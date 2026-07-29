@@ -35,6 +35,23 @@
   }
 </style>
 
+<style>
+  /* Disable poster-wall entrance flicker */
+  img[data-source-loc="src/components/PosterWall.tsx:178:1"] {
+    opacity: 0.95 !important;
+    animation: none !important;
+  }
+
+  div:has(> img[data-source-loc="src/components/PosterWall.tsx:178:1"]),
+  a:has(> img[data-source-loc="src/components/PosterWall.tsx:178:1"]) {
+    opacity: 1 !important;
+    transform: none !important;
+    translate: none !important;
+    scale: 1 !important;
+    animation: none !important;
+    transition: none !important;
+  }
+</style>
 </head>
 <body>
 <div id="root"></div>
