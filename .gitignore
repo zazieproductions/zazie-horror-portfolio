@@ -1,0 +1,4 @@
+.wrangler/
+.env
+.env.*
+.DS_Store
