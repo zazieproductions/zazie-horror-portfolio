@@ -57,13 +57,56 @@
 <div id="root"></div>
 
 <script>
-window.addEventListener("load", () => {
-  setTimeout(() => {
-    document.querySelectorAll("iframe[data-embed-src]").forEach((frame) => {
-      if (!frame.src) frame.src = frame.dataset.embedSrc;
-    });
-  }, 1000);
-});
+(() => {
+  const loadFrame = (frame) => {
+    if (frame?.dataset?.embedSrc && !frame.src) {
+      frame.src = frame.dataset.embedSrc;
+    }
+  };
+
+  const observeFrame = (frame) => {
+    if (!frame?.dataset?.embedSrc || frame.src || frame.dataset.embedObserved) return;
+    frame.dataset.embedObserved = "true";
+
+    if (!("IntersectionObserver" in window)) {
+      loadFrame(frame);
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries, instance) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          loadFrame(entry.target);
+          instance.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: "600px 0px" });
+
+    observer.observe(frame);
+  };
+
+  const hydrateEmbeds = () => {
+    document.querySelectorAll("iframe[data-embed-src]").forEach(observeFrame);
+  };
+
+  const scheduleHydration = () => {
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(hydrateEmbeds, { timeout: 1500 });
+    } else {
+      window.setTimeout(hydrateEmbeds, 1000);
+    }
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", scheduleHydration, { once: true });
+  } else {
+    scheduleHydration();
+  }
+
+  if ("MutationObserver" in window) {
+    new MutationObserver(hydrateEmbeds).observe(document.documentElement, { childList: true, subtree: true });
+  }
+})();
 </script>
 </body>
 </html>
