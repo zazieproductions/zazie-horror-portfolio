@@ -56,5 +56,14 @@
 <body>
 <div id="root"></div>
 
+<script>
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    document.querySelectorAll("iframe[data-embed-src]").forEach((frame) => {
+      if (!frame.src) frame.src = frame.dataset.embedSrc;
+    });
+  }, 1000);
+});
+</script>
 </body>
 </html>
