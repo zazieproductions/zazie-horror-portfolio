@@ -1,0 +1,22 @@
+# robots.txt — Zazie Productions Horror Composer Portfolio
+# Surgical crawl guidance for maximum indexation efficiency
+
+User-agent: *
+Allow: /
+Disallow: /audio/
+
+# Allow all crawlers full access to HTML, images, and critical assets
+Sitemap: https://horror.zazieproductions.com/sitemap.xml
+
+# Crawl-delay for respectful bot behavior
+User-agent: AhrefsBot
+Crawl-delay: 2
+
+User-agent: SemrushBot
+Crawl-delay: 2
+
+User-agent: DotBot
+Crawl-delay: 5
+
+User-agent: MJ12bot
+Crawl-delay: 5
