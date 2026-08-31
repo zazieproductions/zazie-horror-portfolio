@@ -1,4 +1,4 @@
-# robots.txt — Zazie Productions Horror Composer Portfolio
+# robots.txt: Zazie Productions Horror Composer Portfolio
 # Surgical crawl guidance for maximum indexation efficiency
 
 User-agent: *
