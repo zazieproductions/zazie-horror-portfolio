@@ -1,0 +1,140 @@
+/* ============================================================
+   GRIT LAYER. post-grade passes:
+   grain / vignette / reel-in load / dirty hover / asymmetric rhythm.
+   ============================================================ */
+
+/* ---------- gate texture: film grain + edge falloff ---------- */
+body::before{
+  content:""; position:fixed; inset:0; z-index:90; pointer-events:none;
+  opacity:.09; mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.86' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:160px 160px;
+  animation:grain-shift .9s steps(4) infinite;
+}
+body::after{
+  content:""; position:fixed; inset:0; z-index:89; pointer-events:none;
+  background:radial-gradient(ellipse 120% 95% at 50% 46%, transparent 62%, rgba(0,0,0,.42) 100%);
+}
+@keyframes grain-shift{
+  0%{transform:translate(0,0)}
+  25%{transform:translate(-2%,1%)}
+  50%{transform:translate(1.5%,-1.5%)}
+  75%{transform:translate(-1%,2%)}
+  100%{transform:translate(2%,-.5%)}
+}
+
+/* ---------- projector start-up ---------- */
+@keyframes reel-in{
+  0%{opacity:.15; filter:blur(3px) contrast(1.6); transform:translateY(7px) scale(1.004)}
+  35%{opacity:.55; filter:blur(1px) contrast(1.25)}
+  72%{opacity:.9; filter:blur(0) contrast(1.06)}
+  100%{opacity:1; filter:none; transform:none}
+}
+#root{animation:reel-in 780ms cubic-bezier(.22,.9,.3,1) both}
+
+/* kickers count in like a frame counter */
+@keyframes frame-count{
+  0%{opacity:0; letter-spacing:.55em; filter:blur(2px)}
+  40%{opacity:.4; filter:blur(1px)}
+  100%{opacity:1; letter-spacing:inherit; filter:none}
+}
+section[id] p[class*="uppercase"][class*="tracking-["]{
+  animation:frame-count 640ms steps(5) both;
+}
+
+/* ---------- dirty hover: chromatic split at card edges ---------- */
+#posters .grid button, #catalogue article, #press .grid a{
+  position:relative;
+}
+#posters .grid button::after, #catalogue article::after, #press .grid a::after{
+  content:""; position:absolute; inset:0; z-index:6;
+  pointer-events:none; opacity:0;
+  box-shadow:2px 0 0 rgba(196,30,30,.5), -2px 0 0 rgba(70,150,170,.32);
+  mix-blend-mode:screen;
+  transition:opacity .28s steps(6);
+}
+#posters .grid button:hover::after, #catalogue article:hover::after, #press .grid a:hover::after{
+  opacity:1;
+}
+
+/* cards lift one corner, never dead-center */
+#posters .grid button, #catalogue article, #press .grid a{
+  transition:transform .5s cubic-bezier(.2,.8,.25,1), border-color .3s, box-shadow .5s, opacity .4s;
+}
+#catalogue article:nth-child(even):hover{transform:translateY(-3px) rotate(.35deg)}
+#catalogue article:nth-child(odd):hover{transform:translateY(-2px) rotate(-.25deg)}
+#press .grid a:nth-child(even):hover{transform:rotate(0) translateY(-3px)}
+#press .grid a:nth-child(odd):hover{transform:rotate(0) translateY(-3px)}
+
+/* poster prints hang in staggered tape positions, with scanline sheen */
+#posters .grid > *:nth-child(3n+2){transform:translateY(14px) rotate(.3deg)}
+#posters .grid > *:nth-child(3n){transform:translateY(-9px) rotate(-.35deg)}
+#posters .grid > *:nth-child(3n+1){transform:translateY(0) rotate(-.15deg)}
+#posters .grid > button:nth-child(3n+1):hover{transform:translateY(-3px) rotate(-.55deg)}
+#posters .grid > button:nth-child(3n+2):hover{transform:translateY(10px) rotate(.65deg)}
+#posters .grid > button:nth-child(3n):hover{transform:translateY(-13px) rotate(.15deg)}
+#posters .grid button > div::before{
+  content:""; position:absolute; inset:0; z-index:7; pointer-events:none;
+  background:repeating-linear-gradient(0deg, rgba(255,255,255,.03) 0 1px, transparent 1px 3px);
+  opacity:0; transition:opacity .4s;
+}
+#posters .grid button:hover > div::before{opacity:1}
+
+/* film-sample articles get a corner tilt on hover, and a static lean per column */
+#work article{
+  transition:transform .5s cubic-bezier(.2,.8,.25,1), border-color .3s, box-shadow .5s;
+}
+#work .grid article:nth-child(odd){transform:rotate(-.2deg)}
+#work .grid article:nth-child(even){transform:rotate(.25deg)}
+#work .grid article:hover{transform:translateY(-3px) rotate(0) !important}
+
+/* press clippings lean alternately */
+#press .grid > a:nth-child(even){transform:rotate(.3deg)}
+#press .grid > a:nth-child(odd){transform:rotate(-.25deg)}
+
+/* blood buttons: two-frame flicker instead of a fade */
+@keyframes hit-flicker{
+  0%,100%{filter:none}
+  30%{filter:brightness(1.7)}
+  45%{filter:brightness(.85)}
+  62%{filter:brightness(1.35)}
+}
+.bg-blood:hover{animation:hit-flicker .5s steps(3) 1}
+
+/* bespoke marks in the method section get a registration jitter */
+#method svg{transition:transform .4s cubic-bezier(.2,.9,.3,1.4)}
+#method .group:hover svg, #method a:hover svg{transform:rotate(-2.5deg) scale(1.06)}
+
+/* selection + scrollbar dressed to grade */
+::selection{background:rgba(196,30,30,.85); color:#f0ebe3}
+html{scrollbar-width:thin; scrollbar-color:#3a0a0a #030303}
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:#030303}
+::-webkit-scrollbar-thumb{background:#2a0d0d; border:2px solid #030303}
+::-webkit-scrollbar-thumb:hover{background:#c41e1e}
+
+/* ---------- asymmetric rhythm: break the perfect grid ---------- */
+#showreel{padding-top:1.2rem}
+#posters{padding-bottom:1.6rem}
+#method{margin-left:-.4vw}
+#press{margin-right:-.6vw}
+#catalogue{padding-top:.8rem}
+#about{padding-left:.6vw}
+#contact{padding-top:1.4rem}
+
+/* ---------- production overrides (relocated out of inline blocks) ---------- */
+/* hero sub-copy holds visible, no entrance dependency */
+section#top p.mt-4.max-w-md{
+  opacity:1 !important;
+  transform:none !important;
+  transition:none !important;
+  animation:none !important;
+}
+/* poster prints ship at rest: wall flicker removed for final cut */
+#posters img{opacity:.95 !important; animation:none !important}
+#posters .grid button{animation:none !important}
+
+@media (prefers-reduced-motion:reduce){
+  body::before, #root, section[id] p[class*="uppercase"]{animation:none !important}
+  *,*::before,*::after{transition-duration:.01ms !important}
+}
