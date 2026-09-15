@@ -5,7 +5,7 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/</loc>
-    <lastmod>2026-08-31</lastmod>
+    <lastmod>2026-09-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -70,6 +70,42 @@
       <video:content_loc>https://www.youtube.com/watch?v=UX2kv3G89Jw</video:content_loc>
       <video:player_loc>https://www.youtube.com/embed/UX2kv3G89Jw</video:player_loc>
     </video:video>
+  </url>
+
+  <url>
+    <loc>https://horror.zazieproductions.com/psychological-horror-composer/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/headshot.jpg</image:loc>
+      <image:title>Zazie Kanwar-Torge, psychological horror composer</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://horror.zazieproductions.com/scores/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/press-photo.png</image:loc>
+      <image:title>Zazie Productions press photo, horror composer credits</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://horror.zazieproductions.com/techniques/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://horror.zazieproductions.com/techniques/temp-music/</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 
 </urlset>
