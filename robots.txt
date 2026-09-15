@@ -1,22 +1,11 @@
-# robots.txt: Zazie Productions Horror Composer Portfolio
-# Surgical crawl guidance for maximum indexation efficiency
-
+# Zazie Productions horror composition portfolio
+# Canonical HTML URLs are discoverable through the sitemap index below.
 User-agent: *
 Allow: /
-Disallow: /audio/
 
-# Allow all crawlers full access to HTML, images, and critical assets
+# Raw media is loaded by the crawlable audio-reel page but is not a standalone HTML result.
+# X-Robots-Tag: noindex is applied to /audio/* in _headers.
+Disallow: /?s=
+Disallow: /search
+
 Sitemap: https://horror.zazieproductions.com/sitemap.xml
-
-# Crawl-delay for respectful bot behavior
-User-agent: AhrefsBot
-Crawl-delay: 2
-
-User-agent: SemrushBot
-Crawl-delay: 2
-
-User-agent: DotBot
-Crawl-delay: 5
-
-User-agent: MJ12bot
-Crawl-delay: 5

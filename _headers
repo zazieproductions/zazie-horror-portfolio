@@ -30,3 +30,25 @@
 
 /index.html
   Cache-Control: public, max-age=0, must-revalidate
+
+/audio/*
+  X-Robots-Tag: noindex
+
+/seo.css
+  Cache-Control: public, max-age=86400
+
+/sitemap-core.xml
+  Content-Type: application/xml
+  Cache-Control: public, max-age=86400
+
+/sitemap-services.xml
+  Content-Type: application/xml
+  Cache-Control: public, max-age=86400
+
+/sitemap-projects.xml
+  Content-Type: application/xml
+  Cache-Control: public, max-age=86400
+
+/sitemap.xml
+  Content-Type: application/xml
+  Cache-Control: public, max-age=86400
