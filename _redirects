@@ -1,1 +1,6 @@
-/* /index.html 200
+# Zazie Productions — redirects
+# Static site: every real page exists as a file and is served directly.
+# The old SPA catch-all ("/* /index.html 200") was removed 2026-09-15:
+# the portfolio uses hash navigation only (no path routing), and the
+# catch-all was turning every mistyped URL into a soft-404 of the homepage.
+# Unknown paths now serve /404.html with a proper 404 status.

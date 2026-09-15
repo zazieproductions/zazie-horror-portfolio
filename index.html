@@ -80,7 +80,7 @@
   "alternateName": "Zazie Productions",
   "url": "https://horror.zazieproductions.com/",
   "image": "https://horror.zazieproductions.com/images/headshot.jpg",
-  "jobTitle": "Horror Film Composer",
+  "jobTitle": "Psychological Horror Composer",
   "description": "Award-winning composer, experimental producer, and multi-instrumentalist specializing in dark, atmospheric, cinematic scores for psychological horror, supernatural thrillers, folk horror, body horror, and dark science fiction.",
   "knowsAbout": [
     "Film Scoring",
@@ -108,7 +108,12 @@
     "name": "Zazie Productions LLC",
     "url": "https://horror.zazieproductions.com/"
   },
-  "award": "Winter 2024 Award Winner",
+  "subjectOf": [
+    {"@type": "WebPage", "url": "https://horror.zazieproductions.com/psychological-horror-composer/", "name": "What Is a Psychological Horror Composer?"},
+    {"@type": "WebPage", "url": "https://horror.zazieproductions.com/scores/", "name": "Scores & Credits — Zazie Kanwar-Torge"},
+    {"@type": "WebPage", "url": "https://horror.zazieproductions.com/techniques/", "name": "The Dread Codex"}
+  ],
+  "award": "Winter 2024 Award Winner — Visual Container",
   "telephone": "+1-864-430-0606",
   "email": "zaziediya@gmail.com",
   "priceRange": "$50 - $5000+",
@@ -225,25 +230,33 @@
   "url": "https://horror.zazieproductions.com/",
   "description": "Portfolio of award-winning psychological horror composer Zazie Kanwar-Torge. Original dark, atmospheric, cinematic scores for film, TV, and games.",
   "publisher": {"@id": "https://horror.zazieproductions.com/#org"},
-  "inLanguage": "en"
+  "inLanguage": "en",
+  "hasPart": [
+    {"@type": "WebPage", "url": "https://horror.zazieproductions.com/psychological-horror-composer/", "name": "What Is a Psychological Horror Composer?"},
+    {"@type": "WebPage", "url": "https://horror.zazieproductions.com/scores/", "name": "Scores & Credits"},
+    {"@type": "WebPage", "url": "https://horror.zazieproductions.com/techniques/", "name": "The Dread Codex"},
+    {"@type": "WebPage", "url": "https://horror.zazieproductions.com/techniques/temp-music/", "name": "Temp Love: Why Your Edit Is Dating the Wrong Music"}
+  ]
 }
 </script>
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "name": "Zazie Productions LLC: Horror Film Scoring",
+  "@type": "MusicGroup",
+  "@id": "https://horror.zazieproductions.com/#musicgroup",
+  "name": "Zazie Productions",
   "url": "https://horror.zazieproductions.com/",
   "image": "https://horror.zazieproductions.com/images/hero-portrait.jpg",
-  "telephone": "+1-864-430-0606",
-  "email": "zaziediya@gmail.com",
-  "priceRange": "$50 - $5000+",
-  "description": "Boutique horror scoring studio offering original dark, atmospheric, cinematic compositions for film, TV, and games.",
+  "genre": ["Horror", "Dark Ambient", "Film Score", "Experimental"],
+  "description": "Boutique horror scoring studio and recording project of composer Zazie Kanwar-Torge: original dark, atmospheric, cinematic compositions for film, TV, and games. Hundreds of catalogue cues; releases on Bandcamp, Spotify, and Apple Music.",
+  "member": {"@id": "https://horror.zazieproductions.com/#person"},
   "sameAs": [
     "https://www.imdb.com/name/nm17333332",
     "https://open.spotify.com/artist/4UOgvZEOo7xBhFBjJvlMm0",
-    "https://zazieproductions.bandcamp.com"
+    "https://music.apple.com/us/artist/zazie-productions/1623719351",
+    "https://zazieproductions.bandcamp.com",
+    "https://youtube.com/@zazieproductions"
   ]
 }
 </script>
@@ -866,6 +879,32 @@
   </div>
 </footer>
 </div>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     STATIC DIRECTORY STRIP — sits outside the React root (#root).
+     Hydration-safe: React owns #root's subtree only, never this sibling.
+     Provides crawlable path links to the deep-content pages.
+     ═══════════════════════════════════════════════════════════════════ -->
+<style>
+  .zpdir{border-top:1px solid rgba(255,255,255,.08);background:#050505;padding:1.3rem 0 1.5rem}
+  .zpdir-in{max-width:80rem;margin:0 auto;padding:0 1.5rem;display:flex;align-items:baseline;justify-content:space-between;gap:1.5rem;flex-wrap:wrap}
+  .zpdir-label{font-size:.58rem;letter-spacing:.34em;text-transform:uppercase;color:#6e6b66}
+  .zpdir-links{display:flex;gap:1.6rem;flex-wrap:wrap}
+  .zpdir-links a{font-size:.62rem;letter-spacing:.22em;text-transform:uppercase;color:#a3a09a;text-decoration:none;transition:color .2s}
+  .zpdir-links a:hover{color:#c41e1e}
+  .zpdir-links a b{color:#eceae4;font-weight:500}
+</style>
+<nav class="zpdir" aria-label="Site directory">
+  <div class="zpdir-in">
+    <span class="zpdir-label">Deeper cuts</span>
+    <div class="zpdir-links">
+      <a href="/psychological-horror-composer/"><b>What is a psychological horror composer?</b></a>
+      <a href="/scores/">Scores &amp; credits</a>
+      <a href="/techniques/">The Dread Codex</a>
+      <a href="/techniques/temp-music/">Temp love, explained</a>
+    </div>
+  </div>
+</nav>
 
 <!-- ═══════════════════════════════════════════════════════════════════
      SEO ENHANCEMENT SCRIPT: Post-render surgical fixes

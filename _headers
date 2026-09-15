@@ -25,8 +25,32 @@
 /sitemap.xml
   Cache-Control: public, max-age=86400
 
+/llms.txt
+  Cache-Control: public, max-age=86400
+  Content-Type: text/plain; charset=utf-8
+
 /
   Cache-Control: public, max-age=0, must-revalidate
 
 /index.html
   Cache-Control: public, max-age=0, must-revalidate
+
+# Deep-content pages: HTML must always revalidate
+/psychological-horror-composer
+  Cache-Control: public, max-age=0, must-revalidate
+/psychological-horror-composer/*
+  Cache-Control: public, max-age=0, must-revalidate
+/scores
+  Cache-Control: public, max-age=0, must-revalidate
+/scores/*
+  Cache-Control: public, max-age=0, must-revalidate
+/techniques
+  Cache-Control: public, max-age=0, must-revalidate
+/techniques/*
+  Cache-Control: public, max-age=0, must-revalidate
+/404.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Internal ops documentation: kept out of the index
+/docs/*
+  X-Robots-Tag: noindex, nofollow

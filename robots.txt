@@ -8,6 +8,9 @@ Disallow: /audio/
 # Allow all crawlers full access to HTML, images, and critical assets
 Sitemap: https://horror.zazieproductions.com/sitemap.xml
 
+# Machine-readable citation feed: https://llmstxt.org
+# https://horror.zazieproductions.com/llms.txt
+
 # Crawl-delay for respectful bot behavior
 User-agent: AhrefsBot
 Crawl-delay: 2
