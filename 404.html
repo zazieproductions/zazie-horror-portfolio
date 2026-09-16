@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<link href="favicon.svg" rel="icon" type="image/svg+xml"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<meta content="#050505" name="theme-color"/>
+<meta name="robots" content="noindex, follow"/>
+<title>Signal lost (404) | Zazie Kanwar-Torge, Horror Composer</title>
+<link href="fonts.css" rel="stylesheet"/>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/cormorant-garamond-latin-400-normal.woff2" crossorigin/>
+<style>
+  :root {
+    --void:#050505; --ink:#0a0a0a; --ash:#2a2a2a; --bone:#f2ece7; --mist:#9a9490;
+    --blood:#c41e1e; --ember:#ff2a2a;
+    --font-display:"Cormorant Garamond", Georgia, "Times New Roman", serif;
+    --font-sans:"Inter", ui-sans-serif, system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    min-height: 100vh; background-color: var(--void); color: var(--bone);
+    font-family: var(--font-sans); -webkit-font-smoothing: antialiased;
+    display: flex; flex-direction: column;
+  }
+  .glow {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(ellipse at 70% 20%, rgba(140,10,10,0.28), transparent 55%),
+      radial-gradient(ellipse at 20% 85%, rgba(196,30,30,0.12), transparent 45%);
+  }
+  header, main, footer { position: relative; z-index: 1; }
+  header { padding: 1.5rem 1.25rem; }
+  .brand {
+    display: inline-flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--bone);
+  }
+  .brand-mark {
+    display: flex; align-items: center; justify-content: center;
+    width: 2.25rem; height: 2.25rem; border: 1px solid rgba(196,30,30,0.4);
+    background: rgba(196,30,30,0.1); color: var(--blood);
+    font-family: var(--font-display); font-size: 1.125rem;
+  }
+  .brand-name { font-family: var(--font-display); font-size: 1.125rem; letter-spacing: 0.12em; }
+  .brand-sub { display: block; font-size: 9px; letter-spacing: 0.32em; text-transform: uppercase; color: var(--mist); }
+  main {
+    flex: 1; width: 100%; max-width: 46rem; margin: 0 auto;
+    padding: 2.5rem 1.25rem 4rem; display: flex; flex-direction: column; justify-content: center;
+  }
+  .eyebrow { margin: 0 0 1rem; font-size: 10px; letter-spacing: 0.38em; text-transform: uppercase; color: var(--blood); }
+  h1 {
+    margin: 0 0 1rem; font-family: var(--font-display); font-weight: 400;
+    font-size: clamp(2.25rem, 9vw, 3.75rem); line-height: 1.02; letter-spacing: -0.01em;
+  }
+  h1 em { font-style: italic; color: var(--blood); display: block; }
+  .lede { margin: 0 0 0.75rem; font-size: 1rem; line-height: 1.65; color: var(--bone); max-width: 34rem; }
+  .note { margin: 0; font-size: 0.875rem; line-height: 1.65; color: var(--mist); max-width: 34rem; }
+  .actions { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 2rem; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 52px; padding: 0.875rem 1.75rem; font-size: 0.875rem; font-weight: 500;
+    letter-spacing: 0.04em; text-decoration: none; border: 1px solid transparent;
+  }
+  .btn-primary { background: var(--blood); color: var(--bone); }
+  .btn-primary:hover, .btn-primary:focus-visible { background: var(--ember); }
+  .btn-ghost { border-color: var(--ash); color: var(--bone); }
+  .btn-ghost:hover, .btn-ghost:focus-visible { border-color: var(--blood); }
+  footer { border-top: 1px solid rgba(255,255,255,0.06); padding: 1.5rem 1.25rem 2.5rem; }
+  /* Footer link rows keep their exact visual rhythm but gain a 33px touch area. */
+  .footer-inner a { padding-block: 0.625rem; margin-block: -0.625rem; }
+  .footer-inner {
+    max-width: 46rem; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem;
+    font-size: 10px; letter-spacing: 0.25em; text-transform: uppercase;
+  }
+  footer a { color: var(--mist); text-decoration: none; padding: 0.35rem 0; }
+  footer a:hover, footer a:focus-visible { color: var(--blood); }
+  :focus-visible { outline: 2px solid var(--blood); outline-offset: 3px; }
+  @media (min-width: 640px) {
+    header { padding: 2rem 2rem; }
+    main { padding: 3rem 2rem 5rem; }
+    .actions { flex-direction: row; }
+    footer { padding: 2rem 2rem 3rem; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .btn { transition: background-color 200ms ease, border-color 200ms ease; }
+  }
+</style>
+</head>
+<body>
+<div class="glow" aria-hidden="true"></div>
+<header>
+  <a class="brand" href="/" aria-label="Zazie Kanwar-Torge, Zazie Productions, horror composer — back to home">
+    <span class="brand-mark" aria-hidden="true">Z</span>
+    <span>
+      <span class="brand-name">ZKT</span>
+      <span class="brand-sub">Productions</span>
+    </span>
+  </a>
+</header>
+
+<main>
+  <p class="eyebrow">Error 404</p>
+  <h1>This cue was never <em>scored.</em></h1>
+  <p class="lede">The page you asked for does not exist on this reel. Nothing is broken on your end — the link is simply dead.</p>
+  <p class="note">Jump back into the work, or send a scoring inquiry and I will reply within 48 hours.</p>
+  <div class="actions">
+    <a class="btn btn-primary" href="/#showreel">Hear the reel</a>
+    <a class="btn btn-ghost" href="/#contact">Claim a scoring slot</a>
+    <a class="btn btn-ghost" href="mailto:zaziediya@gmail.com?subject=Scoring%20Inquiry">Email zaziediya@gmail.com</a>
+  </div>
+</main>
+
+<footer>
+  <nav class="footer-inner" aria-label="Site sections">
+    <a href="/#work">Film samples</a>
+    <a href="/#posters">Film covers</a>
+    <a href="/#catalogue">Listening room</a>
+    <a href="/#services">Rates</a>
+    <a href="/#press">Press kit</a>
+    <a href="/#about">About</a>
+    <a href="https://www.imdb.com/name/nm17333332" target="_blank" rel="noreferrer">IMDb</a>
+  </nav>
+</footer>
+</body>
+</html>

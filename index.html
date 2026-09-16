@@ -10,16 +10,14 @@
 <title>Zazie Kanwar-Torge: Psychological Horror Composer | Dark Cinematic Scores for Film, TV & Games</title>
 <link rel="canonical" href="https://horror.zazieproductions.com/" />
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-<link rel="preload" as="image" href="/images/hero-portrait.jpg" fetchpriority="high" media="(min-width: 1024px)">
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link rel="preload" as="image" href="/images/hero-portrait.jpg" imagesrcset="/images/hero-portrait-448.jpg 448w, /images/hero-portrait-672.jpg 672w, /images/hero-portrait.jpg 896w" imagesizes="(min-width:1024px) 46vw, 1px" fetchpriority="high" media="(min-width: 1024px)">
 <link href="https://www.youtube-nocookie.com" rel="preconnect"/>
-<link href="https://bandcamp.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" media="print" onload="this.onload=null;this.media='all'"/>
-<noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/></noscript>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/cormorant-garamond-latin-400-normal.woff2" crossorigin/>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/inter-latin-400-normal.woff2" crossorigin/>
+<link href="fonts.css" rel="stylesheet"/>
 
 
-<script crossorigin="" src="index-daKuu3pI.js?v=76d2ace91bb4" type="module"></script>
+<script crossorigin="" src="index-68e2b4d8.js" type="module"></script>
 <link crossorigin="" href="index-BloO9D4b.css" rel="stylesheet"/>
 <meta content="website" property="og:type"/>
 <meta content="Zazie Kanwar-Torge: Psychological Horror Composer | Dark Cinematic Scores" property="og:title"/>
@@ -40,6 +38,52 @@
 <meta name="author" content="Zazie Kanwar-Torge" />
 <meta name="keywords" content="horror film composer, psychological horror scoring, dark cinematic music, atmospheric horror soundtrack, supernatural thriller composer, folk horror score, body horror music, game horror sound designer, dark trailer music composer, original film score, boutique horror composer" />
 
+<style id="site-enhancements">
+  /* ── Anchor targets clear the sticky header ── */
+  section[id], footer[id] { scroll-margin-top: 4.75rem; }
+  @media (min-width: 768px) { section[id], footer[id] { scroll-margin-top: 5.5rem; } }
+
+  /* ── Tap targets: standalone utility links keep their exact visual position
+        but gain a 32px+ touch area (padding cancelled by an equal negative
+        margin, so no layout shift). ── */
+  main a[class~="gap-2.5"],
+  main a[class~="transition-colors"][class~="hover:text-bone"],
+  main a[class~="flex"][class~="items-center"][class~="gap-3"],
+  main a[class~="text-center"][class~="text-[10px]"],
+  main a[class~="hover:underline"],
+  header a[class~="py-2"],
+  footer a { padding-block: 0.5625rem; margin-block: -0.5625rem; }
+
+  /* ── Range sliders: identical track art, 32px tall hit area ── */
+  html body input[type="range"].seek {
+    height: 32px;
+    background-color: transparent;
+    background-image: linear-gradient(#2a2a2a, #2a2a2a);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100% 3px;
+  }
+  @media (max-width: 768px) { html body input[type="range"].seek { background-size: 100% 6px; } }
+
+  /* ── Click-to-load embeds: idle / loading / error states ── */
+  iframe[data-embed-state] { cursor: pointer; }
+  iframe[data-embed-state="loading"] { cursor: progress; }
+  iframe[data-embed-state]:focus-visible { outline: 2px solid #c41e1e; outline-offset: 3px; }
+
+  /* ── Screen-reader-only utility (kept available for markup overrides) ── */
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+  /* ── Long words / unbreakable strings must not push the layout ── */
+  main a, main h1, main h2, main h3, main p { overflow-wrap: break-word; }
+
+  /* ── Reduced motion: no decorative loops, no smooth-scroll ── */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto !important; }
+    *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; }
+    .hero-kenburns, .marquee-track, .ambient-orb, .grain, .vhs-tracking, .wave-bar,
+    .glitch::before, .glitch::after { animation: none !important; }
+  }
+</style>
 <style>
   section#top > div.relative > div.w-full > p.mt-4 {
     opacity: 1 !important;
@@ -278,7 +322,7 @@
   <section id="top" class="relative overflow-hidden bg-void" style="min-height:100svh">
     <div class="pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] lg:block" aria-hidden="true">
       <div class="absolute bottom-0 right-0 h-[92%] w-full">
-        <img src="/images/hero-portrait.jpg" alt="" width="896" height="1152" fetchpriority="high" class="absolute bottom-0 right-0 h-full w-auto max-w-none object-cover object-top opacity-80"/>
+        <img src="/images/hero-portrait.jpg" srcset="/images/hero-portrait-448.jpg 448w, /images/hero-portrait-672.jpg 672w, /images/hero-portrait.jpg 896w" sizes="(min-width:1024px) 46vw, 1px" alt="" width="896" height="1152" fetchpriority="high" class="absolute bottom-0 right-0 h-full w-auto max-w-none object-cover object-top opacity-80"/>
       </div>
     </div>
     <div style="padding-top:8rem;padding-bottom:5rem" class="relative mx-auto flex max-w-7xl flex-col justify-center px-4 sm:px-6 md:px-8">
@@ -454,7 +498,7 @@
       <ul class="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
         <li>
           <a href="https://www.imdb.com/title/tt19369318/" target="_blank" rel="noreferrer" class="group relative block w-full overflow-hidden border border-ash bg-smoke" style="aspect-ratio:2/3">
-            <img src="/images/posters/expire-red-check.jpg" alt="EXPIRE (2025) theatrical poster, horror short scored by Zazie Kanwar-Torge" width="1200" height="2133" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
+            <img src="/images/posters/expire-red-check.jpg" srcset="/images/posters/expire-red-check-320.jpg 320w, /images/posters/expire-red-check.jpg 640w" sizes="(min-width:768px) 22vw, 46vw" alt="EXPIRE (2025) theatrical poster, horror short scored by Zazie Kanwar-Torge" width="640" height="1138" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
             <span class="absolute inset-x-0 bottom-0 p-3 sm:p-4 md:p-5">
               <h3 class="font-display text-base leading-tight text-bone group-hover:text-blood sm:text-xl md:text-2xl">EXPIRE</h3>
               <p class="mt-0.5 text-[9px] uppercase tracking-[0.2em] text-mist sm:text-[10px]">2025 · A Muhammad Abed Baryal Film</p>
@@ -463,7 +507,7 @@
         </li>
         <li>
           <a href="https://www.imdb.com/name/nm17333332" target="_blank" rel="noreferrer" class="group relative block w-full overflow-hidden border border-ash bg-smoke" style="aspect-ratio:2/3">
-            <img src="/images/posters/unseen.png" alt="UNSEEN feature poster, Steve Merlo’s unseen killer, music by Zazie Kanwar-Torge" width="1163" height="1712" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
+            <img src="/images/posters/unseen.jpg" srcset="/images/posters/unseen-320.jpg 320w, /images/posters/unseen.jpg 640w" sizes="(min-width:768px) 22vw, 46vw" alt="UNSEEN feature poster, Steve Merlo’s unseen killer, music by Zazie Kanwar-Torge" width="640" height="942" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
             <span class="absolute inset-x-0 bottom-0 p-3 sm:p-4 md:p-5">
               <h3 class="font-display text-base leading-tight text-bone group-hover:text-blood sm:text-xl md:text-2xl">UNSEEN</h3>
               <p class="mt-0.5 text-[9px] uppercase tracking-[0.2em] text-mist sm:text-[10px]">Feature · Steve Merlo’s unseen killer</p>
@@ -472,7 +516,7 @@
         </li>
         <li>
           <a href="https://www.imdb.com/name/nm17333332" target="_blank" rel="noreferrer" class="group relative block w-full overflow-hidden border border-ash bg-smoke" style="aspect-ratio:2/3">
-            <img src="/images/posters/peregrinus.png" alt="PEREGRINUS series poster, a pilgrimage of foreign forces, scored by Zazie Kanwar-Torge" width="1080" height="1456" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
+            <img src="/images/posters/peregrinus.jpg" srcset="/images/posters/peregrinus-320.jpg 320w, /images/posters/peregrinus.jpg 640w" sizes="(min-width:768px) 22vw, 46vw" alt="PEREGRINUS series poster, a pilgrimage of foreign forces, scored by Zazie Kanwar-Torge" width="640" height="863" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
             <span class="absolute inset-x-0 bottom-0 p-3 sm:p-4 md:p-5">
               <h3 class="font-display text-base leading-tight text-bone group-hover:text-blood sm:text-xl md:text-2xl">PEREGRINUS</h3>
               <p class="mt-0.5 text-[9px] uppercase tracking-[0.2em] text-mist sm:text-[10px]">Series · A pilgrimage of foreign forces</p>
@@ -481,7 +525,7 @@
         </li>
         <li>
           <a href="https://www.youtube.com/watch?v=UX2kv3G89Jw" target="_blank" rel="noreferrer" class="group relative block w-full overflow-hidden border border-ash bg-smoke" style="aspect-ratio:2/3">
-            <img src="/images/posters/phantom-requiem.jpg" alt="Phantom Requiem poster, short film by Zazie Productions" width="600" height="800" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
+            <img src="/images/posters/phantom-requiem.jpg" srcset="/images/posters/phantom-requiem-320.jpg 320w, /images/posters/phantom-requiem.jpg 640w" sizes="(min-width:768px) 22vw, 46vw" alt="Phantom Requiem poster, short film by Zazie Productions" width="600" height="800" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
             <span class="absolute inset-x-0 bottom-0 p-3 sm:p-4 md:p-5">
               <h3 class="font-display text-base leading-tight text-bone group-hover:text-blood sm:text-xl md:text-2xl">Phantom Requiem</h3>
               <p class="mt-0.5 text-[9px] uppercase tracking-[0.2em] text-mist sm:text-[10px]">Short · A film by Zazie Productions</p>
@@ -490,7 +534,7 @@
         </li>
         <li>
           <a href="https://www.imdb.com/name/nm17333332" target="_blank" rel="noreferrer" class="group relative block w-full overflow-hidden border border-ash bg-smoke" style="aspect-ratio:2/3">
-            <img src="/images/posters/eclipsed.png" alt="ECLIPSED feature poster, to erase him, she had to become him. A film by William Viera" width="1386" height="1819" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
+            <img src="/images/posters/eclipsed.jpg" srcset="/images/posters/eclipsed-320.jpg 320w, /images/posters/eclipsed.jpg 640w" sizes="(min-width:768px) 22vw, 46vw" alt="ECLIPSED feature poster, to erase him, she had to become him. A film by William Viera" width="640" height="840" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
             <span class="absolute inset-x-0 bottom-0 p-3 sm:p-4 md:p-5">
               <h3 class="font-display text-base leading-tight text-bone group-hover:text-blood sm:text-xl md:text-2xl">ECLIPSED</h3>
               <p class="mt-0.5 text-[9px] uppercase tracking-[0.2em] text-mist sm:text-[10px]">Feature · A film by William Viera</p>
@@ -499,7 +543,7 @@
         </li>
         <li>
           <a href="https://www.youtube.com/watch?v=Ty8tPp59mDc" target="_blank" rel="noreferrer" class="group relative block w-full overflow-hidden border border-ash bg-smoke" style="aspect-ratio:2/3">
-            <img src="/images/posters/the-haunted.jpg" alt="THE HAUNTED feature poster, perception is reality. A Mike Fox film for Crystal Fox Films" width="1200" height="1777" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
+            <img src="/images/posters/the-haunted.jpg" srcset="/images/posters/the-haunted-320.jpg 320w, /images/posters/the-haunted.jpg 640w" sizes="(min-width:768px) 22vw, 46vw" alt="THE HAUNTED feature poster, perception is reality. A Mike Fox film for Crystal Fox Films" width="640" height="948" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
             <span class="absolute inset-x-0 bottom-0 p-3 sm:p-4 md:p-5">
               <h3 class="font-display text-base leading-tight text-bone group-hover:text-blood sm:text-xl md:text-2xl">THE HAUNTED</h3>
               <p class="mt-0.5 text-[9px] uppercase tracking-[0.2em] text-mist sm:text-[10px]">Feature · A Mike Fox Film</p>
@@ -508,7 +552,7 @@
         </li>
         <li>
           <a href="https://www.imdb.com/title/tt38637541/" target="_blank" rel="noreferrer" class="group relative block w-full overflow-hidden border border-ash bg-smoke" style="aspect-ratio:2/3">
-            <img src="/images/posters/choleric.jpg" alt="CHOLERIC poster, her sins brought me home. A Sebastian Fabres film" width="2389" height="3584" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
+            <img src="/images/posters/choleric.jpg" srcset="/images/posters/choleric-320.jpg 320w, /images/posters/choleric.jpg 640w" sizes="(min-width:768px) 22vw, 46vw" alt="CHOLERIC poster, her sins brought me home. A Sebastian Fabres film" width="640" height="961" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
             <span class="absolute inset-x-0 bottom-0 p-3 sm:p-4 md:p-5">
               <h3 class="font-display text-base leading-tight text-bone group-hover:text-blood sm:text-xl md:text-2xl">CHOLERIC</h3>
               <p class="mt-0.5 text-[9px] uppercase tracking-[0.2em] text-mist sm:text-[10px]">Short · A Sebastian Fabres Film</p>
@@ -517,7 +561,7 @@
         </li>
         <li>
           <a href="https://www.imdb.com/title/tt36954700/" target="_blank" rel="noreferrer" class="group relative block w-full overflow-hidden border border-ash bg-smoke" style="aspect-ratio:2/3">
-            <img src="/images/posters/mike-has-a-visitor.jpg" alt="Mike Has A Visitor poster, a sleep paralysis horror short by Marco Saikaley" width="1353" height="1772" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
+            <img src="/images/posters/mike-has-a-visitor.jpg" srcset="/images/posters/mike-has-a-visitor-320.jpg 320w, /images/posters/mike-has-a-visitor.jpg 640w" sizes="(min-width:768px) 22vw, 46vw" alt="Mike Has A Visitor poster, a sleep paralysis horror short by Marco Saikaley" width="640" height="838" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
             <span class="absolute inset-x-0 bottom-0 p-3 sm:p-4 md:p-5">
               <h3 class="font-display text-base leading-tight text-bone group-hover:text-blood sm:text-xl md:text-2xl">MIKE HAS A VISITOR</h3>
               <p class="mt-0.5 text-[9px] uppercase tracking-[0.2em] text-mist sm:text-[10px]">Short · A film by Marco Saikaley</p>
@@ -875,104 +919,229 @@
      Non-blocking. Runs after React hydration.
      ═══════════════════════════════════════════════════════════════════ -->
 <script>
-(function(){
+/* Progressive enhancement. No third-party requests, no frameworks.
+   1. Media embeds (YouTube / Bandcamp) are click-to-load instead of
+      auto-loading 18 third-party iframes on every visit.
+   2. In-page anchors scroll with the sticky-header offset applied.
+   3. The scope builder's "Send this scope" link opens a pre-filled
+      scoring inquiry mail (it used to be a dead href).
+   4. Anything that fails shows a clear message instead of a black box. */
+(function () {
   'use strict';
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var LOAD_TIMEOUT = 12000;
 
-  function enhanceSEO() {
-    /* ── Fix hero image alt text (was empty: alt="") ── */
-    var heroImg = document.querySelector('img[src*="hero-portrait"]');
-    if (heroImg && (!heroImg.alt || heroImg.alt === '')) {
-      heroImg.alt = 'Zazie Kanwar-Torge, psychological horror composer for film, TV, and games';
-    }
-
-    /* ── Fix headshot alt text ── */
-    var headshot = document.querySelector('img[src*="headshot"]');
-    if (headshot && (!headshot.alt || headshot.alt === '')) {
-      headshot.alt = 'Zazie Kanwar-Torge, award-winning horror film composer, headshot';
-    }
-
-    /* ── Fix project thumbnail alt texts ── */
-    var projectMap = {
-      'HaVJP08j77U': 'Mike Has A Visitor, sleep paralysis horror short, original score by Zazie Kanwar-Torge',
-      'ItrrcilS0ro': 'GOODBYE BROTHER, dramatic short film, original score by Zazie Kanwar-Torge',
-      'riCvy2abhlc': 'Home Intruder, action thriller chase sequence, original cue by Zazie Kanwar-Torge',
-      'Ty8tPp59mDc': 'The Haunted, horror film teaser, Crystal Fox Films, original score by Zazie Kanwar-Torge',
-      'rvCGO0BJ_2E': 'AQUAPHOBIA, short horror film, original score by Zazie Kanwar-Torge',
-      '6qa3Uwj47fc': 'Whispers In The Dark, horror short film, original score by Zazie Kanwar-Torge',
-      'UX2kv3G89Jw': 'Phantom Requiem, short film, original score by Zazie Kanwar-Torge'
-    };
-    document.querySelectorAll('img[src*="/images/project-"]').forEach(function(img) {
-      var src = img.getAttribute('src') || '';
-      Object.keys(projectMap).forEach(function(key) {
-        if (src.indexOf(key) !== -1 && (!img.alt || img.alt === '' || img.alt.indexOf('film sample') !== -1)) {
-          img.alt = projectMap[key];
+  /* 0. Audio elements created by the sticker player used to pull ~1 MB of the
+        first track before anyone pressed play. Audio objects are now inert until
+        playback is requested, then behave exactly like a normal HTMLAudioElement. */
+  (function lazyAudio() {
+    var NativeAudio = window.Audio;
+    if (!NativeAudio || !window.HTMLAudioElement) return;
+    function LazyAudio() {
+      var el = new NativeAudio();
+      var pending = '';
+      var started = false;
+      el.preload = 'none';
+      try {
+        Object.defineProperty(el, 'src', {
+          configurable: true,
+          enumerable: true,
+          get: function () {
+            var attr = el.getAttribute('src');
+            if (attr) return attr;
+            return pending ? new URL(pending, document.baseURI).href : '';
+          },
+          set: function (value) {
+            pending = value || '';
+            if (started) el.setAttribute('src', pending);
+          }
+        });
+      } catch (err) { return el; }
+      var nativePlay = window.HTMLMediaElement.prototype.play;
+      el.play = function () {
+        if (pending && !el.getAttribute('src')) {
+          started = true;
+          el.setAttribute('src', pending);
         }
-      });
-    });
+        return nativePlay.call(el);
+      };
+      return el;
+    }
+    LazyAudio.prototype = NativeAudio.prototype;
+    try { window.Audio = LazyAudio; } catch (err) { /* leave the native constructor */ }
+  })();
 
-    /* ── Fix poster image alt texts ── */
-    document.querySelectorAll('img[src*="/images/posters/"]').forEach(function(img) {
-      if (!img.alt || img.alt === '') {
-        var name = (img.getAttribute('src') || '').split('/').pop().replace(/\.(jpg|png)$/i, '').replace(/-/g, ' ');
-        img.alt = name + ', horror film poster, scored by Zazie Kanwar-Torge';
+  function dataUri(svg) { return 'url("data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg) + '")'; }
+  var PLAY = '<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96"><circle cx="48" cy="48" r="33" fill="#c41e1e" fill-opacity="0.92"/><path d="M40 33l26 15-26 15z" fill="#f2ece7"/></svg>';
+  var PENDING = '<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96"><circle cx="48" cy="48" r="30" fill="none" stroke="#c41e1e" stroke-opacity="0.85" stroke-width="3" stroke-dasharray="30 14"/><path d="M40 33l26 15-26 15z" fill="#f2ece7" fill-opacity="0.8"/></svg>';
+  var UNAVAILABLE = '<svg xmlns="http://www.w3.org/2000/svg" width="480" height="270" viewBox="0 0 480 270"><rect width="480" height="270" fill="#0d0d0d"/><text x="240" y="128" text-anchor="middle" fill="#f2ece7" font-family="Georgia,serif" font-size="19">Player could not load</text><text x="240" y="154" text-anchor="middle" fill="#9a9490" font-family="Georgia,serif" font-size="14">Open the link on this card instead</text></svg>';
+
+  function badge(frame, image, size) {
+    frame.style.backgroundImage = image;
+    frame.style.backgroundRepeat = image.indexOf(',') === -1 ? 'no-repeat' : 'no-repeat, no-repeat';
+    frame.style.backgroundPosition = image.indexOf(',') === -1 ? 'center' : 'center, center';
+    frame.style.backgroundSize = size;
+  }
+
+  function paintPoster(frame, thumb) {
+    frame.style.backgroundImage = 'url("' + thumb + '"), ' + dataUri(PLAY);
+    frame.style.backgroundRepeat = 'no-repeat, no-repeat';
+    frame.style.backgroundPosition = 'center, center';
+    frame.style.backgroundSize = 'cover, 84px 84px';
+  }
+
+  // Poster stills are only fetched once the card approaches the viewport, so the
+  // fold stays light (the play badge itself is a few hundred bytes of inline SVG).
+  function deferPoster(frame, thumb) {
+    if (!window.IntersectionObserver) { paintPoster(frame, thumb); return; }
+    var observer = new IntersectionObserver(function (entries) {
+      for (var i = 0; i < entries.length; i++) {
+        if (entries[i].isIntersecting) { observer.disconnect(); paintPoster(frame, thumb); return; }
       }
-    });
+    }, { rootMargin: '600px 0px' });
+    observer.observe(frame);
+  }
 
-    /* ── Ensure heading hierarchy: promote first major display heading to h1 ── */
-    var main = document.querySelector('main');
-    if (main) {
-      var firstH1 = main.querySelector('h1');
-      if (!firstH1) {
-        /* Find the hero heading. Largest display font heading in the hero section. */
-        var heroSection = document.getElementById('top');
-        if (heroSection) {
-          var heroHeadings = heroSection.querySelectorAll('[class*="font-display"][class*="text-"][class*="leading-"]');
-          for (var i = 0; i < heroHeadings.length; i++) {
-            var el = heroHeadings[i];
-            if (el.textContent.trim().length > 10) {
-              var tag = el.tagName.toLowerCase();
-              if (tag !== 'h1' && tag !== 'h2' && tag !== 'h3') {
-                /* Create semantic h1 overlay. Doesn't break visual layout. */
-                var h1 = document.createElement('h1');
-                h1.className = 'sr-only';
-                h1.textContent = 'Zazie Kanwar-Torge: Psychological Horror Composer';
-                el.parentNode.insertBefore(h1, el);
-              }
-              break;
-            }
+  function initEmbed(frame) {
+    if (frame.getAttribute('data-embed-state')) return;
+    var src = frame.getAttribute('data-embed-src');
+    if (!src) return;
+    var label = frame.getAttribute('title') || 'embedded player';
+    frame.setAttribute('data-embed-state', 'idle');
+    frame.setAttribute('role', 'button');
+    frame.setAttribute('tabindex', '0');
+    frame.setAttribute('aria-label', 'Load ' + label);
+
+    var match = /embed\/([A-Za-z0-9_-]{6,})/.exec(src);
+    var thumb = match ? '/images/project-' + match[1] + '.jpg' : null;
+    frame.style.backgroundColor = '#0d0d0d';
+    badge(frame, dataUri(PLAY), '84px 84px');
+    if (thumb) deferPoster(frame, thumb);
+
+    function load() {
+      if (frame.getAttribute('data-embed-state') !== 'idle') return;
+      frame.setAttribute('data-embed-state', 'loading');
+      frame.setAttribute('aria-label', 'Loading ' + label);
+      if (thumb) {
+        frame.style.backgroundImage = 'url("' + thumb + '"), ' + dataUri(PENDING);
+        frame.style.backgroundRepeat = 'no-repeat, no-repeat';
+        frame.style.backgroundPosition = 'center, center';
+        frame.style.backgroundSize = 'cover, 84px 84px';
+      } else {
+        badge(frame, dataUri(PENDING), '84px 84px');
+      }
+      var settled = false;
+      frame.addEventListener('load', function () {
+        settled = true;
+        frame.setAttribute('data-embed-state', 'loaded');
+        frame.removeAttribute('role');
+        frame.removeAttribute('tabindex');
+        frame.removeAttribute('aria-label');
+        frame.style.backgroundImage = '';
+      }, { once: true });
+      frame.src = src;
+      window.setTimeout(function () {
+        if (settled) return;
+        frame.setAttribute('data-embed-state', 'error');
+        frame.setAttribute('aria-label', label + ' could not be loaded');
+        frame.style.backgroundImage = dataUri(UNAVAILABLE);
+        frame.style.backgroundRepeat = 'no-repeat';
+        frame.style.backgroundPosition = 'center';
+        frame.style.backgroundSize = 'contain';
+      }, LOAD_TIMEOUT);
+    }
+
+    frame.addEventListener('click', load);
+    frame.addEventListener('keydown', function (event) {
+      var k = event.key;
+      if (k === 'Enter' || k === ' ' || k === 'Spacebar') { event.preventDefault(); load(); }
+    });
+  }
+
+  function initEmbeds(scope) {
+    var nodes = (scope || document).querySelectorAll('iframe[data-embed-src]');
+    for (var i = 0; i < nodes.length; i++) initEmbed(nodes[i]);
+  }
+
+  // The React bundle mounts the embeds after this script parses, so watch the DOM.
+  function watchEmbeds() {
+    initEmbeds();
+    if (!window.MutationObserver) return;
+    var scheduled = false;
+    var observer = new MutationObserver(function (records) {
+      var interesting = false;
+      for (var i = 0; i < records.length && !interesting; i++) {
+        var added = records[i].addedNodes;
+        for (var j = 0; j < added.length; j++) {
+          var node = added[j];
+          if (node.nodeType !== 1) continue;
+          if (node.tagName === 'IFRAME' || (node.querySelector && node.querySelector('iframe[data-embed-src]'))) {
+            interesting = true;
+            break;
           }
         }
       }
-    }
-
-    /* ── Add screen-reader-only utility class if not present ── */
-    if (!document.querySelector('#sr-only-styles')) {
-      var style = document.createElement('style');
-      style.id = 'sr-only-styles';
-      style.textContent = '.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}';
-      document.head.appendChild(style);
-    }
-  }
-
-  /* Run after React hydration completes */
-  if (document.readyState === 'complete') {
-    setTimeout(enhanceSEO, 500);
-  } else {
-    window.addEventListener('load', function() {
-      setTimeout(enhanceSEO, 500);
+      if (!interesting || scheduled) return;
+      scheduled = true;
+      window.requestAnimationFrame(function () { scheduled = false; initEmbeds(); });
     });
+    observer.observe(document.body, { childList: true, subtree: true });
   }
+
+  var SCOPE_FIELDS = {
+    type: 'Project type',
+    runtime: 'Scored runtime (minutes)',
+    complexity: 'Atmospheric intensity',
+    addons: 'Add-ons',
+    estimate: 'Indicative range',
+    micro: 'Micro-budget route',
+    target: 'Target budget',
+    notes: 'Notes'
+  };
+
+  function scopeToMailto(params) {
+    var lines = ['Scoring Inquiry', ''];
+    Object.keys(SCOPE_FIELDS).forEach(function (key) {
+      var value = params.get(key);
+      if (!value || value === '0') return;
+      lines.push(SCOPE_FIELDS[key] + ': ' + (key === 'micro' ? 'yes' : value));
+    });
+    lines.push('', 'Sent from the scope builder on horror.zazieproductions.com');
+    return 'mailto:zaziediya@gmail.com?subject=' + encodeURIComponent('Scoring Inquiry') + '&body=' + encodeURIComponent(lines.join('\n'));
+  }
+
+  document.addEventListener('click', function (event) {
+    if (event.defaultPrevented || event.button > 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    var anchor = event.target && event.target.closest ? event.target.closest('a[href^="#"]') : null;
+    if (!anchor) return;
+    var href = anchor.getAttribute('href') || '';
+
+    // Scope builder: previously set an unusable "#contact?..." hash.
+    if (href.indexOf('#contact?') === 0) {
+      event.preventDefault();
+      var params = new URLSearchParams(href.slice(href.indexOf('?') + 1));
+      var contact = document.getElementById('contact');
+      if (contact) contact.scrollIntoView({ block: 'start', behavior: 'auto' });
+      window.location.href = scopeToMailto(params);
+      return;
+    }
+
+    var target = document.getElementById(href.slice(1));
+    if (!target) return;
+    event.preventDefault();
+    // Let the mobile menu finish closing before we scroll.
+    window.requestAnimationFrame(function () {
+      window.setTimeout(function () {
+        target.scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
+      }, 0);
+    });
+    if (window.history && window.history.pushState) window.history.pushState(null, '', href);
+    else window.location.hash = href;
+  });
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', watchEmbeds);
+  else watchEmbeds();
 })();
-</script>
-
-<script>
-window.addEventListener("load", () => {
-  setTimeout(() => {
-    document.querySelectorAll("iframe[data-embed-src]").forEach((frame) => {
-      if (!frame.src) frame.src = frame.dataset.embedSrc;
-    });
-  }, 1000);
-});
 </script>
 </body>
 </html>
