@@ -1,1 +1,24 @@
-/* /index.html 200
+# Cloudflare Pages redirects.
+# The site is a single page (#top, #showreel, #work, #posters, #catalogue,
+# #press, #method, #why-now, #services, #about, #reviews, #contact), so legacy
+# or guessed paths are sent to the matching section instead of a soft 404.
+# Unmatched paths fall through to /404.html (Pages serves it with a 404 status).
+
+/work        /#work       301
+/film        /#work       301
+/samples     /#work       301
+/reel        /#showreel   301
+/showreel    /#showreel   301
+/listen      /#catalogue  301
+/catalogue   /#catalogue  301
+/posters     /#posters    301
+/rates       /#services   301
+/pricing     /#services   301
+/services    /#services   301
+/press       /#press      301
+/press-kit   /#press      301
+/about       /#about      301
+/bio         /#about      301
+/reviews     /#reviews    301
+/contact     /#contact    301
+/hire        /#contact    301
