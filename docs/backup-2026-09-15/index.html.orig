@@ -5,9 +5,9 @@
 <meta charset="utf-8"/>
 <link href="favicon.svg" rel="icon" type="image/svg+xml"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
-<meta content="Award-winning psychological horror composer. Original scores written to picture — themes, tension, silence, never library cues. Rented music reads as a rented film. Hear the reel." name="description"/>
+<meta content="Award-winning psychological horror composer. Dark, atmospheric, cinematic scores for film, TV & games. Boutique scoring. Limited slots per quarter. Hear the reel." name="description"/>
 <meta content="#050505" name="theme-color"/>
-<title>Zazie Kanwar-Torge: Psychological Horror Composer | Original Scores Written to Picture</title>
+<title>Zazie Kanwar-Torge: Psychological Horror Composer | Dark Cinematic Scores for Film, TV & Games</title>
 <link rel="canonical" href="https://horror.zazieproductions.com/" />
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 <link rel="preload" as="image" href="/images/hero-portrait.jpg" fetchpriority="high" media="(min-width: 1024px)">
@@ -19,13 +19,13 @@
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/></noscript>
 
 
-<script crossorigin="" src="index-daKuu3pI.js?v=20260915a" type="module"></script>
+<script crossorigin="" src="index-daKuu3pI.js?v=76d2ace91bb4" type="module"></script>
 <link crossorigin="" href="index-BloO9D4b.css" rel="stylesheet"/>
 <meta content="website" property="og:type"/>
-<meta content="Zazie Kanwar-Torge: Psychological Horror Composer | Original Scores Written to Picture" property="og:title"/>
-<meta content="Rented music reads as a rented film. Zazie Kanwar-Torge writes original psychological horror scores to picture — themes, tension, and silence placed on purpose. Film, TV, and games. Limited scoring slots per quarter." property="og:description"/>
+<meta content="Zazie Kanwar-Torge: Psychological Horror Composer | Dark Cinematic Scores" property="og:title"/>
+<meta content="Award-winning horror composer. Dark, atmospheric scores for psychological horror, supernatural thrillers, folk horror, body horror & dark sci-fi. Boutique capacity. Limited scoring slots per quarter." property="og:description"/>
 <meta content="Zazie Kanwar-Torge: Psychological Horror Composer" name="twitter:title"/>
-<meta content="Rented music reads as a rented film. Zazie Kanwar-Torge writes original psychological horror scores to picture — themes, tension, and silence placed on purpose. Film, TV, and games. Limited scoring slots per quarter." name="twitter:description"/>
+<meta content="Award-winning horror composer. Dark, atmospheric scores for psychological horror, supernatural thrillers, folk horror, body horror & dark sci-fi. Boutique capacity. Limited scoring slots per quarter." name="twitter:description"/>
 <meta property="og:url" content="https://horror.zazieproductions.com/" />
 <meta property="og:site_name" content="Zazie Productions: Horror Composer" />
 <meta property="og:locale" content="en_US" />
@@ -33,12 +33,12 @@
 <meta property="og:image:type" content="image/jpeg"/>
 <meta property="og:image:width" content="896"/>
 <meta property="og:image:height" content="1152"/>
-<meta property="og:image:alt" content="Zazie Kanwar-Torge, psychological horror composer — original score written to picture"/>
+<meta property="og:image:alt" content="Zazie Kanwar-Torge, psychological horror composer, dark cinematic score artwork"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:image" content="https://horror.zazieproductions.com/images/hero-portrait.jpg"/>
-<meta name="twitter:image:alt" content="Zazie Kanwar-Torge, psychological horror composer — original score written to picture"/>
+<meta name="twitter:image:alt" content="Zazie Kanwar-Torge, psychological horror composer, dark cinematic score artwork"/>
 <meta name="author" content="Zazie Kanwar-Torge" />
-<meta name="keywords" content="horror film composer, psychological horror scoring, original horror score written to picture, dread and tension music for film, supernatural thriller composer, folk horror score, body horror music, game horror sound designer, dark trailer music composer, original film score, boutique horror composer" />
+<meta name="keywords" content="horror film composer, psychological horror scoring, dark cinematic music, atmospheric horror soundtrack, supernatural thriller composer, folk horror score, body horror music, game horror sound designer, dark trailer music composer, original film score, boutique horror composer" />
 
 <style>
   section#top > div.relative > div.w-full > p.mt-4 {
@@ -80,9 +80,8 @@
   "alternateName": "Zazie Productions",
   "url": "https://horror.zazieproductions.com/",
   "image": "https://horror.zazieproductions.com/images/headshot.jpg",
-  "jobTitle": "Psychological Horror Composer",
-  "slogan": "Rented music reads as a rented film.",
-  "description": "Award-winning composer, experimental producer, and multi-instrumentalist writing original psychological horror scores to picture. Working principle: rented music reads as a rented film — every cue is built for one film at a time. Themes, tension, and placed silence; hybrid orchestral dread, ambient minimalism, struck strings, bowed metal, custom synth work. Film, TV, and games.",
+  "jobTitle": "Horror Film Composer",
+  "description": "Award-winning composer, experimental producer, and multi-instrumentalist specializing in dark, atmospheric, cinematic scores for psychological horror, supernatural thrillers, folk horror, body horror, and dark science fiction.",
   "knowsAbout": [
     "Film Scoring",
     "Horror Music Composition",
@@ -126,8 +125,7 @@
   "name": "Zazie Productions LLC",
   "url": "https://horror.zazieproductions.com/",
   "logo": "https://horror.zazieproductions.com/favicon.svg",
-  "slogan": "Rented music reads as a rented film.",
-  "description": "Boutique horror scoring studio. Original scores written to picture for film, TV, and games — themes, tension, and placed silence; no library packs, no foley substitution. Composition-first scoring for psychological horror, supernatural thrillers, folk horror, body horror, and dark science fiction.",
+  "description": "Boutique horror scoring studio. Dark, atmospheric, cinematic original scores for film, TV, and games. Composition-first approach for psychological horror, supernatural thrillers, folk horror, body horror, and dark science fiction.",
   "foundingDate": "2022",
   "sameAs": [
     "https://www.imdb.com/name/nm17333332",
@@ -143,7 +141,7 @@
 {
   "@context": "https://schema.org",
   "@type": "ItemList",
-  "name": "Horror Composer Showreel: Original Scores Written to Picture",
+  "name": "Horror Composer Showreel: Original Dark Cinematic Scores",
   "description": "Original horror film scores by Zazie Kanwar-Torge: psychological horror, supernatural, body horror, cosmic horror, dark ambient, and thriller cues.",
   "numberOfItems": 29,
   "itemListElement": [
@@ -168,18 +166,10 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "What does a psychological horror composer actually do?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "A psychological horror composer scores anticipation, not action: music that tells the audience what the story hasn\u2019t admitted yet. That only works when the score is original to the picture, because library cues carry other films\u2019 associations — rented music reads as a rented film. Zazie Kanwar-Torge writes themes, tension, and placed silence to the locked cut and delivers stems on time for the mix, so dread is built into the film rather than borrowed from it."
-      }
-    },
-    {
-      "@type": "Question",
       "name": "What kind of horror films does Zazie Kanwar-Torge compose for?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Zazie Kanwar-Torge composes original scores for psychological horror, supernatural thrillers, folk horror, body horror, techno-thrillers, dark science fiction, and cosmic horror. The compositional spine is picture-first: hybrid orchestral dread, ambient minimalism, and tension built around what the story withholds."
+        "text": "Zazie Kanwar-Torge composes original scores for psychological horror, supernatural thrillers, folk horror, body horror, techno-thrillers, dark science fiction, and cosmic horror. The compositional spine is dark, atmospheric, and cinematic: hybrid orchestral dread, ambient minimalism, and psychological tension cues shaped for picture."
       }
     },
     {
@@ -233,7 +223,7 @@
   "@id": "https://horror.zazieproductions.com/#website",
   "name": "Zazie Kanwar-Torge: Horror Composer",
   "url": "https://horror.zazieproductions.com/",
-  "description": "Portfolio of award-winning psychological horror composer Zazie Kanwar-Torge. Original scores written to picture for film, TV, and games.",
+  "description": "Portfolio of award-winning psychological horror composer Zazie Kanwar-Torge. Original dark, atmospheric, cinematic scores for film, TV, and games.",
   "publisher": {"@id": "https://horror.zazieproductions.com/#org"},
   "inLanguage": "en"
 }
@@ -249,7 +239,7 @@
   "telephone": "+1-864-430-0606",
   "email": "zaziediya@gmail.com",
   "priceRange": "$50 - $5000+",
-  "description": "Boutique horror scoring studio offering original scores written to picture for film, TV, and games. Rented music reads as a rented film — every cue is built, never licensed from a pack.",
+  "description": "Boutique horror scoring studio offering original dark, atmospheric, cinematic compositions for film, TV, and games.",
   "sameAs": [
     "https://www.imdb.com/name/nm17333332",
     "https://open.spotify.com/artist/4UOgvZEOo7xBhFBjJvlMm0",
@@ -259,7 +249,7 @@
 </script>
 
 <script type="application/ld+json">
-{"@context": "https://schema.org", "@graph": [{"@type": "WebPage", "@id": "https://horror.zazieproductions.com/#webpage", "url": "https://horror.zazieproductions.com/", "name": "Zazie Kanwar-Torge: Psychological Horror Composer | Original Scores Written to Picture", "description": "Award-winning psychological horror composer. Original scores written to picture — themes, tension, silence, never library cues. Rented music reads as a rented film. Hear the reel.", "isPartOf": {"@id": "https://horror.zazieproductions.com/#website"}, "about": {"@id": "https://horror.zazieproductions.com/#person"}, "primaryImageOfPage": "https://horror.zazieproductions.com/images/hero-portrait.jpg", "dateModified": "2026-09-15", "significantLink": "https://play.reelcrafter.com/xUXGBP_5Sui1_2ve23fyLg"}, {"@type": "Organization", "@id": "https://horror.zazieproductions.com/#org", "aggregateRating": {"@type": "AggregateRating", "ratingValue": "5.0", "bestRating": "5", "reviewCount": "4"}, "review": [{"@type": "Review", "reviewBody": "The score felt inseparable from the cut: quiet dread, clear themes, nothing generic.", "author": {"@type": "Person", "name": "Independent Director"}}, {"@type": "Review", "reviewBody": "Strong atmospheric writing and easy collaboration. Exactly what we needed for tone.", "author": {"@type": "Person", "name": "Music Supervisor"}}, {"@type": "Review", "reviewBody": "Professional, responsive, and the music sharp every screening.", "author": {"@type": "Person", "name": "Festival Circuit"}}, {"@type": "Review", "reviewBody": "On a student budget we still got a cinematic atmosphere that made our short feel finished.", "author": {"@type": "Person", "name": "Student Filmmaker"}}], "makesOffer": {"@type": "Offer", "name": "Original horror scoring: film, TV & games", "itemOffered": {"@type": "Service", "name": "Original cinematic horror score", "serviceType": "Film and game composition", "provider": {"@id": "https://horror.zazieproductions.com/#person"}}, "priceSpecification": {"@type": "PriceSpecification", "price": 50, "priceCurrency": "USD", "description": "Micro-budget naming from $50; short scores from $2,500; feature scores from $8,000."}, "availability": "https://schema.org/LimitedAvailability"}}, {"@type": "ItemList", "name": "Selected film & TV scores", "itemListOrder": "https://schema.org/ItemListOrderAscending", "numberOfItems": 8, "itemListElement": [{"@type": "ListItem", "position": 1, "item": {"@type": "CreativeWork", "name": "EXPIRE", "genre": ["Horror", "Dark Cinematic"], "description": "A Muhammad Abed Baryal film. Sound designer: Zazie Kanwar-Torge.", "url": "https://www.imdb.com/title/tt19369318/", "contributor": {"@id": "https://horror.zazieproductions.com/#person"}}}, {"@type": "ListItem", "position": 2, "item": {"@type": "CreativeWork", "name": "UNSEEN", "genre": ["Horror", "Dark Cinematic"], "description": "Steve Merlo’s unseen killer. Feature film score.", "url": "https://www.imdb.com/name/nm17333332", "musicBy": {"@id": "https://horror.zazieproductions.com/#person"}}}, {"@type": "ListItem", "position": 3, "item": {"@type": "CreativeWork", "name": "PEREGRINUS", "genre": ["Horror", "Dark Cinematic"], "description": "A pilgrimage of foreign forces. Series score.", "url": "https://www.imdb.com/name/nm17333332", "musicBy": {"@id": "https://horror.zazieproductions.com/#person"}}}, {"@type": "ListItem", "position": 4, "item": {"@type": "CreativeWork", "name": "Phantom Requiem", "genre": ["Horror", "Dark Cinematic"], "description": "A film by Zazie Productions. Original score.", "url": "https://www.youtube.com/watch?v=UX2kv3G89Jw", "musicBy": {"@id": "https://horror.zazieproductions.com/#person"}}}, {"@type": "ListItem", "position": 5, "item": {"@type": "CreativeWork", "name": "ECLIPSED", "genre": ["Horror", "Dark Cinematic"], "description": "A film by William Viera · VIERA Productions.", "url": "https://www.imdb.com/name/nm17333332", "musicBy": {"@id": "https://horror.zazieproductions.com/#person"}}}, {"@type": "ListItem", "position": 6, "item": {"@type": "CreativeWork", "name": "THE HAUNTED", "genre": ["Horror", "Dark Cinematic"], "description": "A Mike Fox film · Crystal Fox Films. Original score.", "url": "https://www.youtube.com/watch?v=Ty8tPp59mDc", "musicBy": {"@id": "https://horror.zazieproductions.com/#person"}}}, {"@type": "ListItem", "position": 7, "item": {"@type": "CreativeWork", "name": "CHOLERIC", "genre": ["Horror", "Dark Cinematic"], "description": "A Sebastian Fabres film · Haunted Dreams Pictures · NYFA.", "url": "https://www.imdb.com/title/tt38637541/", "musicBy": {"@id": "https://horror.zazieproductions.com/#person"}}}, {"@type": "ListItem", "position": 8, "item": {"@type": "CreativeWork", "name": "MIKE HAS A VISITOR", "genre": ["Horror", "Dark Cinematic"], "description": "A sleep paralysis horror short by Marco Saikaley.", "url": "https://www.imdb.com/title/tt36954700/", "musicBy": {"@id": "https://horror.zazieproductions.com/#person"}}}]}, {"@type": "MusicPlaylist", "name": "Zazie Productions: Horror Demo Reel", "description": "Curated horror cue reel: psychological dread beds, tension stingers, dark ambient soundscapes, cosmic and body-horror cues.", "track": [{"@type": "MusicRecording", "position": 1, "name": "Needle in The Nerve", "duration": "PT1M12S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 2, "name": "Dissociative Amnesia", "duration": "PT35S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 3, "name": "Brutalist Tension Stinger", "duration": "PT30S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 4, "name": "Scraping Psychophonic Bed", "duration": "PT1M31S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 5, "name": "Hidden Intentions / Serene Purgatory", "duration": "PT1M2S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 6, "name": "Variations on a Vanishing Body", "duration": "PT2M46S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 7, "name": "The Silence Began Crawling", "duration": "PT44S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 8, "name": "Timeless Retro Splurge", "duration": "PT2M16S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 9, "name": "Quarter-Eater Poltergeist", "duration": "PT56S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 10, "name": "Dark Thriller Cinematic Cue", "duration": "PT1M5S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 11, "name": "Opaline Lament (Life From The Beyond)", "duration": "PT2M24S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 12, "name": "Ominous Drone", "duration": "PT1M57S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 13, "name": "The Fatal Overdose", "duration": "PT42S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 14, "name": "Bone-Colored Air", "duration": "PT1M22S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 15, "name": "Obsidian Hall", "duration": "PT1M48S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 16, "name": "R’lyeh’s Xenolith", "duration": "PT6M32S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 17, "name": "Deep Dystopian Synth Cue", "duration": "PT1M11S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 18, "name": "Panic Threshold", "duration": "PT52S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 19, "name": "Waterphone Shower Scene", "duration": "PT1M19S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 20, "name": "The Room Forgets You", "duration": "PT2M16S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 21, "name": "Dark Ambient Soundscape No. 1", "duration": "PT1M44S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 22, "name": "Subdued Drone / Sensory Deprivation", "duration": "PT1M3S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 23, "name": "Dark Ambient Soundscape No. 2", "duration": "PT58S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 24, "name": "Screams of The Damned", "duration": "PT3M20S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 25, "name": "Narrow Pulse", "duration": "PT34S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 26, "name": "Dissonant Decay : Soundscape Sampler", "duration": "PT1M0S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 27, "name": "Time Shifting Into Daylight", "duration": "PT5M4S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 28, "name": "Stinger Cello Cue", "duration": "PT32S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 29, "name": "Smell of Bleach", "duration": "PT2M6S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}]}]}
+{"@context": "https://schema.org", "@graph": [{"@type": "WebPage", "@id": "https://horror.zazieproductions.com/#webpage", "url": "https://horror.zazieproductions.com/", "name": "Zazie Kanwar-Torge: Psychological Horror Composer | Dark Cinematic Scores for Film, TV & Games", "description": "Award-winning psychological horror composer. Dark, atmospheric, cinematic scores for film, TV & games. Boutique scoring. Limited slots per quarter. Hear the reel.", "isPartOf": {"@id": "https://horror.zazieproductions.com/#website"}, "about": {"@id": "https://horror.zazieproductions.com/#person"}, "primaryImageOfPage": "https://horror.zazieproductions.com/images/hero-portrait.jpg", "dateModified": "2026-08-31", "significantLink": "https://play.reelcrafter.com/xUXGBP_5Sui1_2ve23fyLg"}, {"@type": "Organization", "@id": "https://horror.zazieproductions.com/#org", "aggregateRating": {"@type": "AggregateRating", "ratingValue": "5.0", "bestRating": "5", "reviewCount": "4"}, "review": [{"@type": "Review", "reviewBody": "The score felt inseparable from the cut: quiet dread, clear themes, nothing generic.", "author": {"@type": "Person", "name": "Independent Director"}}, {"@type": "Review", "reviewBody": "Strong atmospheric writing and easy collaboration. Exactly what we needed for tone.", "author": {"@type": "Person", "name": "Music Supervisor"}}, {"@type": "Review", "reviewBody": "Professional, responsive, and the music sharp every screening.", "author": {"@type": "Person", "name": "Festival Circuit"}}, {"@type": "Review", "reviewBody": "On a student budget we still got a cinematic atmosphere that made our short feel finished.", "author": {"@type": "Person", "name": "Student Filmmaker"}}], "makesOffer": {"@type": "Offer", "name": "Original horror scoring: film, TV & games", "itemOffered": {"@type": "Service", "name": "Original cinematic horror score", "serviceType": "Film and game composition", "provider": {"@id": "https://horror.zazieproductions.com/#person"}}, "priceSpecification": {"@type": "PriceSpecification", "price": 50, "priceCurrency": "USD", "description": "Micro-budget naming from $50; short scores from $2,500; feature scores from $8,000."}, "availability": "https://schema.org/LimitedAvailability"}}, {"@type": "ItemList", "name": "Selected film & TV scores", "itemListOrder": "https://schema.org/ItemListOrderAscending", "numberOfItems": 8, "itemListElement": [{"@type": "ListItem", "position": 1, "item": {"@type": "CreativeWork", "name": "EXPIRE", "genre": ["Horror", "Dark Cinematic"], "description": "A Muhammad Abed Baryal film. Sound designer: Zazie Kanwar-Torge.", "url": "https://www.imdb.com/title/tt19369318/", "contributor": {"@id": "https://horror.zazieproductions.com/#person"}}}, {"@type": "ListItem", "position": 2, "item": {"@type": "CreativeWork", "name": "UNSEEN", "genre": ["Horror", "Dark Cinematic"], "description": "Steve Merlo’s unseen killer. Feature film score.", "url": "https://www.imdb.com/name/nm17333332", "musicBy": {"@id": "https://horror.zazieproductions.com/#person"}}}, {"@type": "ListItem", "position": 3, "item": {"@type": "CreativeWork", "name": "PEREGRINUS", "genre": ["Horror", "Dark Cinematic"], "description": "A pilgrimage of foreign forces. Series score.", "url": "https://www.imdb.com/name/nm17333332", "musicBy": {"@id": "https://horror.zazieproductions.com/#person"}}}, {"@type": "ListItem", "position": 4, "item": {"@type": "CreativeWork", "name": "Phantom Requiem", "genre": ["Horror", "Dark Cinematic"], "description": "A film by Zazie Productions. Original score.", "url": "https://www.youtube.com/watch?v=UX2kv3G89Jw", "musicBy": {"@id": "https://horror.zazieproductions.com/#person"}}}, {"@type": "ListItem", "position": 5, "item": {"@type": "CreativeWork", "name": "ECLIPSED", "genre": ["Horror", "Dark Cinematic"], "description": "A film by William Viera · VIERA Productions.", "url": "https://www.imdb.com/name/nm17333332", "musicBy": {"@id": "https://horror.zazieproductions.com/#person"}}}, {"@type": "ListItem", "position": 6, "item": {"@type": "CreativeWork", "name": "THE HAUNTED", "genre": ["Horror", "Dark Cinematic"], "description": "A Mike Fox film · Crystal Fox Films. Original score.", "url": "https://www.youtube.com/watch?v=Ty8tPp59mDc", "musicBy": {"@id": "https://horror.zazieproductions.com/#person"}}}, {"@type": "ListItem", "position": 7, "item": {"@type": "CreativeWork", "name": "CHOLERIC", "genre": ["Horror", "Dark Cinematic"], "description": "A Sebastian Fabres film · Haunted Dreams Pictures · NYFA.", "url": "https://www.imdb.com/title/tt38637541/", "musicBy": {"@id": "https://horror.zazieproductions.com/#person"}}}, {"@type": "ListItem", "position": 8, "item": {"@type": "CreativeWork", "name": "MIKE HAS A VISITOR", "genre": ["Horror", "Dark Cinematic"], "description": "A sleep paralysis horror short by Marco Saikaley.", "url": "https://www.imdb.com/title/tt36954700/", "musicBy": {"@id": "https://horror.zazieproductions.com/#person"}}}]}, {"@type": "MusicPlaylist", "name": "Zazie Productions: Horror Demo Reel", "description": "Curated horror cue reel: psychological dread beds, tension stingers, dark ambient soundscapes, cosmic and body-horror cues.", "track": [{"@type": "MusicRecording", "position": 1, "name": "Needle in The Nerve", "duration": "PT1M12S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 2, "name": "Dissociative Amnesia", "duration": "PT35S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 3, "name": "Brutalist Tension Stinger", "duration": "PT30S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 4, "name": "Scraping Psychophonic Bed", "duration": "PT1M31S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 5, "name": "Hidden Intentions / Serene Purgatory", "duration": "PT1M2S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 6, "name": "Variations on a Vanishing Body", "duration": "PT2M46S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 7, "name": "The Silence Began Crawling", "duration": "PT44S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 8, "name": "Timeless Retro Splurge", "duration": "PT2M16S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 9, "name": "Quarter-Eater Poltergeist", "duration": "PT56S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 10, "name": "Dark Thriller Cinematic Cue", "duration": "PT1M5S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 11, "name": "Opaline Lament (Life From The Beyond)", "duration": "PT2M24S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 12, "name": "Ominous Drone", "duration": "PT1M57S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 13, "name": "The Fatal Overdose", "duration": "PT42S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 14, "name": "Bone-Colored Air", "duration": "PT1M22S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 15, "name": "Obsidian Hall", "duration": "PT1M48S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 16, "name": "R’lyeh’s Xenolith", "duration": "PT6M32S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 17, "name": "Deep Dystopian Synth Cue", "duration": "PT1M11S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 18, "name": "Panic Threshold", "duration": "PT52S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 19, "name": "Waterphone Shower Scene", "duration": "PT1M19S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 20, "name": "The Room Forgets You", "duration": "PT2M16S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 21, "name": "Dark Ambient Soundscape No. 1", "duration": "PT1M44S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 22, "name": "Subdued Drone / Sensory Deprivation", "duration": "PT1M3S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 23, "name": "Dark Ambient Soundscape No. 2", "duration": "PT58S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 24, "name": "Screams of The Damned", "duration": "PT3M20S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 25, "name": "Narrow Pulse", "duration": "PT34S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 26, "name": "Dissonant Decay : Soundscape Sampler", "duration": "PT1M0S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 27, "name": "Time Shifting Into Daylight", "duration": "PT5M4S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 28, "name": "Stinger Cello Cue", "duration": "PT32S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}, {"@type": "MusicRecording", "position": 29, "name": "Smell of Bleach", "duration": "PT2M6S", "byArtist": {"@id": "https://horror.zazieproductions.com/#person"}}]}]}
 </script>
 </head>
 <body>
@@ -296,8 +286,8 @@
         <p class="mb-4 text-[10px] uppercase tracking-[0.38em] text-mist sm:text-[11px]">Film · TV · Games</p>
         <p class="mt-4 font-display text-lg tracking-wide text-bone">Zazie Kanwar-Torge</p>
         <h1 class="font-display text-[2.35rem] leading-[1.02] tracking-tight text-bone sm:text-5xl md:text-6xl lg:text-[3.75rem]">Stop letting temp music <span class="mt-1 block bg-gradient-to-r from-blood via-ember to-blood bg-clip-text italic text-transparent">rewrite your film.</span></h1>
-        <p class="mt-5 max-w-md font-display text-xl leading-snug text-bone/90 sm:mt-6 sm:text-2xl">Original scores that play the dread the audience feels <span class="block italic text-mist">before the film admits why.</span></p>
-        <p class="mt-4 max-w-md text-sm leading-relaxed text-mist/90 sm:text-base">Your audience has already heard that library cue — in someone else’s trailer. Rented music reads as a rented film. I write to one picture at a time: themes that know where your cuts fall, dread that survives a festival mix, stems on time for the dub.</p>
+        <p class="mt-5 max-w-md font-display text-xl leading-snug text-bone/90 sm:mt-6 sm:text-2xl">Dark, atmospheric scores that make the room <span class="block italic text-mist">lean in. Before anyone can call it generic.</span></p>
+        <p class="mt-4 max-w-md text-sm leading-relaxed text-mist/90 sm:text-base">Original music written to picture. Not a library. Not foley. The cinematic finish that protects everything you already fought for.</p>
         <div class="mt-8 flex w-full flex-col gap-3 sm:mt-10 sm:flex-row sm:items-center">
           <a href="#showreel" class="group relative inline-flex min-h-[54px] w-full items-center justify-center gap-3 bg-blood px-8 py-4 text-sm font-medium tracking-wide text-bone shadow-[0_0_40px_rgba(196,30,30,0.35)] transition-all hover:bg-ember hover:shadow-[0_0_56px_rgba(255,42,42,0.45)] sm:w-auto">Hear the proof</a>
           <a href="#contact" class="group relative inline-flex min-h-[54px] w-full items-center justify-center gap-3 border border-ash px-8 py-4 text-sm font-medium tracking-wide text-bone transition-colors hover:border-blood hover:text-bone sm:w-auto">Claim a scoring slot</a>
@@ -317,18 +307,18 @@
       <li class="font-display text-sm tracking-[0.2em] text-bone/70 sm:text-base sm:tracking-[0.28em]">Crystal Fox Films</li>
       <li class="font-display text-sm tracking-[0.2em] text-bone/70 sm:text-base sm:tracking-[0.28em]">Festival shorts</li>
       <li class="font-display text-sm tracking-[0.2em] text-bone/70 sm:text-base sm:tracking-[0.28em]">Psychological horror</li>
-      <li class="font-display text-sm tracking-[0.2em] text-bone/70 sm:text-base sm:tracking-[0.28em]">Festival-selected</li>
-      <li class="font-display text-sm tracking-[0.2em] text-bone/70 sm:text-base sm:tracking-[0.28em]">Platform-ready</li>
-      <li class="font-display text-sm tracking-[0.2em] text-bone/70 sm:text-base sm:tracking-[0.28em]">Deadline discipline</li>
+      <li class="font-display text-sm tracking-[0.2em] text-bone/70 sm:text-base sm:tracking-[0.28em]">A24-adjacent taste</li>
+      <li class="font-display text-sm tracking-[0.2em] text-bone/70 sm:text-base sm:tracking-[0.28em]">Shudder-ready tone</li>
+      <li class="font-display text-sm tracking-[0.2em] text-bone/70 sm:text-base sm:tracking-[0.28em]">Blumhouse efficiency</li>
       <li class="font-display text-sm tracking-[0.2em] text-bone/70 sm:text-base sm:tracking-[0.28em]">Student → feature</li>
     </ul>
   </section>
   <section class="border-b border-ash bg-void py-12 sm:py-14 md:py-16">
     <div class="mx-auto max-w-3xl px-4 text-center sm:px-6 md:px-8">
       <p class="mb-3 text-[10px] uppercase tracking-[0.35em] text-blood sm:text-[11px]">For serious filmmakers</p>
-      <h2 class="mb-4 font-display text-3xl leading-none text-bone sm:text-4xl md:text-5xl">If that reel felt like your missing scene, <span class="block italic text-blood">“close enough” is what gets locked instead.</span></h2>
-      <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-mist sm:text-base">Temp got you through the edit. It will not carry the room. Original score is how directors protect the cut, supervisors protect taste, and producers protect the screening.</p>
-      <p class="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-mist sm:text-base">Keep renting emotion, or put original music on the cut before picture lock freezes the wrong feeling into your film.</p>
+      <h2 class="mb-4 font-display text-3xl leading-none text-bone sm:text-4xl md:text-5xl">If that reel felt like your missing scene, <span class="block italic text-blood">don’t settle for “close enough.”</span></h2>
+      <p class="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-mist sm:text-base">Temp got you through the edit. It will not carry the room. Original dark, cinematic music is how directors protect the cut, supervisors protect taste, and producers protect the screening.</p>
+      <p class="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-mist sm:text-base">Next step is simple: keep renting emotion, or get original music on the cut before picture lock freezes the wrong feeling into the film.</p>
       <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
         <a href="#why-now" class="inline-flex items-center border border-ash px-6 py-3 text-[11px] uppercase tracking-[0.22em] text-mist transition-colors hover:border-blood hover:text-bone">See why temp fails</a>
         <a href="#contact" class="inline-flex items-center bg-blood px-6 py-3 text-[11px] uppercase tracking-[0.22em] text-bone transition-colors hover:bg-ember">Start inquiry now</a>
@@ -340,7 +330,7 @@
       <div class="max-w-2xl">
         <p class="mb-3 text-[10px] uppercase tracking-[0.35em] text-blood sm:text-[11px]">01 · Showreel</p>
         <h2 class="mb-4 font-display text-3xl leading-none text-bone sm:text-4xl md:text-6xl">Listen first. <span class="mt-1 block italic text-mist">Decide in the body.</span></h2>
-        <p class="text-sm leading-relaxed text-mist sm:text-base">Original cues from the demo reel. Play the right one against the scene you can’t crack.</p>
+        <p class="text-sm leading-relaxed text-mist sm:text-base">Dark, atmospheric cues: the fastest way to know if the fit is inevitable.</p>
       </div>
       <p class="mt-10 mb-4 text-[10px] uppercase tracking-[0.3em] text-mist">Curated cues. 29 from the demo reel</p>
       <ol class="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
@@ -543,7 +533,7 @@
       <div class="mb-10 max-w-2xl sm:mb-14">
         <p class="mb-3 text-[10px] uppercase tracking-[0.35em] text-blood sm:text-[11px]">03 · Listening room</p>
         <h2 class="mb-4 font-display text-3xl leading-none text-bone sm:text-4xl md:text-6xl">From the demo reel</h2>
-        <p class="text-sm leading-relaxed text-mist sm:text-base">The same catalogue cuts paired with the horror reel, playable here in a square grid. Stay on the page. Let the cues do the pitching.</p>
+        <p class="text-sm leading-relaxed text-mist sm:text-base">The same catalogue cuts paired with the horror reel, playable here in a square grid. Stay on the page. Let the atmosphere do the pitching.</p>
       </div>
       <ul class="grid gap-4 sm:grid-cols-2">
         <li class="border border-ash bg-void p-4"><p class="font-mono text-[10px] text-blood">01</p><h3 class="font-display text-base text-bone">Signal Fragment I</h3></li>
@@ -607,15 +597,15 @@
   <section id="method" class="relative bg-ink py-16 sm:py-24 md:py-32">
     <div class="relative mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
       <div class="mb-10 max-w-3xl sm:mb-14">
-        <p class="mb-3 text-[10px] uppercase tracking-[0.4em] text-blood sm:text-[11px]">04 · The collaborator</p>
+        <p class="mb-3 text-[10px] uppercase tracking-[0.4em] text-blood sm:text-[11px]">03 · Attractive character</p>
         <h2 class="mb-4 font-display text-3xl leading-none text-bone sm:text-4xl md:text-6xl">Not a vendor.<br/><span class="italic text-blood">The ally who guards the feeling.</span></h2>
-        <p class="text-sm leading-relaxed text-mist sm:text-base">You’re not hiring “someone who owns plugins.” You’re hiring a point of view: themes, tension, and quiet written to your cut, so the film feels authored, not decorated. No sound-design menu. No identity crisis mid-spotting. Just music that behaves like story.</p>
+        <p class="text-sm leading-relaxed text-mist sm:text-base">You’re not hiring “someone who owns plugins.” You’re hiring a point of view: dark, atmospheric, cinematic composition that makes your film feel authored. No sound-design menu. No identity crisis mid-spotting. Just music that behaves like story.</p>
       </div>
       <div class="grid gap-4 sm:grid-cols-2">
         <div class="border border-ash bg-ink/70 p-5 transition-colors hover:border-blood/40 sm:p-7">
           <p class="text-[10px] tabular-nums text-mist">01</p>
           <h3 class="mt-2 font-display text-xl text-bone">Composer first</h3>
-          <p class="mt-2 text-sm leading-relaxed text-mist">Themes, harmony, tension — scored to picture</p>
+          <p class="mt-2 text-sm leading-relaxed text-mist">Themes, harmony, atmosphere scored to picture</p>
         </div>
         <div class="border border-ash bg-ink/70 p-5 transition-colors hover:border-blood/40 sm:p-7">
           <p class="text-[10px] tabular-nums text-mist">02</p>
@@ -633,12 +623,12 @@
   <section class="relative overflow-hidden border-y border-blood/25 py-14 sm:py-20">
     <div class="relative mx-auto max-w-3xl px-4 sm:px-6 md:px-8">
       <p class="mb-3 text-[10px] uppercase tracking-[0.35em] text-blood sm:text-[11px]">Direct offer · no maze</p>
-      <h2 class="font-display text-2xl leading-tight text-bone sm:text-3xl md:text-4xl">Here’s the deal, plain: <span class="mt-2 block italic text-blood">a composer who makes the cut feel finished.</span></h2>
-      <p class="mt-4 text-sm leading-relaxed text-mist sm:text-base">No 47-page proposal theater. Hear the work. Scope the score. Send “Scoring Inquiry.” If it’s a fit, we lock the score to picture. If it’s not, you haven’t wasted a month auditioning libraries that will never love your film back.</p>
+      <h2 class="font-display text-2xl leading-tight text-bone sm:text-3xl md:text-4xl">Here’s the deal, plain: <span class="mt-2 block italic text-blood">original atmospheric horror scoring. A composer who makes the cut feel finished.</span></h2>
+      <p class="mt-4 text-sm leading-relaxed text-mist sm:text-base">No 47-page proposal theater. Hear the work. Scope the score. Send “Scoring Inquiry.” If it’s a fit, we lock atmosphere to picture. If it’s not, you haven’t wasted a month auditioning libraries that will never love your film back.</p>
       <p class="mt-3 text-sm leading-relaxed text-mist sm:text-base">Scarcity isn’t a gimmick. I take on a limited number of scores at a time. Miss the window and you’re back to hoping temp still fools the room.</p>
       <ul class="mt-8 grid gap-4 md:grid-cols-3">
         <li class="border border-ash bg-void p-5"><h3 class="font-display text-lg text-bone">48-hour reply standard</h3><p class="mt-1 text-sm text-mist">Complete inquiries get a human answer, not a void.</p></li>
-        <li class="border border-ash bg-void p-5"><h3 class="font-display text-lg text-bone">Score-only promise</h3><p class="mt-1 text-sm text-mist">Themes, tension, cues. Zero foley bait-and-switch.</p></li>
+        <li class="border border-ash bg-void p-5"><h3 class="font-display text-lg text-bone">Score-only promise</h3><p class="mt-1 text-sm text-mist">Atmosphere, themes, cues. Zero foley bait-and-switch.</p></li>
         <li class="border border-ash bg-void p-5"><h3 class="font-display text-lg text-bone">Budgets that match reality</h3><p class="mt-1 text-sm text-mist">Features to micro: name your price from $50 up.</p></li>
       </ul>
       <div class="mt-8 flex flex-col gap-3 sm:flex-row">
@@ -652,7 +642,7 @@
       <div class="mb-10 max-w-3xl sm:mb-14">
         <p class="mb-3 text-[10px] uppercase tracking-[0.35em] text-blood sm:text-[11px]">Read this before you “fix music later”</p>
         <h2 class="font-display text-3xl leading-tight text-bone sm:text-4xl md:text-5xl">The costliest mistake in indie film isn’t the camera. <span class="mt-2 block italic text-blood">It’s the night the room decides your movie is only “fine.”</span></h2>
-        <p class="mt-4 text-sm leading-relaxed text-mist sm:text-base">People feel the score before they argue with the plot. Temp is rented feeling. Rented feeling never gets your film remembered.</p>
+        <p class="mt-4 text-sm leading-relaxed text-mist sm:text-base">People feel the score before they argue with the plot. Temp is rented feeling. Rented feeling does not get your film remembered.</p>
       </div>
       <div class="grid gap-4 sm:grid-cols-2">
         <div class="border border-ash bg-void p-5 sm:p-6">
@@ -668,7 +658,7 @@
         <div class="border border-ash bg-void p-5 sm:p-6">
           <p class="mb-2 text-[10px] uppercase tracking-[0.28em] text-blood">03 · Fix</p>
           <h3 class="font-display text-xl text-bone">Put original music on the cut</h3>
-          <p class="mt-2 text-sm leading-relaxed text-mist">A score written to your picture: themes that return when they shouldn’t, tension that holds across the cut, silence placed on purpose. Built, not rented.</p>
+          <p class="mt-2 text-sm leading-relaxed text-mist">A dark, atmospheric, cinematic score written to your picture. Not a library pack. Not “we also do foley.” Music with a point of view so people lean in.</p>
         </div>
       </div>
       <div class="mt-6 grid gap-4 md:grid-cols-2">
@@ -730,9 +720,9 @@
   <section id="services" class="relative bg-ink py-16 sm:py-24 md:py-32">
     <div class="relative mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
       <div class="mb-10 max-w-3xl sm:mb-14">
-        <p class="mb-3 text-[10px] uppercase tracking-[0.4em] text-blood sm:text-[11px]">05 · Scope and budget</p>
+        <p class="mb-3 text-[10px] uppercase tracking-[0.4em] text-blood sm:text-[11px]">04 · Scope and budget</p>
         <h2 class="mb-4 font-display text-3xl leading-none text-bone sm:text-4xl md:text-6xl">Pick the level of <span class="italic text-blood">finish</span> your picture needs</h2>
-        <p class="text-sm leading-relaxed text-mist sm:text-base">You don’t need the top package to start. Configure score-only work (themes, beds, and cues — never foley). Micro and student films: name your price from $50. Serious projects only.</p>
+        <p class="text-sm leading-relaxed text-mist sm:text-base">You don’t need the top package to start. Configure atmospheric score only (themes, beds, and cues, never foley). Micro and student films: name your price from $50. Serious projects only.</p>
       </div>
       <div class="grid gap-4 sm:grid-cols-2">
         <div class="border border-ash bg-void p-5 sm:p-6">
@@ -781,11 +771,11 @@
           </div>
         </div>
         <div class="lg:col-span-7">
-          <p class="mb-3 text-[10px] uppercase tracking-[0.4em] text-blood sm:text-[11px]">06 · Biography</p>
-          <h2 class="mb-4 font-display text-3xl leading-none text-bone sm:text-4xl md:text-5xl">The composer behind the dread</h2>
+          <p class="mb-3 text-[10px] uppercase tracking-[0.4em] text-blood sm:text-[11px]">05 · Biography</p>
+          <h2 class="mb-4 font-display text-3xl leading-none text-bone sm:text-4xl md:text-5xl">The composer behind the atmosphere</h2>
           <p class="mt-4 text-sm leading-relaxed text-mist sm:text-base">Zazie Kanwar-Torge writes the music, performs it, and builds the sounds himself. Award-winning composer, experimental producer, multi-instrumentalist. Under Zazie Productions he scores psychological horror, folk horror, body horror, and dark sci-fi. The toolkit: struck strings, bowed metal, hybrid orchestration, custom synth-work for post-production. Student shorts to features. The dread is built, not rented.</p>
-          <p class="mt-4 text-sm leading-relaxed text-mist sm:text-base">Zazie writes original scores for psychological horror, supernatural thrillers, folk horror, techno-thriller, and body horror: hybrid orchestral dread, ambient minimalism, and tension built to picture. Composition first, always.</p>
-          <p class="mt-6 text-[10px] uppercase tracking-[0.3em] text-mist">Original · To picture · Built, not rented</p>
+          <p class="mt-4 text-sm leading-relaxed text-mist sm:text-base">Zazie writes dark, atmospheric, and cinematic music: hybrid orchestral dread, ambient minimalism, and psychological tension cues shaped for picture. Scores for psychological horror, supernatural thrillers, folk horror, techno-thriller, and body-horror stories. Composition first, always.</p>
+          <p class="mt-6 text-[10px] uppercase tracking-[0.3em] text-mist">Atmospheric · Dark · Cinematic scores</p>
           <p class="mt-1 text-[10px] uppercase tracking-[0.3em] text-mist">Select projects · Micro to feature</p>
           <div class="mt-8 flex flex-col gap-3 sm:flex-row">
             <a href="#contact" class="inline-flex items-center justify-center bg-blood px-8 py-4 text-sm font-medium tracking-wide text-bone transition-colors hover:bg-ember">Start a Conversation</a>
@@ -843,11 +833,11 @@
         <span class="text-[10px]"><span class="font-semibold text-[#F5C518]">5.0</span><span class="text-mist"> · 5-star collaborator reviews</span></span>
       </div>
       <h2 class="mb-4 font-display text-3xl leading-tight text-bone sm:text-4xl md:text-5xl">Do this now. <span class="italic text-blood">before temp becomes “the score.”</span></h2>
-      <p class="max-w-2xl text-sm leading-relaxed text-mist sm:text-base">Every day you wait, the cut learns the wrong music. The last thing you fix is the first thing they feel. Fill budget, theme, and format. One click opens your mail to zaziediya@gmail.com with subject “Scoring Inquiry” already written. You hit send. We talk.</p>
-      <p class="mt-3 max-w-2xl text-sm leading-relaxed text-mist sm:text-base">The filmmakers who get the slots aren’t “thinking about it.” They’re the ones whose inquiry is already in the inbox while everyone else is still temping Hans.</p>
+      <p class="max-w-2xl text-sm leading-relaxed text-mist sm:text-base">Every day you wait, the cut learns the wrong music. Fill budget, theme, and format. One click opens your mail to zaziediya@gmail.com with subject “Scoring Inquiry” already written. You hit send. We talk.</p>
+      <p class="mt-3 max-w-2xl text-sm leading-relaxed text-mist sm:text-base">Direct-response truth: the filmmakers who get the slots aren’t “thinking about it.” They’re the ones whose inquiry is already in the inbox while everyone else is still temping Hans.</p>
       <div class="mt-8 border border-ash bg-ink/70 p-5 sm:p-6">
         <p class="text-[10px] uppercase tracking-[0.25em] text-blood">Direct inquiry</p>
-        <p class="mt-2 text-sm text-mist">Focus: Original score — themes, tension, and cues. Not sound design or foley.</p>
+        <p class="mt-2 text-sm text-mist">Focus: Original atmospheric / cinematic score (not sound design or foley) · atmospheric score focus only.</p>
         <a href="mailto:zaziediya@gmail.com?subject=Scoring%20Inquiry" class="mt-4 inline-flex min-h-[52px] items-center justify-center bg-blood px-8 py-3.5 text-sm font-medium text-bone transition-colors hover:bg-ember">Open my scoring inquiry</a>
         <p class="mt-3 break-all text-xs text-mist">Subject: Scoring Inquiry → zaziediya@gmail.com</p>
       </div>
@@ -860,7 +850,7 @@
     <div class="flex flex-col justify-between gap-10 md:flex-row md:items-end">
       <div>
         <p class="font-display text-3xl tracking-wide text-bone sm:text-4xl md:text-5xl">Zazie Kanwar-Torge</p>
-        <p class="mt-3 text-[10px] uppercase tracking-[0.35em] text-mist sm:text-[11px]">Zazie Productions LLC · Original scores written to picture</p>
+        <p class="mt-3 text-[10px] uppercase tracking-[0.35em] text-mist sm:text-[11px]">Zazie Productions LLC · Atmospheric horror scores</p>
       </div>
       <div class="flex max-w-md flex-wrap gap-x-5 gap-y-3">
         <a href="#press" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Press kit</a>
