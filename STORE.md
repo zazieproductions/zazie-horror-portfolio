@@ -55,28 +55,34 @@ Never hand-edit `store.html`: the next build overwrites it.
 | 3 | Spectral Ode to Synesthesia (8:55 binaural, Mar 2025) | Bandcamp | $5+ | `…bandcamp.com/album/spectral-ode-to-synesthesia-2` | `f4.bcbits.com/img/a3756749177_16.jpg` |
 | 4 | To Halt Space Adrift (album, 8 tracks, May 2023) | Bandcamp | $8+ | `…bandcamp.com/album/to-halt-space-adrift` | `f4.bcbits.com/img/a0612904516_16.jpg` |
 | 5 | Constrained Capacity (album, 10 tracks, May 2022) | Bandcamp | $7+ | `…bandcamp.com/album/constrained-capacity` | `f4.bcbits.com/img/a0935502895_16.jpg` |
-| 6 | Unholy Anatomy — 209 body horror & creature vocal SFX | itch.io | $10+ | `zazieproductions.itch.io/unholyanatomy` | `img.itch.zone/aW1nLzI5MTYyOTA5LnBuZw==/347x500/…` |
-| 7 | Fault Codes — 25+ minimal error beeps | itch.io | $1 | `zazieproductions.itch.io/30-minimal-error-beeps-system-warning-sfx` | `img.itch.zone/aW1nLzI4NjA5NjM4LnBuZw==/347x500/…` |
-| 8 | Galactic Requiem — immersive 3D battle soundscape | Gumroad | $5+ | `zazieproductions.gumroad.com/l/immersive3daudio` | `public-files.gumroad.com/kxisasmtty6rugi2h6wyhz29lvb4` |
-| 9 | World's Strangest Plug-in Mega-Vault (200+ VSTs) | Gumroad | $35+ | `zazieproductions.gumroad.com/l/plugin` | `public-files.gumroad.com/gxx8r6nvhvokuqz8ktnou29qlm7c` |
-| 10 | Micro-Rupture Collection — 18 vertical glitch cuts | Gumroad | $5 | `zazieproductions.gumroad.com/l/hdtgt` | `public-files.gumroad.com/ggkcnd8qzh2wnynjbinyw2b54l0b` |
-| 11 | Creepy Cricket Noise Generator Module (5 colours) | eBay | $13.96 + $10.50 | item `237074138587` | `i.ebayimg.com/images/g/c-cAAeSwjBpqrDDB/s-l500.webp` |
-| 12 | Halloween Ghost Glow Fruit Plate with music | eBay | $45.00 + $10.50 | item `236994104581` | `i.ebayimg.com/images/g/99UAAeSwqhJqd3CA/s-l500.webp` |
-| 13 | F998Pro live sound card (white, English version) | eBay | $85.00 + $10.50 | item `236994099582` | `i.ebayimg.com/images/g/7aAAAeSwAVhqd3Cg/s-l500.webp` |
-| 14 | Voice-control WiFi bulb, RGBCW 9 W | eBay | $25.00 + $10.50 | item `236992067377` | `i.ebayimg.com/images/g/hkQAAeSwAfJqdiA1/s-l500.webp` |
+| 6 | Vermiform (album, 8 tracks, Jul 2023) | Bandcamp | $7+ | `…bandcamp.com/album/vermiform` | `f4.bcbits.com/img/a0050695008_16.jpg` |
+| 7 | Interference Archive 01010101 (album, 5 tracks, Sep 2021) | Bandcamp | $7+ | `…bandcamp.com/album/interference-archive-01010101` | `f4.bcbits.com/img/a0281727228_16.jpg` |
+| 8 | Stutter to stammer (album, 5 tracks, Nov 2019) | Bandcamp | $7+ | `…bandcamp.com/album/stutter-to-stammer` | `f4.bcbits.com/img/a1008810016_16.jpg` |
+| 9 | Unholy Anatomy — 209 body horror & creature vocal SFX | itch.io | $10+ | `zazieproductions.itch.io/unholyanatomy` | `img.itch.zone/aW1nLzI5MTYyOTA5LnBuZw==/347x500/…` |
+| 10 | Fault Codes — 25+ minimal error beeps | itch.io | $1 | `zazieproductions.itch.io/30-minimal-error-beeps-system-warning-sfx` | `img.itch.zone/aW1nLzI4NjA5NjM4LnBuZw==/347x500/…` |
+| 11 | Galactic Requiem — immersive 3D battle soundscape | Gumroad | $5+ | `zazieproductions.gumroad.com/l/immersive3daudio` | `public-files.gumroad.com/kxisasmtty6rugi2h6wyhz29lvb4` |
+| 12 | World's Strangest Plug-in Mega-Vault (200+ VSTs) | Gumroad | $35+ | `zazieproductions.gumroad.com/l/plugin` | `public-files.gumroad.com/gxx8r6nvhvokuqz8ktnou29qlm7c` |
+| 13 | Micro-Rupture Collection — 18 vertical glitch cuts | Gumroad | $5 | `zazieproductions.gumroad.com/l/hdtgt` | `public-files.gumroad.com/ggkcnd8qzh2wnynjbinyw2b54l0b` |
+| 14 | The Forbidden Canticles — 4 Renaissance manuscript facsimiles (PDF, 50 left) | Gumroad | $20+ | `zazieproductions.gumroad.com/l/wbqvh` | `public-files.gumroad.com/h4mkhyng4g2dq47w82bof8aa1xa0` |
+| 15 | Aztec Death Whistle — screaming skull (3 variants, 5 available) | eBay | $28.50 + $10.50 | item `237074158813` | `i.ebayimg.com/images/g/v5cAAeSwYHhqrDTs/s-l500.webp` |
+| 16 | Skull Heads with motion sensor (type Z270, 5 available) | eBay | $30.10 + $10.50 | item `237074157963` | `i.ebayimg.com/images/g/4awAAeSwtpFqrDSI/s-l500.webp` |
+| 17 | Creepy Cricket Noise Generator Module (5 colours) | eBay | $13.96 + $10.50 | item `237074138587` | `i.ebayimg.com/images/g/c-cAAeSwjBpqrDDB/s-l500.webp` |
+| 18 | Halloween Ghost Glow Fruit Plate with music | eBay | $45.00 + $10.50 | item `236994104581` | `i.ebayimg.com/images/g/99UAAeSwqhJqd3CA/s-l500.webp` |
+| 19 | F998Pro live sound card (white, English version) | eBay | $85.00 + $10.50 | item `236994099582` | `i.ebayimg.com/images/g/7aAAAeSwAVhqd3Cg/s-l500.webp` |
+| 20 | Voice-control WiFi bulb, RGBCW 9 W | eBay | $25.00 + $10.50 | item `236992067377` | `i.ebayimg.com/images/g/hkQAAeSwAfJqdiA1/s-l500.webp` |
 
 Plus a **discography band** linking to `zazieproductions.bandcamp.com/music`
 (full digital discography: 18 releases, $110.25+, 10 % off — as shown on every
 Bandcamp release page on the capture date).
 
-Categories (`data-collection`): `records` (1–5), `sfx` (6–8), `plugins` (9),
-`motion` (10), `gear` (11–14). Delivery (`data-delivery`): `digital` (1–10),
-`physical` (11–14).
+Categories (`data-collection`): `records` (1–8), `sfx` (9–11), `plugins` (12),
+`motion` (13), `scores` (14), `gear` (15–20). Delivery (`data-delivery`):
+`digital` (1–14), `physical` (15–20).
 
-Bandcamp covers use the `_16` size (700×700). Records 1 and 2 have an in-card
-**Preview** button wired to a showreel cue that appears on that release
+Bandcamp covers use the `_16` size (700×700). Records 1, 2 and 7 have an
+in-card **Preview** button wired to a showreel cue that appears on that release
 (`/audio/track-00.mp3` = *Needle In The Nerve*, `/audio/track-10.mp3` =
-*Opaline Lament*). Add `data-preview` to other cards only when a matching cue
+*Opaline Lament*, `/audio/track-07.mp3` = *Timeless Retro Splurge*). Add `data-preview` to other cards only when a matching cue
 exists in `/audio`.
 
 ## 4. Cover art
@@ -104,10 +110,10 @@ layers appear.
 * Adds `has-js` to `<html>` — the filter bar, previews, ambience toggle and
   torch are hidden without it.
 * Two filter groups (`collection`, `delivery`) combined with AND logic,
-  `aria-pressed` state, a live `role="status"` counter ("N of 14 releases"), and
+  `aria-pressed` state, a live `role="status"` counter ("N of 20 releases"), and
   an empty state with a reset link.
 * Filter selection is reflected in the URL hash (`#records`, `#sfx`,
-  `#plugins`, `#motion`, `#gear`, `#digital`, `#physical`) via
+  `#plugins`, `#motion`, `#scores`, `#gear`, `#digital`, `#physical`) via
   `history.replaceState`, read back on load **and** on `hashchange`
   (`#shelf` resets both groups).
 * **Atmosphere** — all disabled under `prefers-reduced-motion`:

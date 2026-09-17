@@ -95,3 +95,10 @@ CSS 32 KB, JS 9 KB (all pre-compression, still zero framework).
   lazy, `no-referrer`, same monogram fallback.
 - jsdom suite is now 54 assertions (filters incl. `records`, hashchange,
   previews, ambience, atmosphere layers, JSON-LD 14 products).
+
+### 5.2 Catalogue 14 → 20 — 2026-09-17 (later still)
+
+Three more Bandcamp records, one Gumroad score facsimile (new `scores`
+collection) and two eBay objects. No new origins, no new local media; one
+additional preview button reuses `/audio/track-07.mp3`. HTML 61.7 KB, CSS
+unchanged (32 KB), JS 9 KB. jsdom suite: 60 assertions.
