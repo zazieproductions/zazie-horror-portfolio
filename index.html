@@ -3,6 +3,137 @@
 <html lang="en" style="background:#050505;color-scheme:dark">
 <head>
 <meta charset="utf-8"/>
+<!-- ═══════════════════════════════════════════════════════════════════
+     ZP ARCHIVE BOOT — analog-horror terminal intro (inline, zero requests)
+     Activated only when <html> gets .zp-boot-on (see gate script below).
+     Preview/dev hosts (e2b.app, pages.dev, localhost) replay on every load;
+     ?boot=1 / #boot forces a replay even under prefers-reduced-motion.
+     Failsafes: no-JS → never shows · reduced-motion/bots → never shows ·
+     JS error mid-run → CSS force-hide at 10s · bfcache restore → instant out.
+     ═══════════════════════════════════════════════════════════════════ -->
+<script>
+(function(){try{
+  if(/bot|crawl|spider|slurp|lighthouse|headless/i.test(navigator.userAgent))return;
+  var force=null;
+  try{force=new URLSearchParams(location.search).get('boot');}catch(e){}
+  if(force===null&&location.hash.indexOf('boot')>-1)force='1';
+  if(force===null&&window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  var h=location.hostname,preview=(h==='localhost'||h==='127.0.0.1'||/(^|\.)e2b\.app$/.test(h)||/(^|\.)pages\.dev$/.test(h));
+  var seen=null;try{seen=sessionStorage.getItem('zpBootShown');}catch(e){}
+  if(seen&&force===null&&!preview)return;
+  var de=document.documentElement;
+  if(de.classList){de.classList.add('zp-boot-on');if(force!==null)de.classList.add('zp-boot-force');}
+  else de.className+=' zp-boot-on';
+}catch(e){}})();
+</script>
+<style id="zp-boot-style">
+#zp-boot{display:none}
+html.zp-boot-on body{overflow:hidden!important}
+html.zp-boot-on #zp-boot{
+  display:block;position:fixed;inset:0;z-index:2147483647;background:#020202;
+  cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;contain:strict;
+  animation:zpForceHide .5s linear 10s forwards;
+}
+#zp-boot.zp-off{display:block;pointer-events:none;animation:zpOvFade .56s ease forwards,zpForceHide .1s linear 9s forwards}
+@media (prefers-reduced-motion:reduce){html:not(.zp-boot-force) #zp-boot{display:none!important}}
+.zp-screen{
+  position:absolute;inset:0;overflow:hidden;transform-origin:50% 50%;
+  background:radial-gradient(120% 90% at 50% 45%,#0a0d0a 0%,#060806 55%,#020302 100%);
+  animation:zpPowerOn .38s cubic-bezier(.3,.7,.3,1) both;
+}
+#zp-boot.zp-off .zp-screen{animation:zpCollapse .5s cubic-bezier(.5,.2,.6,1) forwards}
+/* CRT dressing: scanlines + vignette + flicker */
+.zp-crt{
+  position:absolute;inset:0;pointer-events:none;z-index:4;
+  background:
+    repeating-linear-gradient(0deg,rgba(0,0,0,.34) 0 1px,transparent 1px 3px),
+    radial-gradient(115% 100% at 50% 50%,transparent 60%,rgba(0,0,0,.55) 100%);
+  animation:zpFlick 3.6s steps(1) infinite;
+}
+/* Rolling VHS tracking band */
+.zp-track{
+  position:absolute;left:0;right:0;height:16%;top:-25%;z-index:3;pointer-events:none;
+  background:linear-gradient(180deg,transparent,rgba(255,255,255,.04) 30%,rgba(255,255,255,.085) 50%,rgba(255,255,255,.04) 70%,transparent);
+  mix-blend-mode:screen;animation:zpTrack 2.3s linear infinite;
+}
+.zp-glitch .zp-track{animation-duration:.75s}
+/* VHS on-screen display */
+.zp-osd{
+  position:absolute;inset:0;z-index:5;pointer-events:none;
+  font:700 12px/1 var(--zp-mono);letter-spacing:.09em;color:#f0ebe3;
+  text-shadow:0 0 7px rgba(240,235,227,.35),1px 0 rgba(255,42,42,.22);
+}
+.zp-osd .zp-play{position:absolute;top:4.5%;left:5%}
+.zp-osd .zp-rec{position:absolute;top:4.5%;right:5%;color:#ff2a2a}
+.zp-osd .zp-rec i{
+  display:inline-block;width:9px;height:9px;border-radius:50%;background:#ff2a2a;margin-right:.5em;
+  box-shadow:0 0 8px rgba(255,42,42,.85);animation:zpBlink 1.2s steps(2,start) infinite;
+}
+.zp-osd .zp-count{position:absolute;bottom:4.5%;right:5%;opacity:.85}
+/* Terminal body */
+.zp-term{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;margin:0;
+  width:min(88vw,720px);max-height:76vh;overflow:hidden;
+  font:400 clamp(11px,.5rem + 1.55vw,15px)/1.62 var(--zp-mono);
+  letter-spacing:.03em;color:#f0ebe3;white-space:pre-wrap;word-break:break-word;
+  text-shadow:0 0 8px rgba(240,235,227,.28),0 0 26px rgba(240,235,227,.12);
+}
+.zp-line{min-height:1.62em}
+.zp-dim{color:#9a9590;text-shadow:0 0 6px rgba(154,149,144,.22)}
+.zp-hi{color:#f0ebe3;font-weight:700;letter-spacing:.13em}
+.zp-ok{color:#cdc7bb}
+.zp-prompt{color:#e9e3d6}
+.zp-bad{color:#ff2a2a;text-shadow:0 0 9px rgba(255,42,42,.6),1px 0 rgba(255,42,42,.4)}
+.zp-corrupt{color:#cfc9bd;text-shadow:1px 0 rgba(255,42,42,.45),-1px 0 rgba(70,230,255,.3)}
+.zp-gate{color:#f0ebe3;letter-spacing:.15em;margin-top:1.1em;animation:zpBlink 1.15s steps(2,start) infinite}
+.zp-cursor{
+  display:inline-block;width:.62em;height:1.02em;margin-left:.08em;vertical-align:-.12em;
+  background:#f0ebe3;box-shadow:0 0 8px rgba(240,235,227,.6);animation:zpBlink 1s steps(2,start) infinite;
+}
+/* Glitch state: RGB split + jitter */
+.zp-glitch .zp-term{
+  animation:zpJit .14s steps(2) infinite;
+  text-shadow:2px 0 rgba(255,42,42,.5),-2px 0 rgba(70,230,255,.35),0 0 10px rgba(240,235,227,.3);
+}
+.zp-glitch .zp-crt{animation:zpFlick .18s steps(1) infinite}
+/* EAS-style red frame double-blink */
+.zp-alertframe{
+  position:absolute;inset:0;z-index:6;pointer-events:none;opacity:0;
+  box-shadow:inset 0 0 0 3px rgba(255,42,42,.65),inset 0 0 90px rgba(196,30,30,.35);
+}
+#zp-boot.zp-alert .zp-alertframe{animation:zpAlert .36s steps(1) both}
+:root{--zp-mono:ui-monospace,'Cascadia Mono','SF Mono',Menlo,Consolas,'Liberation Mono','Courier New',monospace}
+@keyframes zpBlink{50%{opacity:0}}
+@keyframes zpFlick{0%{opacity:1}7%{opacity:.965}8%{opacity:1}54%{opacity:1}55%{opacity:.93}56%{opacity:1}81%{opacity:.985}82%{opacity:1}}
+@keyframes zpTrack{0%{transform:translateY(-25%)}100%{transform:translateY(750%)}}
+@keyframes zpJit{
+  0%{transform:translate(-50%,-50%)}
+  25%{transform:translate(calc(-50% - 2px),calc(-50% + 1px))}
+  50%{transform:translate(calc(-50% + 2px),calc(-50% - 1px))}
+  75%{transform:translate(calc(-50% - 1px),calc(-50% - 1px))}
+  100%{transform:translate(-50%,-50%)}
+}
+@keyframes zpAlert{0%,19%{opacity:1}20%,49%{opacity:0}50%,69%{opacity:1}70%,100%{opacity:0}}
+@keyframes zpPowerOn{
+  0%{transform:scale(1,.004);filter:brightness(3)}
+  45%{transform:scale(1,.004);filter:brightness(2.6)}
+  70%{transform:scale(1,1.02);filter:brightness(1.5)}
+  100%{transform:scale(1,1);filter:brightness(1)}
+}
+@keyframes zpCollapse{
+  0%{transform:scale(1,1);filter:brightness(1);opacity:1}
+  55%{transform:scale(1.015,.012);filter:brightness(2.4);opacity:1}
+  78%{transform:scale(.35,.012);filter:brightness(3)}
+  100%{transform:scale(0,.012);filter:brightness(3);opacity:0}
+}
+@keyframes zpOvFade{0%,55%{opacity:1}100%{opacity:0}}
+@keyframes zpForceHide{to{visibility:hidden;opacity:0;pointer-events:none}}
+@media (max-width:640px){
+  .zp-osd{font-size:10px}
+  .zp-term{width:90vw;top:47%}
+}
+</style>
 <link href="favicon.svg" rel="icon" type="image/svg+xml"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
 <meta content="Original dark, atmospheric scores for psychological horror, thrillers, film, TV, and games. Listen to the showreel or request a scoring quote." name="description"/>
@@ -263,6 +394,188 @@ document.readyState==="complete"?boot():window.addEventListener("load",boot,{onc
 </script>
 </head>
 <body>
+<!-- ═══════════════════════════════════════════════════════════════════
+     ZP ARCHIVE BOOT — overlay lives OUTSIDE #root so the React takeover
+     can never remove it. aria-hidden: purely decorative; page content is
+     fully present in the DOM for crawlers regardless of this intro.
+     ═══════════════════════════════════════════════════════════════════ -->
+<div id="zp-boot" role="presentation" aria-hidden="true">
+  <div class="zp-screen">
+    <pre class="zp-term" id="zp-term"></pre>
+    <div class="zp-track" aria-hidden="true"></div>
+    <div class="zp-crt" aria-hidden="true"></div>
+    <div class="zp-osd" aria-hidden="true">
+      <span class="zp-play">&#9654; PLAY</span>
+      <span class="zp-rec"><i></i>REC</span>
+      <span class="zp-count" id="zp-count">SP 0:00:00</span>
+    </div>
+    <div class="zp-alertframe" aria-hidden="true"></div>
+  </div>
+</div>
+<script>
+/* ZP ARCHIVE BOOT — sequence driver (runs only if <html> has .zp-boot-on) */
+(function(){
+  var d=document,w=window,root=d.documentElement,ov=d.getElementById('zp-boot');
+  if(!ov||!('classList' in root)||!root.classList.contains('zp-boot-on'))return;
+  var term=d.getElementById('zp-term'),cnt=d.getElementById('zp-count');
+  var done=false,skipReq=false,timers=[],skipFns=[],autoTimer=null,trackLine=null,cursor=null;
+  var t0=(w.performance&&w.performance.now)?w.performance.now():Date.now();
+
+  function clearTimers(){while(timers.length)clearTimeout(timers.pop());}
+  function sleep(ms){
+    if(skipReq)return Promise.resolve();
+    return new Promise(function(res){
+      var id=setTimeout(function(){res();},ms);timers.push(id);
+      skipFns.push(function(){clearTimeout(id);res();});
+    });
+  }
+  function repeat(s,n){var o='';while(n-->0)o+=s;return o;}
+  function pad(n){return (n<10?'0':'')+n;}
+  function newline(cls){var l=d.createElement('div');l.className='zp-line'+(cls?' '+cls:'');term.appendChild(l);return l;}
+  function now(text,cls){newline(cls).textContent=text===''?'\u00a0':text;}
+  function blank(){now('');}
+  function adopt(l){
+    if(cursor&&cursor.parentNode)cursor.parentNode.removeChild(cursor);
+    cursor=d.createElement('span');cursor.className='zp-cursor';l.appendChild(cursor);
+  }
+  function typeLine(text,cls,cps){
+    var l=newline(cls),span=d.createElement('span');l.appendChild(span);adopt(l);
+    cps=cps||120;
+    return new Promise(function(res){
+      var step=Math.max(1,Math.round(cps/60)),i=0;
+      (function tick(){
+        if(done)return res();
+        if(skipReq){span.textContent=text;return res();}
+        i=Math.min(text.length,i+step);
+        span.textContent=text.slice(0,i);
+        if(i>=text.length)return res();
+        var id=setTimeout(tick,Math.round(1000/cps));timers.push(id);
+      })();
+    });
+  }
+  function tracking(){
+    var l=newline('zp-ok');trackLine=l;
+    var span=d.createElement('span');l.appendChild(span);adopt(l);
+    var target=61,p=0;
+    return new Promise(function(res){
+      (function draw(){
+        if(done)return res();
+        if(skipReq){p=100;}
+        var blocks=Math.round(p/10);
+        span.textContent='  TRACKING ['+repeat('\u2588',blocks)+repeat('\u2591',10-blocks)+'] '+pad(p)+'%';
+        if(p>=target||skipReq){span.textContent='  TRACKING ['+repeat('\u2588',10)+'] 100%';return res();}
+        p=Math.min(target,p+3+Math.random()*7);
+        var id=setTimeout(draw,55);timers.push(id);
+      })();
+    });
+  }
+  function corruptTracking(){
+    if(!trackLine)return;
+    trackLine.classList.add('zp-corrupt');
+    if(trackLine.firstChild)trackLine.firstChild.textContent='  TRACKING [\u2588\u2593\u2592\u2588\u2591\u2593-\u2592\u2591-] \u2592%';
+  }
+  function glitch(on){ov.classList.add('zp-glitch');}
+  function glitchOff(){ov.classList.remove('zp-glitch');}
+  function alertBlink(){
+    ov.classList.add('zp-alert');
+    var id=setTimeout(function(){ov.classList.remove('zp-alert');},380);timers.push(id);
+  }
+  function gate(){
+    var l=newline('zp-gate');
+    l.textContent='[ CLICK OR PRESS ANY KEY TO OBSERVE ]';
+    var f=newline('zp-dim');
+    f.textContent='TAPE 00 \u00b7 "SHOWREEL" \u00b7 PROPERTY OF ZAZIE PRODUCTIONS';
+  }
+  function countLoop(){
+    if(done||!cnt)return;
+    var nowMs=(w.performance&&w.performance.now)?w.performance.now():Date.now();
+    var s=Math.max(0,Math.floor((nowMs-t0)/1000));
+    cnt.textContent='SP 0:'+pad(Math.floor(s/60)%60)+':'+pad(s%60);
+    w.requestAnimationFrame(countLoop);
+  }
+  function bootSound(){
+    try{
+      var AC=w.AudioContext||w.webkitAudioContext;if(!AC)return;
+      var ac=new AC(),t=ac.currentTime;
+      var master=ac.createGain();master.gain.value=0.055;master.connect(ac.destination);
+      /* power-down thump */
+      var o=ac.createOscillator();o.type='sine';
+      o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(36,t+0.28);
+      var g=ac.createGain();g.gain.setValueAtTime(0.9,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.3);
+      o.connect(g);g.connect(master);o.start(t);o.stop(t+0.32);
+      /* tape static burst */
+      var len=Math.floor(ac.sampleRate*0.2),buf=ac.createBuffer(1,len,ac.sampleRate),ch=buf.getChannelData(0);
+      for(var i=0;i<len;i++)ch[i]=(Math.random()*2-1)*(1-i/len);
+      var src=ac.createBufferSource();src.buffer=buf;
+      var f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=1300;
+      var g2=ac.createGain();g2.gain.value=0.5;
+      src.connect(f);f.connect(g2);g2.connect(master);src.start(t);
+      setTimeout(function(){try{ac.close();}catch(e){}},800);
+    }catch(e){}
+  }
+  function finish(byUser){
+    if(done)return;done=true;
+    clearTimers();skipFns.length=0;
+    if(autoTimer)clearTimeout(autoTimer);
+    try{sessionStorage.setItem('zpBootShown','1');}catch(e){}
+    if(byUser)bootSound();
+    root.classList.remove('zp-boot-on');
+    ov.classList.add('zp-off');
+    setTimeout(function(){
+      if(ov&&ov.parentNode)ov.parentNode.removeChild(ov);
+      try{w.dispatchEvent(new CustomEvent('zp:bootdone'));}catch(e){}
+    },580);
+  }
+
+  /* user can bail out at any moment */
+  ov.addEventListener('pointerdown',function(){finish(true);});
+  d.addEventListener('keydown',function(){finish(true);});
+  d.addEventListener('wheel',function(){finish(true);},{passive:true});
+  /* bfcache restore mid-boot -> get out instantly */
+  w.addEventListener('pageshow',function(e){if(e.persisted&&!done)finish(false);});
+  /* hard cap */
+  timers.push(setTimeout(function(){finish(false);},9200));
+
+  async function run(){
+    await sleep(430);                    /* CRT power-on flash */
+    now('ZP-ARCHIVE / TERMINAL 02','zp-hi');
+    now('ZAZIE PRODUCTIONS BROADCAST SYSTEMS','zp-dim');
+    now('\u00a9 1987 ZAZIE PRODUCTIONS \u00b7 ALL RIGHTS RESERVED','zp-dim');
+    blank();
+    countLoop();
+    await sleep(240);
+    await typeLine('BOOTING ZP-OS v2.31 ...','zp-prompt',95);
+    await sleep(130);
+    await typeLine('  PHOSPHOR ARRAY ........ OK','zp-ok',155);
+    await typeLine('  MEMORY 640K ........... OK','zp-ok',155);
+    await typeLine('  AUDIO SUBSYSTEM ....... OK','zp-ok',155);
+    await typeLine('  MOUNT /ARCHIVE/TAPES .. OK','zp-ok',155);
+    await typeLine('  INDEX ARTIFACTS ....... 29 CUES','zp-ok',155);
+    await typeLine('  SIGNAL INTEGRITY ...... 97.3%','zp-ok',155);
+    await sleep(220);
+    blank();
+    await typeLine('> PLAY SHOWREEL.REEL','zp-prompt',85);
+    await sleep(200);
+    await tracking();
+    await sleep(430);
+    glitch(true);
+    corruptTracking();
+    await sleep(320);
+    alertBlink();
+    await typeLine('!! UNREGISTERED SIGNAL ON TAPE 00','zp-bad',115);
+    await typeLine('!! AUDIO SOURCE IS IN THE ROOM WITH YOU.','zp-bad',115);
+    await sleep(400);
+    glitchOff();
+    await typeLine('> REWIND ..................... OK','zp-prompt',115);
+    await sleep(190);
+    await typeLine('SIGNAL RESTORED. OBSERVATION PERMITTED.','zp-hi',85);
+    await sleep(360);
+    gate();
+    autoTimer=setTimeout(function(){finish(false);},2800);
+  }
+  try{run();}catch(e){finish(false);}
+})();
+</script>
 <div id="root">
 <div class="grain" aria-hidden="true"></div><div class="vignette opacity-80" aria-hidden="true"></div>
 <header class="fixed inset-x-0 top-0 z-50 bg-transparent">
