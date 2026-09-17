@@ -60,8 +60,10 @@ HTML with one 19 KB stylesheet and one 3 KB deferred script, built by
   interactive after ~25 KB of subresources, and the filters degrade to "all
   releases visible" without JS.
 - **Caching**: generated filenames are content-derived, so `/*.css` + `/*.js`
-  `immutable` headers stay honest; `/store.html` is `must-revalidate` like
-  `index.html`. `_redirects` gains `/store` + `/store/` above the SPA catch-all.
+  `immutable` headers stay honest; `/store`, `/store/`, `/store/index.html` and
+  `/store.html` are `must-revalidate` like `index.html`. `/store` is served
+  natively from `store/index.html` (no `_redirects` rewrite: a `200` rewrite to
+  `/store.html` loops against Cloudflare Pages' pretty-URL redirect).
 - **Cover art** is hot-linked from the three marketplace CDNs with
   `loading="lazy"`, `decoding="async"`, `referrerpolicy="no-referrer"` and a
   monogram fallback on `error`, third-party origins are off the critical path
