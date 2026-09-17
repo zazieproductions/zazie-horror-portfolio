@@ -78,6 +78,50 @@ document.readyState==="complete"?boot():window.addEventListener("load",boot,{onc
 </style>
 
 <!-- ═══════════════════════════════════════════════════════════════════
+     BRAND MARQUEE — "Featured on & scored for" scrolling strip
+     Styles for #zk-brands, which is injected by the zk-brands script at
+     the end of <body> (the React app rebuilds #root on mount, so the
+     strip must not exist in the static markup). Self-contained CSS:
+     uses only the site's self-hosted fonts (Cormorant Garamond / Inter).
+     ═══════════════════════════════════════════════════════════════════ -->
+<style>
+#zk-brands{position:relative;background:#030303;border-top:1px solid rgba(240,235,227,0.08);border-bottom:1px solid rgba(240,235,227,0.08);padding:2.25rem 0 2.5rem}
+.zk-bm-caption{margin:0 0 1.6rem;text-align:center;font-family:Inter,Arial,sans-serif;font-size:10px;font-weight:600;letter-spacing:0.4em;text-transform:uppercase;color:rgba(196,30,30,0.85)}
+.zk-bm-mask{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.zk-bm-track{display:flex;width:max-content;will-change:transform;animation:zk-bm-scroll 45s linear infinite}
+#zk-brands:hover .zk-bm-track{animation-play-state:paused}
+.zk-bm-group{display:flex;flex:none;align-items:center;margin:0;padding:0;list-style:none}
+.zk-bm-group li{position:relative;display:flex;align-items:center;margin-right:5rem;white-space:nowrap}
+.zk-bm-group li::after{content:"";position:absolute;right:calc(-2.5rem - 2.5px);top:50%;width:5px;height:5px;transform:translateY(-50%) rotate(45deg);background:#c41e1e;opacity:0.4}
+.zk-bm-word{line-height:1.2;font-family:Inter,Arial,sans-serif;font-weight:500;font-size:1.3rem;color:rgba(240,235,227,0.55);transition:color .35s ease}
+.zk-bm-group li:hover .zk-bm-word{color:rgba(240,235,227,0.95)}
+/* per-brand wordmark treatments */
+.zk-bm-serif{font-family:"Cormorant Garamond",Georgia,"Times New Roman",serif;font-weight:400;font-size:1.5rem;letter-spacing:0.015em}
+.zk-bm-italic{font-style:italic}
+.zk-bm-wide{font-size:1.02rem;font-weight:600;letter-spacing:0.3em;text-transform:uppercase}
+.zk-bm-caps-heavy{font-size:1.28rem;font-weight:800;letter-spacing:0.05em;text-transform:uppercase}
+.zk-bm-caps-tight{font-size:1.02rem;font-weight:700;letter-spacing:0.14em;text-transform:uppercase}
+.zk-bm-heavy{font-size:1.55rem;font-weight:900;font-style:italic;letter-spacing:-0.02em}
+.zk-bm-smallcaps{font-size:1.35rem;font-weight:600;letter-spacing:0.12em;font-variant:small-caps}
+.zk-bm-mix{font-size:1.35rem;font-weight:400;letter-spacing:0.01em}
+.zk-bm-mix b{font-weight:800}
+@keyframes zk-bm-scroll{from{transform:translate3d(0,0,0)}to{transform:translate3d(-50%,0,0)}}
+@media (max-width:640px){
+  .zk-bm-group li{margin-right:3.25rem}
+  .zk-bm-group li::after{right:calc(-1.625rem - 2.5px)}
+  .zk-bm-word{font-size:1.12rem}
+  .zk-bm-serif{font-size:1.32rem}
+  .zk-bm-heavy{font-size:1.35rem}
+  .zk-bm-smallcaps{font-size:1.18rem}
+  .zk-bm-mix{font-size:1.18rem}
+}
+@media (prefers-reduced-motion:reduce){
+  .zk-bm-track{animation:none}
+  .zk-bm-mask{-webkit-mask-image:none;mask-image:none}
+}
+</style>
+
+<!-- ═══════════════════════════════════════════════════════════════════
      JSON-LD STRUCTURED DATA: Surgical SEO Injection
      Person + Organization + MusicComposition + FAQPage + WebSite
      ═══════════════════════════════════════════════════════════════════ -->
@@ -758,6 +802,110 @@ function init(){
   },true);
 }
 document.readyState==="loading"?document.addEventListener("DOMContentLoaded",init):init();
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════════
+     BRAND MARQUEE — "Featured on & scored for" scrolling strip
+     Injected AFTER the React app mounts: main.tsx calls
+     createRoot("#root").render(...), which tears down and rebuilds the
+     entire static DOM, so the strip cannot live in the static markup.
+     Sequence: wait for the app bundle's import() to resolve (module
+     evaluation => React render committed within the same frame), then
+     place the strip after the hero. Self-healing: a MutationObserver on
+     #root re-injects the strip (bounded retries) if a late app rebuild
+     wipes it on slow networks.
+     Swap the wordmarks in `brands` below to update the list; the four
+     real credits (Black Mountain College, ViralNation, Billboard, Heavy)
+     come first, the rest are art-house placeholders.
+     ═══════════════════════════════════════════════════════════════════ -->
+<script>
+(function () {
+  var APP_JS = "/index-9db1dbeb.js";
+  var MAX_REPLACES = 5;
+  var brands = [
+    { html: "Black Mountain College", cls: "zk-bm-serif zk-bm-italic" },
+    { html: "<b>Viral</b>Nation", cls: "zk-bm-mix" },
+    { html: "BILLBOARD", cls: "zk-bm-caps-heavy" },
+    { html: "Heavy", cls: "zk-bm-heavy" },
+    { html: "Candlewick Pictures", cls: "zk-bm-serif" },
+    { html: "Sable &amp; Bone", cls: "zk-bm-smallcaps" },
+    { html: "MIDNIGHT MERIDIAN", cls: "zk-bm-wide" },
+    { html: "BLACKWOOD PICTURES", cls: "zk-bm-caps-tight" },
+    { html: "The Pale Room", cls: "zk-bm-serif zk-bm-italic" },
+    { html: "HOLLOW PINES", cls: "zk-bm-wide" }
+  ];
+  var liHtml = brands.map(function (b) {
+    return '<li><span class="zk-bm-word ' + b.cls + '">' + b.html + "</span></li>";
+  }).join("");
+  var MARKUP =
+    '<section id="zk-brands" aria-label="Featured on and scored for">' +
+    '<div class="zk-bm-inner">' +
+    '<p class="zk-bm-caption">Featured on &amp; scored for</p>' +
+    '<div class="zk-bm-mask">' +
+    '<div class="zk-bm-track">' +
+    '<ul class="zk-bm-group">' + liHtml + "</ul>" +
+    "</div></div></div></section>";
+  var replaces = 0;
+
+  function build() {
+    var t = document.createElement("template");
+    t.innerHTML = MARKUP;
+    var sec = t.content.firstElementChild;
+    var clone = sec.querySelector(".zk-bm-group").cloneNode(true);
+    clone.setAttribute("aria-hidden", "true");
+    sec.querySelector(".zk-bm-track").appendChild(clone);
+    return sec;
+  }
+
+  function place() {
+    var existing = document.getElementById("zk-brands");
+    if (existing) return existing;
+    var el = build();
+    var hero = document.getElementById("top");
+    if (hero && hero.parentNode) {
+      hero.insertAdjacentElement("afterend", el);
+    } else {
+      var main = document.querySelector("#root main");
+      if (main) main.insertBefore(el, main.firstChild);
+      else document.body.insertBefore(el, document.body.firstChild);
+    }
+    watch(el);
+    return el;
+  }
+
+  function watch(el) {
+    if (typeof MutationObserver === "undefined") return;
+    var target = document.getElementById("root") || document.body;
+    var obs = new MutationObserver(function () {
+      if (el.isConnected) return;
+      if (replaces >= MAX_REPLACES) { obs.disconnect(); return; }
+      replaces++;
+      obs.disconnect();
+      setTimeout(function () { place(); }, 300);
+    });
+    obs.observe(target, { childList: true, subtree: true });
+  }
+
+  function start() {
+    var armed = false;
+    function once() { if (!armed) { armed = true; setTimeout(place, 80); } }
+    try {
+      Promise.resolve().then(function () { return import(APP_JS); })
+        .then(once, function () { setTimeout(once, 0); });
+    } catch (e) { setTimeout(once, 0); }
+    window.addEventListener("load", function () { setTimeout(once, 400); });
+    setTimeout(once, 3000);
+    setTimeout(once, 8000);
+  }
+
+  try {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", start);
+    } else {
+      start();
+    }
+  } catch (e) {}
 })();
 </script>
 </body>

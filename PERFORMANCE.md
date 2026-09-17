@@ -45,3 +45,22 @@ Scope: horror.zazieproductions.com (static prerendered React build on an edge ho
 - **Audio re-encode** (12.5 MB longest track at ~256 kbps): left untouched deliberately — streaming is progressive and bitrate is a brand-quality call. If mobile data matters more than master fidelity, re-encode to 160 kbps CBR (+ update immutable cache via filename change). Owner: composer.
 - **Poster `-1200.jpg` lightbox**: capped at 1200 px long side; if 4K fullscreen inspection of posters is ever a use case, add an AVIF tier. Owner: design.
 - `Cache-Control: immutable` on hashed JS/CSS now depends on the rename-on-change discipline (hashes are content-derived; enforce in whatever build/commit flow produces these files).
+
+## 5. Addendum — Brand marquee ("Featured on & scored for"), 2026-09-17
+
+Scope: one CSS block in `<head>` (~2 KB) + one inline script in `<body>` (~3 KB) in `index.html`. No new assets, no font/weight additions, no cache/header changes.
+
+### Key finding (verified, jsdom + real bundle)
+- `main.tsx` is `createRoot(document.getElementById("root")).render(<StrictMode><App/></...>)` — **not** `hydrateRoot` (the `hydrateRoot` string in the bundle is React's internal export). On mount the entire static `#root` is torn down and rebuilt (~46 KB static → ~183 KB client DOM, 991 `data-source-loc` nodes).
+- Consequence: any static markup injected into `#root` is **destroyed** at mount (reproduced: marker section disappears post-mount). Conversely, nodes injected *after* the rebuild persist through subsequent React updates (verified 2 s+ settle).
+- This is concrete evidence for the "hydration upgrade (recommended, not shipped)" item above: switching to `hydrateRoot` would let this strip (and future static additions) live directly in the static markup for no-JS/SEO parity.
+
+### Design
+- Infinite CSS marquee (`translate3d` -50%, two cloned `<ul>` groups, `flex:none`, per-item `margin-right` so the loop is pixel-seamless), edge fade via `mask-image`, 45 s/loop, pause on hover, `prefers-reduced-motion` → static row. GPU-composited (transform only), one `will-change`.
+- Wordmarks are pure CSS type treatments over the two self-hosted families (Cormorant Garamond 400 / Inter variable) — no logo image assets, so no trademarked artwork is shipped and nothing to 404. Real credits first (Black Mountain College, ViralNation, Billboard, Heavy), then six art-house placeholder names (swap in `brands[]` in the inline script).
+- Placement: after the hero (`#top`), injected ~80 ms after the app bundle's `import()` resolves (module evaluation ⇒ render commit lands in the same frame). Fallback timers (load+400 ms, 3 s, 8 s) cover import failure. A `MutationObserver` on `#root` (bounded to 5 retries) re-injects if a late rebuild on a slow network wipes an early-injected copy.
+
+### Verification
+- jsdom harness executing the real `index-9db1dbeb.js` against the new `index.html`: static node in `#root` is destroyed post-mount (as predicted); strip injected pre-mount survives the rebuild via self-heal and lands at `main[1]` (between `#top` and `#posters`) in the client DOM; injected post-mount persists at +3.5 s and +5 s. Zero new runtime errors (only the pre-existing jsdom `HTMLMediaElement.load()` not-implemented noise).
+- `postcss` parse of the new CSS block: clean. `zk-` class/id prefix confirmed collision-free against bundle and compiled CSS.
+- Not verifiable in sandbox: no headless browser (Chrome CDN unreachable) — animation smoothness, mask rendering, and the visual rhythm of the wordmark treatments were not eyeballed in a real browser.
