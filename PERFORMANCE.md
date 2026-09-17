@@ -166,3 +166,31 @@ scanlines, vignette, rolling tracking band) to blinking gate to CRT power-off co
 - Gate copy: `[ CLICK OR PRESS ANY KEY TO OBSERVE ]`.
 - Possible next iterations: per-visit tape number, longer scare on repeat visits, tying
   `zp:bootdone` into the showreel player, CRT curvature on large screens.
+
+---
+
+# Hero Copy Rewrite: deliverable list → outcome promise
+
+Date: 2026-09-17 · Branch: `arena/01a0ac9b-zazie-horror-portfolio`
+
+The hero's third line was a deliverables list (`Themes, tension cues, stems,
+and alternate mixes delivered for picture.`). It now leads with the outcome the
+buyer hires for and names the two stages they own:
+
+> Music that makes the fear land. Built for your edit, ready for your mix.
+
+- **Both copies patched**: the prerendered hero in `index.html` and the same
+  string inside the React bundle, so the post-mount teardown rebuilds the
+  paragraph with identical text (no flash of the old line after boot).
+- **Content-hashed rename**, per the `immutable` discipline in `_headers`:
+  `index-b43ddf07.js` → `index-bf264c32.js` (raw file sha256, first 8 hex,
+  matching the existing `index-*` convention). `index.html`'s dynamic import
+  updated; no `?v=` query reintroduced. Nothing else referenced the old hash
+  except §5 above, which is a dated record of that change.
+- **Cost**: +1 byte of hero copy, +1 byte of bundle (423,059 → 423,060). No
+  markup, class, spacing or component change, so no layout shift or reflow.
+- **House style**: no em dashes (matches the store suite's assertion).
+- **Not verifiable in this sandbox**: no headless browser, so no visual capture.
+  Verified instead by `node --input-type=module --check` on the renamed bundle
+  and a local HTTP crawl (200 on `/index.html` and `/index-bf264c32.js`, zero
+  stale references to the old hash in any served file).
