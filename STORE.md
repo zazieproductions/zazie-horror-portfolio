@@ -144,7 +144,7 @@ layers appear.
   * `IntersectionObserver` scroll reveal (`.reveal`, staggered by `--i`);
   * the masthead gains `is-stuck` after 24 px of scroll.
 * **Catalogue structure**: four numbered `<section class="group">` blocks
-  (`#records` I, `#sfx` II, `#tools` III, `#gear` IV), each with its own
+  (`#records` I, `#gear` II, `#sfx` III, `#tools` IV), each with its own
   `ul[data-grid]`. Filtering hides whole groups when none of their cards match
   and rewrites the per-group count ("1 of 3"). Every card carries a catalogue
   number (`.no`), a platform tag (`.tag`), a `dl.spec` of three facts, a price
