@@ -1,0 +1,54 @@
+/* 404 — minimal, on-brand */
+body {
+  margin: 0;
+  background: #030303;
+  color: #f0ebe3;
+  font-family: "Inter", ui-sans-serif, system-ui, sans-serif;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 2rem;
+}
+.lost { max-width: 34rem; }
+.flicker {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-size: clamp(5rem, 20vw, 9rem);
+  line-height: 1;
+  color: #c41e1e;
+  margin: 0;
+  animation: flick 4s infinite steps(1);
+}
+@keyframes flick {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.25; }
+  94% { opacity: 1; }
+  96% { opacity: 0.4; }
+  97% { opacity: 1; }
+}
+h1 {
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-weight: 500;
+  font-size: 2rem;
+  margin: 0.75rem 0 0.5rem;
+}
+.sub { color: #9a9590; font-size: 0.95rem; margin: 0 0 2.25rem; }
+nav { display: flex; flex-direction: column; gap: 0.7rem; align-items: center; }
+.door {
+  display: inline-flex;
+  min-height: 50px;
+  align-items: center;
+  justify-content: center;
+  min-width: 16rem;
+  border: 1px solid #1e1e1e;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #f0ebe3;
+  transition: border-color 0.15s, color 0.15s;
+}
+.door:hover { border-color: #c41e1e; color: #c41e1e; }
+.door.quiet { color: #9a9590; border-color: transparent; }
+@media (prefers-reduced-motion: reduce) { .flicker { animation: none; } }

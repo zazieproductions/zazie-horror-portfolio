@@ -1,14 +1,34 @@
-# robots.txt: Zazie Productions Horror Composer Portfolio
-# Surgical crawl guidance for maximum indexation efficiency
+# robots.txt — Zazie Productions Horror Composer Portfolio
+# Search crawlers: full access. AI answer engines: may cite the pages, may not
+# harvest the audio catalog. Backlink crawlers throttled.
 
 User-agent: *
 Allow: /
 Disallow: /audio/
+Disallow: /tools/
 
-# Allow all crawlers full access to HTML, images, and critical assets
-Sitemap: https://horror.zazieproductions.com/sitemap.xml
+# AI / answer engines — content citable, audio catalog off-limits
+User-agent: GPTBot
+Allow: /
+Disallow: /audio/
 
-# Crawl-delay for respectful bot behavior
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /audio/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /audio/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /audio/
+
+User-agent: Applebot-Extended
+Allow: /
+Disallow: /audio/
+
+# SEO backlink crawlers — throttled, not blocked (they feed the industry's own tools)
 User-agent: AhrefsBot
 Crawl-delay: 2
 
@@ -20,3 +40,5 @@ Crawl-delay: 5
 
 User-agent: MJ12bot
 Crawl-delay: 5
+
+Sitemap: https://horror.zazieproductions.com/sitemap.xml

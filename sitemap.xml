@@ -3,6 +3,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
         xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
 
+  <!-- ============ HOME ============ -->
   <url>
     <loc>https://horror.zazieproductions.com/</loc>
     <lastmod>2026-09-16</lastmod>
@@ -17,59 +18,229 @@
       <image:loc>https://horror.zazieproductions.com/images/headshot.jpg</image:loc>
       <image:title>Zazie Kanwar-Torge headshot, horror film composer</image:title>
     </image:image>
+  </url>
+
+  <!-- ============ WORK HUB ============ -->
+  <url>
+    <loc>https://horror.zazieproductions.com/work/</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
     <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/press-photo.png</image:loc>
-      <image:title>Zazie Productions press photo, horror composer portfolio</image:title>
+      <image:loc>https://horror.zazieproductions.com/images/posters/mike-has-a-visitor.jpg</image:loc>
+      <image:title>Mike Has A Visitor — horror short scored by Zazie Kanwar-Torge</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/the-haunted.jpg</image:loc>
+      <image:title>The Haunted — feature teaser scored by Zazie Kanwar-Torge</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/choleric.jpg</image:loc>
+      <image:title>CHOLERIC — short film scored by Zazie Kanwar-Torge</image:title>
+    </image:image>
+  </url>
+
+  <!-- ============ CASE STUDIES ============ -->
+  <url>
+    <loc>https://horror.zazieproductions.com/work/mike-has-a-visitor/</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/mike-has-a-visitor.jpg</image:loc>
+      <image:title>Mike Has A Visitor poster — sleep paralysis horror short by Marco Saikaley</image:title>
     </image:image>
     <video:video>
       <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-HaVJP08j77U.jpg</video:thumbnail_loc>
-      <video:title>Mike Has A Visitor: Original Horror Score</video:title>
-      <video:description>Sleep paralysis horror short scored by Zazie Kanwar-Torge. Dark, atmospheric, cinematic composition.</video:description>
+      <video:title>Mike Has A Visitor: Sleep Paralysis Horror Short — Original Score</video:title>
+      <video:description>Sleep paralysis horror short directed by Marco Saikaley, scored by Zazie Kanwar-Torge. Dark, atmospheric, cinematic composition.</video:description>
       <video:content_loc>https://www.youtube.com/watch?v=HaVJP08j77U</video:content_loc>
       <video:player_loc>https://www.youtube.com/embed/HaVJP08j77U</video:player_loc>
+      <video:publication_date>2025-06-30</video:publication_date>
+      <video:duration>PT14M23S</video:duration>
     </video:video>
-    <video:video>
-      <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-ItrrcilS0ro.jpg</video:thumbnail_loc>
-      <video:title>GOODBYE, BROTHER: Original Film Score</video:title>
-      <video:description>Dramatic short film scored by Zazie Kanwar-Torge. Atmospheric cinematic composition.</video:description>
-      <video:content_loc>https://www.youtube.com/watch?v=ItrrcilS0ro</video:content_loc>
-      <video:player_loc>https://www.youtube.com/embed/ItrrcilS0ro</video:player_loc>
-    </video:video>
-    <video:video>
-      <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-riCvy2abhlc.jpg</video:thumbnail_loc>
-      <video:title>Home Intruder: Thriller Chase Cue</video:title>
-      <video:description>Action thriller chase sequence scored by Zazie Kanwar-Torge. Tension-driven cinematic composition.</video:description>
-      <video:content_loc>https://www.youtube.com/watch?v=riCvy2abhlc</video:content_loc>
-      <video:player_loc>https://www.youtube.com/embed/riCvy2abhlc</video:player_loc>
-    </video:video>
+  </url>
+  <url>
+    <loc>https://horror.zazieproductions.com/work/the-haunted/</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/the-haunted.jpg</image:loc>
+      <image:title>The Haunted poster — Crystal Fox Films psychological thriller scored by Zazie Kanwar-Torge</image:title>
+    </image:image>
     <video:video>
       <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-Ty8tPp59mDc.jpg</video:thumbnail_loc>
-      <video:title>The Haunted: Horror Film Teaser Score</video:title>
-      <video:description>Official teaser for The Haunted by Crystal Fox Films. Original horror score by Zazie Kanwar-Torge.</video:description>
+      <video:title>The Haunted: Official Teaser — Original Score</video:title>
+      <video:description>Official teaser for The Haunted, a psychological thriller by Mike Fox / Crystal Fox Films. Original score by Zazie Kanwar-Torge.</video:description>
       <video:content_loc>https://www.youtube.com/watch?v=Ty8tPp59mDc</video:content_loc>
       <video:player_loc>https://www.youtube.com/embed/Ty8tPp59mDc</video:player_loc>
+      <video:publication_date>2025-10-18</video:publication_date>
+      <video:duration>PT2M48S</video:duration>
     </video:video>
-    <video:video>
-      <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-rvCGO0BJ_2E.jpg</video:thumbnail_loc>
-      <video:title>AQUAPHOBIA: Short Horror Film Score</video:title>
-      <video:description>Short horror film AQUAPHOBIA scored by Zazie Kanwar-Torge. Dark atmospheric composition.</video:description>
-      <video:content_loc>https://www.youtube.com/watch?v=rvCGO0BJ_2E</video:content_loc>
-      <video:player_loc>https://www.youtube.com/embed/rvCGO0BJ_2E</video:player_loc>
-    </video:video>
+  </url>
+  <url>
+    <loc>https://horror.zazieproductions.com/work/whispers-in-the-dark/</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
     <video:video>
       <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-6qa3Uwj47fc.jpg</video:thumbnail_loc>
-      <video:title>Whispers In The Dark: Horror Short Score</video:title>
-      <video:description>Horror short Whispers In The Dark scored by Zazie Kanwar-Torge. Atmospheric dread composition.</video:description>
+      <video:title>Whispers In The Dark: Horror Short — Original Score</video:title>
+      <video:description>Cue Tube's 2024 Halloween special: Jack is haunted by whispers of his own guilt. Scored by Zazie Kanwar-Torge.</video:description>
       <video:content_loc>https://www.youtube.com/watch?v=6qa3Uwj47fc</video:content_loc>
       <video:player_loc>https://www.youtube.com/embed/6qa3Uwj47fc</video:player_loc>
+      <video:publication_date>2026-04-05</video:publication_date>
+      <video:duration>PT1M46S</video:duration>
     </video:video>
+  </url>
+  <url>
+    <loc>https://horror.zazieproductions.com/work/aquaphobia/</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+    <video:video>
+      <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-rvCGO0BJ_2E.jpg</video:thumbnail_loc>
+      <video:title>AQUAPHOBIA: Short Horror Film — Score &amp; Sound Design</video:title>
+      <video:description>Short horror film AQUAPHOBIA: score and sound design by Zazie Kanwar-Torge, cinematography by Piotrek Naumowicz.</video:description>
+      <video:content_loc>https://www.youtube.com/watch?v=rvCGO0BJ_2E</video:content_loc>
+      <video:player_loc>https://www.youtube.com/embed/rvCGO0BJ_2E</video:player_loc>
+      <video:publication_date>2026-04-21</video:publication_date>
+      <video:duration>PT1M44S</video:duration>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://horror.zazieproductions.com/work/goodbye-brother/</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+    <video:video>
+      <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-ItrrcilS0ro.jpg</video:thumbnail_loc>
+      <video:title>GOODBYE, BROTHER: Dramatic Short — Original Score</video:title>
+      <video:description>Dramatic short film scored by Zazie Kanwar-Torge. Atmospheric cinematic composition: grief scored with dread architecture.</video:description>
+      <video:content_loc>https://www.youtube.com/watch?v=ItrrcilS0ro</video:content_loc>
+      <video:player_loc>https://www.youtube.com/embed/ItrrcilS0ro</video:player_loc>
+      <video:publication_date>2026-04-11</video:publication_date>
+      <video:duration>PT1M45S</video:duration>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://horror.zazieproductions.com/work/home-intruder/</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+    <video:video>
+      <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-riCvy2abhlc.jpg</video:thumbnail_loc>
+      <video:title>Home Intruder: Official Car Chase Scene — Score &amp; Sound Design</video:title>
+      <video:description>Action thriller chase sequence scored and sound designed by Zazie Kanwar-Torge. Tension-driven cinematic composition.</video:description>
+      <video:content_loc>https://www.youtube.com/watch?v=riCvy2abhlc</video:content_loc>
+      <video:player_loc>https://www.youtube.com/embed/riCvy2abhlc</video:player_loc>
+      <video:publication_date>2026-06-11</video:publication_date>
+      <video:duration>PT0M49S</video:duration>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://horror.zazieproductions.com/work/phantom-requiem/</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/phantom-requiem.jpg</image:loc>
+      <image:title>Phantom Requiem poster — experimental short film by Zazie Productions</image:title>
+    </image:image>
     <video:video>
       <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-UX2kv3G89Jw.jpg</video:thumbnail_loc>
-      <video:title>Phantom Requiem: Short Film Score</video:title>
-      <video:description>Short film Phantom Requiem scored by Zazie Kanwar-Torge. Dark cinematic composition.</video:description>
+      <video:title>Phantom Requiem: Experimental Short Film — Original Score</video:title>
+      <video:description>Phantom Requiem (2024), an original experimental short by Zazie Productions: a requiem written for an abandoned factory.</video:description>
       <video:content_loc>https://www.youtube.com/watch?v=UX2kv3G89Jw</video:content_loc>
       <video:player_loc>https://www.youtube.com/embed/UX2kv3G89Jw</video:player_loc>
+      <video:publication_date>2024-06-20</video:publication_date>
+      <video:duration>PT4M53S</video:duration>
     </video:video>
+  </url>
+  <url>
+    <loc>https://horror.zazieproductions.com/work/expire/</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/expire-red-check.jpg</image:loc>
+      <image:title>EXPIRE (2025) poster — festival horror short, sound design by Zazie Kanwar-Torge</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://horror.zazieproductions.com/work/choleric/</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/choleric.jpg</image:loc>
+      <image:title>CHOLERIC poster — Sebastian Fabres short film scored by Zazie Kanwar-Torge</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://horror.zazieproductions.com/work/eclipsed/</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/eclipsed.png</image:loc>
+      <image:title>ECLIPSED poster — feature film by William Viera with Zazie Productions music</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://horror.zazieproductions.com/work/unseen/</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/unseen.png</image:loc>
+      <image:title>UNSEEN poster — Steve Merlo's unseen killer, additional music by Zazie Kanwar-Torge</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://horror.zazieproductions.com/work/peregrinus/</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/peregrinus.png</image:loc>
+      <image:title>PEREGRINUS series poster — a pilgrimage of foreign forces, scored by Zazie Kanwar-Torge</image:title>
+    </image:image>
+  </url>
+
+  <!-- ============ LEXICON ============ -->
+  <url>
+    <loc>https://horror.zazieproductions.com/lexicon/</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ============ GUIDES ============ -->
+  <url>
+    <loc>https://horror.zazieproductions.com/guides/horror-film-score-cost/</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://horror.zazieproductions.com/guides/hire-a-horror-composer/</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- ============ PRESS ============ -->
+  <url>
+    <loc>https://horror.zazieproductions.com/press/</loc>
+    <lastmod>2026-09-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/press-photo.png</image:loc>
+      <image:title>Zazie Productions press photo</image:title>
+    </image:image>
   </url>
 
 </urlset>

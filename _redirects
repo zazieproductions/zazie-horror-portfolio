@@ -1,1 +1,14 @@
-/* /index.html 200
+# Utility redirects. NOTE: there is intentionally NO "/* /index.html 200"
+# SPA fallback — the React app uses hash routes only, so every unknown path
+# must return the real 404 page (no soft-200 duplicate URLs).
+# Cloudflare Pages serves existing static files before consulting this file.
+
+/work            /work/   301
+/lexicon         /lexicon/ 301
+/press           /press/  301
+/guides          /guides/horror-film-score-cost/ 301
+/work/index      /work/   301
+
+# Legacy entry points some clients append
+/index.php       /        301
+/home            /        301
