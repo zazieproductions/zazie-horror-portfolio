@@ -124,7 +124,7 @@ content-hashed. jsdom suite: 65 assertions, including "no em dashes" and "no
 
 ## 6. Zero-Lag Media Preload & Video Instant Playback: 2026-09-17 (night)
 
-Scope: Eliminate all media loading lag, scroll hitching, and video playback delay across `index.html`, `store.html`, and the client React bundle (`index-499c2aca.js`).
+Scope: Eliminate all media loading lag, scroll hitching, and video playback delay across `index.html`, `store.html`, and the client React bundle (`index-8638e732.js`).
 
 ### 6.1 Critical Media Preload & Prefetch Pipeline
 
@@ -151,7 +151,7 @@ To prevent micro-stutters and main-thread decode jank during scrolling:
 Previously, project cards either linked away to third-party pages or waited for external redirection:
 - **In-Place Autoplaying Embeds**: Clicking any video card dynamically swaps the poster thumbnail for an embedded responsive iframe with `autoplay=1` and hardware acceleration flags (`accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture`).
 - **Pre-Hydration Instant Player**: Static HTML includes declarative `data-video-card` attributes and a native lightweight event listener. Users can click or press Enter on any film sample immediately upon initial paint without waiting for React hydration.
-- **Client React Bundle Harmony**: `index-499c2aca.js` implements matching stateful video player logic with hover/pointerenter prefetching. DOM markup between static HTML and React component is identical, eliminating layout shifts and DOM churn.
+- **Client React Bundle Harmony**: `index-8638e732.js` implements matching stateful video player logic with hover/pointerenter prefetching. DOM markup between static HTML and React component is identical, eliminating layout shifts and DOM churn.
 - **Local Fallback for Drive Assets**: Replaced broken external Google Drive thumbnail URL with high-performance local `/images/project-eclipsed-drive.jpg`.
 
 ### 6.4 Service Worker Cache-First Architecture (`sw.js`)
