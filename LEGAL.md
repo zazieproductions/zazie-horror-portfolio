@@ -1,0 +1,218 @@
+# /legal: trust, legal and operating layer
+
+Date: 2026-09-17 · Branch: `arena/01a0b115-zazie-horror-portfolio`
+Scope: horror.zazieproductions.com
+
+The site had no terms, no privacy notice, no licensing statement, no purchase
+policy, no accessibility statement and no FAQ page. It did have a
+`FAQPage` JSON-LD block of six questions in `index.html` with nothing behind
+it, a footer with no legal row, and a public phone number, an LLC name and a
+"full rights to the score" claim, all of which create obligations that no
+published document acknowledged.
+
+This record covers what was built, how it deploys, what was verified, and what
+is deliberately not here. Facts that create obligations and need a human
+decision are collected in **`RATIFY.md`**, not silently resolved.
+
+---
+
+## 1. System as found (evidence from repo inspection)
+
+* **No backend of any kind.** The scoring form builds a `mailto:` URL and
+  hands off to the visitor's own mail client
+  (`window.location.href=\`mailto:…\`` in `Contact.tsx:263`). Nothing is
+  posted anywhere. There are no accounts, no database, no newsletter.
+* **No analytics, no cookies, no trackers.** `document.cookie` appears zero
+  times in `index.html`, the bundle and `store.js`; `localStorage` zero times;
+  `sessionStorage` exactly twice, both for the one key `zpBootShown` written
+  by the opening sequence. No `gtag`, GA, Plausible, Fathom, PostHog, Clarity
+  or pixel of any kind.
+* **Store takes no payment.** All 20 catalogue items link out to Bandcamp,
+  itch.io, Gumroad and eBay, which run the checkout (`STORE.md` section 3).
+* **Real third parties that are contacted:** `youtube-nocookie.com` (embed on
+  play, plus a `prefetch` of the embed document on pointer-enter),
+  `drive.google.com` (one sample), and on `/store` the four marketplace image
+  CDNs that serve cover art on load. Fonts are self hosted. `doubleclick` and
+  `i.ytimg.com` appear as connection hints only.
+* **Routing constraint.** `_redirects` ends with `/* /index.html 200`, and
+  `STORE.md` section 2 records the failure mode: on Cloudflare Pages a `200`
+  rewrite to a `.html` target loops forever. New routes therefore had to be
+  real static paths, not rewrite targets.
+* **Two hash conventions.** `store-src/build.sh` hashes `"$(cat file)"`, which
+  strips the trailing newline; the React bundle is named from
+  `sha256(raw bytes)[:8]` (verified: `index-8638e732.js` matched its own raw
+  content hash before this change).
+* **No skip link on the portfolio.** `grep -c 'Skip to' index.html` returned
+  `0`. The store and the new pages had one.
+
+## 2. What was built
+
+Seven documents, each a real static path, sharing one stylesheet, one script
+and two partials:
+
+| Route | Role |
+| --- | --- |
+| `/legal` | Hub: precedence order, index of all six documents, status of the text |
+| `/faq` | 36 questions in 8 sections, `FAQPage` schema generated from the markup |
+| `/terms` | 25 clauses: site use plus the commercial terms of a commission |
+| `/privacy` | 15 sections: real data inventory, third party table, rights, inspector |
+| `/licensing` | 14 sections: grant, options, retained rights, credits, cue sheets, AI |
+| `/purchases` | 9 sections: marketplace fulfilment, delivery, returns, sync |
+| `/accessibility` | 6 sections: measured contrast, implemented features, named gaps |
+
+### Files
+
+| Path | Role |
+| --- | --- |
+| `legal-src/pages/*.html` | Page sources (`__CSS__`, `__JS__`, `__MASTHEAD__`, `__FOOTER__`, `<!--FAQ_SCHEMA-->`) |
+| `legal-src/partials/masthead.html`, `footer.html` | Shared chrome, so the legal row exists in exactly one place |
+| `legal-src/legal.css` | Self-contained stylesheet, same tokens and texture recipes as the portfolio |
+| `legal-src/legal.js` | Progressive enhancement: accordion, scroll spy, copy plates, device inspector |
+| `legal-src/build.sh` | Hashes assets, injects partials, generates `FAQPage` schema, writes `<slug>/index.html` |
+| `<slug>/index.html` | **Generated.** Real static paths, seven of them |
+| `legal-<hash>.css`, `legal-<hash>.js` | **Generated**, content hashed, `immutable` under `_headers` |
+
+Rebuild after any source edit:
+
+```bash
+./legal-src/build.sh
+```
+
+Never hand edit a generated `<slug>/index.html`; the next build overwrites it.
+
+### Design decisions worth recording
+
+* **Real paths, no rewrites.** `<slug>/index.html` only, with no root
+  `<slug>.html` aliases. This is the `/store` lesson applied from the start:
+  static assets are matched before the `/* /index.html 200` splat, so nothing
+  can loop. `_redirects` is untouched.
+* **`FAQPage` is generated, not written.** `build.sh` parses the page's own
+  `<details class="faq-item">` elements and emits the schema from them, so the
+  structured data cannot drift from the visible answers. The build reports the
+  count (36).
+* **No cookie banner.** A consent banner on a site that sets no cookies is
+  theatre, and a visitor who dismisses one learns nothing true. The consent
+  surface here is instead: media that loads only on press, a privacy notice
+  that inventories every third party and when it is contacted, a device
+  inspector that reads the visitor's own browser, and a one line footer
+  statement on every page.
+* **The device inspector** (`/privacy` section 5) reads `document.cookie`,
+  `localStorage`, `sessionStorage`, `CacheStorage`, service worker
+  registrations and the count of off origin scripts on the page, and prints
+  them. It makes no network request and writes nothing. The claim on the page
+  is falsifiable by the reader, which is the point.
+* **Documents sit still.** Grain, vignette and the hairline frame are kept;
+  the torch, custom cursor, scanlines and VHS roll are not carried onto these
+  pages. A page someone is asked to rely on should not move.
+* **Answers ship open.** Every `<details>` is `open` in the markup, so with
+  JavaScript off the FAQ is a complete document and the section index is a
+  plain list of links. The script collapses them on load.
+* **Legibility red.** `#c41e1e` measures 3.49:1 on `#030303`, short of the
+  4.5:1 needed for small text. These pages add `--blood-text:#e65650`
+  (5.71:1) for labels and keep the darker red for rules, marks and display
+  type. The portfolio and `/store` still use the darker red for small labels;
+  that is listed as an open gap in the accessibility statement rather than
+  quietly fixed or ignored.
+* **Legal pages bypass the stale cache.** `sw.js` serves navigations
+  stale-while-revalidate, which is right for a portfolio and wrong for a
+  document whose effective date matters. The seven legal paths are now
+  network first with the cache as a fallback only.
+* **Copy rules followed.** No em or en dashes anywhere on the new pages
+  (asserted by the suite), no marketing filler, and no SaaS defined terms: no
+  "the App", no "Your Account", no "the Service".
+
+### Integration with what already existed
+
+* **Portfolio footer** (`index.html` prerendered *and* the React `Footer.tsx`
+  output in the bundle): a `nav[aria-label="Legal and operating documents"]`
+  row with all seven documents, and a bottom bar that adds "No advertising
+  trackers · no cookies set by this site" beside the copyright line. Both
+  footers were patched, because the bundle tears down and rebuilds the static
+  DOM on mount: patching one alone would flash and disappear.
+* **Contact**: a line under the inquiry CTA pointing at the FAQ, in both the
+  prerendered markup and `Contact.tsx`.
+* **Bundle renamed** `index-8638e732.js` → `index-b9d7912d.js` per the raw
+  sha256 convention, with the dynamic import in `index.html` and the
+  precache entry in `sw.js` updated. No stale references remain.
+* **Store**: the same legal row and tracker line added to
+  `store-src/store.html`, with `.foot-law` styles added to
+  `store-src/store.css` (which moved its hash to `store-8af6034d.css`;
+  `sw.js` updated to match).
+* **Skip link** added to `index.html` outside `#root`, so the React teardown
+  cannot remove it, with `tabindex="-1"` on `#root` to make it a real target.
+* **`server.mjs`** now resolves a directory URL to its `index.html`, matching
+  edge behaviour. Before this, `/faq` 404'd locally.
+* **`_headers`**: `must-revalidate` added for all 21 new HTML paths.
+* **`sitemap.xml`**: seven URLs added, priorities 0.2 to 0.6. `robots.txt`
+  unchanged: the documents should be crawled.
+
+## 3. Verification performed
+
+Two suites, 344 assertions, all passing. They live outside the repo
+(`/home/user/verify/`) and read the real files.
+
+**`static-checks.mjs`, 256 assertions:** every generated page exists as a real
+path with no root alias; hash discipline for all four hashed assets; every
+page references its hashed assets and carries no leftover placeholder;
+canonical, `og:url`, robots, title, description, `lang`, a single `h1`, skip
+link and effective date on all seven; zero off origin subresource loads and no
+`preconnect` to a third party on any document page; no em or en dashes and no
+template tells in any page body; all JSON-LD parses and carries `WebPage` (or
+`CollectionPage`) plus `BreadcrumbList`; **all 36 `FAQPage` questions and
+answers match the visible text exactly**; every internal href resolves to a
+route, a file on disk, or an id that exists on the target page; cross
+references between documents; `_headers`, `_redirects`, `sw.js`, `sitemap.xml`
+and `robots.txt` all correct with no stale hashes; portfolio and store
+integration present; and `node --check` clean on the patched bundle, both
+generated scripts, `sw.js`, `server.mjs` and the legal source.
+
+**`runtime-checks.mjs`, 88 assertions:** boots the patched bundle against the
+patched `index.html` in jsdom and asserts React renders, the site footer
+carries all seven document links plus the tracker statement and the copyright
+line, the primary nav still reads Reel / Work / Rates / Store, the FAQ link
+sits inside the contact section, all eight portfolio sections survive, and
+zero runtime errors. Then boots `legal.js` against the generated pages: the
+accordion collapses all 36 on load, the counter tracks state, expand and
+collapse both work, a `#q-who-owns` deep link opens only that question, the
+device inspector populates every row, and the credit line copies verbatim.
+Finally a crawl through the repo's own `server.mjs`: `/faq`, `/faq/` and
+`/faq/index.html` for all seven routes, plus `/`, `/store`, `/store/`,
+`/store.html`, `robots.txt` and `sitemap.xml` all 200; every local asset
+referenced by the new pages serves 200; the old bundle name 404s; unknown
+paths still 404.
+
+Two bugs were found by the suite and fixed: the device inspector had no
+`data-device` hook, so `legal.js` skipped the whole block, and the panel
+lookup is now also derived from the output list as a fallback.
+
+**Not verifiable here:** no headless browser and no route to the live edge, so
+the pages were not visually captured, the Cloudflare Pages asset-before-splat
+behaviour was not observed first hand (it is inferred from `/store` working
+the same way today), and no screen reader or automated WCAG tool was run. The
+contrast figures in the accessibility statement are computed from the palette
+values, not measured from a rendered page.
+
+## 4. Residual risks and open items
+
+* **`RATIFY.md` is the short list.** Governing law, the default rights model,
+  payment terms, retention periods and the plug-in vault's redistribution
+  position are drafted as studio defaults and flagged, not invented as facts.
+  Nothing in these pages takes effect for a real counterparty until the
+  principal confirms those.
+* **Not legal advice, and it says so.** `/legal` section iii, `/terms`
+  section 18 and `/licensing` section 14 all state that the documents are the
+  studio's standard position rather than counsel. A lawyer should read
+  `/terms` clauses 10, 19 and 23 before the studio relies on them against a
+  represented counterparty.
+* **Pre-existing claims now carry documents.** The homepage asserts "full
+  rights to the score", a 5.0 rating with four attributed reviews, a public
+  phone number and an LLC name. The documents are consistent with those
+  claims; whether the claims themselves are right is in `RATIFY.md`.
+* **Accent red contrast on `/` and `/store`** remains below AA for small
+  text. Fixed on the documents, open elsewhere, disclosed in the
+  accessibility statement.
+* **Service worker staleness** is now handled for the seven legal paths only.
+  Any future document route must be added to `LEGAL_PATHS` in `sw.js`.
+* **The FAQ count is load bearing.** `/faq` states 36 questions in its
+  heading meta and the counter's static text. Adding a question means editing
+  both; the build regenerates the schema automatically.

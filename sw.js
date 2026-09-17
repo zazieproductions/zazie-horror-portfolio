@@ -12,8 +12,8 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-ba4ce5d7.css',
-  '/index-8638e732.js',
-  '/store-220e02f1.css',
+  '/index-b9d7912d.js',
+  '/store-8af6034d.css',
   '/store-2b4680d0.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',
@@ -96,6 +96,23 @@ self.addEventListener('fetch', (event) => {
   if (req.method !== 'GET') return;
 
   const url = new URL(req.url);
+
+  // Legal and operating documents: network first, cache only as a fallback.
+  // A terms or privacy page must never be served stale while a network is
+  // reachable, even though the rest of the site is stale-while-revalidate.
+  const LEGAL_PATHS = ['/legal', '/faq', '/terms', '/privacy', '/licensing', '/purchases', '/accessibility'];
+  if (url.origin === self.location.origin && req.mode === 'navigate' && LEGAL_PATHS.includes(url.pathname.replace(/\/$/, ''))) {
+    event.respondWith(
+      fetch(req).then((res) => {
+        if (res && res.status === 200) {
+          const resClone = res.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, resClone));
+        }
+        return res;
+      }).catch(() => caches.match(req).then((c) => c || caches.match('/index.html')))
+    );
+    return;
+  }
 
   // Same-origin handling
   if (url.origin === self.location.origin) {

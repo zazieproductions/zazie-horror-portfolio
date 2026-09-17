@@ -49,3 +49,66 @@
 /sw.js
   Cache-Control: public, max-age=0, must-revalidate
 
+/legal
+  Cache-Control: public, max-age=0, must-revalidate
+
+/legal/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/legal/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/faq
+  Cache-Control: public, max-age=0, must-revalidate
+
+/faq/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/faq/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/terms
+  Cache-Control: public, max-age=0, must-revalidate
+
+/terms/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/terms/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/privacy
+  Cache-Control: public, max-age=0, must-revalidate
+
+/privacy/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/privacy/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/licensing
+  Cache-Control: public, max-age=0, must-revalidate
+
+/licensing/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/licensing/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/purchases
+  Cache-Control: public, max-age=0, must-revalidate
+
+/purchases/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/purchases/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/accessibility
+  Cache-Control: public, max-age=0, must-revalidate
+
+/accessibility/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/accessibility/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+

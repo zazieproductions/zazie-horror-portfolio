@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<html lang="en" style="background:#030303;color-scheme:dark">
+<head>
+<meta charset="utf-8"/>
+<link href="/favicon.svg" rel="icon" type="image/svg+xml"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<meta content="#030303" name="theme-color"/>
+<title>Accessibility Statement | Zazie Productions</title>
+<meta content="The accessibility standard these pages are built to, what is implemented, the gaps that are still open with honest measurements, and how to request any document in another format." name="description"/>
+<link rel="canonical" href="https://horror.zazieproductions.com/accessibility" />
+<meta name="robots" content="index, follow, max-snippet:-1" />
+<meta name="author" content="Zazie Kanwar-Torge" />
+
+<link rel="preload" as="font" type="font/woff2" href="/fonts/cormorant-garamond-latin-400-normal.woff2" crossorigin/>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/inter-latin-wght-normal.woff2" crossorigin/>
+
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Zazie Productions: Horror Composer"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:title" content="Accessibility Statement"/>
+<meta property="og:description" content="The standard these pages are built to, what is implemented, and the gaps that are still open."/>
+<meta property="og:url" content="https://horror.zazieproductions.com/accessibility"/>
+<meta property="og:image" content="https://horror.zazieproductions.com/images/press-photo.jpg"/>
+<meta property="og:image:alt" content="Zazie Productions press photo."/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Accessibility Statement"/>
+<meta name="twitter:description" content="The standard these pages are built to, and the gaps that are still open."/>
+
+<link href="/__CSS__" rel="stylesheet"/>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://horror.zazieproductions.com/accessibility#webpage",
+      "url": "https://horror.zazieproductions.com/accessibility",
+      "name": "Accessibility Statement",
+      "description": "The accessibility conformance status of horror.zazieproductions.com, what is implemented, known gaps, and how to request an alternative format.",
+      "isPartOf": {"@id": "https://horror.zazieproductions.com/#website"},
+      "about": {"@id": "https://horror.zazieproductions.com/#org"},
+      "publisher": {"@id": "https://horror.zazieproductions.com/#org"},
+      "inLanguage": "en",
+      "datePublished": "2026-09-17",
+      "dateModified": "2026-09-17"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "Portfolio", "item": "https://horror.zazieproductions.com/"},
+        {"@type": "ListItem", "position": 2, "name": "Documents", "item": "https://horror.zazieproductions.com/legal"},
+        {"@type": "ListItem", "position": 3, "name": "Accessibility", "item": "https://horror.zazieproductions.com/accessibility"}
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+__MASTHEAD__
+
+<header class="doc-head">
+  <div class="shell doc-head-inner">
+    <p class="eyebrow">Document 06 · Access</p>
+    <h1>Accessibility <em>statement</em></h1>
+    <p class="doc-lead">A dark, grain covered portfolio is a hostile environment for accessibility by default, so this page states what is actually implemented, with measurements, and what is still open. An aesthetic is not an excuse, and a statement that only lists successes is not worth publishing.</p>
+    <ul class="doc-meta">
+      <li>Updated <time datetime="2026-09-17">17 September 2026</time></li>
+      <li>Target <b>WCAG 2.2 Level AA</b></li>
+      <li>Status <b>Partially conformant</b></li>
+    </ul>
+  </div>
+</header>
+
+<main id="doc" class="doc">
+  <div class="shell doc-layout">
+    <nav class="doc-index" aria-label="On this page">
+      <p>Sections</p>
+      <ol>
+        <li><a href="#status"><span class="idx">1</span>Status and scope</a></li>
+        <li><a href="#implemented"><span class="idx">2</span>What is implemented</a></li>
+        <li><a href="#contrast"><span class="idx">3</span>Contrast, measured</a></li>
+        <li><a href="#gaps"><span class="idx">4</span>Known gaps</a></li>
+        <li><a href="#formats"><span class="idx">5</span>Alternative formats</a></li>
+        <li><a href="#feedback"><span class="idx">6</span>Feedback</a></li>
+      </ol>
+    </nav>
+
+    <div class="doc-body">
+      <nav class="doc-jump" aria-label="Sections">
+        <p>Sections</p>
+        <ul>
+          <li><a href="#status">Status</a></li>
+          <li><a href="#implemented">Implemented</a></li>
+          <li><a href="#contrast">Contrast</a></li>
+          <li><a href="#gaps">Gaps</a></li>
+          <li><a href="#formats">Formats</a></li>
+          <li><a href="#feedback">Feedback</a></li>
+        </ul>
+      </nav>
+
+      <section class="clause" id="status">
+        <h2><span class="no">1</span>Status and scope</h2>
+        <p>The target is WCAG 2.2 Level AA. The site is <strong>partially conformant</strong>: the document pages (FAQ, terms, privacy, licensing, purchases, accessibility) are built to that target and are the most heavily used pages by anyone who needs them, while the portfolio and catalogue carry atmosphere effects that create the exceptions listed in section 4.</p>
+        <p>"Partially conformant" means some content does not fully conform. It is not a euphemism for unfinished; the specific exceptions are named below so you know which pages to treat with care.</p>
+        <p>This statement covers horror.zazieproductions.com as published on the date above. Third party destinations reached by link, and embedded video players, are covered by their own statements.</p>
+      </section>
+
+      <section class="clause" id="implemented">
+        <h2><span class="no">2</span>What is implemented</h2>
+        <h3>Content without scripting</h3>
+        <p>Every clause, every question and every answer is in the HTML. With JavaScript disabled, all FAQ answers are open, the section index is a plain list of links, and nothing on any document page disappears. The enhancement script collapses the answers into an accordion on load; it never gates content.</p>
+        <h3>Structure and landmarks</h3>
+        <p>One <code>h1</code> per page, headings in sequence, banner, main, navigation and contentinfo landmarks, and a skip link as the first focusable element on every page including the portfolio. Section anchors are real fragments, so any clause can be linked and returned to.</p>
+        <h3>Keyboard operation</h3>
+        <p>Everything is reachable and operable by keyboard. FAQ items are native <code>details</code> elements, so they open and close with Enter and Space and their state is exposed to assistive technology by the browser rather than by a custom widget. Film sample cards on the portfolio are focusable buttons with a <code>Play</code> label and respond to Enter and Space.</p>
+        <h3>Focus visibility</h3>
+        <p>A 1 pixel ember outline with a 3 pixel offset on every focusable element, via <code>:focus-visible</code>, so keyboard focus is visible without adding outlines to mouse clicks. Against the near black background it reads clearly at any zoom.</p>
+        <h3>Motion</h3>
+        <p>Nothing autoplays. No audio starts without a press. Every animation on the document pages stops under <code>prefers-reduced-motion: reduce</code>, including scroll reveals and hover transitions, and the portfolio's opening sequence is suppressed entirely under that setting and for automated clients.</p>
+        <h3>Type and zoom</h3>
+        <p>Fluid type with <code>clamp()</code>, a measure capped at 74 characters on the reading column, 1.85 line height for body copy, and no fixed pixel font sizes, so text resizes to at least 200 percent without loss of content. Fonts are self hosted, which means no layout shift from a third party font arriving late.</p>
+        <h3>Print</h3>
+        <p>Every document page carries a print stylesheet: white background, black text, texture layers and navigation removed, FAQ answers expanded, clauses kept whole across page breaks. A lawyer who wants these terms on paper gets a legible document, which is the point of a legal page.</p>
+        <h3>Colour independence</h3>
+        <p>No information is carried by colour alone. FAQ state is conveyed by the native disclosure semantics as well as the indicator mark, the section index marks the current clause with a text colour change on a link whose text already identifies it, and status labels in the device inspector are words rather than dots.</p>
+        <h3>Target size</h3>
+        <p>Buttons are at least 40 pixels tall, FAQ summary rows are full width with generous padding, and no interactive element on these pages is smaller than 24 by 24 CSS pixels.</p>
+      </section>
+
+      <section class="clause" id="contrast">
+        <h2><span class="no">3</span>Contrast, measured</h2>
+        <p>The palette is bone text on near black, which gives a lot of headroom, and one accent red that does not. Measured against <code>#030303</code>:</p>
+        <div class="table-wrap">
+          <table>
+            <caption>Measured contrast ratios on the document pages</caption>
+            <thead>
+              <tr><th scope="col">Element</th><th scope="col">Ratio</th><th scope="col">AA requirement</th><th scope="col">Result</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Body copy, <code>rgba(240,235,227,.82)</code></th><td>11.54 : 1</td><td>4.5 : 1</td><td>Pass</td></tr>
+              <tr><th scope="row">Headings, <code>#f0ebe3</code></th><td>17.38 : 1</td><td>3 : 1</td><td>Pass</td></tr>
+              <tr><th scope="row">Secondary text, <code>#9a9590</code></th><td>6.95 : 1</td><td>4.5 : 1</td><td>Pass</td></tr>
+              <tr><th scope="row">Labels on document pages, <code>#e65650</code></th><td>5.71 : 1</td><td>4.5 : 1</td><td>Pass</td></tr>
+              <tr><th scope="row">Accent red <code>#c41e1e</code> as text</th><td>3.49 : 1</td><td>4.5 : 1</td><td>Fail for small text</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>That last row is why these pages define a second red. The accent red is kept for rules, marks and large display type where 3 : 1 is sufficient, and small uppercase labels use <code>#e65650</code> at 5.71 : 1 instead. The portfolio and the catalogue still use the darker red for small labels, which is listed as an open gap below rather than quietly ignored.</p>
+      </section>
+
+      <section class="clause" id="gaps">
+        <h2><span class="no">4</span>Known gaps</h2>
+        <p>These are the exceptions behind "partially conformant", with the page each one lives on.</p>
+        <ul>
+          <li><strong>Small label contrast on the portfolio and catalogue.</strong> The darker accent red sits at 3.49 : 1 against the background, below the 4.5 : 1 needed for small text. Fixed on the document pages, open on <code>/</code> and <code>/store</code>.</li>
+          <li><strong>Custom cursor and pointer torch on the catalogue.</strong> On fine pointers the page hides the system cursor and draws its own. It is disabled for coarse pointers, for reduced motion and without scripting, but it is still a non standard pointer for anyone who relies on cursor shape or position cues.</li>
+          <li><strong>Atmosphere layers.</strong> Grain, vignette, scanlines and a hairline frame sit above the page as fixed overlays. They are decorative, marked <code>aria-hidden</code>, kept at low opacity and switched off in print, but they reduce effective contrast slightly for anyone with low vision and cannot be turned off by the visitor.</li>
+          <li><strong>The portfolio's opening sequence.</strong> A full screen animation on first visit. It is decorative, hidden from assistive technology, dismissed by a click or keypress, suppressed under reduced motion and for automated clients, and never shown twice in the same tab. It is still an interruption, and it does not exist on any document page.</li>
+          <li><strong>Scroll spy announcements.</strong> The sticky index marks the clause you are reading with <code>aria-current</code>. Some screen readers announce that change, most do not, so it should be treated as a visual aid rather than a reliable announcement.</li>
+          <li><strong>Embedded video.</strong> Film samples come from third party players whose own accessibility the studio does not control. Every cue on the portfolio is also listed as text with its title, duration and description, so no information is locked inside a player.</li>
+          <li><strong>Captions.</strong> The film samples are music driven picture with no dialogue, so there is nothing to caption. If a sample with dialogue is ever published, it will carry captions.</li>
+        </ul>
+        <p>None of these block access to the content of any document page. They are listed because an accessibility statement that hides its exceptions is worthless.</p>
+      </section>
+
+      <section class="clause" id="formats">
+        <h2><span class="no">5</span>Alternative formats</h2>
+        <p>Any document on this site can be supplied in another format on request: plain text, a single accessible PDF, large print, or a version without the atmosphere layers. Say which and it will be sent, normally within two business days.</p>
+        <p>For an immediate plain text version, every page is readable with styling disabled, and the print stylesheet produces a clean text document from any browser's print dialog.</p>
+      </section>
+
+      <section class="clause" id="feedback">
+        <h2><span class="no">6</span>Feedback</h2>
+        <p>If something on this site blocks you, tell the studio: <a href="mailto:zaziediya@gmail.com?subject=Accessibility">zaziediya@gmail.com</a>. Say which page, what you were using, and what happened. The reply will come from the person who builds the site, which is the fastest route to a fix that exists at this size.</p>
+        <p>Reports are treated as defects. Where a fix is not immediate, the gap gets added to section 4 with the reason, so the next reader knows it is known rather than invisible.</p>
+        <p>Nothing in this statement limits any right you have under the accessibility law of your own jurisdiction, including the European Accessibility Act, the Equality Act 2010 in the UK, or the Americans with Disabilities Act in the United States.</p>
+      </section>
+    </div>
+  </div>
+</main>
+
+<section class="closing">
+  <div class="shell closing-inner">
+    <div>
+      <h2>Found something <em>that blocks you</em></h2>
+      <p>One email is enough. Say which page and what you were using, and it gets fixed or it gets written down here as a known gap.</p>
+    </div>
+    <div class="closing-actions">
+      <a class="btn" href="mailto:zaziediya@gmail.com?subject=Accessibility">Report a barrier</a>
+      <a class="btn btn-ghost" href="/faq">Read the questions</a>
+    </div>
+  </div>
+</section>
+
+__FOOTER__
+
+<script>
+if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("/sw.js").catch(()=>{})},{once:true})}
+</script>
+<script src="/__JS__" defer></script>
+</body>
+</html>
