@@ -60,8 +60,10 @@ HTML with one 19 KB stylesheet and one 3 KB deferred script, built by
   interactive after ~25 KB of subresources, and the filters degrade to "all
   releases visible" without JS.
 - **Caching**: generated filenames are content-derived, so `/*.css` + `/*.js`
-  `immutable` headers stay honest; `/store.html` is `must-revalidate` like
-  `index.html`. `_redirects` gains `/store` + `/store/` above the SPA catch-all.
+  `immutable` headers stay honest; `/store`, `/store/`, `/store/index.html` and
+  `/store.html` are `must-revalidate` like `index.html`. `/store` is served
+  natively from `store/index.html` (no `_redirects` rewrite: a `200` rewrite to
+  `/store.html` loops against Cloudflare Pages' pretty-URL redirect).
 - **Cover art** is hot-linked from the three marketplace CDNs with
   `loading="lazy"`, `decoding="async"`, `referrerpolicy="no-referrer"` and a
   monogram fallback on `error`, third-party origins are off the critical path
@@ -119,6 +121,81 @@ filter. All pointer effects gate on `(hover:hover) and (pointer:fine)` and
 content-hashed. jsdom suite: 65 assertions, including "no em dashes" and "no
 `atmosphere-bg` reference".
 
+---
+
+# ZP Archive Boot, analog-horror terminal intro
+
+Date: 2026-09-17 · Branch: `arena/01a0b074-zazie-horror-portfolio`
+
+## What it is
+
+A terminal-style loading screen with analog-horror dressing shown once per session on first
+paint: CRT power-on flash to typed BIOS boot log (29 archive cues indexed) to `PLAY SHOWREEL.REEL`
+with a VHS tracking bar to signal glitch (RGB split, jitter, EAS-style red frame double-blink,
+"UNREGISTERED SIGNAL" warnings) to VHS OSD chrome (`► PLAY`, blinking `● REC`, running `SP` counter,
+scanlines, vignette, rolling tracking band) to blinking gate to CRT power-off collapse revealing the site.
+
+## Cost & performance guardrails
+
+- **Zero network requests**: ~15 KB raw / ~4 KB gzip of inline HTML+CSS+JS in `index.html`.
+  No fonts (uses `ui-monospace` stack), no images, no audio files.
+- **Animation hygiene**: only `transform`, `opacity`, and `filter` animate; `contain: strict`
+  on the overlay; scanlines are static gradients; the whole thing self-destructs (node removed).
+- **Timing**: ≈5.4 s to the gate; any click / key / wheel / tap skips instantly; gate auto-enters
+  after 2.8 s; JS hard cap at 9.2 s; CSS force-hide at 10 s as the final failsafe.
+- **Sound**: none by default. A ~0.3 s synthesized tape-click/power-down (WebAudio, peak gain 0.055)
+  plays only when the user's own click/keypress dismisses the screen, autoplay-policy safe.
+
+## Correctness guardrails
+
+- **Overlay lives outside `#root`**, so the React bundle's teardown/rebuild can never remove it.
+- **No-JS / crawlers / bots / Lighthouse**: overlay is `display:none` unless a synchronous head
+  script adds `.zp-boot-on` to `<html>`; bots and `prefers-reduced-motion` never get it. Page
+  content is fully present in the DOM regardless (SEO untouched).
+- **JS error mid-sequence**: try/catch to `finish()`; CSS `zpForceHide` animation hides the overlay
+  even if every JS path dies.
+- **bfcache restore mid-boot** (`pageshow.persisted`) to instant teardown.
+- **Once per session** via `sessionStorage` (`zpBootShown`); replay with `?boot=1` or `#boot` (force also bypasses reduced motion via a `zp-boot-force` class). Preview/dev hosts (e2b.app, pages.dev, localhost, 127.0.0.1) ignore the session flag and replay on every load, so the intro stays demoable while building; production domains keep the once-per-session gate.
+- Emits `zp:bootdone` on `window` after teardown, future hook for starting ambience/music
+  from the site's own player.
+
+## Workshop notes (deliberate creative choices to revisit)
+
+- `© 1987 ZAZIE PRODUCTIONS` is an intentional analog-horror anachronism (real founding: 2022).
+- The corrupted tracking bar stays corrupted after the glitch, the tape never fully heals.
+- Gate copy: `[ CLICK OR PRESS ANY KEY TO OBSERVE ]`.
+- Possible next iterations: per-visit tape number, longer scare on repeat visits, tying
+  `zp:bootdone` into the showreel player, CRT curvature on large screens.
+
+---
+
+# Hero Copy Rewrite: deliverable list → outcome promise
+
+Date: 2026-09-17 · Branch: `arena/01a0ac9b-zazie-horror-portfolio`
+
+The hero's third line was a deliverables list (`Themes, tension cues, stems,
+and alternate mixes delivered for picture.`). It now leads with the outcome the
+buyer hires for and names the two stages they own:
+
+> Music that makes the fear land. Built for your edit, ready for your mix.
+
+- **Both copies patched**: the prerendered hero in `index.html` and the same
+  string inside the React bundle, so the post-mount teardown rebuilds the
+  paragraph with identical text (no flash of the old line after boot).
+- **Content-hashed rename**, per the `immutable` discipline in `_headers`:
+  `index-b43ddf07.js` → `index-bf264c32.js` (raw file sha256, first 8 hex,
+  matching the existing `index-*` convention). `index.html`'s dynamic import
+  updated; no `?v=` query reintroduced. Nothing else referenced the old hash
+  except §5 above, which is a dated record of that change.
+- **Cost**: +1 byte of hero copy, +1 byte of bundle (423,059 → 423,060). No
+  markup, class, spacing or component change, so no layout shift or reflow.
+- **House style**: no em dashes (matches the store suite's assertion).
+- **Not verifiable in this sandbox**: no headless browser, so no visual capture.
+  Verified instead by `node --input-type=module --check` on the renamed bundle
+  and a local HTTP crawl (200 on `/index.html` and `/index-bf264c32.js`, zero
+  stale references to the old hash in any served file).
+
+---
 
 ---
 

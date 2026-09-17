@@ -1,3 +1,5 @@
-/store     /store.html   200
-/store/    /store.html   200
+# /store is served natively from store/index.html (see store-src/build.sh).
+# Do NOT rewrite /store to /store.html here: Cloudflare Pages redirects
+# ".html" URLs back to their pretty form, so a 200 rewrite loops forever
+# (ERR_TOO_MANY_REDIRECTS on /store and /store.html).
 /* /index.html 200

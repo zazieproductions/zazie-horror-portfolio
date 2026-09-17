@@ -6,6 +6,7 @@ const PRECACHE_ASSETS = [
   '/index.html',
   '/store',
   '/store.html',
+  '/store/index.html',
   '/favicon.svg',
   '/fonts/cormorant-garamond-latin-400-normal.woff2',
   '/fonts/cormorant-garamond-latin-400-italic.woff2',

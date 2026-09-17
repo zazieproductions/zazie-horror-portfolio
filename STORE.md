@@ -15,11 +15,12 @@ script.
 
 | Path | Role |
 | --- | --- |
-| `store-src/store.html` | Source markup (placeholders `__CSS__`, `__JS__`) |
+| `store-src/store.html` | Source markup (placeholders `__CSS__`, `__JS__`; all asset refs root-absolute) |
 | `store-src/store.css` | Source stylesheet, self-contained (tokens, `@font-face`, all rules) |
 | `store-src/store.js` | Source behaviour, progressive enhancement only |
-| `store-src/build.sh` | Build: hashes assets, writes them to the repo root, generates `store.html` |
-| `store.html` | **Generated.** Do not edit directly |
+| `store-src/build.sh` | Build: hashes assets, writes them to the repo root, generates `store.html` and `store/index.html` |
+| `store/index.html` | **Generated.** The page `/store` actually serves — a real static path |
+| `store.html` | **Generated.** Root alias; hosts with pretty-URL handling 301 it to `/store`. Do not edit directly |
 | `store-<hash>.css`, `store-<hash>.js` | **Generated**, content-hashed, served `immutable` by `_headers` |
 
 Rebuild after any source edit:
@@ -29,15 +30,26 @@ Rebuild after any source edit:
 ```
 
 It removes the previous hashed pair, so no stale assets are left behind.
-Never hand-edit `store.html`: the next build overwrites it.
+Never hand-edit `store.html` or `store/index.html`: the next build overwrites
+them.
 
 ## 2. Deployment
 
-* `_redirects` maps `/store` and `/store/` to `/store.html` **above** the SPA
-  catch-all (`/* /index.html 200`). Rule order matters, keep the store rules first.
-* `_headers` gives `/store.html` the same `must-revalidate` policy as
-  `/index.html`; `/*.css` and `/*.js` are already `immutable, max-age=1y`, which
-  is why the generated filenames are content-hashed.
+* `/store` is served **natively** from `store/index.html` — a real asset, no
+  redirect machinery. This is deliberate. Earlier revisions mapped `/store` to
+  `/store.html` via a `200` rewrite in `_redirects`, and on Cloudflare Pages
+  (which redirects `.html` URLs to their pretty form) the two collided:
+  `/store → /store.html → /store → …`, an infinite redirect loop. The browser
+  showed ERR_TOO_MANY_REDIRECTS, i.e. the page never loaded. Do not reintroduce
+  a rewrite to any `.html` path here.
+* `_redirects` therefore contains only the SPA catch-all (`/* /index.html 200`).
+* `_headers` gives `/store`, `/store/`, `/store/index.html` and `/store.html`
+  the same `must-revalidate` policy as `/index.html`; `/*.css` and `/*.js` are
+  already `immutable, max-age=1y`, which is why the generated filenames are
+  content-hashed.
+* Asset references inside the store markup are root-absolute (`/store-<hash>.css`,
+  `/favicon.svg`, `/fonts/…`) so the page resolves identically whether it is
+  served at `/store` or `/store/`.
 * `sitemap.xml` lists `/store` (priority 0.8, weekly).
 * The page is linked from three places:
   1. the primary nav tab (React, `Ix` array in `index-<hash>.js`, feeds the

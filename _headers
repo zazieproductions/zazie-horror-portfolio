@@ -34,6 +34,15 @@
 /index.html
   Cache-Control: public, max-age=0, must-revalidate
 
+/store
+  Cache-Control: public, max-age=0, must-revalidate
+
+/store/
+  Cache-Control: public, max-age=0, must-revalidate
+
+/store/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
 /store.html
   Cache-Control: public, max-age=0, must-revalidate
 
