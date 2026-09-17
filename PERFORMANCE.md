@@ -194,3 +194,27 @@ buyer hires for and names the two stages they own:
   Verified instead by `node --input-type=module --check` on the renamed bundle
   and a local HTTP crawl (200 on `/index.html` and `/index-bf264c32.js`, zero
   stale references to the old hash in any served file).
+
+---
+
+# Hero Third Line Removed: two headings only
+
+Date: 2026-09-17 · Branch: `arena/01a0b10a-zazie-horror-portfolio`
+
+Per owner request, the hero's third line (the paragraph added in the entry
+above) is removed entirely. The hero now carries only its two headings:
+
+1. `Dark, atmospheric scores written to your picture.` (h1)
+2. `Original music for psychological horror, thrillers, and dark sci-fi,
+   composed for film, TV, and games.` (subheading)
+
+- **Both copies patched**: the prerendered `<p>` in `index.html` (deleted line)
+  and the matching `u.jsx(Bt.p, {custom:4, ...})` element in the React bundle,
+  so post-mount rebuild never reintroduces the paragraph.
+- **Content-hashed rename**, per the `immutable` discipline in `_headers`:
+  `index-bf264c32.js` → `index-6c0d14e6.js` (raw file sha256, first 8 hex).
+  `index.html`'s dynamic import updated; zero stale `bf264c32` references in
+  any served file.
+- Verified by `node --input-type=module --check` on the renamed bundle and a
+  local HTTP crawl (200 on `/index.html` and `/index-6c0d14e6.js`, zero
+  occurrences of the removed line in any served file).
