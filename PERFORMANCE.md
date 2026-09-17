@@ -45,3 +45,31 @@ Scope: horror.zazieproductions.com (static prerendered React build on an edge ho
 - **Audio re-encode** (12.5 MB longest track at ~256 kbps): left untouched deliberately — streaming is progressive and bitrate is a brand-quality call. If mobile data matters more than master fidelity, re-encode to 160 kbps CBR (+ update immutable cache via filename change). Owner: composer.
 - **Poster `-1200.jpg` lightbox**: capped at 1200 px long side; if 4K fullscreen inspection of posters is ever a use case, add an AVIF tier. Owner: design.
 - `Cache-Control: immutable` on hashed JS/CSS now depends on the rename-on-change discipline (hashes are content-derived; enforce in whatever build/commit flow produces these files).
+
+---
+
+## 5. Store page — added 2026-09-17
+
+New route `/store` (source + maintenance notes in `STORE.md`). It deliberately
+does **not** touch the React bundle's runtime: the page is plain prerendered
+HTML with one 19 KB stylesheet and one 3 KB deferred script, built by
+`store-src/build.sh` into content-hashed `store-<hash>.{css,js}` + `store.html`.
+
+- **Critical path**: HTML (28.5 KB / ~5 KB brotli) + `store-*.css` + 3 preloaded
+  woff2 faces. No React, no framer-motion, no 420 KB bundle — the store is
+  interactive after ~25 KB of subresources, and the filters degrade to "all
+  releases visible" without JS.
+- **Caching**: generated filenames are content-derived, so `/*.css` + `/*.js`
+  `immutable` headers stay honest; `/store.html` is `must-revalidate` like
+  `index.html`. `_redirects` gains `/store` + `/store/` above the SPA catch-all.
+- **Cover art** is hot-linked from the three marketplace CDNs with
+  `loading="lazy"`, `decoding="async"`, `referrerpolicy="no-referrer"` and a
+  monogram fallback on `error` — third-party origins are off the critical path
+  and a pulled image cannot leave a hole in the grid.
+- **Integration cost on the homepage**: +2 nav-entry bytes in the bundle
+  (`Ix` array) and one footer link; the bundle was re-hashed and
+  `index.html`'s dynamic import updated (`index-b43ddf07.js`).
+- **Not verifiable in this sandbox**: no headless browser, so no visual capture
+  or Lighthouse run for the new page; verified instead by jsdom behavioural
+  tests (38 assertions on `/store`, 14 on the homepage boot) and a local HTTP
+  crawl of every referenced asset.
