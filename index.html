@@ -4,26 +4,159 @@
 <head>
 <meta charset="utf-8"/>
 <!-- ═══════════════════════════════════════════════════════════════════
+     ZP CONTENT ADVISORY — the warning that runs BEFORE the tape.
+     Decided here in <head> so the page never paints unwarned; the panel
+     itself lives outside #root so a React takeover cannot strip it.
+     Once per browser session; preview hosts replay it every load and
+     ?advisory=1 / #advisory forces it anywhere. Silent and still by
+     design: no autoplay audio, no strobe, reduced-motion aware.
+     Handoff: the boot gate below yields while this panel is up, and the
+     tape starts from this panel's close handler (~see driver in <body>).
+     Failsafe: if the panel never reaches the screen, a watchdog in the boot
+     driver releases the tape at 1.2s; no-JS never gates anything at all.
+     ═══════════════════════════════════════════════════════════════════ -->
+<script id="zp-advisory-gate">
+(function(){try{
+  var de=document.documentElement;
+  if(!de.classList)return;
+  var force=null;
+  try{force=new URLSearchParams(location.search).get('advisory');}catch(e){}
+  if(force===null&&location.hash.indexOf('advisory')>-1)force='1';
+  var h=location.hostname,preview=(h==='localhost'||h==='127.0.0.1'||/(^|\.)e2b\.app$/.test(h)||/(^|\.)pages\.dev$/.test(h));
+  var seen=null;try{seen=sessionStorage.getItem('zpAdvisorySeen');}catch(e){}
+  if(seen&&force===null&&!preview)return;
+  de.classList.add('zp-advisory-on');
+  window.zpAdvisoryPending=true;   /* the boot gate waits its turn */
+}catch(e){}})();
+</script>
+<style id="zp-advisory-style">
+#zp-advisory{display:none}
+html.zp-advisory-on body{overflow:hidden!important}
+html.zp-advisory-on #zp-advisory{
+  display:flex;align-items:center;justify-content:center;overflow-y:auto;
+  position:fixed;inset:0;z-index:2147483647;cursor:default;
+  padding:clamp(1rem,4vw,2.5rem) clamp(1rem,4vw,2.5rem) clamp(1.5rem,5vw,3rem);
+  touch-action:pan-y;-webkit-overflow-scrolling:touch;
+  background:radial-gradient(115% 85% at 50% 34%,#120607 0%,#080505 45%,#020202 100%);
+  animation:zpAdvIn .34s ease both;
+}
+/* half-strength CRT dressing: scanlines + vignette, still and quiet */
+.zp-adv-crt{
+  position:fixed;inset:0;pointer-events:none;z-index:1;   /* fixed: stays put while the panel scrolls */
+  background:
+    repeating-linear-gradient(0deg,rgba(0,0,0,.2) 0 1px,transparent 1px 3px),
+    radial-gradient(120% 100% at 50% 50%,transparent 58%,rgba(0,0,0,.62) 100%);
+}
+.zp-adv-wrap{position:relative;z-index:2;width:min(100%,44rem);margin:auto}
+.zp-adv-osd{
+  display:flex;justify-content:space-between;gap:1rem;margin:0 0 .55rem;
+  font:700 10px/1.2 var(--zp-mono,ui-monospace,Menlo,Consolas,monospace);
+  letter-spacing:.18em;text-transform:uppercase;color:#9a9590;
+}
+.zp-adv-osd b{font-weight:700;color:#c41e1e}
+.zp-adv-osd b::before{
+  content:"";display:inline-block;width:6px;height:6px;margin-right:.55em;vertical-align:.05em;
+  background:#c41e1e;transform:rotate(45deg);
+}
+.zp-adv-panel{
+  position:relative;overflow:hidden;
+  border:1px solid rgba(196,30,30,.3);
+  background:linear-gradient(180deg,rgba(9,8,8,.965),rgba(4,4,4,.985));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.03),0 30px 90px rgba(0,0,0,.75),0 0 80px rgba(196,30,30,.07);
+  padding:clamp(1.35rem,4.2vw,2.5rem);
+}
+/* corner ticks, same frame language as the hero */
+.zp-adv-panel::before,.zp-adv-panel::after{content:"";position:absolute;width:14px;height:14px;border:0 solid rgba(196,30,30,.55)}
+.zp-adv-panel::before{top:-1px;left:-1px;border-top-width:1px;border-left-width:1px}
+.zp-adv-panel::after{bottom:-1px;right:-1px;border-bottom-width:1px;border-right-width:1px}
+/* one slow sheen sweep across the panel — no strobe, ever */
+.zp-adv-sheen{
+  position:absolute;left:0;right:0;top:0;height:38%;pointer-events:none;
+  background:linear-gradient(180deg,transparent,rgba(255,255,255,.04) 50%,transparent);
+  animation:zpAdvSheen 7.5s linear infinite;
+}
+.zp-adv-kicker{
+  position:relative;margin:0;
+  font:700 10px/1.2 var(--zp-mono,ui-monospace,Menlo,Consolas,monospace);
+  letter-spacing:.34em;text-transform:uppercase;color:#c41e1e;
+  animation:zpAdvBreathe 6.5s ease-in-out infinite;
+}
+.zp-adv-title{
+  position:relative;margin:.9rem 0 0;
+  font-family:"Cormorant Garamond","Cormorant Garamond Fallback",Georgia,serif;
+  font-weight:400;font-size:clamp(1.9rem,6.2vw,3.05rem);line-height:1.03;letter-spacing:-.01em;color:#f0ebe3;
+}
+.zp-adv-lead{position:relative;margin:1rem 0 0;max-width:48ch;font-size:.9375rem;line-height:1.7;color:#9a9590}
+.zp-adv-list{
+  position:relative;display:grid;grid-template-columns:1fr;margin:1.4rem 0 0;padding:0;list-style:none;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.zp-adv-list li{
+  display:flex;align-items:center;gap:.7rem;padding:.6rem 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:#f0ebe3;
+}
+.zp-adv-list li::before{content:"";flex:none;width:5px;height:5px;background:#c41e1e;transform:rotate(45deg)}
+.zp-adv-note{
+  position:relative;margin:1.2rem 0 0;max-width:52ch;
+  font-family:"Cormorant Garamond","Cormorant Garamond Fallback",Georgia,serif;
+  font-size:1.0625rem;font-style:italic;line-height:1.55;color:rgba(240,235,227,.82);
+}
+.zp-adv-enter{
+  position:relative;display:inline-flex;align-items:center;justify-content:center;
+  width:100%;min-height:54px;margin-top:1.4rem;border:0;padding:.9rem 1.5rem;
+  background:#c41e1e;color:#f0ebe3;cursor:pointer;
+  font-family:inherit;font-size:.8125rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
+  transition:background .2s ease,box-shadow .2s ease;
+}
+.zp-adv-enter:hover{background:#ff2a2a;box-shadow:0 0 42px rgba(255,42,42,.32)}
+.zp-adv-enter:focus-visible{outline:2px solid #f0ebe3;outline-offset:3px}
+.zp-adv-fine{
+  position:relative;margin:1rem 0 0;font-size:.5625rem;letter-spacing:.2em;text-transform:uppercase;color:#9a9590;
+}
+@media (min-width:560px){
+  .zp-adv-list{grid-template-columns:1fr 1fr;column-gap:1.75rem}
+}
+@media (prefers-reduced-motion:reduce){
+  html.zp-advisory-on #zp-advisory{animation:none}
+  .zp-adv-sheen{display:none}
+  .zp-adv-kicker{animation:none}
+}
+@media print{html.zp-advisory-on #zp-advisory{display:none}}
+@keyframes zpAdvIn{from{opacity:0}to{opacity:1}}
+@keyframes zpAdvSheen{0%{transform:translateY(-120%)}100%{transform:translateY(330%)}}
+@keyframes zpAdvBreathe{0%,100%{opacity:1}50%{opacity:.68}}
+</style>
+<!-- ═══════════════════════════════════════════════════════════════════
      ZP ARCHIVE BOOT — analog-horror terminal intro (inline, zero requests)
      Activated only when <html> gets .zp-boot-on (see gate script below).
      Preview/dev hosts (e2b.app, pages.dev, localhost) replay on every load;
      ?boot=1 / #boot forces a replay even under prefers-reduced-motion.
+     Yields while the content advisory is up: it is re-armed from the
+     advisory's close handler instead of returning a hard no.
      Failsafes: no-JS → never shows · reduced-motion/bots → never shows ·
      JS error mid-run → CSS force-hide at 10s · bfcache restore → instant out.
      ═══════════════════════════════════════════════════════════════════ -->
 <script>
 (function(){try{
-  if(/bot|crawl|spider|slurp|lighthouse|headless/i.test(navigator.userAgent))return;
-  var force=null;
-  try{force=new URLSearchParams(location.search).get('boot');}catch(e){}
-  if(force===null&&location.hash.indexOf('boot')>-1)force='1';
-  if(force===null&&window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  var h=location.hostname,preview=(h==='localhost'||h==='127.0.0.1'||/(^|\.)e2b\.app$/.test(h)||/(^|\.)pages\.dev$/.test(h));
-  var seen=null;try{seen=sessionStorage.getItem('zpBootShown');}catch(e){}
-  if(seen&&force===null&&!preview)return;
-  var de=document.documentElement;
-  if(de.classList){de.classList.add('zp-boot-on');if(force!==null)de.classList.add('zp-boot-force');}
-  else de.className+=' zp-boot-on';
+  function zpBootGate(){
+    var de=document.documentElement;
+    if(de.classList&&de.classList.contains('zp-boot-on'))return false;
+    if(window.zpAdvisoryPending)return false;   /* advisory screens first; re-armed on its close */
+    if(/bot|crawl|spider|slurp|lighthouse|headless/i.test(navigator.userAgent))return false;
+    var force=null;
+    try{force=new URLSearchParams(location.search).get('boot');}catch(e){}
+    if(force===null&&location.hash.indexOf('boot')>-1)force='1';
+    if(force===null&&window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return false;
+    var h=location.hostname,preview=(h==='localhost'||h==='127.0.0.1'||/(^|\.)e2b\.app$/.test(h)||/(^|\.)pages\.dev$/.test(h));
+    var seen=null;try{seen=sessionStorage.getItem('zpBootShown');}catch(e){}
+    if(seen&&force===null&&!preview)return false;
+    if(de.classList){de.classList.add('zp-boot-on');if(force!==null)de.classList.add('zp-boot-force');}
+    else de.className+=' zp-boot-on';
+    return true;
+  }
+  window.zpBootGate=zpBootGate;
+  zpBootGate();
 }catch(e){}})();
 </script>
 <style id="zp-boot-style">
@@ -413,169 +546,218 @@ document.readyState==="complete"?boot():window.addEventListener("load",boot,{onc
   </div>
 </div>
 <script>
-/* ZP ARCHIVE BOOT — sequence driver (runs only if <html> has .zp-boot-on) */
+/* ZP ARCHIVE BOOT — sequence driver. Armed by the gate above: it runs once
+   .zp-boot-on is on <html>, which happens at parse time or, when the
+   content advisory is up, from that panel's close handler. */
 (function(){
   var d=document,w=window,root=d.documentElement,ov=d.getElementById('zp-boot');
-  if(!ov||!('classList' in root)||!root.classList.contains('zp-boot-on'))return;
-  var term=d.getElementById('zp-term'),cnt=d.getElementById('zp-count');
-  var done=false,skipReq=false,timers=[],skipFns=[],autoTimer=null,trackLine=null,cursor=null;
-  var t0=(w.performance&&w.performance.now)?w.performance.now():Date.now();
+  if(!ov||!('classList' in root))return;
+  var bootStarted=false;
+  function bootSequence(){
+    var term=d.getElementById('zp-term'),cnt=d.getElementById('zp-count');
+    var done=false,skipReq=false,timers=[],skipFns=[],autoTimer=null,trackLine=null,cursor=null;
+    var t0=(w.performance&&w.performance.now)?w.performance.now():Date.now();
 
-  function clearTimers(){while(timers.length)clearTimeout(timers.pop());}
-  function sleep(ms){
-    if(skipReq)return Promise.resolve();
-    return new Promise(function(res){
-      var id=setTimeout(function(){res();},ms);timers.push(id);
-      skipFns.push(function(){clearTimeout(id);res();});
-    });
+    function clearTimers(){while(timers.length)clearTimeout(timers.pop());}
+    function sleep(ms){
+      if(skipReq)return Promise.resolve();
+      return new Promise(function(res){
+        var id=setTimeout(function(){res();},ms);timers.push(id);
+        skipFns.push(function(){clearTimeout(id);res();});
+      });
+    }
+    function repeat(s,n){var o='';while(n-->0)o+=s;return o;}
+    function pad(n){return (n<10?'0':'')+n;}
+    function newline(cls){var l=d.createElement('div');l.className='zp-line'+(cls?' '+cls:'');term.appendChild(l);return l;}
+    function now(text,cls){newline(cls).textContent=text===''?'\u00a0':text;}
+    function blank(){now('');}
+    function adopt(l){
+      if(cursor&&cursor.parentNode)cursor.parentNode.removeChild(cursor);
+      cursor=d.createElement('span');cursor.className='zp-cursor';l.appendChild(cursor);
+    }
+    function typeLine(text,cls,cps){
+      var l=newline(cls),span=d.createElement('span');l.appendChild(span);adopt(l);
+      cps=cps||120;
+      return new Promise(function(res){
+        var step=Math.max(1,Math.round(cps/60)),i=0;
+        (function tick(){
+          if(done)return res();
+          if(skipReq){span.textContent=text;return res();}
+          i=Math.min(text.length,i+step);
+          span.textContent=text.slice(0,i);
+          if(i>=text.length)return res();
+          var id=setTimeout(tick,Math.round(1000/cps));timers.push(id);
+        })();
+      });
+    }
+    function tracking(){
+      var l=newline('zp-ok');trackLine=l;
+      var span=d.createElement('span');l.appendChild(span);adopt(l);
+      var target=61,p=0;
+      return new Promise(function(res){
+        (function draw(){
+          if(done)return res();
+          if(skipReq){p=100;}
+          var blocks=Math.round(p/10);
+          span.textContent='  TRACKING ['+repeat('\u2588',blocks)+repeat('\u2591',10-blocks)+'] '+pad(p)+'%';
+          if(p>=target||skipReq){span.textContent='  TRACKING ['+repeat('\u2588',10)+'] 100%';return res();}
+          p=Math.min(target,p+3+Math.random()*7);
+          var id=setTimeout(draw,55);timers.push(id);
+        })();
+      });
+    }
+    function corruptTracking(){
+      if(!trackLine)return;
+      trackLine.classList.add('zp-corrupt');
+      if(trackLine.firstChild)trackLine.firstChild.textContent='  TRACKING [\u2588\u2593\u2592\u2588\u2591\u2593-\u2592\u2591-] \u2592%';
+    }
+    function glitch(on){ov.classList.add('zp-glitch');}
+    function glitchOff(){ov.classList.remove('zp-glitch');}
+    function alertBlink(){
+      ov.classList.add('zp-alert');
+      var id=setTimeout(function(){ov.classList.remove('zp-alert');},380);timers.push(id);
+    }
+    function gate(){
+      var l=newline('zp-gate');
+      l.textContent='[ CLICK OR PRESS ANY KEY TO OBSERVE ]';
+      var f=newline('zp-dim');
+      f.textContent='TAPE 00 \u00b7 "SHOWREEL" \u00b7 PROPERTY OF ZAZIE PRODUCTIONS';
+    }
+    function countLoop(){
+      if(done||!cnt)return;
+      var nowMs=(w.performance&&w.performance.now)?w.performance.now():Date.now();
+      var s=Math.max(0,Math.floor((nowMs-t0)/1000));
+      cnt.textContent='SP 0:'+pad(Math.floor(s/60)%60)+':'+pad(s%60);
+      w.requestAnimationFrame(countLoop);
+    }
+    function bootSound(){
+      try{
+        var AC=w.AudioContext||w.webkitAudioContext;if(!AC)return;
+        var ac=new AC(),t=ac.currentTime;
+        var master=ac.createGain();master.gain.value=0.055;master.connect(ac.destination);
+        /* power-down thump */
+        var o=ac.createOscillator();o.type='sine';
+        o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(36,t+0.28);
+        var g=ac.createGain();g.gain.setValueAtTime(0.9,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.3);
+        o.connect(g);g.connect(master);o.start(t);o.stop(t+0.32);
+        /* tape static burst */
+        var len=Math.floor(ac.sampleRate*0.2),buf=ac.createBuffer(1,len,ac.sampleRate),ch=buf.getChannelData(0);
+        for(var i=0;i<len;i++)ch[i]=(Math.random()*2-1)*(1-i/len);
+        var src=ac.createBufferSource();src.buffer=buf;
+        var f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=1300;
+        var g2=ac.createGain();g2.gain.value=0.5;
+        src.connect(f);f.connect(g2);g2.connect(master);src.start(t);
+        setTimeout(function(){try{ac.close();}catch(e){}},800);
+      }catch(e){}
+    }
+    function finish(byUser){
+      if(done)return;done=true;
+      clearTimers();skipFns.length=0;
+      if(autoTimer)clearTimeout(autoTimer);
+      try{sessionStorage.setItem('zpBootShown','1');}catch(e){}
+      if(byUser)bootSound();
+      root.classList.remove('zp-boot-on');
+      ov.classList.add('zp-off');
+      setTimeout(function(){
+        if(ov&&ov.parentNode)ov.parentNode.removeChild(ov);
+        try{w.dispatchEvent(new CustomEvent('zp:bootdone'));}catch(e){}
+      },580);
+    }
+
+    /* user can bail out at any moment */
+    ov.addEventListener('pointerdown',function(){finish(true);});
+    d.addEventListener('keydown',function(){finish(true);});
+    d.addEventListener('wheel',function(){finish(true);},{passive:true});
+    /* bfcache restore mid-boot -> get out instantly */
+    w.addEventListener('pageshow',function(e){if(e.persisted&&!done)finish(false);});
+    /* hard cap */
+    timers.push(setTimeout(function(){finish(false);},9200));
+
+    async function run(){
+      await sleep(430);                    /* CRT power-on flash */
+      now('ZP-ARCHIVE / TERMINAL 02','zp-hi');
+      now('ZAZIE PRODUCTIONS BROADCAST SYSTEMS','zp-dim');
+      now('\u00a9 1987 ZAZIE PRODUCTIONS \u00b7 ALL RIGHTS RESERVED','zp-dim');
+      blank();
+      countLoop();
+      await sleep(240);
+      await typeLine('BOOTING ZP-OS v2.31 ...','zp-prompt',95);
+      await sleep(130);
+      await typeLine('  PHOSPHOR ARRAY ........ OK','zp-ok',155);
+      await typeLine('  MEMORY 640K ........... OK','zp-ok',155);
+      await typeLine('  AUDIO SUBSYSTEM ....... OK','zp-ok',155);
+      await typeLine('  MOUNT /ARCHIVE/TAPES .. OK','zp-ok',155);
+      await typeLine('  INDEX ARTIFACTS ....... 29 CUES','zp-ok',155);
+      await typeLine('  SIGNAL INTEGRITY ...... 97.3%','zp-ok',155);
+      await sleep(220);
+      blank();
+      await typeLine('> PLAY SHOWREEL.REEL','zp-prompt',85);
+      await sleep(200);
+      await tracking();
+      await sleep(430);
+      glitch(true);
+      corruptTracking();
+      await sleep(320);
+      alertBlink();
+      await typeLine('!! UNREGISTERED SIGNAL ON TAPE 00','zp-bad',115);
+      await typeLine('!! AUDIO SOURCE IS IN THE ROOM WITH YOU.','zp-bad',115);
+      await sleep(400);
+      glitchOff();
+      await typeLine('> REWIND ..................... OK','zp-prompt',115);
+      await sleep(190);
+      await typeLine('SIGNAL RESTORED. OBSERVATION PERMITTED.','zp-hi',85);
+      await sleep(360);
+      gate();
+      autoTimer=setTimeout(function(){finish(false);},2800);
+    }
+    try{run();}catch(e){finish(false);}
   }
-  function repeat(s,n){var o='';while(n-->0)o+=s;return o;}
-  function pad(n){return (n<10?'0':'')+n;}
-  function newline(cls){var l=d.createElement('div');l.className='zp-line'+(cls?' '+cls:'');term.appendChild(l);return l;}
-  function now(text,cls){newline(cls).textContent=text===''?'\u00a0':text;}
-  function blank(){now('');}
-  function adopt(l){
-    if(cursor&&cursor.parentNode)cursor.parentNode.removeChild(cursor);
-    cursor=d.createElement('span');cursor.className='zp-cursor';l.appendChild(cursor);
-  }
-  function typeLine(text,cls,cps){
-    var l=newline(cls),span=d.createElement('span');l.appendChild(span);adopt(l);
-    cps=cps||120;
-    return new Promise(function(res){
-      var step=Math.max(1,Math.round(cps/60)),i=0;
-      (function tick(){
-        if(done)return res();
-        if(skipReq){span.textContent=text;return res();}
-        i=Math.min(text.length,i+step);
-        span.textContent=text.slice(0,i);
-        if(i>=text.length)return res();
-        var id=setTimeout(tick,Math.round(1000/cps));timers.push(id);
-      })();
-    });
-  }
-  function tracking(){
-    var l=newline('zp-ok');trackLine=l;
-    var span=d.createElement('span');l.appendChild(span);adopt(l);
-    var target=61,p=0;
-    return new Promise(function(res){
-      (function draw(){
-        if(done)return res();
-        if(skipReq){p=100;}
-        var blocks=Math.round(p/10);
-        span.textContent='  TRACKING ['+repeat('\u2588',blocks)+repeat('\u2591',10-blocks)+'] '+pad(p)+'%';
-        if(p>=target||skipReq){span.textContent='  TRACKING ['+repeat('\u2588',10)+'] 100%';return res();}
-        p=Math.min(target,p+3+Math.random()*7);
-        var id=setTimeout(draw,55);timers.push(id);
-      })();
-    });
-  }
-  function corruptTracking(){
-    if(!trackLine)return;
-    trackLine.classList.add('zp-corrupt');
-    if(trackLine.firstChild)trackLine.firstChild.textContent='  TRACKING [\u2588\u2593\u2592\u2588\u2591\u2593-\u2592\u2591-] \u2592%';
-  }
-  function glitch(on){ov.classList.add('zp-glitch');}
-  function glitchOff(){ov.classList.remove('zp-glitch');}
-  function alertBlink(){
-    ov.classList.add('zp-alert');
-    var id=setTimeout(function(){ov.classList.remove('zp-alert');},380);timers.push(id);
-  }
-  function gate(){
-    var l=newline('zp-gate');
-    l.textContent='[ CLICK OR PRESS ANY KEY TO OBSERVE ]';
-    var f=newline('zp-dim');
-    f.textContent='TAPE 00 \u00b7 "SHOWREEL" \u00b7 PROPERTY OF ZAZIE PRODUCTIONS';
-  }
-  function countLoop(){
-    if(done||!cnt)return;
-    var nowMs=(w.performance&&w.performance.now)?w.performance.now():Date.now();
-    var s=Math.max(0,Math.floor((nowMs-t0)/1000));
-    cnt.textContent='SP 0:'+pad(Math.floor(s/60)%60)+':'+pad(s%60);
-    w.requestAnimationFrame(countLoop);
-  }
-  function bootSound(){
+  /* one-shot: the advisory handoff and a parse-time arm can't both fire */
+  window.zpBootRun=function(){if(bootStarted)return;bootStarted=true;bootSequence();};
+  /* Watchdog: if the advisory panel never made it into the page (markup
+     stripped, driver blocked), the tape must not be held hostage. While the
+     gate is genuinely on screen this does nothing. */
+  setTimeout(function(){
     try{
-      var AC=w.AudioContext||w.webkitAudioContext;if(!AC)return;
-      var ac=new AC(),t=ac.currentTime;
-      var master=ac.createGain();master.gain.value=0.055;master.connect(ac.destination);
-      /* power-down thump */
-      var o=ac.createOscillator();o.type='sine';
-      o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(36,t+0.28);
-      var g=ac.createGain();g.gain.setValueAtTime(0.9,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.3);
-      o.connect(g);g.connect(master);o.start(t);o.stop(t+0.32);
-      /* tape static burst */
-      var len=Math.floor(ac.sampleRate*0.2),buf=ac.createBuffer(1,len,ac.sampleRate),ch=buf.getChannelData(0);
-      for(var i=0;i<len;i++)ch[i]=(Math.random()*2-1)*(1-i/len);
-      var src=ac.createBufferSource();src.buffer=buf;
-      var f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=1300;
-      var g2=ac.createGain();g2.gain.value=0.5;
-      src.connect(f);f.connect(g2);g2.connect(master);src.start(t);
-      setTimeout(function(){try{ac.close();}catch(e){}},800);
+      if(!w.zpAdvisoryPending)return;
+      if(d.getElementById('zp-advisory')&&root.classList.contains('zp-advisory-on'))return;
+      w.zpAdvisoryPending=false;
+      if(w.zpBootGate&&w.zpBootGate())window.zpBootRun();
     }catch(e){}
-  }
-  function finish(byUser){
-    if(done)return;done=true;
-    clearTimers();skipFns.length=0;
-    if(autoTimer)clearTimeout(autoTimer);
-    try{sessionStorage.setItem('zpBootShown','1');}catch(e){}
-    if(byUser)bootSound();
-    root.classList.remove('zp-boot-on');
-    ov.classList.add('zp-off');
-    setTimeout(function(){
-      if(ov&&ov.parentNode)ov.parentNode.removeChild(ov);
-      try{w.dispatchEvent(new CustomEvent('zp:bootdone'));}catch(e){}
-    },580);
-  }
-
-  /* user can bail out at any moment */
-  ov.addEventListener('pointerdown',function(){finish(true);});
-  d.addEventListener('keydown',function(){finish(true);});
-  d.addEventListener('wheel',function(){finish(true);},{passive:true});
-  /* bfcache restore mid-boot -> get out instantly */
-  w.addEventListener('pageshow',function(e){if(e.persisted&&!done)finish(false);});
-  /* hard cap */
-  timers.push(setTimeout(function(){finish(false);},9200));
-
-  async function run(){
-    await sleep(430);                    /* CRT power-on flash */
-    now('ZP-ARCHIVE / TERMINAL 02','zp-hi');
-    now('ZAZIE PRODUCTIONS BROADCAST SYSTEMS','zp-dim');
-    now('\u00a9 1987 ZAZIE PRODUCTIONS \u00b7 ALL RIGHTS RESERVED','zp-dim');
-    blank();
-    countLoop();
-    await sleep(240);
-    await typeLine('BOOTING ZP-OS v2.31 ...','zp-prompt',95);
-    await sleep(130);
-    await typeLine('  PHOSPHOR ARRAY ........ OK','zp-ok',155);
-    await typeLine('  MEMORY 640K ........... OK','zp-ok',155);
-    await typeLine('  AUDIO SUBSYSTEM ....... OK','zp-ok',155);
-    await typeLine('  MOUNT /ARCHIVE/TAPES .. OK','zp-ok',155);
-    await typeLine('  INDEX ARTIFACTS ....... 29 CUES','zp-ok',155);
-    await typeLine('  SIGNAL INTEGRITY ...... 97.3%','zp-ok',155);
-    await sleep(220);
-    blank();
-    await typeLine('> PLAY SHOWREEL.REEL','zp-prompt',85);
-    await sleep(200);
-    await tracking();
-    await sleep(430);
-    glitch(true);
-    corruptTracking();
-    await sleep(320);
-    alertBlink();
-    await typeLine('!! UNREGISTERED SIGNAL ON TAPE 00','zp-bad',115);
-    await typeLine('!! AUDIO SOURCE IS IN THE ROOM WITH YOU.','zp-bad',115);
-    await sleep(400);
-    glitchOff();
-    await typeLine('> REWIND ..................... OK','zp-prompt',115);
-    await sleep(190);
-    await typeLine('SIGNAL RESTORED. OBSERVATION PERMITTED.','zp-hi',85);
-    await sleep(360);
-    gate();
-    autoTimer=setTimeout(function(){finish(false);},2800);
-  }
-  try{run();}catch(e){finish(false);}
+  },1200);
+  if(root.classList.contains('zp-boot-on'))window.zpBootRun();
 })();
 </script>
+<!-- ═══════════════════════════════════════════════════════════════════
+     ZP CONTENT ADVISORY — panel. Lives OUTSIDE #root for the same reason
+     the tape does: the React takeover can never remove it. Hidden unless
+     <html> carries .zp-advisory-on (see the gate in <head>), so no-JS and
+     crawlers read the copy straight out of the document instead. Silent:
+     no audio nodes, no autoplay, one button, Esc works, focus is trapped.
+     ═══════════════════════════════════════════════════════════════════ -->
+<div id="zp-advisory" role="dialog" aria-modal="true" aria-labelledby="zp-adv-title" aria-describedby="zp-adv-lead">
+  <div class="zp-adv-crt" aria-hidden="true"></div>
+  <div class="zp-adv-wrap">
+    <p class="zp-adv-osd"><span>ZP-Archive / Tape&nbsp;00</span><b>Content advisory</b></p>
+    <div class="zp-adv-panel">
+      <div class="zp-adv-sheen" aria-hidden="true"></div>
+      <p class="zp-adv-kicker">Advisory · 00</p>
+      <h2 class="zp-adv-title" id="zp-adv-title">Before you watch</h2>
+      <p class="zp-adv-lead" id="zp-adv-lead">Horror and experimental film work lives in this archive. Expect the register of the form:</p>
+      <ul class="zp-adv-list">
+        <li>Paranoia</li>
+        <li>Blood</li>
+        <li>Flashy images · flicker</li>
+        <li>Dissonant + screechy sound</li>
+        <li>Dread</li>
+        <li>Disturbing content</li>
+      </ul>
+      <p class="zp-adv-note">That register is the form, not an accident of it. Nothing plays on its own: picture and sound start only when you press play.</p>
+      <button class="zp-adv-enter" id="zp-adv-enter" type="button">I understand · Enter the archive</button>
+      <p class="zp-adv-fine">Shown once per visit · reopen any time in the footer · Esc closes this panel</p>
+    </div>
+  </div>
+</div>
 <div id="root">
 <div class="grain" aria-hidden="true"></div><div class="vignette opacity-80" aria-hidden="true"></div>
 <header class="fixed inset-x-0 top-0 z-50 bg-transparent">
@@ -1047,10 +1229,75 @@ document.readyState==="complete"?boot():window.addEventListener("load",boot,{onc
         <a href="https://youtube.com/@zazieproductions" target="_blank" rel="noreferrer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">YouTube</a>
       </div>
     </div>
+    <!-- Advisory in plain text, always in the document: readable with JS off,
+         and a link target (/#advisory) from anywhere else on the site. -->
+    <div id="advisory" class="mt-12 flex flex-col gap-5 border-t border-white/5 pt-6 sm:flex-row sm:items-start sm:justify-between sm:gap-10">
+      <div class="max-w-2xl">
+        <p class="text-[10px] uppercase tracking-[0.35em] text-blood">Content advisory</p>
+        <p class="mt-2 text-xs leading-relaxed text-mist">Paranoia · Blood · Flashy images · Dissonant and screechy sound · Dread · Disturbing content, of the kind expected in experimental and horror film.</p>
+      </div>
+      <button type="button" data-advisory-open class="inline-flex shrink-0 items-center justify-center self-start border border-ash px-4 py-3 text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:border-blood hover:text-bone">Read before you watch</button>
+    </div>
   </div>
 </footer>
 </div>
 
+
+<script>
+/* ZP CONTENT ADVISORY — panel driver. Silent: no audio, no strobe.
+   Close → the tape (boot) takes the screen, never both at once. */
+(function(){
+  var d=document,w=window,root=d.documentElement;
+  var ov=d.getElementById('zp-advisory'),btn=d.getElementById('zp-adv-enter');
+  if(!ov||!btn||!('classList' in root))return;
+  var handedOff=false,lastFocus=null;
+
+  function isOpen(){return root.classList.contains('zp-advisory-on');}
+  function page(){return d.getElementById('root');}   /* looked up late: this script runs after it */
+  function focusables(){
+    return ov.querySelectorAll('button,[href],input,select,textarea,[tabindex]:not([tabindex="-1"])');
+  }
+  function open(from){
+    lastFocus=from||d.activeElement;
+    root.classList.add('zp-advisory-on');
+    var pg=page();if(pg&&pg.setAttribute)pg.setAttribute('aria-hidden','true');
+    try{btn.focus({preventScroll:true});}catch(e){try{btn.focus();}catch(e2){}}
+  }
+  function close(){
+    if(!isOpen())return;
+    root.classList.remove('zp-advisory-on');
+    var pg=page();if(pg&&pg.removeAttribute)pg.removeAttribute('aria-hidden');
+    try{sessionStorage.setItem('zpAdvisorySeen','1');}catch(e){}
+    if(lastFocus&&lastFocus.focus&&d.contains(lastFocus)){try{lastFocus.focus({preventScroll:true});}catch(e){}}
+    else if(d.activeElement&&d.activeElement.blur)d.activeElement.blur();
+    if(handedOff)return;
+    handedOff=true;
+    w.zpAdvisoryPending=false;   /* release the tape's gate, then re-arm it */
+    try{w.dispatchEvent(new CustomEvent('zp:advisorydone'));}catch(e){}
+    try{if(w.zpBootGate&&w.zpBootGate()&&w.zpBootRun)w.zpBootRun();}catch(e){}
+  }
+
+  btn.addEventListener('click',close);
+  d.addEventListener('keydown',function(e){
+    var k=e.key||'';
+    if(!isOpen())return;
+    if(k==='Escape'||e.keyCode===27){e.preventDefault();close();return;}
+    if(k!=='Tab'&&e.keyCode!==9)return;
+    var f=focusables();if(!f.length)return;
+    var first=f[0],last=f[f.length-1];
+    if(e.shiftKey&&d.activeElement===first){e.preventDefault();last.focus();}
+    else if(!e.shiftKey&&d.activeElement===last){e.preventDefault();first.focus();}
+  },true);
+  /* reopen hook: footer control, or any [data-advisory-open] */
+  d.addEventListener('click',function(e){
+    var t=(e.target&&e.target.closest)?e.target.closest('[data-advisory-open]'):null;
+    if(!t||isOpen())return;
+    e.preventDefault();open(t);
+  },true);
+  w.zpAdvisoryOpen=function(){if(!isOpen())open(d.activeElement);};
+  if(isOpen())open(null);
+})();
+</script>
 
 <script>
 (function(){
