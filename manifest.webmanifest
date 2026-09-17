@@ -1,0 +1,16 @@
+{
+  "name": "Zazie Kanwar-Torge | Horror Composer",
+  "short_name": "ZKT Horror",
+  "description": "Original dark, atmospheric scores for psychological horror, thrillers, and dark sci-fi.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#030303",
+  "theme_color": "#030303",
+  "lang": "en",
+  "orientation": "portrait-primary",
+  "categories": ["music", "entertainment"],
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

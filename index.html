@@ -4,22 +4,45 @@
 <head>
 <meta charset="utf-8"/>
 <link href="favicon.svg" rel="icon" type="image/svg+xml"/>
+<link href="/manifest.webmanifest" rel="manifest"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
 <meta content="Original dark, atmospheric scores for psychological horror, thrillers, film, TV, and games. Listen to the showreel or request a scoring quote." name="description"/>
-<meta content="#050505" name="theme-color"/>
+<meta content="#030303" name="theme-color"/>
+<meta http-equiv="Delegate-CH" content="sec-ch-dpr https://horror.zazieproductions.com; sec-ch-viewport-width https://horror.zazieproductions.com; sec-ch-width https://horror.zazieproductions.com">
+
+<style>
+  /* Instant paint — matches final :root so no flash */
+  html,body{background:#030303;color:#f0ebe3}
+  /* Reduce FOUT by declaring fallback stacks that will be replaced when CSS + fonts arrive */
+  body{font-family:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+  .font-display{font-family:"Cormorant Garamond",Georgia,"Times New Roman",serif}
+  /* LQIP background layer for hero (desktop only since mobile hides hero) */
+  .hero-frame{background-image:url('data:image/jpeg;base64,/9j/2wBDACgcHiMeGSgjISMtKygwPGRBPDc3PHtYXUlkkYCZlo+AjIqgtObDoKrarYqMyP/L2u71////m8H////6/+b9//j/2wBDASstLTw1PHZBQXb4pYyl+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj/wAARCAAVABADASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAMFAQT/xAAjEAACAgEDAwUAAAAAAAAAAAABAgARAwQSIRMUQSIjMVFh/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AJ21Q3JXkeZnouxtA+KE600wCq+HJ7gBLbvr8iemvbhlssxIuuIC8eodCDwaFUZb0+BDpsQIsVuF+LhCB//Z');background-size:cover;background-position:top right;background-color:#030303}
+  .poster-lqip{background-size:cover;background-position:center top;background-color:#121212}
+  .thumb-lqip{background-size:cover;background-position:center top;background-color:#121212}
+  .headshot-lqip{background-size:cover;background-position:center;background-color:#121212}
+  /* Avoid layout shift before CSS is delivered by declaring aspect ratio for common layouts */
+  .ar-2/3{aspect-ratio:2/3}
+  .ar-16/9{aspect-ratio:16/9}
+  .ar-4/5{aspect-ratio:4/5}
+  /* Mobile hero: small atmospheric portrait visible on mobile only */
+  @media (max-width:1023px){
+    #mobile-hero{display:block}
+  }
+</style>
 <title>Zazie Kanwar-Torge | Psychological Horror Composer</title>
 <link rel="canonical" href="https://horror.zazieproductions.com/" />
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-<link rel="preload" as="image" href="/images/hero-portrait.jpg" fetchpriority="high" media="(min-width: 1024px)">
+<link rel="preload" as="image" href="/images/hero-portrait-896.jpg" imagesrcset="/images/hero-portrait-480.jpg 480w,/images/hero-portrait-720.jpg 720w,/images/hero-portrait-896.jpg 896w" imagesizes="(min-width: 1024px) 46vw, 1px" fetchpriority="high">
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://www.youtube-nocookie.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" media="print" onload="this.onload=null;this.media='all'"/>
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/></noscript>
 
 
-<script crossorigin="" src="index-daKuu3pI.js?v=streamlined-20260916" type="module"></script>
-<link crossorigin="" href="index-BloO9D4b.css" rel="stylesheet"/>
+<link rel="modulepreload" href="index-daKuu3pI.js?v=streamlined-20260916" as="script">
+<script src="index-daKuu3pI.js?v=streamlined-20260916" type="module"></script>
+<link href="index-BloO9D4b.css" rel="stylesheet"/>
 <meta content="website" property="og:type"/>
 <meta content="Zazie Kanwar-Torge | Psychological Horror Composer" property="og:title"/>
 <meta content="Original dark, atmospheric scores for psychological horror, thrillers, film, TV, and games. Listen to the showreel or request a scoring quote." property="og:description"/>
@@ -272,10 +295,15 @@
   </div>
 </header>
 <main>
-  <section id="top" class="relative overflow-hidden bg-void" style="min-height:100svh">
+  <section id="top" class="relative overflow-hidden bg-void" style="min-height:100svh"><div id="mobile-hero" class="pointer-events-none absolute inset-0 hidden lg:hidden" aria-hidden="true"><div class="absolute inset-0 bg-gradient-to-b from-void/70 via-void/60 to-void"></div><picture><source type="image/avif" srcset="/images/hero-portrait-480.avif 480w" sizes="100vw"><source type="image/webp" srcset="/images/hero-portrait-480.webp 480w" sizes="100vw"><img src="/images/hero-portrait-480.jpg" alt="" width="480" height="616" fetchpriority="high" class="absolute right-0 top-0 h-full w-auto max-w-none object-cover object-top opacity-30"/></picture></div>
     <div class="pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] lg:block" aria-hidden="true">
-      <div class="absolute bottom-0 right-0 h-[92%] w-full">
-        <img src="/images/hero-portrait.jpg" alt="" width="896" height="1152" fetchpriority="high" class="absolute bottom-0 right-0 h-full w-auto max-w-none object-cover object-top opacity-80"/>
+      <div class="hero-frame absolute bottom-0 right-0 h-[92%] w-full">
+        
+<picture class="absolute bottom-0 right-0 h-full w-auto max-w-none">
+  <source type="image/avif" srcset="/images/hero-portrait-480.avif 480w,/images/hero-portrait-720.avif 720w,/images/hero-portrait-896.avif 896w" sizes="46vw">
+  <source type="image/webp" srcset="/images/hero-portrait-480.webp 480w,/images/hero-portrait-720.webp 720w,/images/hero-portrait-896.webp 896w" sizes="46vw">
+  <img src="/images/hero-portrait-896.jpg" srcset="/images/hero-portrait-480.jpg 480w,/images/hero-portrait-720.jpg 720w,/images/hero-portrait-896.jpg 896w" sizes="46vw" alt="" width="896" height="1152" fetchpriority="high" decoding="async" class="absolute bottom-0 right-0 h-full w-full max-w-none object-cover object-top opacity-80" style="background-image:url('data:image/jpeg;base64,/9j/2wBDACgcHiMeGSgjISMtKygwPGRBPDc3PHtYXUlkkYCZlo+AjIqgtObDoKrarYqMyP/L2u71////m8H////6/+b9//j/2wBDASstLTw1PHZBQXb4pYyl+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj/wAARCAAVABADASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAMFAQT/xAAjEAACAgEDAwUAAAAAAAAAAAABAgARAwQSIRMUQSIjMVFh/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AJ21Q3JXkeZnouxtA+KE600wCq+HJ7gBLbvr8iemvbhlssxIuuIC8eodCDwaFUZb0+BDpsQIsVuF+LhCB//Z');background-size:cover;background-position:top right"/>
+</picture>
       </div>
     </div>
     <div style="padding-top:8rem;padding-bottom:5rem" class="relative mx-auto flex max-w-7xl flex-col justify-center px-4 sm:px-6 md:px-8">
@@ -352,7 +380,11 @@
       <ul class="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
         <li>
           <a href="https://www.imdb.com/title/tt19369318/" target="_blank" rel="noreferrer" class="group relative block w-full overflow-hidden border border-ash bg-smoke" style="aspect-ratio:2/3">
-            <img src="/images/posters/expire-red-check.jpg" alt="EXPIRE (2025) theatrical poster, horror short scored by Zazie Kanwar-Torge" width="1200" height="2133" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
+            <picture>
+  <source type="image/avif" srcset="/images/posters/expire-red-check-360.avif 360w,/images/posters/expire-red-check-480.avif 480w,/images/posters/expire-red-check-640.avif 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw">
+  <source type="image/webp" srcset="/images/posters/expire-red-check-360.webp 360w,/images/posters/expire-red-check-480.webp 480w,/images/posters/expire-red-check-640.webp 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw">
+  <img src="/images/posters/expire-red-check-640.jpg" srcset="/images/posters/expire-red-check-360.jpg 360w,/images/posters/expire-red-check-480.jpg 480w,/images/posters/expire-red-check-640.jpg 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw" alt="EXPIRE (2025) theatrical poster, horror short scored by Zazie Kanwar-Torge" width="1200" height="2133" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95" style="background-image:url('data:image/jpeg;base64,/9j/2wBDACgcHiMeGSgjISMtKygwPGRBPDc3PHtYXUlkkYCZlo+AjIqgtObDoKrarYqMyP/L2u71////m8H////6/+b9//j/2wBDASstLTw1PHZBQXb4pYyl+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj/wAARCAAcABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAEDBP/EACAQAQACAgEEAwAAAAAAAAAAAAECAwAREhMhMUEiUaH/xAAWAQEBAQAAAAAAAAAAAAAAAAADAQT/xAAZEQACAwEAAAAAAAAAAAAAAAAAEQESITH/2gAMAwEAAhEDEQA/AJ12UdM3TykH7hZZR00jVqWuzmYi8RVN+D7xSENjs8YZttD6UGMuDGYSDXy7YrZRjsUZSPXrM2GVBPEf/9k=');background-size:cover;background-position:center top"/>
+</picture>
             <span class="absolute inset-x-0 bottom-0 p-3 sm:p-4 md:p-5">
               <h3 class="font-display text-base leading-tight text-bone group-hover:text-blood sm:text-xl md:text-2xl">EXPIRE</h3>
               <p class="mt-0.5 text-[9px] uppercase tracking-[0.2em] text-mist sm:text-[10px]">2025 · A Muhammad Abed Baryal Film</p>
@@ -361,7 +393,11 @@
         </li>
         <li>
           <a href="https://www.imdb.com/name/nm17333332" target="_blank" rel="noreferrer" class="group relative block w-full overflow-hidden border border-ash bg-smoke" style="aspect-ratio:2/3">
-            <img src="/images/posters/unseen.png" alt="UNSEEN feature poster, Steve Merlo’s unseen killer, music by Zazie Kanwar-Torge" width="1163" height="1712" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
+            <picture>
+  <source type="image/avif" srcset="/images/posters/unseen-360.avif 360w,/images/posters/unseen-480.avif 480w,/images/posters/unseen-640.avif 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw">
+  <source type="image/webp" srcset="/images/posters/unseen-360.webp 360w,/images/posters/unseen-480.webp 480w,/images/posters/unseen-640.webp 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw">
+  <img src="/images/posters/unseen-640.jpg" srcset="/images/posters/unseen-360.jpg 360w,/images/posters/unseen-480.jpg 480w,/images/posters/unseen-640.jpg 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw" alt="UNSEEN feature poster, Steve Merlo’s unseen killer, music by Zazie Kanwar-Torge" width="1163" height="1712" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95" style="background-image:url('data:image/jpeg;base64,/9j/2wBDACgcHiMeGSgjISMtKygwPGRBPDc3PHtYXUlkkYCZlo+AjIqgtObDoKrarYqMyP/L2u71////m8H////6/+b9//j/2wBDASstLTw1PHZBQXb4pYyl+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj/wAARCAAYABADASIAAhEBAxEB/8QAGQAAAgMBAAAAAAAAAAAAAAAAAAQBAgMF/8QAHxAAAgMAAQUBAAAAAAAAAAAAAQIAAxESISIxQWFR/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAL/xAAYEQEBAAMAAAAAAAAAAAAAAAAAESFBQv/aAAwDAQACEQMRAD8AZpvDKO714lzarpy3fh6TkLYUpBDHu0HJo95WjeQJP2VtPNLVPWqDUJcHzvSRfYrA4uHf2EIJl//Z');background-size:cover;background-position:center top"/>
+</picture>
             <span class="absolute inset-x-0 bottom-0 p-3 sm:p-4 md:p-5">
               <h3 class="font-display text-base leading-tight text-bone group-hover:text-blood sm:text-xl md:text-2xl">UNSEEN</h3>
               <p class="mt-0.5 text-[9px] uppercase tracking-[0.2em] text-mist sm:text-[10px]">Feature · Steve Merlo’s unseen killer</p>
@@ -370,7 +406,11 @@
         </li>
         <li>
           <a href="https://www.imdb.com/name/nm17333332" target="_blank" rel="noreferrer" class="group relative block w-full overflow-hidden border border-ash bg-smoke" style="aspect-ratio:2/3">
-            <img src="/images/posters/peregrinus.png" alt="PEREGRINUS series poster, a pilgrimage of foreign forces, scored by Zazie Kanwar-Torge" width="1080" height="1456" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
+            <picture>
+  <source type="image/avif" srcset="/images/posters/peregrinus-360.avif 360w,/images/posters/peregrinus-480.avif 480w,/images/posters/peregrinus-640.avif 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw">
+  <source type="image/webp" srcset="/images/posters/peregrinus-360.webp 360w,/images/posters/peregrinus-480.webp 480w,/images/posters/peregrinus-640.webp 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw">
+  <img src="/images/posters/peregrinus-640.jpg" srcset="/images/posters/peregrinus-360.jpg 360w,/images/posters/peregrinus-480.jpg 480w,/images/posters/peregrinus-640.jpg 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw" alt="PEREGRINUS series poster, a pilgrimage of foreign forces, scored by Zazie Kanwar-Torge" width="1080" height="1456" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95" style="background-image:url('data:image/jpeg;base64,/9j/2wBDACgcHiMeGSgjISMtKygwPGRBPDc3PHtYXUlkkYCZlo+AjIqgtObDoKrarYqMyP/L2u71////m8H////6/+b9//j/2wBDASstLTw1PHZBQXb4pYyl+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj/wAARCAAWABADASIAAhEBAxEB/8QAGAAAAwEBAAAAAAAAAAAAAAAAAAEEAgP/xAAgEAACAQIHAQAAAAAAAAAAAAABAgADEQQFEiExUWEi/8QAFQEBAQAAAAAAAAAAAAAAAAAAAQL/xAAWEQEBAQAAAAAAAAAAAAAAAAAAESH/2gAMAwEAAhEDEQA/AJctCGoVckbXB6nXH4gEFEPyRzIaLaTfziOsSwB8kzTcZpMFXdbnuOq+oCygWhCUH//Z');background-size:cover;background-position:center top"/>
+</picture>
             <span class="absolute inset-x-0 bottom-0 p-3 sm:p-4 md:p-5">
               <h3 class="font-display text-base leading-tight text-bone group-hover:text-blood sm:text-xl md:text-2xl">PEREGRINUS</h3>
               <p class="mt-0.5 text-[9px] uppercase tracking-[0.2em] text-mist sm:text-[10px]">Series · A pilgrimage of foreign forces</p>
@@ -379,7 +419,11 @@
         </li>
         <li>
           <a href="https://www.youtube.com/watch?v=UX2kv3G89Jw" target="_blank" rel="noreferrer" class="group relative block w-full overflow-hidden border border-ash bg-smoke" style="aspect-ratio:2/3">
-            <img src="/images/posters/phantom-requiem.jpg" alt="Phantom Requiem poster, short film by Zazie Productions, original score" width="600" height="800" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
+            <picture>
+  <source type="image/avif" srcset="/images/posters/phantom-requiem-360.avif 360w,/images/posters/phantom-requiem-480.avif 480w,/images/posters/phantom-requiem-640.avif 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw">
+  <source type="image/webp" srcset="/images/posters/phantom-requiem-360.webp 360w,/images/posters/phantom-requiem-480.webp 480w,/images/posters/phantom-requiem-640.webp 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw">
+  <img src="/images/posters/phantom-requiem-640.jpg" srcset="/images/posters/phantom-requiem-360.jpg 360w,/images/posters/phantom-requiem-480.jpg 480w,/images/posters/phantom-requiem-640.jpg 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw" alt="Phantom Requiem poster, short film by Zazie Productions, original score" width="600" height="800" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95" style="background-image:url('data:image/jpeg;base64,/9j/2wBDACgcHiMeGSgjISMtKygwPGRBPDc3PHtYXUlkkYCZlo+AjIqgtObDoKrarYqMyP/L2u71////m8H////6/+b9//j/2wBDASstLTw1PHZBQXb4pYyl+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj/wAARCAAVABADASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAMBAgX/xAAeEAACAQUBAQEAAAAAAAAAAAABAgMABBESUTETIf/EABQBAQAAAAAAAAAAAAAAAAAAAAD/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwB1y9yuxjlI/eDtRbTzM6bSkg+g4qtz9zKy5iC7eF8GlQQTC4jw0ZAbzcZoNRoI3bZlUnpWhYERtgqhugUUUH//2Q==');background-size:cover;background-position:center top"/>
+</picture>
             <span class="absolute inset-x-0 bottom-0 p-3 sm:p-4 md:p-5">
               <h3 class="font-display text-base leading-tight text-bone group-hover:text-blood sm:text-xl md:text-2xl">PHANTOM REQUIEM</h3>
               <p class="mt-0.5 text-[9px] uppercase tracking-[0.2em] text-mist sm:text-[10px]">Short · A film by Zazie Productions</p>
@@ -388,7 +432,11 @@
         </li>
         <li>
           <a href="https://www.imdb.com/name/nm17333332" target="_blank" rel="noreferrer" class="group relative block w-full overflow-hidden border border-ash bg-smoke" style="aspect-ratio:2/3">
-            <img src="/images/posters/eclipsed.png" alt="ECLIPSED feature poster, to erase him, she had to become him. A film by William Viera" width="1386" height="1819" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
+            <picture>
+  <source type="image/avif" srcset="/images/posters/eclipsed-360.avif 360w,/images/posters/eclipsed-480.avif 480w,/images/posters/eclipsed-640.avif 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw">
+  <source type="image/webp" srcset="/images/posters/eclipsed-360.webp 360w,/images/posters/eclipsed-480.webp 480w,/images/posters/eclipsed-640.webp 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw">
+  <img src="/images/posters/eclipsed-640.jpg" srcset="/images/posters/eclipsed-360.jpg 360w,/images/posters/eclipsed-480.jpg 480w,/images/posters/eclipsed-640.jpg 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw" alt="ECLIPSED feature poster, to erase him, she had to become him. A film by William Viera" width="1386" height="1819" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95" style="background-image:url('data:image/jpeg;base64,/9j/2wBDACgcHiMeGSgjISMtKygwPGRBPDc3PHtYXUlkkYCZlo+AjIqgtObDoKrarYqMyP/L2u71////m8H////6/+b9//j/2wBDASstLTw1PHZBQXb4pYyl+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj/wAARCAAVABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAQAF/8QAGhABAQEBAQEBAAAAAAAAAAAAAQIAETESYf/EABUBAQEAAAAAAAAAAAAAAAAAAAEA/8QAFhEBAQEAAAAAAAAAAAAAAAAAABEB/9oADAMBAAIRAxEAPwDHDoGWeCZln5/cUh0H3BgimK6e6um3r7rWVdkf/9k=');background-size:cover;background-position:center top"/>
+</picture>
             <span class="absolute inset-x-0 bottom-0 p-3 sm:p-4 md:p-5">
               <h3 class="font-display text-base leading-tight text-bone group-hover:text-blood sm:text-xl md:text-2xl">ECLIPSED</h3>
               <p class="mt-0.5 text-[9px] uppercase tracking-[0.2em] text-mist sm:text-[10px]">Feature · A film by William Viera</p>
@@ -397,7 +445,11 @@
         </li>
         <li>
           <a href="https://www.youtube.com/watch?v=Ty8tPp59mDc" target="_blank" rel="noreferrer" class="group relative block w-full overflow-hidden border border-ash bg-smoke" style="aspect-ratio:2/3">
-            <img src="/images/posters/the-haunted.jpg" alt="THE HAUNTED feature poster, perception is reality, music by Zazie Kanwar-Torge" width="1200" height="1777" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
+            <picture>
+  <source type="image/avif" srcset="/images/posters/the-haunted-360.avif 360w,/images/posters/the-haunted-480.avif 480w,/images/posters/the-haunted-640.avif 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw">
+  <source type="image/webp" srcset="/images/posters/the-haunted-360.webp 360w,/images/posters/the-haunted-480.webp 480w,/images/posters/the-haunted-640.webp 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw">
+  <img src="/images/posters/the-haunted-640.jpg" srcset="/images/posters/the-haunted-360.jpg 360w,/images/posters/the-haunted-480.jpg 480w,/images/posters/the-haunted-640.jpg 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw" alt="THE HAUNTED feature poster, perception is reality, music by Zazie Kanwar-Torge" width="1200" height="1777" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95" style="background-image:url('data:image/jpeg;base64,/9j/2wBDACgcHiMeGSgjISMtKygwPGRBPDc3PHtYXUlkkYCZlo+AjIqgtObDoKrarYqMyP/L2u71////m8H////6/+b9//j/2wBDASstLTw1PHZBQXb4pYyl+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj/wAARCAAYABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAIDBP/EACIQAAIDAAAFBQAAAAAAAAAAAAECAAMRBBITITIiIzFBUf/EABUBAQEAAAAAAAAAAAAAAAAAAAID/8QAFxEBAQEBAAAAAAAAAAAAAAAAAQACEf/aAAwDAQACEQMRAD8AhwtaLX1LFB3xH6ZXiGqsp5goRh5DJPqtXSlgLKR6VIjW+5W1rsW7Fd0d41O086Q7Y1tRlVXDHPrmwRmuRayiKw0fGjIQgqX/2Q==');background-size:cover;background-position:center top"/>
+</picture>
             <span class="absolute inset-x-0 bottom-0 p-3 sm:p-4 md:p-5">
               <h3 class="font-display text-base leading-tight text-bone group-hover:text-blood sm:text-xl md:text-2xl">THE HAUNTED</h3>
               <p class="mt-0.5 text-[9px] uppercase tracking-[0.2em] text-mist sm:text-[10px]">Feature · A Mike Fox Film</p>
@@ -406,7 +458,11 @@
         </li>
         <li>
           <a href="https://www.imdb.com/title/tt38637541/" target="_blank" rel="noreferrer" class="group relative block w-full overflow-hidden border border-ash bg-smoke" style="aspect-ratio:2/3">
-            <img src="/images/posters/choleric.jpg" alt="CHOLERIC poster, her sins brought me home. A Sebastian Fabres film" width="2389" height="3584" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
+            <picture>
+  <source type="image/avif" srcset="/images/posters/choleric-360.avif 360w,/images/posters/choleric-480.avif 480w,/images/posters/choleric-640.avif 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw">
+  <source type="image/webp" srcset="/images/posters/choleric-360.webp 360w,/images/posters/choleric-480.webp 480w,/images/posters/choleric-640.webp 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw">
+  <img src="/images/posters/choleric-640.jpg" srcset="/images/posters/choleric-360.jpg 360w,/images/posters/choleric-480.jpg 480w,/images/posters/choleric-640.jpg 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw" alt="CHOLERIC poster, her sins brought me home. A Sebastian Fabres film" width="2389" height="3584" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95" style="background-image:url('data:image/jpeg;base64,/9j/2wBDACgcHiMeGSgjISMtKygwPGRBPDc3PHtYXUlkkYCZlo+AjIqgtObDoKrarYqMyP/L2u71////m8H////6/+b9//j/2wBDASstLTw1PHZBQXb4pYyl+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj/wAARCAAYABADASIAAhEBAxEB/8QAFwABAQEBAAAAAAAAAAAAAAAAAAIDBP/EABwQAAICAwEBAAAAAAAAAAAAAAECAAMREiExYf/EABYBAQEBAAAAAAAAAAAAAAAAAAIBA//EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AJCASigxDNWw2VlIHD2ZvairwZMzNx62g8U4PySa7WPhiIkf/9k=');background-size:cover;background-position:center top"/>
+</picture>
             <span class="absolute inset-x-0 bottom-0 p-3 sm:p-4 md:p-5">
               <h3 class="font-display text-base leading-tight text-bone group-hover:text-blood sm:text-xl md:text-2xl">CHOLERIC</h3>
               <p class="mt-0.5 text-[9px] uppercase tracking-[0.2em] text-mist sm:text-[10px]">Short · A Sebastian Fabres Film</p>
@@ -415,7 +471,11 @@
         </li>
         <li>
           <a href="https://www.youtube.com/watch?v=HaVJP08j77U" target="_blank" rel="noreferrer" class="group relative block w-full overflow-hidden border border-ash bg-smoke" style="aspect-ratio:2/3">
-            <img src="/images/posters/mike-has-a-visitor.jpg" alt="Mike Has A Visitor poster, a sleep paralysis horror short by Marco Saikaley" width="1353" height="1772" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95"/>
+            <picture>
+  <source type="image/avif" srcset="/images/posters/mike-has-a-visitor-360.avif 360w,/images/posters/mike-has-a-visitor-480.avif 480w,/images/posters/mike-has-a-visitor-640.avif 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw">
+  <source type="image/webp" srcset="/images/posters/mike-has-a-visitor-360.webp 360w,/images/posters/mike-has-a-visitor-480.webp 480w,/images/posters/mike-has-a-visitor-640.webp 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw">
+  <img src="/images/posters/mike-has-a-visitor-640.jpg" srcset="/images/posters/mike-has-a-visitor-360.jpg 360w,/images/posters/mike-has-a-visitor-480.jpg 480w,/images/posters/mike-has-a-visitor-640.jpg 640w" sizes="(min-width:768px) 25vw, (min-width:640px) 50vw, 50vw" alt="Mike Has A Visitor poster, a sleep paralysis horror short by Marco Saikaley" width="1353" height="1772" loading="lazy" decoding="async" class="h-full w-full object-cover object-top opacity-95" style="background-image:url('data:image/jpeg;base64,/9j/2wBDACgcHiMeGSgjISMtKygwPGRBPDc3PHtYXUlkkYCZlo+AjIqgtObDoKrarYqMyP/L2u71////m8H////6/+b9//j/2wBDASstLTw1PHZBQXb4pYyl+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj/wAARCAAVABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAQAF/8QAGxAAAgIDAQAAAAAAAAAAAAAAAAECERIhQTH/xAAWAQEBAQAAAAAAAAAAAAAAAAACAQP/xAAXEQEBAQEAAAAAAAAAAAAAAAABAAJB/9oADAMBAAIRAxEAPwDKehgrsVWV3wdZXfA2wdiMVL0XBIiIyyF//9k=');background-size:cover;background-position:center top"/>
+</picture>
             <span class="absolute inset-x-0 bottom-0 p-3 sm:p-4 md:p-5">
               <h3 class="font-display text-base leading-tight text-bone group-hover:text-blood sm:text-xl md:text-2xl">MIKE HAS A VISITOR</h3>
               <p class="mt-0.5 text-[9px] uppercase tracking-[0.2em] text-mist sm:text-[10px]">Short · A film by Marco Saikaley</p>
@@ -436,7 +496,11 @@
       <ul class="grid gap-4 sm:grid-cols-2">
         <li class="group overflow-hidden border border-ash bg-void transition-colors hover:border-blood/40">
           <a href="https://www.youtube.com/watch?v=HaVJP08j77U" target="_blank" rel="noreferrer" class="block">
-            <span class="relative block aspect-video overflow-hidden"><img src="/images/project-HaVJP08j77U.jpg" alt="Mike Has A Visitor: sleep paralysis horror short scored by Zazie Kanwar-Torge" width="320" height="180" loading="lazy" decoding="async" class="h-full w-full object-cover object-top"/></span>
+            <span class="relative block aspect-video overflow-hidden"><picture>
+  <source type="image/avif" srcset="/images/project-HaVJP08j77U-480.avif 480w" sizes="(min-width:640px) 50vw, 100vw">
+  <source type="image/webp" srcset="/images/project-HaVJP08j77U-480.webp 480w" sizes="(min-width:640px) 50vw, 100vw">
+  <img src="/images/project-HaVJP08j77U-480.jpg" srcset="/images/project-HaVJP08j77U-480.jpg 480w" sizes="(min-width:640px) 50vw, 100vw" alt="Mike Has A Visitor: sleep paralysis horror short scored by Zazie Kanwar-Torge" width="320" height="180" loading="lazy" decoding="async" class="h-full w-full object-cover object-top" style="background-image:url('data:image/jpeg;base64,/9j/2wBDACgcHiMeGSgjISMtKygwPGRBPDc3PHtYXUlkkYCZlo+AjIqgtObDoKrarYqMyP/L2u71////m8H////6/+b9//j/2wBDASstLTw1PHZBQXb4pYyl+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj/wAARCAAJABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABAMF/8QAHhAAAQQBBQAAAAAAAAAAAAAAAQACESEDEzEzQUL/xAAVAQEBAAAAAAAAAAAAAAAAAAACA//EABYRAQEBAAAAAAAAAAAAAAAAAAABMf/aAAwDAQACEQMRAD8Azml2rRtJMzHZ3pQx8xSPZVIF1//Z');background-size:cover;background-position:center top"/>
+</picture></span>
             <span class="block p-4">
               <span class="block font-display text-lg text-bone">Mike Has A Visitor</span>
               <span class="mt-1 block text-[11px] uppercase tracking-[0.18em] text-mist">Original Score · Sleep Paralysis Horror Short</span>
@@ -445,7 +509,11 @@
         </li>
         <li class="group overflow-hidden border border-ash bg-void transition-colors hover:border-blood/40">
           <a href="https://www.youtube.com/watch?v=ItrrcilS0ro" target="_blank" rel="noreferrer" class="block">
-            <span class="relative block aspect-video overflow-hidden"><img src="/images/project-ItrrcilS0ro.jpg" alt="Goodbye, Brother: dramatic short with an original score by Zazie Kanwar-Torge" width="1280" height="720" loading="lazy" decoding="async" class="h-full w-full object-cover object-top"/></span>
+            <span class="relative block aspect-video overflow-hidden"><picture>
+  <source type="image/avif" srcset="/images/project-ItrrcilS0ro-480.avif 480w,/images/project-ItrrcilS0ro-768.avif 768w,/images/project-ItrrcilS0ro-1280.avif 1280w" sizes="(min-width:640px) 50vw, 100vw">
+  <source type="image/webp" srcset="/images/project-ItrrcilS0ro-480.webp 480w,/images/project-ItrrcilS0ro-768.webp 768w,/images/project-ItrrcilS0ro-1280.webp 1280w" sizes="(min-width:640px) 50vw, 100vw">
+  <img src="/images/project-ItrrcilS0ro-1280.jpg" srcset="/images/project-ItrrcilS0ro-480.jpg 480w,/images/project-ItrrcilS0ro-768.jpg 768w,/images/project-ItrrcilS0ro-1280.jpg 1280w" sizes="(min-width:640px) 50vw, 100vw" alt="Goodbye, Brother: dramatic short with an original score by Zazie Kanwar-Torge" width="1280" height="720" loading="lazy" decoding="async" class="h-full w-full object-cover object-top" style="background-image:url('data:image/jpeg;base64,/9j/2wBDACgcHiMeGSgjISMtKygwPGRBPDc3PHtYXUlkkYCZlo+AjIqgtObDoKrarYqMyP/L2u71////m8H////6/+b9//j/2wBDASstLTw1PHZBQXb4pYyl+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj/wAARCAAJABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAwEE/8QAHRABAAEEAwEAAAAAAAAAAAAAAQACERJRAwQxQf/EABUBAQEAAAAAAAAAAAAAAAAAAAEC/8QAFREBAQAAAAAAAAAAAAAAAAAAABH/2gAMAwEAAhEDEQA/AMfWxBzqANsHmBblQ31Bq+SHsmGv/9k=');background-size:cover;background-position:center top"/>
+</picture></span>
             <span class="block p-4">
               <span class="block font-display text-lg text-bone">GOODBYE, BROTHER</span>
               <span class="mt-1 block text-[11px] uppercase tracking-[0.18em] text-mist">Original Score · Dramatic Short</span>
@@ -454,7 +522,11 @@
         </li>
         <li class="group overflow-hidden border border-ash bg-void transition-colors hover:border-blood/40">
           <a href="https://www.youtube.com/watch?v=riCvy2abhlc" target="_blank" rel="noreferrer" class="block">
-            <span class="relative block aspect-video overflow-hidden"><img src="/images/project-riCvy2abhlc.jpg" alt="Home Intruder, action thriller chase sequence cue by Zazie Kanwar-Torge" width="1280" height="720" loading="lazy" decoding="async" class="h-full w-full object-cover object-top"/></span>
+            <span class="relative block aspect-video overflow-hidden"><picture>
+  <source type="image/avif" srcset="/images/project-riCvy2abhlc-480.avif 480w,/images/project-riCvy2abhlc-768.avif 768w,/images/project-riCvy2abhlc-1280.avif 1280w" sizes="(min-width:640px) 50vw, 100vw">
+  <source type="image/webp" srcset="/images/project-riCvy2abhlc-480.webp 480w,/images/project-riCvy2abhlc-768.webp 768w,/images/project-riCvy2abhlc-1280.webp 1280w" sizes="(min-width:640px) 50vw, 100vw">
+  <img src="/images/project-riCvy2abhlc-1280.jpg" srcset="/images/project-riCvy2abhlc-480.jpg 480w,/images/project-riCvy2abhlc-768.jpg 768w,/images/project-riCvy2abhlc-1280.jpg 1280w" sizes="(min-width:640px) 50vw, 100vw" alt="Home Intruder, action thriller chase sequence cue by Zazie Kanwar-Torge" width="1280" height="720" loading="lazy" decoding="async" class="h-full w-full object-cover object-top" style="background-image:url('data:image/jpeg;base64,/9j/2wBDACgcHiMeGSgjISMtKygwPGRBPDc3PHtYXUlkkYCZlo+AjIqgtObDoKrarYqMyP/L2u71////m8H////6/+b9//j/2wBDASstLTw1PHZBQXb4pYyl+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj/wAARCAAJABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAAEDBf/EABoQAAMAAwEAAAAAAAAAAAAAAAABEQIhMRL/xAAVAQEBAAAAAAAAAAAAAAAAAAAAAf/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AMlOrzMe3mwSxuyYwj//2Q==');background-size:cover;background-position:center top"/>
+</picture></span>
             <span class="block p-4">
               <span class="block font-display text-lg text-bone">Home Intruder</span>
               <span class="mt-1 block text-[11px] uppercase tracking-[0.18em] text-mist">Cue / Chase Sequence · Action Thriller Scene</span>
@@ -463,7 +535,11 @@
         </li>
         <li class="group overflow-hidden border border-ash bg-void transition-colors hover:border-blood/40">
           <a href="https://www.youtube.com/watch?v=Ty8tPp59mDc" target="_blank" rel="noreferrer" class="block">
-            <span class="relative block aspect-video overflow-hidden"><img src="/images/project-Ty8tPp59mDc.jpg" alt="The Haunted: official teaser for Crystal Fox Films, scored by Zazie Kanwar-Torge" width="1280" height="720" loading="lazy" decoding="async" class="h-full w-full object-cover object-top"/></span>
+            <span class="relative block aspect-video overflow-hidden"><picture>
+  <source type="image/avif" srcset="/images/project-Ty8tPp59mDc-480.avif 480w,/images/project-Ty8tPp59mDc-768.avif 768w,/images/project-Ty8tPp59mDc-1280.avif 1280w" sizes="(min-width:640px) 50vw, 100vw">
+  <source type="image/webp" srcset="/images/project-Ty8tPp59mDc-480.webp 480w,/images/project-Ty8tPp59mDc-768.webp 768w,/images/project-Ty8tPp59mDc-1280.webp 1280w" sizes="(min-width:640px) 50vw, 100vw">
+  <img src="/images/project-Ty8tPp59mDc-1280.jpg" srcset="/images/project-Ty8tPp59mDc-480.jpg 480w,/images/project-Ty8tPp59mDc-768.jpg 768w,/images/project-Ty8tPp59mDc-1280.jpg 1280w" sizes="(min-width:640px) 50vw, 100vw" alt="The Haunted: official teaser for Crystal Fox Films, scored by Zazie Kanwar-Torge" width="1280" height="720" loading="lazy" decoding="async" class="h-full w-full object-cover object-top" style="background-image:url('data:image/jpeg;base64,/9j/2wBDACgcHiMeGSgjISMtKygwPGRBPDc3PHtYXUlkkYCZlo+AjIqgtObDoKrarYqMyP/L2u71////m8H////6/+b9//j/2wBDASstLTw1PHZBQXb4pYyl+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj/wAARCAAJABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAABAED/8QAHhABAAICAQUAAAAAAAAAAAAAAQMRAAIEEhMxMkH/xAAVAQEBAAAAAAAAAAAAAAAAAAABAv/EABgRAAIDAAAAAAAAAAAAAAAAAAARAQJR/9oADAMBAAIRAxEAPwAsUcprq9EdUI2DkIzaffugN+BusLt65rxPuXfBcpH/2Q==');background-size:cover;background-position:center top"/>
+</picture></span>
             <span class="block p-4">
               <span class="block font-display text-lg text-bone">The Haunted</span>
               <span class="mt-1 block text-[11px] uppercase tracking-[0.18em] text-mist">Original Score · Official Teaser: Crystal Fox Films</span>
@@ -472,7 +548,11 @@
         </li>
         <li class="group overflow-hidden border border-ash bg-void transition-colors hover:border-blood/40">
           <a href="https://www.youtube.com/watch?v=rvCGO0BJ_2E" target="_blank" rel="noreferrer" class="block">
-            <span class="relative block aspect-video overflow-hidden"><img src="/images/project-rvCGO0BJ_2E.jpg" alt="Aquaphobia, short horror film with original score by Zazie Kanwar-Torge" width="1280" height="720" loading="lazy" decoding="async" class="h-full w-full object-cover object-top"/></span>
+            <span class="relative block aspect-video overflow-hidden"><picture>
+  <source type="image/avif" srcset="/images/project-rvCGO0BJ_2E-480.avif 480w,/images/project-rvCGO0BJ_2E-768.avif 768w,/images/project-rvCGO0BJ_2E-1280.avif 1280w" sizes="(min-width:640px) 50vw, 100vw">
+  <source type="image/webp" srcset="/images/project-rvCGO0BJ_2E-480.webp 480w,/images/project-rvCGO0BJ_2E-768.webp 768w,/images/project-rvCGO0BJ_2E-1280.webp 1280w" sizes="(min-width:640px) 50vw, 100vw">
+  <img src="/images/project-rvCGO0BJ_2E-1280.jpg" srcset="/images/project-rvCGO0BJ_2E-480.jpg 480w,/images/project-rvCGO0BJ_2E-768.jpg 768w,/images/project-rvCGO0BJ_2E-1280.jpg 1280w" sizes="(min-width:640px) 50vw, 100vw" alt="Aquaphobia, short horror film with original score by Zazie Kanwar-Torge" width="1280" height="720" loading="lazy" decoding="async" class="h-full w-full object-cover object-top" style="background-image:url('data:image/jpeg;base64,/9j/2wBDACgcHiMeGSgjISMtKygwPGRBPDc3PHtYXUlkkYCZlo+AjIqgtObDoKrarYqMyP/L2u71////m8H////6/+b9//j/2wBDASstLTw1PHZBQXb4pYyl+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj/wAARCAAJABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAgMEBf/EAB0QAAICAQUAAAAAAAAAAAAAAAECABEDITEycoH/xAAVAQEBAAAAAAAAAAAAAAAAAAACA//EABcRAQADAAAAAAAAAAAAAAAAAAABAiH/2gAMAwEAAhEDEQA/AMxRSFvKlAVTjFtTEaxOPiO0PJuIkbbL/9k=');background-size:cover;background-position:center top"/>
+</picture></span>
             <span class="block p-4">
               <span class="block font-display text-lg text-bone">AQUAPHOBIA</span>
               <span class="mt-1 block text-[11px] uppercase tracking-[0.18em] text-mist">Original Score · Short Horror Film</span>
@@ -481,7 +561,11 @@
         </li>
         <li class="group overflow-hidden border border-ash bg-void transition-colors hover:border-blood/40">
           <a href="https://www.youtube.com/watch?v=6qa3Uwj47fc" target="_blank" rel="noreferrer" class="block">
-            <span class="relative block aspect-video overflow-hidden"><img src="/images/project-6qa3Uwj47fc.jpg" alt="Whispers In The Dark: horror short scored by Zazie Kanwar-Torge" width="1280" height="720" loading="lazy" decoding="async" class="h-full w-full object-cover object-top"/></span>
+            <span class="relative block aspect-video overflow-hidden"><picture>
+  <source type="image/avif" srcset="/images/project-6qa3Uwj47fc-480.avif 480w,/images/project-6qa3Uwj47fc-768.avif 768w,/images/project-6qa3Uwj47fc-1280.avif 1280w" sizes="(min-width:640px) 50vw, 100vw">
+  <source type="image/webp" srcset="/images/project-6qa3Uwj47fc-480.webp 480w,/images/project-6qa3Uwj47fc-768.webp 768w,/images/project-6qa3Uwj47fc-1280.webp 1280w" sizes="(min-width:640px) 50vw, 100vw">
+  <img src="/images/project-6qa3Uwj47fc-1280.jpg" srcset="/images/project-6qa3Uwj47fc-480.jpg 480w,/images/project-6qa3Uwj47fc-768.jpg 768w,/images/project-6qa3Uwj47fc-1280.jpg 1280w" sizes="(min-width:640px) 50vw, 100vw" alt="Whispers In The Dark: horror short scored by Zazie Kanwar-Torge" width="1280" height="720" loading="lazy" decoding="async" class="h-full w-full object-cover object-top" style="background-image:url('data:image/jpeg;base64,/9j/2wBDACgcHiMeGSgjISMtKygwPGRBPDc3PHtYXUlkkYCZlo+AjIqgtObDoKrarYqMyP/L2u71////m8H////6/+b9//j/2wBDASstLTw1PHZBQXb4pYyl+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj/wAARCAAJABADASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAMF/8QAGRABAQEAAwAAAAAAAAAAAAAAAQACETFB/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AMnKHYM1x4FOQf/Z');background-size:cover;background-position:center top"/>
+</picture></span>
             <span class="block p-4">
               <span class="block font-display text-lg text-bone">Whispers In The Dark</span>
               <span class="mt-1 block text-[11px] uppercase tracking-[0.18em] text-mist">Original Score · Horror Short</span>
@@ -490,7 +574,11 @@
         </li>
         <li class="group overflow-hidden border border-ash bg-void transition-colors hover:border-blood/40">
           <a href="https://www.youtube.com/watch?v=UX2kv3G89Jw" target="_blank" rel="noreferrer" class="block">
-            <span class="relative block aspect-video overflow-hidden"><img src="/images/project-UX2kv3G89Jw.jpg" alt="Phantom Requiem, short film by Zazie Productions, original score" width="640" height="480" loading="lazy" decoding="async" class="h-full w-full object-cover object-top"/></span>
+            <span class="relative block aspect-video overflow-hidden"><picture>
+  <source type="image/avif" srcset="/images/project-UX2kv3G89Jw-480.avif 480w,/images/project-UX2kv3G89Jw-768.avif 768w" sizes="(min-width:640px) 50vw, 100vw">
+  <source type="image/webp" srcset="/images/project-UX2kv3G89Jw-480.webp 480w,/images/project-UX2kv3G89Jw-768.webp 768w" sizes="(min-width:640px) 50vw, 100vw">
+  <img src="/images/project-UX2kv3G89Jw-768.jpg" srcset="/images/project-UX2kv3G89Jw-480.jpg 480w,/images/project-UX2kv3G89Jw-768.jpg 768w" sizes="(min-width:640px) 50vw, 100vw" alt="Phantom Requiem, short film by Zazie Productions, original score" width="640" height="480" loading="lazy" decoding="async" class="h-full w-full object-cover object-top" style="background-image:url('data:image/jpeg;base64,/9j/2wBDACgcHiMeGSgjISMtKygwPGRBPDc3PHtYXUlkkYCZlo+AjIqgtObDoKrarYqMyP/L2u71////m8H////6/+b9//j/2wBDASstLTw1PHZBQXb4pYyl+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj/wAARCAAMABADASIAAhEBAxEB/8QAFwAAAwEAAAAAAAAAAAAAAAAAAQIDBP/EAB4QAAICAgIDAAAAAAAAAAAAAAECAAMEESFBBRKB/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AJN49FoJ49h2YcPHx2sUOikEdzC+Ze55f5EF9gbYOjA//9k=');background-size:cover;background-position:center top"/>
+</picture></span>
             <span class="block p-4">
               <span class="block font-display text-lg text-bone">Phantom Requiem</span>
               <span class="mt-1 block text-[11px] uppercase tracking-[0.18em] text-mist">Original Score · Short Film</span>
@@ -613,7 +701,11 @@
       <div class="grid gap-10 lg:grid-cols-12">
         <div class="relative lg:col-span-5">
           <div class="relative overflow-hidden border border-ash" style="aspect-ratio:4/5">
-            <img src="/images/headshot.jpg" alt="Zazie Kanwar-Torge, horror composer, Zazie Productions" width="864" height="996" loading="lazy" decoding="async" class="h-full w-full object-cover grayscale"/>
+            <picture>
+  <source type="image/avif" srcset="/images/headshot-480.avif 480w,/images/headshot-640.avif 640w,/images/headshot-864.avif 864w" sizes="(min-width:1024px) 42vw, 100vw">
+  <source type="image/webp" srcset="/images/headshot-480.webp 480w,/images/headshot-640.webp 640w,/images/headshot-864.webp 864w" sizes="(min-width:1024px) 42vw, 100vw">
+  <img src="/images/headshot-864.jpg" srcset="/images/headshot-480.jpg 480w,/images/headshot-640.jpg 640w,/images/headshot-864.jpg 864w" sizes="(min-width:1024px) 42vw, 100vw" alt="Zazie Kanwar-Torge, horror composer, Zazie Productions" width="864" height="996" loading="lazy" decoding="async" class="h-full w-full object-cover grayscale" style="background-image:url('data:image/jpeg;base64,/9j/2wBDACgcHiMeGSgjISMtKygwPGRBPDc3PHtYXUlkkYCZlo+AjIqgtObDoKrarYqMyP/L2u71////m8H////6/+b9//j/2wBDASstLTw1PHZBQXb4pYyl+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj4+Pj/wAARCAASABADASIAAhEBAxEB/8QAGAAAAgMAAAAAAAAAAAAAAAAAAAIBAwT/xAAeEAACAgICAwAAAAAAAAAAAAABAgARIXEEEgMxUf/EABQBAQAAAAAAAAAAAAAAAAAAAAD/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCjkoy9WC3Q9iiCZkZSG6kjcduQWWgoGcm4vlJNEnWoCfJJy53CED//2Q==');background-size:cover;background-position:center"/>
+</picture>
           </div>
         </div>
         <div class="lg:col-span-7">
@@ -704,7 +796,11 @@ window.addEventListener("load", () => {
     document.querySelectorAll("iframe[data-embed-src]").forEach((frame) => {
       if (!frame.src) frame.src = frame.dataset.embedSrc;
     });
-  }, 1000);
+  }, 1500);
+  // Register service worker for instant repeat visits / offline resilience
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(() => {});
+  }
 });
 </script>
 </body>
