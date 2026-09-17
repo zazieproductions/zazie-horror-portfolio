@@ -6,20 +6,24 @@
 <!-- ═══════════════════════════════════════════════════════════════════
      ZP ARCHIVE BOOT — analog-horror terminal intro (inline, zero requests)
      Activated only when <html> gets .zp-boot-on (see gate script below).
+     Preview/dev hosts (e2b.app, pages.dev, localhost) replay on every load;
+     ?boot=1 / #boot forces a replay even under prefers-reduced-motion.
      Failsafes: no-JS → never shows · reduced-motion/bots → never shows ·
      JS error mid-run → CSS force-hide at 10s · bfcache restore → instant out.
      ═══════════════════════════════════════════════════════════════════ -->
 <script>
 (function(){try{
   if(/bot|crawl|spider|slurp|lighthouse|headless/i.test(navigator.userAgent))return;
-  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   var force=null;
   try{force=new URLSearchParams(location.search).get('boot');}catch(e){}
   if(force===null&&location.hash.indexOf('boot')>-1)force='1';
+  if(force===null&&window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  var h=location.hostname,preview=(h==='localhost'||h==='127.0.0.1'||/(^|\.)e2b\.app$/.test(h)||/(^|\.)pages\.dev$/.test(h));
   var seen=null;try{seen=sessionStorage.getItem('zpBootShown');}catch(e){}
-  if(seen&&force===null)return;
+  if(seen&&force===null&&!preview)return;
   var de=document.documentElement;
-  de.classList?de.classList.add('zp-boot-on'):de.className+=' zp-boot-on';
+  if(de.classList){de.classList.add('zp-boot-on');if(force!==null)de.classList.add('zp-boot-force');}
+  else de.className+=' zp-boot-on';
 }catch(e){}})();
 </script>
 <style id="zp-boot-style">
@@ -32,7 +36,7 @@ html.zp-boot-on #zp-boot{
   animation:zpForceHide .5s linear 10s forwards;
 }
 #zp-boot.zp-off{display:block;pointer-events:none;animation:zpOvFade .56s ease forwards,zpForceHide .1s linear 9s forwards}
-@media (prefers-reduced-motion:reduce){#zp-boot{display:none!important}}
+@media (prefers-reduced-motion:reduce){html:not(.zp-boot-force) #zp-boot{display:none!important}}
 .zp-screen{
   position:absolute;inset:0;overflow:hidden;transform-origin:50% 50%;
   background:radial-gradient(120% 90% at 50% 45%,#0a0d0a 0%,#060806 55%,#020302 100%);

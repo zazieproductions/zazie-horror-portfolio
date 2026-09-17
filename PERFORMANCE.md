@@ -153,7 +153,7 @@ scanlines, vignette, rolling tracking band) to blinking gate to CRT power-off co
 - **JS error mid-sequence**: try/catch to `finish()`; CSS `zpForceHide` animation hides the overlay
   even if every JS path dies.
 - **bfcache restore mid-boot** (`pageshow.persisted`) to instant teardown.
-- **Once per session** via `sessionStorage` (`zpBootShown`); replay with `?boot=1` or `#boot`.
+- **Once per session** via `sessionStorage` (`zpBootShown`); replay with `?boot=1` or `#boot` (force also bypasses reduced motion via a `zp-boot-force` class). Preview/dev hosts (e2b.app, pages.dev, localhost, 127.0.0.1) ignore the session flag and replay on every load, so the intro stays demoable while building; production domains keep the once-per-session gate.
 - Emits `zp:bootdone` on `window` after teardown, future hook for starting ambience/music
   from the site's own player.
 
