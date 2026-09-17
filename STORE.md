@@ -50,17 +50,34 @@ Never hand-edit `store.html`: the next build overwrites it.
 
 | # | Title | Platform | Price | Listing | Cover |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Unholy Anatomy — 209 body horror & creature vocal SFX | itch.io | $10+ | `zazieproductions.itch.io/unholyanatomy` | `img.itch.zone/aW1nLzI5MTYyOTA5LnBuZw==/347x500/…` |
-| 2 | Fault Codes — 25+ minimal error beeps | itch.io | $1 | `zazieproductions.itch.io/30-minimal-error-beeps-system-warning-sfx` | `img.itch.zone/aW1nLzI4NjA5NjM4LnBuZw==/347x500/…` |
-| 3 | Galactic Requiem — immersive 3D battle soundscape | Gumroad | $5+ | `zazieproductions.gumroad.com/l/immersive3daudio` | `public-files.gumroad.com/kxisasmtty6rugi2h6wyhz29lvb4` |
-| 4 | World's Strangest Plug-in Mega-Vault (200+ VSTs) | Gumroad | $35+ | `zazieproductions.gumroad.com/l/plugin` | `public-files.gumroad.com/gxx8r6nvhvokuqz8ktnou29qlm7c` |
-| 5 | Micro-Rupture Collection — 18 vertical glitch cuts | Gumroad | $5 | `zazieproductions.gumroad.com/l/hdtgt` | `public-files.gumroad.com/ggkcnd8qzh2wnynjbinyw2b54l0b` |
-| 6 | Halloween Ghost Glow Fruit Plate with music | eBay | $45.00 + $10.50 | item `236994104581` | `i.ebayimg.com/images/g/99UAAeSwqhJqd3CA/s-l500.webp` |
-| 7 | F998Pro live sound card (white, English version) | eBay | $85.00 + $10.50 | item `236994099582` | `i.ebayimg.com/images/g/7aAAAeSwAVhqd3Cg/s-l500.webp` |
-| 8 | Voice-control WiFi bulb, RGBCW 9 W | eBay | $25.00 + $10.50 | item `236992067377` | `i.ebayimg.com/images/g/hkQAAeSwAfJqdiA1/s-l500.webp` |
+| 1 | Anesthesia for the Signal Age (album, 10 tracks, May 2026) | Bandcamp | $7.50+ | `…bandcamp.com/album/anesthesia-for-the-signal-age` | `f4.bcbits.com/img/a4087485987_16.jpg` |
+| 2 | Opaline Lament (Life From The Beyond) (single, Dec 2025) | Bandcamp | $4+ | `…bandcamp.com/track/opaline-lament-life-from-the-beyond-2` | `f4.bcbits.com/img/a4110701137_16.jpg` |
+| 3 | Spectral Ode to Synesthesia (8:55 binaural, Mar 2025) | Bandcamp | $5+ | `…bandcamp.com/album/spectral-ode-to-synesthesia-2` | `f4.bcbits.com/img/a3756749177_16.jpg` |
+| 4 | To Halt Space Adrift (album, 8 tracks, May 2023) | Bandcamp | $8+ | `…bandcamp.com/album/to-halt-space-adrift` | `f4.bcbits.com/img/a0612904516_16.jpg` |
+| 5 | Constrained Capacity (album, 10 tracks, May 2022) | Bandcamp | $7+ | `…bandcamp.com/album/constrained-capacity` | `f4.bcbits.com/img/a0935502895_16.jpg` |
+| 6 | Unholy Anatomy — 209 body horror & creature vocal SFX | itch.io | $10+ | `zazieproductions.itch.io/unholyanatomy` | `img.itch.zone/aW1nLzI5MTYyOTA5LnBuZw==/347x500/…` |
+| 7 | Fault Codes — 25+ minimal error beeps | itch.io | $1 | `zazieproductions.itch.io/30-minimal-error-beeps-system-warning-sfx` | `img.itch.zone/aW1nLzI4NjA5NjM4LnBuZw==/347x500/…` |
+| 8 | Galactic Requiem — immersive 3D battle soundscape | Gumroad | $5+ | `zazieproductions.gumroad.com/l/immersive3daudio` | `public-files.gumroad.com/kxisasmtty6rugi2h6wyhz29lvb4` |
+| 9 | World's Strangest Plug-in Mega-Vault (200+ VSTs) | Gumroad | $35+ | `zazieproductions.gumroad.com/l/plugin` | `public-files.gumroad.com/gxx8r6nvhvokuqz8ktnou29qlm7c` |
+| 10 | Micro-Rupture Collection — 18 vertical glitch cuts | Gumroad | $5 | `zazieproductions.gumroad.com/l/hdtgt` | `public-files.gumroad.com/ggkcnd8qzh2wnynjbinyw2b54l0b` |
+| 11 | Creepy Cricket Noise Generator Module (5 colours) | eBay | $13.96 + $10.50 | item `237074138587` | `i.ebayimg.com/images/g/c-cAAeSwjBpqrDDB/s-l500.webp` |
+| 12 | Halloween Ghost Glow Fruit Plate with music | eBay | $45.00 + $10.50 | item `236994104581` | `i.ebayimg.com/images/g/99UAAeSwqhJqd3CA/s-l500.webp` |
+| 13 | F998Pro live sound card (white, English version) | eBay | $85.00 + $10.50 | item `236994099582` | `i.ebayimg.com/images/g/7aAAAeSwAVhqd3Cg/s-l500.webp` |
+| 14 | Voice-control WiFi bulb, RGBCW 9 W | eBay | $25.00 + $10.50 | item `236992067377` | `i.ebayimg.com/images/g/hkQAAeSwAfJqdiA1/s-l500.webp` |
 
-Categories (`data-collection`): `sfx` (1–3), `plugins` (4), `motion` (5),
-`gear` (6–8). Delivery (`data-delivery`): `digital` (1–5), `physical` (6–8).
+Plus a **discography band** linking to `zazieproductions.bandcamp.com/music`
+(full digital discography: 18 releases, $110.25+, 10 % off — as shown on every
+Bandcamp release page on the capture date).
+
+Categories (`data-collection`): `records` (1–5), `sfx` (6–8), `plugins` (9),
+`motion` (10), `gear` (11–14). Delivery (`data-delivery`): `digital` (1–10),
+`physical` (11–14).
+
+Bandcamp covers use the `_16` size (700×700). Records 1 and 2 have an in-card
+**Preview** button wired to a showreel cue that appears on that release
+(`/audio/track-00.mp3` = *Needle In The Nerve*, `/audio/track-10.mp3` =
+*Opaline Lament*). Add `data-preview` to other cards only when a matching cue
+exists in `/audio`.
 
 ## 4. Cover art
 
@@ -78,16 +95,34 @@ If a cover is ever replaced by a locally hosted one, put it in
 `images/store/`, keep the source JPEG plus an AVIF sibling, and update both the
 `<img>` and the JSON-LD `image` URL.
 
-## 5. Behaviour (`store.js`, ~3 KB)
+## 5. Behaviour (`store.js`, ~9 KB)
 
-* Adds `has-js` to `<html>` — the filter bar is hidden without it, so a
-  JavaScript-free visitor still sees all eight releases.
+Everything is progressive enhancement: with JavaScript off every release is
+visible, every card links straight to its listing, and none of the atmosphere
+layers appear.
+
+* Adds `has-js` to `<html>` — the filter bar, previews, ambience toggle and
+  torch are hidden without it.
 * Two filter groups (`collection`, `delivery`) combined with AND logic,
-  `aria-pressed` state, a live `role="status"` counter ("N of 8 releases"), and
+  `aria-pressed` state, a live `role="status"` counter ("N of 14 releases"), and
   an empty state with a reset link.
-* Filter selection is reflected in the URL hash (`#sfx`, `#plugins`, `#motion`,
-  `#gear`, `#digital`, `#physical`) via `history.replaceState`, so filtered
-  views can be linked — and read back on load.
+* Filter selection is reflected in the URL hash (`#records`, `#sfx`,
+  `#plugins`, `#motion`, `#gear`, `#digital`, `#physical`) via
+  `history.replaceState`, read back on load **and** on `hashchange`
+  (`#shelf` resets both groups).
+* **Atmosphere** — all disabled under `prefers-reduced-motion`:
+  * cinematic hero with Ken-Burns drift on `images/atmosphere-bg.jpg`, drifting
+    blood orbs, a flickering italic line, blood drips under the headline;
+  * fixed grain + scanlines + vignette (same recipes as the portfolio) and a
+    random VHS tracking roll every 9–23 s;
+  * a pointer-following "torch" glow (fine pointers only);
+  * card tilt + spotlight on hover (`--rx/--ry/--mx/--my`, rAF-throttled);
+  * chromatic glitch on card titles on hover;
+  * `IntersectionObserver` scroll reveal (`.reveal`, staggered by `--i`).
+* **Audio** — one shared `<audio>` for in-card previews (`[data-preview]`,
+  conic progress ring, one at a time, stops on tab hide) and a separate looping
+  **Room tone** toggle in the masthead (`[data-ambience]` → `/audio/track-11.mp3`,
+  *Ominous Drone*), which ducks to 6 % while a preview plays. Nothing autoplays.
 * Cover-error fallback (above) and the footer year.
 
 ## 6. Maintenance checklist

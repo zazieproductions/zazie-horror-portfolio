@@ -73,3 +73,25 @@ HTML with one 19 KB stylesheet and one 3 KB deferred script, built by
   or Lighthouse run for the new page; verified instead by jsdom behavioural
   tests (38 assertions on `/store`, 14 on the homepage boot) and a local HTTP
   crawl of every referenced asset.
+
+### 5.1 Immersive pass + Bandcamp — 2026-09-17 (later)
+
+Catalogue grew 8 → 14 (5 Bandcamp records, 1 more eBay object) and the page
+picked up the portfolio's atmosphere kit. Budget after the pass: HTML 47.5 KB,
+CSS 32 KB, JS 9 KB (all pre-compression, still zero framework).
+
+- **LCP** is now the hero plate `images/atmosphere-bg.jpg` (33.8 KB, already in
+  the repo, `preload` + `fetchpriority="high"`); Ken-Burns runs on `transform`
+  only. Every other image stays lazy, including the three sleeves in the
+  discography band.
+- **Motion cost is opt-in by capability**: tilt/spotlight and the torch only
+  bind on `(hover:hover) and (pointer:fine)`, everything is rAF-throttled, and
+  `prefers-reduced-motion` turns off Ken-Burns, orbs, drips, flicker, ticker,
+  VHS roll, torch, tilt and scroll-reveal in one media block.
+- **Audio never autoplays**: previews and the Room-tone loop are
+  `preload="none"` `Audio()` objects created on first click, reusing cues that
+  are already cache-immutable under `/audio/*`. No new media files were added.
+- **New third-party origin**: `f4.bcbits.com` (Bandcamp covers), dns-prefetched,
+  lazy, `no-referrer`, same monogram fallback.
+- jsdom suite is now 54 assertions (filters incl. `records`, hashchange,
+  previews, ambience, atmosphere layers, JSON-LD 14 products).
