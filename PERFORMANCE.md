@@ -45,3 +45,49 @@ Scope: horror.zazieproductions.com (static prerendered React build on an edge ho
 - **Audio re-encode** (12.5 MB longest track at ~256 kbps): left untouched deliberately — streaming is progressive and bitrate is a brand-quality call. If mobile data matters more than master fidelity, re-encode to 160 kbps CBR (+ update immutable cache via filename change). Owner: composer.
 - **Poster `-1200.jpg` lightbox**: capped at 1200 px long side; if 4K fullscreen inspection of posters is ever a use case, add an AVIF tier. Owner: design.
 - `Cache-Control: immutable` on hashed JS/CSS now depends on the rename-on-change discipline (hashes are content-derived; enforce in whatever build/commit flow produces these files).
+
+---
+
+# ZP Archive Boot — analog-horror terminal intro
+
+Date: 2026-09-17 · Branch: `arena/01a0b074-zazie-horror-portfolio`
+
+## What it is
+
+A terminal-style loading screen with analog-horror dressing shown once per session on first
+paint: CRT power-on flash → typed BIOS boot log (29 archive cues indexed) → `PLAY SHOWREEL.REEL`
+with a VHS tracking bar → signal glitch (RGB split, jitter, EAS-style red frame double-blink,
+"UNREGISTERED SIGNAL" warnings) → VHS OSD chrome (`► PLAY`, blinking `● REC`, running `SP` counter,
+scanlines, vignette, rolling tracking band) → blinking gate → CRT power-off collapse revealing the site.
+
+## Cost & performance guardrails
+
+- **Zero network requests**: ~15 KB raw / ~4 KB gzip of inline HTML+CSS+JS in `index.html`.
+  No fonts (uses `ui-monospace` stack), no images, no audio files.
+- **Animation hygiene**: only `transform`, `opacity`, and `filter` animate; `contain: strict`
+  on the overlay; scanlines are static gradients; the whole thing self-destructs (node removed).
+- **Timing**: ≈5.4 s to the gate; any click / key / wheel / tap skips instantly; gate auto-enters
+  after 2.8 s; JS hard cap at 9.2 s; CSS force-hide at 10 s as the final failsafe.
+- **Sound**: none by default. A ~0.3 s synthesized tape-click/power-down (WebAudio, peak gain 0.055)
+  plays only when the user's own click/keypress dismisses the screen — autoplay-policy safe.
+
+## Correctness guardrails
+
+- **Overlay lives outside `#root`**, so the React bundle's teardown/rebuild can never remove it.
+- **No-JS / crawlers / bots / Lighthouse**: overlay is `display:none` unless a synchronous head
+  script adds `.zp-boot-on` to `<html>`; bots and `prefers-reduced-motion` never get it. Page
+  content is fully present in the DOM regardless (SEO untouched).
+- **JS error mid-sequence**: try/catch → `finish()`; CSS `zpForceHide` animation hides the overlay
+  even if every JS path dies.
+- **bfcache restore mid-boot** (`pageshow.persisted`) → instant teardown.
+- **Once per session** via `sessionStorage` (`zpBootShown`); replay with `?boot=1` or `#boot`.
+- Emits `zp:bootdone` on `window` after teardown — future hook for starting ambience/music
+  from the site's own player.
+
+## Workshop notes (deliberate creative choices to revisit)
+
+- `© 1987 ZAZIE PRODUCTIONS` is an intentional analog-horror anachronism (real founding: 2022).
+- The corrupted tracking bar stays corrupted after the glitch — the tape never fully heals.
+- Gate copy: `[ CLICK OR PRESS ANY KEY TO OBSERVE ]`.
+- Possible next iterations: per-visit tape number, longer scare on repeat visits, tying
+  `zp:bootdone` into the showreel player, CRT curvature on large screens.
