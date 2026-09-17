@@ -1,9 +1,9 @@
-# /store — build, data and maintenance record
+# /store: build, data and maintenance record
 
 Date: 2026-09-17 · Page: <https://horror.zazieproductions.com/store>
 
-A single static page that gathers the Zazie Productions catalogue — digital
-releases on itch.io and Gumroad, physical finds on eBay — and hands each card
+A single static page that gathers the Zazie Productions catalogue, digital
+releases on itch.io and Gumroad, physical finds on eBay, and hands each card
 straight to the marketplace that owns the checkout. It shares the portfolio's
 palette, type stack, texture layers and section rhythm, but **not** its React
 bundle: the store ships as plain HTML, one small stylesheet and one small
@@ -16,8 +16,8 @@ script.
 | Path | Role |
 | --- | --- |
 | `store-src/store.html` | Source markup (placeholders `__CSS__`, `__JS__`) |
-| `store-src/store.css` | Source stylesheet — self-contained (tokens, `@font-face`, all rules) |
-| `store-src/store.js` | Source behaviour — progressive enhancement only |
+| `store-src/store.css` | Source stylesheet, self-contained (tokens, `@font-face`, all rules) |
+| `store-src/store.js` | Source behaviour, progressive enhancement only |
 | `store-src/build.sh` | Build: hashes assets, writes them to the repo root, generates `store.html` |
 | `store.html` | **Generated.** Do not edit directly |
 | `store-<hash>.css`, `store-<hash>.js` | **Generated**, content-hashed, served `immutable` by `_headers` |
@@ -34,13 +34,13 @@ Never hand-edit `store.html`: the next build overwrites it.
 ## 2. Deployment
 
 * `_redirects` maps `/store` and `/store/` to `/store.html` **above** the SPA
-  catch-all (`/* /index.html 200`). Rule order matters — keep the store rules first.
+  catch-all (`/* /index.html 200`). Rule order matters, keep the store rules first.
 * `_headers` gives `/store.html` the same `must-revalidate` policy as
   `/index.html`; `/*.css` and `/*.js` are already `immutable, max-age=1y`, which
   is why the generated filenames are content-hashed.
 * `sitemap.xml` lists `/store` (priority 0.8, weekly).
 * The page is linked from three places:
-  1. the primary nav tab (React — `Ix` array in `index-<hash>.js`, feeds the
+  1. the primary nav tab (React, `Ix` array in `index-<hash>.js`, feeds the
      desktop tabs *and* the sub-`xl` mobile menu),
   2. the prerendered nav in `index.html` (what a visitor sees before the bundle
      mounts),
@@ -58,13 +58,13 @@ Never hand-edit `store.html`: the next build overwrites it.
 | 6 | Vermiform (album, 8 tracks, Jul 2023) | Bandcamp | $7+ | `…bandcamp.com/album/vermiform` | `f4.bcbits.com/img/a0050695008_16.jpg` |
 | 7 | Interference Archive 01010101 (album, 5 tracks, Sep 2021) | Bandcamp | $7+ | `…bandcamp.com/album/interference-archive-01010101` | `f4.bcbits.com/img/a0281727228_16.jpg` |
 | 8 | Stutter to stammer (album, 5 tracks, Nov 2019) | Bandcamp | $7+ | `…bandcamp.com/album/stutter-to-stammer` | `f4.bcbits.com/img/a1008810016_16.jpg` |
-| 9 | Unholy Anatomy — 209 body horror & creature vocal SFX | itch.io | $10+ | `zazieproductions.itch.io/unholyanatomy` | `img.itch.zone/aW1nLzI5MTYyOTA5LnBuZw==/347x500/…` |
-| 10 | Fault Codes — 25+ minimal error beeps | itch.io | $1 | `zazieproductions.itch.io/30-minimal-error-beeps-system-warning-sfx` | `img.itch.zone/aW1nLzI4NjA5NjM4LnBuZw==/347x500/…` |
-| 11 | Galactic Requiem — immersive 3D battle soundscape | Gumroad | $5+ | `zazieproductions.gumroad.com/l/immersive3daudio` | `public-files.gumroad.com/kxisasmtty6rugi2h6wyhz29lvb4` |
+| 9 | Unholy Anatomy, 209 body horror & creature vocal SFX | itch.io | $10+ | `zazieproductions.itch.io/unholyanatomy` | `img.itch.zone/aW1nLzI5MTYyOTA5LnBuZw==/347x500/…` |
+| 10 | Fault Codes, 25+ minimal error beeps | itch.io | $1 | `zazieproductions.itch.io/30-minimal-error-beeps-system-warning-sfx` | `img.itch.zone/aW1nLzI4NjA5NjM4LnBuZw==/347x500/…` |
+| 11 | Galactic Requiem, immersive 3D battle soundscape | Gumroad | $5+ | `zazieproductions.gumroad.com/l/immersive3daudio` | `public-files.gumroad.com/kxisasmtty6rugi2h6wyhz29lvb4` |
 | 12 | World's Strangest Plug-in Mega-Vault (200+ VSTs) | Gumroad | $35+ | `zazieproductions.gumroad.com/l/plugin` | `public-files.gumroad.com/gxx8r6nvhvokuqz8ktnou29qlm7c` |
-| 13 | Micro-Rupture Collection — 18 vertical glitch cuts | Gumroad | $5 | `zazieproductions.gumroad.com/l/hdtgt` | `public-files.gumroad.com/ggkcnd8qzh2wnynjbinyw2b54l0b` |
-| 14 | The Forbidden Canticles — 4 Renaissance manuscript facsimiles (PDF, 50 left) | Gumroad | $20+ | `zazieproductions.gumroad.com/l/wbqvh` | `public-files.gumroad.com/h4mkhyng4g2dq47w82bof8aa1xa0` |
-| 15 | Aztec Death Whistle — screaming skull (3 variants, 5 available) | eBay | $28.50 + $10.50 | item `237074158813` | `i.ebayimg.com/images/g/v5cAAeSwYHhqrDTs/s-l500.webp` |
+| 13 | Micro-Rupture Collection, 18 vertical glitch cuts | Gumroad | $5 | `zazieproductions.gumroad.com/l/hdtgt` | `public-files.gumroad.com/ggkcnd8qzh2wnynjbinyw2b54l0b` |
+| 14 | The Forbidden Canticles, 4 Renaissance manuscript facsimiles (PDF, 50 left) | Gumroad | $20+ | `zazieproductions.gumroad.com/l/wbqvh` | `public-files.gumroad.com/h4mkhyng4g2dq47w82bof8aa1xa0` |
+| 15 | Aztec Death Whistle, screaming skull (3 variants, 5 available) | eBay | $28.50 + $10.50 | item `237074158813` | `i.ebayimg.com/images/g/v5cAAeSwYHhqrDTs/s-l500.webp` |
 | 16 | Skull Heads with motion sensor (type Z270, 5 available) | eBay | $30.10 + $10.50 | item `237074157963` | `i.ebayimg.com/images/g/4awAAeSwtpFqrDSI/s-l500.webp` |
 | 17 | Creepy Cricket Noise Generator Module (5 colours) | eBay | $13.96 + $10.50 | item `237074138587` | `i.ebayimg.com/images/g/c-cAAeSwjBpqrDDB/s-l500.webp` |
 | 18 | Halloween Ghost Glow Fruit Plate with music | eBay | $45.00 + $10.50 | item `236994104581` | `i.ebayimg.com/images/g/99UAAeSwqhJqd3CA/s-l500.webp` |
@@ -72,12 +72,12 @@ Never hand-edit `store.html`: the next build overwrites it.
 | 20 | Voice-control WiFi bulb, RGBCW 9 W | eBay | $25.00 + $10.50 | item `236992067377` | `i.ebayimg.com/images/g/hkQAAeSwAfJqdiA1/s-l500.webp` |
 
 Plus a **discography band** linking to `zazieproductions.bandcamp.com/music`
-(full digital discography: 18 releases, $110.25+, 10 % off — as shown on every
+(full digital discography: 18 releases, $110.25+, 10 % off, as shown on every
 Bandcamp release page on the capture date).
 
-Categories (`data-collection`): `records` (1–8), `sfx` (9–11), `plugins` (12),
-`motion` (13), `scores` (14), `gear` (15–20). Delivery (`data-delivery`):
-`digital` (1–14), `physical` (15–20).
+Categories (`data-collection`): `records` (1 to 8), `sfx` (9 to 11), `plugins` (12),
+`motion` (13), `scores` (14), `gear` (15 to 20). Delivery (`data-delivery`):
+`digital` (1 to 14), `physical` (15 to 20).
 
 Bandcamp covers use the `_16` size (700×700). Records 1, 2 and 7 have an
 in-card **Preview** button wired to a showreel cue that appears on that release
@@ -89,7 +89,7 @@ exists in `/audio`.
 
 Card thumbnails are **hot-linked** from each marketplace's CDN
 (`img.itch.zone`, `public-files.gumroad.com`, `i.ebayimg.com`) because the
-listings already host correct, current product art — no re-uploads, no
+listings already host correct, current product art, no re-uploads, no
 duplicated storage, and the images follow the listing. Each `<img>` carries
 `loading="lazy"`, `decoding="async"`, `referrerpolicy="no-referrer"` and an
 empty `alt` (the card title is the link text). `store.js` watches for `error`
@@ -101,13 +101,13 @@ If a cover is ever replaced by a locally hosted one, put it in
 `images/store/`, keep the source JPEG plus an AVIF sibling, and update both the
 `<img>` and the JSON-LD `image` URL.
 
-## 5. Behaviour (`store.js`, ~9 KB)
+## 5. Behaviour (`store.js`, ~11 KB)
 
 Everything is progressive enhancement: with JavaScript off every release is
 visible, every card links straight to its listing, and none of the atmosphere
 layers appear.
 
-* Adds `has-js` to `<html>` — the filter bar, previews, ambience toggle and
+* Adds `has-js` to `<html>`, the filter bar, previews, ambience toggle and
   torch are hidden without it.
 * Two filter groups (`collection`, `delivery`) combined with AND logic,
   `aria-pressed` state, a live `role="status"` counter ("N of 20 releases"), and
@@ -116,16 +116,31 @@ layers appear.
   `#plugins`, `#motion`, `#scores`, `#gear`, `#digital`, `#physical`) via
   `history.replaceState`, read back on load **and** on `hashchange`
   (`#shelf` resets both groups).
-* **Atmosphere** — all disabled under `prefers-reduced-motion`:
-  * cinematic hero with Ken-Burns drift on `images/atmosphere-bg.jpg`, drifting
-    blood orbs, a flickering italic line, blood drips under the headline;
-  * fixed grain + scanlines + vignette (same recipes as the portfolio) and a
-    random VHS tracking roll every 9–23 s;
-  * a pointer-following "torch" glow (fine pointers only);
-  * card tilt + spotlight on hover (`--rx/--ry/--mx/--my`, rAF-throttled);
+* **Atmosphere** (all disabled under `prefers-reduced-motion`; pointer effects
+  only on `(hover:hover) and (pointer:fine)`):
+  * no photographic hero. The opening is typographic: catalogue meta, the
+    headline, a section index, and a "vitrine" of four real Bandcamp sleeves
+    (`f4.bcbits.com/img/<id>_16.jpg`) that link to their albums. The former
+    `images/atmosphere-bg.jpg` is no longer referenced anywhere on the page;
+  * fixed grain, scanlines, vignette and a hairline page frame (same recipes as
+    the portfolio) plus a random VHS tracking roll every 11 to 27 s;
+  * a pointer-following torch glow and a custom two-part cursor (dot + lagging
+    ring; ring grows over links and buttons, shrinks on press). The `<html>`
+    element carries `cur`, `cur-hover`, `cur-down`, `torch-on`;
+  * card tilt and sheen on hover (`--rx/--ry/--mx/--my`, rAF-throttled);
   * chromatic glitch on card titles on hover;
-  * `IntersectionObserver` scroll reveal (`.reveal`, staggered by `--i`).
-* **Audio** — one shared `<audio>` for in-card previews (`[data-preview]`,
+  * `IntersectionObserver` scroll reveal (`.reveal`, staggered by `--i`);
+  * the masthead gains `is-stuck` after 24 px of scroll.
+* **Catalogue structure**: four numbered `<section class="group">` blocks
+  (`#records` I, `#sfx` II, `#tools` III, `#gear` IV), each with its own
+  `ul[data-grid]`. Filtering hides whole groups when none of their cards match
+  and rewrites the per-group count ("1 of 3"). Every card carries a catalogue
+  number (`.no`), a platform tag (`.tag`), a `dl.spec` of three facts, a price
+  with qualifier and a "Buy on …" CTA.
+* **Copy rules**: no em or en dashes anywhere in the page (the jsdom suite
+  asserts this), and no marketing filler. Descriptions state what the item is,
+  what it contains and how it is delivered.
+* **Audio**, one shared `<audio>` for in-card previews (`[data-preview]`,
   conic progress ring, one at a time, stops on tab hide) and a separate looping
   **Room tone** toggle in the masthead (`[data-ambience]` → `/audio/track-11.mp3`,
   *Ominous Drone*), which ducks to 6 % while a preview plays. Nothing autoplays.
@@ -144,7 +159,7 @@ layers appear.
    strip if the totals change.
 4. **Bundle edits.** If the nav/footer integration in `index-<hash>.js` is ever
    changed again, rename the file to its new content hash and update the
-   dynamic import in `index.html` — the `immutable` header depends on it.
+   dynamic import in `index.html`, the `immutable` header depends on it.
 
 ## 7. Verification performed
 
@@ -153,7 +168,8 @@ layers appear.
   app renders, the nav reads **Reel / Work / Rates / Store**, the tab appears in
   the primary nav and again in the footer, all portfolio sections survive, zero
   runtime errors.
-* jsdom test of `store.html` + `store.js` (38 assertions): 8 cards, 8 chips,
+* jsdom test of `store.html` + `store.js` (65 assertions after the boutique
+  pass; originally 38): 8 cards, 8 chips,
   AND-filtering (Plug-ins → 1 card, Plug-ins + Ships → empty state, Objects +
   Ships → 3 cards, reset → 8), counter text, hash updates, cover-error
   fallback, valid JSON-LD with 8 `Product` offers, canonical/OG tags, and every

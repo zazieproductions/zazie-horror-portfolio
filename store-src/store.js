@@ -1,7 +1,7 @@
-/* Zazie Productions — Store behaviour.
-   Progressive enhancement only: without this file every release is visible,
-   every card links straight to its marketplace listing, the filter bar,
-   previews, ambience and atmosphere effects simply never appear. */
+/* Zazie Productions catalogue behaviour.
+   Progressive enhancement only. Without this file every release is visible,
+   every card links straight to its listing, and the filter bar, previews,
+   room tone, torch, cursor and tilt simply never appear. */
 (function () {
   "use strict";
 
@@ -14,14 +14,14 @@
 
   /* --- Filtering --------------------------------------------------------- */
   var shelf = $("[data-shelf]");
-  var grid = $("[data-grid]");
+  var groups = $$(".group", shelf || document);
   var empty = $("[data-empty]");
   var counter = $("[data-count]");
   var chips = $$(".chip[data-group]");
   var KEYS = ["records", "sfx", "plugins", "motion", "scores", "gear"];
 
-  if (shelf && grid && chips.length) {
-    var cards = $$("[data-collection]", grid);
+  if (shelf && groups.length && chips.length) {
+    var cards = $$("[data-collection]", shelf);
     var state = { collection: "all", delivery: "all" };
 
     var apply = function () {
@@ -32,6 +32,16 @@
           (state.delivery === "all" || card.getAttribute("data-delivery") === state.delivery);
         card.hidden = !match;
         if (match) shown++;
+      });
+      groups.forEach(function (g) {
+        var visible = $$("[data-collection]", g).filter(function (c) { return !c.hidden; }).length;
+        g.hidden = visible === 0;
+        var n = $("[data-group-count]", g);
+        if (n) {
+          if (!n.getAttribute("data-full")) n.setAttribute("data-full", n.textContent);
+          var total = $$("[data-collection]", g).length;
+          n.textContent = visible === total ? n.getAttribute("data-full") : visible + " of " + total;
+        }
       });
       shelf.classList.toggle("is-filtered", shown === 0);
       if (counter) counter.innerHTML = "<b>" + shown + "</b> of " + cards.length + " releases";
@@ -56,17 +66,17 @@
       var h = (location.hash || "").replace("#", "");
       if (KEYS.indexOf(h) > -1) { state.collection = h; apply(); }
       else if (h === "digital" || h === "physical") { state.delivery = h; apply(); }
-      else if (h === "shelf") { state.collection = "all"; state.delivery = "all"; apply(); }
+      else if (h === "shelf" || h === "tools") { state.collection = "all"; state.delivery = "all"; apply(); }
     };
     window.addEventListener("hashchange", readHash);
     readHash();
     apply();
   }
 
-  /* --- Cover art fallback ------------------------------------------------
-     Cover images are served by each marketplace CDN. If one is ever pulled,
-     the card keeps its composure and shows the monogram plate instead. */
-  $$(".card-media img").forEach(function (img) {
+  /* --- Cover art fallback -------------------------------------------------
+     Sleeves are served by each marketplace CDN. If one is ever pulled the
+     card shows its monogram plate instead of a broken image. */
+  $$(".card-media img, .vitrine img, .vault-sleeves img").forEach(function (img) {
     var host = img.parentElement;
     var fail = function () { host.classList.add("is-missing"); };
     if (img.complete && img.naturalWidth === 0) fail();
@@ -74,7 +84,7 @@
   });
 
   /* --- Scroll reveal ------------------------------------------------------ */
-  var revealables = $$(".reveal, .stats li");
+  var revealables = $$(".reveal");
   if ("IntersectionObserver" in window && !reduce) {
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
@@ -89,7 +99,15 @@
     revealables.forEach(function (el) { el.classList.add("in"); });
   }
 
-  /* --- Card tilt + spotlight (fine pointers only) ------------------------- */
+  /* --- Masthead: tighten once the page has scrolled ---------------------- */
+  var masthead = $(".masthead");
+  if (masthead) {
+    var onScroll = function () { masthead.classList.toggle("is-stuck", window.scrollY > 24); };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  }
+
+  /* --- Card tilt and sheen (fine pointers only) --------------------------- */
   if (fine && !reduce) {
     $$(".card").forEach(function (card) {
       var raf = 0;
@@ -101,8 +119,8 @@
           var px = (e.clientX - r.left) / r.width;
           var py = (e.clientY - r.top) / r.height;
           card.classList.add("is-tilting");
-          card.style.setProperty("--ry", ((px - 0.5) * 7).toFixed(2) + "deg");
-          card.style.setProperty("--rx", ((0.5 - py) * 7).toFixed(2) + "deg");
+          card.style.setProperty("--ry", ((px - 0.5) * 6).toFixed(2) + "deg");
+          card.style.setProperty("--rx", ((0.5 - py) * 6).toFixed(2) + "deg");
           card.style.setProperty("--mx", (px * 100).toFixed(1) + "%");
           card.style.setProperty("--my", (py * 100).toFixed(1) + "%");
         });
@@ -115,19 +133,44 @@
     });
   }
 
-  /* --- Torch: pointer-following glow ------------------------------------- */
+  /* --- Torch and cursor: one pointer listener feeds both ----------------- */
   if (fine && !reduce) {
-    var torchRaf = 0;
+    root.classList.add("cur");
+    var cx = -100, cy = -100, rx = -100, ry = -100, moving = false, cursorRaf = 0;
+
+    var frame = function () {
+      rx += (cx - rx) * 0.18;
+      ry += (cy - ry) * 0.18;
+      root.style.setProperty("--crx", rx.toFixed(1) + "px");
+      root.style.setProperty("--cry", ry.toFixed(1) + "px");
+      if (Math.abs(cx - rx) > 0.3 || Math.abs(cy - ry) > 0.3) cursorRaf = requestAnimationFrame(frame);
+      else cursorRaf = 0;
+    };
+
     window.addEventListener("pointermove", function (e) {
-      if (torchRaf) return;
-      torchRaf = requestAnimationFrame(function () {
-        torchRaf = 0;
-        root.style.setProperty("--tx", e.clientX + "px");
-        root.style.setProperty("--ty", e.clientY + "px");
-        root.classList.add("torch-on");
-      });
+      cx = e.clientX; cy = e.clientY;
+      root.style.setProperty("--cx", cx + "px");
+      root.style.setProperty("--cy", cy + "px");
+      root.style.setProperty("--tx", cx + "px");
+      root.style.setProperty("--ty", cy + "px");
+      if (!moving) { moving = true; root.classList.add("torch-on"); }
+      if (!cursorRaf) cursorRaf = requestAnimationFrame(frame);
     }, { passive: true });
-    document.addEventListener("pointerleave", function () { root.classList.remove("torch-on"); });
+
+    document.addEventListener("pointerleave", function () {
+      moving = false;
+      root.classList.remove("torch-on");
+    });
+
+    var hoverTargets = "a, button, [role=button], input, label";
+    document.addEventListener("pointerover", function (e) {
+      if (e.target.closest && e.target.closest(hoverTargets)) root.classList.add("cur-hover");
+    });
+    document.addEventListener("pointerout", function (e) {
+      if (e.target.closest && e.target.closest(hoverTargets)) root.classList.remove("cur-hover");
+    });
+    document.addEventListener("pointerdown", function () { root.classList.add("cur-down"); });
+    document.addEventListener("pointerup", function () { root.classList.remove("cur-down"); });
   }
 
   /* --- VHS tracking roll, now and then ----------------------------------- */
@@ -138,12 +181,12 @@
         vhs.classList.add("active");
         setTimeout(function () { vhs.classList.remove("active"); }, 450);
       }
-      setTimeout(roll, 9000 + Math.random() * 14000);
+      setTimeout(roll, 11000 + Math.random() * 16000);
     };
-    setTimeout(roll, 5000 + Math.random() * 6000);
+    setTimeout(roll, 6000 + Math.random() * 6000);
   }
 
-  /* --- Audio: in-card previews + room ambience --------------------------- */
+  /* --- Audio: in-card previews and room tone ----------------------------- */
   var previews = $$("[data-preview]");
   var ambBtn = $("[data-ambience]");
   var preview = null, ambience = null, current = null;
@@ -168,6 +211,8 @@
     btn.setAttribute("aria-pressed", "false");
     btn.setAttribute("aria-label", btn.getAttribute("data-label-play"));
     btn.style.setProperty("--p", "0");
+    var lbl = $(".preview-label", btn);
+    if (lbl) lbl.textContent = "Listen";
     ambientLevel();
   };
 
@@ -184,8 +229,10 @@
 
     previews.forEach(function (btn) {
       var title = btn.getAttribute("data-title") || "this release";
-      btn.setAttribute("data-label-play", "Preview " + title);
-      btn.setAttribute("aria-label", "Preview " + title);
+      btn.setAttribute("data-label-play", "Listen: " + title);
+      btn.setAttribute("aria-label", "Listen: " + title);
+      var lbl = $(".preview-label", btn);
+      if (lbl) lbl.textContent = "Listen";
       btn.addEventListener("click", function (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -197,13 +244,15 @@
         var p = preview.play();
         if (p && p.catch) p.catch(stopPreview);
         btn.setAttribute("aria-pressed", "true");
-        btn.setAttribute("aria-label", "Stop preview of " + title);
+        btn.setAttribute("aria-label", "Stop: " + title);
+        if (lbl) lbl.textContent = "Playing";
         ambientLevel();
       });
     });
   }
 
   if (ambBtn) {
+    var ambLabel = $(".amb-label", ambBtn);
     ambBtn.addEventListener("click", function () {
       if (!ambience) {
         ambience = new Audio(ambBtn.getAttribute("data-ambience"));
@@ -215,10 +264,15 @@
       if (on) {
         ambience.pause();
         ambBtn.setAttribute("aria-pressed", "false");
+        if (ambLabel) ambLabel.textContent = "Room tone";
       } else {
         var p = ambience.play();
-        if (p && p.catch) p.catch(function () { ambBtn.setAttribute("aria-pressed", "false"); });
+        if (p && p.catch) p.catch(function () {
+          ambBtn.setAttribute("aria-pressed", "false");
+          if (ambLabel) ambLabel.textContent = "Room tone";
+        });
         ambBtn.setAttribute("aria-pressed", "true");
+        if (ambLabel) ambLabel.textContent = "Room tone on";
         ambientLevel();
       }
     });
