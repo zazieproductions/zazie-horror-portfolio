@@ -200,6 +200,18 @@ i{font-style:italic}
 }
 .hero h1 em{font-style:italic;color:var(--blood)}
 .hero-lead{margin:1.5rem 0 0;max-width:52ch;font-size:1rem;line-height:1.75;color:rgba(240,235,227,.8)}
+/* Content advisory: same terms as the portfolio footer, read before the
+   previews and before anything is bought. Quiet by design — a hairline, not
+   a banner. */
+.hero-advisory{
+  margin:1.75rem 0 0;max-width:58ch;padding-left:.9rem;
+  border-left:1px solid rgba(196,30,30,.45);
+  font-size:.6875rem;line-height:1.8;color:var(--mist);
+}
+.hero-advisory b{
+  display:block;margin-bottom:.35rem;color:var(--blood);
+  font-size:.5625rem;font-weight:500;letter-spacing:.3em;text-transform:uppercase;
+}
 .hero-actions{display:flex;flex-wrap:wrap;gap:.85rem;margin-top:2rem}
 .hero-index{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.4rem 2rem;margin:2.25rem 0 0;padding:1.25rem 0 0;list-style:none;border-top:1px solid var(--edge);max-width:32rem}
 @media (min-width:520px){.hero-index{grid-template-columns:repeat(3,minmax(0,1fr))}}

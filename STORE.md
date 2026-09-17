@@ -33,6 +33,11 @@ It removes the previous hashed pair, so no stale assets are left behind.
 Never hand-edit `store.html` or `store/index.html`: the next build overwrites
 them.
 
+The hero carries a content advisory line (`.hero-advisory`): the same terms as
+the portfolio footer, in one quiet hairline block, so a buyer reads what the
+previews contain before pressing play. Copy and cross-page contract:
+`ADVISORY.md`.
+
 ## 2. Deployment
 
 * `/store` is served **natively** from `store/index.html` — a real asset, no
