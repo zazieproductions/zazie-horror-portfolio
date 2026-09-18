@@ -308,3 +308,125 @@ the line is gone and the poster now reads as a poster: title only.
   renamed bundle and a local HTTP crawl (200 on `/`, `/index.html`,
   `/index-59310ce8.js`; 404 on the previous hash; zero matches for the removed
   class in either copy).
+
+# Cinema player: embedded video size, sharpness and fullscreen — 2026-09-18
+
+## What was wrong (evidence, not guesswork)
+
+- **The player was simply too small.** Each sample sat in one cell of a
+  `md:grid-cols-2` grid inside `max-w-7xl`, so at a 1280px viewport the iframe
+  was ~596 × 335 CSS px. YouTube's IFrame player picks its rendition from the
+  player's **pixel dimensions**, not from the source's best stream: the standard
+  failure mode documented for embeds is a ~600px player being served 360p/480p
+  regardless of what the upload contains. That, not CSS, is what made the
+  picture soft.
+- **The site's own decoration was dimming the picture.** `.vignette`
+  (`radial-gradient(#0000 40%, #000000a6)`, `z-index:85`) and, to a much
+  smaller degree, `.grain` paint over everything, including the player's
+  control bar in the bottom-right corner.
+- **Neither iframe delegated `fullscreen` through Permissions Policy.** The
+  YouTube frame's `allow` list stopped at `web-share` and the Drive frame's at
+  `autoplay`; both relied on the legacy `allowfullscreen` alias alone.
+- **The poster was destroyed on play** (`card.innerHTML = <iframe>`), so a card
+  could never be closed and a second card could be opened while the first kept
+  playing.
+- **The pre-mount player was torn down by the mount.** The inline handler
+  created the iframe in the prerendered DOM; `createRoot().render()` then
+  replaced `#root`, and the React copy had no idea anything was playing.
+
+## What changed (both copies: prerendered `index.html` and the bundle)
+
+- **Cinematic breakout frame.** The active card gets `.is-playing`, spans the
+  whole grid row (`grid-column:1/-1`) and is sized
+  `min(94vw, 1600px, calc((100svh - 7rem) * 16 / 9))`, centred on the row with
+  a percentage margin so nothing relies on `transform`. The height leg keeps the
+  frame fully on screen on short laptops. Nothing is upscaled: the iframe
+  renders at the frame's real pixel size (`width/height:100%`,
+  `max-width/max-height:none`).
+
+  | viewport | player before | player after | width | area |
+  | --- | --- | --- | --- | --- |
+  | 390×844 (phone) | 358px | 358px | 1.00× | 1.00× |
+  | 768×1024 | 340px | 722px | 2.12× | 4.51× |
+  | 1024×768 | 468px | 963px | 2.06× | 4.23× |
+  | 1280×800 | 596px | 1203px | 2.02× | 4.08× |
+  | 1440×900 | 596px | 1354px | 2.27× | 5.16× |
+  | 1920×1080 | 596px | 1600px | 2.68× | 7.21× |
+
+  Phones were already full-bleed, so they gain fullscreen rather than width.
+- **Player attributes.** Privacy-enhanced `youtube-nocookie.com` host kept;
+  params trimmed to `autoplay=1&rel=0&color=white&playsinline=1&iv_load_policy=3&fs=1`.
+  `modestbranding=1` was dropped — YouTube deprecated it in 2023 and it no
+  longer does anything. `playsinline=1` keeps iOS inline, `fs=1` keeps the
+  fullscreen control. Both frames now carry
+  `allow="...; fullscreen"` **and** `allowfullscreen`, plus
+  `referrerpolicy="strict-origin-when-cross-origin"` and a real `title`.
+- **The Google Drive sample stays on the `/preview` player** — that is already
+  the correct embeddable form (it is the only one Google serves an embeddable
+  player for; `/view` is the file page, `uc?export=download` is a download).
+- **Controls are never covered.** The poster is hidden (`.is-live>*{display:none}`)
+  instead of deleted, only one player can be live, and `body.zp-player-open`
+  fades `.vignette`, `.blood-vignette` and `.grain` to 0 for the duration of
+  playback, so the control bar is at full contrast.
+- **Handoff to React.** Both implementations publish the active id on
+  `window.__zpPlayer`; the `Projects` component seeds its state from it, so a
+  visitor who presses play before the bundle loads keeps their player through
+  the mount instead of watching it disappear.
+- **Cost**: bundle 424,525 → 425,650 bytes; `index.html` 156,077 → 161,574.
+- **Cache discipline**, per the `immutable` rules in `_headers`:
+  `index-59310ce8.js` → `index-5be19885.js` (raw file sha256, first 8 hex).
+  `index.html`'s dynamic import and the `sw.js` precache entry updated; the
+  service worker cache is bumped `zazie-v2` → `zazie-v3` so a returning visitor
+  is not served the previous (immutably cached) html/js pair.
+
+## Verification performed
+
+- **DOM harness (jsdom), 48 assertions, all passing**, over both copies:
+  prerendered click → correct iframe src/params/`allow`/`allowfullscreen`/
+  `title`/`referrerpolicy`; keyboard activation; switching cards leaves exactly
+  one live player and collapses the previous one; the bundle mounts, renders
+  eight `.zp-vcard`s, keeps a pre-mount player alive and emits byte-identical
+  player markup to the prerendered copy.
+- **Ancestor audit** for fullscreen: no `transform`, `filter`, `backdrop-filter`
+  or clipping `overflow` on any ancestor of the frame between `.zp-vcard` and
+  `<html>`; the fullscreen control sits in an iframe that nothing overlays.
+- **`_headers` audit**: `frame-src`/`media-src`/`script-src` already allow
+  `youtube-nocookie.com` and `drive.google.com`; `Permissions-Policy` does not
+  disable `fullscreen` — the missing piece was the per-frame delegation, now
+  fixed.
+- **CSS parsed** with PostCSS (0 errors across all six inline blocks) and
+  `node --input-type=module --check` on the renamed bundle.
+- **Local HTTP crawl**: 200 on `/`, `/index.html`, `/index-5be19885.js`,
+  `/index-ba4ce5d7.css`, `/work`, `/reel`, `/store.html`; 404 on the retired
+  hash; zero stale references in any served file.
+
+## Provider limits that no code on our side can override
+
+- **YouTube quality is adaptive and size-driven.** There is no supported
+  parameter that pins a rendition (`vq=hd1080` is undocumented, was withdrawn
+  and reinstated over the years, and is ignored when the ladder disagrees);
+  `hd=1`, `fmt=` and `showinfo` are gone. The only honest lever is the one used
+  here — give the player a large viewport. The user still gets 1080p/1440p only
+  if the upload has those renditions and the connection carries them.
+- **`rel=0` no longer removes related videos** (post-2018 it only restricts them
+  to the same channel), and the player's title bar can still link out to
+  YouTube. Ordinary playback never navigates the page itself.
+- **Google Drive transcodes to its own renditions**, capped at 1080p, and picks
+  between them adaptively; there is no parameter to request a specific
+  rendition. Drive also owns the player chrome, including how the quality and
+  fullscreen controls behave inside it.
+- **Drive file size / virus scan**: this sample is `Eclipsed V3 Distortion.mov`,
+  356 MB. Files over ~100 MB are not virus-scanned, and large files are where
+  Drive's preview degrades or falls back to a "can't scan this file for
+  viruses / download" interstitial. A server-side fetch of
+  `/file/d/1zKtAavEx-Yjd2To_troEYlxTTt62Y2OU/preview` currently lands on the
+  download + virus-scan page rather than the player. **If the Eclipsed sample
+  does not stream in a browser, the fix is on the Drive side**: re-upload a
+  ≤300 MB H.264/AAC `.mp4` (1080p max) and keep the same share setting. Our
+  markup is already the correct embeddable form; nothing in the page can make
+  Drive stream a file it declines to preview.
+- **Not verifiable in this sandbox**: no headless browser (no `libnss3`, no
+  reachable browser CDN) and no outbound network to YouTube or Drive, so actual
+  playback, rendition selection and the fullscreen transition were verified as
+  preconditions (attributes, permissions policy, overlay/ancestor audit) and
+  must be eyeballed once in a real browser.

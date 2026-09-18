@@ -24,8 +24,9 @@ Allow: /*.svg$
 # Sitemaps - primary and image/video extensions embedded in main sitemap
 Sitemap: https://horror.zazieproductions.com/sitemap.xml
 
-# Host directive for canonical domain consolidation
-Host: https://horror.zazieproductions.com
+# Host directive for canonical domain consolidation (Yandex reads this; Google ignores
+# unknown lines). The value must be a bare hostname with no scheme and no path.
+Host: horror.zazieproductions.com
 
 # Respectful crawl-delay for aggressive SEO crawlers (preserve budget for Googlebot)
 User-agent: AhrefsBot
