@@ -1,7 +1,10 @@
 // Service Worker: instant cache & zero-lag offline/repeat visit delivery - v3 includes IA silos /work /reel /composer /process /services /contact and weaponized schema
 // v3: cache name bumped with the cinema-player bundle so a returning visitor is not served the
 // previous index.html/JS pair from the old cache (they are immutable for a year).
-const CACHE_NAME = 'zazie-v4';
+// v5: bumped again after index.html had trailing markup appended past </html> - that markup
+// rendered as visible text on the page. Without the bump, /index.html would keep being served
+// stale-while-revalidate from the v4 precache, so a returning visitor would still see the junk.
+const CACHE_NAME = 'zazie-v5';
 
 const PRECACHE_ASSETS = [
   '/',
