@@ -569,3 +569,52 @@ Per the `immutable` rules in `_headers` (`/*.js`, one year):
   text, not as pixels. Worth one eyeball at 390 px, 768 px and 1440 px: the band
   adds a row to a section that already had one, and the pull-quote is the only
   display-size sentence in the section.
+
+## Method band, darker pass: sonic theory + conversion spine — 2026-09-18 (later)
+
+Same three movements, rewritten darker and more psychological, with the
+argument carried by what the sound does to a body rather than by adjectives:
+
+- **Homepage label** "The method · how the dread is built"; **kickers** under
+  each title ("Before the first note, the diagnosis" / "The world of the cut,
+  built as sound" / "Where it starts, where it peaks, what it leaves").
+- **Dread signatures now named**: existential dread moves slowly and low;
+  paranoia works in tight repeats and intervals that never settle; grief
+  sustains and refuses to resolve — plus the line that does the selling:
+  scoring the wrong one is how a horror film ends up loud instead of
+  frightening.
+- **Sonic-terrain card** carries the craft claim: bottom octave felt in the
+  sternum before it is heard; threat written as approach; a startle lands
+  hardest when a quiet has prepared it, never a stock sting on a jump.
+- **Trajectory card** closes on residue: what the audience is still carrying
+  when the film goes black.
+- **Conversion spine**: proof line ("29 original cues · 5.0 collaborator rating
+  · reply within 48 hours") and two CTAs — *Hear it in the reel* (`/reel`,
+  secondary) and *Start a scoring inquiry* (`/contact`, blood-filled primary).
+- **Section lead aligned across both copies** (previously divergent): one
+  sentence, links to `/process#method` and `/faq`. The bundle's display
+  headline is now "The score is not decoration. It is the pressure the film is
+  under."; the prerendered `<h2>` keeps the SEO wording, and that single
+  remaining divergence is deliberate.
+- **Palette row** rewritten in both copies to match the new register and, for
+  the first time, to agree with each other (title now "Cinematic themes that
+  stalk" in both; bodies rewritten).
+- **`/process` `#method`** carries the theory at depth: dread signatures, the
+  psychology of expectation ("dread is the gap between what the ear is promised
+  and what arrives"), **auditory looming**, **infrasound used deliberately**,
+  **prepulse**, and trajectory scored as a curve (expectation, tension,
+  violation, aftermath). `/composer` gains the bottom-octave clause.
+
+Cache discipline: bundle `index-03372948.js` → `index-8bb73e69.js` (429,874
+bytes), import in `index.html` and the `sw.js` precache updated, `CACHE_NAME`
+`zazie-v5` → `zazie-v7`.
+
+Verification: jsdom 30.1.0 mount — band renders in the mounted app, all 15
+substantive sentences of the prerendered band appear verbatim in the mounted
+band, three kickers, two CTAs and the proof line present, `main`'s poster wall
+still renders; `/process` carries the theory vocabulary. Tag balance, JSON-LD
+parses, class audit, `check-sitemap.mjs` PASS, HTTP crawl 200 across every
+route and the new bundle with 404 on all retired hashes.
+
+Copy variants (sonic-theory maximal and high-converting maximal) are recorded in
+`METHOD-COPY.md` for a future swing to either pole.

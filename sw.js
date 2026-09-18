@@ -1,8 +1,8 @@
-// Service Worker: instant cache & zero-lag offline/repeat visit delivery - v5 includes IA silos /work /reel /composer /process /services /contact and weaponized schema
+// Service Worker: instant cache & zero-lag offline/repeat visit delivery - v7 includes IA silos /work /reel /composer /process /services /contact and weaponized schema
 // v3: cache name bumped with the cinema-player bundle so a returning visitor is not served the
 // previous index.html/JS pair from the old cache (they are immutable for a year).
-// v5: bumped with the merged index.html/JS pair (method band + poster wall).
-const CACHE_NAME = 'zazie-v5';
+// v6: bumped with the darker method band (sonic theory + conversion spine, darker headline).
+const CACHE_NAME = 'zazie-v7';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -37,7 +37,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-ba4ce5d7.css',
-  '/index-03372948.js',
+  '/index-8bb73e69.js',
   '/store-8af6034d.css',
   '/store-2b4680d0.js',
   '/legal-89928f71.css',
