@@ -24,6 +24,68 @@ Allow: /*.svg$
 # Sitemaps - primary and image/video extensions embedded in main sitemap
 Sitemap: https://horror.zazieproductions.com/sitemap.xml
 
+# ─────────────────────────────────────────────────────────────────────────────
+# AI ANSWER-ENGINE CRAWLER FLEET — explicit full access, zero delay
+# These agents feed ChatGPT (GPTBot/OAI-SearchBot), Claude (ClaudeBot), Perplexity
+# (PerplexityBot), Google AI Overviews / Gemini (Google-Extended), Apple Intelligence
+# (Applebot-Extended), Amazon (Amazonbot/AmazonSearchbot), TikTok (Bytespider),
+# Meta AI (Meta-ExternalAgent), You.com (YouBot), and Cohere (cohere-ai).
+# Blocking any of them is the #1 self-inflicted GEO failure: the answer engines
+# then have zero first-party evidence about this entity.
+# llms.txt and llms-full.txt at the domain root are the canonical plain-text
+# digests for RAG ingestion — allow without restriction.
+# ─────────────────────────────────────────────────────────────────────────────
+User-agent: GPTBot
+Allow: /
+Crawl-delay: 0
+
+User-agent: OAI-SearchBot
+Allow: /
+Crawl-delay: 0
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+Crawl-delay: 0
+
+User-agent: Applebot-Extended
+Allow: /
+Crawl-delay: 0
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: AmazonSearchbot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
 # Host directive for canonical domain consolidation (Yandex reads this; Google ignores
 # unknown lines). The value must be a bare hostname with no scheme and no path.
 Host: horror.zazieproductions.com

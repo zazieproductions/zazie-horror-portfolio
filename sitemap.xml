@@ -421,4 +421,40 @@
     <priority>0.3</priority>
   </url>
 
+  <!-- GEO / entity layer: press kit + field notes -->
+  <url>
+    <loc>https://horror.zazieproductions.com/press</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <url>
+    <loc>https://horror.zazieproductions.com/notes</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://horror.zazieproductions.com/notes/horror-score-cost</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+  </url>
+
+  <url>
+    <loc>https://horror.zazieproductions.com/notes/psychological-horror-vs-thriller-scores</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+  </url>
+
+  <url>
+    <loc>https://horror.zazieproductions.com/notes/scoring-horror-on-a-budget</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.65</priority>
+  </url>
+
 </urlset>

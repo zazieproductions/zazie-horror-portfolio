@@ -214,5 +214,71 @@
   Cache-Control: public, max-age=0, must-revalidate
   Link: <https://horror.zazieproductions.com/accessibility>; rel="canonical"
 
+/press
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/press>; rel="canonical"
+
+/press/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/press>; rel="canonical"
+
+/press/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/press>; rel="canonical"
+
+/notes
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/notes>; rel="canonical"
+
+/notes/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/notes>; rel="canonical"
+
+/notes/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/notes>; rel="canonical"
+
+/notes/horror-score-cost
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/notes/horror-score-cost>; rel="canonical"
+
+/notes/horror-score-cost/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/notes/horror-score-cost>; rel="canonical"
+
+/notes/horror-score-cost/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/notes/horror-score-cost>; rel="canonical"
+
+/notes/psychological-horror-vs-thriller-scores
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/notes/psychological-horror-vs-thriller-scores>; rel="canonical"
+
+/notes/psychological-horror-vs-thriller-scores/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/notes/psychological-horror-vs-thriller-scores>; rel="canonical"
+
+/notes/psychological-horror-vs-thriller-scores/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/notes/psychological-horror-vs-thriller-scores>; rel="canonical"
+
+/notes/scoring-horror-on-a-budget
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/notes/scoring-horror-on-a-budget>; rel="canonical"
+
+/notes/scoring-horror-on-a-budget/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/notes/scoring-horror-on-a-budget>; rel="canonical"
+
+/notes/scoring-horror-on-a-budget/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/notes/scoring-horror-on-a-budget>; rel="canonical"
+
+/llms.txt
+  Cache-Control: public, max-age=3600
+
+/llms-full.txt
+  Cache-Control: public, max-age=3600
+
 /404.html
   Cache-Control: public, max-age=0, must-revalidate
