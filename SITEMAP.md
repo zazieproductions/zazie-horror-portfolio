@@ -2,8 +2,15 @@
 
 **File:** `sitemap.xml` → `https://horror.zazieproductions.com/sitemap.xml`
 **Validator:** `node tools/check-sitemap.mjs`
-**Status:** ✅ `PASS — 15 URLs, 37 images, 7 videos. Safe to submit.`
+**Status:** ✅ `PASS — 20 URLs, 37 images, 7 videos. Safe to submit.`
 **Date:** 2026-09-18
+
+> **2026-09-18 GEO layer update:** five URLs added for the entity/press and
+> field-notes silos: `/press`, `/notes`, `/notes/horror-score-cost`,
+> `/notes/psychological-horror-vs-thriller-scores`, `/notes/scoring-horror-on-a-budget`.
+> Each is a real static page with a self-referencing canonical (see `GEO.md`).
+> Companion machine-readable files at the domain root: `llms.txt`, `llms-full.txt`
+> (deliberately not in the sitemap — they are crawl directives, not indexable pages).
 
 ---
 
