@@ -1,22 +1,66 @@
 # robots.txt: Zazie Productions Horror Composer Portfolio
-# Surgical crawl guidance for maximum indexation efficiency
+# Mastermind internal ranking architecture - full crawl efficiency, no soft 404 traps
+# Updated 2026-09-18 - audio unblocked for AudioObject rich results, parameter waste blocked
 
 User-agent: *
 Allow: /
-Disallow: /audio/
 
-# Allow all crawlers full access to HTML, images, and critical assets
+# Crawl budget weaponization: block infinite param spaces while allowing clean URLs
+Disallow: /*?*boot=
+Disallow: /*?*utm_
+Disallow: /*?*fbclid=
+Disallow: /*?*gclid=
+Disallow: /*?*ref=
+
+# Allow all critical assets - images, audio, fonts, media for rich results
+Allow: /audio/
+Allow: /images/
+Allow: /fonts/
+Allow: /*.mp3$
+Allow: /*.avif$
+Allow: /*.jpg$
+Allow: /*.svg$
+
+# Sitemaps - primary and image/video extensions embedded in main sitemap
 Sitemap: https://horror.zazieproductions.com/sitemap.xml
 
-# Crawl-delay for respectful bot behavior
+# Host directive for canonical domain consolidation
+Host: https://horror.zazieproductions.com
+
+# Respectful crawl-delay for aggressive SEO crawlers (preserve budget for Googlebot)
 User-agent: AhrefsBot
 Crawl-delay: 2
+Disallow:
 
 User-agent: SemrushBot
 Crawl-delay: 2
+Disallow:
 
 User-agent: DotBot
 Crawl-delay: 5
+Disallow:
 
 User-agent: MJ12bot
 Crawl-delay: 5
+Disallow:
+
+User-agent: Yandex
+Crawl-delay: 3
+
+User-agent: Baiduspider
+Crawl-delay: 10
+
+# Googlebot - full access, no delay, maximum indexation
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Googlebot-Video
+Allow: /
+
+# Bingbot - full access
+User-agent: Bingbot
+Allow: /

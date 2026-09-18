@@ -23,21 +23,36 @@ const MIME = {
   '.txt': 'text/plain',
 };
 
+const CLEAN_ROUTES = [
+  '/work', '/reel', '/composer', '/process', '/services', '/contact',
+  '/store', '/legal', '/faq', '/terms', '/privacy', '/licensing', '/purchases', '/accessibility'
+];
+
 const server = http.createServer((req, res) => {
   const parsed = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   let urlPath = decodeURIComponent(parsed.pathname);
 
-  // Clean URLs support
+  // Normalize trailing slash for clean routes
+  const trimmed = urlPath.replace(/\/$/, '') || '/';
+  if (CLEAN_ROUTES.includes(trimmed) || CLEAN_ROUTES.includes(urlPath)) {
+    // Serve directory index.html for /work -> /work/index.html, etc.
+    const candidate = path.join(__dirname, trimmed, 'index.html');
+    if (fs.existsSync(candidate)) {
+      urlPath = path.posix.join(trimmed, 'index.html');
+    } else if (fs.existsSync(path.join(__dirname, trimmed + '.html'))) {
+      urlPath = trimmed + '.html';
+    } else if (trimmed === '/store' && fs.existsSync(path.join(__dirname, 'store.html'))) {
+      urlPath = '/store.html';
+    }
+  }
+
   if (urlPath === '/' || urlPath === '') {
     urlPath = '/index.html';
-  } else if (urlPath === '/store' || urlPath === '/store/') {
-    urlPath = '/store.html';
   }
 
   let filePath = path.join(__dirname, urlPath);
 
-  // Directory URLs resolve to their index.html, matching how the edge host
-  // serves the real static paths (/store, /faq, /terms, /privacy, ...).
+  // Directory URLs resolve to their index.html
   if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
     filePath = path.join(filePath, 'index.html');
   }
@@ -47,6 +62,14 @@ const server = http.createServer((req, res) => {
     if (fs.existsSync(filePath + '.html')) {
       filePath = filePath + '.html';
     } else {
+      // Try 404 page
+      const notFoundPath = path.join(__dirname, '404.html');
+      if (fs.existsSync(notFoundPath)) {
+        const data = fs.readFileSync(notFoundPath);
+        res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8', 'Access-Control-Allow-Origin': '*' });
+        res.end(data);
+        return;
+      }
       res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
       res.end('404 Not Found');
       return;

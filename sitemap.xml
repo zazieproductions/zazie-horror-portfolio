@@ -3,129 +3,236 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
         xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
 
+  <!-- PRIMARY MONEY PAGE: Homepage - psychological horror composer entity -->
   <url>
     <loc>https://horror.zazieproductions.com/</loc>
-    <lastmod>2026-09-16</lastmod>
-    <changefreq>monthly</changefreq>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/hero-portrait.jpg</image:loc>
-      <image:title>Zazie Kanwar-Torge: Psychological Horror Composer</image:title>
-      <image:caption>Award-winning horror composer specializing in dark, atmospheric, cinematic scores for film, TV, and games.</image:caption>
+      <image:title>Zazie Kanwar-Torge: Psychological Horror Composer - Dark Atmospheric Scores</image:title>
+      <image:caption>Award-winning psychological horror composer specializing in dark, atmospheric, cinematic original scores for psychological horror, folk horror, body horror, supernatural thrillers, and dark sci-fi. Film, TV, and game scoring.</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/headshot.jpg</image:loc>
-      <image:title>Zazie Kanwar-Torge headshot, horror film composer</image:title>
+      <image:title>Zazie Kanwar-Torge headshot - horror film composer, Zazie Productions LLC</image:title>
+      <image:caption>Zazie Kanwar-Torge, award-winning horror film composer and founder of Zazie Productions LLC, Asheville NC.</image:caption>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
-      <image:title>Zazie Productions press photo, horror composer portfolio</image:title>
+      <image:title>Zazie Productions press photo - horror composer portfolio, dark cinematic scores</image:title>
+      <image:caption>Press photo for Zazie Productions horror composer portfolio. Original dark atmospheric scores for film, TV, and games.</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg</image:loc>
+      <image:title>EXPIRE (2025) - Horror Short Film Score by Zazie Kanwar-Torge</image:title>
+      <image:caption>EXPIRE theatrical poster - Muhammad Abed Baryal horror short, sound design by Zazie Kanwar-Torge</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/unseen-640.jpg</image:loc>
+      <image:title>UNSEEN Feature Film - Psychological Horror Score by Zazie Kanwar-Torge</image:title>
+      <image:caption>UNSEEN feature poster - Steve Merlo unseen killer feature, original horror score by Zazie Kanwar-Torge</image:caption>
+    </image:image>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/the-haunted-640.jpg</image:loc>
+      <image:title>THE HAUNTED - Supernatural Horror Feature Score</image:title>
+      <image:caption>THE HAUNTED feature poster - perception is reality, Crystal Fox Films, original score by Zazie Kanwar-Torge</image:caption>
     </image:image>
     <video:video>
       <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-HaVJP08j77U.jpg</video:thumbnail_loc>
-      <video:title>Mike Has A Visitor: Original Horror Score</video:title>
-      <video:description>Sleep paralysis horror short scored by Zazie Kanwar-Torge. Dark, atmospheric, cinematic composition.</video:description>
+      <video:title>Mike Has A Visitor: Original Psychological Horror Score - Sleep Paralysis Short</video:title>
+      <video:description>Sleep paralysis horror short scored by Zazie Kanwar-Torge. Dark, atmospheric, cinematic composition for psychological horror. Original score, themes, tension cues, and dread beds written to picture.</video:description>
       <video:content_loc>https://www.youtube.com/watch?v=HaVJP08j77U</video:content_loc>
       <video:player_loc>https://www.youtube.com/embed/HaVJP08j77U</video:player_loc>
+      <video:publication_date>2025-01-15</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:tag>psychological horror composer</video:tag>
+      <video:tag>horror film score</video:tag>
+      <video:tag>sleep paralysis horror</video:tag>
+      <video:tag>dark atmospheric score</video:tag>
     </video:video>
     <video:video>
       <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-ItrrcilS0ro.jpg</video:thumbnail_loc>
-      <video:title>GOODBYE, BROTHER: Original Film Score</video:title>
-      <video:description>Dramatic short film scored by Zazie Kanwar-Torge. Atmospheric cinematic composition.</video:description>
+      <video:title>GOODBYE, BROTHER: Original Dark Cinematic Film Score - Psychological Drama</video:title>
+      <video:description>Dramatic short film scored by Zazie Kanwar-Torge. Atmospheric cinematic composition for dark psychological storytelling. Original themes and tension cues.</video:description>
       <video:content_loc>https://www.youtube.com/watch?v=ItrrcilS0ro</video:content_loc>
       <video:player_loc>https://www.youtube.com/embed/ItrrcilS0ro</video:player_loc>
+      <video:tag>horror composer</video:tag>
+      <video:tag>dark cinematic score</video:tag>
     </video:video>
     <video:video>
       <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-riCvy2abhlc.jpg</video:thumbnail_loc>
-      <video:title>Home Intruder: Thriller Chase Cue</video:title>
-      <video:description>Action thriller chase sequence scored by Zazie Kanwar-Torge. Tension-driven cinematic composition.</video:description>
+      <video:title>Home Intruder: Thriller Chase Cue - Tension-Driven Horror Composition</video:title>
+      <video:description>Action thriller chase sequence scored by Zazie Kanwar-Torge. Tension-driven cinematic composition for thriller and horror. Dark, propulsive, dread-filled cue architecture.</video:description>
       <video:content_loc>https://www.youtube.com/watch?v=riCvy2abhlc</video:content_loc>
       <video:player_loc>https://www.youtube.com/embed/riCvy2abhlc</video:player_loc>
+      <video:tag>thriller chase music</video:tag>
+      <video:tag>horror tension cue</video:tag>
     </video:video>
     <video:video>
       <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-Ty8tPp59mDc.jpg</video:thumbnail_loc>
-      <video:title>The Haunted: Horror Film Teaser Score</video:title>
-      <video:description>Official teaser for The Haunted by Crystal Fox Films. Original horror score by Zazie Kanwar-Torge.</video:description>
+      <video:title>The Haunted: Horror Film Teaser Score - Supernatural Thriller by Crystal Fox Films</video:title>
+      <video:description>Official teaser for The Haunted by Crystal Fox Films. Original supernatural horror score by Zazie Kanwar-Torge. Atmospheric dread, dark ambient beds, and cinematic themes for supernatural thriller.</video:description>
       <video:content_loc>https://www.youtube.com/watch?v=Ty8tPp59mDc</video:content_loc>
       <video:player_loc>https://www.youtube.com/embed/Ty8tPp59mDc</video:player_loc>
+      <video:tag>supernatural horror score</video:tag>
+      <video:tag>haunted house music</video:tag>
     </video:video>
     <video:video>
       <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-rvCGO0BJ_2E.jpg</video:thumbnail_loc>
-      <video:title>AQUAPHOBIA: Short Horror Film Score</video:title>
-      <video:description>Short horror film AQUAPHOBIA scored by Zazie Kanwar-Torge. Dark atmospheric composition.</video:description>
+      <video:title>AQUAPHOBIA: Short Horror Film Score - Folk Horror and Body Horror</video:title>
+      <video:description>Short horror film AQUAPHOBIA scored by Zazie Kanwar-Torge. Dark atmospheric composition for folk horror and psychological dread. Original score with waterphone, bowed metal, and hybrid orchestration.</video:description>
       <video:content_loc>https://www.youtube.com/watch?v=rvCGO0BJ_2E</video:content_loc>
       <video:player_loc>https://www.youtube.com/embed/rvCGO0BJ_2E</video:player_loc>
+      <video:tag>folk horror music</video:tag>
+      <video:tag>body horror score</video:tag>
     </video:video>
     <video:video>
       <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-6qa3Uwj47fc.jpg</video:thumbnail_loc>
-      <video:title>Whispers In The Dark: Horror Short Score</video:title>
-      <video:description>Horror short Whispers In The Dark scored by Zazie Kanwar-Torge. Atmospheric dread composition.</video:description>
+      <video:title>Whispers In The Dark: Horror Short Score - Atmospheric Dread Composition</video:title>
+      <video:description>Horror short Whispers In The Dark scored by Zazie Kanwar-Torge. Atmospheric dread composition for supernatural horror. Slow-burn tension beds and psychological horror architecture.</video:description>
       <video:content_loc>https://www.youtube.com/watch?v=6qa3Uwj47fc</video:content_loc>
       <video:player_loc>https://www.youtube.com/embed/6qa3Uwj47fc</video:player_loc>
+      <video:tag>atmospheric horror music</video:tag>
+      <video:tag>dread soundscape</video:tag>
     </video:video>
     <video:video>
       <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-UX2kv3G89Jw.jpg</video:thumbnail_loc>
-      <video:title>Phantom Requiem: Short Film Score</video:title>
-      <video:description>Short film Phantom Requiem scored by Zazie Kanwar-Torge. Dark cinematic composition.</video:description>
+      <video:title>Phantom Requiem: Short Film Score - Dark Cinematic Horror by Zazie Productions</video:title>
+      <video:description>Short film Phantom Requiem scored by Zazie Kanwar-Torge. Dark cinematic composition for psychological horror and gothic dread. Original themes, motifs, and atmospheric beds.</video:description>
       <video:content_loc>https://www.youtube.com/watch?v=UX2kv3G89Jw</video:content_loc>
       <video:player_loc>https://www.youtube.com/embed/UX2kv3G89Jw</video:player_loc>
+      <video:tag>gothic horror score</video:tag>
+      <video:tag>phantom requiem</video:tag>
     </video:video>
   </url>
 
+  <!-- SILO 1: Work / Portfolio hub - concentrates authority on filmography -->
   <url>
-    <loc>https://horror.zazieproductions.com/store</loc>
-    <lastmod>2026-09-17</lastmod>
-    <changefreq>weekly</changefreq>
+    <loc>https://horror.zazieproductions.com/work</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg</image:loc>
+      <image:title>EXPIRE - Horror Film Score Portfolio</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/unseen-640.jpg</image:loc>
+      <image:title>UNSEEN - Feature Horror Score</image:title>
+    </image:image>
+  </url>
+
+  <!-- SILO 2: Reel / Showreel hub - audio object rich results -->
+  <url>
+    <loc>https://horror.zazieproductions.com/reel</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+
+  <!-- SILO 3: Composer entity page - Person schema dominance -->
+  <url>
+    <loc>https://horror.zazieproductions.com/composer</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/headshot.jpg</image:loc>
+      <image:title>Zazie Kanwar-Torge - Psychological Horror Composer Biography</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/hero-portrait.jpg</image:loc>
+      <image:title>Zazie Kanwar-Torge - Dark Atmospheric Horror Composer</image:title>
+    </image:image>
+  </url>
+
+  <!-- SILO 4: Process / How it works - HowTo + Service -->
+  <url>
+    <loc>https://horror.zazieproductions.com/process</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <!-- SILO 5: Services / Rates hub -->
+  <url>
+    <loc>https://horror.zazieproductions.com/services</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
+  <!-- MONEY PAGE: Store / Catalogue -->
+  <url>
+    <loc>https://horror.zazieproductions.com/store</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://f4.bcbits.com/img/a4087485987_10.jpg</image:loc>
+      <image:title>Zazie Productions Catalogue - Horror Sound Libraries and Dark Ambient Records</image:title>
+    </image:image>
+  </url>
+
+  <!-- CONTACT MONEY PAGE -->
+  <url>
+    <loc>https://horror.zazieproductions.com/contact</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+
+  <!-- FAQ - Long-tail capture, FAQPage rich results -->
   <url>
     <loc>https://horror.zazieproductions.com/faq</loc>
-    <lastmod>2026-09-17</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
+    <priority>0.7</priority>
   </url>
 
+  <!-- Legal Hub - topical authority support -->
   <url>
     <loc>https://horror.zazieproductions.com/legal</loc>
-    <lastmod>2026-09-17</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.4</priority>
-  </url>
-
-  <url>
-    <loc>https://horror.zazieproductions.com/licensing</loc>
-    <lastmod>2026-09-17</lastmod>
-    <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
+    <loc>https://horror.zazieproductions.com/licensing</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.55</priority>
+  </url>
+
+  <url>
     <loc>https://horror.zazieproductions.com/purchases</loc>
-    <lastmod>2026-09-17</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/terms</loc>
-    <lastmod>2026-09-17</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <priority>0.4</priority>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/privacy</loc>
-    <lastmod>2026-09-17</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
+    <priority>0.4</priority>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/accessibility</loc>
-    <lastmod>2026-09-17</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <changefreq>yearly</changefreq>
-    <priority>0.2</priority>
+    <priority>0.3</priority>
   </url>
 
 </urlset>
