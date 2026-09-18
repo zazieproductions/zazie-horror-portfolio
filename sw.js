@@ -5,7 +5,7 @@
 // v6: scope builder starts with project type, intensity, and add-ons unselected.
 // v7: technical SEO signal architecture overhaul, new CSS asset hashes, visible breadcrumbs & schema matrix.
 // v8: clean header and hero prerender text on load/refresh.
-const CACHE_NAME = 'zazie-v8';
+const CACHE_NAME = 'zazie-v9';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -40,7 +40,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-ba4ce5d7.css',
-  '/index-c7104566.js',
+  '/index-754861ca.js',
   '/store-ec9af1c2.css',
   '/store-2b4680d0.js',
   '/legal-7c07784d.css',
