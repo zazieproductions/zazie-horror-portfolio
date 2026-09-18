@@ -238,3 +238,73 @@ Added `sw.js` for instant sub-5ms repeat visits anytime anyone visits the site:
 - **Cache-First Static Strategy**: Serves all local images, fonts, styles, and scripts directly from cache, avoiding roundtrips to the network.
 - **Stale-While-Revalidate Navigation**: Serves navigation requests (`/`, `/index.html`, `/store`, `/store.html`) instantly from cache while revalidating in the background.
 - **Edge Header**: `_headers` configured with `Cache-Control: public, max-age=0, must-revalidate` for `/sw.js` to ensure rapid service worker updates.
+
+---
+
+# Film sample cards: genre subtitle removed
+
+Date: 2026-09-18 · Branch: `arena/01a0b207-zazie-horror-portfolio`
+
+Every card in the Film samples grid carried a third line under the title:
+"Sleep Paralysis Horror Short", "Dramatic Short", "Horror Short", and five
+more of the same kind. On a horror composer's own site those labels restate
+what the card already says: the red role tag above the title ("Original Score",
+"Cue / Chase Sequence") names the job, and the thumbnail is the film itself.
+All eight lines are gone. Two of them carried something other than a genre
+("Official Teaser: Crystal Fox Films", "Action Thriller Scene"); the studio
+credit still lives on the poster wall and at the linked video, and one
+surviving subtitle would read as an inconsistency rather than a credit.
+
+- **Both copies patched**: the prerendered cards in `index.html` and the React
+  `Projects.tsx` output in the bundle (`<p class="mt-1 text-xs …">{n.type}</p>`),
+  plus the now unused `type` field on all eight entries of the `projects`
+  array, so the post-mount teardown rebuilds identical cards (no flash of the
+  old line after boot).
+- **What each card keeps**: role tag, title, external link. Nothing above the
+  removed line changed, so no reflow and no layout shift.
+- **Cost**: bundle 425,038 → 424,692 bytes, `index.html` 136,946 → 136,281.
+- **Content-hashed rename**, per the `immutable` discipline in `_headers`:
+  `index-9e79ed09.js` → `index-4d596325.js` (raw file sha256, first 8 hex).
+  `index.html`'s dynamic import and the precache entry in `sw.js` updated; no
+  stale references remain in any served file.
+- **Kept at the time, reversed later the same day**: the poster wall captions
+  ("Short · A film by …", "Feature · A film by …") went too, in the follow-up
+  entry below. The video titles in `sitemap.xml` stay: they exist for video
+  search and are not page copy.
+- **Not verifiable in this sandbox**: no headless browser, so no visual
+  capture. Verified instead by `node --input-type=module --check` on the
+  renamed bundle and a local HTTP crawl (200 on `/`, `/index.html`,
+  `/index-4d596325.js`; 404 on the old hash; zero matches for the removed
+  class in either copy).
+
+---
+
+# Poster wall: format caption removed
+
+Date: 2026-09-18 · Branch: `arena/01a0b207-zazie-horror-portfolio`
+
+Follow-up to the film sample entry above. Each poster carried a line under its
+title as well: "2025 · A Muhammad Abed Baryal Film", "Feature · A film by
+William Viera", "Series · A pilgrimage of foreign forces", and five more.
+Format words like "Short" and "Feature" are not what a director hires on, so
+the line is gone and the poster now reads as a poster: title only.
+
+- **Both copies patched**: the prerendered `<p>` in `index.html`, which read
+  `year · tagline`, and the `PosterWall.tsx` render in the bundle, which read
+  `year` on its own. The two copies did not even agree before this change, so
+  the caption used to swap text when the bundle mounted; now both render
+  nothing and the grid is stable across the teardown.
+- **No data deleted**: `year`, `tagline` and `detail` stay on the poster
+  objects, because the lightbox still uses all three. That panel is a click
+  away and is where a credit belongs, so it keeps the year label, the credit
+  line and the tagline.
+- **Cost**: bundle 424,692 → 424,525 bytes, `index.html` 136,281 → 135,205.
+- **Content-hashed rename**, per the `immutable` discipline in `_headers`:
+  `index-4d596325.js` → `index-59310ce8.js` (raw file sha256, first 8 hex).
+  `index.html`'s dynamic import and the `sw.js` precache entry updated; no
+  stale references remain in any served file.
+- **Not verifiable in this sandbox**: no headless browser, so no visual
+  capture. Verified instead by `node --input-type=module --check` on the
+  renamed bundle and a local HTTP crawl (200 on `/`, `/index.html`,
+  `/index-59310ce8.js`; 404 on the previous hash; zero matches for the removed
+  class in either copy).
