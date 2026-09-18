@@ -1,12 +1,34 @@
-// Service Worker: instant cache & zero-lag offline/repeat visit delivery
-const CACHE_NAME = 'zazie-v1';
+// Service Worker: instant cache & zero-lag offline/repeat visit delivery - v2 includes IA silos /work /reel /composer /process /services /contact and weaponized schema
+const CACHE_NAME = 'zazie-v2';
 
 const PRECACHE_ASSETS = [
   '/',
   '/index.html',
+  '/work',
+  '/work/index.html',
+  '/reel',
+  '/reel/index.html',
+  '/composer',
+  '/composer/index.html',
+  '/process',
+  '/process/index.html',
+  '/services',
+  '/services/index.html',
+  '/contact',
+  '/contact/index.html',
   '/store',
   '/store.html',
   '/store/index.html',
+  '/legal',
+  '/faq',
+  '/terms',
+  '/privacy',
+  '/licensing',
+  '/purchases',
+  '/accessibility',
+  '/404.html',
+  '/sitemap.xml',
+  '/robots.txt',
   '/favicon.svg',
   '/fonts/cormorant-garamond-latin-400-normal.woff2',
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
@@ -15,6 +37,8 @@ const PRECACHE_ASSETS = [
   '/index-59310ce8.js',
   '/store-8af6034d.css',
   '/store-2b4680d0.js',
+  '/legal-89928f71.css',
+  '/legal-ea8a33ec.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',
   '/images/hero-portrait.avif',
@@ -100,7 +124,7 @@ self.addEventListener('fetch', (event) => {
   // Legal and operating documents: network first, cache only as a fallback.
   // A terms or privacy page must never be served stale while a network is
   // reachable, even though the rest of the site is stale-while-revalidate.
-  const LEGAL_PATHS = ['/legal', '/faq', '/terms', '/privacy', '/licensing', '/purchases', '/accessibility'];
+  const LEGAL_PATHS = ['/legal', '/faq', '/terms', '/privacy', '/licensing', '/purchases', '/accessibility', '/work', '/reel', '/composer', '/process', '/services', '/contact'];
   if (url.origin === self.location.origin && req.mode === 'navigate' && LEGAL_PATHS.includes(url.pathname.replace(/\/$/, ''))) {
     event.respondWith(
       fetch(req).then((res) => {

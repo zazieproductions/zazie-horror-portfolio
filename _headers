@@ -3,6 +3,8 @@
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
+  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.youtube-nocookie.com https://www.youtube.com https://drive.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' https://i.ytimg.com https://www.youtube-nocookie.com https://drive.google.com https://f4.bcbits.com https://img.itch.zone https://public-files.gumroad.com https://i.ebayimg.com data:; font-src 'self'; media-src 'self' https://www.youtube-nocookie.com https://drive.google.com; connect-src 'self' https://www.youtube-nocookie.com https://i.ytimg.com https://drive.google.com; frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://drive.google.com https://play.reelcrafter.com; object-src 'none'; base-uri 'self'
 
 /images/*
   Cache-Control: public, max-age=86400, stale-while-revalidate=2592000
@@ -12,6 +14,7 @@
 
 /audio/*
   Cache-Control: public, max-age=31536000, immutable
+  X-Robots-Tag: index, follow, max-image-preview:large
 
 /*.js
   Cache-Control: public, max-age=31536000, immutable
@@ -30,85 +33,186 @@
 
 /
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/>; rel="canonical"
 
 /index.html
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/>; rel="canonical"
 
 /store
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/store>; rel="canonical"
 
 /store/
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/store>; rel="canonical"
 
 /store/index.html
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/store>; rel="canonical"
 
 /store.html
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/store>; rel="canonical"
+
+/work
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work>; rel="canonical"
+
+/work/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work>; rel="canonical"
+
+/work/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work>; rel="canonical"
+
+/reel
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/reel>; rel="canonical"
+
+/reel/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/reel>; rel="canonical"
+
+/reel/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/reel>; rel="canonical"
+
+/composer
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/composer>; rel="canonical"
+
+/composer/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/composer>; rel="canonical"
+
+/composer/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/composer>; rel="canonical"
+
+/process
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/process>; rel="canonical"
+
+/process/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/process>; rel="canonical"
+
+/process/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/process>; rel="canonical"
+
+/services
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/services>; rel="canonical"
+
+/services/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/services>; rel="canonical"
+
+/services/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/services>; rel="canonical"
+
+/contact
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/contact>; rel="canonical"
+
+/contact/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/contact>; rel="canonical"
+
+/contact/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/contact>; rel="canonical"
 
 /sw.js
   Cache-Control: public, max-age=0, must-revalidate
 
 /legal
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/legal>; rel="canonical"
 
 /legal/
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/legal>; rel="canonical"
 
 /legal/index.html
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/legal>; rel="canonical"
 
 /faq
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/faq>; rel="canonical"
 
 /faq/
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/faq>; rel="canonical"
 
 /faq/index.html
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/faq>; rel="canonical"
 
 /terms
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/terms>; rel="canonical"
 
 /terms/
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/terms>; rel="canonical"
 
 /terms/index.html
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/terms>; rel="canonical"
 
 /privacy
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/privacy>; rel="canonical"
 
 /privacy/
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/privacy>; rel="canonical"
 
 /privacy/index.html
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/privacy>; rel="canonical"
 
 /licensing
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/licensing>; rel="canonical"
 
 /licensing/
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/licensing>; rel="canonical"
 
 /licensing/index.html
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/licensing>; rel="canonical"
 
 /purchases
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/purchases>; rel="canonical"
 
 /purchases/
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/purchases>; rel="canonical"
 
 /purchases/index.html
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/purchases>; rel="canonical"
 
 /accessibility
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/accessibility>; rel="canonical"
 
 /accessibility/
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/accessibility>; rel="canonical"
 
 /accessibility/index.html
   Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/accessibility>; rel="canonical"
 
+/404.html
+  Cache-Control: public, max-age=0, must-revalidate

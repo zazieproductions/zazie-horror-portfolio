@@ -1,5 +1,25 @@
-# /store is served natively from store/index.html (see store-src/build.sh).
-# Do NOT rewrite /store to /store.html here: Cloudflare Pages redirects
-# ".html" URLs back to their pretty form, so a 200 rewrite loops forever
-# (ERR_TOO_MANY_REDIRECTS on /store and /store.html).
-/* /index.html 200
+# Zazie Productions - Surgical redirect map
+# NO catch-all SPA rewrite - that caused soft 404 disaster (every 404 returned 200 with index.html)
+# All routes are REAL static paths: /, /store, /work, /reel, /composer, /process, /services, /contact, /legal, /faq, etc.
+# Cloudflare Pages serves /404.html automatically for missing routes with proper 404 status
+# Legacy aliases for old .html URLs - 301 to canonical pretty form
+
+/store.html  /store  301
+/legal.html  /legal  301
+/faq.html  /faq  301
+/terms.html  /terms  301
+/privacy.html  /privacy  301
+/licensing.html  /licensing  301
+/purchases.html  /purchases  301
+/accessibility.html  /accessibility  301
+
+# Hub pages - legacy hash anchors now have real pages, but preserve anchor jumps
+# If someone visits old hash URL, client-side JS handles scroll; no redirect needed
+
+# Optional: redirect common typos and old campaign URLs
+/composer/  /composer  301
+/work/  /work  301
+/reel/  /reel  301
+/process/  /process  301
+/services/  /services  301
+/contact/  /contact  301
