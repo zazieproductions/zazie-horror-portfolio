@@ -4,7 +4,8 @@
 // v5: bumped again after index.html had trailing markup appended past </html> - that markup
 // rendered as visible text on the page. Without the bump, /index.html would keep being served
 // stale-while-revalidate from the v4 precache, so a returning visitor would still see the junk.
-const CACHE_NAME = 'zazie-v5';
+// v6: bumped so returning visitors get clean header and hero without stray prerender/terminal text.
+const CACHE_NAME = 'zazie-v6';
 
 const PRECACHE_ASSETS = [
   '/',
