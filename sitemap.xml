@@ -88,6 +88,11 @@
       <image:caption>Mike Has A Visitor short film poster - sleep paralysis horror score by Zazie Kanwar-Torge</image:caption>
       <image:title>Mike Has A Visitor - Sleep Paralysis Horror Short Score</image:title>
     </image:image>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/the-dark-awaits-1200.jpg</image:loc>
+      <image:caption>THE DARK AWAITS (2025) poster - supernatural horror score by Zazie Kanwar-Torge</image:caption>
+      <image:title>THE DARK AWAITS - Supernatural Horror Score</image:title>
+    </image:image>
 
     <video:video>
       <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-HaVJP08j77U.jpg</video:thumbnail_loc>
@@ -161,6 +166,19 @@
       <video:tag>gothic horror score</video:tag>
       <video:tag>phantom requiem</video:tag>
     </video:video>
+    <video:video>
+      <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-eclipsed-drive.jpg</video:thumbnail_loc>
+      <video:title>Eclipsed: Psychological Thriller Short - Unsettling Film Score</video:title>
+      <video:description>Psychological thriller short film scored by Zazie Kanwar-Torge. Experimental analog synthesis, prepared instruments, and psychoacoustic dread composition.</video:description>
+      <video:player_loc>https://drive.google.com/file/d/1zKtAavEx-Yjd2To_troEYlxTTt62Y2OU/preview</video:player_loc>
+      <video:duration>195</video:duration>
+      <video:publication_date>2024-10-05</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+      <video:tag>psychological horror score</video:tag>
+      <video:tag>horror film composer</video:tag>
+      <video:tag>dark thriller composition</video:tag>
+      <video:tag>analog synth dread</video:tag>
+    </video:video>
   </url>
 
   <!-- ============================================================
@@ -213,6 +231,11 @@
       <image:title>Mike Has A Visitor - Sleep Paralysis Horror Short Score</image:title>
     </image:image>
     <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/the-dark-awaits-640.jpg</image:loc>
+      <image:caption>THE DARK AWAITS horror film - original supernatural horror score by Zazie Kanwar-Torge</image:caption>
+      <image:title>THE DARK AWAITS - Supernatural Horror Film Score</image:title>
+    </image:image>
+    <image:image>
       <image:loc>https://horror.zazieproductions.com/images/project-HaVJP08j77U.jpg</image:loc>
       <image:caption>Still from Mike Has A Visitor, sleep paralysis horror short scored by Zazie Kanwar-Torge</image:caption>
       <image:title>Mike Has A Visitor - Film Still</image:title>
@@ -247,6 +270,11 @@
       <image:caption>Still from Phantom Requiem, gothic horror short scored by Zazie Kanwar-Torge</image:caption>
       <image:title>Phantom Requiem - Film Still</image:title>
     </image:image>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/project-eclipsed-drive.jpg</image:loc>
+      <image:caption>Eclipsed film sample still - psychological thriller horror score by Zazie Kanwar-Torge</image:caption>
+      <image:title>Eclipsed - Psychological Thriller Film Sample</image:title>
+    </image:image>
   </url>
 
   <!-- ============================================================
@@ -257,6 +285,11 @@
     <lastmod>2026-09-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/hero-portrait.jpg</image:loc>
+      <image:caption>Zazie Kanwar-Torge, psychological horror composer showreel artwork</image:caption>
+      <image:title>Horror Composer Showreel - 29 Cues</image:title>
+    </image:image>
   </url>
 
   <!-- ============================================================
@@ -293,6 +326,11 @@
     <lastmod>2026-09-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
+      <image:caption>Zazie Kanwar-Torge at the scoring desk, Asheville, NC studio</image:caption>
+      <image:title>Horror Film Scoring Suite - Process</image:title>
+    </image:image>
   </url>
 
   <!-- ============================================================
@@ -303,6 +341,11 @@
     <lastmod>2026-09-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
+      <image:caption>Zazie Productions horror film scoring suite Asheville, NC</image:caption>
+      <image:title>Horror Film Scoring Suite - Rates</image:title>
+    </image:image>
   </url>
 
   <!-- ============================================================
@@ -364,6 +407,11 @@
     <lastmod>2026-09-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/hero-portrait.jpg</image:loc>
+      <image:caption>Zazie Kanwar-Torge, psychological horror composer available for commission</image:caption>
+      <image:title>Hire a Horror Composer - Scoring Inquiry</image:title>
+    </image:image>
   </url>
 
   <!-- ============================================================
