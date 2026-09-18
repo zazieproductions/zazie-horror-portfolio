@@ -430,3 +430,49 @@ the line is gone and the poster now reads as a poster: title only.
   playback, rendition selection and the fullscreen transition were verified as
   preconditions (attributes, permissions policy, overlay/ancestor audit) and
   must be eyeballed once in a real browser.
+
+# Poster wall: THE DARK AWAITS added (8 → 9 productions) — 2026-09-18
+
+## Source
+- Upload `The Dark Awaits.png` (3022×1566) is a viewer screenshot, not a clean
+  poster: browser chrome (Close, `4 of 4`, arrows) plus a semi-transparent info
+  bar covering the lower title line. Credit visible in the bar:
+  `© Matthew kondracki` → carried as `A Matthew Kondracki Film`.
+- Central portrait crop (1100×1400) cleaned to key art (848×1264, ~2:3): eye
+  untouched, `THE DARK AWAITS` title restored, no interface elements.
+
+## Assets (same pipeline as the other eight posters)
+- `images/posters/the-dark-awaits-640.jpg` — 640×954, 104 KB, q82
+- `images/posters/the-dark-awaits-640.avif` — 640×954, 58 KB, q60
+- `images/posters/the-dark-awaits-1200.jpg` — 805×1200, 151 KB, q82 (lightbox)
+
+## What changed (both copies: prerendered `index.html` and the bundle)
+- Poster grid: ninth `<li>` after MIKE HAS A VISITOR (prerender links to the
+  composer's IMDb, matching the UNSEEN/PEREGRINUS/ECLIPSED fallback — no title
+  IMDb or video URL is known yet). Prefetch, `pageImages`, `lightboxImages`
+  extended the same way.
+- Bundle `n1` array: `{title:"THE DARK AWAITS", year:"Feature",
+  detail:"A Matthew Kondracki Film", poster/thumb/thumbA, featured:!0}` — no
+  `tagline` (nothing quotable on the source), no `imdb`/`yt` (lightbox shows
+  Close only until a link is known).
+- Counts 8 → 9 everywhere they appear: meta/OG/Twitter descriptions, FAQPage
+  Q8, both ItemLists (`numberOfItems` + 9th CreativeWork, Supernatural /
+  Psychological Horror), hero, poster-section lede, footer, `/work` h1 + 9th
+  hub-card, hub teasers on `/composer /contact /process /reel /services`,
+  `404.html`, `SEO-DOSSIER.md`.
+- **Cache discipline**, per the `immutable` rules in `_headers`:
+  `index-5be19885.js` → `index-7a2157f4.js` (raw file sha256, first 8 hex).
+  `index.html`'s dynamic import and the `sw.js` precache entry updated, the
+  retired hash deleted, and the service worker cache bumped
+  `zazie-v3` → `zazie-v4` so a returning visitor is not served the previous
+  (immutably cached) html/js pair. New poster paths need no busting.
+
+## Verification performed
+- `node --input-type=module --check` on the renamed bundle, `node --check` on
+  `sw.js`, all 14 JSON-LD blocks parsed as JSON.
+- Local HTTP crawl: 200 on `/`, `/work`, `/index-7a2157f4.js`, all three new
+  poster assets; 404 on the retired hash; zero stale references in any served
+  file; no remaining `8 productions` / `Eight` counts outside history docs.
+- Assumptions to confirm with the filmmaker credit: format label (`Feature`),
+  genre pair, and the future IMDb/YouTube URL (one-line change in the bundle
+  entry + prerender `<a href>` + `/work` hub-card when known).

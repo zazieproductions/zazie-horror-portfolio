@@ -56,7 +56,7 @@
 
 - **IA Silo Design - 6 New Indexable Hubs:**
 
-  1. `/work/index.html` - CollectionPage + BreadcrumbList + ItemList 8 CreativeWorks (EXPIRE/UNSEEN/PEREGRINUS/Phantom Requiem/ECLIPSED/THE HAUNTED/CHOLERIC/MIKE HAS A VISITOR) with genre, contributor/musicBy Person ref, hub-grid cards, internal links to /faq /services /reel /#work /#showreel /store, external IMDb/YouTube
+  1. `/work/index.html` - CollectionPage + BreadcrumbList + ItemList 9 CreativeWorks (EXPIRE/UNSEEN/PEREGRINUS/Phantom Requiem/ECLIPSED/THE HAUNTED/CHOLERIC/MIKE HAS A VISITOR/THE DARK AWAITS) with genre, contributor/musicBy Person ref, hub-grid cards, internal links to /faq /services /reel /#work /#showreel /store, external IMDb/YouTube
   2. `/reel/index.html` - CollectionPage + BreadcrumbList + MusicPlaylist 29 MusicRecordings each with AudioObject contentUrl /audio/track-*.mp3 (29 tracks), 29 details faq-item list, mood clusters A-E mapping intent (psychological dread, tension stingers, dark ambient, cosmic/body horror, thriller), links to /work /composer /services /contact
   3. `/composer/index.html` - Person + BreadcrumbList + WebPage, biography with sameAs reinforcement (IMDb, Spotify, Bandcamp, Apple, YouTube, LinkedIn), press kit 4 features, hub-grid related archives
   4. `/process/index.html` - HowTo (6 steps: inquiry, spotting, composition, revisions, delivery, rights) + BreadcrumbList + WebPage, FAQ anchor linking, hub-grid related
@@ -75,7 +75,7 @@
 
 **Meta Description:**
 - BEFORE: `Original dark, atmospheric scores for psychological horror, thrillers, film, TV, and games. Listen to the showreel or request a scoring quote.` (130 chars, generic)
-- AFTER: `Award-winning psychological horror composer Zazie Kanwar-Torge crafts original dark, atmospheric cinematic scores for psychological horror, folk horror, body horror, supernatural thrillers, cosmic horror, and dark sci-fi. Film, TV, and game scoring from $50 micro-budget to feature. 29-cue showreel, 8 productions, 7 film samples.` (330 chars, entity + award + genre stack + price anchor + counts for rich snippet triggers)
+- AFTER: `Award-winning psychological horror composer Zazie Kanwar-Torge crafts original dark, atmospheric cinematic scores for psychological horror, folk horror, body horror, supernatural thrillers, cosmic horror, and dark sci-fi. Film, TV, and game scoring from $50 micro-budget to feature. 29-cue showreel, 9 productions, 7 film samples.` (entity + award + genre stack + price anchor + counts for rich snippet triggers)
 
 **OG/Twitter:**
 - BEFORE: same as generic description
@@ -142,7 +142,7 @@
 - FAQPage 6 questions
 - WebSite (1)
 - LocalBusiness (1)
-- Graph: WebPage + Organization AggregateRating 5.0 4 reviews + ItemList 8 CreativeWorks + MusicPlaylist 29 MusicRecordings (without AudioObject contentUrl)
+- Graph: WebPage + Organization AggregateRating 5.0 4 reviews + ItemList 9 CreativeWorks + MusicPlaylist 29 MusicRecordings (without AudioObject contentUrl)
 
 **Total distinct @types:** ~8
 **VideoObject:** 0
@@ -160,12 +160,12 @@
 - Service (AggregateOffer 5 offers $50-$8000, OfferCatalog 4 tiers Lean/Standard/Signature/Orchestral+)
 - VideoObject x4 (Mike Has A Visitor, The Haunted, AQUAPHOBIA, Phantom Requiem) with thumbnailUrl, uploadDate, duration, contentUrl, embedUrl, genre, keywords
 - FAQPage 8 questions (enhanced with internal linking to /work /reel /services /process /contact /faq)
-- Graph: WebPage with Speakable (h1, #top p, #services h2) + Organization AggregateRating 5.0 4 reviews + makesOffer + ItemList 8 CreativeWorks (genre enhanced: Psychological Horror, Body Horror, Folk Horror, Supernatural, Gothic, etc.) + MusicPlaylist 29 MusicRecordings EACH with AudioObject contentUrl https://horror.zazieproductions.com/audio/track-*.mp3 + genre
+- Graph: WebPage with Speakable (h1, #top p, #services h2) + Organization AggregateRating 5.0 4 reviews + makesOffer + ItemList 9 CreativeWorks (genre enhanced: Psychological Horror, Body Horror, Folk Horror, Supernatural, Gothic, etc.) + MusicPlaylist 29 MusicRecordings EACH with AudioObject contentUrl https://horror.zazieproductions.com/audio/track-*.mp3 + genre
 
 **Total distinct @types in index.html AFTER:** 25 types, 29 MusicRecording, 29 AudioObject, 16 ListItem, 10 Offer, 8 Question, 8 Answer, 8 CreativeWork, 6 Service, 5 Person, 4 VideoObject, 4 Review, 3 Organization, plus Occupation, City, ContactPoint, WebSite, SearchAction, BreadcrumbList, AggregateOffer, OfferCatalog, FAQPage, WebPage, SpeakableSpecification, AggregateRating, PriceSpecification, ItemList, MusicPlaylist
 
 **New Hub Schemas:**
-- /work: CollectionPage + BreadcrumbList + ItemList 8 CreativeWorks (genre, contributor/musicBy)
+- /work: CollectionPage + BreadcrumbList + ItemList 9 CreativeWorks (genre, contributor/musicBy)
 - /reel: CollectionPage + BreadcrumbList + MusicPlaylist 29 AudioObject contentUrl (unblocked from robots)
 - /composer: Person + BreadcrumbList + WebPage (entity page)
 - /process: HowTo 6 steps + BreadcrumbList + WebPage
@@ -213,7 +213,7 @@
 - 404.html serves with proper 404 status, not 200
 - Canonical Link headers for all 45 variants in _headers + <link rel=canonical> in each HTML head
 - Noindex only on 404.html, all others index,follow
-- Pagination not needed (29 cues in single page, 8 productions single page) - no thin paginated archives
+- Pagination not needed (29 cues in single page, 9 productions single page) - no thin paginated archives
 
 **Micro-Signal Stacking (Grey-hat aggressive but defensible):**
 - Title stacking: primary keyword + secondary + service + format (film TV games)
@@ -254,7 +254,7 @@
 - [x] _redirects fixed: removed /* /index.html 200 soft-404 trap, 301 legacy .html->pretty + trailing-slash normalization
 - [x] 404.html created noindex,follow, WebPage+BreadcrumbList, hub-grid recovery
 - [x] 6 hub directories created: work, reel, composer, process, services, contact
-- [x] work/index.html CollectionPage+ItemList 8 productions
+- [x] work/index.html CollectionPage+ItemList 9 productions
 - [x] reel/index.html CollectionPage+MusicPlaylist 29 AudioObject contentUrl
 - [x] composer/index.html Person+WebPage+BreadcrumbList biography
 - [x] process/index.html HowTo 6 steps+BreadcrumbList+WebPage
