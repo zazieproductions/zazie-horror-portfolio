@@ -3,7 +3,8 @@
 // previous index.html/JS pair from the old cache (they are immutable for a year).
 // v5: bumped again after removing trailing markup appended past </html>.
 // v6: scope builder starts with project type, intensity, and add-ons unselected.
-const CACHE_NAME = 'zazie-v6';
+// v7: technical SEO signal architecture overhaul, new CSS asset hashes, visible breadcrumbs & schema matrix.
+const CACHE_NAME = 'zazie-v7';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -39,9 +40,9 @@ const PRECACHE_ASSETS = [
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-ba4ce5d7.css',
   '/index-c7104566.js',
-  '/store-8af6034d.css',
+  '/store-ec9af1c2.css',
   '/store-2b4680d0.js',
-  '/legal-89928f71.css',
+  '/legal-7c07784d.css',
   '/legal-ea8a33ec.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',
