@@ -1,7 +1,10 @@
 // Service Worker: instant cache & zero-lag offline/repeat visit delivery - v3 includes IA silos /work /reel /composer /process /services /contact and weaponized schema
 // v3: cache name bumped with the cinema-player bundle so a returning visitor is not served the
 // previous index.html/JS pair from the old cache (they are immutable for a year).
-const CACHE_NAME = 'zazie-v5';
+// v5: bumped again after removing trailing markup appended past </html>.
+// v6: scope builder starts with project type, intensity, and add-ons unselected.
+// v7: technical SEO signal architecture overhaul, new CSS asset hashes, visible breadcrumbs & schema matrix.
+const CACHE_NAME = 'zazie-v7';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -36,7 +39,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-ba4ce5d7.css',
-  '/index-7a2157f4.js',
+  '/index-c7104566.js',
   '/store-ec9af1c2.css',
   '/store-2b4680d0.js',
   '/legal-7c07784d.css',
