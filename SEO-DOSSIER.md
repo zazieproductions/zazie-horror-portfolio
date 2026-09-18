@@ -316,7 +316,7 @@
 
 ### Next Steps for Ranking (Outside This Dossier Scope But Recommended)
 
-1. Submit new sitemap.xml in Search Console, request indexing for /work /reel /composer /process /services /contact
+1. Submit new sitemap.xml in Search Console, request indexing for /work /reel /composer /process /services /contact - **the sitemap is now GSC-validated; see [SITEMAP.md](SITEMAP.md) for the submission runbook and the validator (`node tools/check-sitemap.mjs`)**
 2. Fetch as Googlebot to verify no soft 404, proper canonicals, rich results for VideoObject/AudioObject/FAQPage/Service
 3. Update internal ReelCrafter and YouTube descriptions to link to new hub URLs (/reel, /work) for backlink velocity
 4. Add 301s from old hash URLs if any external links point to /#work etc. (client-side handles scroll, but 301 not needed)
@@ -348,6 +348,10 @@
 - faq/index.html etc. (built)
 - sw.js (CACHE_NAME v2, precache + legal hashes, LEGAL_PATHS extended)
 - server.mjs (clean routes for all hubs)
+- robots.txt (Host directive corrected to a bare hostname)
+- sitemap.xml (GSC-hardened: video:content_loc removed, image child order fixed, 37 image entries)
+- tools/check-sitemap.mjs (new - 15-point Search Console pre-flight validator)
+- SITEMAP.md (new - submission runbook)
 
 All changes preserve atmospheric horror aesthetic, existing equity, performance work.
 
