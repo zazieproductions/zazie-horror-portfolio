@@ -8,6 +8,11 @@
      Activated only when <html> gets .zp-boot-on (see gate script below).
      Preview/dev hosts (e2b.app, pages.dev, localhost) replay on every load;
      ?boot=1 / #boot forces a replay even under prefers-reduced-motion.
+     Sound: full analog-horror mix (19/41/110Hz dread drone, tape hiss,
+     60Hz mains hum, CRT whines, SFX) synthesized inline via WebAudio.
+     Starts ONLY on the first gesture: tap/keypress powers the archive on
+     (first input = sound on, next input enters the site). Skip any time:
+     any key, scroll, or Esc. No gesture at all = fully silent.
      Failsafes: no-JS → never shows · reduced-motion/bots → never shows ·
      JS error mid-run → CSS force-hide at 10s · bfcache restore → instant out.
      ═══════════════════════════════════════════════════════════════════ -->
@@ -136,6 +141,66 @@ html.zp-boot-on #zp-boot{
 @media (max-width:640px){
   .zp-osd{font-size:10px}
   .zp-term{width:90vw;top:47%}
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   ZP ARCHIVE BOOT v2 — deeper analog layer
+   Live VHS grain · tape-tear slivers · sync slip · curved CRT glass ·
+   VHS clock · tape-state readout · audio hint + level meter.
+   Everything below only exists while #zp-boot is on screen and is
+   removed with the overlay. No flashes >3Hz at >10% luminance.
+   ═══════════════════════════════════════════════════════════════════ */
+/* CRT glass: curved rim + inset depth */
+.zp-screen{
+  border-radius:clamp(18px,3.5vmin,42px);
+  box-shadow:inset 0 0 0 1px rgba(240,235,227,.06),inset 0 0 90px rgba(0,0,0,.55);
+}
+/* Live VHS grain — texture painted by the driver (inline canvas, zero requests) */
+.zp-noise{
+  position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.05;
+  background-repeat:repeat;mix-blend-mode:screen;
+  animation:zpGrain .34s steps(2) infinite;
+}
+@keyframes zpGrain{0%{background-position:0 0}50%{background-position:64px -96px}100%{background-position:-48px 32px}}
+.zp-noise.zp-startflash{animation:zpSnowA .5s ease-out both,zpGrain .34s steps(2) .5s infinite}
+@keyframes zpSnowA{0%{opacity:.42}100%{opacity:.05}}
+#zp-boot.zp-audio-on .zp-noise{opacity:.065}
+.zp-noise.zp-audioflash{animation:zpSnowB .55s ease-out both,zpGrain .34s steps(2) .55s infinite}
+@keyframes zpSnowB{0%{opacity:.5}100%{opacity:.065}}
+/* Audio power-on: the set "settles" (scoped so it never overrides exit collapse) */
+#zp-boot.zp-audio-on:not(.zp-off) .zp-screen{animation:zpAvSettle .55s ease-out 1}
+@keyframes zpAvSettle{0%{filter:brightness(1.65) saturate(1.15)}40%{filter:brightness(.9)}100%{filter:brightness(1)}}
+/* Tape-tear slivers + one-frame sync slip */
+.zp-tears{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden}
+.zp-tear{
+  position:absolute;left:-5%;width:110%;height:3px;opacity:0;
+  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.55) 20%,rgba(255,255,255,.85) 50%,rgba(255,255,255,.55) 80%,transparent 100%);
+  mix-blend-mode:screen;
+}
+.zp-tear.zp-tear-dark{background:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.85) 25%,rgba(0,0,0,.95) 55%,transparent 100%);mix-blend-mode:normal}
+.zp-tear.zp-tear-on{animation:zpTear .55s steps(3) both}
+@keyframes zpTear{0%{opacity:.5;transform:translateX(-16px)}50%{opacity:.3;transform:translateX(12px)}100%{opacity:0;transform:translateX(-6px)}}
+#zp-boot.zp-shift{transform:translateY(3px)}
+/* OSD extras: VHS clock · tape state · audio hint + level meter */
+.zp-clock{
+  position:absolute;top:4.5%;left:50%;transform:translateX(-50%);
+  opacity:.8;letter-spacing:.14em;font-variant-numeric:tabular-nums;
+}
+.zp-tape{position:absolute;bottom:4.5%;left:50%;transform:translateX(-50%);opacity:.9;letter-spacing:.22em}
+.zp-tape.zp-tape-err{color:#ff2a2a;text-shadow:0 0 9px rgba(255,42,42,.7)}
+.zp-audio{
+  position:absolute;bottom:4.5%;left:5%;opacity:.6;
+  display:flex;align-items:center;gap:.6em;transition:opacity .5s;
+}
+.zp-audio.zp-audio-on{opacity:.85}
+.zp-vu{display:inline-flex;align-items:flex-end;gap:2px;height:11px}
+.zp-vu i{display:block;width:3px;background:#9a9590;opacity:.15}
+.zp-vu i:nth-child(1){height:4px}
+.zp-vu i:nth-child(2){height:6px}
+.zp-vu i:nth-child(3){height:9px}
+.zp-vu i:nth-child(4){height:11px}
+@media (max-width:640px){
+  .zp-clock,.zp-tape,.zp-audio{font-size:9px}
 }
 </style>
 <link href="favicon.svg" rel="icon" type="image/svg+xml"/>
@@ -307,7 +372,7 @@ document.addEventListener("keydown", (e) => {
 
 // 4. React Bundle Mount
 const boot = () => {
-  const go = () => import("/index-b9d7912d.js");
+  const go = () => import("/index-9e79ed09.js");
   "requestIdleCallback" in window ? requestIdleCallback(go, { timeout: 1200 }) : setTimeout(go, 250);
 };
 document.readyState === "complete" ? boot() : window.addEventListener("load", boot, { once: true });
@@ -552,13 +617,18 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
      ═══════════════════════════════════════════════════════════════════ -->
 <div id="zp-boot" role="presentation" aria-hidden="true">
   <div class="zp-screen">
+    <div class="zp-noise" aria-hidden="true"></div>
     <pre class="zp-term" id="zp-term"></pre>
     <div class="zp-track" aria-hidden="true"></div>
+    <div class="zp-tears" id="zp-tears" aria-hidden="true"></div>
     <div class="zp-crt" aria-hidden="true"></div>
     <div class="zp-osd" aria-hidden="true">
       <span class="zp-play">&#9654; PLAY</span>
       <span class="zp-rec"><i></i>REC</span>
+      <span class="zp-clock" id="zp-clock">JUL 14 1987 11:47:14 PM</span>
       <span class="zp-count" id="zp-count">SP 0:00:00</span>
+      <span class="zp-tape" id="zp-tape">&#9658; PLAY</span>
+      <span class="zp-audio" id="zp-audio"><span class="zp-vu" id="zp-vu"><i></i><i></i><i></i><i></i></span><span id="zp-audiolabel">AUDIO OFF &middot; TAP TO POWER ON</span></span>
     </div>
     <div class="zp-alertframe" aria-hidden="true"></div>
   </div>
@@ -569,6 +639,10 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
   var d=document,w=window,root=d.documentElement,ov=d.getElementById('zp-boot');
   if(!ov||!('classList' in root)||!root.classList.contains('zp-boot-on'))return;
   var term=d.getElementById('zp-term'),cnt=d.getElementById('zp-count');
+  var clockEl=d.getElementById('zp-clock'),tapeEl=d.getElementById('zp-tape'),
+      noiseEl=d.getElementById('zp-noise'),tearsEl=d.getElementById('zp-tears'),
+      audioEl=d.getElementById('zp-audio'),vuEl=d.getElementById('zp-vu'),
+      audioLabelEl=d.getElementById('zp-audiolabel');
   var done=false,skipReq=false,timers=[],skipFns=[],autoTimer=null,trackLine=null,cursor=null;
   var t0=(w.performance&&w.performance.now)?w.performance.now():Date.now();
 
@@ -589,6 +663,373 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
     if(cursor&&cursor.parentNode)cursor.parentNode.removeChild(cursor);
     cursor=d.createElement('span');cursor.className='zp-cursor';l.appendChild(cursor);
   }
+
+  /* ── AUDIO ENGINE ─────────────────────────────────────────────────
+     All analog-horror sound is synthesized inline (zero requests).
+     Browser policy: audio may only start after a user gesture, so the
+     mix powers ON on the first tap/keypress — the screen "wakes up" —
+     and any further input exits. Never tapped = fully silent, always.
+     Levels are kept low and everything is under a compressor ceiling. */
+  var S={ac:null,master:null,an:null,on:false,dead:false,layers:[],dropIv:0,vuLast:0};
+  var _noiseBuf=null;
+  function A(){return (S.ac&&!S.dead)?S.ac:null;}
+  function noiseBuf(){
+    if(!_noiseBuf){
+      var ac=S.ac,b=ac.createBuffer(1,Math.floor(ac.sampleRate*1.2),ac.sampleRate),
+          ch=b.getChannelData(0);
+      for(var i=0;i<ch.length;i++)ch[i]=Math.random()*2-1;
+      _noiseBuf=b;
+    }
+    return _noiseBuf;
+  }
+  function blip(freq,dur,peak,type,off){
+    var ac=A();if(!ac)return;
+    try{
+      var t=ac.currentTime+(off||0);
+      var o=ac.createOscillator();o.type=type||'sine';o.frequency.value=freq;
+      var g=ac.createGain();
+      g.gain.setValueAtTime(0.0001,t);
+      g.gain.exponentialRampToValueAtTime(peak,t+0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+      o.connect(g);g.connect(S.master);o.start(t);o.stop(t+dur+0.05);
+    }catch(e){}
+  }
+  function noiseHit(off,dur,peak,type,fc0,fc1){
+    var ac=A();if(!ac)return;
+    try{
+      var t=ac.currentTime+(off||0);
+      var src=ac.createBufferSource();src.buffer=noiseBuf();
+      var f=ac.createBiquadFilter();f.type=type||'bandpass';f.Q.value=0.8;
+      f.frequency.setValueAtTime(fc0||800,t);
+      f.frequency.exponentialRampToValueAtTime(Math.max(40,fc1==null?fc0:fc1),t+dur);
+      var g=ac.createGain();
+      g.gain.setValueAtTime(0.0001,t);
+      g.gain.exponentialRampToValueAtTime(peak,t+Math.max(0.015,dur*0.25));
+      g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+      src.connect(f);f.connect(g);g.connect(S.master);
+      src.start(t);src.stop(t+dur+0.05);
+    }catch(e){}
+  }
+  function thump(f0,f1,dur,peak){
+    var ac=A();if(!ac)return;
+    try{
+      var t=ac.currentTime;
+      var o=ac.createOscillator();o.type='sine';
+      o.frequency.setValueAtTime(f0,t);
+      o.frequency.exponentialRampToValueAtTime(Math.max(20,f1),t+dur);
+      var g=ac.createGain();
+      g.gain.setValueAtTime(0.0001,t);
+      g.gain.exponentialRampToValueAtTime(peak,t+0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+      o.connect(g);g.connect(S.master);o.start(t);o.stop(t+dur+0.05);
+    }catch(e){}
+  }
+  function whine(off,dur,f0,f1,peak){
+    var ac=A();if(!ac)return;
+    try{
+      var t=ac.currentTime+(off||0);
+      var o=ac.createOscillator();o.type='sine';
+      o.frequency.setValueAtTime(f0,t);
+      o.frequency.exponentialRampToValueAtTime(Math.max(20,f1),t+dur);
+      var g=ac.createGain();
+      g.gain.setValueAtTime(0.0001,t);
+      g.gain.exponentialRampToValueAtTime(peak,t+dur*0.3);
+      g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+      o.connect(g);g.connect(S.master);o.start(t);o.stop(t+dur+0.05);
+    }catch(e){}
+  }
+  function chordTone(f,dur,peak,att,off){
+    var ac=A();if(!ac)return;
+    try{
+      var t=ac.currentTime+(off||0);
+      var o=ac.createOscillator();o.type='sine';o.frequency.value=f;
+      var g=ac.createGain();
+      g.gain.setValueAtTime(0.0001,t);
+      g.gain.linearRampToValueAtTime(peak,t+att);
+      g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+      o.connect(g);g.connect(S.master);o.start(t);o.stop(t+dur+0.1);
+    }catch(e){}
+  }
+  function buildDrone(t){
+    /* Eerie bed: 19.4Hz felt-sub (the "ghost frequency") + 41.2Hz dread
+       drone with a slow breathing LFO + 110/111.7Hz beating pair (a
+       ~1.7Hz pulse) panned L/R + 55Hz detuned machinery growl. */
+    var ac=S.ac;
+    var g=ac.createGain();g.gain.value=0.0001;g.connect(S.master);
+    g.gain.linearRampToValueAtTime(1,t+2.2);
+    function osc(type,f,lv,pan){
+      var o=ac.createOscillator();o.type=type;o.frequency.value=f;
+      var og=ac.createGain();og.gain.value=lv;o.connect(og);
+      var node=og;
+      if(ac.createStereoPanner){
+        var p=ac.createStereoPanner();p.pan.value=pan||0;og.connect(p);node=p;
+      }
+      node.connect(g);o.start(t);
+      return o;
+    }
+    osc('sine',41.2,0.16,0);
+    osc('sine',110,0.06,0.35);
+    osc('sine',111.7,0.05,-0.35);
+    osc('sine',19.4,0.05,0);
+    var o2=ac.createOscillator();o2.type='sawtooth';o2.frequency.value=55;
+    var lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=240;lp.Q.value=0.7;
+    var lg2=ac.createGain();lg2.gain.value=0.03;
+    o2.connect(lp);lp.connect(lg2);lg2.connect(g);o2.start(t);
+    var lfo=ac.createOscillator();lfo.frequency.value=0.13;
+    var lfg=ac.createGain();lfg.gain.value=70;
+    lfo.connect(lfg);lfg.connect(lp.frequency);lfo.start(t);
+    /* slow "breath" across the whole bed */
+    var br=ac.createOscillator();br.frequency.value=0.06;
+    var brg=ac.createGain();brg.gain.value=0.22;
+    br.connect(brg);brg.connect(g.gain);br.start(t);
+    S.layers.push(g);
+  }
+  function buildHiss(t){
+    /* Tape hiss bed with flutter (filter LFO) + random magnetic dropouts. */
+    var ac=S.ac;
+    var src=ac.createBufferSource();src.buffer=noiseBuf();src.loop=true;
+    var hp=ac.createBiquadFilter();hp.type='highpass';hp.frequency.value=900;
+    var lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=6800;
+    var g=ac.createGain();g.gain.value=0.0001;
+    src.connect(hp);hp.connect(lp);lp.connect(g);g.connect(S.master);
+    g.gain.linearRampToValueAtTime(0.05,t+1.8);
+    var lfo=ac.createOscillator();lfo.frequency.value=0.09;
+    var lfg=ac.createGain();lfg.gain.value=900;
+    lfo.connect(lfg);lfg.connect(lp.frequency);lfo.start(t);
+    src.start(t);
+    S.layers.push(g);
+    S.dropIv=setInterval(function(){
+      if(S.dead||!S.on)return;
+      try{
+        var n=ac.currentTime;
+        g.gain.cancelScheduledValues(n);
+        g.gain.setValueAtTime(Math.max(0.0001,g.gain.value),n);
+        g.gain.linearRampToValueAtTime(0.012,n+0.05);
+        g.gain.linearRampToValueAtTime(0.05,n+0.18);
+      }catch(e){}
+    },6500);
+  }
+  function buildHum(t){
+    /* 60Hz mains hum + harmonics: the room the tape sits in. */
+    var ac=S.ac;
+    var g=ac.createGain();g.gain.value=0.0001;g.connect(S.master);
+    g.gain.linearRampToValueAtTime(0.05,t+2);
+    function hz(f,lv){
+      var o=ac.createOscillator();o.type='sine';o.frequency.value=f;
+      var og=ac.createGain();og.gain.value=lv;
+      o.connect(og);og.connect(g);o.start(t);
+    }
+    hz(60,0.5);hz(120,0.22);hz(180,0.06);hz(240,0.04);
+    S.layers.push(g);
+  }
+  function powerOn(){
+    if(S.on||S.dead||done)return;
+    var AC=w.AudioContext||w.webkitAudioContext;if(!AC)return;
+    try{
+      var ac=new AC();S.ac=ac;
+      if(ac.state==='suspended'&&ac.resume){try{ac.resume();}catch(e){}}
+      var comp=ac.createDynamicsCompressor();
+      if(comp.threshold){
+        comp.threshold.value=-20;comp.knee.value=10;comp.ratio.value=5;
+        comp.attack.value=0.004;comp.release.value=0.22;
+      }
+      var master=ac.createGain();master.gain.value=0.0001;
+      master.connect(comp);comp.connect(ac.destination);
+      var an=ac.createAnalyser();an.fftSize=256;master.connect(an);
+      S.master=master;S.an=an;S.on=true;
+      var t=ac.currentTime+0.03;
+      /* the machine wakes up */
+      noiseHit(0,0.03,0.09,'highpass',2400,2400);   /* power click */
+      noiseHit(0.05,0.28,0.07,'bandpass',300,3400); /* channel scan up */
+      noiseHit(0.3,0.3,0.045,'bandpass',3400,260);  /* channel scan down */
+      whine(0.06,0.5,2200,70,0.035);                /* CRT whine settle */
+      thump(110,34,0.3,0.22);                       /* power thump */
+      noiseHit(0.12,0.8,0.04,'lowpass',170,150);    /* tape deck engages */
+      buildDrone(t);buildHiss(t);buildHum(t);
+      master.gain.setValueAtTime(0.0001,t);
+      master.gain.linearRampToValueAtTime(0.5,t+1.7);
+      if(ov.classList)ov.classList.add('zp-audio-on');
+      if(noiseEl)noiseEl.classList.add('zp-audioflash');
+      if(audioEl)audioEl.classList.add('zp-audio-on');
+      if(audioLabelEl)audioLabelEl.textContent='ARCHIVE AUDIO ON';
+      startVu();
+      scheduleAmbient();
+    }catch(e){S.dead=true;}
+  }
+  function powerDown(){
+    if(S.dead)return;
+    S.dead=true;
+    if(S.dropIv){clearInterval(S.dropIv);S.dropIv=0;}
+    var ac=S.ac;
+    if(!ac||!S.on)return;
+    try{
+      var t=ac.currentTime,i,g;
+      for(i=0;i<S.layers.length;i++){
+        g=S.layers[i];
+        g.gain.cancelScheduledValues(t);
+        g.gain.setValueAtTime(Math.max(0.0001,g.gain.value),t);
+        g.gain.linearRampToValueAtTime(0.0001,t+0.4+i*0.22);
+      }
+      /* tape brake */
+      (function(){
+        var o=ac.createOscillator();o.type='sawtooth';
+        o.frequency.setValueAtTime(130,t);
+        o.frequency.exponentialRampToValueAtTime(48,t+0.75);
+        var f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=430;
+        var gg=ac.createGain();
+        gg.gain.setValueAtTime(0.0001,t);
+        gg.gain.exponentialRampToValueAtTime(0.04,t+0.07);
+        gg.gain.exponentialRampToValueAtTime(0.0001,t+0.75);
+        o.connect(f);f.connect(gg);gg.connect(S.master);o.start(t);o.stop(t+0.8);
+      })();
+      whine(0.02,0.6,1900,44,0.04);   /* CRT power-down whine */
+      thump(150,34,0.32,0.28);        /* power thump */
+      /* room tone lingers over the revealed page */
+      chordTone(41.2,2.6,0.045,0.2,0.2);
+      chordTone(19.4,2.4,0.035,0.2,0.2);
+      var m=S.master;
+      m.gain.cancelScheduledValues(t);
+      m.gain.setValueAtTime(Math.max(0.0001,m.gain.value),t);
+      m.gain.linearRampToValueAtTime(0.0001,t+2.2);
+      setTimeout(function(){try{ac.close();}catch(e){}},3600);
+    }catch(e){}
+  }
+  var sfx={
+    /* terminal key clacks (sparse + very quiet) */
+    key:function(){if(!S.on)return;if(Math.random()<0.45)noiseHit(0,0.02,0.016,'bandpass',2400+Math.random()*900,1600);},
+    ok:function(){if(!S.on)return;blip(1318.5,0.05,0.018);},
+    seekUp:function(){if(!S.on)return;noiseHit(0,0.32,0.04,'bandpass',500,2600);},
+    seekDown:function(){if(!S.on)return;noiseHit(0,0.3,0.04,'bandpass',2600,300);},
+    tick:function(){if(!S.on)return;blip(987.8,0.03,0.012,'square');},
+    trackDone:function(){if(!S.on)return;blip(1174.7,0.05,0.02);blip(880,0.06,0.02,'sine',0.09);},
+    glitch:function(){if(!S.on)return;noiseHit(0,0.16,0.08,'lowpass',1500,240);thump(72,42,0.26,0.13);noiseHit(0.06,0.22,0.035,'bandpass',700,180);},
+    /* EAS-style attention tones, short and muffled */
+    alarm:function(){if(!S.on)return;blip(853,0.08,0.035,'square');blip(960,0.08,0.035,'square',0.11);blip(853,0.08,0.035,'square',0.22);},
+    /* the sting: duck, sub boom, 2093Hz "presence" ping, reverse swell */
+    sting:function(){
+      if(!S.on)return;
+      try{
+        var ac=S.ac,t=ac.currentTime;
+        S.master.gain.cancelScheduledValues(t);
+        S.master.gain.setValueAtTime(Math.max(0.0001,S.master.gain.value),t);
+        S.master.gain.linearRampToValueAtTime(0.14,t+0.06);
+        S.master.gain.linearRampToValueAtTime(0.5,t+0.34);
+      }catch(e){}
+      thump(52,38,1.1,0.22);
+      blip(2093,1.5,0.055,'sine',0.04);
+      noiseHit(0,1.1,0.045,'lowpass',180,4200);
+    },
+    /* the gate: low A chord, slow bloom */
+    gate:function(){
+      if(!S.on)return;
+      chordTone(55,3.4,0.075,1.2);
+      chordTone(82.41,3.2,0.05,1.3,0.05);
+      chordTone(110,3,0.045,1.4,0.1);
+      chordTone(659.25,2.6,0.012,1,0.9);
+    }
+  };
+  /* a few random room events while the user lingers at the gate */
+  function scheduleAmbient(){
+    var ev=[
+      function(){thump(58,40,0.5,0.06);},
+      function(){noiseHit(0,0.9,0.018,'lowpass',320,170);},
+      function(){noiseHit(0,0.12,0.02,'bandpass',500,220);thump(64,45,0.3,0.05);},
+      function(){blip(392,0.7,0.01);}
+    ];
+    for(var i=0;i<3;i++){
+      (function(fn){
+        timers.push(setTimeout(function(){
+          if(S.on&&!S.dead){try{fn();}catch(e){}}
+        },2400+i*2300+Math.random()*1500));
+      })(ev[i%ev.length]);
+    }
+  }
+  /* tiny VU meter so "sound is on" is legible at a glance */
+  function startVu(){
+    if(!vuEl||!S.an||!w.requestAnimationFrame)return;
+    var buf;
+    try{buf=new Float32Array(S.an.fftSize);}catch(e){return;}
+    (function loop(){
+      if(S.dead)return;
+      w.requestAnimationFrame(loop);
+      var n=(w.performance&&w.performance.now())||0;
+      if(n-S.vuLast<90)return;
+      S.vuLast=n;
+      try{
+        S.an.getFloatTimeDomainData(buf);
+        var s=0;
+        for(var i=0;i<buf.length;i+=4)s+=buf[i]*buf[i];
+        var rms=Math.sqrt(s/(buf.length/4));
+        var lv=rms<0.012?0:(rms<0.035?1:(rms<0.08?2:(rms<0.15?3:4)));
+        var bars=vuEl.children;
+        for(var j=0;j<bars.length;j++){
+          bars[j].style.opacity=j<lv?(0.35+0.15*j):0.15;
+          bars[j].style.background=(lv===4&&j===3)?'#ff2a2a':'#9a9590';
+        }
+      }catch(e){}
+    })();
+  }
+
+  /* ── VISUAL EXTRAS ──────────────────────────────────────────────── */
+  /* VHS grain texture: one 160px canvas painted once, tiled by CSS */
+  function makeNoise(){
+    try{
+      var c=d.createElement('canvas');c.width=160;c.height=160;
+      var x=c.getContext('2d');if(!x)return;
+      var img=x.createImageData(160,160),dd=img.data;
+      for(var i=0;i<dd.length;i+=4){
+        var v=(Math.random()*255)|0;
+        dd[i]=v;dd[i+1]=v;dd[i+2]=v;dd[i+3]=255;
+      }
+      x.putImageData(img,0,0);
+      if(noiseEl){
+        noiseEl.style.backgroundImage='url('+c.toDataURL('image/png')+')';
+        noiseEl.style.backgroundSize='160px 160px';
+      }
+    }catch(e){}
+  }
+  /* thin horizontal tear that slices the frame; strong tears slip the sync */
+  function tear(strong){
+    if(!tearsEl||done)return;
+    try{
+      var n=d.createElement('div');
+      n.className='zp-tear'+(Math.random()<0.4?' zp-tear-dark':'');
+      n.style.top=(8+Math.random()*80)+'%';
+      n.style.height=(Math.round((1.5+Math.random()*(strong?5:2.5))*2)/2)+'px';
+      tearsEl.appendChild(n);
+      n.getBoundingClientRect();
+      n.classList.add('zp-tear-on');
+      if(strong){
+        ov.classList.add('zp-shift');
+        setTimeout(function(){ov.classList.remove('zp-shift');},90);
+      }
+      setTimeout(function(){if(n.parentNode)n.parentNode.removeChild(n);},620);
+    }catch(e){}
+  }
+  function tearBurst(){
+    for(var i=0;i<5;i++)timers.push(setTimeout(function(){tear(true);},i*110));
+  }
+  function idleTears(){
+    if(done)return;
+    tear(false);
+    timers.push(setTimeout(idleTears,1700+Math.random()*2800));
+  }
+  /* the VHS on-screen clock — frozen in JULY 1987 */
+  var clockSec=14;
+  function clockStep(){
+    if(done||!clockEl)return;
+    clockSec++;
+    var s=clockSec%60,m=47+Math.floor(clockSec/60);
+    clockEl.textContent='JUL 14 1987 11:'+pad(m%60)+':'+pad(s)+' PM';
+    timers.push(setTimeout(clockStep,1000));
+  }
+  function tapeState(txt,err){
+    if(!tapeEl)return;
+    tapeEl.textContent=txt;
+    if(err)tapeEl.classList.add('zp-tape-err');
+    else tapeEl.classList.remove('zp-tape-err');
+  }
+
   function typeLine(text,cls,cps){
     var l=newline(cls),span=d.createElement('span');l.appendChild(span);adopt(l);
     cps=cps||120;
@@ -600,6 +1041,7 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
         i=Math.min(text.length,i+step);
         span.textContent=text.slice(0,i);
         if(i>=text.length)return res();
+        sfx.key();
         var id=setTimeout(tick,Math.round(1000/cps));timers.push(id);
       })();
     });
@@ -607,15 +1049,19 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
   function tracking(){
     var l=newline('zp-ok');trackLine=l;
     var span=d.createElement('span');l.appendChild(span);adopt(l);
-    var target=61,p=0;
+    var target=61,p=0,lastB=-1;
     return new Promise(function(res){
       (function draw(){
         if(done)return res();
         if(skipReq){p=100;}
+        else{
+          p=Math.min(target,p+3+Math.random()*7);
+          var b=Math.round(p/10);
+          if(b!==lastB){lastB=b;sfx.tick();}
+        }
         var blocks=Math.round(p/10);
         span.textContent='  TRACKING ['+repeat('\u2588',blocks)+repeat('\u2591',10-blocks)+'] '+pad(p)+'%';
         if(p>=target||skipReq){span.textContent='  TRACKING ['+repeat('\u2588',10)+'] 100%';return res();}
-        p=Math.min(target,p+3+Math.random()*7);
         var id=setTimeout(draw,55);timers.push(id);
       })();
     });
@@ -644,32 +1090,12 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
     cnt.textContent='SP 0:'+pad(Math.floor(s/60)%60)+':'+pad(s%60);
     w.requestAnimationFrame(countLoop);
   }
-  function bootSound(){
-    try{
-      var AC=w.AudioContext||w.webkitAudioContext;if(!AC)return;
-      var ac=new AC(),t=ac.currentTime;
-      var master=ac.createGain();master.gain.value=0.055;master.connect(ac.destination);
-      /* power-down thump */
-      var o=ac.createOscillator();o.type='sine';
-      o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(36,t+0.28);
-      var g=ac.createGain();g.gain.setValueAtTime(0.9,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.3);
-      o.connect(g);g.connect(master);o.start(t);o.stop(t+0.32);
-      /* tape static burst */
-      var len=Math.floor(ac.sampleRate*0.2),buf=ac.createBuffer(1,len,ac.sampleRate),ch=buf.getChannelData(0);
-      for(var i=0;i<len;i++)ch[i]=(Math.random()*2-1)*(1-i/len);
-      var src=ac.createBufferSource();src.buffer=buf;
-      var f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=1300;
-      var g2=ac.createGain();g2.gain.value=0.5;
-      src.connect(f);f.connect(g2);g2.connect(master);src.start(t);
-      setTimeout(function(){try{ac.close();}catch(e){}},800);
-    }catch(e){}
-  }
   function finish(byUser){
     if(done)return;done=true;
     clearTimers();skipFns.length=0;
     if(autoTimer)clearTimeout(autoTimer);
     try{sessionStorage.setItem('zpBootShown','1');}catch(e){}
-    if(byUser)bootSound();
+    powerDown();
     root.classList.remove('zp-boot-on');
     ov.classList.add('zp-off');
     setTimeout(function(){
@@ -678,51 +1104,80 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
     },580);
   }
 
-  /* user can bail out at any moment */
-  ov.addEventListener('pointerdown',function(){finish(true);});
-  d.addEventListener('keydown',function(){finish(true);});
-  d.addEventListener('wheel',function(){finish(true);},{passive:true});
+  /* First gesture powers the audio on (the set "wakes up"); the next input
+     — or scroll / Esc at any moment — moves on into the archive. */
+  function onPointer(){if(done)return;if(!S.on)powerOn();else finish(true);}
+  function onKey(e){
+    if(done)return;
+    if(e&&(e.key==='Escape'||e.keyCode===27)){finish(true);return;}
+    if(e&&e.repeat&&!S.on)return;
+    if(!S.on)powerOn();else finish(true);
+  }
+  ov.addEventListener('pointerdown',onPointer);
+  d.addEventListener('keydown',onKey);
+  d.addEventListener('wheel',function(){if(done)return;finish(true);},{passive:true});
   /* bfcache restore mid-boot -> get out instantly */
   w.addEventListener('pageshow',function(e){if(e.persisted&&!done)finish(false);});
   /* hard cap */
   timers.push(setTimeout(function(){finish(false);},9200));
 
   async function run(){
-    await sleep(430);                    /* CRT power-on flash */
+    makeNoise();
+    if(noiseEl)noiseEl.classList.add('zp-startflash');
+    await sleep(400);                    /* CRT power-on flash */
     now('ZP-ARCHIVE / TERMINAL 02','zp-hi');
     now('ZAZIE PRODUCTIONS BROADCAST SYSTEMS','zp-dim');
     now('\u00a9 1987 ZAZIE PRODUCTIONS \u00b7 ALL RIGHTS RESERVED','zp-dim');
     blank();
     countLoop();
+    timers.push(setTimeout(clockStep,1000));
+    timers.push(setTimeout(idleTears,1400));
+    tapeState('\u25B8 PLAY');
     await sleep(240);
     await typeLine('BOOTING ZP-OS v2.31 ...','zp-prompt',95);
     await sleep(130);
-    await typeLine('  PHOSPHOR ARRAY ........ OK','zp-ok',155);
-    await typeLine('  MEMORY 640K ........... OK','zp-ok',155);
-    await typeLine('  AUDIO SUBSYSTEM ....... OK','zp-ok',155);
-    await typeLine('  MOUNT /ARCHIVE/TAPES .. OK','zp-ok',155);
-    await typeLine('  INDEX ARTIFACTS ....... 29 CUES','zp-ok',155);
-    await typeLine('  SIGNAL INTEGRITY ...... 97.3%','zp-ok',155);
-    await sleep(220);
+    await typeLine('  PHOSPHOR ARRAY ........ OK','zp-ok',155);sfx.ok();
+    await typeLine('  MEMORY 640K ........... OK','zp-ok',155);sfx.ok();
+    await typeLine('  AUDIO SUBSYSTEM ....... OK','zp-ok',155);sfx.ok();
+    await typeLine('  MOUNT /ARCHIVE/TAPES .. OK','zp-ok',155);sfx.ok();
+    await typeLine('  INDEX ARTIFACTS ....... 29 CUES','zp-ok',155);sfx.ok();
+    await typeLine('  SIGNAL INTEGRITY ...... 97.3%','zp-ok',155);sfx.ok();
+    await typeLine('  SPECTRUM LOCK ......... 19/41/110Hz','zp-ok',155);sfx.ok();
+    await sleep(180);
     blank();
     await typeLine('> PLAY SHOWREEL.REEL','zp-prompt',85);
-    await sleep(200);
+    sfx.seekUp();
+    await sleep(160);
     await tracking();
-    await sleep(430);
+    sfx.trackDone();
+    await sleep(380);
     glitch(true);
     corruptTracking();
+    tapeState('\u25B8\u25B8 ERR',true);
+    tearBurst();
+    sfx.glitch();
     await sleep(320);
     alertBlink();
+    sfx.alarm();
     await typeLine('!! UNREGISTERED SIGNAL ON TAPE 00','zp-bad',115);
+    await sleep(120);
     await typeLine('!! AUDIO SOURCE IS IN THE ROOM WITH YOU.','zp-bad',115);
-    await sleep(400);
+    await sleep(240);
+    sfx.sting();
+    await sleep(300);
     glitchOff();
     await typeLine('> REWIND ..................... OK','zp-prompt',115);
+    sfx.seekDown();
+    tapeState('\u25C2 REW');
     await sleep(190);
     await typeLine('SIGNAL RESTORED. OBSERVATION PERMITTED.','zp-hi',85);
-    await sleep(360);
+    sfx.ok();
+    await sleep(300);
     gate();
-    autoTimer=setTimeout(function(){finish(false);},2800);
+    sfx.gate();
+    tapeState('\u25C9 OBS');
+    if(S.on&&audioLabelEl)audioLabelEl.textContent='TAP TO ENTER ARCHIVE';
+    autoTimer=setTimeout(function(){finish(false);},2200);
   }
   try{run();}catch(e){finish(false);}
 })();
@@ -911,7 +1366,7 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
         <article class="overflow-hidden border border-ash bg-void transition-colors hover:border-blood/40">
           <div class="relative aspect-video w-full overflow-hidden bg-black">
             <div data-video-card="drive" data-drive="1zKtAavEx-Yjd2To_troEYlxTTt62Y2OU" role="button" tabindex="0" aria-label="Play Eclipsed film sample" class="group/vid absolute inset-0 h-full w-full cursor-pointer select-none">
-              <img src="/images/project-eclipsed-drive.jpg" alt="Eclipsed: still from the film" width="1280" height="720" loading="eager" decoding="async" class="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover/vid:scale-105"/>
+              <img src="https://drive.google.com/thumbnail?id=1zKtAavEx-Yjd2To_troEYlxTTt62Y2OU&sz=w1600" onerror="this.onerror=null;this.src='/images/project-eclipsed-drive.jpg'" alt="Eclipsed: still from the film" width="1280" height="720" loading="eager" decoding="async" class="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover/vid:scale-105"/>
               <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-void via-transparent to-transparent opacity-60"></div>
               <span aria-hidden="true" class="pointer-events-none absolute inset-0 flex items-center justify-center transition-transform duration-300 group-hover/vid:scale-110">
                 <span class="flex h-14 w-14 items-center justify-center rounded-full border border-bone/70 bg-black/60 text-bone backdrop-blur-sm shadow-[0_0_24px_rgba(196,30,30,0.4)] transition-colors group-hover/vid:border-blood group-hover/vid:bg-blood/70">

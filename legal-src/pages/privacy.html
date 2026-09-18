@@ -120,7 +120,7 @@ __MASTHEAD__
           <li>The scoring form does not send your details to a server. It composes an email in your own mail application, and you press send.</li>
           <li>Nothing about you is sold, rented or shared. There is nothing here to sell.</li>
           <li>The only personal data that reaches the studio is what you choose to put in an email.</li>
-          <li>Video and audio come from third party hosts and are only requested when you press play. The inventory is in <a href="#third-parties">section 6</a>.</li>
+          <li>Video and audio come from third party hosts. Their players load only when you press play; one film sample’s cover image is fetched from its host when the page loads. The inventory is in <a href="#third-parties">section 6</a>.</li>
         </ul>
         <p>The rest of this notice exists because "we value your privacy" is not a statement anybody can check. What follows is checkable.</p>
       </section>
@@ -221,7 +221,7 @@ __MASTHEAD__
               </tr>
               <tr>
                 <th scope="row">drive.google.com<br/><span class="small">Google LLC</span></th>
-                <td>When you press play on the one film sample hosted there rather than on YouTube.</td>
+                <td>When the page loads, for the cover image of the one film sample hosted there rather than on YouTube; and again when you press play on it. A self hosted image loads instead if the request fails.</td>
                 <td>Your IP address, user agent and the file identifier, under Google's own policies.</td>
               </tr>
               <tr>
@@ -249,7 +249,7 @@ __MASTHEAD__
         </div>
         <p>Nothing else. Fonts are self hosted on this domain, so no font service sees your visit. There is no analytics provider, no advertising network, no social media embed, no live chat widget and no payment processor anywhere on this site.</p>
         <div class="note">
-          <p>Two hosts appear as connection hints in the page head only, <code>static.doubleclick.net</code> and <code>googleads.g.doubleclick.net</code>, which are hosts the YouTube player itself may reach. No code on this site requests anything from them. The head also hints at <code>i.ytimg.com</code>; no thumbnail is fetched from it, because every poster and frame on this site is a self hosted image.</p>
+          <p>Two hosts appear as connection hints in the page head only, <code>static.doubleclick.net</code> and <code>googleads.g.doubleclick.net</code>, which are hosts the YouTube player itself may reach. No code on this site requests anything from them. The head also hints at <code>i.ytimg.com</code>; no thumbnail is fetched from it. Every poster on this site is a self hosted image, with one exception: the cover frame for the Eclipsed sample comes from <code>drive.google.com</code>, as the row above records.</p>
         </div>
         <p>Pressing a card in the catalogue, or any external link in the footer, takes you to that marketplace or platform. From that point their privacy policy applies to you, and the studio has no visibility of what happens there.</p>
       </section>
@@ -257,6 +257,7 @@ __MASTHEAD__
       <section class="clause" id="video">
         <h2><span class="no">7</span>Embedded video and audio</h2>
         <p>Film samples are embedded with the privacy enhancing <code>youtube-nocookie.com</code> host and no iframe exists in the page until you press play, so a visit that never plays anything never loads a player. The showreel audio is served from this domain.</p>
+        <p>One image is the exception, and it is named rather than buried: the cover frame for the Eclipsed sample is requested from <code>drive.google.com</code> when the page loads, falling back to a self hosted image if that request fails. It is an image request and not a player, but it is a third party contact made without any action from you.</p>
         <p>One behaviour is worth stating precisely because it is easy to hide: hovering a film sample pre fetches the embed document from YouTube so that playback starts instantly. That is a network request to a third party made before you press play, and it is disclosed here rather than buried.</p>
         <p>If you would rather no third party were contacted at all, browse with images and media blocked, or use a browser that partitions or blocks third party requests. Every cue title, credit and description on this site is readable as text without loading a single embedded player.</p>
       </section>

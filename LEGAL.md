@@ -131,7 +131,7 @@ Never hand edit a generated `<slug>/index.html`; the next build overwrites it.
   DOM on mount: patching one alone would flash and disappear.
 * **Contact**: a line under the inquiry CTA pointing at the FAQ, in both the
   prerendered markup and `Contact.tsx`.
-* **Bundle renamed** `index-8638e732.js` → `index-b9d7912d.js` per the raw
+* **Bundle renamed** `index-8638e732.js` → `index-9e79ed09.js` per the raw
   sha256 convention, with the dynamic import in `index.html` and the
   precache entry in `sw.js` updated. No stale references remain.
 * **Store**: the same legal row and tracker line added to
@@ -146,7 +146,39 @@ Never hand edit a generated `<slug>/index.html`; the next build overwrites it.
 * **`sitemap.xml`**: seven URLs added, priorities 0.2 to 0.6. `robots.txt`
   unchanged: the documents should be crawled.
 
-## 3. Verification performed
+### Merge with `main` (PR #26) and what it cost the privacy notice
+
+`main` moved while this branch was open: PR #26 swapped the Eclipsed cover
+frame from the self hosted `/images/project-eclipsed-drive.jpg` to
+`https://drive.google.com/thumbnail?id=…&sz=w1600`, in both `index.html` and
+the bundle. That is the whole of its bundle change (verified: the size delta of
+46 bytes matches that one string swap exactly, and reconstructing it from the
+base reproduces main's bundle byte for byte).
+
+Two consequences, both handled:
+
+* **The conflict.** Git followed this branch's rename and reported a content
+  conflict in the bundle. It was resolved by rebuilding from **main's** content
+  and re applying both of this branch's patches to it, so PR #26's thumbnail
+  survives: the result is `index-9e79ed09.js`, and `index-8638e732.js` is gone.
+  `index.html` auto merged cleanly; all six of this branch's edits to it are
+  present exactly once, with no conflict markers anywhere in the tree.
+* **The claim it broke.** The cover frame is now an `<img src>` that loads on
+  page load, so six statements in these documents became false: "only requested
+  when you press play" (privacy section 1), "nothing is requested from those
+  hosts until you press play" (FAQ question 35), "load only when you press
+  play" (terms clause 16), the `drive.google.com` row in the third party table,
+  "every poster and frame on this site is a self hosted image", and section 7's
+  "a visit that never plays anything never loads a player". All six were
+  corrected and the pages rebuilt, which regenerates the `FAQPage` schema from
+  the amended answer automatically. Section 7 now names the load time image
+  request explicitly rather than letting the player sentence imply otherwise.
+
+The wider lesson is worth keeping: any change to what the portfolio loads is a
+change to the privacy notice, because that document inventories requests rather
+than describing intentions.
+
+
 
 Two suites, 344 assertions, all passing. They live outside the repo
 (`/home/user/verify/`) and read the real files.
