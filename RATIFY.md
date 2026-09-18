@@ -269,6 +269,87 @@ Not changed by this work, flagged because the documents now give them weight:
 
 ---
 
+## 14. Cross-property association - what only a human can do
+
+Date: 2026-09-18 · Companion to `ECOSYSTEM-DOSSIER.md`
+
+The on-site network is built. Every page, every `sameAs` and every outbound
+link now points at the studio's 45 properties, and three new hubs
+(`/elsewhere`, `/press`, `/discography`) plus `llms.txt` publish the
+disambiguation between the five name variants in use.
+
+What remains is the **reciprocal** half: the properties pointing back. That
+needs logins, and in some cases a judgement about how visible the studio wants
+a change to be. Nothing below blocks anything already shipped.
+
+### 14.1 The website field, on every property that has one
+
+**Highest value, lowest effort, entirely within the rules.** Linktree is
+listed in the property registry as the public link hub, which means at least
+some of these profiles are pointing visitors at a rental rather than at the
+site. `horror.zazieproductions.com` is the asset. Audit each profile's website
+field and set it to the canonical domain where it is empty or pointing
+elsewhere.
+
+Where: Bandcamp, Discogs (profile is currently **empty** and holds 64
+releases), MusicBrainz, itch.io, Gumroad, SoundClick, hackaday.io, Casting Call
+Club, FilmFreeway, Groover, Substack, GitHub, and Linktree itself.
+
+Value: `https://horror.zazieproductions.com/`
+
+### 14.2 IMDb
+
+Add the site as an official/external link on `nm17333332`. Separately, five
+verified credits are not cited anywhere on the site - `tt43438100`,
+`tt37707793`, `tt43746773`, `tt43407807`, `tt36984141`. Their titles were not
+publishable from the data available, so they were left out rather than guessed.
+Confirm the titles, then submit.
+
+Also: the backlink tracker files `tt19369318` as *Phantom Requiem*. It is
+**EXPIRE** (Muhammad Abed Baryal short). The site is right, the tracker is
+wrong.
+
+### 14.3 Wikidata
+
+There is no Wikidata item for the entity. Without one there is no Google
+Knowledge Panel and no stable identifier for a generative engine to anchor to -
+it is the hard ceiling on the whole campaign. Creating it is a human action
+with notability implications, and doing it from the studio's own account is
+exactly the pattern reviewers look for. Every identifier needed to justify the
+item is now published on `/elsewhere` and in `llms.txt`. Decision: create it,
+or commission it, or leave it.
+
+### 14.4 Black Mountain College
+
+A high-authority institutional page that names the composer and links out to
+nobody (tracker item `BL-013`). One polite email asking for a link to the site
+is the highest-authority link available anywhere in this graph.
+
+### 14.5 The distributor's stray space
+
+Deezer and downstream services render the writer as `Zazie Kanwar- Torge`
+with a stray space before the hyphen. `/elsewhere` and `llms.txt` now explain
+the discrepancy; only the distributor can end it. Worth one support ticket -
+it is the cleanest single fix in the whole reconciliation.
+
+### 14.6 Linking the low-tier coverage - a deliberate trade, reversible
+
+`/press` names Grammy Weekly, Billboard Wire, Limitless Magazine, MUSE Online
+and iye magazine **without hyperlinking them**. They are content farms or
+automated aggregators; naming them earns co-occurrence, linking them passes
+authority to pages that have not earned it and invites guilt by association.
+
+If you would rather they were linked: `tools/ecosystem-properties.json` →
+`mentions` → add `"url"` to each entry, then rebuild. One-line change. It is a
+trade, not a bug.
+
+### 14.7 Decide whether the store should chase its own product names
+
+`UNHOLY ANATOMY` ranks inside itch.io's Gore and Dark-Fantasy tag pages, and
+`horror.zazieproductions.com/store` does not surface for it at all. Fixing that
+properly means a per-product page with its own schema, not a bigger store grid.
+Say the word and it gets built the same way: registry-driven, one file.
+
 ## Suggested order of work
 
 1. Confirm the entity and its state (items 1, 2). Everything keys off them.

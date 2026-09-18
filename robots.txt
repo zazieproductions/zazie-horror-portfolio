@@ -21,6 +21,9 @@ Allow: /*.avif$
 Allow: /*.jpg$
 Allow: /*.svg$
 
+# Entity index for generative engines (plain text, generator-readable):
+# https://horror.zazieproductions.com/llms.txt
+
 # Sitemaps - primary and image/video extensions embedded in main sitemap
 Sitemap: https://horror.zazieproductions.com/sitemap.xml
 

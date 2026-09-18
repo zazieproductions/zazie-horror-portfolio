@@ -216,3 +216,43 @@
 
 /404.html
   Cache-Control: public, max-age=0, must-revalidate
+
+/elsewhere
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/elsewhere>; rel="canonical"
+
+/elsewhere/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/elsewhere>; rel="canonical"
+
+/elsewhere/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/elsewhere>; rel="canonical"
+
+/press
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/press>; rel="canonical"
+
+/press/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/press>; rel="canonical"
+
+/press/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/press>; rel="canonical"
+
+/discography
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/discography>; rel="canonical"
+
+/discography/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/discography>; rel="canonical"
+
+/discography/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/discography>; rel="canonical"
+
+/llms.txt
+  Cache-Control: public, max-age=86400
+  Content-Type: text/plain; charset=utf-8

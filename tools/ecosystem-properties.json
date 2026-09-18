@@ -1,0 +1,477 @@
+{
+  "$comment": "Single source of truth for the Zazie Productions cross-property entity graph. Every outbound link, every sameAs value and every co-mention on horror.zazieproductions.com is generated from this file. Do not hand-edit the generated pages - edit this file and run `node tools/build-ecosystem.mjs`.",
+  "canonical": "https://horror.zazieproductions.com",
+  "entity": {
+    "person": "Zazie Kanwar-Torge",
+    "org": "Zazie Productions LLC",
+    "alias": "Zazie Productions",
+    "personId": "https://horror.zazieproductions.com/#person",
+    "orgId": "https://horror.zazieproductions.com/#org",
+    "websiteId": "https://horror.zazieproductions.com/#website",
+    "labelId": "https://horror.zazieproductions.com/#label"
+  },
+  "groups": [
+    {
+      "id": "credits",
+      "title": "Credits and filmography",
+      "lead": "The filmography lives on IMDb under <b>nm17333332</b>. Everything the portfolio claims is checkable there, title by title, and every title page links back to the name page that carries the whole record.",
+      "items": [
+        {
+          "name": "IMDb",
+          "url": "https://www.imdb.com/name/nm17333332",
+          "label": "IMDb name page",
+          "note": "Zazie Kanwar-Torge, composer and sound department. Eight title credits.",
+          "anchor": "composer and sound department credits"
+        },
+        {
+          "name": "IMDb Pro",
+          "url": "https://pro.imdb.com/name/nm17333332/",
+          "label": "IMDbPro",
+          "note": "Industry-facing record for the same name page, with Starmeter and representation fields.",
+          "anchor": "IMDbPro record"
+        },
+        {
+          "name": "EXPIRE on IMDb",
+          "url": "https://www.imdb.com/title/tt19369318/",
+          "label": "tt19369318",
+          "note": "Muhammad Abed Baryal short. Sound designer: Zazie Kanwar-Torge. Psychological horror with body-horror texture.",
+          "anchor": "EXPIRE (2025)"
+        },
+        {
+          "name": "MIKE HAS A VISITOR on IMDb",
+          "url": "https://www.imdb.com/title/tt36954700/",
+          "label": "tt36954700",
+          "note": "Marco Saikaley sleep-paralysis horror short. Composer.",
+          "anchor": "MIKE HAS A VISITOR"
+        },
+        {
+          "name": "CHOLERIC on IMDb",
+          "url": "https://www.imdb.com/title/tt38637541/",
+          "label": "tt38637541",
+          "note": "Sebastian Fabres film, Haunted Dreams Pictures, NYFA. Composer and co-producer.",
+          "anchor": "CHOLERIC"
+        },
+        {
+          "name": "TMDB",
+          "url": "https://www.themoviedb.org/person/5112050",
+          "label": "TMDB 5112050",
+          "note": "Carries Phantom Requiem (movie 1328893). Note: the entry is filed under the studio alias, not the legal name - same person, one record.",
+          "anchor": "person record, filed under the alias"
+        },
+        {
+          "name": "Muso.AI",
+          "url": "https://credits.muso.ai/profile/4010f3b7-9a87-4961-8dfd-917de0ba787e",
+          "label": "Muso.AI",
+          "note": "Automated credits index: composer on 41 credits, lyricist on 9.",
+          "anchor": "credits index"
+        },
+        {
+          "name": "Stage 32",
+          "url": "https://www.stage32.com/profile/1164424/about",
+          "label": "Stage 32",
+          "note": "Composer, musician and music supervisor profile with title-level credits.",
+          "anchor": "Stage 32 composer profile"
+        },
+        {
+          "name": "FilmFreeway",
+          "url": "https://filmfreeway.com/ZazieProductions",
+          "label": "FilmFreeway",
+          "note": "Festival submissions for Phantom Requiem and Deaf Orphans of Streamcast.",
+          "anchor": "FilmFreeway festival profile"
+        }
+      ]
+    },
+    {
+      "id": "listen",
+      "title": "Where the records live",
+      "lead": "Eighteen releases on Bandcamp, mirrored to the streaming services. The showreel cues on this site are the same room, the same instruments and the same hands as the records - the catalogue is the evidence.",
+      "items": [
+        {
+          "name": "Spotify",
+          "url": "https://open.spotify.com/artist/4UOgvZEOo7xBhFBjJvlMm0",
+          "label": "Spotify artist 4UOgvZEOo7xBhFBjJvlMm0",
+          "note": "Zazie Productions, the artist page for the studio releases and compilation appearances.",
+          "anchor": "where the records stream"
+        },
+        {
+          "name": "Apple Music",
+          "url": "https://music.apple.com/us/artist/zazie-productions/1623719351",
+          "label": "Apple Music 1623719351",
+          "note": "Same catalogue, same writer credits: Zazie Kanwar-Torge.",
+          "anchor": "same catalogue, same credits"
+        },
+        {
+          "name": "Deezer",
+          "url": "https://www.deezer.com/us/artist/170543657",
+          "label": "Deezer 170543657",
+          "note": "Album-level credits. Note: the distributor filed the writer name with a stray space, so some services show \"Zazie Kanwar- Torge\". Same writer.",
+          "anchor": "album-level writer credits"
+        },
+        {
+          "name": "Bandcamp",
+          "url": "https://zazieproductions.bandcamp.com",
+          "label": "Bandcamp",
+          "note": "The label home. Eighteen records, 24-bit downloads, the musique concrete end of the catalogue.",
+          "anchor": "the label home, eighteen records"
+        },
+        {
+          "name": "Bandcamp discography",
+          "url": "https://zazieproductions.bandcamp.com/music",
+          "label": "Bandcamp /music",
+          "note": "Full eighteen-release discography in one list.",
+          "anchor": "all eighteen releases in one list"
+        },
+        {
+          "name": "YouTube",
+          "url": "https://youtube.com/@zazieproductions",
+          "label": "@zazieproductions",
+          "note": "Film samples, score-in-context cuts and the shorts themselves.",
+          "anchor": "scores in context"
+        },
+        {
+          "name": "Discogs",
+          "url": "https://www.discogs.com/artist/11354435",
+          "label": "Discogs 11354435",
+          "note": "Sixty-four releases, almost all compilation appearances across the noise, harsh-noise-wall and experimental underground.",
+          "anchor": "sixty-four releases"
+        },
+        {
+          "name": "MusicBrainz",
+          "url": "https://musicbrainz.org/artist/b610b4cb-87da-44d7-a262-2bd65fb8098c",
+          "label": "MusicBrainz b610b4cb",
+          "note": "Open music database record linking the Discogs, Spotify, Apple and Bandcamp identifiers.",
+          "anchor": "open identifier record"
+        },
+        {
+          "name": "SoundClick",
+          "url": "https://pro.soundclick.com/ZazieProductions",
+          "label": "SoundClick",
+          "note": "Long-running pro page for the instrumental catalogue.",
+          "anchor": "the instrumental catalogue"
+        },
+        {
+          "name": "Black Mountain College Radio",
+          "url": "https://soundcloud.com/bmcmuseum/bmc-radio-art-zazie-productions-cheaper-impressions",
+          "label": "BMC Radio Art",
+          "note": "\"Cheaper Impressions\" - the Satie / Cage musique concrete commission, broadcast by the Black Mountain College Museum.",
+          "anchor": "BMC Radio Art broadcast"
+        },
+        {
+          "name": "ReelCrafter - horror reel",
+          "url": "https://play.reelcrafter.com/xUXGBP_5Sui1_2ve23fyLg",
+          "label": "ReelCrafter horror",
+          "note": "Demo reel cut specifically for psychological horror.",
+          "anchor": "psychological horror reel"
+        },
+        {
+          "name": "ReelCrafter - full reel",
+          "url": "https://play.reelcrafter.com/z6vU_hn4T76AE0kv4rtd9w",
+          "label": "ReelCrafter full",
+          "note": "Full reel with written discography and professional credit list.",
+          "anchor": "full composer reel"
+        }
+      ]
+    },
+    {
+      "id": "catalogue",
+      "title": "Catalogue, libraries and objects",
+      "lead": "Sound libraries, records, instruments and props are sold on three platforms. The listings carry the same licence terms published under <a href=\"/licensing\">licensing</a> and <a href=\"/purchases\">purchases and returns</a>.",
+      "items": [
+        {
+          "name": "itch.io",
+          "url": "https://zazieproductions.itch.io/",
+          "label": "itch.io",
+          "note": "Horror game audio: SFX libraries, UI packs and glyph archives.",
+          "anchor": "horror game audio"
+        },
+        {
+          "name": "Unholy Anatomy",
+          "url": "https://zazieproductions.itch.io/unholyanatomy",
+          "label": "Unholy Anatomy",
+          "note": "209 body horror, gore, creature vocal and supernatural SFX for games, film, trailers and audio drama.",
+          "anchor": "Unholy Anatomy body horror SFX"
+        },
+        {
+          "name": "Fault Codes",
+          "url": "https://zazieproductions.itch.io/30-minimal-error-beeps-system-warning-sfx",
+          "label": "Fault Codes",
+          "note": "25+ minimal error beeps and system warning SFX for retro, horror and sci-fi games.",
+          "anchor": "error beeps and system warnings"
+        },
+        {
+          "name": "Gumroad",
+          "url": "https://zazieproductions.gumroad.com/",
+          "label": "Gumroad",
+          "note": "Plug-in vault, immersive 3D audio and the downloadable score tools.",
+          "anchor": "plug-ins and immersive audio"
+        },
+        {
+          "name": "Plug-in Mega-Vault",
+          "url": "https://zazieproductions.gumroad.com/l/plugin",
+          "label": "Mega-Vault",
+          "note": "200+ discontinued and hard-to-find instruments, sold as an archive. Each instrument stays under its own developer licence.",
+          "anchor": "plug-in mega-vault"
+        },
+        {
+          "name": "Immersive 3D audio",
+          "url": "https://zazieproductions.gumroad.com/l/immersive3daudio",
+          "label": "Immersive 3D",
+          "note": "3D sci-fi battle soundscapes and immersive audio assets.",
+          "anchor": "immersive 3D soundscapes"
+        },
+        {
+          "name": "eBay",
+          "url": "https://www.ebay.com/usr/zazie_productions",
+          "label": "eBay",
+          "note": "Physical objects from the scoring room: instruments, props, plates, skulls.",
+          "anchor": "objects from the scoring room"
+        },
+        {
+          "name": "GameDevMarket",
+          "url": "https://www.gamedevmarket.net/asset/galactic-requiem-immersive-3d-sci-fi-battle-soundscape-2-CkUE",
+          "label": "GameDevMarket",
+          "note": "Galactic Requiem, the immersive 3D sci-fi battle soundscape, licensed for games.",
+          "anchor": "Galactic Requiem on GameDevMarket"
+        }
+      ]
+    },
+    {
+      "id": "profiles",
+      "title": "Profiles and directories",
+      "lead": "The rest of the graph. Same name, same studio, same identifiers - every one of these resolves back to the composer behind the atmosphere.",
+      "items": [
+        {
+          "name": "Linktree",
+          "url": "https://linktr.ee/zazieproductions",
+          "label": "Linktree",
+          "note": "The public link hub. Most festival and press credits point here, so it is the one page that must stay in sync with this one.",
+          "anchor": "the public link hub"
+        },
+        {
+          "name": "Instagram",
+          "url": "https://www.instagram.com/zazieproductionsofficial/",
+          "label": "Instagram",
+          "note": "@zazieproductionsofficial - scores, sessions and the instruments.",
+          "anchor": "@zazieproductionsofficial"
+        },
+        {
+          "name": "LinkedIn",
+          "url": "https://www.linkedin.com/in/zazie-kanwar-torge-3b8a98373/",
+          "label": "LinkedIn",
+          "note": "Independent film composer record under the legal name.",
+          "anchor": "the legal name, for contracts"
+        },
+        {
+          "name": "GitHub",
+          "url": "https://github.com/zazieproductions",
+          "label": "GitHub",
+          "note": "The studio organisation: browsers instruments, DSP tools, generative workstations and the portfolio source itself.",
+          "anchor": "the studio source"
+        },
+        {
+          "name": "Substack",
+          "url": "https://substack.com/@zazieproductions",
+          "label": "Substack",
+          "note": "Reader profile. No newsletter yet.",
+          "anchor": "reader profile"
+        },
+        {
+          "name": "Groover",
+          "url": "https://groover.co/en/influencer/profile/0.zazie-productions/",
+          "label": "Groover",
+          "note": "Curator profile. Active reviewer across playlist submission platforms.",
+          "anchor": "curator profile"
+        },
+        {
+          "name": "Hackaday.io",
+          "url": "https://hackaday.io/ZazieProductions",
+          "label": "Hackaday.io",
+          "note": "The hardware end: modular synthesis, microcontroller prototyping, real-time DSP, machine-assisted composition.",
+          "anchor": "the hardware end"
+        },
+        {
+          "name": "Casting Call Club",
+          "url": "https://www.castingcall.club/zazieproductions",
+          "label": "Casting Call Club",
+          "note": "Voice and audio roles for narrative games, ARGs and immersive podcasts.",
+          "anchor": "voice and audio roles"
+        }
+      ]
+    }
+  ],
+  "press": [
+    {
+      "name": "Visual Container - Winter 2024 Award Winners",
+      "url": "https://www.visualcontainer.tv/wp-content/uploads/2025/01/Winter-2024-Award-Winners_Press-Release.pdf",
+      "kind": "Award press release",
+      "note": "The award document itself, listing the studio among the Winter 2024 winners.",
+      "anchor": "Winter 2024 award press release"
+    },
+    {
+      "name": "Visual Container - Pebbles Underground award round",
+      "url": "https://www.visualcontainer.tv/pebbles-underground-summer-2024-award-winners-winter-2024-award-winners/",
+      "kind": "Institution",
+      "note": "The festival body behind the award, with both rounds of winners.",
+      "anchor": "Visual Container award page"
+    },
+    {
+      "name": "Pebbles Underground - Phantom Requiem",
+      "url": "https://pebblesunderground.art/video/phantom-requiem/",
+      "kind": "Festival selection",
+      "note": "Jury Special Mention, USA 2024. Links the studio's Bandcamp and the Linktree hub from the credit block.",
+      "anchor": "Phantom Requiem jury special mention"
+    },
+    {
+      "name": "Pebbles Underground - award winners, winter screenings",
+      "url": "https://pebblesunderground.art/award-winners-winter-screenings-2024/",
+      "kind": "Festival selection",
+      "note": "The winter screening roster the award sits inside.",
+      "anchor": "winter screening award winners"
+    },
+    {
+      "name": "Black Mountain College Museum + Arts Center",
+      "url": "https://www.blackmountaincollege.org/broadcast-bmc-radio-artist-zazie-productions/",
+      "kind": "Institution",
+      "note": "The commission that started it: at fourteen, reworking Satie's Gymnopedie No. 1 through musique concrete for the college's radio programme.",
+      "anchor": "Black Mountain College broadcast"
+    },
+    {
+      "name": "Pulitzer Center - Local Letters for Global Change",
+      "url": "https://pulitzercenter.org/zazie-kanwar-torge-finalist-local-letters-global-change",
+      "kind": "Institution",
+      "note": "Finalist citation, with the reporting the letter responded to.",
+      "anchor": "Pulitzer Center finalist"
+    },
+    {
+      "name": "Lake Ivan - Spinning in the Wildness",
+      "url": "https://lakeivan.substack.com/p/spinning-in-the-wildness-phantom",
+      "kind": "Critical review",
+      "note": "David Finkelstein's review of Phantom Requiem in an established experimental-film journal. Names both the studio and the legal name.",
+      "anchor": "Lake Ivan review of Phantom Requiem"
+    },
+    {
+      "name": "The Film-Makers' Cooperative - Films for Freedom",
+      "url": "https://film-makerscoop.com/screenings/films-for-freedom-presented-by-the-film-makers-cooperative-a",
+      "kind": "Screening",
+      "note": "Co-presented with Canyon Cinema for Fall of Freedom. Featured-filmmaker list renders the name exactly.",
+      "anchor": "Films for Freedom screening"
+    }
+  ],
+  "mentions": [
+    "Grammy Weekly, in a feature on the underground polymath",
+    "Billboard Wire, on how an underground experimental musician became a go-to composer for psychological horror",
+    "Limitless Magazine, on nervous-system re wiring and the atmospheric end of the catalogue",
+    "MUSE Online's artist profile",
+    "iye magazine, in the automated culture feed"
+  ],
+  "releases": [
+    {
+      "title": "Anesthesia for the Signal Age",
+      "year": "2026",
+      "url": "https://zazieproductions.bandcamp.com/album/anesthesia-for-the-signal-age",
+      "note": "The most recent record. Clinical title, unclinical sound: signal decay, tape hiss and slow dissonance held just under the threshold of pain."
+    },
+    {
+      "title": "Opaline Lament (Life From The Beyond)",
+      "year": "2025",
+      "url": "https://zazieproductions.bandcamp.com/track/opaline-lament-life-from-the-beyond-2",
+      "note": "A single long lament built from bowed metal and held reverb tails. The closest the catalogue comes to a ghost story told without words."
+    },
+    {
+      "title": "Spectral Ode to Synesthesia",
+      "year": "2025",
+      "url": "https://zazieproductions.bandcamp.com/album/spectral-ode-to-synesthesia-2",
+      "note": "Eight minutes and fifty-six seconds of colour-hearing: one continuous piece that maps pitch onto hue and lets the two drift apart."
+    },
+    {
+      "title": "Greetings From Tinsel Time (Super Deluxe Edition)",
+      "year": "2024",
+      "url": "https://zazieproductions.bandcamp.com/music",
+      "note": "The deluxe expansion of the 2023 record, with the interludes restored and the 2024 remasters folded in."
+    },
+    {
+      "title": "Stutter to stammer (Super Deluxe Edition)",
+      "year": "2024",
+      "url": "https://zazieproductions.bandcamp.com/album/stutter-to-stammer",
+      "note": "The 2019 EP rebuilt. Contains \"Cheaper Impressions\", the musique concrete homage to Cage that Black Mountain College commissioned when the composer was fourteen."
+    },
+    {
+      "title": "Greetings From Tinsel Time",
+      "year": "2023",
+      "url": "https://zazieproductions.bandcamp.com/music",
+      "note": "The original release: hollow-sea ballads, carnival organs and one track reportedly abandoned when the session ended in hypothermia."
+    },
+    {
+      "title": "A Long Way To Nowhere",
+      "year": "2023",
+      "url": "https://zazieproductions.bandcamp.com/music",
+      "note": "Road record. Repetition as dread, with the melody arriving late and leaving early."
+    },
+    {
+      "title": "Vermiform",
+      "year": "2023",
+      "url": "https://zazieproductions.bandcamp.com/album/vermiform",
+      "note": "Seven tracks of body horror in instrumental form. Recorded credited across both name variants, which is why the databases disagree."
+    },
+    {
+      "title": "To Halt Space Adrift",
+      "year": "2023",
+      "url": "https://zazieproductions.bandcamp.com/album/to-halt-space-adrift",
+      "note": "Eight tracks of cosmic drift: trichromatic phases, echopraxia, and a closing Gainax Ending that refuses to resolve."
+    },
+    {
+      "title": "Miraculously Unhurt",
+      "year": "2023",
+      "url": "https://zazieproductions.bandcamp.com/music",
+      "note": "Single. The title is the whole joke and the whole horror."
+    },
+    {
+      "title": "Distant Bells For Surgical Minds",
+      "year": "2023",
+      "url": "https://zazieproductions.bandcamp.com/music",
+      "note": "Six tracks. Neocortex activation, lobotomies, and bells that never get closer - the record that first drew the film work."
+    },
+    {
+      "title": "Anything Can Happen On An Electric Day",
+      "year": "2022",
+      "url": "https://zazieproductions.bandcamp.com/music",
+      "note": "EP. Bright surface, wrong underneath - the uncanny-valley end of the catalogue."
+    },
+    {
+      "title": "Constrained Capacity",
+      "year": "2022",
+      "url": "https://zazieproductions.bandcamp.com/album/constrained-capacity",
+      "note": "Ten tracks written against a hard limit: hyperfixation simulation, a paranormal woodland incident, and a drill-and-plastic-bag variation."
+    },
+    {
+      "title": "Interference Archive 01010101",
+      "year": "2022",
+      "url": "https://zazieproductions.bandcamp.com/album/interference-archive-01010101",
+      "note": "Transmission debris assembled into pieces. The source material for the analogue-horror sound design work."
+    },
+    {
+      "title": "Sellotape (Super Deluxe Edition)",
+      "year": "2022",
+      "url": "https://zazieproductions.bandcamp.com/music",
+      "note": "Deluxe rebuild of the 2020 debut: Vlad the Impaler, organised chaos, a cryptic epilogue, and the dismal movie scene."
+    },
+    {
+      "title": "Sellotape",
+      "year": "2020",
+      "url": "https://zazieproductions.bandcamp.com/music",
+      "note": "The first record. Toy harmonicas, warped live sessions and the wooden creaks of a broken floorboard."
+    },
+    {
+      "title": "Stutter to stammer",
+      "year": "2019",
+      "url": "https://zazieproductions.bandcamp.com/album/stutter-to-stammer",
+      "note": "Where it starts. Hundreds of collected sounds - TV static, windscreen wipers, toy instruments - stretched into fragments of classical music that slash out into noise."
+    },
+    {
+      "title": "G7e Torpedo",
+      "year": "2019",
+      "url": "https://zazieproductions.bandcamp.com/music",
+      "note": "The oldest entry in the Bandcamp discography. Not available to stream everywhere; ask if you need it."
+    }
+  ]
+}
