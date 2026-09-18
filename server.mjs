@@ -36,6 +36,12 @@ const server = http.createServer((req, res) => {
 
   let filePath = path.join(__dirname, urlPath);
 
+  // Directory URLs resolve to their index.html, matching how the edge host
+  // serves the real static paths (/store, /faq, /terms, /privacy, ...).
+  if (fs.existsSync(filePath) && fs.statSync(filePath).isDirectory()) {
+    filePath = path.join(filePath, 'index.html');
+  }
+
   // Fallback to .html if not found
   if (!fs.existsSync(filePath) || fs.statSync(filePath).isDirectory()) {
     if (fs.existsSync(filePath + '.html')) {

@@ -415,7 +415,11 @@ i{font-style:italic}
 .foot-links{display:flex;flex-wrap:wrap;gap:.65rem 1.25rem;max-width:34rem}
 .foot-links a{font-size:.625rem;letter-spacing:.24em;text-transform:uppercase;color:var(--mist);transition:color .2s}
 .foot-links a:hover{color:var(--blood)}
-.foot-legal{margin:2rem 0 0;padding-top:1.5rem;border-top:1px solid var(--edge);display:flex;flex-wrap:wrap;gap:.5rem 1rem;justify-content:space-between;font-size:.625rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(154,149,144,.6)}
+.foot-law{margin:1.75rem 0 0;padding-top:1.25rem;border-top:1px solid var(--edge);display:flex;flex-wrap:wrap;gap:.6rem 1.15rem}
+.foot-law .lbl{font-size:.5625rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(154,149,144,.6)}
+.foot-law a{font-size:.625rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mist);transition:color .2s}
+.foot-law a:hover{color:var(--blood)}
+.foot-legal{margin:1.25rem 0 0;padding-top:1.5rem;border-top:1px solid var(--edge);display:flex;flex-wrap:wrap;gap:.5rem 1rem;justify-content:space-between;font-size:.625rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(154,149,144,.6)}
 
 /* --- Motion / print ------------------------------------------------------ */
 @media (prefers-reduced-motion:reduce){
