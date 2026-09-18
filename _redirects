@@ -23,3 +23,14 @@
 /process/  /process  301
 /services/  /services  301
 /contact/  /contact  301
+
+# Filmography records - normalize trailing slash to the canonical form
+/work/expire/  /work/expire  301
+/work/unseen/  /work/unseen  301
+/work/peregrinus/  /work/peregrinus  301
+/work/phantom-requiem/  /work/phantom-requiem  301
+/work/eclipsed/  /work/eclipsed  301
+/work/the-haunted/  /work/the-haunted  301
+/work/choleric/  /work/choleric  301
+/work/mike-has-a-visitor/  /work/mike-has-a-visitor  301
+/work/the-dark-awaits/  /work/the-dark-awaits  301

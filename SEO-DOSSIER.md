@@ -1,362 +1,342 @@
-# Zazie Productions Horror Composer Portfolio - Full-Spectrum Technical SEO Domination Dossier
-## horror.zazieproductions.com | 2026-09-18
-## Grey-hat aggressive but defensible | Preserve atmospheric horror aesthetic
+# SEO — horror.zazieproductions.com
+
+**Owner of this file:** SEO principal, acting with technical authority inside the repo.
+**Last revised:** 2026-09-18
+**Status:** implemented, not proposed. Every claim below is either a command output from
+this repo or explicitly marked **unverified**.
 
 ---
 
-### Executive Summary: Before vs After
+## 0. What changed from the previous dossier, and why
 
-**Domain:** horror.zazieproductions.com
-**Primary Entity:** Zazie Kanwar-Torge, Psychological Horror Composer, Zazie Productions LLC
-**Money Intent:** Hire horror composer, horror film scoring rates, psychological horror composer for film/TV/games
+The previous version of this file (`git show 7a24bec:SEO-DOSSIER.md`) documented a pass that
+shipped real technical wins and several decisions that were wrong. Two of them were
+disqualifying rather than merely suboptimal.
 
-#### Crawl Budget & Index Control - BEFORE DISASTER
+| Previous claim | Verdict | Evidence |
+|---|---|---|
+| "AggregateRating 5.0 4 reviews on Organization + LocalBusiness (preserved)" | **Removed.** Self-serving review markup is a Google spam-policy violation, not an aggressive tactic. | The 4 `Review` nodes were authored by `"Independent Director"`, `"Music Supervisor"`, `"Festival Circuit"`, `"Student Filmmaker"` — anonymous role labels, none with a `reviewRating`. A 5.0 aggregate was computed from reviews that carry no rating, and the visible copy called them *"Verified production collaborators."* |
+| "Self-referential sameAs including internal hubs … defensible as same entity" | **Removed.** `sameAs` exists to point at the same entity on *other* web pages. Listing `/composer`, `/work`, `/reel` as "the same thing as" the person teaches the graph nothing and dilutes the signal that does resolve. | `Person.sameAs` contained 3 own-domain URLs; `Organization.sameAs` contained its own homepage. |
+| Title 110 chars / meta 330 chars, "defensible as descriptive" | **Reversed.** Google truncates both. What was left was keyword cosplay that also mangled the brand's signature lines. | Measured: title 106 chars, description 330 chars, and H2s rewritten to `Horror showreel: 29 original dark cinematic cues. Listen first. Decide in the body.` |
+| `VideoObject.contentUrl` deferred to "a deliberate, separate commit" | **Done in this commit.** | 4 × `contentUrl` pointed at `youtube.com/watch?v=…` — an HTML page, not a media file. |
 
-- **robots.txt:** Blocked `/audio/` entirely (29 mp3s = 29 AudioObject rich results blocked), no param blocking, no Host/Sitemap directives weaponized, no crawl-delay for aggressive bots stealing budget
-- **_redirects:** `/* /index.html 200` catch-all SPA rewrite = SOFT 404 TRAP: every 404 returned 200 with index.html, diluting link equity, confusing Googlebot, zero proper 404 handling
-- **sitemap.xml:** 9 URLs, no image:image, no video:video, priorities flat (0.5-0.8), lastmod stale, missing 6 money silos
-- **_headers:** No X-Robots-Tag, no Link canonical, no CSP for youtube-nocookie, cache headers not differentiated
-- **404.html:** Did not exist as real file, relied on SPA rewrite
-- **IA:** Hash-only navigation `#showreel #work #services` - NOT crawlable as separate URLs, zero silo depth, zero hub-and-spoke
-
-#### AFTER - Weaponized Architecture
-
-- **robots.txt:** 
-  - `Allow: /audio/ /images/ /fonts/ /*.mp3/*.avif/*.jpg/*.svg` - unblocks 29 mp3s for AudioObject rich results
-  - `Disallow: /*?*boot=, /*?*utm_, fbclid, gclid, ref=` - blocks infinite param waste
-  - `Sitemap: + Host:` directives for canonical consolidation
-  - Crawl-delay tiers: AhrefsBot 2, Semrush 5, DotBot 10, MJ12 10, Yandex 2, Baiduspider 10 - preserves budget for Googlebot
-  - `Allow: /` for Googlebot, Googlebot-Image, Googlebot-Video, Bingbot full
-
-- **_redirects:**
-  - REMOVED `/* /index.html 200` soft-404 trap
-  - 8 legacy `.html -> pretty` 301s: store, legal, faq, terms, privacy, licensing, purchases, accessibility
-  - 6 hub trailing-slash 301s: /composer/, /work/, /reel/, /process/, /services/, /contact/ -> canonical without slash
-  - Cloudflare Pages now serves /404.html with proper 404 status
-
-- **sitemap.xml:**
-  - 15 URLs vs 9 before (+66%)
-  - Priorities weaponized: 1.0 home, 0.85 work/reel, 0.8 composer/services/store, 0.75 process/contact, 0.7 faq, 0.5 legal/licensing, 0.4 terms/privacy, 0.3 accessibility
-  - Homepage: 6 image:image entries (hero-portrait, headshot, press-photo, expire/unseen/haunted posters) + 7 video:video with publication_date + tags (psychological horror, supernatural thriller, folk horror, body horror, etc.)
-  - New silos: /work /reel /composer /process /services /contact with image entries
-  - lastmod 2026-09-18 across all
-
-- **_headers:**
-  - `X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1` global
-  - CSP allowing youtube-nocookie/drive/reelcrafter (required for film samples)
-  - Cache-Control immutable for /images/* /fonts/* /audio/* /*.js /*.css /favicon.svg, must-revalidate for html hubs
-  - Link rel=canonical for 45 variants: /, /store, /work, /reel, /composer, /process, /services, /contact, /legal, /faq, /terms, /privacy, /licensing, /purchases, /accessibility + /404.html + /sw.js
-
-- **404.html NEW:**
-  - noindex,follow, WebPage + BreadcrumbList schema
-  - Eyebrow "Archive Error 404"
-  - Hub-grid recovery: 11 cards linking to all primary/silo/document routes (Primary signals, Archive silos, Documents, Composer entity)
-  - Concentrates authority back to / /work /reel /composer /process /services /contact /store /faq /legal
-  - External entity reinforcement: IMDb, Spotify, Bandcamp, YouTube
-
-- **IA Silo Design - 6 New Indexable Hubs:**
-
-  1. `/work/index.html` - CollectionPage + BreadcrumbList + ItemList 9 CreativeWorks (EXPIRE/UNSEEN/PEREGRINUS/Phantom Requiem/ECLIPSED/THE HAUNTED/CHOLERIC/MIKE HAS A VISITOR/THE DARK AWAITS) with genre, contributor/musicBy Person ref, hub-grid cards, internal links to /faq /services /reel /#work /#showreel /store, external IMDb/YouTube
-  2. `/reel/index.html` - CollectionPage + BreadcrumbList + MusicPlaylist 29 MusicRecordings each with AudioObject contentUrl /audio/track-*.mp3 (29 tracks), 29 details faq-item list, mood clusters A-E mapping intent (psychological dread, tension stingers, dark ambient, cosmic/body horror, thriller), links to /work /composer /services /contact
-  3. `/composer/index.html` - Person + BreadcrumbList + WebPage, biography with sameAs reinforcement (IMDb, Spotify, Bandcamp, Apple, YouTube, LinkedIn), press kit 4 features, hub-grid related archives
-  4. `/process/index.html` - HowTo (6 steps: inquiry, spotting, composition, revisions, delivery, rights) + BreadcrumbList + WebPage, FAQ anchor linking, hub-grid related
-  5. `/services/index.html` - Service with AggregateOffer (5 offers: micro $50, short $2500, feature $8000, game $4500, custom $3000) + OfferCatalog Lean/Standard/Signature/Orchestral+, BreadcrumbList + WebPage, what moves price, hub-grid
-  6. `/contact/index.html` - ContactPage + BreadcrumbList, money page, mailto with prefilled subject/body (format, runtime, timeline, budget, references), direct inquiry, what to send 5 things
+The technical work from that pass that was correct is kept: the soft-404 catch-all removal,
+the `_redirects` 301 map, robots parameter blocking, the sitemap image/video extensions, and
+`tools/check-sitemap.mjs`.
 
 ---
 
-### On-Page Extraction & Title/Meta/H1-H6 Precision
+## 1. The system, as measured
 
-#### index.html - Primary Money Page
+### Entity
 
-**Title:**
-- BEFORE: `Zazie Kanwar-Torge | Psychological Horror Composer` (47 chars, weak, no service keywords)
-- AFTER: `Zazie Kanwar-Torge | Psychological Horror Composer | Original Dark Atmospheric Scores for Film, TV & Games` (110 chars, exact-match intent stacking: psychological horror composer + original dark atmospheric scores + film TV games)
+**Person:** Zazie Kanwar-Torge — composer, experimental producer, multi-instrumentalist.
+**Organization:** Zazie Productions LLC, Asheville NC, founded 2022.
+**Release/artist name:** "Zazie Productions" — this is genuinely an alias for the *person* on
+the music graph (Spotify and Apple Music artist pages both resolve to it), so it stays as
+`Person.alternateName`. `"ZKT Productions"` is the masthead lockup and was moved to
+`Organization.alternateName`, where it belongs. Previously both sat on the Person, which
+asserted that a human being is a limited liability company.
 
-**Meta Description:**
-- BEFORE: `Original dark, atmospheric scores for psychological horror, thrillers, film, TV, and games. Listen to the showreel or request a scoring quote.` (130 chars, generic)
-- AFTER: `Award-winning psychological horror composer Zazie Kanwar-Torge crafts original dark, atmospheric cinematic scores for psychological horror, folk horror, body horror, supernatural thrillers, cosmic horror, and dark sci-fi. Film, TV, and game scoring from $50 micro-budget to feature. 29-cue showreel, 9 productions, 7 film samples.` (entity + award + genre stack + price anchor + counts for rich snippet triggers)
+Corroborated off-site (from the site's own `sameAs` set, **not independently fetched** —
+no network in this sandbox):
 
-**OG/Twitter:**
-- BEFORE: same as generic description
-- AFTER: horror-specific with price, counts, genre stack
+`imdb.com/name/nm17333332` · Spotify `4UOgvZEOo7xBhFBjJvlMm0` · `zazieproductions.bandcamp.com`
+· Apple Music `1623719351` · `youtube.com/@zazieproductions` · LinkedIn · Linktree
 
-**H1:**
-- BEFORE: `Dark, atmospheric scores written to your picture.`
-- AFTER: `Dark, atmospheric horror scores written to your picture.` - inserts money keyword "horror scores"
+**Award:** "Winter 2024 Award Winner — Visual Container" is **kept**. It is the one
+authority claim on the site that links to a third-party press PDF
+(`visualcontainer.tv/wp-content/uploads/2025/01/Winter-2024-Award-Winners_Press…`). That is
+the correct corroboration pattern. **Unverified:** I could not fetch the PDF from here.
 
-**H2s - BEFORE generic, AFTER intent-clustered:**
+**Rating:** every "5.0 collaborator rating" claim is **gone**. It appeared in 4 places:
+`Organization.aggregateRating`, `Person.award[]`, a hero badge, and the shared footer tagline
+baked into 8 pages. The hero badge was the worst instance — `5.0` rendered in `#F5C518`
+(IMDb's brand gold) linking to the IMDb name page, immediately beside a separate
+"IMDb credited" link. It read as an IMDb rating IMDb does not publish.
 
-- `Selected productions` -> `Selected horror productions: psychological, folk, and body horror scores`
-- `Film samples` -> `Horror film samples: original dark scores in context`
-- `Listen first. Decide in the body.` -> `Horror showreel: 29 original dark cinematic cues. Listen first. Decide in the body.`
-- `Press kit` -> `Press kit: award-winning horror composer recognition`
-- `A distinct point of view, built for the story.` -> `Scoring approach: psychological horror architecture and dark atmospheric color, built for story`
-- `Build a scope and estimate` -> `Horror film scoring rates: build a scope and estimate`
-- `The composer behind the atmosphere` -> `Zazie Kanwar-Torge: psychological horror composer behind the atmosphere`
-- `What collaborators say` -> `Horror composer reviews: 5.0 collaborator rating, what collaborators say`
-- `Tell me about your project.` -> `Hire a horror composer: tell me about your psychological horror project.`
+### Index
 
-**H1-H6 Hardening:**
-- Single H1 per page enforced
-- H2s include primary keywords: horror productions, horror film samples, horror showreel, horror composer, horror scoring rates
-- H3s preserved for film titles (EXPIRE, UNSEEN, etc.) - entity stacking
-- Added entity-rich paragraph under H1 with internal link graph: links to /reel, /work, /process, /services, /composer, /faq with keyword-rich anchors
-- Footer entity reinforcement paragraph: 100+ word keyword-dense summary with internal links to all silos, includes micro-budget pricing, counts, press awards
+Measured from the repo (the live site was unreachable from this sandbox — see §7):
 
-**Internal Link Graph - BEFORE vs AFTER:**
-- BEFORE: hash-only nav, footer 9 links (mostly external)
-- AFTER: header nav 6 hub links with title attributes (keyword-rich), footer 12 links including 7 internal hubs (Portfolio, Showreel: 29 cues, Selected productions, Composer biography, Process: spotting to stems, Rates: $50 to $8k, Hire horror composer, Catalogue: sound libraries), plus 11 recovery cards on 404, plus hub-grids on every new page linking to all silos
-- Index.html now has 6+ links to /work, 7 to /reel, 6 to /composer, 4 to /process, 5 to /services, 2 to /contact = 30+ internal hub links vs ~0 before
+| | before this commit | after |
+|---|---|---|
+| URLs in `sitemap.xml` | 15 | **24** |
+| Images submitted | 37 | **46** |
+| Videos submitted | 7 | **9** |
+| Real crawlable film objects | **0** | **9** |
+| `<title>` over 65 chars | 15 of 16 pages | **0** |
+| meta description over 160 chars | 16 of 16 pages | **0** |
+| Self-serving review markup | 2 pages | **0** |
+| `sameAs` self-references | 4 | **0** |
+| Internal links that 404 | not measured | **0 of 572** |
 
-#### store-src/store.html Template
+### The bottleneck that mattered
 
-- Title: `Catalogue: Records...` -> `Catalogue: Horror Sound Libraries, Dark Ambient Records, Tools and Objects | Zazie Productions - Horror Composer`
-- Meta desc: added "by psychological horror composer Zazie Kanwar-Torge", "209 body horror SFX", "immersive 3D sci-fi soundscapes", "vault of 200+ discontinued VSTs", "from same room as horror scores"
-- H1: `The Catalogue. Records, sound, tools and objects.` -> `The Catalogue. Horror sound libraries, dark records, tools and objects from a psychological horror composer.`
-- Hero lead: +150 words with internal links to /, /reel, /work, /services
-- Group H2s: `Records` -> `Records: dark ambient and experimental horror albums`, `Objects` -> `Objects: horror instruments and props from scoring room`, `Sound Libraries` -> `Sound Libraries: body horror SFX and immersive horror soundscapes`, `Tools and Scores` -> `Tools and Scores: VST vault, glitch video, Renaissance manuscripts`
-- JSON-LD WebPage description enhanced with horror genre stack
-- BreadcrumbList extended: Portfolio -> Catalogue -> Records -> Sound Libraries + Person + Organization
-- Footer tagline enhanced with 5.0 rating + Winter 2024 + counts
-- Closing H2: `Scoring a picture...` -> `Scoring a horror picture... Hire a psychological horror composer.`
+**The filmography did not exist as objects.** Nine productions were nine `<h2>` sections on a
+single 771-word page. There was no `Movie`, no `MusicComposition`, no per-work URL. Every
+"[film] composer" and "[film] score" query had nothing to land on, and four of the nine
+`CreativeWork.url` values pointed at the composer's IMDb **name** page — telling the graph
+that four films *are* that person.
 
-#### legal-src pages
-
-- All 7 pages title/meta enhanced with horror keywords:
-  - faq.html: `Questions Filmmakers Ask...` -> `Horror Film Scoring FAQ: Fees, Process, Rights, Delivery - 36 Questions | Zazie Productions - Psychological Horror Composer`
-  - legal.html, licensing.html, privacy.html, purchases.html, terms.html, accessibility.html all similarly enhanced
-- H1 in faq.html: `What people ask before they commit` -> `Horror film scoring FAQ: what people ask before they commit to a horror score`
-- Doc-lead in faq.html: + internal links to /services /process /reel /work
-- masthead.html partial: nav now includes /reel /work /composer /process /services /store with title attributes
-- footer.html partial: tagline + 5.0 rating + Winter 2024, foot-links 13 vs 9 before, includes / /reel /work /composer /process /services /contact /store
+That was the single largest structural gap, and it is now closed.
 
 ---
 
-### Max Valid Schema Density - Before vs After
+## 2. Committed architecture
 
-#### BEFORE (index.html only):
-- Person (1)
-- Organization (1)
-- ItemList 10 MusicComposition (partial, only 10 of 29)
-- FAQPage 6 questions
-- WebSite (1)
-- LocalBusiness (1)
-- Graph: WebPage + Organization AggregateRating 5.0 4 reviews + ItemList 9 CreativeWorks + MusicPlaylist 29 MusicRecordings (without AudioObject contentUrl)
+One URL per intent. No page is built to be a thin satellite of another.
 
-**Total distinct @types:** ~8
-**VideoObject:** 0
-**AudioObject:** 0
-**Service:** 0
-**BreadcrumbList:** 0
-**HowTo:** 0
-**Speakable:** 0
+| Intent cluster | Winning URL | Why it wins |
+|---|---|---|
+| **Brand** — `zazie kanwar-torge`, `zazie productions` | `/` | Title now leads with the entity name; `Person` + `Organization` resolve; press kit corroborates |
+| **Hire** — `psychological horror composer`, `hire horror composer`, `dark atmospheric film composer` | `/` → `/services` → `/contact` | Homepage carries the term in `<title>` and H1; `/services` owns rates; `/contact` is the conversion |
+| **Method / craft** — `how psychological horror is scored`, `experimental horror scoring` | `/process`, `/composer` | Real documented process, first-person, named human |
+| **Catalogue / discovery** — `dark ambient cues`, cue-name queries | `/reel` | 29 named cues with `AudioObject` per MP3 — the most distinctive, least copyable asset on the property |
+| **Credit / entity** — `[film] composer`, `[film] score`, `[film] Zazie` | **`/work/<slug>` ×9** ← new | `Movie`/`TVSeries` + `MusicComposition`, director, year, genre, poster, sample |
+| **Filmography overview** | `/work` | `ItemList` of the nine, each item pointing at its own record |
 
-#### AFTER (index.html):
-- Person (enhanced: 18 knowsAbout, 10 sameAs including internal hubs, hasOccupation, award 2)
-- Organization (enhanced: foundingDate, founder, contactPoint)
-- WebSite (with SearchAction potentialAction)
-- BreadcrumbList (8 items: Portfolio, Selected Horror Productions, Horror Showreel, Composer Bio, Scoring Process, Scoring Rates, Catalogue, Hire Horror Composer)
-- Service (AggregateOffer 5 offers $50-$8000, OfferCatalog 4 tiers Lean/Standard/Signature/Orchestral+)
-- VideoObject x4 (Mike Has A Visitor, The Haunted, AQUAPHOBIA, Phantom Requiem) with thumbnailUrl, uploadDate, duration, contentUrl, embedUrl, genre, keywords
-- FAQPage 8 questions (enhanced with internal linking to /work /reel /services /process /contact /faq)
-- Graph: WebPage with Speakable (h1, #top p, #services h2) + Organization AggregateRating 5.0 4 reviews + makesOffer + ItemList 9 CreativeWorks (genre enhanced: Psychological Horror, Body Horror, Folk Horror, Supernatural, Gothic, etc.) + MusicPlaylist 29 MusicRecordings EACH with AudioObject contentUrl https://horror.zazieproductions.com/audio/track-*.mp3 + genre
+### The filmography graph
 
-**Total distinct @types in index.html AFTER:** 25 types, 29 MusicRecording, 29 AudioObject, 16 ListItem, 10 Offer, 8 Question, 8 Answer, 8 CreativeWork, 6 Service, 5 Person, 4 VideoObject, 4 Review, 3 Organization, plus Occupation, City, ContactPoint, WebSite, SearchAction, BreadcrumbList, AggregateOffer, OfferCatalog, FAQPage, WebPage, SpeakableSpecification, AggregateRating, PriceSpecification, ItemList, MusicPlaylist
+`tools/work-data.mjs` is the single source of truth. `tools/build-work-pages.mjs` generates
+all 10 pages from it. Homepage `ItemList` and `/work` `ItemList` are generated from the same
+data, so they cannot drift.
 
-**New Hub Schemas:**
-- /work: CollectionPage + BreadcrumbList + ItemList 9 CreativeWorks (genre, contributor/musicBy)
-- /reel: CollectionPage + BreadcrumbList + MusicPlaylist 29 AudioObject contentUrl (unblocked from robots)
-- /composer: Person + BreadcrumbList + WebPage (entity page)
-- /process: HowTo 6 steps + BreadcrumbList + WebPage
-- /services: Service 5 offers + BreadcrumbList + WebPage
-- /contact: ContactPage + BreadcrumbList (money page)
-- /store: WebPage + BreadcrumbList (extended 4 levels) + Organization + Person + ItemList 20 Product (records, horror SFX libraries, tools)
-- /faq: FAQPage 36 questions auto-generated from details markup (never drifts) + WebPage + BreadcrumbList
-- 404.html: WebPage + BreadcrumbList, noindex
+```
+/                      9 tiles, each → /work/<slug>     (previously: all 9 went off-site)
+/work                  ItemList → 9 records
+/work/<slug>           Movie + MusicComposition + BreadcrumbList + Person
+   ├─ adjacent work    linked by SHARED GENRE, not "related posts"
+   ├─ /reel            "the material outside a specific picture"
+   ├─ /process         the method
+   ├─ /composer        the vocabulary
+   └─ /contact         the CTA
+```
 
-**Schema Density Multiplier:** ~8 types -> 25+ types on primary, plus 6 new pages each with 3-5 types = total site-wide schema graph ~3x denser, all valid per Google Rich Results Test (no warnings expected due to proper contentUrl, thumbnailUrl, etc.)
+Internal links are conceptual: EXPIRE connects to CHOLERIC because both are body horror, not
+because both were published last year. That is what teaches a crawler what this house *is*.
 
----
+### Three rules the generator enforces
 
-### Media SEO
+1. **A sound-design credit is never marked up as a `MusicComposition`.** EXPIRE is credited as
+   sound designer on this site, so `/work/expire` emits `Movie` + `Role{roleName:"Sound designer"}`
+   and states in visible copy: *"This credit is sound design rather than a composed score."*
+   Verified: `musicBy present? False`.
+2. **`VideoObject` is emitted only when `uploadDate` is known.** `uploadDate` is required for
+   video rich results. Phantom Requiem has a real video and no published date, so it gets the
+   embed and no schema rather than a guessed date.
+3. **A work's `sameAs` is its own IMDb *title* page, or absent.** Never the name page.
 
-**Images:**
-- Preload hero-portrait.avif/.jpg, atmosphere-bg.jpg with fetchpriority high
-- Prefetch 8 poster 640.avif + 1200.jpg lightbox + 7 video thumbnails + headshot + press-photo
-- sitemap.xml image:image 6 entries for homepage (hero, headshot, press, expire/unseen/haunted posters) with captions + geo? (kept simple)
-- _headers Cache-Control immutable for /images/*, max-image-preview:large in X-Robots-Tag
-- Alt text already descriptive: "EXPIRE (2025) theatrical poster, horror short scored by Zazie Kanwar-Torge" - preserved
+### What will not be built
 
-**Video:**
-- 7 film samples with data-video-card yt/drive, inline player (no external request until click), prefetch embeds, thumbnails prefetched
-- sitemap.xml video:video 7 entries with title, description, thumbnail_loc, content_loc, publication_date, tags (psychological horror, supernatural thriller, folk horror, body horror, etc.)
-- _headers CSP allows youtube-nocookie/drive
-- JSON-LD VideoObject x4 with embedUrl, contentUrl, thumbnailUrl, duration, uploadDate, genre, keywords
-- OG image for homepage hero-portrait.jpg 896x1152
-
-**Audio:**
-- robots.txt unblocks /audio/ and /*.mp3$
-- _headers allows /audio/* immutable, X-Robots-Tag index,follow max-image-preview:large
-- /reel/index.html provides 29 AudioObject contentUrl for rich results
-- index.html MusicPlaylist 29 tracks each with AudioObject contentUrl
-- store.html preview buttons data-preview="/audio/track-*.mp3" - playable cues from showreel appearing on release
-- Service Worker precaches? No, audio not precached to preserve budget, but fetchable
+- **No blog.** A news/magazine layer would change what the site is and dilute the entity type.
+- **No listicles.** "Top 10 psychological horror movies 2026" is brand assassination.
+- **No tag or category pages.** Nine productions do not need faceted navigation.
+- **No `psychological horror` head-term page.** See §6.
+- **No hreflang.** Single language, no measured international demand.
+- **No per-film pages for the four sample-only works.** See §7, escalation 2.
 
 ---
 
-### Template/Pagination Control & Micro-Signal Stacking
+## 3. Verification
 
-**Template Control:**
-- All routes are REAL static paths: /work/index.html, /reel/index.html, etc., not rewrites - no redirect loops (store had ERR_TOO_MANY_REDIRECTS before, fixed via static path)
-- server.mjs updated to handle clean routes: /work, /reel, /composer, /process, /services, /contact, /store, /legal, /faq, etc. all resolve to index.html
-- 404.html serves with proper 404 status, not 200
-- Canonical Link headers for all 45 variants in _headers + <link rel=canonical> in each HTML head
-- Noindex only on 404.html, all others index,follow
-- Pagination not needed (29 cues in single page, 9 productions single page) - no thin paginated archives
+Four commands, all passing:
 
-**Micro-Signal Stacking (Grey-hat aggressive but defensible):**
-- Title stacking: primary keyword + secondary + service + format (film TV games)
-- Meta description stacking: award + entity + genre list (psychological, folk, body, supernatural, cosmic, techno, dark sci-fi) + price anchor + counts
-- H2 stacking: keyword + qualifier (horror productions: psychological, folk, body)
-- Internal anchor text: "horror showreel", "selected horror productions", "psychological horror composer biography", "horror scoring rates", "horror scoring process", "hire horror composer" - exact match but varied
-- SameAs stacking: 10 sameAs including internal hubs (self-referential entity reinforcement) + external authority (IMDb, Spotify, Bandcamp, Apple, YouTube, LinkedIn, Linktree)
-- KnowsAbout 18 skills (psychological horror scoring, folk horror music, body horror soundtracks, supernatural thriller scoring, cosmic horror composition, etc.)
-- FAQPage 8 questions on homepage + 36 on /faq - covers money, process, rights, delivery, games, catalogue - each answer links to silos
-- BreadcrumbList 8 items on homepage covering entire IA silo - passes authority to all hubs
-- Service AggregateOffer with lowPrice highPrice for rich results
-- VideoObject publication_date + tags for video rich results
-- AudioObject contentUrl for audio rich results
-- SpeakableSpecification for voice search (h1, hero p, services h2)
-- AggregateRating 5.0 4 reviews on Organization + LocalBusiness (preserved)
-- OfferCatalog 4 tiers for long-tail "Lean horror score" etc.
-- Entity reinforcement paragraph in footer (100+ words) + 404 recovery + 6 hub pages each with related archives hub-grid
-- No keyword stuffing in visible text - all stacking in schema, title, meta, alt, and internal anchor title attributes (defensible)
+```
+node tools/build-work-pages.mjs --check     # 10 pages in sync with work-data.mjs
+node tools/check-seo.mjs                    # PASS - 25 pages, 24 sitemap URLs, 572 internal links, 0 errors
+node tools/check-sitemap.mjs                # PASS - 24 URLs, 46 images, 9 videos
+node server.mjs && curl -I /work/expire     # 200; /nope-not-a-page returns a real 404
+```
+
+`tools/check-seo.mjs` is new and is the regression gate. Every rule in it exists because it
+was actually broken here. It fails the build on: `AggregateRating`/`Review` markup, "Verified
+collaborator" claims, `sameAs` self-references, `Person.alternateName` company conflation,
+`VideoObject` without `uploadDate`, `contentUrl` pointing at an HTML watch page, title >65 or
+description >160, missing/duplicate/non-self-referencing canonical, ≠1 `<h1>`, SEO jargon in
+visible copy, internal links that do not resolve, sitemap/canonical disagreement.
+
+It caught 39 real defects on first run, including seven legal pages still carrying the
+fabricated rating in the shared footer partial. It now returns 0.
+
+Rebuilds were run through the project's own scripts (`legal-src/build.sh`,
+`store-src/build.sh`). Asset hashes are unchanged — `legal-89928f71.css`,
+`store-8af6034d.css` — so no reference churn and no `sw.js` precache invalidation.
 
 ---
 
-### Performance & Aesthetic Preservation
+## 4. Subdomain vs apex — one recommendation
 
-- Atmospheric horror aesthetic preserved: grain, vignette, frame, torch, vhs-tracking, boot terminal intro - all decorative, aria-hidden, not blocking content
-- Critical fonts preload, hero images preload, video thumbnails prefetch - LCP protected
-- Service Worker v2 precaches 30+ assets including new hubs, legal CSS/JS, sitemap, robots, 404
-- Cache-Control: immutable for images/fonts/audio/js/css, must-revalidate for html - performance work preserved
-- No advertising trackers, no cookies set by site - privacy notice accurate
-- Skip links, progress bar, masthead preserved
+**Keep `horror.zazieproductions.com` as the canonical host. Do not merge into the apex.**
 
----
+Reasoning: every asset on this property — canonicals, `_headers` Link headers, `robots.txt`,
+the sitemap, all `@id` values in the structured data, and every `sameAs` target — already
+resolves to the subdomain as a single consistent entity. A merge would mean 301-ing 24 URLs
+and rewriting every `@id`, and the equity being protected is small enough that the migration
+risk exceeds the gain. Splitting the *store* onto the same host would be a different question
+and is not worth reopening now.
 
-### Deliverables Checklist
-
-- [x] robots.txt rewritten - unblocks /audio/, Allow *.mp3/*.avif/*.jpg/*.svg, Disallow param waste, crawl-delay tiers, Sitemap + Host, full Allow for Googlebot
-- [x] sitemap.xml rewritten 9->15 URLs, priorities weaponized, image:image 6, video:video 7, new silos /work /reel /composer /process /services /contact
-- [x] _headers rewritten X-Robots-Tag, CSP, Link canonical 45 variants, immutable vs must-revalidate
-- [x] _redirects fixed: removed /* /index.html 200 soft-404 trap, 301 legacy .html->pretty + trailing-slash normalization
-- [x] 404.html created noindex,follow, WebPage+BreadcrumbList, hub-grid recovery
-- [x] 6 hub directories created: work, reel, composer, process, services, contact
-- [x] work/index.html CollectionPage+ItemList 9 productions
-- [x] reel/index.html CollectionPage+MusicPlaylist 29 AudioObject contentUrl
-- [x] composer/index.html Person+WebPage+BreadcrumbList biography
-- [x] process/index.html HowTo 6 steps+BreadcrumbList+WebPage
-- [x] services/index.html Service AggregateOffer 5 offers+BreadcrumbList+WebPage
-- [x] contact/index.html ContactPage+BreadcrumbList money page
-- [x] index.html schema density maxed: VideoObject x4, AudioObject x29, BreadcrumbList 8, Service, FAQPage 8, Speakable, etc. + title/meta/H1-H6 hardening + internal link graph 30+ hub links + footer entity paragraph
-- [x] store-src/store.html template enhanced: title/meta/H1/group H2s, internal links, BreadcrumbList extended, WebPage desc, footer
-- [x] legal-src partials masthead/footer enhanced with hub links + entity reinforcement
-- [x] legal-src pages titles/meta/H1s enhanced with horror keywords + internal links
-- [x] sw.js PRECACHE_ASSETS updated to include 6 hubs + legal + 404 + sitemap/robots, CACHE_NAME v2, LEGAL_PATHS extended
-- [x] server.mjs updated to handle clean routes for all hubs
-- [x] ./store-src/build.sh + ./legal-src/build.sh run, hashes generated, store/index.html + legal pages built
+Residual risk: if the apex `zazieproductions.com` carries significant equity or ranks for
+brand terms, the two hosts compete for the brand SERP. **Unverified** — I could not fetch
+either host from this sandbox. This is the one item in §7 that needs an operator with
+Search Console access to settle.
 
 ---
 
-### Before/After Metrics Table
+## 5. Measurement
 
-| Signal | Before | After | Delta |
-|--------|--------|-------|-------|
-| Indexable URLs in sitemap | 9 | 15 | +66% |
-| Real static hub paths | 1 (/store) | 7 (/store + 6 new) | +600% |
-| Soft 404 trap | Yes (/* 200) | No (proper 404.html 404) | Fixed |
-| robots.txt blocks audio | Yes (/audio/ blocked) | No (Allow /audio/ + *.mp3) | Unblocked 29 mp3s |
-| Param waste blocking | No | Yes (boot, utm_, fbclid, gclid, ref) | +5 rules |
-| Sitemap image entries | 0 | 6 homepage + 15 hub images | +21 |
-| Sitemap video entries | 0 | 7 with tags + dates | +7 |
-| Schema types index.html | ~8 | 25 | +212% |
-| VideoObject | 0 | 4 | +4 |
-| AudioObject contentUrl | 0 | 29 in index + 29 in /reel = 58 | +58 |
-| FAQPage questions index | 6 | 8 | +33% |
-| FAQPage total site | 6+36=42 | 8+36=44 | +2 but denser linking |
-| BreadcrumbList | 0 | 1 homepage 8 items + 6 hubs each 2-3 items | +7 |
-| Service offers | 0 | 5 offers + 4 tier catalog | +9 |
-| Internal hub links homepage | ~0 | 30+ | +30 |
-| Title keyword density | 1 (psychological horror composer) | 4 (psychological horror composer + dark atmospheric scores + film TV games + horror) | +300% |
-| H2 keyword-rich | 0/9 | 9/9 | 100% |
-| Footer internal links | 3 | 13 | +333% |
-| _headers canonical Links | 0 | 45 | +45 |
-| 404 recovery links | 0 | 11 | +11 |
-| Entity sameAs | 6 external | 10 incl internal hubs | +66% |
-| KnowsAbout skills | 10 | 18 | +80% |
-| SW precache assets | 33 | 45+ | +36% |
+In place: `tools/check-seo.mjs` and `tools/check-sitemap.mjs` both exit non-zero, so they can
+run in CI on every commit.
+
+**Not in place, and the next thing to wire:** conversion events. There is no analytics on this
+property (by design — the privacy notice says "no advertising trackers · no cookies set by
+this site"). The measurement gap is real: a #1 page whose inquiries nobody counts is a trophy
+in an empty room. The instrumentation must be cookie-free to stay consistent with the notice —
+server-side log counting on the `mailto:` click, or a privacy-preserving beacon. That is an
+operator decision, not something to add silently.
+
+**Search Console actions, in order:**
+1. Confirm `https://horror.zazieproductions.com/sitemap.xml` serves 24 URLs (it currently
+   serves 15 in production until this merges).
+2. Resubmit the sitemap.
+3. Request indexing on `/work` and all nine `/work/<slug>` URLs — never crawled before.
+4. Check the **Video pages** report: expect 3 valid `VideoObject` on `/` (was 4, one of which
+   was invalid) plus 2 on film pages.
+5. Watch for the *Excluded by "Alternate page with proper canonical tag"* row — it should
+   stay empty; the sitemap validator enforces canonical equality.
 
 ---
 
-### Grey-Hat But Defensible Notes
+## 6. Attacking my own strategy
 
-- **Self-referential sameAs including internal hubs:** Google allows sameAs to include own properties for entity consolidation; we include /composer /work /reel as sameAs on Person to reinforce internal entity graph - defensible as same entity.
-- **Title 110 chars:** Slightly long but under 60 visible + rest for long-tail - defensible as descriptive.
-- **Meta 330 chars:** Over 155 but Google rewrites anyway; extra for other engines and for keyword coverage - defensible.
-- **Internal anchor title attributes:** Provide extra context for screen readers and SEO, not visible spam - defensible.
-- **Footer entity paragraph 100+ words:** Keyword-dense but natural sentence, includes internal links, provides user value (summary of services/pricing) - defensible.
-- **Param blocking in robots:** Standard practice, not cloaking.
-- **Crawl-delay for aggressive bots:** Respects their existence, preserves budget - defensible.
-- **No hidden text, no cloaking, no link buying, no PBN:** All content visible, all links real, all schema valid and matches visible content.
-- **Audio unblocking:** Previously blocked valuable content; unblocking is correction, not manipulation.
+**What I cannot win:** `psychological horror`. That SERP is Wikipedia, streamers and
+magazines, and it is not a hire-intent query anyway. Nobody searching it is buying a score.
+There is no version of this site that should want it.
 
----
+**What is owned instead:** the composer/craft neighbourhood. `psychological horror composer`,
+`dark atmospheric film composer`, `experimental horror score`, and — the defensible moat —
+every `[film] composer` and `[film] score` query for the nine productions, which now have a
+real object to resolve to and did not have one yesterday.
 
-### Next Steps for Ranking (Outside This Dossier Scope But Recommended)
+**Where the strategy is still exposed:**
 
-1. Submit new sitemap.xml in Search Console, request indexing for /work /reel /composer /process /services /contact - **the sitemap is now GSC-validated; see [SITEMAP.md](SITEMAP.md) for the submission runbook and the validator (`node tools/check-sitemap.mjs`)**
-2. Fetch as Googlebot to verify no soft 404, proper canonicals, rich results for VideoObject/AudioObject/FAQPage/Service
-3. Update internal ReelCrafter and YouTube descriptions to link to new hub URLs (/reel, /work) for backlink velocity
-4. Add 301s from old hash URLs if any external links point to /#work etc. (client-side handles scroll, but 301 not needed)
-5. Monitor Search Console: Index coverage, Video indexing, Product rich results (store), FAQ rich results
-6. Build external entity reinforcement: update IMDb bio to link to /composer, Spotify artist bio to link to /reel, Bandcamp to link to /store
-7. Consider adding /blog or /journal for fresh content targeting "horror film scoring tips" long-tail
+1. **Thin per-film content.** Each record runs 452–549 visible words (measured). That is enough to resolve
+   the entity and win a long-tail credit query; it is not enough to win a competitive one.
+   The missing layer is per-film craft commentary — which cues, what instrumentation, what the
+   director asked for. I did not write it, because inventing it is the one thing this brief
+   forbids. See §7, escalation 1.
+2. **Off-site corroboration is unchanged.** I could not verify or edit IMDb, Wikidata,
+   MusicBrainz or Discogs from here. Entity resolution depends on those records agreeing with
+   this page, and I have not confirmed they do.
+3. **Four scored works have public samples and no filmography record** — AQUAPHOBIA,
+   GOODBYE BROTHER, Home Intruder, Whispers In The Dark. They are named on `/work` with an
+   honest explanation rather than given invented credits.
+4. **No backlink work.** Nothing in this commit earns a citation. The nine film pages are the
+   linkable artifact — a director's festival page can now link to a real record instead of a
+   portfolio homepage — but the outreach has not happened.
+5. **Performance unmeasured.** The nine new pages add ~13 KB of HTML each and no new assets
+   (posters are preloaded AVIF, already on disk). I did not run Lighthouse: no browser in this
+   sandbox. LCP on the filmography template is **unverified**.
 
----
-
-### Files Modified/Created This Phase
-
-- robots.txt (rewritten)
-- sitemap.xml (rewritten 15 URLs)
-- _headers (rewritten 45 canonicals + X-Robots-Tag)
-- _redirects (removed soft-404, added 301s)
-- 404.html (new)
-- work/index.html (new)
-- reel/index.html (new)
-- composer/index.html (new)
-- process/index.html (new)
-- services/index.html (new)
-- contact/index.html (new)
-- index.html (surgical overhaul: title, meta, OG, H1-H6, internal links, footer entity, JSON-LD 25 types)
-- store-src/store.html (template enhanced)
-- store.html + store/index.html (built)
-- legal-src/partials/masthead.html (enhanced)
-- legal-src/partials/footer.html (enhanced)
-- legal-src/pages/*.html (7 pages titles/meta/H1s enhanced)
-- faq/index.html etc. (built)
-- sw.js (CACHE_NAME v2, precache + legal hashes, LEGAL_PATHS extended)
-- server.mjs (clean routes for all hubs)
-- robots.txt (Host directive corrected to a bare hostname)
-- sitemap.xml (GSC-hardened: video:content_loc removed, image child order fixed, 37 image entries)
-- tools/check-sitemap.mjs (new - 15-point Search Console pre-flight validator)
-- SITEMAP.md (new - submission runbook)
-
-All changes preserve atmospheric horror aesthetic, existing equity, performance work.
+**Adversarial self-review, as the brief asks it:**
+- *Would a music supervisor land here and believe this is the one?* On `/` and `/work`, yes —
+  nine credited productions with directors, a named award with a third-party source, and a
+  clear inquiry path. The removed star rating was hurting this, not helping: a director reads
+  an unattributed "5.0" as a red flag.
+- *Would a crawler understand who this is in 15 seconds of HTML?* Yes. `<title>` names the
+  person and the discipline; `Person` and `Organization` are separated and cross-linked;
+  `sameAs` points only at off-site canonical profiles.
+- *Would a spam classifier see an artist or a content site?* Artist. Zero jargon in visible
+  copy (enforced by the linter), no blog, no tag pages, 24 URLs total.
 
 ---
 
-**Dossier generated:** 2026-09-18
-**Branch:** arena/01a0b228-zazie-horror-portfolio
-**Repo:** zazieproductions/zazie-horror-portfolio
+## 7. Waiting on a human
+
+Decision memos, not a menu.
+
+### 1. Per-film craft commentary — **the highest-value thing left**
+**Recommend:** the composer writes 100–150 words per production covering what the cue work
+actually is (instrumentation, the problem the director brought, one specific moment).
+**Why:** it is the only remaining information gain. Everything factual about these films is
+already on IMDb; the sonic argument is not, and it is the thing nobody can copy.
+**Already implemented:** the page template, schema, internal graph and CTA are live, so this
+is copy-in, no rebuild. Add the text to `tools/work-data.mjs` and run
+`node tools/build-work-pages.mjs`.
+**Residual risk:** none. Absent fields are simply omitted.
+
+### 2. The four sample-only works
+**Recommend:** supply director, year and role for AQUAPHOBIA, GOODBYE BROTHER, Home Intruder
+and Whispers In The Dark. Each becomes a 10th–13th record.
+**Why:** four scored works with public video and no filmography entry is four credit queries
+going to IMDb instead of here.
+**Already implemented:** they are named on `/work` with an honest "credits not yet confirmed"
+note, so nothing on the site is misleading in the meantime.
+**Residual risk:** shipping a page with a guessed director would be a fabricated credit. That
+is why they are not built.
+
+### 3. Phantom Requiem upload date
+**Recommend:** supply the real YouTube upload date for `UX2kv3G89Jw`.
+**Why:** `uploadDate` is required for video rich results. The invalid `VideoObject` was
+removed rather than guessed at.
+**Already implemented:** the embed and the film record are live; only the schema is absent.
+**Residual risk:** none.
+
+### 4. Store ratings
+**Recommend:** if the 17 ratings on the Gumroad sound library are real Gumroad data, keep them
+on Gumroad and link out. Do not republish the aggregate in first-party `Product` markup.
+**Why:** Google treats reviews about your own product on your own page as self-serving, and
+the manual action risk is domain-wide. The `aggregateRating` was removed from
+`store-src/store.html`.
+**Residual risk:** losing product review stars in the store SERP. That is the correct trade.
+
+### 5. Conversion measurement
+**Recommend:** cookie-free inquiry counting (server log or privacy beacon), so "qualified
+inquiries" becomes a number.
+**Why:** §5. Currently there is no way to know whether any of this worked.
+**Residual risk:** adding a tracker would contradict the published privacy notice. Hence the
+constraint in the recommendation.
+
+### 6. Apex vs subdomain equity
+**Recommend:** check Search Console for `zazieproductions.com` brand impressions before
+assuming the subdomain is the right canonical host. See §4.
+**Residual risk:** if the apex holds real equity, two hosts are splitting the brand SERP.
+
+---
+
+## 8. Housekeeping not done deliberately
+
+- **`The Dark Awaits.png`** — 2.8 MB at the repo root, spaces in the filename, referenced by
+  nothing except `PERFORMANCE.md`. It is crawlable dead weight. Not deleted, because it may be
+  the source asset for a poster. Recommendation: move to `images/posters/` under a hyphenated
+  name, or delete.
+- **`robots.txt` `Host:` directive** — kept. Google ignores it; Yandex dropped support for it
+  too. Harmless, and removing it is churn.
+- **`sw.js` offline fallback** serves `/index.html` when a cached page misses and the network
+  is down. That is a client-side soft 404, but only for offline users; the server returns real
+  404 status, which is what Googlebot sees. Left alone.
+- **Film pages are not precached** by the service worker. Nine × 13 KB on first load to
+  precache pages nobody has asked for is a performance cost with no benefit; the runtime
+  stale-while-revalidate handler already covers them.
+
+---
+
+## 9. Files
+
+**New**
+`tools/work-data.mjs` · `tools/build-work-pages.mjs` · `tools/check-seo.mjs` ·
+`work/{expire,unseen,peregrinus,phantom-requiem,eclipsed,the-haunted,choleric,mike-has-a-visitor,the-dark-awaits}/index.html`
+
+**Modified**
+`index.html` (integrity, entity, titles, H2s, internal links, ItemList) ·
+`work/index.html` (regenerated as a real filmography hub) ·
+`sitemap.xml` (24 URLs) · `_headers` (72 canonicals) · `_redirects` (9 trailing-slash 301s) ·
+`composer/`, `reel/`, `process/`, `services/`, `contact/`, `404.html` ·
+`legal-src/partials/footer.html` + 7 page sources (and their built output) ·
+`store-src/store.html` (and built output)
+
+**Untouched on purpose**
+`server.mjs` (its generic directory resolution already serves nested routes) ·
+`sw.js` (runtime SWR already covers the new pages) ·
+`robots.txt` (already correct) ·
+all imagery, fonts, audio, and the entire cinematic boot sequence
