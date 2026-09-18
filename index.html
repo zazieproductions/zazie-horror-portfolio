@@ -442,7 +442,7 @@ document.addEventListener("keydown", (e) => {
 
 // 4. React Bundle Mount
 const boot = () => {
-  const go = () => import("/index-7a2157f4.js");
+  const go = () => import("/index-c7104566.js");
   "requestIdleCallback" in window ? requestIdleCallback(go, { timeout: 1200 }) : setTimeout(go, 250);
 };
 document.readyState === "complete" ? boot() : window.addEventListener("load", boot, { once: true });
