@@ -476,3 +476,96 @@ the line is gone and the poster now reads as a poster: title only.
 - Assumptions to confirm with the filmmaker credit: format label (`Feature`),
   genre pair, and the future IMDb/YouTube URL (one-line change in the bundle
   entry + prerender `<a href>` + `/work` hub-card when known).
+---
+
+# Method band: psychological audit / sonic terrain design / trajectory scoring — 2026-09-18
+
+## What was added
+
+The studio's method statement now has a home on two surfaces (and, on the
+homepage, in both copies):
+
+- **`index.html` `<section id="method">` (prerendered copy) and the bundle's
+  `Method` component** — a new band under the `03 · Approach` intro: label
+  "The method · three movements", the statement in the composer's own words
+  ("I don't write 'music for scenes.' *I build entire sonic ecosystems that
+  breathe with your world.*"), then three cards numbered in Roman numerals so
+  they never collide with the palette cards underneath:
+
+  | # | Movement | Core claim |
+  | --- | --- | --- |
+  | I | Psychological audit | dread is diagnosed before a note is written; unconscious triggers mapped first |
+  | II | Sonic terrain design | custom instruments, found sounds, sub-bass felt in the sternum |
+  | III | Trajectory scoring | where anxiety starts, peaks, what residue it leaves |
+
+  The pre-existing three pillar cards stay, now under a `Palette · what the
+  score is made of` label, so the section reads "how" (method) then "what"
+  (palette) instead of six unlabelled look-alike cards.
+- **`/process`** — new clause `III Method - psychological audit, sonic terrain
+  design, trajectory scoring` (`#method`) documenting the three movements for
+  the page's audience. Clauses after it renumbered: Composition IV, Revisions V,
+  Delivery VI, Rights VII, Related archives VIII. The contents list now reaches
+  `#related`, which it previously omitted, and the header `doc-meta` line reads
+  `Method · Psychological audit · sonic terrain design · trajectory scoring`.
+- **`/composer`** `#approach` — one paragraph pointing at the method with a
+  deep link to `/process#method`.
+- **Structured data** — the homepage `Service` block's `description` now names
+  the three movements. No other schema, title, meta description or heading was
+  touched.
+
+## Cache discipline
+
+Per the `immutable` rules in `_headers` (`/*.js`, one year):
+
+- bundle `index-5be19885.js` → `index-03372948.js` (raw file sha256, first 8
+  hex), 425,885 → 427,784 bytes. This branch rebased onto the poster-wall
+  commit (`index-7a2157f4.js`), so the new bundle is *that* bundle plus the
+  method band: neither change was dropped.
+- `index.html`'s dynamic import and the `sw.js` precache entry updated.
+- service worker cache bumped to `zazie-v5` (main already sat at `zazie-v4`
+  from the poster wall), because a returning visitor otherwise keeps the old
+  `index.html`/JS pair.
+
+## Verification performed
+
+- **jsdom harness (jsdom 30.1.0, installed outside the repo — no
+  `package.json` was added, so the harness is scratch), both copies, PASS.** The bundle was mounted into a
+  real `#root` with the browser surface it needs (`IntersectionObserver`,
+  `ResizeObserver`, `Audio`, media stubs): the app renders, `#method` contains
+  all three movement titles in order with Roman numerals I–III, and the palette
+  cards still follow. The same six strings were asserted in the prerendered copy,
+  which proves the two copies agree on this band.
+- **`node --check` on the patched bundle** (minified, single line 425 KB):
+  syntax clean, and the insertion was made at exactly one anchor
+  (`"data-source-loc":"src/components/Method.tsx:52:1"`), verified by count
+  before write.
+- **HTML well-formedness** — `html.parser` tag-balance pass over `index.html`,
+  `/process`, `/composer`: zero unclosed and zero mismatched tags.
+- **JSON-LD** — every `application/ld+json` block in both edited pages parses.
+- **Class audit** — every class string added exists in the compiled CSS
+  (`index-ba4ce5d7.css` for the homepage, `legal-89928f71.css` for the document
+  pages). No new CSS file, no rebuild of `legal-src`, no new class invented; the
+  pages' own card/pull-quote patterns were reused.
+- **`node tools/check-sitemap.mjs`** — PASS (15 URLs, 37 images, 7 videos).
+  `lastmod` on `/`, `/process` and `/composer` was already `2026-09-18`.
+- **Local HTTP crawl** — 200 on `/`, `/process`, `/composer`, `/reel`, `/work`,
+  `/services`, `/contact`, `/store`, `/faq`, `/sw.js` and
+  `/index-03372948.js`; 404 on both retired hashes; the served homepage imports
+  the new bundle and `sw.js` carries `zazie-v5`.
+
+## Observations, deliberately not changed here
+
+- **The two homepage copies were already out of sync before this change** and
+  still are, outside the new band: the prerendered `index.html` carries the
+  SEO-tuned `h2` ("Scoring approach: psychological horror architecture and dark
+  atmospheric color, built for story") and the palette card copy, while the
+  bundle's `Method` component still renders "A distinct point of view, built for
+  the story." and "Cinematic themes that stalk". Since `createRoot().render()`
+  replaces `#root`, **visitors see the bundle's wording while crawlers see the
+  prerendered wording.** Reconciling that is a bigger decision than a copy
+  addition (it means choosing one canonical source for the homepage), so it is
+  left as-is and recorded here.
+- **No browser in this sandbox**, so the band was verified as structure and
+  text, not as pixels. Worth one eyeball at 390 px, 768 px and 1440 px: the band
+  adds a row to a section that already had one, and the pull-quote is the only
+  display-size sentence in the section.
