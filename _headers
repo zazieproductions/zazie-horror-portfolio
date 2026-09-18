@@ -214,5 +214,115 @@
   Cache-Control: public, max-age=0, must-revalidate
   Link: <https://horror.zazieproductions.com/accessibility>; rel="canonical"
 
+# Filmography records - one crawlable object per production
+
+/work/expire
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/expire>; rel="canonical"
+
+/work/expire/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/expire>; rel="canonical"
+
+/work/expire/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/expire>; rel="canonical"
+
+/work/unseen
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/unseen>; rel="canonical"
+
+/work/unseen/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/unseen>; rel="canonical"
+
+/work/unseen/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/unseen>; rel="canonical"
+
+/work/peregrinus
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/peregrinus>; rel="canonical"
+
+/work/peregrinus/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/peregrinus>; rel="canonical"
+
+/work/peregrinus/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/peregrinus>; rel="canonical"
+
+/work/phantom-requiem
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/phantom-requiem>; rel="canonical"
+
+/work/phantom-requiem/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/phantom-requiem>; rel="canonical"
+
+/work/phantom-requiem/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/phantom-requiem>; rel="canonical"
+
+/work/eclipsed
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/eclipsed>; rel="canonical"
+
+/work/eclipsed/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/eclipsed>; rel="canonical"
+
+/work/eclipsed/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/eclipsed>; rel="canonical"
+
+/work/the-haunted
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/the-haunted>; rel="canonical"
+
+/work/the-haunted/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/the-haunted>; rel="canonical"
+
+/work/the-haunted/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/the-haunted>; rel="canonical"
+
+/work/choleric
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/choleric>; rel="canonical"
+
+/work/choleric/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/choleric>; rel="canonical"
+
+/work/choleric/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/choleric>; rel="canonical"
+
+/work/mike-has-a-visitor
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/mike-has-a-visitor>; rel="canonical"
+
+/work/mike-has-a-visitor/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/mike-has-a-visitor>; rel="canonical"
+
+/work/mike-has-a-visitor/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/mike-has-a-visitor>; rel="canonical"
+
+/work/the-dark-awaits
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/the-dark-awaits>; rel="canonical"
+
+/work/the-dark-awaits/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/the-dark-awaits>; rel="canonical"
+
+/work/the-dark-awaits/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/work/the-dark-awaits>; rel="canonical"
+
 /404.html
   Cache-Control: public, max-age=0, must-revalidate

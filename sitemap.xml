@@ -174,8 +174,8 @@
 
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg</image:loc>
-      <image:caption>EXPIRE (2025) horror short - sound design and score by Zazie Kanwar-Torge</image:caption>
-      <image:title>EXPIRE - Horror Film Score Portfolio</image:title>
+      <image:caption>EXPIRE (2025) horror short - sound design by Zazie Kanwar-Torge</image:caption>
+      <image:title>EXPIRE - Sound Design by Zazie Kanwar-Torge</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/unseen-640.jpg</image:loc>
@@ -246,6 +246,143 @@
       <image:loc>https://horror.zazieproductions.com/images/project-UX2kv3G89Jw.jpg</image:loc>
       <image:caption>Still from Phantom Requiem, gothic horror short scored by Zazie Kanwar-Torge</image:caption>
       <image:title>Phantom Requiem - Film Still</image:title>
+    </image:image>
+  </url>
+
+  <!-- ============================================================
+       SILO 1b - Individual work records (filmography objects)
+       Generated from tools/work-data.mjs via tools/build-work-pages.mjs
+       ============================================================ -->
+  <url>
+    <loc>https://horror.zazieproductions.com/work/expire</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.75</priority>
+
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/expire-red-check-1200.jpg</image:loc>
+      <image:caption>EXPIRE (2025) short film - sound design by Zazie Kanwar-Torge</image:caption>
+      <image:title>EXPIRE - Sound design by Zazie Kanwar-Torge</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://horror.zazieproductions.com/work/unseen</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.75</priority>
+
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/unseen-1200.jpg</image:loc>
+      <image:caption>UNSEEN feature film - original score by Zazie Kanwar-Torge</image:caption>
+      <image:title>UNSEEN - Original score by Zazie Kanwar-Torge</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://horror.zazieproductions.com/work/peregrinus</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.75</priority>
+
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/peregrinus-1200.jpg</image:loc>
+      <image:caption>PEREGRINUS series - series score by Zazie Kanwar-Torge</image:caption>
+      <image:title>PEREGRINUS - Series score by Zazie Kanwar-Torge</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://horror.zazieproductions.com/work/phantom-requiem</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.75</priority>
+
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/phantom-requiem-1200.jpg</image:loc>
+      <image:caption>Phantom Requiem short film - original score by Zazie Kanwar-Torge</image:caption>
+      <image:title>Phantom Requiem - Original score by Zazie Kanwar-Torge</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://horror.zazieproductions.com/work/eclipsed</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.75</priority>
+
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/eclipsed-1200.jpg</image:loc>
+      <image:caption>ECLIPSED feature film - original score by Zazie Kanwar-Torge</image:caption>
+      <image:title>ECLIPSED - Original score by Zazie Kanwar-Torge</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://horror.zazieproductions.com/work/the-haunted</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.75</priority>
+
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/the-haunted-1200.jpg</image:loc>
+      <image:caption>THE HAUNTED teaser - original score by Zazie Kanwar-Torge</image:caption>
+      <image:title>THE HAUNTED - Original score by Zazie Kanwar-Torge</image:title>
+    </image:image>
+    <video:video>
+      <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-Ty8tPp59mDc.jpg</video:thumbnail_loc>
+      <video:title>THE HAUNTED - original score by Zazie Kanwar-Torge</video:title>
+      <video:description>A supernatural horror teaser from Mike Fox at Crystal Fox Films — perception is reality. The score treats the haunting as a question of attention: atmospheric beds and haunted-house dread that never confirm the apparition for you.</video:description>
+      <video:player_loc>https://www.youtube.com/embed/Ty8tPp59mDc</video:player_loc>
+      <video:publication_date>2024-11-20</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+  </url>
+
+  <url>
+    <loc>https://horror.zazieproductions.com/work/choleric</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.75</priority>
+
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/choleric-1200.jpg</image:loc>
+      <image:caption>CHOLERIC short film - original score by Zazie Kanwar-Torge</image:caption>
+      <image:title>CHOLERIC - Original score by Zazie Kanwar-Torge</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://horror.zazieproductions.com/work/mike-has-a-visitor</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.75</priority>
+
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/mike-has-a-visitor-1200.jpg</image:loc>
+      <image:caption>MIKE HAS A VISITOR short film - original score by Zazie Kanwar-Torge</image:caption>
+      <image:title>MIKE HAS A VISITOR - Original score by Zazie Kanwar-Torge</image:title>
+    </image:image>
+    <video:video>
+      <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-HaVJP08j77U.jpg</video:thumbnail_loc>
+      <video:title>MIKE HAS A VISITOR - original score by Zazie Kanwar-Torge</video:title>
+      <video:description>A sleep-paralysis horror short by Marco Saikaley. Scored for dissociative tension: the paralysis is the premise, so the music holds a body that cannot move — sustained, unhurried, and refusing the release a conventional scare cue would give it.</video:description>
+      <video:player_loc>https://www.youtube.com/embed/HaVJP08j77U</video:player_loc>
+      <video:publication_date>2025-01-15</video:publication_date>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+  </url>
+
+  <url>
+    <loc>https://horror.zazieproductions.com/work/the-dark-awaits</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.75</priority>
+
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/the-dark-awaits-1200.jpg</image:loc>
+      <image:caption>THE DARK AWAITS feature film - original score by Zazie Kanwar-Torge</image:caption>
+      <image:title>THE DARK AWAITS - Original score by Zazie Kanwar-Torge</image:title>
     </image:image>
   </url>
 
