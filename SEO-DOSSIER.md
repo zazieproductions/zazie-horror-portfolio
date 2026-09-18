@@ -35,7 +35,7 @@
   - Cloudflare Pages now serves /404.html with proper 404 status
 
 - **sitemap.xml:**
-  - 15 URLs vs 9 before (+66%)
+  - 15 URLs vs 9 before (+66%) — now **16** with `/press` (2026-09-18, see `PRESS.md`)
   - Priorities weaponized: 1.0 home, 0.85 work/reel, 0.8 composer/services/store, 0.75 process/contact, 0.7 faq, 0.5 legal/licensing, 0.4 terms/privacy, 0.3 accessibility
   - Homepage: 6 image:image entries (hero-portrait, headshot, press-photo, expire/unseen/haunted posters) + 7 video:video with publication_date + tags (psychological horror, supernatural thriller, folk horror, body horror, etc.)
   - New silos: /work /reel /composer /process /services /contact with image entries
@@ -250,6 +250,7 @@
 
 - [x] robots.txt rewritten - unblocks /audio/, Allow *.mp3/*.avif/*.jpg/*.svg, Disallow param waste, crawl-delay tiers, Sitemap + Host, full Allow for Googlebot
 - [x] sitemap.xml rewritten 9->15 URLs, priorities weaponized, image:image 6, video:video 7, new silos /work /reel /composer /process /services /contact
+- [x] 2026-09-18: `/press` press-kit silo added (16 URLs, 42 images) — recognition record, approved bios, pull quotes, cleared assets, press-kit PDF + one-sheet. See `PRESS.md`.
 - [x] _headers rewritten X-Robots-Tag, CSP, Link canonical 45 variants, immutable vs must-revalidate
 - [x] _redirects fixed: removed /* /index.html 200 soft-404 trap, 301 legacy .html->pretty + trailing-slash normalization
 - [x] 404.html created noindex,follow, WebPage+BreadcrumbList, hub-grid recovery
@@ -329,7 +330,7 @@
 ### Files Modified/Created This Phase
 
 - robots.txt (rewritten)
-- sitemap.xml (rewritten 15 URLs)
+- sitemap.xml (rewritten 15 URLs, then 16 with /press)
 - _headers (rewritten 45 canonicals + X-Robots-Tag)
 - _redirects (removed soft-404, added 301s)
 - 404.html (new)

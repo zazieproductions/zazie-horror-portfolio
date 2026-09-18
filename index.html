@@ -438,7 +438,7 @@ document.addEventListener("keydown", (e) => {
 
 // 4. React Bundle Mount
 const boot = () => {
-  const go = () => import("/index-5be19885.js");
+  const go = () => import("/index-2b3820b1.js");
   "requestIdleCallback" in window ? requestIdleCallback(go, { timeout: 1200 }) : setTimeout(go, 250);
 };
 document.readyState === "complete" ? boot() : window.addEventListener("load", boot, { once: true });
@@ -1926,9 +1926,37 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
     <div class="relative mx-auto max-w-7xl px-4 sm:px-6 md:px-8">
       <div class="mb-10 max-w-2xl sm:mb-14">
         <h2 class="mb-4 font-display text-3xl leading-none text-bone sm:text-4xl md:text-6xl">Press kit: award-winning horror composer recognition</h2>
-        <p class="text-sm leading-relaxed text-mist sm:text-base">Selected interviews, features, and award coverage for psychological horror composer Zazie Kanwar-Torge: Visual Container Winter 2024 Award, Grammy Weekly, Limitless Magazine, Billboard Wire. Entity reinforcement for <a href="/composer" class="text-bone underline underline-offset-4 hover:text-blood">composer biography</a>.</p>
+        <p class="text-sm leading-relaxed text-mist sm:text-base">Selected interviews, features, and award coverage: the Ars Electronica Festival 2026 selection in Linz, the Golden Bloody Globes 2026 official selection in Los Angeles, the Black Mountain College radio-artist commission, Grammy Weekly, Limitless Magazine, Billboard Wire, and the Lake Ivan Film Journal review of Phantom Requiem. <a href="/press" class="text-bone underline underline-offset-4 hover:text-blood">Full press kit: recognition record, approved bios, pull quotes, photos and PDF</a>.</p>
       </div>
       <ul class="grid gap-4 md:grid-cols-2">
+        <li class="border border-ash bg-ink p-5 transition-colors hover:border-blood/60 sm:p-6">
+          <a href="https://ars.electronica.art/negotiatinghumanity/en/view/medium-sonorum-closing-concert-38238ddb450c80528618dd4d375c272d/" target="_blank" rel="noreferrer" class="block">
+            <p class="text-[9px] uppercase tracking-[0.2em] text-blood">Ars Electronica Festival 2026 · Linz, Austria</p>
+            <h3 class="mt-1 font-display text-xl text-bone">Slippage Beyond the Hyperlink, selected and performed at the Sonic Lab</h3>
+            <p class="mt-3 text-[9px] uppercase tracking-[0.22em] text-mist">Programme entry →</p>
+          </a>
+        </li>
+        <li class="border border-ash bg-ink p-5 transition-colors hover:border-blood/60 sm:p-6">
+          <a href="https://www.hollywoodsff.org/bloody2026.html" target="_blank" rel="noreferrer" class="block">
+            <p class="text-[9px] uppercase tracking-[0.2em] text-blood">Golden Bloody Globes 2026 · Los Angeles</p>
+            <h3 class="mt-1 font-display text-xl text-bone">Are You Real? - original score, Best of the Festival nominee</h3>
+            <p class="mt-3 text-[9px] uppercase tracking-[0.22em] text-mist">Selection page →</p>
+          </a>
+        </li>
+        <li class="border border-ash bg-ink p-5 transition-colors hover:border-blood/60 sm:p-6">
+          <a href="https://www.blackmountaincollege.org/broadcast-bmc-radio-artist-zazie-productions/" target="_blank" rel="noreferrer" class="block">
+            <p class="text-[9px] uppercase tracking-[0.2em] text-blood">Black Mountain College Museum + Arts Center</p>
+            <h3 class="mt-1 font-display text-xl text-bone">BMC Radio Artist 2021, selected with Asheville FM and Make Noise</h3>
+            <p class="mt-3 text-[9px] uppercase tracking-[0.22em] text-mist">Artist page →</p>
+          </a>
+        </li>
+        <li class="border border-ash bg-ink p-5 transition-colors hover:border-blood/60 sm:p-6">
+          <a href="https://lakeivan.substack.com/p/spinning-in-the-wildness-phantom" target="_blank" rel="noreferrer" class="block">
+            <p class="text-[9px] uppercase tracking-[0.2em] text-blood">Lake Ivan Film Journal · Review</p>
+            <h3 class="mt-1 font-display text-xl text-bone">Spinning in the Wildness: Phantom Requiem reviewed by David Finkelstein</h3>
+            <p class="mt-3 text-[9px] uppercase tracking-[0.22em] text-mist">Read review →</p>
+          </a>
+        </li>
         <li class="border border-ash bg-ink p-5 transition-colors hover:border-blood/60 sm:p-6">
           <a href="https://www.visualcontainer.tv/wp-content/uploads/2025/01/Winter-2024-Award-Winners_Press-Release.pdf" target="_blank" rel="noreferrer" class="block">
             <p class="text-[9px] uppercase tracking-[0.2em] text-blood">Visual Container · PDF</p>
@@ -1958,6 +1986,10 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
           </a>
         </li>
       </ul>
+      <div class="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-white/5 pt-6">
+        <a href="/press" class="inline-flex items-center border border-blood bg-blood/10 px-4 py-2 text-[11px] uppercase tracking-[0.25em] text-bone transition-colors hover:bg-blood">Open the full press kit</a>
+        <p class="text-[10px] uppercase tracking-[0.25em] text-mist/80">Approved bios · pull quotes · twelve cleared images · press-kit PDF and one-sheet · reply target 48 hours</p>
+      </div>
     </div>
   </section>
   <section id="method" class="relative overflow-hidden bg-void py-16 sm:py-24 md:py-32">

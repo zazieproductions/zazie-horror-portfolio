@@ -1,7 +1,9 @@
-// Service Worker: instant cache & zero-lag offline/repeat visit delivery - v3 includes IA silos /work /reel /composer /process /services /contact and weaponized schema
-// v3: cache name bumped with the cinema-player bundle so a returning visitor is not served the
-// previous index.html/JS pair from the old cache (they are immutable for a year).
-const CACHE_NAME = 'zazie-v3';
+// Service Worker: instant cache & zero-lag offline/repeat visit delivery - v4 adds the /press EPK
+// (page, both press-kit PDFs and their preview images) alongside the IA silos /work /reel /composer
+// /process /services /contact and weaponized schema.
+// v4: cache name bumped so a returning visitor picks up the new /press route and the homepage press
+// section instead of the previous HTML/JS pair from the old cache (they are immutable for a year).
+const CACHE_NAME = 'zazie-v4';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -12,6 +14,10 @@ const PRECACHE_ASSETS = [
   '/reel/index.html',
   '/composer',
   '/composer/index.html',
+  '/press',
+  '/press/index.html',
+  '/press/zazie-productions-press-kit-2026.pdf',
+  '/press/zazie-productions-one-sheet-2026.pdf',
   '/process',
   '/process/index.html',
   '/services',
@@ -36,7 +42,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-ba4ce5d7.css',
-  '/index-5be19885.js',
+  '/index-2b3820b1.js',
   '/store-8af6034d.css',
   '/store-2b4680d0.js',
   '/legal-89928f71.css',
@@ -82,7 +88,10 @@ const PRECACHE_ASSETS = [
   // Bio & Press
   '/images/headshot.avif',
   '/images/headshot.jpg',
-  '/images/press-photo.jpg'
+  '/images/press-photo.jpg',
+  // Press kit documents & previews
+  '/images/press/press-kit-cover.jpg',
+  '/images/press/one-sheet-thumb.jpg'
 ];
 
 self.addEventListener('install', (event) => {
@@ -126,7 +135,7 @@ self.addEventListener('fetch', (event) => {
   // Legal and operating documents: network first, cache only as a fallback.
   // A terms or privacy page must never be served stale while a network is
   // reachable, even though the rest of the site is stale-while-revalidate.
-  const LEGAL_PATHS = ['/legal', '/faq', '/terms', '/privacy', '/licensing', '/purchases', '/accessibility', '/work', '/reel', '/composer', '/process', '/services', '/contact'];
+  const LEGAL_PATHS = ['/legal', '/faq', '/terms', '/privacy', '/licensing', '/purchases', '/accessibility', '/work', '/reel', '/composer', '/press', '/process', '/services', '/contact'];
   if (url.origin === self.location.origin && req.mode === 'navigate' && LEGAL_PATHS.includes(url.pathname.replace(/\/$/, ''))) {
     event.respondWith(
       fetch(req).then((res) => {
@@ -165,6 +174,7 @@ self.addEventListener('fetch', (event) => {
       url.pathname.startsWith('/fonts/') ||
       url.pathname.endsWith('.js') ||
       url.pathname.endsWith('.css') ||
+      url.pathname.endsWith('.pdf') ||
       url.pathname === '/favicon.svg';
 
     if (isStatic) {

@@ -430,3 +430,85 @@ the line is gone and the poster now reads as a poster: title only.
   playback, rendition selection and the fullscreen transition were verified as
   preconditions (attributes, permissions policy, overlay/ancestor audit) and
   must be eyeballed once in a real browser.
+
+---
+
+# Press kit: `/press` silo, EPK PDF and a fuller homepage press section — 2026-09-18
+
+Date: 2026-09-18 · Branch: `arena/01a0b69c-zazie-horror-portfolio` · Kit v1.0
+
+The request was to make the press kit more impressive, more organised, more detailed and higher-converting.
+The old press kit was a four-card grid inside the homepage React bundle. It named four outlets and linked out;
+it did not name a festival, a year, a work, a venue, a quotable line, an image anyone was cleared to run, or a
+reply target. Full rationale, recognition record and maintenance rules live in `PRESS.md`; this entry covers
+delivery, weight and verification.
+
+## What shipped
+
+- **New page `/press`** — eleven clauses: fact sheet, 2026 recognitions, 2021–2026 timeline, selected
+  coverage, quotable critical response, screening history, approved boilerplate (25/50/100/150 words plus
+  three credit lines, all with copy buttons), press assets, story angles, press Q&A, contact and booking.
+- **Two generated PDFs** — `press/zazie-productions-press-kit-2026.pdf` (6 pp, 319 KB) and
+  `press/zazie-productions-one-sheet-2026.pdf` (1 p, 31 KB), built by `press-src/build-press-pdf.py` from the
+  same facts as the page, with the site's Cormorant/Inter faces converted to static TTF and embedded, source
+  URLs as real links, and a QR code that resolves to `/press`.
+- **Homepage press section, both copies**: the prerendered markup in `index.html` and the `PressKit.tsx`
+  render in the bundle. Four cards became eight, with the 2026 selections first (Ars Electronica Festival,
+  Golden Bloody Globes, Black Mountain College, Lake Ivan Film Journal) and each card carrying its own CTA
+  label; a hairline row under the grid adds *Open the full press kit* → `/press` and the line *Approved bios ·
+  pull quotes · twelve cleared images · press-kit PDF and one-sheet · reply target 48 hours*. The section
+  intro now names the 2026 selections and links `/press`.
+- **Wayfinding**: footer links (bundle + shared partial) now point at `/press` instead of `/#press`; `/press`
+  added to the shared masthead tabs; `/composer` press grid expanded 4 → 8 entries with a `/press` link;
+  `/404` gained a press recovery card (surrounding cards renumbered 01–12).
+- **Infrastructure**: `/press` in `server.mjs` `CLEAN_ROUTES` and in the MIME map for `.pdf`; `_headers`
+  canonical block for `/press`, `/press/`, `/press/index.html` plus a 1-hour TTL on `/press/*.pdf` so a
+  corrected kit replaces an old one inside the hour without a URL change; `sw.js` bumped `zazie-v3` → `v4`
+  with the page, both PDFs and both preview images precached, `/press` in `LEGAL_PATHS` (network-first) and
+  `.pdf` treated as a cache-first static asset; `sitemap.xml` new *SILO 3b* entry with five `image:image`
+  children.
+
+## Cost
+
+| Item | Weight |
+|------|--------|
+| `/press` HTML | 72,381 bytes (shared `legal-*` CSS/JS, no new render-blocking asset) |
+| Press-kit PDF | 319 KB, 6 pages, fonts embedded |
+| One-sheet PDF | 31 KB, 1 page |
+| Two preview images | 72 KB + 115 KB, lazy-loaded, only referenced from the page |
+| Bundle delta | 425,650 → 427,710 bytes (+2,060) for the press cards, CTA row and intro edit |
+| `index.html` press block | 2,518 → 5,494 bytes: the prerendered four-card grid becomes the same eight cards plus the CTA row, so the static page and the hydrated page agree and no-JS visitors see the full record |
+
+Nothing new is requested on first paint of the homepage: the two PDFs are behind `download` links, and the
+preview images are `loading="lazy"`.
+
+## Cache discipline
+
+Per the `immutable` rules in `_headers`: `index-5be19885.js` → **`index-2b3820b1.js`** (raw file sha256, first
+8 hex). `index.html`'s dynamic import and the `sw.js` precache entry were updated; the service worker cache
+name moved `zazie-v3` → `zazie-v4` so a returning visitor is not served the previous html/js pair. `legal-*.css`
+and `legal-*.js` were rebuilt unchanged in content, so their hashes did not move.
+
+## Verification performed
+
+- `node tools/check-sitemap.mjs` → **PASS (16 URLs, 42 images, 7 videos)**, zero errors. The `/press` entry
+  passed the canonical, robots, on-disk-image and schema-order checks.
+- **Bundle patched without a build step** (no toolchain is vendored for the React source). Verified by
+  `node --check` on an ESM copy, then by **executing the bundle in jsdom** against the built `index.html` with
+  the missing browser APIs stubbed: the page mounts with no exceptions, `#press` renders, the eight outlet
+  labels print in the intended order, each card's CTA label is correct (`Programme entry →`, `Selection page →`,
+  `Artist page →`, `Read review →`, `Open PDF →`, `Read feature →`), three `/press` links exist and zero
+  `#press` links remain.
+- **`/press` executed the same way** with `legal-*.js`: no exceptions, seven copy plates with unique ids, six
+  press Q&A items collapsing on load (a real bug found and fixed here — an empty `id` made the deep-link check
+  treat every item as the linked one, so all six stayed open; each item now carries `id="pq-*"`), no broken
+  in-page anchors, and all 26 `download` links resolving to files on disk.
+- **Local HTTP crawl** on `server.mjs`: 200 on `/`, `/press`, both PDFs (`application/pdf`),
+  `/images/press/press-kit-cover.jpg`, `/composer`, `/sitemap.xml`.
+- Sanity checks kept: HTML tag balance on `404.html`, `composer/index.html` and `press/index.html` (zero
+  unclosed or mismatched tags), JSON-LD parsed on `/press` (9 entities in one `@graph`).
+- **Not verifiable in this sandbox**: no headless browser and no reachable browser CDN, so there is no visual
+  capture of the page or of the PDFs' rendered pages as a browser would paint them. The PDFs were instead
+  rendered to PNG with `pypdfium2` and inspected page by page (bleed, orphan headings and stranded content
+  fixed across four iterations), and the page's layout was reasoned from the shared stylesheet plus the jsdom
+  text extraction.

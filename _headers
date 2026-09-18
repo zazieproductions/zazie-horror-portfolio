@@ -31,6 +31,13 @@
 /sitemap.xml
   Cache-Control: public, max-age=86400
 
+# Press kit downloads: real files, versioned by year in the filename. Short TTL so a
+# corrected kit replaces the old one within the hour without a URL change.
+/press/*.pdf
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+  Content-Disposition: inline
+  X-Robots-Tag: index, follow, max-image-preview:large
+
 /
   Cache-Control: public, max-age=0, must-revalidate
   Link: <https://horror.zazieproductions.com/>; rel="canonical"
@@ -54,6 +61,18 @@
 /store.html
   Cache-Control: public, max-age=0, must-revalidate
   Link: <https://horror.zazieproductions.com/store>; rel="canonical"
+
+/press
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/press>; rel="canonical"
+
+/press/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/press>; rel="canonical"
+
+/press/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/press>; rel="canonical"
 
 /work
   Cache-Control: public, max-age=0, must-revalidate

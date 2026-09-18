@@ -286,6 +286,42 @@
   </url>
 
   <!-- ============================================================
+       SILO 3b - Press kit / EPK (Person + MusicEvent + Review schema)
+       ============================================================ -->
+  <url>
+    <loc>https://horror.zazieproductions.com/press</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/press/press-kit-cover.jpg</image:loc>
+      <image:caption>Cover of the Zazie Productions press kit PDF (2026): electronic press kit for psychological horror composer Zazie Kanwar-Torge.</image:caption>
+      <image:title>Zazie Productions Press Kit 2026 - Zazie Kanwar-Torge, psychological horror composer</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/press/one-sheet-thumb.jpg</image:loc>
+      <image:caption>One-page press one-sheet for Zazie Kanwar-Torge: 2026 recognition, approved bio, credit wording, quotes and press contact.</image:caption>
+      <image:title>Zazie Productions press one-sheet 2026 - psychological horror composer</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
+      <image:caption>Press photo - Zazie Kanwar-Torge, psychological horror composer, Zazie Productions LLC, Asheville NC.</image:caption>
+      <image:title>Zazie Productions Press Photo - Horror Composer</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/headshot.jpg</image:loc>
+      <image:caption>Headshot - Zazie Kanwar-Torge, award-winning horror film composer, available for press and interviews.</image:caption>
+      <image:title>Zazie Kanwar-Torge Headshot - Horror Composer Press Asset</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/hero-portrait.jpg</image:loc>
+      <image:caption>Hero portrait - Zazie Kanwar-Torge, composer of dark, atmospheric, cinematic horror scores for film, TV and games.</image:caption>
+      <image:title>Zazie Kanwar-Torge Hero Portrait - Psychological Horror Composer</image:title>
+    </image:image>
+  </url>
+
+  <!-- ============================================================
        SILO 4 - Process (HowTo + Service)
        ============================================================ -->
   <url>

@@ -19,12 +19,14 @@ const MIME = {
   '.svg': 'image/svg+xml',
   '.woff2': 'font/woff2',
   '.mp3': 'audio/mpeg',
+  '.pdf': 'application/pdf',
   '.xml': 'application/xml',
   '.txt': 'text/plain',
 };
 
 const CLEAN_ROUTES = [
   '/work', '/reel', '/composer', '/process', '/services', '/contact',
+  '/press',
   '/store', '/legal', '/faq', '/terms', '/privacy', '/licensing', '/purchases', '/accessibility'
 ];
 

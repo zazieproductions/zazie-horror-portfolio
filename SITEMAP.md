@@ -2,7 +2,7 @@
 
 **File:** `sitemap.xml` → `https://horror.zazieproductions.com/sitemap.xml`
 **Validator:** `node tools/check-sitemap.mjs`
-**Status:** ✅ `PASS — 15 URLs, 37 images, 7 videos. Safe to submit.`
+**Status:** ✅ `PASS — 16 URLs, 42 images, 7 videos. Safe to submit.`
 **Date:** 2026-09-18
 
 ---
@@ -23,7 +23,8 @@ silently ignoring. All 13 are fixed.
 | 17 | `/legal` (0.5) ranked below its child `/licensing` (0.55) | Cosmetic, but priority should follow the silo. | `/legal` → 0.55, `/licensing` → 0.5. |
 | 18 | `robots.txt` `Host:` value included a scheme (`Host: https://…`) | The directive takes a bare hostname. Google ignores unknown lines; Yandex would have ignored a malformed one. | `Host: horror.zazieproductions.com`. |
 
-**Net:** 15 URLs, 37 images, 7 videos, 23.6 KB.
+**Net (after the /press silo, 2026-09-18):** 16 URLs, 42 images, 7 videos. The `/press` entry adds
+five `image:image` children (press-kit cover, one-sheet thumb, press photo, headshot, hero portrait).
 
 ---
 
@@ -80,8 +81,8 @@ above and fails — so the checks are real, not decorative.
    more reliably.
 3. **Sitemaps → Add a new sitemap →** enter `sitemap.xml` (not the full URL).
    Expect `Success` and `15 pages discovered` within a few minutes.
-4. Use **URL Inspection → Request Indexing** on the six new silos: `/work`,
-   `/reel`, `/composer`, `/process`, `/services`, `/contact`. They are live and
+4. Use **URL Inspection → Request Indexing** on the newer silos: `/work`,
+   `/reel`, `/composer`, `/process`, `/services`, `/contact` and `/press`. They are live and
    return 200, but have never been submitted, so Google has no reason to crawl
    them promptly.
 5. Check back in 2–7 days:
@@ -116,6 +117,11 @@ above and fails — so the checks are real, not decorative.
   demonstrably fake.
 - Re-run `node tools/check-sitemap.mjs` after adding any page, image or video.
   It is fast and exits non-zero, so it can drop straight into CI.
+- When a page is added, it must also be added to: `sitemap.xml`, `robots.txt` (only if it needs a
+  rule), `_headers` (canonical + `Cache-Control: max-age=0, must-revalidate`), `server.mjs`
+  `CLEAN_ROUTES`, `sw.js` (precache list, `LEGAL_PATHS` if it must never be served stale, and the cache
+  name), and the shared footer/masthead partials so it is reachable. `/press` (2026-09-18) is the worked
+  example — see `PRESS.md`.
 - Add new pages to `sitemap.xml`, to `robots.txt` if needed, to `_headers`
   (canonical + `Cache-Control: max-age=0, must-revalidate`), to `server.mjs`
   `CLEAN_ROUTES`, and to `sw.js`.
