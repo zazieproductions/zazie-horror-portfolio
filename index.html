@@ -22,10 +22,8 @@
   var force=null;
   try{force=new URLSearchParams(location.search).get('boot');}catch(e){}
   if(force===null&&location.hash.indexOf('boot')>-1)force='1';
-  if(force===null&&window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  var h=location.hostname,preview=(h==='localhost'||h==='127.0.0.1'||/(^|\.)e2b\.app$/.test(h)||/(^|\.)pages\.dev$/.test(h));
-  var seen=null;try{seen=sessionStorage.getItem('zpBootShown');}catch(e){}
-  if(seen&&force===null&&!preview)return;
+  if(force===null)return;
+  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches&&force!=='1')return;
   var de=document.documentElement;
   if(de.classList){de.classList.add('zp-boot-on');if(force!==null)de.classList.add('zp-boot-force');}
   else de.className+=' zp-boot-on';
@@ -465,15 +463,6 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
 <meta name="twitter:image" content="https://horror.zazieproductions.com/images/hero-portrait.jpg"/>
 <meta name="twitter:image:alt" content="Zazie Kanwar-Torge, psychological horror composer, dark cinematic score artwork"/>
 <meta name="author" content="Zazie Kanwar-Torge" />
-
-<style>
-  section#top > div.relative > div.w-full > p.mt-4 {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-    animation: none !important;
-  }
-</style>
 
 <style>
   /* Disable poster-wall entrance flicker */
@@ -1600,30 +1589,29 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
 </script>
 <div id="root" tabindex="-1">
 <div class="grain" aria-hidden="true"></div><div class="vignette opacity-80" aria-hidden="true"></div>
-<header class="fixed inset-x-0 top-0 z-50 bg-transparent">
-  <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 md:px-8">
-    <a href="#top" class="flex items-center gap-3" aria-label="Zazie Kanwar-Torge, Zazie Productions, horror composer">
-      <span class="font-display text-xl text-bone">Z</span>
-      <span class="flex flex-col leading-none">
-        <span class="text-sm font-semibold tracking-[0.2em] text-bone">ZKT</span>
-        <span class="text-[9px] uppercase tracking-[0.3em] text-mist">Productions</span>
-      </span>
-    </a>
-    <nav aria-label="Primary">
-      <div class="flex items-center gap-6">
-        <a href="/reel" title="Horror composer showreel: 29 original dark cinematic cues" class="text-[11px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-bone">Reel</a>
-        <a href="/work" title="Selected horror productions: psychological, folk, body horror scores" class="text-[11px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-bone">Work</a>
-        <a href="/composer" title="Zazie Kanwar-Torge: psychological horror composer biography" class="text-[11px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-bone">Composer</a>
-        <a href="/process" title="Horror film scoring process: spotting to stems" class="text-[11px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-bone">Process</a>
-        <a href="/services" title="Horror film scoring rates: micro-budget to feature" class="text-[11px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-bone">Rates</a>
-        <a href="/store" title="Catalogue: horror sound libraries, dark ambient records, tools" class="text-[11px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-bone">Store</a>
+<header class="fixed inset-x-0 top-0 z-40 bg-transparent transition-all duration-300">
+  <div class="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:h-16 sm:px-6 md:h-[4.5rem] md:px-8">
+    <a href="#top" class="group flex items-center gap-3" aria-label="Zazie Kanwar-Torge, Zazie Productions, horror composer">
+      <span class="relative flex h-9 w-9 items-center justify-center border border-blood/40 bg-blood/10 font-display text-lg text-blood transition-all group-hover:border-blood group-hover:bg-blood group-hover:text-bone">Z</span>
+      <div class="hidden sm:block">
+        <span class="block font-display text-lg leading-none tracking-[0.12em] text-bone transition-colors group-hover:text-blood">ZKT</span>
+        <span class="mt-0.5 block text-[9px] uppercase tracking-[0.32em] text-mist">Productions</span>
       </div>
-      <a href="/contact" title="Hire a horror composer: scoring inquiry" class="inline-flex items-center border border-blood bg-blood/10 px-4 py-2 text-[11px] uppercase tracking-[0.25em] text-bone transition-colors hover:bg-blood">Scoring inquiry</a>
+    </a>
+    <nav class="hidden items-center gap-1 xl:flex" aria-label="Primary">
+      <a href="#showreel" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Reel</a>
+      <a href="#work" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Work</a>
+      <a href="#services" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Rates</a>
+      <a href="/store" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Store</a>
+      <a href="#contact" class="ml-3 bg-blood px-5 py-2.5 text-[10px] uppercase tracking-[0.22em] text-bone shadow-[0_0_24px_rgba(196,30,30,0.25)] transition-all hover:bg-ember hover:shadow-[0_0_32px_rgba(255,42,42,0.35)]">Scoring inquiry</a>
     </nav>
+    <button class="border border-white/10 p-2.5 text-bone transition-colors hover:border-blood/50 xl:hidden" aria-label="Open menu">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu" aria-hidden="true"><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></svg>
+    </button>
   </div>
 </header>
 <main>
-  <section id="top" class="relative overflow-hidden bg-void" style="min-height:100svh">
+  <section id="top" class="relative flex min-h-[100svh] items-center overflow-hidden">
     <div class="pointer-events-none absolute inset-0" aria-hidden="true">
       <img src="/images/atmosphere-bg.jpg" alt="Atmospheric dark ambient scoring background: fog, texture, and psychological horror ambiance" title="Atmospheric Horror Scoring Backdrop - Zazie Productions" fetchpriority="high" decoding="async" class="absolute inset-0 h-full w-full scale-110 object-cover opacity-40 hero-kenburns"/>
       <div class="absolute inset-0 bg-gradient-to-r from-void via-void/92 to-void/55"></div>
@@ -1640,27 +1628,59 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
           <source srcset="/images/hero-portrait.avif" type="image/avif"/>
           <img src="/images/hero-portrait.jpg" alt="Zazie Kanwar-Torge, award-winning psychological horror composer and multi-instrumentalist" title="Zazie Kanwar-Torge | Psychological Horror Composer" width="896" height="1152" fetchpriority="high" decoding="async" class="absolute bottom-0 right-0 h-full w-auto max-w-none object-cover object-top opacity-80"/>
         </picture>
+        <div class="absolute inset-0 bg-gradient-to-l from-transparent via-void/20 to-void"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-void via-transparent to-void/40"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-void"></div>
+        <div class="absolute inset-y-[15%] right-0 w-px bg-gradient-to-b from-transparent via-blood/50 to-transparent"></div>
       </div>
     </div>
-    <div style="padding-top:8rem;padding-bottom:5rem" class="relative mx-auto flex max-w-7xl flex-col justify-center px-4 sm:px-6 md:px-8">
-      <div class="w-full max-w-2xl">
-        <p class="mt-4 font-display text-lg tracking-wide text-bone">Zazie Kanwar-Torge</p>
-        <h1 class="font-display text-[2.35rem] leading-[1.02] tracking-tight text-bone sm:text-5xl md:text-6xl lg:text-[3.75rem]">Dark, atmospheric horror scores <span class="mt-1 block bg-gradient-to-r from-blood via-ember to-blood bg-clip-text italic text-transparent">written to your picture.</span></h1>
-        <p class="mt-5 max-w-md font-display text-xl leading-snug text-bone/90 sm:mt-6 sm:text-2xl">Original music for psychological horror, folk horror, body horror, supernatural thrillers, and dark sci-fi, <span class="block italic text-mist">composed for film, TV, and games.</span></p>
-        <p class="mt-3 max-w-md text-[13px] leading-relaxed text-mist sm:text-sm">Award-winning psychological horror composer Zazie Kanwar-Torge, founder of Zazie Productions LLC. IMDb credited, 5.0 collaborator rating, Winter 2024 Award Winner. Micro-budget naming from $50, short scores from $2,500, features from $8,000. 29 original cues in <a href="/reel" class="text-bone underline underline-offset-4 hover:text-blood">horror showreel</a>, 9 productions in <a href="/work" class="text-bone underline underline-offset-4 hover:text-blood">selected horror filmography</a>, scoring approach at <a href="/process" class="text-bone underline underline-offset-4 hover:text-blood">process documentation</a>, and rates at <a href="/services" class="text-bone underline underline-offset-4 hover:text-blood">horror scoring rates</a>. <a href="/composer" class="text-bone underline underline-offset-4 hover:text-blood">Composer biography</a> and <a href="/faq">36 questions filmmakers ask</a>.</p>
+    <div class="relative z-10 mx-auto w-full max-w-7xl px-4 pb-28 pt-[max(6rem,env(safe-area-inset-top)+5rem)] sm:px-6 sm:pb-32 md:px-8 md:pt-36">
+      <div class="w-full max-w-xl lg:max-w-[560px]">
+        <div class="mb-5 inline-flex flex-wrap items-center gap-2">
+          <span class="inline-flex items-center gap-2 rounded-full border border-blood/35 bg-blood/10 px-3 py-1.5 text-[9px] uppercase tracking-[0.28em] text-blood backdrop-blur-sm sm:text-[10px]">
+            <span class="relative flex h-1.5 w-1.5">
+              <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-blood opacity-60"></span>
+              <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-blood"></span>
+            </span>
+            Booking select projects
+          </span>
+        </div>
+        <p class="mb-4 text-[10px] uppercase tracking-[0.38em] text-mist sm:text-[11px]">Zazie Kanwar-Torge</p>
+        <h1 class="font-display text-[2.35rem] leading-[1.02] tracking-tight text-bone sm:text-5xl md:text-6xl lg:text-[3.75rem]">Dark, atmospheric scores <span class="mt-1 block bg-gradient-to-r from-blood via-ember to-blood bg-clip-text italic text-transparent">written to your picture.</span></h1>
+        <p class="mt-5 max-w-md font-display text-xl leading-snug text-bone/90 sm:mt-6 sm:text-2xl">Original music for psychological horror, thrillers, and dark sci-fi, <span class="text-mist">composed for film, TV, and games.</span></p>
         <div class="mt-8 flex w-full flex-col gap-3 sm:mt-10 sm:flex-row sm:items-center">
-          <a href="#showreel" class="group relative inline-flex min-h-[54px] w-full items-center justify-center gap-3 bg-blood px-8 py-4 text-sm font-medium tracking-wide text-bone shadow-[0_0_40px_rgba(196,30,30,0.35)] transition-all hover:bg-ember hover:shadow-[0_0_56px_rgba(255,42,42,0.45)] sm:w-auto">Play the showreel</a>
-          <a href="#contact" class="group relative inline-flex min-h-[54px] w-full items-center justify-center gap-3 border border-ash px-8 py-4 text-sm font-medium tracking-wide text-bone transition-colors hover:border-blood hover:text-bone sm:w-auto">Start an inquiry</a>
+          <a href="#showreel" class="group relative inline-flex min-h-[54px] w-full items-center justify-center gap-3 overflow-hidden bg-blood px-8 py-4 text-sm font-medium tracking-wide text-bone shadow-[0_0_40px_rgba(196,30,30,0.35)] transition-all hover:bg-ember hover:shadow-[0_0_56px_rgba(255,42,42,0.45)] sm:w-auto">
+            <span class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent transition-transform duration-700 group-hover:translate-x-full"></span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-play relative fill-current" aria-hidden="true"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg>
+            <span class="relative">Play the showreel</span>
+          </a>
+          <a href="#contact" class="inline-flex min-h-[54px] w-full items-center justify-center border border-bone/25 bg-white/[0.02] px-7 py-4 text-[11px] uppercase tracking-[0.22em] text-bone backdrop-blur-sm transition-all hover:border-blood hover:bg-blood/10 hover:text-blood sm:w-auto">Start an inquiry</a>
         </div>
         <div class="mt-8 flex flex-col gap-4 border-t border-white/10 pt-6 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6">
-          <a href="https://www.imdb.com/name/nm17333332" target="_blank" rel="noreferrer" class="inline-flex items-center gap-1.5 text-sm"><span class="font-semibold text-[#F5C518]">5.0</span><span class="text-mist">&nbsp;collaborator rating</span></a>
+          <a href="#reviews" class="inline-flex items-center gap-2.5 transition-colors hover:text-bone">
+            <div class="inline-flex items-center gap-1.5" role="img" aria-label="5 out of 5 stars">
+              <div class="flex items-center gap-0.5">
+                <span class="relative inline-block" style="width:12px;height:12px"><svg width="12" height="12" viewBox="0 0 24 24" class="absolute inset-0 text-ash" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.47L12 17.77l-5.8 3.05 1.11-6.47-4.7-4.58 6.49-.94L12 2.5z"></path></svg><span class="absolute inset-0 overflow-hidden" style="width:100%"><svg width="12" height="12" viewBox="0 0 24 24" class="text-[#F5C518]" aria-hidden="true" fill="currentColor" stroke="currentColor" stroke-width="0"><path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.47L12 17.77l-5.8 3.05 1.11-6.47-4.7-4.58 6.49-.94L12 2.5z"></path></svg></span></span>
+                <span class="relative inline-block" style="width:12px;height:12px"><svg width="12" height="12" viewBox="0 0 24 24" class="absolute inset-0 text-ash" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.47L12 17.77l-5.8 3.05 1.11-6.47-4.7-4.58 6.49-.94L12 2.5z"></path></svg><span class="absolute inset-0 overflow-hidden" style="width:100%"><svg width="12" height="12" viewBox="0 0 24 24" class="text-[#F5C518]" aria-hidden="true" fill="currentColor" stroke="currentColor" stroke-width="0"><path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.47L12 17.77l-5.8 3.05 1.11-6.47-4.7-4.58 6.49-.94L12 2.5z"></path></svg></span></span>
+                <span class="relative inline-block" style="width:12px;height:12px"><svg width="12" height="12" viewBox="0 0 24 24" class="absolute inset-0 text-ash" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.47L12 17.77l-5.8 3.05 1.11-6.47-4.7-4.58 6.49-.94L12 2.5z"></path></svg><span class="absolute inset-0 overflow-hidden" style="width:100%"><svg width="12" height="12" viewBox="0 0 24 24" class="text-[#F5C518]" aria-hidden="true" fill="currentColor" stroke="currentColor" stroke-width="0"><path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.47L12 17.77l-5.8 3.05 1.11-6.47-4.7-4.58 6.49-.94L12 2.5z"></path></svg></span></span>
+                <span class="relative inline-block" style="width:12px;height:12px"><svg width="12" height="12" viewBox="0 0 24 24" class="absolute inset-0 text-ash" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.47L12 17.77l-5.8 3.05 1.11-6.47-4.7-4.58 6.49-.94L12 2.5z"></path></svg><span class="absolute inset-0 overflow-hidden" style="width:100%"><svg width="12" height="12" viewBox="0 0 24 24" class="text-[#F5C518]" aria-hidden="true" fill="currentColor" stroke="currentColor" stroke-width="0"><path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.47L12 17.77l-5.8 3.05 1.11-6.47-4.7-4.58 6.49-.94L12 2.5z"></path></svg></span></span>
+                <span class="relative inline-block" style="width:12px;height:12px"><svg width="12" height="12" viewBox="0 0 24 24" class="absolute inset-0 text-ash" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.47L12 17.77l-5.8 3.05 1.11-6.47-4.7-4.58 6.49-.94L12 2.5z"></path></svg><span class="absolute inset-0 overflow-hidden" style="width:100%"><svg width="12" height="12" viewBox="0 0 24 24" class="text-[#F5C518]" aria-hidden="true" fill="currentColor" stroke="currentColor" stroke-width="0"><path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.47L12 17.77l-5.8 3.05 1.11-6.47-4.7-4.58 6.49-.94L12 2.5z"></path></svg></span></span>
+              </div>
+            </div>
+            <span class="text-[11px] text-mist"><span class="font-semibold text-[#F5C518]">5.0</span> collaborator rating</span>
+          </a>
           <span class="hidden h-4 w-px bg-white/10 sm:block" aria-hidden="true"></span>
-          <a href="https://www.imdb.com/name/nm17333332" target="_blank" rel="noreferrer" class="inline-flex items-center gap-1.5 text-sm text-mist hover:text-bone">IMDb credited</a>
-          <span class="hidden h-4 w-px bg-white/10 sm:block" aria-hidden="true"></span>
-          <span class="inline-flex items-center gap-1.5 text-sm text-mist">Micro-budget from $50</span>
+          <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] text-mist">
+            <span class="inline-flex items-center gap-1.5"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-film text-blood" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M7 3v18"></path><path d="M3 7.5h4"></path><path d="M3 12h18"></path><path d="M3 16.5h4"></path><path d="M17 3v18"></path><path d="M17 7.5h4"></path><path d="M17 16.5h4"></path></svg>IMDb credited</span>
+            <a href="#services" class="transition-colors hover:text-bone">Micro-budget from $50</a>
+          </div>
         </div>
       </div>
     </div>
+    <a href="#showreel" class="absolute bottom-8 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 text-mist/60 transition-colors hover:text-blood sm:flex" aria-label="Scroll to showreel">
+      <span class="text-[9px] uppercase tracking-[0.4em]">Enter</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down animate-bounce" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+    </a>
   </section>
   <section id="posters" class="relative overflow-hidden bg-void py-16 sm:py-24 md:py-32">
     <div class="relative mx-auto max-w-7xl px-4 sm:px-6 md:px-8">

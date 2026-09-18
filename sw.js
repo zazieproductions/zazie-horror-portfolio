@@ -4,7 +4,8 @@
 // v5: bumped again after removing trailing markup appended past </html>.
 // v6: scope builder starts with project type, intensity, and add-ons unselected.
 // v7: technical SEO signal architecture overhaul, new CSS asset hashes, visible breadcrumbs & schema matrix.
-const CACHE_NAME = 'zazie-v7';
+// v8: clean header and hero prerender text on load/refresh.
+const CACHE_NAME = 'zazie-v8';
 
 const PRECACHE_ASSETS = [
   '/',
