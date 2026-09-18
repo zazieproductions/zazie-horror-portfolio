@@ -216,3 +216,90 @@
 
 /404.html
   Cache-Control: public, max-age=0, must-revalidate
+
+# --- Craft library: citation layer (named frameworks, glossary, lineage, entity record) ---
+
+/dread
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/dread>; rel="canonical"
+
+/dread/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/dread>; rel="canonical"
+
+/dread/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/dread>; rel="canonical"
+
+/glossary
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/glossary>; rel="canonical"
+
+/glossary/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/glossary>; rel="canonical"
+
+/glossary/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/glossary>; rel="canonical"
+
+/lineage
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/lineage>; rel="canonical"
+
+/lineage/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/lineage>; rel="canonical"
+
+/lineage/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/lineage>; rel="canonical"
+
+/sound-design
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/sound-design>; rel="canonical"
+
+/sound-design/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/sound-design>; rel="canonical"
+
+/sound-design/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/sound-design>; rel="canonical"
+
+/press
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/press>; rel="canonical"
+
+/press/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/press>; rel="canonical"
+
+/press/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/press>; rel="canonical"
+
+/facts
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/facts>; rel="canonical"
+
+/facts/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/facts>; rel="canonical"
+
+/facts/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/facts>; rel="canonical"
+
+
+# Retrieval-system index and machine-readable entity record
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=86400
+  X-Robots-Tag: index, follow
+
+/facts.json
+  Content-Type: application/json; charset=utf-8
+  Cache-Control: public, max-age=86400
+  X-Robots-Tag: index, follow
+

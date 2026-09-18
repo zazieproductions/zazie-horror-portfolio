@@ -1,7 +1,10 @@
-// Service Worker: instant cache & zero-lag offline/repeat visit delivery - v3 includes IA silos /work /reel /composer /process /services /contact and weaponized schema
-// v3: cache name bumped with the cinema-player bundle so a returning visitor is not served the
-// previous index.html/JS pair from the old cache (they are immutable for a year).
-const CACHE_NAME = 'zazie-v4';
+// Service Worker: instant cache and zero-lag repeat-visit delivery.
+// v5: craft library (/dread /glossary /lineage /sound-design /press /facts) added to the
+// precache list and to the network-first list, so a revised reference document is never
+// served from cache while a network is reachable. Cache name bumped so a returning visitor
+// is not served the previous HTML/asset pair from the old cache.
+// v3: cache name bumped with the cinema-player bundle for the same reason.
+const CACHE_NAME = 'zazie-v5';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -18,6 +21,18 @@ const PRECACHE_ASSETS = [
   '/services/index.html',
   '/contact',
   '/contact/index.html',
+  '/dread',
+  '/dread/index.html',
+  '/glossary',
+  '/glossary/index.html',
+  '/lineage',
+  '/lineage/index.html',
+  '/sound-design',
+  '/sound-design/index.html',
+  '/press',
+  '/press/index.html',
+  '/facts',
+  '/facts/index.html',
   '/store',
   '/store.html',
   '/store/index.html',
@@ -39,7 +54,7 @@ const PRECACHE_ASSETS = [
   '/index-7a2157f4.js',
   '/store-8af6034d.css',
   '/store-2b4680d0.js',
-  '/legal-89928f71.css',
+  '/legal-c3e69802.css',
   '/legal-ea8a33ec.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',
@@ -129,7 +144,7 @@ self.addEventListener('fetch', (event) => {
   // Legal and operating documents: network first, cache only as a fallback.
   // A terms or privacy page must never be served stale while a network is
   // reachable, even though the rest of the site is stale-while-revalidate.
-  const LEGAL_PATHS = ['/legal', '/faq', '/terms', '/privacy', '/licensing', '/purchases', '/accessibility', '/work', '/reel', '/composer', '/process', '/services', '/contact'];
+  const LEGAL_PATHS = ['/legal', '/faq', '/terms', '/privacy', '/licensing', '/purchases', '/accessibility', '/work', '/reel', '/composer', '/process', '/services', '/contact', '/dread', '/glossary', '/lineage', '/sound-design', '/press', '/facts'];
   if (url.origin === self.location.origin && req.mode === 'navigate' && LEGAL_PATHS.includes(url.pathname.replace(/\/$/, ''))) {
     event.respondWith(
       fetch(req).then((res) => {

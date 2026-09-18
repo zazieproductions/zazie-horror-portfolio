@@ -415,3 +415,62 @@ td code,th code{white-space:nowrap}
   .clause{break-inside:avoid-page}
   .has-js .reveal{opacity:1;transform:none}
 }
+
+/* --- Craft library additions -------------------------------------------
+   Used by the citation-oriented craft pages: /dread, /glossary, /lineage,
+   /sound-design, /press, /facts. Nothing here is referenced by the legal or
+   operating documents, so their rendering is unchanged. */
+
+.craft-note{margin:1.5rem 0;padding:1.25rem 1.5rem;border:1px solid var(--edge);border-left:2px solid var(--blood);background:var(--ink)}
+.craft-note p:last-child{margin-bottom:0}
+.craft-note .lbl{display:block;margin-bottom:.5rem;font-family:var(--mono);font-size:.5625rem;letter-spacing:.28em;text-transform:uppercase;color:var(--blood-text)}
+
+.cite{margin:2rem 0 0;padding:1.25rem 1.5rem;border:1px dashed var(--edge-2);background:rgba(255,255,255,.02)}
+.cite .lbl{display:block;margin-bottom:.5rem;font-family:var(--mono);font-size:.5625rem;letter-spacing:.28em;text-transform:uppercase;color:var(--mist)}
+.cite p{margin:0;font-size:.8125rem;line-height:1.8;color:var(--body-dim);word-break:break-word}
+.cite p + p{margin-top:.5rem}
+.cite code{font-family:var(--mono);font-size:.75rem;color:var(--bone)}
+
+.ladder{margin:1.5rem 0;padding:0;list-style:none;counter-reset:rung}
+.ladder li{position:relative;padding:1rem 0 1rem 3.5rem;border-top:1px solid var(--edge)}
+.ladder li:last-child{border-bottom:1px solid var(--edge)}
+.ladder li::before{counter-increment:rung;content:"R" counter(rung);position:absolute;left:0;top:1rem;width:2.5rem;font-family:var(--mono);font-size:.6875rem;letter-spacing:.08em;color:var(--blood-text)}
+.ladder b{display:block;color:var(--bone);font-weight:600}
+.ladder span{display:block;margin-top:.25rem;font-size:.8125rem;line-height:1.75;color:var(--body-dim)}
+
+.terms{margin:1.5rem 0}
+.term{padding:1rem 0;border-top:1px solid var(--edge)}
+.term:last-child{border-bottom:1px solid var(--edge)}
+.term dt{font-family:var(--display);font-size:1.125rem;line-height:1.3;color:var(--bone)}
+.term dd{margin:.4rem 0 0;font-size:.8125rem;line-height:1.8;color:var(--body-dim)}
+.term dd em{color:var(--mist);font-style:normal;font-family:var(--mono);font-size:.6875rem;letter-spacing:.06em}
+
+.term-index{margin:1.5rem 0 0}
+.term-index .lbl{display:block;margin-bottom:.75rem;font-family:var(--mono);font-size:.5625rem;letter-spacing:.28em;text-transform:uppercase;color:var(--mist)}
+.term-index ul{display:flex;flex-wrap:wrap;gap:.4rem .9rem;margin:0;padding:0;list-style:none}
+.term-index a{font-size:.75rem;color:var(--body-dim);text-decoration:none;border-bottom:1px solid transparent}
+.term-index a:hover,.term-index a:focus-visible{color:var(--bone);border-bottom-color:var(--blood)}
+
+@media print{
+  .craft-note,.cite{border-color:#999;background:#fff}
+  .term dt{color:#000}
+  .term dd,.cite p,.ladder span{color:#111}
+}
+
+.term dd .lbl{display:block;margin:.9rem 0 .15rem;font-family:var(--mono);font-size:.5625rem;letter-spacing:.24em;text-transform:uppercase;color:var(--blood-text)}
+
+/* Poster figure carried by the craft library pages. */
+.craft-fig{margin:0;border-top:1px solid var(--edge);border-bottom:1px solid var(--edge);background:var(--ink)}
+.craft-fig img{display:block;width:100%;max-width:22rem;margin:0 auto;filter:grayscale(.25) contrast(1.05)}
+.craft-fig figcaption{padding:.9rem var(--gutter) 1.1rem;text-align:center;font-family:var(--mono);font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mist)}
+@media print{.craft-fig{display:none}}
+
+/* Craft library navigation in the footer: the reference documents are the
+   pages other people quote, so every page links to them. */
+.foot-craft{
+  margin:1.75rem 0 0;padding-top:1.25rem;border-top:1px solid var(--edge);
+  display:flex;flex-wrap:wrap;gap:.6rem 1.15rem;
+}
+.foot-craft span.lbl{font-size:.5625rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(154,149,144,.6)}
+.foot-craft a{font-size:.625rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mist);transition:color .2s}
+.foot-craft a:hover{color:var(--blood)}

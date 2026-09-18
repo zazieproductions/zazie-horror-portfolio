@@ -421,4 +421,95 @@
     <priority>0.3</priority>
   </url>
 
+
+  <!-- ============================================================
+       CRAFT LIBRARY - citation layer: named frameworks, glossary,
+       lineage, sound design method, press kit, entity record.
+       These are the primary sources other publications quote.
+       ============================================================ -->
+
+  <!-- Craft 01 - The Dread Grammar: named techniques for scoring dread -->
+  <url>
+    <loc>https://horror.zazieproductions.com/dread</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/the-haunted-1200.jpg</image:loc>
+      <image:caption>Poster art for THE HAUNTED, a supernatural horror production scored by psychological horror composer Zazie Kanwar-Torge.</image:caption>
+      <image:title>THE HAUNTED - score by Zazie Kanwar-Torge</image:title>
+    </image:image>
+  </url>
+
+  <!-- Craft 02 - Glossary of horror scoring and sound design terms (67 defined) -->
+  <url>
+    <loc>https://horror.zazieproductions.com/glossary</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/eclipsed-1200.jpg</image:loc>
+      <image:caption>Poster art for ECLIPSED, a psychological horror feature with an original score by Zazie Kanwar-Torge.</image:caption>
+      <image:title>ECLIPSED - psychological horror - score by Zazie Kanwar-Torge</image:title>
+    </image:image>
+  </url>
+
+  <!-- Craft 03 - Psychological horror composers: the lineage and the five families -->
+  <url>
+    <loc>https://horror.zazieproductions.com/lineage</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/peregrinus-1200.jpg</image:loc>
+      <image:caption>Poster art for PEREGRINUS, a folk horror series scored by composer Zazie Kanwar-Torge.</image:caption>
+      <image:title>PEREGRINUS - folk horror series - score by Zazie Kanwar-Torge</image:title>
+    </image:image>
+  </url>
+
+  <!-- Craft 04 - Unsettling cinematic sound design: method and materials -->
+  <url>
+    <loc>https://horror.zazieproductions.com/sound-design</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/choleric-1200.jpg</image:loc>
+      <image:caption>Poster art for CHOLERIC, a psychological body horror short with score and sound design by Zazie Kanwar-Torge.</image:caption>
+      <image:title>CHOLERIC - body horror - score and sound design</image:title>
+    </image:image>
+  </url>
+
+  <!-- Press kit - approved biographies, cleared quotations, credits and editorial licence -->
+  <url>
+    <loc>https://horror.zazieproductions.com/press</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
+      <image:caption>Press photograph of psychological horror composer Zazie Kanwar-Torge, cleared for editorial republication with credit.</image:caption>
+      <image:title>Press photograph - Zazie Kanwar-Torge, psychological horror composer</image:title>
+    </image:image>
+  </url>
+
+  <!-- Canonical entity record - Zazie Productions LLC: facts, identifiers, rights, rates -->
+  <url>
+    <loc>https://horror.zazieproductions.com/facts</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/headshot.jpg</image:loc>
+      <image:caption>Portrait of composer Zazie Kanwar-Torge, founder of Zazie Productions LLC.</image:caption>
+      <image:title>Zazie Kanwar-Torge - founder, Zazie Productions LLC</image:title>
+    </image:image>
+  </url>
+
 </urlset>

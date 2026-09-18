@@ -2,7 +2,12 @@
 
 **File:** `sitemap.xml` → `https://horror.zazieproductions.com/sitemap.xml`
 **Validator:** `node tools/check-sitemap.mjs`
-**Status:** ✅ `PASS — 15 URLs, 37 images, 7 videos. Safe to submit.`
+**Status:** ✅ `PASS — 21 URLs, 43 images, 7 videos. Safe to submit.`
+
+> Updated 2026-09-18: six reference pages added to the crawl layer — `/dread`,
+> `/glossary`, `/lineage`, `/sound-design`, `/press`, `/facts` — each with a
+> self-referencing canonical, one image entry, and a footer link from every
+> page on the site. See `GEO.md` for why they exist.
 **Date:** 2026-09-18
 
 ---

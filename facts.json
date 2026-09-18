@@ -1,0 +1,277 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "@id": "https://horror.zazieproductions.com/#org",
+  "name": "Zazie Productions LLC",
+  "alternateName": [
+    "Zazie Productions",
+    "ZKT Productions"
+  ],
+  "url": "https://horror.zazieproductions.com/",
+  "description": "Boutique horror scoring studio founded 2022. Original dark, atmospheric, cinematic scores for psychological horror, folk horror, body horror, supernatural thrillers, cosmic horror and dark science fiction, plus unsettling sound design, for film, television and games.",
+  "foundingDate": "2022",
+  "founder": {
+    "@type": "Person",
+    "@id": "https://horror.zazieproductions.com/#person",
+    "name": "Zazie Kanwar-Torge",
+    "alternateName": [
+      "Zazie Productions",
+      "ZKT Productions"
+    ],
+    "jobTitle": [
+      "Psychological Horror Composer",
+      "Horror Film Composer",
+      "Dark Atmospheric Composer"
+    ],
+    "url": "https://horror.zazieproductions.com/composer",
+    "image": "https://horror.zazieproductions.com/images/headshot.jpg",
+    "telephone": "+1-864-430-0606",
+    "email": "zaziediya@gmail.com",
+    "knowsAbout": [
+      "Psychological Horror Scoring",
+      "Folk Horror Music",
+      "Body Horror Soundtracks",
+      "Supernatural Thriller Scoring",
+      "Cosmic Horror Composition",
+      "Dark Atmospheric Film Scores",
+      "Film Scoring",
+      "Dread Sound Design",
+      "Dark Ambient Soundscapes",
+      "Hybrid Orchestral Horror",
+      "Game Audio Composition",
+      "Adaptive Horror Music",
+      "Waterphone Horror",
+      "Bowed Metal Textures",
+      "Orchestral Horror",
+      "Dark Sci-Fi Scoring",
+      "Unsettling Sound Design",
+      "Musique Concrete"
+    ],
+    "sameAs": [
+      "https://www.imdb.com/name/nm17333332",
+      "https://open.spotify.com/artist/4UOgvZEOo7xBhFBjJvlMm0",
+      "https://zazieproductions.bandcamp.com",
+      "https://music.apple.com/us/artist/zazie-productions/1623719351",
+      "https://youtube.com/@zazieproductions",
+      "https://www.linkedin.com/in/zazie-kanwar-torge-3b8a98373",
+      "http://linktr.ee/zazieproductions",
+      "https://museonline.org/profile/zazie-kanwar-torge/",
+      "https://soundbetter.com/profiles/614805-zazie-productions",
+      "https://www.stage32.com/profile/1164424/about",
+      "https://musicians.directory/profile-zazie-productions",
+      "https://credits.muso.ai/profile/4010f3b7-9a87-4961-8dfd-917de0ba787e",
+      "https://play.reelcrafter.com/z6vU_hn4T76AE0kv4rtd9w",
+      "https://manicworldmagazine.com/zazie-kanwar-torge/"
+    ],
+    "award": [
+      "Special Jury Mention, Pebbles Underground Film Festival, 2024 (Phantom Requiem)",
+      "Special Mention for Artistic Contribution, Kvikmyndalistahátíð Íslands / Iceland Film Festival, Reykjavík, 2024",
+      "Official Selection, Octopus Marquee Underground Film Festival",
+      "Exclusive Stream, PVTV Fringe Flicks",
+      "Prize for Visionary Filmmaking, Riviera Art Film Festival",
+      "Black Mountain College Radio Art Award, commissioned by Black Mountain College Museum + Arts Center, 2021",
+      "Finalist, Local Letters for Global Change, Pulitzer Center",
+      "Visual Container Winter 2024 Award Winner"
+    ],
+    "memberOf": [
+      {
+        "@type": "Organization",
+        "name": "American Federation of Musicians (AFM)"
+      },
+      {
+        "@type": "Organization",
+        "name": "Council of Music Creators"
+      }
+    ],
+    "subjectOf": [
+      {
+        "@type": "Article",
+        "name": "Zazie Kanwar-Torge - ManicWorld Magazine profile",
+        "url": "https://manicworldmagazine.com/zazie-kanwar-torge/"
+      },
+      {
+        "@type": "Article",
+        "name": "Zazie Kanwar-Torge, Finalist, Local Letters for Global Change",
+        "url": "https://pulitzercenter.org/zazie-kanwar-torge-finalist-local-letters-global-change",
+        "publisher": {
+          "@type": "Organization",
+          "name": "Pulitzer Center"
+        }
+      },
+      {
+        "@type": "Article",
+        "name": "Phantom Requiem by Zazie Kanwar-Torge (Zazie Productions), Jury Special Mention",
+        "url": "https://pebblesunderground.art/video/phantom-requiem/",
+        "publisher": {
+          "@type": "Organization",
+          "name": "Pebbles Underground"
+        }
+      },
+      {
+        "@type": "AudioObject",
+        "name": "BMC Radio Art: Zazie Productions - Cheaper Impressions",
+        "url": "https://soundcloud.com/bmcmuseum/bmc-radio-art-zazie-productions-cheaper-impressions",
+        "publisher": {
+          "@type": "Organization",
+          "name": "Black Mountain College Museum + Arts Center"
+        }
+      }
+    ]
+  },
+  "email": "zaziediya@gmail.com",
+  "telephone": "+1-864-430-0606",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Asheville",
+    "addressRegion": "NC",
+    "addressCountry": "US"
+  },
+  "areaServed": "Worldwide",
+  "knowsLanguage": "English",
+  "priceRange": "$50 - $8000+",
+  "makesOffer": [
+    {
+      "@type": "Offer",
+      "name": "Micro-budget naming",
+      "price": 50,
+      "priceCurrency": "USD"
+    },
+    {
+      "@type": "Offer",
+      "name": "Short film score",
+      "price": 2500,
+      "priceCurrency": "USD"
+    },
+    {
+      "@type": "Offer",
+      "name": "Feature score",
+      "price": 8000,
+      "priceCurrency": "USD"
+    },
+    {
+      "@type": "Offer",
+      "name": "Game score",
+      "price": 4500,
+      "priceCurrency": "USD"
+    }
+  ],
+  "sameAs": [
+    "https://www.imdb.com/name/nm17333332",
+    "https://open.spotify.com/artist/4UOgvZEOo7xBhFBjJvlMm0",
+    "https://zazieproductions.bandcamp.com",
+    "https://music.apple.com/us/artist/zazie-productions/1623719351",
+    "https://youtube.com/@zazieproductions",
+    "https://www.linkedin.com/in/zazie-kanwar-torge-3b8a98373",
+    "http://linktr.ee/zazieproductions",
+    "https://zazieproductions.itch.io/",
+    "https://zazieproductions.gumroad.com/",
+    "https://museonline.org/profile/zazie-kanwar-torge/",
+    "https://soundbetter.com/profiles/614805-zazie-productions",
+    "https://www.stage32.com/profile/1164424/about",
+    "https://musicians.directory/profile-zazie-productions",
+    "https://credits.muso.ai/profile/4010f3b7-9a87-4961-8dfd-917de0ba787e",
+    "https://play.reelcrafter.com/z6vU_hn4T76AE0kv4rtd9w",
+    "https://manicworldmagazine.com/zazie-kanwar-torge/"
+  ],
+  "subjectOf": [
+    {
+      "@type": "Article",
+      "name": "Zazie Kanwar-Torge - ManicWorld Magazine profile",
+      "url": "https://manicworldmagazine.com/zazie-kanwar-torge/"
+    },
+    {
+      "@type": "Article",
+      "name": "Zazie Kanwar-Torge, Finalist, Local Letters for Global Change",
+      "url": "https://pulitzercenter.org/zazie-kanwar-torge-finalist-local-letters-global-change",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Pulitzer Center"
+      }
+    },
+    {
+      "@type": "Article",
+      "name": "Phantom Requiem by Zazie Kanwar-Torge (Zazie Productions), Jury Special Mention",
+      "url": "https://pebblesunderground.art/video/phantom-requiem/",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Pebbles Underground"
+      }
+    },
+    {
+      "@type": "AudioObject",
+      "name": "BMC Radio Art: Zazie Productions - Cheaper Impressions",
+      "url": "https://soundcloud.com/bmcmuseum/bmc-radio-art-zazie-productions-cheaper-impressions",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Black Mountain College Museum + Arts Center"
+      }
+    },
+    {
+      "@type": "Article",
+      "name": "The Dread Grammar: A Working Taxonomy of Psychological Horror Scoring",
+      "url": "https://horror.zazieproductions.com/dread",
+      "datePublished": "2026-09-18"
+    },
+    {
+      "@type": "DefinedTermSet",
+      "name": "Horror scoring and sound design glossary",
+      "url": "https://horror.zazieproductions.com/glossary",
+      "dateModified": "2026-09-18"
+    },
+    {
+      "@type": "Article",
+      "name": "Psychological Horror Composers: The Lineage and the Five Families",
+      "url": "https://horror.zazieproductions.com/lineage",
+      "dateModified": "2026-09-18"
+    },
+    {
+      "@type": "Article",
+      "name": "Unsettling Cinematic Sound Design: Method and Materials",
+      "url": "https://horror.zazieproductions.com/sound-design",
+      "dateModified": "2026-09-18"
+    }
+  ],
+  "additionalProperty": [
+    {
+      "@type": "PropertyValue",
+      "name": "Rights model",
+      "value": "Buyout on full payment; composer retains writer's share, credit, and reel and portfolio use"
+    },
+    {
+      "@type": "PropertyValue",
+      "name": "Wikipedia article",
+      "value": "None as of 2026-09-18"
+    },
+    {
+      "@type": "PropertyValue",
+      "name": "Wikidata item",
+      "value": "None as of 2026-09-18"
+    },
+    {
+      "@type": "PropertyValue",
+      "name": "Last verified",
+      "value": "2026-09-18"
+    }
+  ],
+  "citation": "Kanwar-Torge, Zazie. \"Canonical Entity Record: Zazie Productions LLC.\" Zazie Productions LLC, 18 September 2026, https://horror.zazieproductions.com/facts",
+  "award": [
+    "Special Jury Mention, Pebbles Underground Film Festival, 2024 (Phantom Requiem)",
+    "Special Mention for Artistic Contribution, Kvikmyndalistahátíð Íslands / Iceland Film Festival, Reykjavík, 2024",
+    "Official Selection, Octopus Marquee Underground Film Festival",
+    "Exclusive Stream, PVTV Fringe Flicks",
+    "Prize for Visionary Filmmaking, Riviera Art Film Festival",
+    "Black Mountain College Radio Art Award, commissioned by Black Mountain College Museum + Arts Center, 2021",
+    "Finalist, Local Letters for Global Change, Pulitzer Center",
+    "Visual Container Winter 2024 Award Winner"
+  ],
+  "memberOf": [
+    {
+      "@type": "Organization",
+      "name": "American Federation of Musicians (AFM)"
+    },
+    {
+      "@type": "Organization",
+      "name": "Council of Music Creators"
+    }
+  ]
+}

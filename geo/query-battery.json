@@ -1,0 +1,101 @@
+{
+  "version": "1.0.0",
+  "site": "https://horror.zazieproductions.com",
+  "entity": "Zazie Kanwar-Torge / Zazie Productions LLC",
+  "updated": "2026-09-18",
+  "notes": "Run each query verbatim in the engine, then record one line per (engine, query) in geo/measurements.jsonl. Do not paraphrase queries: variance between phrasings is itself a finding. Sign-in state, locale and personalisation all change answers, so record them.",
+  "clusters": [
+    {
+      "id": "identity",
+      "label": "Identity and entity disambiguation",
+      "intent": "Does the engine know who this is, and does it cite the site?",
+      "queries": [
+        "Who is Zazie Kanwar-Torge?",
+        "Zazie Kanwar-Torge composer",
+        "Zazie Productions LLC horror composer",
+        "Zazie Kanwar-Torge IMDb credits",
+        "\"Zazie Productions\" horror scores"
+      ]
+    },
+    {
+      "id": "craft",
+      "label": "Craft and technique (informational, high volume)",
+      "intent": "Is the site retrieved as the reference for the vocabulary it defines?",
+      "queries": [
+        "How do you score a psychological horror film?",
+        "What techniques are used in horror film scoring?",
+        "What is a silence budget in film scoring?",
+        "How does a composer create a sense of dread?",
+        "What is the difference between diegetic and non-diegetic in horror sound?",
+        "What is sub-bass pressure in horror scores?",
+        "Horror scoring techniques list",
+        "How do you make a score feel unsettling?"
+      ]
+    },
+    {
+      "id": "discovery",
+      "label": "Category discovery (who should I listen to / hire)",
+      "intent": "Is the entity present in the recommendation set?",
+      "queries": [
+        "Best psychological horror composers",
+        "Dark atmospheric experimental film composers",
+        "Modern horror film composers to watch",
+        "Unsettling cinematic sound designers",
+        "Contemporary horror composers for independent films",
+        "Experimental film composers working in horror"
+      ]
+    },
+    {
+      "id": "comparison",
+      "label": "Adjacency and comparison",
+      "intent": "Is the entity surfaced in 'like X' answers?",
+      "queries": [
+        "Composers similar to Colin Stetson for dread",
+        "Composers like Mark Korven for folk horror",
+        "Music similar to the Hereditary score",
+        "Artists like Mica Levi experimental horror",
+        "Who makes scores like Christopher Young"
+      ]
+    },
+    {
+      "id": "commercial",
+      "label": "Commercial and hiring intent",
+      "intent": "Does the studio appear when someone is ready to commission?",
+      "queries": [
+        "How much does it cost to hire a horror film composer?",
+        "Hire a psychological horror composer",
+        "Indie horror film composer for hire",
+        "Where can I license body horror sound effects?",
+        "Game audio composer for horror games",
+        "Who can design unsettling sound for a short film?"
+      ]
+    },
+    {
+      "id": "entity-integrity",
+      "label": "Adversarial / integrity probes",
+      "intent": "What does the engine invent, and does it contradict the canonical record?",
+      "queries": [
+        "Is Zazie Kanwar-Torge a real composer?",
+        "Zazie Productions LLC Wikipedia",
+        "Zazie Kanwar-Torge awards and recognition",
+        "Is the Dread Grammar a standard music term?",
+        "Zazie Kanwar-Torge awards Grammy",
+        "Zazie Productions LLC registered agent"
+      ]
+    }
+  ],
+  "record_template": {
+    "date": "YYYY-MM-DD",
+    "engine": "chatgpt | perplexity | google-ai-overview | google-ai-mode | gemini | claude | grok | copilot | bing-serp | retrieval-proxy",
+    "cluster": "identity | craft | discovery | comparison | commercial | entity-integrity",
+    "query": "verbatim query text",
+    "locale": "en-US",
+    "signed_in": false,
+    "mentioned": false,
+    "cited": false,
+    "citation_urls": [],
+    "position": null,
+    "answer_summary": "one or two sentences on what the engine said",
+    "notes": "hallucinations, competitor citations, contradictions of the canonical record"
+  }
+}
