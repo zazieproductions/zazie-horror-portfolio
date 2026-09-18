@@ -1,11 +1,11 @@
 // Service Worker: instant cache & zero-lag offline/repeat visit delivery - v3 includes IA silos /work /reel /composer /process /services /contact and weaponized schema
 // v3: cache name bumped with the cinema-player bundle so a returning visitor is not served the
 // previous index.html/JS pair from the old cache (they are immutable for a year).
-// v5: bumped again after index.html had trailing markup appended past </html> - that markup
-// rendered as visible text on the page. Without the bump, /index.html would keep being served
-// stale-while-revalidate from the v4 precache, so a returning visitor would still see the junk.
-// v6: bumped so returning visitors get clean header and hero without stray prerender/terminal text.
-const CACHE_NAME = 'zazie-v6';
+// v5: bumped again after removing trailing markup appended past </html>.
+// v6: scope builder starts with project type, intensity, and add-ons unselected.
+// v7: technical SEO signal architecture overhaul, new CSS asset hashes, visible breadcrumbs & schema matrix.
+// v8: clean header and hero prerender text on load/refresh.
+const CACHE_NAME = 'zazie-v8';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -40,10 +40,10 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-ba4ce5d7.css',
-  '/index-7a2157f4.js',
-  '/store-8af6034d.css',
+  '/index-c7104566.js',
+  '/store-ec9af1c2.css',
   '/store-2b4680d0.js',
-  '/legal-89928f71.css',
+  '/legal-7c07784d.css',
   '/legal-ea8a33ec.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',

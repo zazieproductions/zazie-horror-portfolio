@@ -51,6 +51,28 @@ Crawl-delay: 3
 User-agent: Baiduspider
 Crawl-delay: 10
 
+# AI Search & Answer Engine Crawlers - full access for answer citation & entity indexing
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Cohere-ai
+Allow: /
+
 # Googlebot - full access, no delay, maximum indexation
 User-agent: Googlebot
 Allow: /

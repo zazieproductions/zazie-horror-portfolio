@@ -360,3 +360,51 @@ All changes preserve atmospheric horror aesthetic, existing equity, performance 
 **Dossier generated:** 2026-09-18
 **Branch:** arena/01a0b228-zazie-horror-portfolio
 **Repo:** zazieproductions/zazie-horror-portfolio
+
+
+---
+
+## Technical SEO Signal Architecture Overhaul (2026-09-18)
+### Phase: Signal Density, Topical Graph Expansion & Full-Spectrum Accessibility
+
+#### 1. Semantic Heading Architecture (H1 -> H2 -> H3 Strict Compliance)
+- **Problem:** All secondary hub pages (`work`, `reel`, `composer`, `process`, `services`, `contact`, `store`, `404`) previously suffered from heading flattening, utilizing up to 22 sibling `<h2>` elements per page with 0 `<h3>` subheadings.
+- **Solution:** Restructured heading trees across all 17 HTML documents to enforce strict parent-child semantic order:
+  - Exactly 1 `<h1>` per page focused on entity name + primary money topic.
+  - Section-level `<h2>` tags defining topical themes (e.g., "Selected Film Scores & Soundtracks", "Production Scoring Stages", "Scoring Packages & Rates").
+  - Card/tier-level `<h3>` tags nested logically under their parent sections for every project, audio cue, process phase, rate tier, and FAQ item.
+
+#### 2. Visible Breadcrumb Navigation & BreadcrumbList Schema
+- **Problem:** `BreadcrumbList` JSON-LD was previously declared on several pages without any visible user-facing breadcrumb navigation, creating a machine-human disparity.
+- **Solution:** Designed and deployed responsive, accessible `<nav class="breadcrumbs" aria-label="Breadcrumb navigation">` across all 16 interior routes (`/work`, `/reel`, `/composer`, `/process`, `/services`, `/store`, `/contact`, `/faq`, `/legal`, `/licensing`, `/privacy`, `/purchases`, `/terms`, `/accessibility`, `/404.html`).
+  - Styled with subtle divider slashes, horror-themed muted accents, and hover transitions in both `store-ec9af1c2.css` and `legal-7c07784d.css`.
+  - 100% paired with validated `BreadcrumbList` structured data matching exact canonical URLs.
+
+#### 3. Image Accessibility & Rich Entity Signal Density
+- **Problem:** Missing or empty `alt=""` attributes existed on 32 store product items, the homepage atmosphere backdrop, and the studio console photo. Furthermore, `/work`, `/composer`, `/process`, and `/services` lacked visual figures despite images being listed in the sitemap.
+- **Solution:**
+  - 100% of images across all 17 HTML files now have keyword-rich, descriptive `alt` and `title` attributes.
+  - Added responsive `<picture>` poster grids with AVIF/JPG sources, dimensions, and semantic `<figure>` / `<figcaption>` wrappers on `/work`.
+  - Added press photo and portrait figures on `/composer`, `/process`, `/services`, and `/contact`.
+  - Zero CLS (Cumulative Layout Shift) with explicit `width` and `height` dimensions sitewide.
+
+#### 4. Social Card Completeness (Open Graph & Twitter Cards)
+- **Problem:** Secondary silos lacked `twitter:image`, `twitter:title`, `twitter:description`, and `twitter:image:alt` tags.
+- **Solution:** Universal implementation of `twitter:card` (`summary_large_image`), absolute `og:image` and `twitter:image` URLs, and descriptive social copy tuned to each silo's specific intent.
+
+#### 5. Structured Data Schema Matrix
+- **`/work`:** 8 `VideoObject` schemas with player locs, upload dates, durations, and horror tags + `ItemList` + `BreadcrumbList`.
+- **`/reel`:** 29 `MusicRecording` and `AudioObject` items in `MusicPlaylist` schema with exact durations, mp3 encodings, and cue descriptions.
+- **`/composer`:** `Person` schema with 19 structured `knowsAbout` topics, IMDb/social `sameAs` links, and biography.
+- **`/process`:** 6-step `HowTo` schema mapping the complete horror scoring pipeline.
+- **`/services`:** `Service` schema with 5 `AggregateOffer` entries and `OfferCatalog` covering 4 production tiers.
+- **`/contact`:** `ContactPage` schema with structured `ContactPoint` (customer service, US/worldwide service area).
+- **Homepage (`/`):** 8 `VideoObject` schemas covering all showcased film samples.
+
+#### 6. Internal Link Equity & Crawl Efficiency
+- Added `/process` to sitewide primary masthead navigation.
+- Deep-linked all 29 showreel cues on the homepage directly to `/reel#track-XX` to distribute PageRank to individual cue anchors.
+- Universal `.foot-entity` footer reinforcement block across all pages reinforcing entity authority, location (Asheville, NC), and genres.
+- `robots.txt` enriched with modern AI search engine allowances (GPTBot, OAI-SearchBot, PerplexityBot, ClaudeBot, Applebot-Extended, Cohere-ai).
+- `sitemap.xml` updated to 15 URLs, 44 images (including 9th poster THE DARK AWAITS and studio photos), and 8 videos; passes `node tools/check-sitemap.mjs` with 0 warnings and 0 errors.
+- `sw.js` cache upgraded to `zazie-v5` with updated CSS asset hashes.
