@@ -10,7 +10,9 @@
 // v10: /store joined the network-first set (the catalogue's prices and primary
 // nav must never come from cache), and the bump itself drops the cached /store
 // document from the previous build - its header nav was missing the Process tab.
-const CACHE_NAME = 'zazie-v10';
+// v11: restored the original long-form biography in the about section; new JS
+// asset hash, and the bump drops the cached index.html/JS pair from v10.
+const CACHE_NAME = 'zazie-v11';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -45,7 +47,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-ba4ce5d7.css',
-  '/index-c7104566.js',
+  '/index-2135f4d9.js',
   '/store-8af6034d.css',
   '/store-2b4680d0.js',
   '/legal-7c07784d.css',
