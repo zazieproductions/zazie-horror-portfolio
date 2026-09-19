@@ -34,10 +34,11 @@ decision are collected in **`RATIFY.md`**, not silently resolved.
   `drive.google.com` (one sample), and on `/store` the four marketplace image
   CDNs that serve cover art on load. Fonts are self hosted. `doubleclick` and
   `i.ytimg.com` appear as connection hints only.
-* **Routing constraint.** `_redirects` ends with `/* /index.html 200`, and
-  `STORE.md` section 2 records the failure mode: on Cloudflare Pages a `200`
-  rewrite to a `.html` target loops forever. New routes therefore had to be
-  real static paths, not rewrite targets.
+* **Routing constraint.** `_redirects` once ended with `/* /index.html 200`
+  (removed in the SEO pass, see `SEO-DOSSIER.md`), and `STORE.md` section 2
+  records the failure mode: on Cloudflare Pages a `200` rewrite to a `.html`
+  target loops forever. New routes therefore had to be real static paths, not
+  rewrite targets.
 * **Two hash conventions.** `store-src/build.sh` hashes `"$(cat file)"`, which
   strips the trailing newline; the React bundle is named from
   `sha256(raw bytes)[:8]` (verified: `index-8638e732.js` matched its own raw
@@ -82,10 +83,16 @@ Never hand edit a generated `<slug>/index.html`; the next build overwrites it.
 
 ### Design decisions worth recording
 
-* **Real paths, no rewrites.** `<slug>/index.html` only, with no root
-  `<slug>.html` aliases. This is the `/store` lesson applied from the start:
-  static assets are matched before the `/* /index.html 200` splat, so nothing
-  can loop. `_redirects` is untouched.
+* **Real paths, no rewrites.** `<slug>/index.html` only — real assets, matched
+  before any splat rule, so nothing can loop. Since 2026-09-19 every page also
+  ships a byte-identical root twin `<slug>.html` (`tools/route-aliases.mjs`),
+  which is what `/store` has always done with `store.html`: Cloudflare Pages
+  308s the slashless `/slug` to `/slug/` for a directory route, and serves the
+  twin instead when one exists, so the canonical slashless URL that
+  `sitemap.xml` and the `<link rel=canonical>` tags advertise answers 200 with
+  no redirect hop. Real files are safe; what loops is a *rewrite* to a `.html`
+  target or a trailing-slash redirect rule fighting the host's 308 — see the
+  note at the foot of `_redirects`.
 * **`FAQPage` is generated, not written.** `build.sh` parses the page's own
   `<details class="faq-item">` elements and emits the schema from them, so the
   structured data cannot drift from the visible answers. The build reports the
@@ -116,7 +123,9 @@ Never hand edit a generated `<slug>/index.html`; the next build overwrites it.
 * **Legal pages bypass the stale cache.** `sw.js` serves navigations
   stale-while-revalidate, which is right for a portfolio and wrong for a
   document whose effective date matters. The seven legal paths are now
-  network first with the cache as a fallback only.
+  network first with the cache as a fallback only (`NETWORK_FIRST`; `/store`
+  joined the same set on 2026-09-19, since its prices and nav must not be
+  served from cache either).
 * **Copy rules followed.** No em or en dashes anywhere on the new pages
   (asserted by the suite), no marketing filler, and no SaaS defined terms: no
   "the App", no "Your Account", no "the Service".
@@ -243,8 +252,9 @@ values, not measured from a rendered page.
 * **Accent red contrast on `/` and `/store`** remains below AA for small
   text. Fixed on the documents, open elsewhere, disclosed in the
   accessibility statement.
-* **Service worker staleness** is now handled for the seven legal paths only.
-  Any future document route must be added to `LEGAL_PATHS` in `sw.js`.
+* **Service worker staleness** is handled for the seven legal paths, the six
+  IA hubs and `/store` (network first). Any future document route must be added
+  to `NETWORK_FIRST` in `sw.js`.
 * **The FAQ count is load bearing.** `/faq` states 36 questions in its
   heading meta and the counter's static text. Adding a question means editing
   both; the build regenerates the schema automatically.

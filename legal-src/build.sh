@@ -12,10 +12,21 @@
 # JSON-LD block generated from its own <details class="faq-item"> markup, so
 # the structured data can never drift from the visible answers.
 #
-# Every page is written as <slug>/index.html: a REAL static path. Do not map
-# these routes through _redirects. Cloudflare Pages redirects ".html" URLs to
-# their pretty form, so a 200 rewrite to a .html target loops forever (the
-# /store page hit exactly this; see STORE.md section 2).
+# Every page is written twice, with identical bytes:
+#
+#   <slug>/index.html   the real static path (/slug/)
+#   <slug>.html         the root twin that serves the canonical /slug
+#
+# The twin is what Cloudflare Pages answers for the slashless request; without
+# it Pages 308s /slug to /slug/, which is what made the retired trailing-slash
+# 301s in _redirects loop forever. It is the same trick /store has always used
+# (store.html beside store/index.html) - see tools/route-aliases.mjs for the
+# general rule and `node tools/route-aliases.mjs --check` for the parity test
+# that tools/check-sitemap.mjs runs on every build.
+#
+# Do not map these routes through _redirects, and never add a trailing-slash
+# redirect: a 200 rewrite to a .html target loops forever on Pages (the /store
+# page hit exactly this; see STORE.md section 2).
 #
 #   ./legal-src/build.sh
 set -euo pipefail
@@ -162,9 +173,13 @@ for page in sorted((src / "pages").glob("*.html")):
     out_dir = root / slug
     out_dir.mkdir(exist_ok=True)
     (out_dir / "index.html").write_text(markup, encoding="utf-8")
+    # Root twin: the byte-identical file Pages serves the slashless canonical
+    # /<slug> from, instead of 308-ing it to /<slug>/ (tools/route-aliases.mjs,
+    # note at the foot of _redirects). Both forms must stay in lockstep.
+    (root / (slug + ".html")).write_text(markup, encoding="utf-8")
     count += 1
     detail = " (%d FAQ questions in schema)" % n if n else ""
-    print("wrote %s/index.html (%d bytes)%s" % (slug, len(markup.encode("utf-8")), detail))
+    print("wrote %s/index.html + %s.html (%d bytes)%s" % (slug, slug, len(markup.encode("utf-8")), detail))
 
 print("pages: %d" % count)
 PY

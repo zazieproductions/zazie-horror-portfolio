@@ -16,10 +16,35 @@
 # Hub pages - legacy hash anchors now have real pages, but preserve anchor jumps
 # If someone visits old hash URL, client-side JS handles scroll; no redirect needed
 
-# Optional: redirect common typos and old campaign URLs
-/composer/  /composer  301
-/work/  /work  301
-/reel/  /reel  301
-/process/  /process  301
-/services/  /services  301
-/contact/  /contact  301
+# ---------------------------------------------------------------------------
+# NO TRAILING-SLASH REDIRECTS. Ever.
+#
+# These lines used to sit here, one per hub:
+#
+#   /composer/  /composer  301
+#   /work/      /work      301
+#   /reel/      /reel      301
+#   /process/   /process   301
+#   /services/  /services  301
+#   /contact/   /contact   301
+#
+# Every route above is served from <route>/index.html, and Cloudflare Pages
+# answers a slashless request for a directory route with its own 308 to the
+# trailing-slash form. So the 301 pointed straight back into that 308:
+#
+#   /work -> 308 /work/ -> 301 /work -> 308 /work/ -> ... ERR_TOO_MANY_REDIRECTS
+#
+# The page never loaded. Every REEL / WORK / COMPOSER / PROCESS / RATES /
+# contact link in the site - including the whole primary nav on /store - was
+# dead for as long as those rules were live (verified 2026-09-19: /work
+# answered 308, /reel/ answered 301, the pair is a loop).
+#
+# Both URL forms are served as 200s instead: <route>/index.html renders
+# /route/ natively, and the generated root twin <route>.html renders the
+# canonical slashless /route exactly the way store.html already renders
+# /store. Regenerate the twins with `node tools/route-aliases.mjs` after
+# editing a hub page (tools/check-sitemap.mjs fails if they drift).
+# _headers gives both forms the same cache policy and a rel="canonical"
+# Link header back to the slashless canonical, and sitemap.xml lists the
+# slashless form, so crawlers consolidate on /route with no redirect hop.
+# ---------------------------------------------------------------------------

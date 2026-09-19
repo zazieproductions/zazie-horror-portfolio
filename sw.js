@@ -7,7 +7,10 @@
 // v8: clean header and hero prerender text on load/refresh.
 // v9: prerendered #root now matches the React render exactly, so no
 // internal/SEO-only copy flashes into view on load or refresh.
-const CACHE_NAME = 'zazie-v9';
+// v10: /store joined the network-first set (the catalogue's prices and primary
+// nav must never come from cache), and the bump itself drops the cached /store
+// document from the previous build - its header nav was missing the Process tab.
+const CACHE_NAME = 'zazie-v10';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -43,7 +46,7 @@ const PRECACHE_ASSETS = [
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-ba4ce5d7.css',
   '/index-c7104566.js',
-  '/store-ec9af1c2.css',
+  '/store-8af6034d.css',
   '/store-2b4680d0.js',
   '/legal-7c07784d.css',
   '/legal-ea8a33ec.js',
@@ -132,11 +135,14 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(req.url);
 
-  // Legal and operating documents: network first, cache only as a fallback.
-  // A terms or privacy page must never be served stale while a network is
-  // reachable, even though the rest of the site is stale-while-revalidate.
-  const LEGAL_PATHS = ['/legal', '/faq', '/terms', '/privacy', '/licensing', '/purchases', '/accessibility', '/work', '/reel', '/composer', '/process', '/services', '/contact'];
-  if (url.origin === self.location.origin && req.mode === 'navigate' && LEGAL_PATHS.includes(url.pathname.replace(/\/$/, ''))) {
+  // Legal and operating documents, plus the catalogue: network first, cache
+  // only as a fallback. A terms or privacy page must never be served stale
+  // while a network is reachable, and the same goes for /store, where the
+  // prices, the stock notes and the primary nav are the page - a returning
+  // visitor must not be handed yesterday's build out of the cache. Everything
+  // else stays stale-while-revalidate for the 0ms repeat render.
+  const NETWORK_FIRST = ['/legal', '/faq', '/terms', '/privacy', '/licensing', '/purchases', '/accessibility', '/store', '/work', '/reel', '/composer', '/process', '/services', '/contact'];
+  if (url.origin === self.location.origin && req.mode === 'navigate' && NETWORK_FIRST.includes(url.pathname.replace(/\/$/, ''))) {
     event.respondWith(
       fetch(req).then((res) => {
         if (res && res.status === 200) {

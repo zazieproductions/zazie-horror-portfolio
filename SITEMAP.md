@@ -52,6 +52,13 @@ Every check below is enforced by `tools/check-sitemap.mjs`, not by eyeballing:
     longest-match-wins are honoured, for both `*` and `Googlebot`).
 14. `robots.txt` advertises the sitemap with a `Sitemap:` line.
 15. On-host `image:loc` and `video:thumbnail_loc` files exist on disk.
+16. Every `<route>/index.html` has a **byte-identical** root twin
+    `<route>.html` (the file Cloudflare Pages serves the canonical slashless
+    URL from, so no submitted URL answers 308 — and no rule can ever loop
+    against that 308). Enforced by `tools/route-aliases.mjs --check`.
+17. No rule in `_redirects` sends a directory route back into the host's own
+    `308` (`/work/ -> /work` while `/work/index.html` ships), the loop that
+    takes every link to that route down with it.
 
 Run it:
 
@@ -119,6 +126,14 @@ above and fails — so the checks are real, not decorative.
 - Add new pages to `sitemap.xml`, to `robots.txt` if needed, to `_headers`
   (canonical + `Cache-Control: max-age=0, must-revalidate`), to `server.mjs`
   `CLEAN_ROUTES`, and to `sw.js`.
+- Give every new `<route>/index.html` its root twin: `node
+  tools/route-aliases.mjs` (add `--check` in CI). The twins are generated, never
+  hand-edited; `legal-src/build.sh` and `store-src/build.sh` write their own on
+  every run, and a drifted twin fails check 16 above.
+- Never add a trailing-slash redirect to `_redirects`. Cloudflare Pages already
+  308s `/route` to `/route/` for directory routes, so `/route/ -> /route` loops
+  and takes every hub link down with it — that is what the twins exist to avoid.
+  See the note at the foot of `_redirects`.
 
 ---
 
