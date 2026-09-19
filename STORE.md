@@ -132,7 +132,10 @@ layers appear.
   only on `(hover:hover) and (pointer:fine)`):
   * no photographic hero. The opening is typographic: catalogue meta, the
     headline, a section index, and a "vitrine" of four real Bandcamp sleeves
-    (`f4.bcbits.com/img/<id>_16.jpg`) that link to their albums. The former
+    (`f4.bcbits.com/img/<id>_16.jpg`) that link to their albums. Full layout
+    (hero, vitrine, ticker, notes, closing CTA) kept; prose was trimmed to
+    short lines on the maintainer's request (2026-09-19): the walls of SEO
+    copy went, the design stayed. The former
     `images/atmosphere-bg.jpg` is no longer referenced anywhere on the page;
   * fixed grain, scanlines, vignette and a hairline page frame (same recipes as
     the portfolio) plus a random VHS tracking roll every 11 to 27 s;
