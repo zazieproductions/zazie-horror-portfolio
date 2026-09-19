@@ -24,6 +24,12 @@
  *  13.  Nothing is blocked by robots.txt         -> GSC "Blocked by robots.txt"
  *  14.  robots.txt advertises the sitemap        -> discovery
  *  15.  image/video assets exist on disk         -> GSC image/video "not found"
+ *  16.  Every <route>/index.html has a byte-     -> the canonical slashless URL
+ *       identical root <route>.html twin             must answer 200, not a
+ *                                                    redirect (or a redirect
+ *                                                    loop) on the host
+ *  17.  No _redirects rule sends a directory     -> ERR_TOO_MANY_REDIRECTS on
+ *       route back into the host's 308               every link to that route
  *
  * Usage:
  *   node tools/check-sitemap.mjs                 # offline / structural checks
@@ -37,6 +43,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+
+import { checkAliases } from './route-aliases.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -574,7 +582,39 @@ if (missing.length) {
   warn(`pages on disk that are NOT in the sitemap: ${missing.join(', ')}`);
 }
 
-/* 6. optional live HTTP check --------------------------------------------- */
+/* 6. route aliases: a root twin for every directory route ------------------ */
+for (const p of checkAliases(ROOT)) {
+  if (p.reason === 'no-matching-canonical') {
+    warn(`route alias: ${p.detail} - no root twin is generated for it`);
+  } else {
+    err(`route alias: ${p.detail}`);
+  }
+}
+
+/* 7. _redirects: nothing may fight the host's directory canonicalization ---- */
+const redirectsFile = path.join(ROOT, '_redirects');
+if (fs.existsSync(redirectsFile)) {
+  fs.readFileSync(redirectsFile, 'utf8').split(/\r?\n/).forEach((line, i) => {
+    const rule = line.replace(/#.*$/, '').trim();
+    if (!rule) return;
+    const [from, to] = rule.split(/\s+/);
+    if (!from.endsWith('/') || !to) return;
+    const stripped = from.replace(/\/+$/, '');
+    const target = path.join(ROOT, stripped.replace(/^\//, ''), 'index.html');
+    // Cloudflare Pages answers the slashless /route with its own 308 to
+    // /route/ whenever <route>/index.html exists, so "sending it back"
+    // loops: /route -> 308 /route/ -> 301 /route -> ... ERR_TOO_MANY_REDIRECTS.
+    if (stripped === to && fs.existsSync(target)) {
+      err(
+        `_redirects:${i + 1}: "${from} -> ${to}" loops on Cloudflare Pages - ` +
+        `the host already 308s ${to} to ${from} for this directory route, and every link to it dies`
+      );
+    }
+  });
+  note('_redirects: no rule sends a directory route back into the host 308');
+}
+
+/* 8. optional live HTTP check --------------------------------------------- */
 let liveFails = 0;
 if (LIVE) {
   console.log('live checks:');
