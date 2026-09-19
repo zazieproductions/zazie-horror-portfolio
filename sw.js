@@ -5,7 +5,9 @@
 // v6: scope builder starts with project type, intensity, and add-ons unselected.
 // v7: technical SEO signal architecture overhaul, new CSS asset hashes, visible breadcrumbs & schema matrix.
 // v8: clean header and hero prerender text on load/refresh.
-const CACHE_NAME = 'zazie-v8';
+// v9: prerendered #root now matches the React render exactly, so no
+// internal/SEO-only copy flashes into view on load or refresh.
+const CACHE_NAME = 'zazie-v9';
 
 const PRECACHE_ASSETS = [
   '/',
