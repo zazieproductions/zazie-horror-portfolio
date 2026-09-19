@@ -23,7 +23,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { WORKS, SITE, PERSON_ID, ORG_ID, SAME_AS, workUrl } from './work-data.mjs';
+import { WORKS, SITE, PERSON_ID, ORG_ID, SAME_AS, LAST_MODIFIED, workUrl } from './work-data.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CHECK = process.argv.includes('--check');
@@ -430,7 +430,7 @@ function hubPage() {
           `Filmography of psychological horror composer Zazie Kanwar-Torge: ${WORKS.length} productions across psychological horror, folk horror, body horror, supernatural and dark science fiction.`,
         isPartOf: { '@id': `${SITE}/#website` },
         about: { '@id': PERSON_ID },
-        dateModified: new Date().toISOString().slice(0, 10),
+        dateModified: LAST_MODIFIED,
       },
       {
         '@type': 'ItemList',

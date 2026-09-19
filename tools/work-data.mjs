@@ -17,6 +17,18 @@ export const PERSON_ID = `${SITE}/#person`;
 export const ORG_ID = `${SITE}/#org`;
 export const IMDB_NAME = 'https://www.imdb.com/name/nm17333332';
 
+/**
+ * Content last-modified date for the filmography pages.
+ *
+ * Deliberately a constant, NOT `new Date()`. A build-time date makes the
+ * generator non-deterministic (the drift gate in build-work-pages.mjs
+ * --check fires every day with no content change, which trains whoever
+ * runs it to ignore it) and emits a dateModified that is demonstrably
+ * fake — Google ignores those. Bump this when a work record actually
+ * changes.
+ */
+export const LAST_MODIFIED = '2026-09-18';
+
 /** External canonical profiles. sameAs must point OFF-SITE only. */
 export const SAME_AS = [
   IMDB_NAME,
