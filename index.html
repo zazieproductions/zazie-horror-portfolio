@@ -4,28 +4,29 @@
 <head>
 <meta charset="utf-8"/>
 <!-- ═══════════════════════════════════════════════════════════════════
-     ZP ARCHIVE BOOT — analog-horror terminal intro (inline, zero requests)
-     Activated only when <html> gets .zp-boot-on (see gate script below).
-     Preview/dev hosts (e2b.app, pages.dev, localhost) replay on every load;
-     ?boot=1 / #boot forces a replay even under prefers-reduced-motion.
-     Sound: full analog-horror mix (19/41/110Hz dread drone, tape hiss,
-     60Hz mains hum, CRT whines, SFX) synthesized inline via WebAudio.
-     Starts ONLY on the first gesture: tap/keypress powers the archive on
-     (first input = sound on, next input enters the site). Skip any time:
-     any key, scroll, or Esc. No gesture at all = fully silent.
-     Failsafes: no-JS → never shows · reduced-motion/bots → never shows ·
-     JS error mid-run → CSS force-hide at 10s · bfcache restore → instant out.
+     ZP ARCHIVE BOOT — minimal terminal loading screen (inline, zero requests)
+     Shows once per session on production; preview/dev hosts replay on reload.
+     ?boot=1 / #boot forces a replay; ?boot=0 / #noboot disables it.
+     Quiet by default: no audio, no jump scare, any click/key/scroll skips.
+     Failsafes: no-JS → never shows · reduced-motion/bots → never shows unless forced ·
+     JS error mid-run → CSS force-hide at 7s · bfcache restore → instant out.
      ═══════════════════════════════════════════════════════════════════ -->
 <script>
 (function(){try{
   if(/bot|crawl|spider|slurp|lighthouse|headless/i.test(navigator.userAgent))return;
-  var force=null;
-  try{force=new URLSearchParams(location.search).get('boot');}catch(e){}
-  if(force===null&&location.hash.indexOf('boot')>-1)force='1';
-  if(force===null)return;
-  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches&&force!=='1')return;
+  var boot=null;
+  try{boot=new URLSearchParams(location.search).get('boot');}catch(e){}
+  var force=boot==='1'||location.hash.indexOf('boot')>-1;
+  var disabled=boot==='0'||location.hash.indexOf('noboot')>-1;
+  if(disabled)return;
+  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches&&!force)return;
+  var host=location.hostname||'';
+  var dev=/^(localhost|127\.0\.0\.1)$/.test(host)||/\.(e2b\.app|pages\.dev)$/.test(host);
+  var shown=false;
+  try{shown=sessionStorage.getItem('zpBootShown')==='1';}catch(e){}
+  if(!force&&!dev&&shown)return;
   var de=document.documentElement;
-  if(de.classList){de.classList.add('zp-boot-on');if(force!==null)de.classList.add('zp-boot-force');}
+  if(de.classList){de.classList.add('zp-boot-on');if(force)de.classList.add('zp-boot-force');}
   else de.className+=' zp-boot-on';
 }catch(e){}})();
 </script>
@@ -200,6 +201,49 @@ html.zp-boot-on #zp-boot{
 @media (max-width:640px){
   .zp-clock,.zp-tape,.zp-audio{font-size:9px}
 }
+
+/* Minimal return of the archive terminal: quiet, brief, and skippable. */
+html.zp-boot-on #zp-boot{
+  background:#030303;
+  animation:zpForceHide .25s linear 7s forwards;
+}
+#zp-boot.zp-off{animation:zpOvFade .38s ease forwards,zpForceHide .1s linear .5s forwards}
+.zp-screen{
+  border-radius:0;
+  background:radial-gradient(90% 70% at 50% 48%,#080908 0%,#040504 62%,#010101 100%);
+  box-shadow:none;
+  animation:zpMinimalIn .42s ease both;
+}
+#zp-boot.zp-off .zp-screen{animation:none}
+.zp-term{
+  width:min(84vw,560px);
+  max-height:60vh;
+  font:400 clamp(11px,.72rem + .28vw,13px)/1.78 var(--zp-mono);
+  letter-spacing:.045em;
+  color:#e8e0d3;
+  text-shadow:0 0 14px rgba(232,224,211,.12);
+}
+.zp-hi{font-weight:500;letter-spacing:.18em;color:#f0ebe3}
+.zp-dim{color:#817b73;text-shadow:none}
+.zp-ok,.zp-prompt{color:#c9c1b6}
+.zp-bad,.zp-corrupt{color:#c9c1b6;text-shadow:none}
+.zp-gate{margin-top:.9em;color:#817b73;letter-spacing:.16em;animation:none}
+.zp-cursor{width:.55em;height:1em;background:#c9c1b6;box-shadow:0 0 8px rgba(201,193,182,.28)}
+.zp-crt{
+  background:
+    repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 4px),
+    radial-gradient(110% 100% at 50% 50%,transparent 66%,rgba(0,0,0,.62) 100%);
+  animation:none;
+  opacity:.75;
+}
+.zp-noise{opacity:.025;mix-blend-mode:screen;animation:none}
+.zp-noise.zp-startflash,.zp-noise.zp-audioflash{animation:none;opacity:.025}
+.zp-track,.zp-tears,.zp-alertframe,.zp-osd{display:none!important}
+.zp-glitch .zp-term{animation:none;text-shadow:0 0 14px rgba(232,224,211,.12)}
+#zp-boot.zp-shift{transform:none}
+#zp-boot.zp-audio-on:not(.zp-off) .zp-screen{animation:zpMinimalIn .42s ease both}
+@keyframes zpMinimalIn{from{opacity:0;filter:brightness(.75)}to{opacity:1;filter:brightness(1)}}
+@media (max-width:640px){.zp-term{width:86vw;top:48%;font-size:11px}}
 </style>
 <link href="favicon.svg" rel="icon" type="image/svg+xml"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
@@ -1024,18 +1068,7 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
   <div class="zp-screen">
     <div class="zp-noise" aria-hidden="true"></div>
     <pre class="zp-term" id="zp-term"></pre>
-    <div class="zp-track" aria-hidden="true"></div>
-    <div class="zp-tears" id="zp-tears" aria-hidden="true"></div>
     <div class="zp-crt" aria-hidden="true"></div>
-    <div class="zp-osd" aria-hidden="true">
-      <span class="zp-play">&#9654; PLAY</span>
-      <span class="zp-rec"><i></i>REC</span>
-      <span class="zp-clock" id="zp-clock">JUL 14 1987 11:47:14 PM</span>
-      <span class="zp-count" id="zp-count">SP 0:00:00</span>
-      <span class="zp-tape" id="zp-tape">&#9658; PLAY</span>
-      <span class="zp-audio" id="zp-audio"><span class="zp-vu" id="zp-vu"><i></i><i></i><i></i><i></i></span><span id="zp-audiolabel">AUDIO OFF &middot; TAP TO POWER ON</span></span>
-    </div>
-    <div class="zp-alertframe" aria-hidden="true"></div>
   </div>
 </div>
 <script>
@@ -1069,311 +1102,19 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
     cursor=d.createElement('span');cursor.className='zp-cursor';l.appendChild(cursor);
   }
 
-  /* ── AUDIO ENGINE ─────────────────────────────────────────────────
-     All analog-horror sound is synthesized inline (zero requests).
-     Browser policy: audio may only start after a user gesture, so the
-     mix powers ON on the first tap/keypress — the screen "wakes up" —
-     and any further input exits. Never tapped = fully silent, always.
-     Levels are kept low and everything is under a compressor ceiling. */
-  var S={ac:null,master:null,an:null,on:false,dead:false,layers:[],dropIv:0,vuLast:0};
-  var _noiseBuf=null;
-  function A(){return (S.ac&&!S.dead)?S.ac:null;}
-  function noiseBuf(){
-    if(!_noiseBuf){
-      var ac=S.ac,b=ac.createBuffer(1,Math.floor(ac.sampleRate*1.2),ac.sampleRate),
-          ch=b.getChannelData(0);
-      for(var i=0;i<ch.length;i++)ch[i]=Math.random()*2-1;
-      _noiseBuf=b;
-    }
-    return _noiseBuf;
-  }
-  function blip(freq,dur,peak,type,off){
-    var ac=A();if(!ac)return;
-    try{
-      var t=ac.currentTime+(off||0);
-      var o=ac.createOscillator();o.type=type||'sine';o.frequency.value=freq;
-      var g=ac.createGain();
-      g.gain.setValueAtTime(0.0001,t);
-      g.gain.exponentialRampToValueAtTime(peak,t+0.01);
-      g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
-      o.connect(g);g.connect(S.master);o.start(t);o.stop(t+dur+0.05);
-    }catch(e){}
-  }
-  function noiseHit(off,dur,peak,type,fc0,fc1){
-    var ac=A();if(!ac)return;
-    try{
-      var t=ac.currentTime+(off||0);
-      var src=ac.createBufferSource();src.buffer=noiseBuf();
-      var f=ac.createBiquadFilter();f.type=type||'bandpass';f.Q.value=0.8;
-      f.frequency.setValueAtTime(fc0||800,t);
-      f.frequency.exponentialRampToValueAtTime(Math.max(40,fc1==null?fc0:fc1),t+dur);
-      var g=ac.createGain();
-      g.gain.setValueAtTime(0.0001,t);
-      g.gain.exponentialRampToValueAtTime(peak,t+Math.max(0.015,dur*0.25));
-      g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
-      src.connect(f);f.connect(g);g.connect(S.master);
-      src.start(t);src.stop(t+dur+0.05);
-    }catch(e){}
-  }
-  function thump(f0,f1,dur,peak){
-    var ac=A();if(!ac)return;
-    try{
-      var t=ac.currentTime;
-      var o=ac.createOscillator();o.type='sine';
-      o.frequency.setValueAtTime(f0,t);
-      o.frequency.exponentialRampToValueAtTime(Math.max(20,f1),t+dur);
-      var g=ac.createGain();
-      g.gain.setValueAtTime(0.0001,t);
-      g.gain.exponentialRampToValueAtTime(peak,t+0.02);
-      g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
-      o.connect(g);g.connect(S.master);o.start(t);o.stop(t+dur+0.05);
-    }catch(e){}
-  }
-  function whine(off,dur,f0,f1,peak){
-    var ac=A();if(!ac)return;
-    try{
-      var t=ac.currentTime+(off||0);
-      var o=ac.createOscillator();o.type='sine';
-      o.frequency.setValueAtTime(f0,t);
-      o.frequency.exponentialRampToValueAtTime(Math.max(20,f1),t+dur);
-      var g=ac.createGain();
-      g.gain.setValueAtTime(0.0001,t);
-      g.gain.exponentialRampToValueAtTime(peak,t+dur*0.3);
-      g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
-      o.connect(g);g.connect(S.master);o.start(t);o.stop(t+dur+0.05);
-    }catch(e){}
-  }
-  function chordTone(f,dur,peak,att,off){
-    var ac=A();if(!ac)return;
-    try{
-      var t=ac.currentTime+(off||0);
-      var o=ac.createOscillator();o.type='sine';o.frequency.value=f;
-      var g=ac.createGain();
-      g.gain.setValueAtTime(0.0001,t);
-      g.gain.linearRampToValueAtTime(peak,t+att);
-      g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
-      o.connect(g);g.connect(S.master);o.start(t);o.stop(t+dur+0.1);
-    }catch(e){}
-  }
-  function buildDrone(t){
-    /* Eerie bed: 19.4Hz felt-sub (the "ghost frequency") + 41.2Hz dread
-       drone with a slow breathing LFO + 110/111.7Hz beating pair (a
-       ~1.7Hz pulse) panned L/R + 55Hz detuned machinery growl. */
-    var ac=S.ac;
-    var g=ac.createGain();g.gain.value=0.0001;g.connect(S.master);
-    g.gain.linearRampToValueAtTime(1,t+2.2);
-    function osc(type,f,lv,pan){
-      var o=ac.createOscillator();o.type=type;o.frequency.value=f;
-      var og=ac.createGain();og.gain.value=lv;o.connect(og);
-      var node=og;
-      if(ac.createStereoPanner){
-        var p=ac.createStereoPanner();p.pan.value=pan||0;og.connect(p);node=p;
-      }
-      node.connect(g);o.start(t);
-      return o;
-    }
-    osc('sine',41.2,0.16,0);
-    osc('sine',110,0.06,0.35);
-    osc('sine',111.7,0.05,-0.35);
-    osc('sine',19.4,0.05,0);
-    var o2=ac.createOscillator();o2.type='sawtooth';o2.frequency.value=55;
-    var lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=240;lp.Q.value=0.7;
-    var lg2=ac.createGain();lg2.gain.value=0.03;
-    o2.connect(lp);lp.connect(lg2);lg2.connect(g);o2.start(t);
-    var lfo=ac.createOscillator();lfo.frequency.value=0.13;
-    var lfg=ac.createGain();lfg.gain.value=70;
-    lfo.connect(lfg);lfg.connect(lp.frequency);lfo.start(t);
-    /* slow "breath" across the whole bed */
-    var br=ac.createOscillator();br.frequency.value=0.06;
-    var brg=ac.createGain();brg.gain.value=0.22;
-    br.connect(brg);brg.connect(g.gain);br.start(t);
-    S.layers.push(g);
-  }
-  function buildHiss(t){
-    /* Tape hiss bed with flutter (filter LFO) + random magnetic dropouts. */
-    var ac=S.ac;
-    var src=ac.createBufferSource();src.buffer=noiseBuf();src.loop=true;
-    var hp=ac.createBiquadFilter();hp.type='highpass';hp.frequency.value=900;
-    var lp=ac.createBiquadFilter();lp.type='lowpass';lp.frequency.value=6800;
-    var g=ac.createGain();g.gain.value=0.0001;
-    src.connect(hp);hp.connect(lp);lp.connect(g);g.connect(S.master);
-    g.gain.linearRampToValueAtTime(0.05,t+1.8);
-    var lfo=ac.createOscillator();lfo.frequency.value=0.09;
-    var lfg=ac.createGain();lfg.gain.value=900;
-    lfo.connect(lfg);lfg.connect(lp.frequency);lfo.start(t);
-    src.start(t);
-    S.layers.push(g);
-    S.dropIv=setInterval(function(){
-      if(S.dead||!S.on)return;
-      try{
-        var n=ac.currentTime;
-        g.gain.cancelScheduledValues(n);
-        g.gain.setValueAtTime(Math.max(0.0001,g.gain.value),n);
-        g.gain.linearRampToValueAtTime(0.012,n+0.05);
-        g.gain.linearRampToValueAtTime(0.05,n+0.18);
-      }catch(e){}
-    },6500);
-  }
-  function buildHum(t){
-    /* 60Hz mains hum + harmonics: the room the tape sits in. */
-    var ac=S.ac;
-    var g=ac.createGain();g.gain.value=0.0001;g.connect(S.master);
-    g.gain.linearRampToValueAtTime(0.05,t+2);
-    function hz(f,lv){
-      var o=ac.createOscillator();o.type='sine';o.frequency.value=f;
-      var og=ac.createGain();og.gain.value=lv;
-      o.connect(og);og.connect(g);o.start(t);
-    }
-    hz(60,0.5);hz(120,0.22);hz(180,0.06);hz(240,0.04);
-    S.layers.push(g);
-  }
-  function powerOn(){
-    if(S.on||S.dead||done)return;
-    var AC=w.AudioContext||w.webkitAudioContext;if(!AC)return;
-    try{
-      var ac=new AC();S.ac=ac;
-      if(ac.state==='suspended'&&ac.resume){try{ac.resume();}catch(e){}}
-      var comp=ac.createDynamicsCompressor();
-      if(comp.threshold){
-        comp.threshold.value=-20;comp.knee.value=10;comp.ratio.value=5;
-        comp.attack.value=0.004;comp.release.value=0.22;
-      }
-      var master=ac.createGain();master.gain.value=0.0001;
-      master.connect(comp);comp.connect(ac.destination);
-      var an=ac.createAnalyser();an.fftSize=256;master.connect(an);
-      S.master=master;S.an=an;S.on=true;
-      var t=ac.currentTime+0.03;
-      /* the machine wakes up */
-      noiseHit(0,0.03,0.09,'highpass',2400,2400);   /* power click */
-      noiseHit(0.05,0.28,0.07,'bandpass',300,3400); /* channel scan up */
-      noiseHit(0.3,0.3,0.045,'bandpass',3400,260);  /* channel scan down */
-      whine(0.06,0.5,2200,70,0.035);                /* CRT whine settle */
-      thump(110,34,0.3,0.22);                       /* power thump */
-      noiseHit(0.12,0.8,0.04,'lowpass',170,150);    /* tape deck engages */
-      buildDrone(t);buildHiss(t);buildHum(t);
-      master.gain.setValueAtTime(0.0001,t);
-      master.gain.linearRampToValueAtTime(0.5,t+1.7);
-      if(ov.classList)ov.classList.add('zp-audio-on');
-      if(noiseEl)noiseEl.classList.add('zp-audioflash');
-      if(audioEl)audioEl.classList.add('zp-audio-on');
-      if(audioLabelEl)audioLabelEl.textContent='ARCHIVE AUDIO ON';
-      startVu();
-      scheduleAmbient();
-    }catch(e){S.dead=true;}
-  }
-  function powerDown(){
-    if(S.dead)return;
-    S.dead=true;
-    if(S.dropIv){clearInterval(S.dropIv);S.dropIv=0;}
-    var ac=S.ac;
-    if(!ac||!S.on)return;
-    try{
-      var t=ac.currentTime,i,g;
-      for(i=0;i<S.layers.length;i++){
-        g=S.layers[i];
-        g.gain.cancelScheduledValues(t);
-        g.gain.setValueAtTime(Math.max(0.0001,g.gain.value),t);
-        g.gain.linearRampToValueAtTime(0.0001,t+0.4+i*0.22);
-      }
-      /* tape brake */
-      (function(){
-        var o=ac.createOscillator();o.type='sawtooth';
-        o.frequency.setValueAtTime(130,t);
-        o.frequency.exponentialRampToValueAtTime(48,t+0.75);
-        var f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=430;
-        var gg=ac.createGain();
-        gg.gain.setValueAtTime(0.0001,t);
-        gg.gain.exponentialRampToValueAtTime(0.04,t+0.07);
-        gg.gain.exponentialRampToValueAtTime(0.0001,t+0.75);
-        o.connect(f);f.connect(gg);gg.connect(S.master);o.start(t);o.stop(t+0.8);
-      })();
-      whine(0.02,0.6,1900,44,0.04);   /* CRT power-down whine */
-      thump(150,34,0.32,0.28);        /* power thump */
-      /* room tone lingers over the revealed page */
-      chordTone(41.2,2.6,0.045,0.2,0.2);
-      chordTone(19.4,2.4,0.035,0.2,0.2);
-      var m=S.master;
-      m.gain.cancelScheduledValues(t);
-      m.gain.setValueAtTime(Math.max(0.0001,m.gain.value),t);
-      m.gain.linearRampToValueAtTime(0.0001,t+2.2);
-      setTimeout(function(){try{ac.close();}catch(e){}},3600);
-    }catch(e){}
-  }
+  /* ── MINIMAL SOUND STUBS ─────────────────────────────────────────
+     The tasteful loader is silent. These no-op hooks keep the older sequence
+     helpers harmless if a future edit reuses them. */
+  var S={on:false,dead:true};
+  function powerOn(){}
+  function powerDown(){}
   var sfx={
-    /* terminal key clacks (sparse + very quiet) */
-    key:function(){if(!S.on)return;if(Math.random()<0.45)noiseHit(0,0.02,0.016,'bandpass',2400+Math.random()*900,1600);},
-    ok:function(){if(!S.on)return;blip(1318.5,0.05,0.018);},
-    seekUp:function(){if(!S.on)return;noiseHit(0,0.32,0.04,'bandpass',500,2600);},
-    seekDown:function(){if(!S.on)return;noiseHit(0,0.3,0.04,'bandpass',2600,300);},
-    tick:function(){if(!S.on)return;blip(987.8,0.03,0.012,'square');},
-    trackDone:function(){if(!S.on)return;blip(1174.7,0.05,0.02);blip(880,0.06,0.02,'sine',0.09);},
-    glitch:function(){if(!S.on)return;noiseHit(0,0.16,0.08,'lowpass',1500,240);thump(72,42,0.26,0.13);noiseHit(0.06,0.22,0.035,'bandpass',700,180);},
-    /* EAS-style attention tones, short and muffled */
-    alarm:function(){if(!S.on)return;blip(853,0.08,0.035,'square');blip(960,0.08,0.035,'square',0.11);blip(853,0.08,0.035,'square',0.22);},
-    /* the sting: duck, sub boom, 2093Hz "presence" ping, reverse swell */
-    sting:function(){
-      if(!S.on)return;
-      try{
-        var ac=S.ac,t=ac.currentTime;
-        S.master.gain.cancelScheduledValues(t);
-        S.master.gain.setValueAtTime(Math.max(0.0001,S.master.gain.value),t);
-        S.master.gain.linearRampToValueAtTime(0.14,t+0.06);
-        S.master.gain.linearRampToValueAtTime(0.5,t+0.34);
-      }catch(e){}
-      thump(52,38,1.1,0.22);
-      blip(2093,1.5,0.055,'sine',0.04);
-      noiseHit(0,1.1,0.045,'lowpass',180,4200);
-    },
-    /* the gate: low A chord, slow bloom */
-    gate:function(){
-      if(!S.on)return;
-      chordTone(55,3.4,0.075,1.2);
-      chordTone(82.41,3.2,0.05,1.3,0.05);
-      chordTone(110,3,0.045,1.4,0.1);
-      chordTone(659.25,2.6,0.012,1,0.9);
-    }
+    key:function(){}, ok:function(){}, seekUp:function(){}, seekDown:function(){},
+    tick:function(){}, trackDone:function(){}, glitch:function(){}, alarm:function(){},
+    sting:function(){}, gate:function(){}
   };
-  /* a few random room events while the user lingers at the gate */
-  function scheduleAmbient(){
-    var ev=[
-      function(){thump(58,40,0.5,0.06);},
-      function(){noiseHit(0,0.9,0.018,'lowpass',320,170);},
-      function(){noiseHit(0,0.12,0.02,'bandpass',500,220);thump(64,45,0.3,0.05);},
-      function(){blip(392,0.7,0.01);}
-    ];
-    for(var i=0;i<3;i++){
-      (function(fn){
-        timers.push(setTimeout(function(){
-          if(S.on&&!S.dead){try{fn();}catch(e){}}
-        },2400+i*2300+Math.random()*1500));
-      })(ev[i%ev.length]);
-    }
-  }
-  /* tiny VU meter so "sound is on" is legible at a glance */
-  function startVu(){
-    if(!vuEl||!S.an||!w.requestAnimationFrame)return;
-    var buf;
-    try{buf=new Float32Array(S.an.fftSize);}catch(e){return;}
-    (function loop(){
-      if(S.dead)return;
-      w.requestAnimationFrame(loop);
-      var n=(w.performance&&w.performance.now())||0;
-      if(n-S.vuLast<90)return;
-      S.vuLast=n;
-      try{
-        S.an.getFloatTimeDomainData(buf);
-        var s=0;
-        for(var i=0;i<buf.length;i+=4)s+=buf[i]*buf[i];
-        var rms=Math.sqrt(s/(buf.length/4));
-        var lv=rms<0.012?0:(rms<0.035?1:(rms<0.08?2:(rms<0.15?3:4)));
-        var bars=vuEl.children;
-        for(var j=0;j<bars.length;j++){
-          bars[j].style.opacity=j<lv?(0.35+0.15*j):0.15;
-          bars[j].style.background=(lv===4&&j===3)?'#ff2a2a':'#9a9590';
-        }
-      }catch(e){}
-    })();
-  }
+  function scheduleAmbient(){}
+  function startVu(){}
 
   /* ── VISUAL EXTRAS ──────────────────────────────────────────────── */
   /* VHS grain texture: one 160px canvas painted once, tiled by CSS */
@@ -1484,9 +1225,9 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
   }
   function gate(){
     var l=newline('zp-gate');
-    l.textContent='[ CLICK OR PRESS ANY KEY TO OBSERVE ]';
+    l.textContent='entering site';
     var f=newline('zp-dim');
-    f.textContent='TAPE 00 \u00b7 "SHOWREEL" \u00b7 PROPERTY OF ZAZIE PRODUCTIONS';
+    f.textContent='ZAZIE PRODUCTIONS · SHOWREEL';
   }
   function countLoop(){
     if(done||!cnt)return;
@@ -1509,14 +1250,12 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
     },580);
   }
 
-  /* First gesture powers the audio on (the set "wakes up"); the next input
-     — or scroll / Esc at any moment — moves on into the archive. */
-  function onPointer(){if(done)return;if(!S.on)powerOn();else finish(true);}
+  /* Minimal loader: any intentional input skips straight to the site. */
+  function onPointer(){if(done)return;finish(true);}
   function onKey(e){
     if(done)return;
-    if(e&&(e.key==='Escape'||e.keyCode===27)){finish(true);return;}
-    if(e&&e.repeat&&!S.on)return;
-    if(!S.on)powerOn();else finish(true);
+    if(e&&e.repeat)return;
+    finish(true);
   }
   ov.addEventListener('pointerdown',onPointer);
   d.addEventListener('keydown',onKey);
@@ -1528,61 +1267,22 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
 
   async function run(){
     makeNoise();
-    if(noiseEl)noiseEl.classList.add('zp-startflash');
-    await sleep(400);                    /* CRT power-on flash */
-    now('ZP-ARCHIVE / TERMINAL 02','zp-hi');
-    now('ZAZIE PRODUCTIONS BROADCAST SYSTEMS','zp-dim');
-    now('\u00a9 1987 ZAZIE PRODUCTIONS \u00b7 ALL RIGHTS RESERVED','zp-dim');
+    await sleep(220);
+    now('ZAZIE PRODUCTIONS','zp-hi');
+    now('ARCHIVE TERMINAL','zp-dim');
     blank();
-    countLoop();
-    timers.push(setTimeout(clockStep,1000));
-    timers.push(setTimeout(idleTears,1400));
-    tapeState('\u25B8 PLAY');
-    await sleep(240);
-    await typeLine('BOOTING ZP-OS v2.31 ...','zp-prompt',95);
-    await sleep(130);
-    await typeLine('  PHOSPHOR ARRAY ........ OK','zp-ok',155);sfx.ok();
-    await typeLine('  MEMORY 640K ........... OK','zp-ok',155);sfx.ok();
-    await typeLine('  AUDIO SUBSYSTEM ....... OK','zp-ok',155);sfx.ok();
-    await typeLine('  MOUNT /ARCHIVE/TAPES .. OK','zp-ok',155);sfx.ok();
-    await typeLine('  INDEX ARTIFACTS ....... 29 CUES','zp-ok',155);sfx.ok();
-    await typeLine('  SIGNAL INTEGRITY ...... 97.3%','zp-ok',155);sfx.ok();
-    await typeLine('  SPECTRUM LOCK ......... 19/41/110Hz','zp-ok',155);sfx.ok();
+    await sleep(180);
+    await typeLine('> initializing showreel archive','zp-prompt',95);
+    await sleep(120);
+    await typeLine('  cue index ............ 29 entries','zp-ok',145);
+    await typeLine('  film samples ......... mounted','zp-ok',145);
+    await typeLine('  signal path .......... clean','zp-ok',145);
     await sleep(180);
     blank();
-    await typeLine('> PLAY SHOWREEL.REEL','zp-prompt',85);
-    sfx.seekUp();
-    await sleep(160);
-    await tracking();
-    sfx.trackDone();
-    await sleep(380);
-    glitch(true);
-    corruptTracking();
-    tapeState('\u25B8\u25B8 ERR',true);
-    tearBurst();
-    sfx.glitch();
-    await sleep(320);
-    alertBlink();
-    sfx.alarm();
-    await typeLine('!! UNREGISTERED SIGNAL ON TAPE 00','zp-bad',115);
-    await sleep(120);
-    await typeLine('!! AUDIO SOURCE IS IN THE ROOM WITH YOU.','zp-bad',115);
-    await sleep(240);
-    sfx.sting();
-    await sleep(300);
-    glitchOff();
-    await typeLine('> REWIND ..................... OK','zp-prompt',115);
-    sfx.seekDown();
-    tapeState('\u25C2 REW');
-    await sleep(190);
-    await typeLine('SIGNAL RESTORED. OBSERVATION PERMITTED.','zp-hi',85);
-    sfx.ok();
-    await sleep(300);
+    await typeLine('ready.','zp-hi',90);
+    await sleep(520);
     gate();
-    sfx.gate();
-    tapeState('\u25C9 OBS');
-    if(S.on&&audioLabelEl)audioLabelEl.textContent='TAP TO ENTER ARCHIVE';
-    autoTimer=setTimeout(function(){finish(false);},2200);
+    autoTimer=setTimeout(function(){finish(false);},520);
   }
   try{run();}catch(e){finish(false);}
 })();
