@@ -123,17 +123,13 @@ content-hashed. jsdom suite: 65 assertions, including "no em dashes" and "no
 
 ---
 
-# ZP Archive Boot, analog-horror terminal intro
+# ZP Archive Boot, minimal terminal intro
 
 Date: 2026-09-17 · Branch: `arena/01a0b074-zazie-horror-portfolio`
 
 ## What it is
 
-A terminal-style loading screen with analog-horror dressing shown once per session on first
-paint: CRT power-on flash to typed BIOS boot log (29 archive cues indexed) to `PLAY SHOWREEL.REEL`
-with a VHS tracking bar to signal glitch (RGB split, jitter, EAS-style red frame double-blink,
-"UNREGISTERED SIGNAL" warnings) to VHS OSD chrome (`► PLAY`, blinking `● REC`, running `SP` counter,
-scanlines, vignette, rolling tracking band) to blinking gate to CRT power-off collapse revealing the site.
+A terminal-style loading screen shown once per session on first paint: a quiet monochrome archive header, a few typed status lines (`29 entries`, film samples mounted, signal path clean), subtle scanlines/noise, and a brief handoff before the page is revealed. The earlier VHS/glitch/audio treatment has been intentionally pared back so the effect reads as tasteful loading atmosphere rather than a set piece.
 
 ## Cost & performance guardrails
 
@@ -141,10 +137,8 @@ scanlines, vignette, rolling tracking band) to blinking gate to CRT power-off co
   No fonts (uses `ui-monospace` stack), no images, no audio files.
 - **Animation hygiene**: only `transform`, `opacity`, and `filter` animate; `contain: strict`
   on the overlay; scanlines are static gradients; the whole thing self-destructs (node removed).
-- **Timing**: ≈5.4 s to the gate; any click / key / wheel / tap skips instantly; gate auto-enters
-  after 2.8 s; JS hard cap at 9.2 s; CSS force-hide at 10 s as the final failsafe.
-- **Sound**: none by default. A ~0.3 s synthesized tape-click/power-down (WebAudio, peak gain 0.055)
-  plays only when the user's own click/keypress dismisses the screen, autoplay-policy safe.
+- **Timing**: ≈3 s end-to-end; any click / key / wheel / tap skips instantly; JS hard cap at 9.2 s; CSS force-hide at 7 s as the final failsafe.
+- **Sound**: none. The loader no longer starts or prepares an audio layer on interaction.
 
 ## Correctness guardrails
 
@@ -161,11 +155,10 @@ scanlines, vignette, rolling tracking band) to blinking gate to CRT power-off co
 
 ## Workshop notes (deliberate creative choices to revisit)
 
-- `© 1987 ZAZIE PRODUCTIONS` is an intentional analog-horror anachronism (real founding: 2022).
-- The corrupted tracking bar stays corrupted after the glitch, the tape never fully heals.
-- Gate copy: `[ CLICK OR PRESS ANY KEY TO OBSERVE ]`.
-- Possible next iterations: per-visit tape number, longer scare on repeat visits, tying
-  `zp:bootdone` into the showreel player, CRT curvature on large screens.
+- Keep the copy understated: no fake copyright dates, no red-alert language, no jump-scare wording.
+- Gate copy: `entering site`.
+- Possible next iterations: per-visit archive ID, even shorter return-visitor path, tying
+  `zp:bootdone` into the showreel player.
 
 ---
 
