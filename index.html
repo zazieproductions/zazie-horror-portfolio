@@ -273,13 +273,13 @@ html.zp-boot-on #zp-boot{
 <link rel="dns-prefetch" href="https://drive.google.com"/>
 
 <!-- Pre-fetch Film Sample Video Embeds (zero latency playback) -->
-<link rel="prefetch" href="https://www.youtube-nocookie.com/embed/HaVJP08j77U?autoplay=1&rel=0&modestbranding=1&color=white"/>
-<link rel="prefetch" href="https://www.youtube-nocookie.com/embed/ItrrcilS0ro?autoplay=1&rel=0&modestbranding=1&color=white"/>
-<link rel="prefetch" href="https://www.youtube-nocookie.com/embed/riCvy2abhlc?autoplay=1&rel=0&modestbranding=1&color=white"/>
-<link rel="prefetch" href="https://www.youtube-nocookie.com/embed/Ty8tPp59mDc?autoplay=1&rel=0&modestbranding=1&color=white"/>
-<link rel="prefetch" href="https://www.youtube-nocookie.com/embed/rvCGO0BJ_2E?autoplay=1&rel=0&modestbranding=1&color=white"/>
-<link rel="prefetch" href="https://www.youtube-nocookie.com/embed/6qa3Uwj47fc?autoplay=1&rel=0&modestbranding=1&color=white"/>
-<link rel="prefetch" href="https://www.youtube-nocookie.com/embed/UX2kv3G89Jw?autoplay=1&rel=0&modestbranding=1&color=white"/>
+<link rel="prefetch" href="https://www.youtube-nocookie.com/embed/HaVJP08j77U?autoplay=1&rel=0&modestbranding=1&color=white&vq=hd1080&hd=1"/>
+<link rel="prefetch" href="https://www.youtube-nocookie.com/embed/ItrrcilS0ro?autoplay=1&rel=0&modestbranding=1&color=white&vq=hd1080&hd=1"/>
+<link rel="prefetch" href="https://www.youtube-nocookie.com/embed/riCvy2abhlc?autoplay=1&rel=0&modestbranding=1&color=white&vq=hd1080&hd=1"/>
+<link rel="prefetch" href="https://www.youtube-nocookie.com/embed/Ty8tPp59mDc?autoplay=1&rel=0&modestbranding=1&color=white&vq=hd1080&hd=1"/>
+<link rel="prefetch" href="https://www.youtube-nocookie.com/embed/rvCGO0BJ_2E?autoplay=1&rel=0&modestbranding=1&color=white&vq=hd1080&hd=1"/>
+<link rel="prefetch" href="https://www.youtube-nocookie.com/embed/6qa3Uwj47fc?autoplay=1&rel=0&modestbranding=1&color=white&vq=hd1080&hd=1"/>
+<link rel="prefetch" href="https://www.youtube-nocookie.com/embed/UX2kv3G89Jw?autoplay=1&rel=0&modestbranding=1&color=white&vq=hd1080&hd=1"/>
 
 <!-- Pre-fetch Video Thumbnails & Posters for Instant Display -->
 <link rel="prefetch" href="/images/project-HaVJP08j77U.jpg" as="image"/>
@@ -389,13 +389,14 @@ onIdle(() => warmImages(lightboxImages, "low"));
 //      cinematic width (see the .zp-vcard rules above). Player size is what
 //      YouTube's adaptive ladder reads, so this is what buys the sharp
 //      rendition - no CSS upscaling is involved.
+//    - vq=hd1080: hints the embed player to prefer 1080p rendition.
 //    - allow/allowfullscreen both carry "fullscreen" so the in-player
 //      fullscreen button is permitted by Permissions Policy.
 //    - window.__zpPlayer hands the active id to the React bundle so the
 //      mount does not tear the playing card down.
 var ZP_ALLOW_YT = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen";
 var ZP_ALLOW_DRIVE = "autoplay; clipboard-write; encrypted-media; picture-in-picture; fullscreen";
-var ZP_PARAMS = "rel=0&color=white&playsinline=1&iv_load_policy=3&fs=1";
+var ZP_PARAMS = "rel=0&color=white&playsinline=1&iv_load_policy=3&fs=1&vq=hd1080&hd=1";
 function zpSrc(yt, drive, autoplay) {
   var a = autoplay ? "autoplay=1" : "";
   return yt
@@ -538,6 +539,7 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
      breaks out to a cinematic width, which is the lever that moves the
      provider up its ladder. Nothing is scaled up in CSS: the iframe is
      rendered at the frame's real pixel size.
+     vq=hd1080 + hd=1 on the embed URL hint the player to prefer 1080p.
      Plain CSS on purpose - these class names are emitted by BOTH the
      prerendered markup and the React render, so both copies behave
      identically before and after the bundle mounts.
