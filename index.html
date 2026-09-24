@@ -4,10 +4,10 @@
 <head>
 <meta charset="utf-8"/>
 <!-- ═══════════════════════════════════════════════════════════════════
-     ZP ARCHIVE BOOT — minimal terminal loading screen (inline, zero requests)
+     ZP ARCHIVE BOOT — analog signal terminal (inline, zero requests)
      Shows once per session on production; preview/dev hosts replay on reload.
      ?boot=1 / #boot forces a replay; ?boot=0 / #noboot disables it.
-     Quiet by default: no audio, no jump scare, any click/key/scroll skips.
+     Silent and skippable: no audio or jump scare; any click/key/scroll skips.
      Failsafes: no-JS → never shows · reduced-motion/bots → never shows unless forced ·
      JS error mid-run → CSS force-hide at 7s · bfcache restore → instant out.
      ═══════════════════════════════════════════════════════════════════ -->
@@ -31,219 +31,229 @@
 }catch(e){}})();
 </script>
 <style id="zp-boot-style">
-#zp-boot{display:none}
-html.zp-boot-on body{overflow:hidden!important}
-html.zp-boot-on #zp-boot{
-  display:block;position:fixed;inset:0;z-index:2147483647;background:#020202;
-  cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;
-  touch-action:manipulation;contain:strict;
-  animation:zpForceHide .5s linear 10s forwards;
+/* The archive boot is self-contained: nothing here styles the site beneath it. */
+#zp-boot{
+  --zp-red:#ee3e42;--zp-mono:ui-monospace,'Cascadia Mono','SF Mono',Menlo,Consolas,'Liberation Mono',monospace;
+  display:none;position:fixed;inset:0;z-index:2147483647;overflow:hidden;
+  background:#030102;color:#e9d6d3;font-family:var(--zp-mono);cursor:pointer;
+  user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;
+  touch-action:none;overscroll-behavior:contain;
+  animation:zpForceHide .1s linear 7s forwards;
 }
-#zp-boot.zp-off{display:block;pointer-events:none;animation:zpOvFade .56s ease forwards,zpForceHide .1s linear 9s forwards}
-@media (prefers-reduced-motion:reduce){html:not(.zp-boot-force) #zp-boot{display:none!important}}
-.zp-screen{
-  position:absolute;inset:0;overflow:hidden;transform-origin:50% 50%;
-  background:radial-gradient(120% 90% at 50% 45%,#0a0d0a 0%,#060806 55%,#020302 100%);
-  animation:zpPowerOn .38s cubic-bezier(.3,.7,.3,1) both;
-}
-#zp-boot.zp-off .zp-screen{animation:zpCollapse .5s cubic-bezier(.5,.2,.6,1) forwards}
-/* CRT dressing: scanlines + vignette + flicker */
-.zp-crt{
-  position:absolute;inset:0;pointer-events:none;z-index:4;
+#zp-boot *{box-sizing:border-box}
+html.zp-boot-on #zp-boot,#zp-boot.zp-off{display:block}
+#zp-boot.zp-off{pointer-events:none;animation:zpFadeOut .45s ease .12s forwards,zpForceHide .1s linear .6s forwards}
+#zp-boot .zp-screen{
+  position:absolute;inset:0;overflow:hidden;isolation:isolate;
   background:
-    repeating-linear-gradient(0deg,rgba(0,0,0,.34) 0 1px,transparent 1px 3px),
-    radial-gradient(115% 100% at 50% 50%,transparent 60%,rgba(0,0,0,.55) 100%);
-  animation:zpFlick 3.6s steps(1) infinite;
+    radial-gradient(ellipse 35% 55% at 74% 46%,rgba(156,11,25,.27),transparent 100%),
+    radial-gradient(ellipse 100% 110% at 50% 40%,#1c0709 0%,#090304 56%,#020101 100%);
+  animation:zpSwitchOn .55s ease-out both;
 }
-/* Rolling VHS tracking band */
-.zp-track{
-  position:absolute;left:0;right:0;height:16%;top:-25%;z-index:3;pointer-events:none;
-  background:linear-gradient(180deg,transparent,rgba(255,255,255,.04) 30%,rgba(255,255,255,.085) 50%,rgba(255,255,255,.04) 70%,transparent);
-  mix-blend-mode:screen;animation:zpTrack 2.3s linear infinite;
+#zp-boot.zp-off .zp-screen{animation:zpPowerDown .45s cubic-bezier(.62,.03,.8,.35) both}
+/* A single tiled canvas and low-contrast scanlines give the screen its tape texture. */
+#zp-boot .zp-grain{position:absolute;inset:0;z-index:5;pointer-events:none;opacity:.13;mix-blend-mode:screen;animation:zpGrain 1.1s steps(3) infinite}
+#zp-boot .zp-screen::before{
+  content:"";position:absolute;inset:0;z-index:6;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent 0 2px,rgba(0,0,0,.28) 3px 4px),
+    radial-gradient(ellipse 95% 105% at 50% 50%,transparent 40%,rgba(0,0,0,.74) 100%);
 }
-.zp-glitch .zp-track{animation-duration:.75s}
-/* VHS on-screen display */
-.zp-osd{
-  position:absolute;inset:0;z-index:5;pointer-events:none;
-  font:700 12px/1 var(--zp-mono);letter-spacing:.09em;color:#f0ebe3;
-  text-shadow:0 0 7px rgba(240,235,227,.35),1px 0 rgba(255,42,42,.22);
+#zp-boot .zp-screen::after{
+  content:"";position:absolute;left:0;right:0;top:-18%;height:14%;z-index:5;pointer-events:none;
+  background:linear-gradient(180deg,transparent,rgba(255,100,100,.025) 28%,rgba(255,125,125,.09) 52%,transparent);
+  animation:zpRoll 4.3s linear .35s both;
 }
-.zp-osd .zp-play{position:absolute;top:4.5%;left:5%}
-.zp-osd .zp-rec{position:absolute;top:4.5%;right:5%;color:#ff2a2a}
-.zp-osd .zp-rec i{
-  display:inline-block;width:9px;height:9px;border-radius:50%;background:#ff2a2a;margin-right:.5em;
-  box-shadow:0 0 8px rgba(255,42,42,.85);animation:zpBlink 1.2s steps(2,start) infinite;
+#zp-boot .zp-rift{
+  position:absolute;left:0;right:0;top:57%;height:3px;z-index:7;pointer-events:none;opacity:0;
+  background:linear-gradient(90deg,transparent,rgba(255,80,80,.5) 20%,rgba(255,185,175,.8) 48%,rgba(255,80,80,.5) 76%,transparent);
+  box-shadow:0 7px 0 rgba(3,0,0,.88);
 }
-.zp-osd .zp-count{position:absolute;bottom:4.5%;right:5%;opacity:.85}
-/* Terminal body */
-.zp-term{
-  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;margin:0;
-  width:min(88vw,720px);max-height:76vh;overflow:hidden;
-  font:400 clamp(11px,.5rem + 1.55vw,15px)/1.62 var(--zp-mono);
-  letter-spacing:.03em;color:#f0ebe3;white-space:pre-wrap;word-break:break-word;
-  text-shadow:0 0 8px rgba(240,235,227,.28),0 0 26px rgba(240,235,227,.12);
+#zp-boot.zp-interference .zp-rift{animation:zpTear .34s steps(2) both}
+#zp-boot .zp-shell{
+  position:absolute;inset:clamp(14px,3.1vw,44px);z-index:2;
+  display:flex;flex-direction:column;min-height:0;padding:clamp(19px,3.1vw,44px);
+  border:1px solid rgba(233,57,65,.28);
+  background:linear-gradient(110deg,rgba(24,5,7,.32),transparent 55%,rgba(28,3,6,.12));
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.75),0 0 90px rgba(0,0,0,.45);
 }
-.zp-line{min-height:1.62em}
-.zp-dim{color:#9a9590;text-shadow:0 0 6px rgba(154,149,144,.22)}
-.zp-hi{color:#f0ebe3;font-weight:700;letter-spacing:.13em}
-.zp-ok{color:#cdc7bb}
-.zp-prompt{color:#e9e3d6}
-.zp-bad{color:#ff2a2a;text-shadow:0 0 9px rgba(255,42,42,.6),1px 0 rgba(255,42,42,.4)}
-.zp-corrupt{color:#cfc9bd;text-shadow:1px 0 rgba(255,42,42,.45),-1px 0 rgba(70,230,255,.3)}
-.zp-gate{color:#f0ebe3;letter-spacing:.15em;margin-top:1.1em;animation:zpBlink 1.15s steps(2,start) infinite}
-.zp-cursor{
-  display:inline-block;width:.62em;height:1.02em;margin-left:.08em;vertical-align:-.12em;
-  background:#f0ebe3;box-shadow:0 0 8px rgba(240,235,227,.6);animation:zpBlink 1s steps(2,start) infinite;
+#zp-boot .zp-shell::before{
+  content:"";position:absolute;inset:-1px;pointer-events:none;
+  background:linear-gradient(var(--zp-red),var(--zp-red)) left top / 32px 2px no-repeat,
+    linear-gradient(var(--zp-red),var(--zp-red)) left top / 2px 32px no-repeat,
+    linear-gradient(var(--zp-red),var(--zp-red)) right top / 32px 2px no-repeat,
+    linear-gradient(var(--zp-red),var(--zp-red)) right top / 2px 32px no-repeat,
+    linear-gradient(var(--zp-red),var(--zp-red)) left bottom / 32px 2px no-repeat,
+    linear-gradient(var(--zp-red),var(--zp-red)) left bottom / 2px 32px no-repeat,
+    linear-gradient(var(--zp-red),var(--zp-red)) right bottom / 32px 2px no-repeat,
+    linear-gradient(var(--zp-red),var(--zp-red)) right bottom / 2px 32px no-repeat;
+  opacity:.8;
 }
-/* Glitch state: RGB split + jitter */
-.zp-glitch .zp-term{
-  animation:zpJit .14s steps(2) infinite;
-  text-shadow:2px 0 rgba(255,42,42,.5),-2px 0 rgba(70,230,255,.35),0 0 10px rgba(240,235,227,.3);
+#zp-boot .zp-header,#zp-boot .zp-deck-row,#zp-boot .zp-footer{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  font-size:10px;line-height:1.4;letter-spacing:.2em;text-transform:uppercase;
 }
-.zp-glitch .zp-crt{animation:zpFlick .18s steps(1) infinite}
-/* EAS-style red frame double-blink */
-.zp-alertframe{
-  position:absolute;inset:0;z-index:6;pointer-events:none;opacity:0;
-  box-shadow:inset 0 0 0 3px rgba(255,42,42,.65),inset 0 0 90px rgba(196,30,30,.35);
+#zp-boot .zp-header{color:#a67071;white-space:nowrap}
+#zp-boot .zp-header strong{color:#e4c0b9;font-weight:600}
+#zp-boot .zp-header-sep{color:#e44145;margin:0 .85em}
+#zp-boot .zp-rec{display:inline-flex;align-items:center;gap:9px;color:#f06360}
+#zp-boot .zp-rec i{width:7px;height:7px;border-radius:50%;background:var(--zp-red);box-shadow:0 0 12px var(--zp-red);animation:zpRec 1.5s ease-in-out infinite}
+#zp-boot .zp-timecode{margin-left:clamp(12px,2vw,32px);font-variant-numeric:tabular-nums;color:#d6a2a0}
+#zp-boot .zp-content{
+  position:relative;flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(210px,.85fr);
+  align-items:center;gap:2vw;
 }
-#zp-boot.zp-alert .zp-alertframe{animation:zpAlert .36s steps(1) both}
-
-/* Skip link: lives outside #root so the React teardown cannot remove it. */
-.zp-skip{position:absolute;left:-9999px;top:0;z-index:2147483646;background:#c41e1e;color:#f0ebe3;padding:.85rem 1.25rem;font:500 .75rem/1 var(--zp-mono);letter-spacing:.2em;text-transform:uppercase;text-decoration:none}
+#zp-boot .zp-copy{position:relative;z-index:2;padding:16px 0}
+#zp-boot .zp-eyebrow{
+  display:flex;align-items:center;gap:12px;margin:0 0 clamp(18px,3vh,33px);
+  font:600 10px/1.4 var(--zp-mono);letter-spacing:.31em;text-transform:uppercase;color:#f46b66;
+  animation:zpRise .7s ease .18s both;
+}
+#zp-boot .zp-eyebrow::before{content:"";width:24px;height:1px;background:var(--zp-red);box-shadow:0 0 10px var(--zp-red)}
+#zp-boot .zp-wordmark{margin:0;font-family:Inter,Arial,Helvetica,sans-serif;text-transform:uppercase;animation:zpRise .8s cubic-bezier(.2,.7,.2,1) .27s both}
+#zp-boot .zp-wordmark-main{
+  display:block;position:relative;width:max-content;max-width:100%;
+  font-size:clamp(68px,9.6vw,148px);font-weight:900;line-height:.8;letter-spacing:-.105em;color:var(--zp-red);
+  text-shadow:0 0 42px rgba(223,23,35,.35),2px 3px 0 #3c070b;
+}
+#zp-boot .zp-wordmark-main::after{
+  content:attr(data-text);position:absolute;inset:0;color:#ff9186;opacity:.24;
+  transform:translate(4px,-2px);clip-path:inset(54% 0 17% 0);pointer-events:none;
+}
+#zp-boot.zp-interference .zp-wordmark-main::after{opacity:.8;transform:translate(11px,-3px)}
+#zp-boot .zp-wordmark-sub{
+  display:block;margin-top:clamp(13px,2vw,30px);
+  font-size:clamp(27px,3.7vw,56px);font-weight:800;line-height:1;letter-spacing:.115em;color:#e9d8d3;
+  text-shadow:2px 0 rgba(235,49,56,.5),0 0 24px rgba(243,52,61,.16);
+}
+#zp-boot .zp-tagline{
+  margin:clamp(18px,3vh,32px) 0 0;font:500 clamp(10px,.85vw,12px)/1.5 var(--zp-mono);
+  letter-spacing:.24em;color:#c18581;text-transform:uppercase;transition:color .4s;
+}
+#zp-boot.zp-ready .zp-tagline{color:#f0b3a8}
+#zp-boot .zp-console{
+  max-width:520px;margin-top:clamp(22px,4.5vh,49px);padding:13px 19px 17px;
+  border-top:1px solid rgba(202,58,61,.32);border-left:2px solid rgba(239,65,68,.7);
+  background:linear-gradient(90deg,rgba(76,12,19,.25),rgba(8,1,2,.02));
+  box-shadow:-14px 0 32px rgba(111,10,18,.12);
+}
+#zp-boot .zp-console-head{display:flex;justify-content:space-between;gap:8px;font:500 9px/1.4 var(--zp-mono);letter-spacing:.12em;color:#996d69;text-transform:uppercase;white-space:nowrap}
+#zp-boot .zp-console-head span:last-child{color:#c24a4c}
+#zp-boot .zp-term{
+  height:7.2em;overflow:hidden;margin:10px 0 0;
+  font:400 clamp(10px,.84vw,12px)/1.8 var(--zp-mono);letter-spacing:.06em;color:#d7bab6;
+  white-space:pre-wrap;
+}
+#zp-boot .zp-line{display:flex;gap:10px;min-height:1.8em}
+#zp-boot .zp-mark{flex:none;color:#f15a58}
+#zp-boot .zp-line.zp-warning{color:#f0706b;text-shadow:0 0 14px rgba(238,62,66,.45)}
+#zp-boot .zp-line.zp-last{color:#f2d1c7;letter-spacing:.13em}
+#zp-boot .zp-cursor{display:inline-block;width:.55em;height:1em;margin-left:2px;vertical-align:-.13em;background:#f2605c;box-shadow:0 0 9px rgba(238,62,66,.75);animation:zpRec 1s steps(2) infinite}
+/* The oscilloscope is decorative, not a network image or an audio player. */
+#zp-boot .zp-visual{position:relative;width:min(100%,480px);aspect-ratio:1;justify-self:center;display:grid;place-items:center;pointer-events:none}
+#zp-boot .zp-visual::before{content:"";position:absolute;inset:-7%;border-radius:50%;background:radial-gradient(circle,rgba(183,13,25,.17),transparent 68%);filter:blur(28px)}
+#zp-boot .zp-disc{
+  position:relative;width:88%;aspect-ratio:1;border:1px solid rgba(238,64,69,.27);border-radius:50%;
+  background:repeating-radial-gradient(circle,rgba(244,73,72,.07) 0 1px,transparent 1px 17px),
+    radial-gradient(circle at 50% 50%,#020101 0 7%,#4c070e 11%,#9e1521 15%,#3b060c 23%,#0e0305 48%,#070203 70%);
+  box-shadow:0 0 95px rgba(184,12,25,.28),inset 0 0 70px rgba(0,0,0,.88),inset 0 0 0 12px rgba(0,0,0,.25);
+  animation:zpBreathe 3.5s ease-in-out infinite;
+}
+#zp-boot .zp-disc::before{content:"";position:absolute;inset:11%;border:1px solid rgba(238,81,79,.17);border-radius:50%;box-shadow:0 0 0 18px rgba(255,51,51,.015),0 0 0 53px rgba(255,51,51,.012)}
+#zp-boot .zp-disc::after{
+  content:"";position:absolute;inset:0;border-radius:50%;opacity:.37;
+  background:linear-gradient(90deg,transparent calc(50% - .5px),#b5353a 50%,transparent calc(50% + .5px)),
+    linear-gradient(0deg,transparent calc(50% - .5px),#b5353a 50%,transparent calc(50% + .5px));
+}
+#zp-boot .zp-wave{position:absolute;left:-5%;width:110%;height:31%;top:34.5%;overflow:visible;filter:drop-shadow(0 0 8px rgba(239,56,62,.9))}
+#zp-boot .zp-wave path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+#zp-boot .zp-wave-base{stroke:rgba(247,112,103,.22);stroke-width:1}
+#zp-boot .zp-wave-live{stroke:#fa7670;stroke-width:1.5;stroke-dasharray:1100;stroke-dashoffset:1100;animation:zpTrace 3.2s ease-out .35s both}
+#zp-boot .zp-visual-note{
+  position:absolute;bottom:0;left:5%;right:5%;display:flex;justify-content:space-between;
+  font:500 9px/1.4 var(--zp-mono);letter-spacing:.22em;text-transform:uppercase;color:#b36b6b;
+}
+#zp-boot .zp-deck{border-top:1px solid rgba(224,68,72,.24);padding-top:18px}
+#zp-boot .zp-deck-row{color:#c9948f}
+#zp-boot .zp-deck-row span:last-child{color:#f06b67;font-variant-numeric:tabular-nums}
+#zp-boot .zp-progress{position:relative;height:4px;margin-top:13px;background:#361014;overflow:hidden}
+#zp-boot .zp-progress-fill{
+  width:100%;height:100%;background:linear-gradient(90deg,#7e111d,#ec3940 65%,#ff8f80);
+  box-shadow:0 0 18px rgba(248,57,64,.8);transform:scaleX(0);transform-origin:left;
+  transition:transform .55s cubic-bezier(.23,.75,.28,1);
+}
+#zp-boot .zp-progress::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 26px,#120406 26px 29px);pointer-events:none}
+#zp-boot .zp-footer{margin-top:16px;color:#88595a;font-size:9px;letter-spacing:.14em}
+#zp-boot .zp-footer span:last-child{color:#c89590;text-align:right}
+/* Keyboard skip remains available even though the visual overlay is decorative. */
+.zp-skip{position:absolute;left:-9999px;top:0;z-index:2147483646;background:#c41e1e;color:#f0ebe3;padding:.85rem 1.25rem;font:500 .75rem/1 ui-monospace,monospace;letter-spacing:.2em;text-transform:uppercase;text-decoration:none}
 .zp-skip:focus{left:.5rem;top:.5rem;outline:1px solid #ff2a2a;outline-offset:3px}
-:root{--zp-mono:ui-monospace,'Cascadia Mono','SF Mono',Menlo,Consolas,'Liberation Mono','Courier New',monospace}
-@keyframes zpBlink{50%{opacity:0}}
-@keyframes zpFlick{0%{opacity:1}7%{opacity:.965}8%{opacity:1}54%{opacity:1}55%{opacity:.93}56%{opacity:1}81%{opacity:.985}82%{opacity:1}}
-@keyframes zpTrack{0%{transform:translateY(-25%)}100%{transform:translateY(750%)}}
-@keyframes zpJit{
-  0%{transform:translate(-50%,-50%)}
-  25%{transform:translate(calc(-50% - 2px),calc(-50% + 1px))}
-  50%{transform:translate(calc(-50% + 2px),calc(-50% - 1px))}
-  75%{transform:translate(calc(-50% - 1px),calc(-50% - 1px))}
-  100%{transform:translate(-50%,-50%)}
-}
-@keyframes zpAlert{0%,19%{opacity:1}20%,49%{opacity:0}50%,69%{opacity:1}70%,100%{opacity:0}}
-@keyframes zpPowerOn{
-  0%{transform:scale(1,.004);filter:brightness(3)}
-  45%{transform:scale(1,.004);filter:brightness(2.6)}
-  70%{transform:scale(1,1.02);filter:brightness(1.5)}
-  100%{transform:scale(1,1);filter:brightness(1)}
-}
-@keyframes zpCollapse{
-  0%{transform:scale(1,1);filter:brightness(1);opacity:1}
-  55%{transform:scale(1.015,.012);filter:brightness(2.4);opacity:1}
-  78%{transform:scale(.35,.012);filter:brightness(3)}
-  100%{transform:scale(0,.012);filter:brightness(3);opacity:0}
-}
-@keyframes zpOvFade{0%,55%{opacity:1}100%{opacity:0}}
+@keyframes zpSwitchOn{0%{opacity:0;transform:scaleY(.015);filter:brightness(1.7)}35%{opacity:1;transform:scaleY(.015)}100%{opacity:1;transform:scaleY(1);filter:brightness(1)}}
+@keyframes zpPowerDown{0%{transform:scaleY(1);opacity:1}75%{transform:scaleY(.012);opacity:1}100%{transform:scaleY(.002);opacity:0}}
+@keyframes zpFadeOut{to{opacity:0}}
 @keyframes zpForceHide{to{visibility:hidden;opacity:0;pointer-events:none}}
-@media (max-width:640px){
-  .zp-osd{font-size:10px}
-  .zp-term{width:90vw;top:47%}
+@keyframes zpRise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes zpRec{50%{opacity:.4}}
+@keyframes zpBreathe{50%{transform:scale(1.035);opacity:.8}}
+@keyframes zpTrace{to{stroke-dashoffset:0}}
+@keyframes zpRoll{to{transform:translateY(850%)}}
+@keyframes zpGrain{0%{background-position:0 0}50%{background-position:53px -91px}100%{background-position:-37px 24px}}
+@keyframes zpTear{0%{opacity:0;transform:translateX(-30px)}25%,65%{opacity:.85}100%{opacity:0;transform:translateX(25px)}}
+@media (max-width:700px){
+  #zp-boot .zp-shell{inset:14px;padding:18px}
+  #zp-boot .zp-header{font-size:9px;letter-spacing:.1em}
+  #zp-boot .zp-header-sep,#zp-boot .zp-format{display:none}
+  #zp-boot .zp-content{display:flex;align-items:center}
+  #zp-boot .zp-copy{width:100%}
+  #zp-boot .zp-visual{position:absolute;right:-18%;top:-5%;width:min(65vw,290px);opacity:.26}
+  #zp-boot .zp-wave,#zp-boot .zp-visual-note{display:none}
+  #zp-boot .zp-wordmark-main{font-size:clamp(64px,18vw,96px)}
+  #zp-boot .zp-wordmark-sub{font-size:clamp(25px,7vw,40px);letter-spacing:.08em}
+  #zp-boot .zp-tagline{font-size:10px;letter-spacing:.14em}
+  #zp-boot .zp-console{margin-top:30px}
+  #zp-boot .zp-footer span:first-child{display:none}
 }
-
-/* ═══════════════════════════════════════════════════════════════════
-   ZP ARCHIVE BOOT v2 — deeper analog layer
-   Live VHS grain · tape-tear slivers · sync slip · curved CRT glass ·
-   VHS clock · tape-state readout · audio hint + level meter.
-   Everything below only exists while #zp-boot is on screen and is
-   removed with the overlay. No flashes >3Hz at >10% luminance.
-   ═══════════════════════════════════════════════════════════════════ */
-/* CRT glass: curved rim + inset depth */
-.zp-screen{
-  border-radius:clamp(18px,3.5vmin,42px);
-  box-shadow:inset 0 0 0 1px rgba(240,235,227,.06),inset 0 0 90px rgba(0,0,0,.55);
+@media (max-width:380px){
+  #zp-boot .zp-shell{padding:15px}
+  #zp-boot .zp-eyebrow{font-size:9px;letter-spacing:.18em}
+  #zp-boot .zp-console{padding:11px 12px 13px}
+  #zp-boot .zp-console-head{font-size:8px}
+  #zp-boot .zp-deck-row,#zp-boot .zp-footer{font-size:8px}
 }
-/* Live VHS grain — texture painted by the driver (inline canvas, zero requests) */
-.zp-noise{
-  position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.05;
-  background-repeat:repeat;mix-blend-mode:screen;
-  animation:zpGrain .34s steps(2) infinite;
+@media (max-height:600px){
+  #zp-boot .zp-shell{padding-top:13px;padding-bottom:13px}
+  #zp-boot .zp-eyebrow{margin-bottom:14px}
+  #zp-boot .zp-tagline{margin-top:14px}
+  #zp-boot .zp-console{margin-top:16px;padding-top:9px;padding-bottom:9px}
+  #zp-boot .zp-deck{padding-top:10px}
+  #zp-boot .zp-footer{margin-top:9px}
 }
-@keyframes zpGrain{0%{background-position:0 0}50%{background-position:64px -96px}100%{background-position:-48px 32px}}
-.zp-noise.zp-startflash{animation:zpSnowA .5s ease-out both,zpGrain .34s steps(2) .5s infinite}
-@keyframes zpSnowA{0%{opacity:.42}100%{opacity:.05}}
-#zp-boot.zp-audio-on .zp-noise{opacity:.065}
-.zp-noise.zp-audioflash{animation:zpSnowB .55s ease-out both,zpGrain .34s steps(2) .55s infinite}
-@keyframes zpSnowB{0%{opacity:.5}100%{opacity:.065}}
-/* Audio power-on: the set "settles" (scoped so it never overrides exit collapse) */
-#zp-boot.zp-audio-on:not(.zp-off) .zp-screen{animation:zpAvSettle .55s ease-out 1}
-@keyframes zpAvSettle{0%{filter:brightness(1.65) saturate(1.15)}40%{filter:brightness(.9)}100%{filter:brightness(1)}}
-/* Tape-tear slivers + one-frame sync slip */
-.zp-tears{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden}
-.zp-tear{
-  position:absolute;left:-5%;width:110%;height:3px;opacity:0;
-  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.55) 20%,rgba(255,255,255,.85) 50%,rgba(255,255,255,.55) 80%,transparent 100%);
-  mix-blend-mode:screen;
+@media (max-width:700px) and (max-height:600px){
+  #zp-boot .zp-wordmark-main{font-size:clamp(48px,11vh,70px)}
+  #zp-boot .zp-wordmark-sub{font-size:clamp(22px,5vh,31px)}
+  #zp-boot .zp-console{margin-top:12px}
+  #zp-boot .zp-term{height:6.4em;line-height:1.6}
 }
-.zp-tear.zp-tear-dark{background:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.85) 25%,rgba(0,0,0,.95) 55%,transparent 100%);mix-blend-mode:normal}
-.zp-tear.zp-tear-on{animation:zpTear .55s steps(3) both}
-@keyframes zpTear{0%{opacity:.5;transform:translateX(-16px)}50%{opacity:.3;transform:translateX(12px)}100%{opacity:0;transform:translateX(-6px)}}
-#zp-boot.zp-shift{transform:translateY(3px)}
-/* OSD extras: VHS clock · tape state · audio hint + level meter */
-.zp-clock{
-  position:absolute;top:4.5%;left:50%;transform:translateX(-50%);
-  opacity:.8;letter-spacing:.14em;font-variant-numeric:tabular-nums;
+@media (max-height:420px){
+  #zp-boot .zp-shell{inset:10px;padding:11px 15px}
+  #zp-boot .zp-content{display:flex}
+  #zp-boot .zp-copy{width:100%;padding:0}
+  #zp-boot .zp-visual{display:none}
+  #zp-boot .zp-eyebrow{margin:0 0 8px;font-size:8px}
+  #zp-boot .zp-wordmark-main{font-size:48px}
+  #zp-boot .zp-wordmark-sub{margin-top:6px;font-size:21px}
+  #zp-boot .zp-tagline{margin-top:8px;font-size:9px}
+  #zp-boot .zp-console{margin-top:9px;padding:6px 9px}
+  #zp-boot .zp-console-head{font-size:8px}
+  #zp-boot .zp-term{height:5.8em;margin-top:3px;line-height:1.45}
+  #zp-boot .zp-deck{padding-top:6px}
+  #zp-boot .zp-progress,#zp-boot .zp-footer{margin-top:5px}
 }
-.zp-tape{position:absolute;bottom:4.5%;left:50%;transform:translateX(-50%);opacity:.9;letter-spacing:.22em}
-.zp-tape.zp-tape-err{color:#ff2a2a;text-shadow:0 0 9px rgba(255,42,42,.7)}
-.zp-audio{
-  position:absolute;bottom:4.5%;left:5%;opacity:.6;
-  display:flex;align-items:center;gap:.6em;transition:opacity .5s;
+@media (prefers-reduced-motion:reduce){
+  html:not(.zp-boot-force) #zp-boot{display:none!important}
+  #zp-boot,#zp-boot *,#zp-boot::before,#zp-boot::after,
+  #zp-boot *::before,#zp-boot *::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  #zp-boot.zp-off{display:none!important}
 }
-.zp-audio.zp-audio-on{opacity:.85}
-.zp-vu{display:inline-flex;align-items:flex-end;gap:2px;height:11px}
-.zp-vu i{display:block;width:3px;background:#9a9590;opacity:.15}
-.zp-vu i:nth-child(1){height:4px}
-.zp-vu i:nth-child(2){height:6px}
-.zp-vu i:nth-child(3){height:9px}
-.zp-vu i:nth-child(4){height:11px}
-@media (max-width:640px){
-  .zp-clock,.zp-tape,.zp-audio{font-size:9px}
-}
-
-/* Minimal return of the archive terminal: quiet, brief, and skippable. */
-html.zp-boot-on #zp-boot{
-  background:#030303;
-  animation:zpForceHide .25s linear 7s forwards;
-}
-#zp-boot.zp-off{animation:zpOvFade .38s ease forwards,zpForceHide .1s linear .5s forwards}
-.zp-screen{
-  border-radius:0;
-  background:radial-gradient(90% 70% at 50% 48%,#080908 0%,#040504 62%,#010101 100%);
-  box-shadow:none;
-  animation:zpMinimalIn .42s ease both;
-}
-#zp-boot.zp-off .zp-screen{animation:none}
-.zp-term{
-  width:min(84vw,560px);
-  max-height:60vh;
-  font:400 clamp(11px,.72rem + .28vw,13px)/1.78 var(--zp-mono);
-  letter-spacing:.045em;
-  color:#e8e0d3;
-  text-shadow:0 0 14px rgba(232,224,211,.12);
-}
-.zp-hi{font-weight:500;letter-spacing:.18em;color:#f0ebe3}
-.zp-dim{color:#817b73;text-shadow:none}
-.zp-ok,.zp-prompt{color:#c9c1b6}
-.zp-bad,.zp-corrupt{color:#c9c1b6;text-shadow:none}
-.zp-gate{margin-top:.9em;color:#817b73;letter-spacing:.16em;animation:none}
-.zp-cursor{width:.55em;height:1em;background:#c9c1b6;box-shadow:0 0 8px rgba(201,193,182,.28)}
-.zp-crt{
-  background:
-    repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 4px),
-    radial-gradient(110% 100% at 50% 50%,transparent 66%,rgba(0,0,0,.62) 100%);
-  animation:none;
-  opacity:.75;
-}
-.zp-noise{opacity:.025;mix-blend-mode:screen;animation:none}
-.zp-noise.zp-startflash,.zp-noise.zp-audioflash{animation:none;opacity:.025}
-.zp-track,.zp-tears,.zp-alertframe,.zp-osd{display:none!important}
-.zp-glitch .zp-term{animation:none;text-shadow:0 0 14px rgba(232,224,211,.12)}
-#zp-boot.zp-shift{transform:none}
-#zp-boot.zp-audio-on:not(.zp-off) .zp-screen{animation:zpMinimalIn .42s ease both}
-@keyframes zpMinimalIn{from{opacity:0;filter:brightness(.75)}to{opacity:1;filter:brightness(1)}}
-@media (max-width:640px){.zp-term{width:86vw;top:48%;font-size:11px}}
 </style>
 <link href="favicon.svg" rel="icon" type="image/svg+xml"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
@@ -1066,225 +1076,139 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
      ═══════════════════════════════════════════════════════════════════ -->
 <div id="zp-boot" role="presentation" aria-hidden="true">
   <div class="zp-screen">
-    <div class="zp-noise" aria-hidden="true"></div>
-    <pre class="zp-term" id="zp-term"></pre>
-    <div class="zp-crt" aria-hidden="true"></div>
+    <div class="zp-grain" id="zp-grain"></div>
+    <div class="zp-rift"></div>
+    <div class="zp-shell">
+      <div class="zp-header">
+        <span><strong>ZP</strong><span class="zp-header-sep">///</span> ARCHIVE_001 <span class="zp-format">/ SIDE A</span></span>
+        <span><span class="zp-rec"><i></i> REC</span><span class="zp-timecode" id="zp-timecode">00:00:00:00</span></span>
+      </div>
+      <div class="zp-content">
+        <div class="zp-copy">
+          <p class="zp-eyebrow">Transmission found <span>— 001 / 029</span></p>
+          <div class="zp-wordmark">
+            <span class="zp-wordmark-main" data-text="ZAZIE">ZAZIE</span>
+            <span class="zp-wordmark-sub">PRODUCTIONS</span>
+          </div>
+          <p class="zp-tagline">Sound for the unseen.</p>
+          <div class="zp-console">
+            <div class="zp-console-head"><span>ZP://ARCHIVE/TAPE_001</span><span id="zp-signal">NO SIGNAL</span></div>
+            <div class="zp-term" id="zp-term"></div>
+          </div>
+        </div>
+        <div class="zp-visual" aria-hidden="true">
+          <div class="zp-disc"></div>
+          <svg class="zp-wave" viewBox="0 0 500 160" preserveAspectRatio="none">
+            <path class="zp-wave-base" d="M0 80 L70 80 83 77 96 83 112 80 132 80 145 60 155 108 166 37 180 124 192 74 203 83 225 80 249 80 260 88 271 50 283 113 294 78 310 80 335 80 348 66 357 89 367 80 392 80 405 77 418 83 430 80 500 80"/>
+            <path class="zp-wave-live" d="M0 80 L70 80 83 77 96 83 112 80 132 80 145 60 155 108 166 37 180 124 192 74 203 83 225 80 249 80 260 88 271 50 283 113 294 78 310 80 335 80 348 66 357 89 367 80 392 80 405 77 418 83 430 80 500 80"/>
+          </svg>
+          <div class="zp-visual-note"><span>MONITOR // 01</span><span>INPUT: ZP</span></div>
+        </div>
+      </div>
+      <div class="zp-deck">
+        <div class="zp-deck-row"><span id="zp-status">ACQUIRING SIGNAL</span><span id="zp-percent">00%</span></div>
+        <div class="zp-progress"><div class="zp-progress-fill" id="zp-fill"></div></div>
+        <div class="zp-footer"><span>PROPERTY OF ZAZIE PRODUCTIONS · SIDE A</span><span>PRESS ANY KEY / TAP TO SKIP →</span></div>
+      </div>
+    </div>
   </div>
 </div>
 <script>
-/* ZP ARCHIVE BOOT — sequence driver (runs only if <html> has .zp-boot-on) */
+/* ZP ARCHIVE BOOT — silent, skippable, and confined to the overlay. */
 (function(){
   var d=document,w=window,root=d.documentElement,ov=d.getElementById('zp-boot');
-  if(!ov||!('classList' in root)||!root.classList.contains('zp-boot-on'))return;
-  var term=d.getElementById('zp-term'),cnt=d.getElementById('zp-count');
-  var clockEl=d.getElementById('zp-clock'),tapeEl=d.getElementById('zp-tape'),
-      noiseEl=d.getElementById('zp-noise'),tearsEl=d.getElementById('zp-tears'),
-      audioEl=d.getElementById('zp-audio'),vuEl=d.getElementById('zp-vu'),
-      audioLabelEl=d.getElementById('zp-audiolabel');
-  var done=false,skipReq=false,timers=[],skipFns=[],autoTimer=null,trackLine=null,cursor=null;
-  var t0=(w.performance&&w.performance.now)?w.performance.now():Date.now();
-
-  function clearTimers(){while(timers.length)clearTimeout(timers.pop());}
-  function sleep(ms){
-    if(skipReq)return Promise.resolve();
-    return new Promise(function(res){
-      var id=setTimeout(function(){res();},ms);timers.push(id);
-      skipFns.push(function(){clearTimeout(id);res();});
-    });
+  if(!ov||!root.classList.contains('zp-boot-on'))return;
+  var term=d.getElementById('zp-term'),grain=d.getElementById('zp-grain'),
+      clock=d.getElementById('zp-timecode'),signal=d.getElementById('zp-signal'),
+      status=d.getElementById('zp-status'),percent=d.getElementById('zp-percent'),fill=d.getElementById('zp-fill');
+  var done=false,timers=[],wake=null,start=Date.now();
+  function schedule(fn,ms){var id=setTimeout(fn,ms);timers.push(id);return id;}
+  function wait(ms){
+    if(done)return Promise.resolve();
+    return new Promise(function(resolve){wake=resolve;schedule(function(){wake=null;resolve();},ms);});
   }
-  function repeat(s,n){var o='';while(n-->0)o+=s;return o;}
   function pad(n){return (n<10?'0':'')+n;}
-  function newline(cls){var l=d.createElement('div');l.className='zp-line'+(cls?' '+cls:'');term.appendChild(l);return l;}
-  function now(text,cls){newline(cls).textContent=text===''?'\u00a0':text;}
-  function blank(){now('');}
-  function adopt(l){
-    if(cursor&&cursor.parentNode)cursor.parentNode.removeChild(cursor);
-    cursor=d.createElement('span');cursor.className='zp-cursor';l.appendChild(cursor);
-  }
-
-  /* ── MINIMAL SOUND STUBS ─────────────────────────────────────────
-     The tasteful loader is silent. These no-op hooks keep the older sequence
-     helpers harmless if a future edit reuses them. */
-  var S={on:false,dead:true};
-  function powerOn(){}
-  function powerDown(){}
-  var sfx={
-    key:function(){}, ok:function(){}, seekUp:function(){}, seekDown:function(){},
-    tick:function(){}, trackDone:function(){}, glitch:function(){}, alarm:function(){},
-    sting:function(){}, gate:function(){}
-  };
-  function scheduleAmbient(){}
-  function startVu(){}
-
-  /* ── VISUAL EXTRAS ──────────────────────────────────────────────── */
-  /* VHS grain texture: one 160px canvas painted once, tiled by CSS */
-  function makeNoise(){
-    try{
-      var c=d.createElement('canvas');c.width=160;c.height=160;
-      var x=c.getContext('2d');if(!x)return;
-      var img=x.createImageData(160,160),dd=img.data;
-      for(var i=0;i<dd.length;i+=4){
-        var v=(Math.random()*255)|0;
-        dd[i]=v;dd[i+1]=v;dd[i+2]=v;dd[i+3]=255;
-      }
-      x.putImageData(img,0,0);
-      if(noiseEl){
-        noiseEl.style.backgroundImage='url('+c.toDataURL('image/png')+')';
-        noiseEl.style.backgroundSize='160px 160px';
-      }
-    }catch(e){}
-  }
-  /* thin horizontal tear that slices the frame; strong tears slip the sync */
-  function tear(strong){
-    if(!tearsEl||done)return;
-    try{
-      var n=d.createElement('div');
-      n.className='zp-tear'+(Math.random()<0.4?' zp-tear-dark':'');
-      n.style.top=(8+Math.random()*80)+'%';
-      n.style.height=(Math.round((1.5+Math.random()*(strong?5:2.5))*2)/2)+'px';
-      tearsEl.appendChild(n);
-      n.getBoundingClientRect();
-      n.classList.add('zp-tear-on');
-      if(strong){
-        ov.classList.add('zp-shift');
-        setTimeout(function(){ov.classList.remove('zp-shift');},90);
-      }
-      setTimeout(function(){if(n.parentNode)n.parentNode.removeChild(n);},620);
-    }catch(e){}
-  }
-  function tearBurst(){
-    for(var i=0;i<5;i++)timers.push(setTimeout(function(){tear(true);},i*110));
-  }
-  function idleTears(){
+  function tick(){
     if(done)return;
-    tear(false);
-    timers.push(setTimeout(idleTears,1700+Math.random()*2800));
+    var elapsed=Date.now()-start,s=Math.floor(elapsed/1000);
+    clock.textContent='00:'+pad(Math.floor(s/60))+':'+pad(s%60)+':'+pad(Math.floor(elapsed%1000/40));
+    schedule(tick,120);
   }
-  /* the VHS on-screen clock — frozen in JULY 1987 */
-  var clockSec=14;
-  function clockStep(){
-    if(done||!clockEl)return;
-    clockSec++;
-    var s=clockSec%60,m=47+Math.floor(clockSec/60);
-    clockEl.textContent='JUL 14 1987 11:'+pad(m%60)+':'+pad(s)+' PM';
-    timers.push(setTimeout(clockStep,1000));
+  function progress(n,label){
+    status.textContent=label;percent.textContent=pad(n)+'%';fill.style.transform='scaleX('+(n/100)+')';
   }
-  function tapeState(txt,err){
-    if(!tapeEl)return;
-    tapeEl.textContent=txt;
-    if(err)tapeEl.classList.add('zp-tape-err');
-    else tapeEl.classList.remove('zp-tape-err');
+  function makeGrain(){
+    try{
+      var c=d.createElement('canvas');c.width=c.height=96;
+      var ctx=c.getContext('2d');if(!ctx)return;
+      var img=ctx.createImageData(96,96),data=img.data;
+      for(var i=0;i<data.length;i+=4){
+        var v=110+Math.random()*145;
+        data[i]=v;data[i+1]=v*.7;data[i+2]=v*.7;data[i+3]=Math.random()*165;
+      }
+      ctx.putImageData(img,0,0);
+      grain.style.backgroundImage='url('+c.toDataURL('image/png')+')';
+    }catch(e){} // The scanlines still work if canvas is unavailable.
   }
-
-  function typeLine(text,cls,cps){
-    var l=newline(cls),span=d.createElement('span');l.appendChild(span);adopt(l);
-    cps=cps||120;
-    return new Promise(function(res){
-      var step=Math.max(1,Math.round(cps/60)),i=0;
-      (function tick(){
-        if(done)return res();
-        if(skipReq){span.textContent=text;return res();}
-        i=Math.min(text.length,i+step);
-        span.textContent=text.slice(0,i);
-        if(i>=text.length)return res();
-        sfx.key();
-        var id=setTimeout(tick,Math.round(1000/cps));timers.push(id);
-      })();
-    });
+  async function typeLine(text,kind,mark){
+    if(done)return;
+    var row=d.createElement('div');row.className='zp-line'+(kind?' '+kind:'');
+    var prefix=d.createElement('span');prefix.className='zp-mark';prefix.textContent=mark;
+    var words=d.createElement('span'),cursor=d.createElement('span');cursor.className='zp-cursor';
+    row.appendChild(prefix);row.appendChild(words);row.appendChild(cursor);term.appendChild(row);
+    for(var i=2;i<text.length+2;i+=2){
+      if(done)return;
+      words.textContent=text.slice(0,i);
+      await wait(27);
+    }
+    cursor.remove();
   }
-  function tracking(){
-    var l=newline('zp-ok');trackLine=l;
-    var span=d.createElement('span');l.appendChild(span);adopt(l);
-    var target=61,p=0,lastB=-1;
-    return new Promise(function(res){
-      (function draw(){
-        if(done)return res();
-        if(skipReq){p=100;}
-        else{
-          p=Math.min(target,p+3+Math.random()*7);
-          var b=Math.round(p/10);
-          if(b!==lastB){lastB=b;sfx.tick();}
-        }
-        var blocks=Math.round(p/10);
-        span.textContent='  TRACKING ['+repeat('\u2588',blocks)+repeat('\u2591',10-blocks)+'] '+pad(p)+'%';
-        if(p>=target||skipReq){span.textContent='  TRACKING ['+repeat('\u2588',10)+'] 100%';return res();}
-        var id=setTimeout(draw,55);timers.push(id);
-      })();
-    });
-  }
-  function corruptTracking(){
-    if(!trackLine)return;
-    trackLine.classList.add('zp-corrupt');
-    if(trackLine.firstChild)trackLine.firstChild.textContent='  TRACKING [\u2588\u2593\u2592\u2588\u2591\u2593-\u2592\u2591-] \u2592%';
-  }
-  function glitch(on){ov.classList.add('zp-glitch');}
-  function glitchOff(){ov.classList.remove('zp-glitch');}
-  function alertBlink(){
-    ov.classList.add('zp-alert');
-    var id=setTimeout(function(){ov.classList.remove('zp-alert');},380);timers.push(id);
-  }
-  function gate(){
-    var l=newline('zp-gate');
-    l.textContent='entering site';
-    var f=newline('zp-dim');
-    f.textContent='ZAZIE PRODUCTIONS · SHOWREEL';
-  }
-  function countLoop(){
-    if(done||!cnt)return;
-    var nowMs=(w.performance&&w.performance.now)?w.performance.now():Date.now();
-    var s=Math.max(0,Math.floor((nowMs-t0)/1000));
-    cnt.textContent='SP 0:'+pad(Math.floor(s/60)%60)+':'+pad(s%60);
-    w.requestAnimationFrame(countLoop);
-  }
-  function finish(byUser){
+  function finish(){
     if(done)return;done=true;
-    clearTimers();skipFns.length=0;
-    if(autoTimer)clearTimeout(autoTimer);
+    while(timers.length)clearTimeout(timers.pop());
+    if(wake){var resolve=wake;wake=null;resolve();}
+    ov.removeEventListener('pointerdown',finish);
+    d.removeEventListener('keydown',onKey);
+    d.removeEventListener('wheel',onWheel);
+    w.removeEventListener('pageshow',onPageShow);
     try{sessionStorage.setItem('zpBootShown','1');}catch(e){}
-    powerDown();
     root.classList.remove('zp-boot-on');
     ov.classList.add('zp-off');
     setTimeout(function(){
-      if(ov&&ov.parentNode)ov.parentNode.removeChild(ov);
+      if(ov.parentNode)ov.parentNode.removeChild(ov);
       try{w.dispatchEvent(new CustomEvent('zp:bootdone'));}catch(e){}
-    },580);
+    },600);
   }
-
-  /* Minimal loader: any intentional input skips straight to the site. */
-  function onPointer(){if(done)return;finish(true);}
-  function onKey(e){
-    if(done)return;
-    if(e&&e.repeat)return;
-    finish(true);
-  }
-  ov.addEventListener('pointerdown',onPointer);
+  function onKey(e){if(!e.repeat)finish();}
+  function onWheel(e){if(done)return;e.preventDefault();finish();}
+  function onPageShow(e){if(e.persisted)finish();}
+  ov.addEventListener('pointerdown',finish);
   d.addEventListener('keydown',onKey);
-  d.addEventListener('wheel',function(){if(done)return;finish(true);},{passive:true});
-  /* bfcache restore mid-boot -> get out instantly */
-  w.addEventListener('pageshow',function(e){if(e.persisted&&!done)finish(false);});
-  /* hard cap */
-  timers.push(setTimeout(function(){finish(false);},9200));
-
+  d.addEventListener('wheel',onWheel,{passive:false});
+  w.addEventListener('pageshow',onPageShow);
+  schedule(finish,6500); // CSS also forces the overlay away at 7 seconds.
   async function run(){
-    makeNoise();
-    await sleep(220);
-    now('ZAZIE PRODUCTIONS','zp-hi');
-    now('ARCHIVE TERMINAL','zp-dim');
-    blank();
-    await sleep(180);
-    await typeLine('> initializing showreel archive','zp-prompt',95);
-    await sleep(120);
-    await typeLine('  cue index ............ 29 entries','zp-ok',145);
-    await typeLine('  film samples ......... mounted','zp-ok',145);
-    await typeLine('  signal path .......... clean','zp-ok',145);
-    await sleep(180);
-    blank();
-    await typeLine('ready.','zp-hi',90);
-    await sleep(520);
-    gate();
-    autoTimer=setTimeout(function(){finish(false);},520);
+    makeGrain();tick();progress(4,'ACQUIRING SIGNAL');
+    await wait(520);if(done)return;
+    signal.textContent='SIGNAL FOUND';
+    await typeLine('TAPE_001 / SIGNAL FOUND','','>');
+    if(done)return;progress(36,'DECODING TAPE');
+    await wait(300);if(done)return;
+    await typeLine('29 CUES / ARCHIVE MOUNTED','','>');
+    if(done)return;progress(67,'VERIFYING TRANSMISSION');
+    await wait(350);if(done)return;
+    ov.classList.add('zp-interference');signal.textContent='INTERFERENCE';
+    await typeLine('DO NOT ADJUST YOUR SET','zp-warning','!');
+    if(done)return;
+    await wait(310);if(done)return;
+    ov.classList.remove('zp-interference');progress(86,'SIGNAL RECOVERED');
+    signal.textContent='SIGNAL STABLE';
+    await typeLine('THE DARK IS WAITING','zp-last','>');
+    if(done)return;
+    progress(100,'ENTERING THE ARCHIVE');ov.classList.add('zp-ready');
+    await wait(850);finish();
   }
-  try{run();}catch(e){finish(false);}
+  run().catch(finish);
 })();
 </script>
 <div id="root" tabindex="-1">
