@@ -51,7 +51,7 @@ Primary routes:
 | --- | --- |
 | `/` | The portfolio: a single continuous React experience (productions, showreel, film samples, press, approach, rates, composer, reviews, inquiry) |
 | `/work` · `/reel` · `/composer` · `/process` · `/services` · `/contact` | Indexable hub pages mirroring the portfolio's content silos |
-| `/store` | The Catalogue: records, sound libraries, tools and objects — 20 items, checkout delegated to Bandcamp, itch.io, Gumroad and eBay |
+| `/store` | The Catalogue: records, sound libraries, tools and objects — 22 items, checkout delegated to Bandcamp, itch.io, Gumroad and eBay |
 | `/legal` · `/faq` · `/terms` · `/privacy` · `/licensing` · `/purchases` · `/accessibility` | Trust, legal and operating documents |
 | `/404.html` | "Signal Lost: Archive Entry Not Found" — a real 404 status with a recovery grid of all routes |
 
@@ -93,7 +93,7 @@ Unconventional choices exist for artistic or experiential reasons and are docume
 
 **The ZP Archive Boot** — a minimal terminal loading screen, inline in `index.html` (zero network requests): quiet monochrome archive text, subtle scanlines/noise, and a short typed handoff into the site. It runs once per session on production, can be replayed with `?boot=1` or `#boot`, disabled with `?boot=0` or `#noboot`, is skipped for bots and `prefers-reduced-motion` users unless forced, contains no audio, is skippable by any input, and hard-caps itself at ~7 s.
 
-**The Catalogue (`/store`)** — 20 items across Records / Objects / Sound libraries / Tools and scores. Progressive enhancement only: without JavaScript every card is visible and links straight to its listing; with JavaScript you get filter chips, audio previews with a **room-tone ambience** that ducks under them, a torch-light cursor, and card tilt.
+**The Catalogue (`/store`)** — 22 items across Records / Objects / Sound libraries / Tools and scores. Progressive enhancement only: without JavaScript every card is visible and links straight to its listing; with JavaScript you get filter chips, audio previews with a **room-tone ambience** that ducks under them, a torch-light cursor, and card tilt.
 
 **The documents** — `/legal`, `/faq` (36 questions), `/terms` (25 clauses), `/privacy` (15 sections), `/licensing`, `/purchases`, `/accessibility`. Share one stylesheet, one script and two partials; ship fully open without JavaScript; served **network-first** through the service worker because their effective dates matter.
 
@@ -251,7 +251,7 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 
 ## Where to add new work
 
-Recipes for the six most likely changes. In every case: **grep the counts** — production (9), cue (29) and item (20) totals appear in meta descriptions, FAQ answers, schema `numberOfItems`, hero copy and footers, and must move together.
+Recipes for the six most likely changes. In every case: **grep the counts** — production (9), cue (29) and item (22) totals appear in meta descriptions, FAQ answers, schema `numberOfItems`, hero copy and footers, and must move together.
 
 **New film / production** (touches both DOM copies):
 1. Poster assets → `images/posters/<slug>-640.avif`, `-640.jpg`, `-1200.jpg` (see [pipeline](#media--asset-pipeline)).
