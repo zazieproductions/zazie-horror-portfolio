@@ -60,7 +60,7 @@
   2. `/reel/index.html` - CollectionPage + BreadcrumbList + MusicPlaylist 29 MusicRecordings each with AudioObject contentUrl /audio/track-*.mp3 (29 tracks), 29 details faq-item list, mood clusters A-E mapping intent (psychological dread, tension stingers, dark ambient, cosmic/body horror, thriller), links to /work /composer /services /contact
   3. `/composer/index.html` - Person + BreadcrumbList + WebPage, biography with sameAs reinforcement (IMDb, Spotify, Bandcamp, Apple, YouTube, LinkedIn), press kit 4 features, hub-grid related archives
   4. `/process/index.html` - HowTo (6 steps: inquiry, spotting, composition, revisions, delivery, rights) + BreadcrumbList + WebPage, FAQ anchor linking, hub-grid related
-  5. `/services/index.html` - Service with AggregateOffer (5 offers: micro $50, short $2500, feature $8000, game $4500, custom $3000) + OfferCatalog Lean/Standard/Signature/Orchestral+, BreadcrumbList + WebPage, what moves price, hub-grid
+  5. `/services/index.html` - Service with AggregateOffer (5 offers sliding by funding: student films from $75.99; short, feature, game, custom typically in the few-hundred-dollar range) + OfferCatalog Lean/Standard/Signature/Orchestral+, BreadcrumbList + WebPage, what moves price, hub-grid
   6. `/contact/index.html` - ContactPage + BreadcrumbList, money page, mailto with prefilled subject/body (format, runtime, timeline, budget, references), direct inquiry, what to send 5 things
 
 ---
@@ -75,7 +75,7 @@
 
 **Meta Description:**
 - BEFORE: `Original dark, atmospheric scores for psychological horror, thrillers, film, TV, and games. Listen to the showreel or request a scoring quote.` (130 chars, generic)
-- AFTER: `Award-winning psychological horror composer Zazie Kanwar-Torge crafts original dark, atmospheric cinematic scores for psychological horror, folk horror, body horror, supernatural thrillers, cosmic horror, and dark sci-fi. Film, TV, and game scoring from $50 micro-budget to feature. 29-cue showreel, 9 productions, 7 film samples.` (entity + award + genre stack + price anchor + counts for rich snippet triggers)
+- AFTER: `Award-winning psychological horror composer Zazie Kanwar-Torge crafts original dark, atmospheric cinematic scores for psychological horror, folk horror, body horror, supernatural thrillers, cosmic horror, and dark sci-fi. Film, TV, and game scoring from $75.99 (student floor), sliding by funding. 29-cue showreel, 9 productions, 7 film samples.` (entity + award + genre stack + price anchor + counts for rich snippet triggers)
 
 **OG/Twitter:**
 - BEFORE: same as generic description
@@ -106,7 +106,7 @@
 
 **Internal Link Graph - BEFORE vs AFTER:**
 - BEFORE: hash-only nav, footer 9 links (mostly external)
-- AFTER: header nav 6 hub links with title attributes (keyword-rich), footer 12 links including 7 internal hubs (Portfolio, Showreel: 29 cues, Selected productions, Composer biography, Process: spotting to stems, Rates: $50 to $8k, Hire horror composer, Catalogue: sound libraries), plus 11 recovery cards on 404, plus hub-grids on every new page linking to all silos
+- AFTER: header nav 6 hub links with title attributes (keyword-rich), footer 12 links including 7 internal hubs (Portfolio, Showreel: 29 cues, Selected productions, Composer biography, Process: spotting to stems, Rates: $75.99, sliding by funding, Hire horror composer, Catalogue: sound libraries), plus 11 recovery cards on 404, plus hub-grids on every new page linking to all silos
 - Index.html now has 6+ links to /work, 7 to /reel, 6 to /composer, 4 to /process, 5 to /services, 2 to /contact = 30+ internal hub links vs ~0 before
 
 #### store-src/store.html Template
@@ -157,7 +157,7 @@
 - Organization (enhanced: foundingDate, founder, contactPoint)
 - WebSite (with SearchAction potentialAction)
 - BreadcrumbList (8 items: Portfolio, Selected Horror Productions, Horror Showreel, Composer Bio, Scoring Process, Scoring Rates, Catalogue, Hire Horror Composer)
-- Service (AggregateOffer 5 offers $50-$8000, OfferCatalog 4 tiers Lean/Standard/Signature/Orchestral+)
+- Service (AggregateOffer 5 offers $75.99+ (sliding by funding), OfferCatalog 4 tiers Lean/Standard/Signature/Orchestral+)
 - VideoObject x4 (Mike Has A Visitor, The Haunted, AQUAPHOBIA, Phantom Requiem) with thumbnailUrl, uploadDate, duration, contentUrl, embedUrl, genre, keywords
 - FAQPage 8 questions (enhanced with internal linking to /work /reel /services /process /contact /faq)
 - Graph: WebPage with Speakable (h1, #top p, #services h2) + Organization AggregateRating 5.0 4 reviews + makesOffer + ItemList 9 CreativeWorks (genre enhanced: Psychological Horror, Body Horror, Folk Horror, Supernatural, Gothic, etc.) + MusicPlaylist 29 MusicRecordings EACH with AudioObject contentUrl https://horror.zazieproductions.com/audio/track-*.mp3 + genre
