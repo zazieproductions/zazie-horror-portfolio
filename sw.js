@@ -11,7 +11,8 @@
 // nav must never come from cache), and the bump itself drops the cached /store
 // document from the previous build - its header nav was missing the Process tab.
 // v12: the catalogue adds CRYPTOTYPE-9 as a free tool and refreshes item totals.
-const CACHE_NAME = 'zazie-v12';
+// v13: catalogue adds TEA5767 DIY radio kit and HD X60 sound mixer to eBay gear.
+const CACHE_NAME = 'zazie-v13';
 
 const PRECACHE_ASSETS = [
   '/',
