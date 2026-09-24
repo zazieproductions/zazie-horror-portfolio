@@ -18,7 +18,7 @@
   var empty = $("[data-empty]");
   var counter = $("[data-count]");
   var chips = $$(".chip[data-group]");
-  var KEYS = ["records", "sfx", "plugins", "motion", "scores", "gear"];
+  var KEYS = ["records", "sfx", "plugins", "motion", "scores", "gear", "tools"];
 
   if (shelf && groups.length && chips.length) {
     var cards = $$("[data-collection]", shelf);
