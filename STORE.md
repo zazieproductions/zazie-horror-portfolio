@@ -1,6 +1,6 @@
 # /store: build, data and maintenance record
 
-Date: 2026-09-17 · Page: <https://horror.zazieproductions.com/store>
+Date: 2026-09-24 · Page: <https://horror.zazieproductions.com/store>
 
 A single static page that gathers the Zazie Productions catalogue, digital
 releases on itch.io and Gumroad, physical finds on eBay, and hands each card
@@ -66,7 +66,7 @@ them.
      mounts),
   3. the footer link rows in both of the above.
 
-## 3. Catalogue (as captured 2026-09-17)
+## 3. Catalogue (as updated 2026-09-24)
 
 | # | Title | Platform | Price | Listing | Cover |
 | --- | --- | --- | --- | --- | --- |
@@ -84,20 +84,22 @@ them.
 | 12 | World's Strangest Plug-in Mega-Vault (200+ VSTs) | Gumroad | $35+ | `zazieproductions.gumroad.com/l/plugin` | `public-files.gumroad.com/gxx8r6nvhvokuqz8ktnou29qlm7c` |
 | 13 | Micro-Rupture Collection, 18 vertical glitch cuts | Gumroad | $5 | `zazieproductions.gumroad.com/l/hdtgt` | `public-files.gumroad.com/ggkcnd8qzh2wnynjbinyw2b54l0b` |
 | 14 | The Forbidden Canticles, 4 Renaissance manuscript facsimiles (PDF, 50 left) | Gumroad | $20+ | `zazieproductions.gumroad.com/l/wbqvh` | `public-files.gumroad.com/h4mkhyng4g2dq47w82bof8aa1xa0` |
-| 15 | Aztec Death Whistle, screaming skull (3 variants, 5 available) | eBay | $28.50 + $10.50 | item `237074158813` | `i.ebayimg.com/images/g/v5cAAeSwYHhqrDTs/s-l500.webp` |
-| 16 | Skull Heads with motion sensor (type Z270, 5 available) | eBay | $30.10 + $10.50 | item `237074157963` | `i.ebayimg.com/images/g/4awAAeSwtpFqrDSI/s-l500.webp` |
-| 17 | Creepy Cricket Noise Generator Module (5 colours) | eBay | $13.96 + $10.50 | item `237074138587` | `i.ebayimg.com/images/g/c-cAAeSwjBpqrDDB/s-l500.webp` |
-| 18 | Halloween Ghost Glow Fruit Plate with music | eBay | $45.00 + $10.50 | item `236994104581` | `i.ebayimg.com/images/g/99UAAeSwqhJqd3CA/s-l500.webp` |
-| 19 | F998Pro live sound card (white, English version) | eBay | $85.00 + $10.50 | item `236994099582` | `i.ebayimg.com/images/g/7aAAAeSwAVhqd3Cg/s-l500.webp` |
-| 20 | Voice-control WiFi bulb, RGBCW 9 W | eBay | $25.00 + $10.50 | item `236992067377` | `i.ebayimg.com/images/g/hkQAAeSwAfJqdiA1/s-l500.webp` |
+| 15 | Room 7G: The Hygiene Loop, 8K liminal bathroom HDRI | itch.io | $10+ | `zazieproductions.itch.io/room-7g-the-hygiene-loop-a-liminal-hdri` | `img.itch.zone/aW1hZ2UvMzQ1Njk3Mi8yMDYyMDc4NC5qcGVn/347x500/…` |
+| 16 | CRYPTOTYPE-9, 6 pixel UI frames and 3 arcane icons | itch.io | **Free** | `zazieproductions.itch.io/cryptoframes-arcane-ui-shards-from-a-lost-console` | `img.itch.zone/aW1nLzIwNzcyOTUyLnBuZw==/347x500/…` |
+| 17 | Aztec Death Whistle, screaming skull (3 variants, 5 available) | eBay | $28.50 + $10.50 | item `237074158813` | `i.ebayimg.com/images/g/v5cAAeSwYHhqrDTs/s-l500.webp` |
+| 18 | Skull Heads with motion sensor (type Z270, 5 available) | eBay | $30.10 + $10.50 | item `237074157963` | `i.ebayimg.com/images/g/4awAAeSwtpFqrDSI/s-l500.webp` |
+| 19 | Creepy Cricket Noise Generator Module (5 colours) | eBay | $13.96 + $10.50 | item `237074138587` | `i.ebayimg.com/images/g/c-cAAeSwjBpqrDDB/s-l500.webp` |
+| 20 | Halloween Ghost Glow Fruit Plate with music | eBay | $45.00 + $10.50 | item `236994104581` | `i.ebayimg.com/images/g/99UAAeSwqhJqd3CA/s-l500.webp` |
+| 21 | F998Pro live sound card (white, English version) | eBay | $85.00 + $10.50 | item `236994099582` | `i.ebayimg.com/images/g/7aAAAeSwAVhqd3Cg/s-l500.webp` |
+| 22 | Voice-control WiFi bulb, RGBCW 9 W | eBay | $25.00 + $10.50 | item `236992067377` | `i.ebayimg.com/images/g/hkQAAeSwAfJqdiA1/s-l500.webp` |
 
 Plus a **discography band** linking to `zazieproductions.bandcamp.com/music`
 (full digital discography: 18 releases, $110.25+, 10 % off, as shown on every
 Bandcamp release page on the capture date).
 
 Categories (`data-collection`): `records` (1 to 8), `sfx` (9 to 11), `plugins` (12),
-`motion` (13), `scores` (14), `gear` (15 to 20). Delivery (`data-delivery`):
-`digital` (1 to 14), `physical` (15 to 20).
+`motion` (13), `scores` (14), `tools` (15 and 16), `gear` (17 to 22). Delivery
+(`data-delivery`): `digital` (1 to 16), `physical` (17 to 22).
 
 Bandcamp covers use the `_16` size (700×700). Records 1, 2 and 7 have an
 in-card **Preview** button wired to a showreel cue that appears on that release
@@ -130,7 +132,7 @@ layers appear.
 * Adds `has-js` to `<html>`, the filter bar, previews, ambience toggle and
   torch are hidden without it.
 * Two filter groups (`collection`, `delivery`) combined with AND logic,
-  `aria-pressed` state, a live `role="status"` counter ("N of 20 releases"), and
+  `aria-pressed` state, a live `role="status"` counter ("N of 22 releases"), and
   an empty state with a reset link.
 * Filter selection is reflected in the URL hash (`#records`, `#sfx`,
   `#plugins`, `#motion`, `#scores`, `#gear`, `#digital`, `#physical`) via

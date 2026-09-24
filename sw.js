@@ -10,7 +10,8 @@
 // v10: /store joined the network-first set (the catalogue's prices and primary
 // nav must never come from cache), and the bump itself drops the cached /store
 // document from the previous build - its header nav was missing the Process tab.
-const CACHE_NAME = 'zazie-v11';
+// v12: the catalogue adds CRYPTOTYPE-9 as a free tool and refreshes item totals.
+const CACHE_NAME = 'zazie-v12';
 
 const PRECACHE_ASSETS = [
   '/',
