@@ -92,14 +92,16 @@ them.
 | 20 | Halloween Ghost Glow Fruit Plate with music | eBay | $45.00 + $10.50 | item `236994104581` | `i.ebayimg.com/images/g/99UAAeSwqhJqd3CA/s-l500.webp` |
 | 21 | F998Pro live sound card (white, English version) | eBay | $85.00 + $10.50 | item `236994099582` | `i.ebayimg.com/images/g/7aAAAeSwAVhqd3Cg/s-l500.webp` |
 | 22 | Voice-control WiFi bulb, RGBCW 9 W | eBay | $25.00 + $10.50 | item `236992067377` | `i.ebayimg.com/images/g/hkQAAeSwAfJqdiA1/s-l500.webp` |
+| 23 | TEA5767 Digital Broadcasting Microcontroller DIY radio kit | eBay | $55.99 + $10.50 | item `237089114955` | `i.ebayimg.com/images/g/FBIAAeSwSL1qta6W/s-l500.webp` |
+| 24 | HD X60 sound card sound mixer | eBay | $55.00 + $10.50 | item `237089102254` | `i.ebayimg.com/images/g/77YAAeSwmdlqtauv/s-l500.webp` |
 
 Plus a **discography band** linking to `zazieproductions.bandcamp.com/music`
 (full digital discography: 18 releases, $110.25+, 10 % off, as shown on every
 Bandcamp release page on the capture date).
 
 Categories (`data-collection`): `records` (1 to 8), `sfx` (9 to 11), `plugins` (12),
-`motion` (13), `scores` (14), `tools` (15 and 16), `gear` (17 to 22). Delivery
-(`data-delivery`): `digital` (1 to 16), `physical` (17 to 22).
+`motion` (13), `scores` (14), `tools` (15 and 16), `gear` (17 to 24). Delivery
+(`data-delivery`): `digital` (1 to 16), `physical` (17 to 24).
 
 Bandcamp covers use the `_16` size (700×700). Records 1, 2 and 7 have an
 in-card **Preview** button wired to a showreel cue that appears on that release
@@ -132,7 +134,7 @@ layers appear.
 * Adds `has-js` to `<html>`, the filter bar, previews, ambience toggle and
   torch are hidden without it.
 * Two filter groups (`collection`, `delivery`) combined with AND logic,
-  `aria-pressed` state, a live `role="status"` counter ("N of 22 releases"), and
+  `aria-pressed` state, a live `role="status"` counter ("N of 24 releases"), and
   an empty state with a reset link.
 * Filter selection is reflected in the URL hash (`#records`, `#sfx`,
   `#plugins`, `#motion`, `#scores`, `#gear`, `#digital`, `#physical`) via
