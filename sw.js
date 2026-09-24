@@ -10,9 +10,7 @@
 // v10: /store joined the network-first set (the catalogue's prices and primary
 // nav must never come from cache), and the bump itself drops the cached /store
 // document from the previous build - its header nav was missing the Process tab.
-// v11: biography rewritten on / and /composer (static HTML + bundle bio/bio2
-// fields); the bump drops the precached previous copies from the old cache.
-const CACHE_NAME = 'zazie-v11';
+const CACHE_NAME = 'zazie-v10';
 
 const PRECACHE_ASSETS = [
   '/',

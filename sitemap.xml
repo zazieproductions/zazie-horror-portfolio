@@ -18,7 +18,7 @@
     * Nothing listed here is disallowed by robots.txt.
 
   Validate locally before submitting:  node tools/check-sitemap.mjs
-  Last regenerated: 2026-09-20
+  Last regenerated: 2026-09-18
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
@@ -29,23 +29,23 @@
        ============================================================ -->
   <url>
     <loc>https://horror.zazieproductions.com/</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
 
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/hero-portrait.jpg</image:loc>
-      <image:caption>Zazie Productions is the studio of psychological horror composer Zazie Kanwar-Torge. Award-winning dark atmospheric cinematic scores for psychological horror, folk horror, body horror, supernatural thrillers and dark sci-fi. Film, TV and game scoring from $50. Asheville, NC.</image:caption>
+      <image:caption>Award-winning psychological horror composer specializing in dark, atmospheric, cinematic original scores for psychological horror, folk horror, body horror, supernatural thrillers, and dark sci-fi. Film, TV, and game scoring.</image:caption>
       <image:title>Zazie Kanwar-Torge: Psychological Horror Composer - Dark Atmospheric Scores</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/headshot.jpg</image:loc>
-      <image:caption>Zazie Kanwar-Torge, award-winning psychological horror composer and founder of Zazie Productions LLC, Asheville, NC. Psychological horror composer portrait.</image:caption>
+      <image:caption>Zazie Kanwar-Torge, award-winning horror film composer and founder of Zazie Productions LLC, Asheville NC.</image:caption>
       <image:title>Zazie Kanwar-Torge headshot - horror film composer, Zazie Productions LLC</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
-      <image:caption>Zazie Productions press photo - psychological horror composer Zazie Kanwar-Torge. Original dark atmospheric scores for film, TV and games. Asheville, NC studio.</image:caption>
+      <image:caption>Press photo for Zazie Productions horror composer portfolio. Original dark atmospheric scores for film, TV, and games.</image:caption>
       <image:title>Zazie Productions press photo - horror composer portfolio, dark cinematic scores</image:title>
     </image:image>
     <image:image>
@@ -186,7 +186,7 @@
        ============================================================ -->
   <url>
     <loc>https://horror.zazieproductions.com/work</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
 
@@ -282,7 +282,7 @@
        ============================================================ -->
   <url>
     <loc>https://horror.zazieproductions.com/reel</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
     <image:image>
@@ -297,7 +297,7 @@
        ============================================================ -->
   <url>
     <loc>https://horror.zazieproductions.com/composer</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
 
@@ -323,7 +323,7 @@
        ============================================================ -->
   <url>
     <loc>https://horror.zazieproductions.com/process</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
     <image:image>
@@ -338,7 +338,7 @@
        ============================================================ -->
   <url>
     <loc>https://horror.zazieproductions.com/services</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -353,7 +353,7 @@
        ============================================================ -->
   <url>
     <loc>https://horror.zazieproductions.com/store</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
 
@@ -404,7 +404,7 @@
        ============================================================ -->
   <url>
     <loc>https://horror.zazieproductions.com/contact</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
     <image:image>
@@ -419,7 +419,7 @@
        ============================================================ -->
   <url>
     <loc>https://horror.zazieproductions.com/faq</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -429,42 +429,42 @@
        ============================================================ -->
   <url>
     <loc>https://horror.zazieproductions.com/legal</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/licensing</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/purchases</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/terms</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/privacy</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/accessibility</loc>
-    <lastmod>2026-09-20</lastmod>
+    <lastmod>2026-09-18</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
