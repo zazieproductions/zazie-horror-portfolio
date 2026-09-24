@@ -1,4 +1,4 @@
-// Service Worker: instant cache & zero-lag offline/repeat visit delivery - v3 includes IA silos /work /reel /composer /process /services /contact and weaponized schema
+// Service Worker: instant cache & zero-lag offline/repeat visit delivery - v12 includes the analog boot - v3 includes IA silos /work /reel /composer /process /services /contact and weaponized schema
 // v3: cache name bumped with the cinema-player bundle so a returning visitor is not served the
 // previous index.html/JS pair from the old cache (they are immutable for a year).
 // v5: bumped again after removing trailing markup appended past </html>.
@@ -12,7 +12,9 @@
 // document from the previous build - its header nav was missing the Process tab.
 // v11: biography rewritten on / and /composer (static HTML + bundle bio/bio2
 // fields); the bump drops the precached previous copies from the old cache.
-const CACHE_NAME = 'zazie-v11';
+// v12: homepage boot rebuilt as the red-on-black analog tape terminal (new inline
+// CSS/JS + markup in index.html); the bump drops the precached previous homepage.
+const CACHE_NAME = 'zazie-v12';
 
 const PRECACHE_ASSETS = [
   '/',

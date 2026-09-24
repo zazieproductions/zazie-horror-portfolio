@@ -75,7 +75,7 @@ Zazie Productions scores psychological horror: dread, tension, possession, cosmi
 The site is built to *demonstrate* rather than describe that identity:
 
 - **A restrained dark system, not decoration.** One palette (`void #030303`, `ink`, `smoke`, `ash`, `mist #9a9590`, `bone #f0ebe3`, `blood #c41e1e`, `ember #ff2a2a`), one serif voice (Cormorant Garamond) against one workhorse sans (Inter variable), and a fixed atmosphere layer (film grain, vignette, drifting ambient orbs, ken-burns hero) that is part of the first painted frame, not an after-effect of JavaScript.
-- **"The Archive" frame.** The 404 is an archive-entry error; the optional boot intro is a tape deck ("TAPE 00 · "SHOWREEL" · PROPERTY OF ZAZIE PRODUCTIONS"); the copy speaks in catalogue and signal language. The metaphor is consistent and quiet.
+- **"The Archive" frame.** The 404 is an archive-entry error; the optional boot intro is a tape deck ("TAPE 00 · "SHOWREEL" · PROPERTY OF Z. KANWAR-TORGE"); the copy speaks in catalogue and signal language. The metaphor is consistent and quiet.
 - **Listen first.** The showreel — 29 original cues, playable inline, organised by mood — is the centre of gravity of the whole site. Film samples embed the scores *in context*. Commerce points outward to marketplaces rather than building a parallel shop.
 - **No backend, no tracking.** The inquiry form composes an email in the visitor's own mail client. No cookies, no analytics, no accounts, no newsletter. The privacy notice inventories every third party the site can touch, and a device inspector lets the visitor verify the claims themselves.
 
@@ -91,7 +91,7 @@ Unconventional choices exist for artistic or experiential reasons and are docume
 - **Press kit** — features and coverage (Visual Container award-winners press release PDF, Grammy Weekly, Limitless Magazine, Billboard Wire).
 - **Approach / Rates / Composer / Reviews / Inquiry** — scoring method, scope-and-estimate bands ($50 micro-budget to $8,000 feature tier as published on `/services`), biography, 5.0 collaborator rating with 4 featured reviews, and a structured inquiry form that builds a `mailto:` handoff.
 
-**The ZP Archive Boot** — a minimal terminal loading screen, inline in `index.html` (zero network requests): quiet monochrome archive text, subtle scanlines/noise, and a short typed handoff into the site. It runs once per session on production, can be replayed with `?boot=1` or `#boot`, disabled with `?boot=0` or `#noboot`, is skipped for bots and `prefers-reduced-motion` users unless forced, contains no audio, is skippable by any input, and hard-caps itself at ~7 s.
+**The ZP Archive Boot** — an analog-horror tape terminal, inline in `index.html` (zero network requests): red phosphor on black, a CRT power-on, live tape grain, a rolling tracking band, tear slivers, a slow scan sweep, head-switching static, a VHS OSD and a typed archive log that loses tracking and recovers before the handoff. It runs once per session on production, can be replayed with `?boot=1` or `#boot`, disabled with `?boot=0` or `#noboot`, is skipped for bots and never auto-plays for `prefers-reduced-motion` users (when forced they get a static frame), contains no audio, is skippable by any input, destroys itself on exit, and hard-caps itself at ≈7 s (JS cap 11.5 s, CSS failsafe 12 s).
 
 **The Catalogue (`/store`)** — 20 items across Records / Objects / Sound libraries / Tools and scores. Progressive enhancement only: without JavaScript every card is visible and links straight to its listing; with JavaScript you get filter chips, audio previews with a **room-tone ambience** that ducks under them, a torch-light cursor, and card tilt.
 
@@ -115,7 +115,7 @@ All artwork © the respective productions. See the [live site](https://horror.za
 | Mood clusters | `tracks` array in the bundle (29 entries: `id, title, src, duration, tag`) | Each cue carries one mood tag; `/reel` mirrors the list with `AudioObject`/`MusicRecording` schema. |
 | Sticky player | `StickyPlayer.tsx` | Hidden until first play; animated wave-bar visualisation; respects `prefers-reduced-motion`. |
 | Film samples | `Projects.tsx` data + prerendered covers | 6 YouTube-nocookie iframes get a real `src` only when lazy-loaded; 1 Google Drive embed; `preconnect` to YouTube deferred off the critical path. |
-| Boot terminal | inline in `index.html` | Minimal typed loading screen, zero network requests, silent, once per session with replay/disable query hooks. |
+| Boot terminal | inline in `index.html` | Analog-horror tape terminal: red/black CRT, grain, tracking slip, tears, scan sweep, VHS OSD, typed archive log. Zero network requests, silent, once per session, any input skips, self-destructs on exit. |
 | Store previews & room tone | `store-src/store.js` | Per-card audio previews (`data-preview`); a looping room tone (`data-ambience`) crossfades down while previews play. `preload="none"`. |
 | External score player | Reelcrafter | Allowlisted in CSP (`frame-src`) and referenced as a `significantLink` in JSON-LD; currently linked, not embedded. |
 
@@ -436,7 +436,7 @@ For future AI-assisted development sessions. **Before changing anything:**
 **Implemented** (all verifiable in this tree):
 
 - Full portfolio experience: poster wall + lightbox (9 productions), 29-cue showreel with mood clusters and sticky player, 7 film samples, press kit, scope-and-estimate, reviews, `mailto:` inquiry
-- Minimal once-per-session terminal boot sequence (`?boot=1` / `#boot` replay, `?boot=0` / `#noboot` disable), fully gated and failsafed
+- Analog-horror once-per-session tape-terminal boot (`?boot=1` / `#boot` replay, `?boot=0` / `#noboot` disable), fully gated and failsafed
 - Six indexable hub pages, seven legal/operating documents with generated FAQ schema, 20-item catalogue with progressive enhancement
 - Service worker (SWR / network-first / cache-first tiers), CSP + canonical headers, 301 map, real 404
 - Sitemap with image/video extensions plus a 15-check validator; JSON-LD matrix; AI-crawler policy
