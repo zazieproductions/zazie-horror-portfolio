@@ -89,7 +89,7 @@ Unconventional choices exist for artistic or experiential reasons and are docume
 - **Showreel** — 29 original cues (`/audio/track-00.mp3` … `track-28.mp3`, ≈95 MB total) with per-cue mood tags (Psychological, Tension, Body Horror, Cosmic Horror, Dark Ambient, …), mood-cluster browsing, and a **sticky global player** driven by a single shared `<audio>` element through a React context.
 - **Film samples** — 7 embeds: 6 lazy `youtube-nocookie.com` players plus 1 Google Drive preview, with poster-`<picture>` covers.
 - **Press kit** — features and coverage (Visual Container award-winners press release PDF, Grammy Weekly, Limitless Magazine, Billboard Wire).
-- **Approach / Rates / Composer / Reviews / Inquiry** — scoring method, scope-and-estimate bands ($50 micro-budget to $8,000 feature tier as published on `/services`), biography, 5.0 collaborator rating with 4 featured reviews, and a structured inquiry form that builds a `mailto:` handoff.
+- **Approach / Rates / Composer / Reviews / Inquiry** — scoring method, scope-and-estimate bands (student films from $75.99; sliding scale by project funding, typically a few hundred dollars, as published on `/services`), biography, 5.0 collaborator rating with 4 featured reviews, and a structured inquiry form that builds a `mailto:` handoff.
 
 **The ZP Archive Boot** — a minimal terminal loading screen, inline in `index.html` (zero network requests): quiet monochrome archive text, subtle scanlines/noise, and a short typed handoff into the site. It runs once per session on production, can be replayed with `?boot=1` or `#boot`, disabled with `?boot=0` or `#noboot`, is skipped for bots and `prefers-reduced-motion` users unless forced, contains no audio, is skippable by any input, and hard-caps itself at ~7 s.
 
