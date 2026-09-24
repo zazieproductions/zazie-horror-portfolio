@@ -123,28 +123,30 @@ content-hashed. jsdom suite: 65 assertions, including "no em dashes" and "no
 
 ---
 
-# ZP Archive Boot, minimal terminal intro
+# ZP Archive Boot, analog-horror tape terminal
 
-Date: 2026-09-17 · Branch: `arena/01a0b074-zazie-horror-portfolio`
+Date: 2026-09-24 · Branch: `arena/01a0d0e9-zazie-horror-portfolio`
 
 ## What it is
 
-A terminal-style loading screen shown once per session on first paint: a quiet monochrome archive header, a few typed status lines (`29 entries`, film samples mounted, signal path clean), subtle scanlines/noise, and a brief handoff before the page is revealed. The earlier VHS/glitch/audio treatment has been intentionally pared back so the effect reads as tasteful loading atmosphere rather than a set piece.
+A terminal-style loading screen shown once per session on first paint, built as a red-on-black analog set piece: a CRT power-on that expands from a single scan line, live tape grain (painted once into a 128 px canvas), a rolling tracking band, tear slivers, a slow full-height scan sweep, head-switching static along the bottom edge, a VHS on-screen display (PLAY, a ticking `JUL 14 1987` clock, blinking REC, VU meter, tape-state readout, SP counter) and a typed archive log: `ZAZIE PRODUCTIONS · ZP ARCHIVE · TAPE 00 "SHOWREEL"`, head engaged, 29 cues indexed, tracking lost at 61 %, `unknown source detected on tape 00` in red, one corrupted line, frame re-captured, handoff with `ENTERING SITE`. Every line is a machine status line — the single "wrong" line is the master tape miswriting, never a narrator.
 
 ## Cost & performance guardrails
 
-- **Zero network requests**: ~15 KB raw / ~4 KB gzip of inline HTML+CSS+JS in `index.html`.
-  No fonts (uses `ui-monospace` stack), no images, no audio files.
+- **Zero network requests**: ~20 KB raw / ~5 KB gzip of inline HTML+CSS+JS in `index.html`.
+  No fonts (uses `ui-monospace` stack), no images, no audio files; the grain texture is generated in-page.
 - **Animation hygiene**: only `transform`, `opacity`, and `filter` animate; `contain: strict`
-  on the overlay; scanlines are static gradients; the whole thing self-destructs (node removed).
-- **Timing**: ≈3 s end-to-end; any click / key / wheel / tap skips instantly; JS hard cap at 9.2 s; CSS force-hide at 7 s as the final failsafe.
-- **Sound**: none. The loader no longer starts or prepares an audio layer on interaction.
+  on the overlay; scanlines and the aperture grille are static gradients; the 56 spectrum bars and
+  12 VU bars are built once and driven by two keyframes; the node self-destructs on exit.
+- **Timing**: ≈7 s end-to-end; any click / key / wheel / tap skips instantly (≈0.5 s exit collapse); JS hard cap at 11.5 s; CSS force-hide at 12 s as the final failsafe.
+- **Sound**: none. The loader does not start, prepare, or hint at an audio layer.
 
 ## Correctness guardrails
 
 - **Overlay lives outside `#root`**, so the React bundle's teardown/rebuild can never remove it.
 - **No-JS / crawlers / bots / Lighthouse**: overlay is `display:none` unless a synchronous head
-  script adds `.zp-boot-on` to `<html>`; bots and `prefers-reduced-motion` never get it. Page
+  script adds `.zp-boot-on` to `<html>`; bots never get it and `prefers-reduced-motion` never
+  auto-plays it (when forced, animations are off, the bars are hidden and a static frame holds ~1.3 s). Page
   content is fully present in the DOM regardless (SEO untouched).
 - **JS error mid-sequence**: try/catch to `finish()`; CSS `zpForceHide` animation hides the overlay
   even if every JS path dies.
@@ -155,10 +157,12 @@ A terminal-style loading screen shown once per session on first paint: a quiet m
 
 ## Workshop notes (deliberate creative choices to revisit)
 
-- Keep the copy understated: no fake copyright dates, no red-alert language, no jump-scare wording.
-- Gate copy: `entering site`.
-- Possible next iterations: per-visit archive ID, even shorter return-visitor path, tying
-  `zp:bootdone` into the showreel player.
+- Keep the copy mechanical: no invented narration, no jump-scare wording, no flashing above 3 Hz.
+- Colour discipline: red phosphor on black; near-white is reserved for the archive header, the cursor
+  and the tear slivers.
+- Gate copy: `ENTERING SITE`.
+- Possible next iterations: per-visit tape ID in the OSD, a head-cleaning beat for return visitors,
+  tying `zp:bootdone` into the showreel player.
 
 ---
 

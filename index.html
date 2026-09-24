@@ -4,12 +4,16 @@
 <head>
 <meta charset="utf-8"/>
 <!-- ═══════════════════════════════════════════════════════════════════
-     ZP ARCHIVE BOOT — minimal terminal loading screen (inline, zero requests)
+     ZP ARCHIVE BOOT — analog-horror tape terminal (inline, zero requests)
+     A red-on-black CRT set: tape grain, tracking slip, tear slivers, a slow
+     scan sweep, VHS OSD and a typed archive log that goes bad before it clears.
      Shows once per session on production; preview/dev hosts replay on reload.
      ?boot=1 / #boot forces a replay; ?boot=0 / #noboot disables it.
-     Quiet by default: no audio, no jump scare, any click/key/scroll skips.
-     Failsafes: no-JS → never shows · reduced-motion/bots → never shows unless forced ·
-     JS error mid-run → CSS force-hide at 7s · bfcache restore → instant out.
+     Silent by design: no audio files, no network requests, no jump scare.
+     Any click / key / scroll / tap skips instantly.
+     Failsafes: no-JS → never shows · bots → never shows · reduced-motion → only a
+     short static frame, and only when forced · JS error mid-run → CSS force-hide
+     at 12s · bfcache restore → instant out.
      ═══════════════════════════════════════════════════════════════════ -->
 <script>
 (function(){try{
@@ -31,90 +35,187 @@
 }catch(e){}})();
 </script>
 <style id="zp-boot-style">
+:root{--zp-mono:ui-monospace,'Cascadia Mono','SF Mono',Menlo,Consolas,'Liberation Mono','Courier New',monospace}
 #zp-boot{display:none}
 html.zp-boot-on body{overflow:hidden!important}
 html.zp-boot-on #zp-boot{
-  display:block;position:fixed;inset:0;z-index:2147483647;background:#020202;
+  display:block;position:fixed;inset:0;z-index:2147483647;background:#000;
   cursor:pointer;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;
   touch-action:manipulation;contain:strict;
-  animation:zpForceHide .5s linear 10s forwards;
+  animation:zpForceHide .6s linear 12s forwards;
 }
-#zp-boot.zp-off{display:block;pointer-events:none;animation:zpOvFade .56s ease forwards,zpForceHide .1s linear 9s forwards}
+#zp-boot.zp-off{display:block;pointer-events:none;animation:zpOvFade .52s ease forwards,zpForceHide .1s linear 11.6s forwards}
 @media (prefers-reduced-motion:reduce){html:not(.zp-boot-force) #zp-boot{display:none!important}}
+
+/* ── THE TUBE ───────────────────────────────────────────────────────────
+   One black screen, red phosphor. Everything animates on transform/opacity/
+   filter only; the whole node is contain:strict and dies with the overlay. */
 .zp-screen{
   position:absolute;inset:0;overflow:hidden;transform-origin:50% 50%;
-  background:radial-gradient(120% 90% at 50% 45%,#0a0d0a 0%,#060806 55%,#020302 100%);
-  animation:zpPowerOn .38s cubic-bezier(.3,.7,.3,1) both;
+  border-radius:clamp(10px,2.2vmin,30px);
+  background:radial-gradient(118% 92% at 50% 47%,#1b0508 0%,#0c0203 46%,#020000 100%);
+  box-shadow:inset 0 0 0 1px rgba(255,70,60,.14),inset 0 0 150px rgba(70,0,0,.55);
+  animation:zpPowerOn .5s cubic-bezier(.3,.7,.3,1) both;
 }
-#zp-boot.zp-off .zp-screen{animation:zpCollapse .5s cubic-bezier(.5,.2,.6,1) forwards}
-/* CRT dressing: scanlines + vignette + flicker */
-.zp-crt{
-  position:absolute;inset:0;pointer-events:none;z-index:4;
+#zp-boot.zp-off .zp-screen{animation:zpCollapse .62s cubic-bezier(.55,.15,.6,1) forwards}
+.zp-stage{position:absolute;inset:0;z-index:2}
+#zp-boot.zp-roll .zp-stage{animation:zpRoll .8s linear 2}
+/* red phosphor bloom + aperture grille (Trinitron-ish verticals) */
+.zp-bloom{
+  position:absolute;inset:0;z-index:7;pointer-events:none;mix-blend-mode:screen;
   background:
-    repeating-linear-gradient(0deg,rgba(0,0,0,.34) 0 1px,transparent 1px 3px),
-    radial-gradient(115% 100% at 50% 50%,transparent 60%,rgba(0,0,0,.55) 100%);
-  animation:zpFlick 3.6s steps(1) infinite;
+    radial-gradient(92% 72% at 50% 50%,rgba(255,34,24,.10),transparent 72%),
+    repeating-linear-gradient(90deg,rgba(255,60,50,.055) 0 1px,transparent 1px 3px);
 }
-/* Rolling VHS tracking band */
+/* scanlines + heavy curved-glass vignette */
+.zp-crt{
+  position:absolute;inset:0;z-index:6;pointer-events:none;
+  background:
+    repeating-linear-gradient(0deg,rgba(0,0,0,.46) 0 1px,rgba(255,60,50,.05) 1px 2px,transparent 2px 3px),
+    radial-gradient(128% 108% at 50% 50%,transparent 48%,rgba(0,0,0,.45) 78%,rgba(0,0,0,.94) 100%);
+  animation:zpFlick 4.2s steps(1) infinite;
+}
+/* the slow sweep band — the analog-horror signature */
+.zp-scanbar{
+  position:absolute;left:0;right:0;top:0;height:32%;z-index:5;pointer-events:none;mix-blend-mode:screen;
+  background:linear-gradient(180deg,transparent 0%,rgba(255,40,30,.05) 38%,rgba(255,190,180,.08) 51%,rgba(255,40,30,.05) 64%,transparent 100%);
+  animation:zpSweep 4.8s linear infinite;
+}
+/* rolling VHS tracking band */
 .zp-track{
-  position:absolute;left:0;right:0;height:16%;top:-25%;z-index:3;pointer-events:none;
-  background:linear-gradient(180deg,transparent,rgba(255,255,255,.04) 30%,rgba(255,255,255,.085) 50%,rgba(255,255,255,.04) 70%,transparent);
-  mix-blend-mode:screen;animation:zpTrack 2.3s linear infinite;
+  position:absolute;left:0;right:0;height:14%;top:-20%;z-index:5;pointer-events:none;mix-blend-mode:screen;
+  background:linear-gradient(180deg,transparent,rgba(255,90,80,.05) 32%,rgba(255,220,215,.075) 50%,rgba(255,90,80,.05) 68%,transparent);
+  animation:zpTrack 2.6s linear infinite;
 }
-.zp-glitch .zp-track{animation-duration:.75s}
-/* VHS on-screen display */
-.zp-osd{
-  position:absolute;inset:0;z-index:5;pointer-events:none;
-  font:700 12px/1 var(--zp-mono);letter-spacing:.09em;color:#f0ebe3;
-  text-shadow:0 0 7px rgba(240,235,227,.35),1px 0 rgba(255,42,42,.22);
+#zp-boot.zp-glitch .zp-track{animation-duration:.7s}
+/* head-switching noise: the strip of static VHS leaves along the bottom edge */
+.zp-headband{
+  position:absolute;left:-4%;right:-4%;bottom:0;height:2.8%;z-index:5;pointer-events:none;mix-blend-mode:screen;opacity:.6;
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.055) 0 2px,rgba(0,0,0,.55) 2px 3px,rgba(255,80,70,.09) 3px 5px,transparent 5px 9px);
+  animation:zpHead .22s steps(3) infinite;
 }
-.zp-osd .zp-play{position:absolute;top:4.5%;left:5%}
-.zp-osd .zp-rec{position:absolute;top:4.5%;right:5%;color:#ff2a2a}
-.zp-osd .zp-rec i{
-  display:inline-block;width:9px;height:9px;border-radius:50%;background:#ff2a2a;margin-right:.5em;
-  box-shadow:0 0 8px rgba(255,42,42,.85);animation:zpBlink 1.2s steps(2,start) infinite;
+/* live tape grain — the texture itself is painted by the driver (inline canvas) */
+.zp-noise{
+  position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.055;
+  background-repeat:repeat;mix-blend-mode:screen;
+  animation:zpGrain .3s steps(2) infinite;
 }
-.zp-osd .zp-count{position:absolute;bottom:4.5%;right:5%;opacity:.85}
-/* Terminal body */
-.zp-term{
-  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;margin:0;
-  width:min(88vw,720px);max-height:76vh;overflow:hidden;
-  font:400 clamp(11px,.5rem + 1.55vw,15px)/1.62 var(--zp-mono);
-  letter-spacing:.03em;color:#f0ebe3;white-space:pre-wrap;word-break:break-word;
-  text-shadow:0 0 8px rgba(240,235,227,.28),0 0 26px rgba(240,235,227,.12);
+.zp-noise.zp-snow{animation:zpSnow .55s ease-out both,zpGrain .3s steps(2) .55s infinite}
+/* tape-tear slivers */
+.zp-tears{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden}
+.zp-tear{
+  position:absolute;left:-5%;width:110%;height:3px;opacity:0;
+  background:linear-gradient(90deg,transparent 0%,rgba(255,120,110,.6) 20%,rgba(255,235,230,.9) 50%,rgba(255,120,110,.6) 80%,transparent 100%);
+  mix-blend-mode:screen;
 }
-.zp-line{min-height:1.62em}
-.zp-dim{color:#9a9590;text-shadow:0 0 6px rgba(154,149,144,.22)}
-.zp-hi{color:#f0ebe3;font-weight:700;letter-spacing:.13em}
-.zp-ok{color:#cdc7bb}
-.zp-prompt{color:#e9e3d6}
-.zp-bad{color:#ff2a2a;text-shadow:0 0 9px rgba(255,42,42,.6),1px 0 rgba(255,42,42,.4)}
-.zp-corrupt{color:#cfc9bd;text-shadow:1px 0 rgba(255,42,42,.45),-1px 0 rgba(70,230,255,.3)}
-.zp-gate{color:#f0ebe3;letter-spacing:.15em;margin-top:1.1em;animation:zpBlink 1.15s steps(2,start) infinite}
-.zp-cursor{
-  display:inline-block;width:.62em;height:1.02em;margin-left:.08em;vertical-align:-.12em;
-  background:#f0ebe3;box-shadow:0 0 8px rgba(240,235,227,.6);animation:zpBlink 1s steps(2,start) infinite;
+.zp-tear.zp-tear-dark{background:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.85) 25%,rgba(0,0,0,.96) 55%,transparent 100%);mix-blend-mode:normal}
+.zp-tear.zp-tear-on{animation:zpTear .55s steps(3) both}
+/* red frame + EAS-style double blink */
+.zp-frame{
+  position:absolute;inset:0;z-index:8;pointer-events:none;
+  box-shadow:inset 0 0 0 1px rgba(255,60,50,.18),inset 0 0 90px rgba(120,0,0,.35);
 }
-/* Glitch state: RGB split + jitter */
-.zp-glitch .zp-term{
-  animation:zpJit .14s steps(2) infinite;
-  text-shadow:2px 0 rgba(255,42,42,.5),-2px 0 rgba(70,230,255,.35),0 0 10px rgba(240,235,227,.3);
-}
-.zp-glitch .zp-crt{animation:zpFlick .18s steps(1) infinite}
-/* EAS-style red frame double-blink */
 .zp-alertframe{
-  position:absolute;inset:0;z-index:6;pointer-events:none;opacity:0;
-  box-shadow:inset 0 0 0 3px rgba(255,42,42,.65),inset 0 0 90px rgba(196,30,30,.35);
+  position:absolute;inset:0;z-index:9;pointer-events:none;opacity:0;
+  box-shadow:inset 0 0 0 4px rgba(255,42,42,.8),inset 0 0 150px rgba(196,30,30,.45);
 }
-#zp-boot.zp-alert .zp-alertframe{animation:zpAlert .36s steps(1) both}
+#zp-boot.zp-alert .zp-alertframe{animation:zpAlert .42s steps(1) both}
 
-/* Skip link: lives outside #root so the React teardown cannot remove it. */
+/* ── THE TERMINAL ───────────────────────────────────────────────────── */
+.zp-term{
+  position:absolute;left:50%;top:49%;transform:translate(-50%,-50%);z-index:3;margin:0;
+  width:min(88vw,780px);max-height:72vh;overflow:hidden;
+  font:400 clamp(11px,.52rem + 1.45vw,15px)/1.66 var(--zp-mono);
+  letter-spacing:.035em;color:#ff4a3d;white-space:pre-wrap;word-break:break-word;
+  text-shadow:0 0 6px rgba(255,44,34,.6),0 0 22px rgba(200,0,0,.42),0 0 48px rgba(140,0,0,.3);
+}
+.zp-line{min-height:1.66em}
+.zp-hi{color:#ffe2dc;font-weight:700;letter-spacing:.2em;text-shadow:0 0 10px rgba(255,90,70,.8),0 0 34px rgba(255,20,10,.55)}
+.zp-dim{color:#8e3b33;text-shadow:0 0 8px rgba(142,59,51,.4)}
+.zp-ok{color:#c9483a}
+.zp-prompt{color:#ff5b48}
+.zp-bad{color:#ff2a2a;font-weight:700;letter-spacing:.09em;text-shadow:0 0 12px rgba(255,42,42,.95),0 0 40px rgba(255,0,0,.6)}
+.zp-corrupt{color:#ff8a7c;text-shadow:2px 0 rgba(255,42,42,.85),-2px 0 rgba(90,225,255,.32),0 0 16px rgba(255,42,42,.6)}
+.zp-gate{color:#ff2a2a;letter-spacing:.2em;margin-top:1.1em;animation:zpBlink 1.1s steps(2,start) infinite}
+.zp-cursor{
+  display:inline-block;width:.6em;height:1.02em;margin-left:.1em;vertical-align:-.14em;
+  background:#ff3b2d;box-shadow:0 0 10px rgba(255,58,45,.85);animation:zpBlink .95s steps(2,start) infinite;
+}
+/* glitch state: RGB split, jitter, sync slip */
+.zp-glitch .zp-term{
+  animation:zpJit .13s steps(2) infinite;
+  text-shadow:2.5px 0 rgba(255,42,42,.8),-2.5px 0 rgba(90,225,255,.3),0 0 16px rgba(255,60,40,.65);
+}
+.zp-glitch .zp-crt{animation:zpFlick .16s steps(1) infinite}
+.zp-glitch .zp-bloom{opacity:1.35}
+
+/* ── OSD: VHS on-screen display ─────────────────────────────────────── */
+.zp-osd{
+  position:absolute;inset:0;z-index:10;pointer-events:none;
+  font:700 11px/1 var(--zp-mono);letter-spacing:.13em;color:#ff5a4a;
+  text-shadow:0 0 8px rgba(255,40,30,.75),0 0 24px rgba(180,0,0,.5);
+  font-variant-numeric:tabular-nums;
+}
+.zp-osd .zp-play{position:absolute;top:4.4%;left:5%}
+.zp-osd .zp-clock{position:absolute;top:4.4%;left:50%;transform:translateX(-50%);opacity:.85}
+.zp-osd .zp-rec{position:absolute;top:4.4%;right:5%;color:#ff2a2a}
+.zp-osd .zp-rec i{
+  display:inline-block;width:9px;height:9px;border-radius:50%;background:#ff2a2a;margin-right:.55em;
+  box-shadow:0 0 10px rgba(255,42,42,.95);animation:zpBlink 1.15s steps(2,start) infinite;
+}
+.zp-osd .zp-audio{position:absolute;bottom:4.4%;left:5%;display:flex;align-items:center;gap:.65em;opacity:.8}
+.zp-osd .zp-tape{position:absolute;bottom:4.4%;left:50%;transform:translateX(-50%);opacity:.9;letter-spacing:.2em}
+.zp-osd .zp-tape.zp-err{color:#ff2a2a;text-shadow:0 0 12px rgba(255,42,42,.9)}
+.zp-osd .zp-count{position:absolute;bottom:4.4%;right:5%;opacity:.85}
+.zp-osd .zp-side{
+  position:absolute;right:1.5%;top:50%;transform:translateY(-50%) rotate(180deg);writing-mode:vertical-rl;
+  font-size:9px;letter-spacing:.42em;opacity:.42;
+}
+.zp-vu{display:inline-flex;align-items:flex-end;gap:2px;height:12px}
+.zp-vu i{display:block;width:3px;height:100%;background:currentColor;opacity:.22;transform-origin:50% 100%;transform:scaleY(.2)}
+#zp-boot.zp-live .zp-vu i{animation:zpVu .5s ease-in-out infinite alternate}
+.zp-vu i:nth-child(2){animation-delay:.07s}
+.zp-vu i:nth-child(3){animation-delay:.14s}
+.zp-vu i:nth-child(4){animation-delay:.21s}
+.zp-vu i:nth-child(5){animation-delay:.28s}
+.zp-vu i:nth-child(6){animation-delay:.09s}
+.zp-vu i:nth-child(7){animation-delay:.19s}
+.zp-vu i:nth-child(8){animation-delay:.03s}
+.zp-vu i:nth-child(9){animation-delay:.24s}
+.zp-vu i:nth-child(10){animation-delay:.12s}
+.zp-vu i:nth-child(11){animation-delay:.31s}
+.zp-vu i:nth-child(12){animation-delay:.17s}
+/* spectrum trace: one bar per cue, staggered by the driver */
+.zp-wave{
+  position:absolute;left:50%;bottom:9.5%;transform:translateX(-50%);z-index:3;
+  display:flex;align-items:flex-end;gap:2px;height:34px;width:min(78vw,660px);
+  opacity:.55;pointer-events:none;
+}
+.zp-wave i{
+  flex:1 1 auto;height:100%;background:linear-gradient(180deg,rgba(255,90,70,.95),rgba(140,10,10,.35));
+  transform-origin:50% 100%;transform:scaleY(.08);animation:zpVu 1.15s ease-in-out infinite alternate;
+}
+#zp-boot.zp-glitch .zp-wave i{animation-duration:.4s}
+#zp-boot.zp-off .zp-wave{opacity:0}
+
+/* ── SKIP HINT ──────────────────────────────────────────────────────── */
+.zp-hint{
+  position:absolute;left:50%;bottom:2%;transform:translateX(-50%);z-index:10;pointer-events:none;
+  font:600 9px/1 var(--zp-mono);letter-spacing:.34em;text-transform:uppercase;
+  color:rgba(255,90,74,.55);text-shadow:0 0 10px rgba(255,40,30,.5);
+  animation:zpHintIn .7s ease 1.2s both,zpHintPulse 3s ease 1.9s infinite;
+}
 .zp-skip{position:absolute;left:-9999px;top:0;z-index:2147483646;background:#c41e1e;color:#f0ebe3;padding:.85rem 1.25rem;font:500 .75rem/1 var(--zp-mono);letter-spacing:.2em;text-transform:uppercase;text-decoration:none}
 .zp-skip:focus{left:.5rem;top:.5rem;outline:1px solid #ff2a2a;outline-offset:3px}
-:root{--zp-mono:ui-monospace,'Cascadia Mono','SF Mono',Menlo,Consolas,'Liberation Mono','Courier New',monospace}
+
+/* ── KEYFRAMES ──────────────────────────────────────────────────────── */
 @keyframes zpBlink{50%{opacity:0}}
-@keyframes zpFlick{0%{opacity:1}7%{opacity:.965}8%{opacity:1}54%{opacity:1}55%{opacity:.93}56%{opacity:1}81%{opacity:.985}82%{opacity:1}}
-@keyframes zpTrack{0%{transform:translateY(-25%)}100%{transform:translateY(750%)}}
+@keyframes zpFlick{0%{opacity:1}7%{opacity:.96}8%{opacity:1}31%{opacity:.93}32%{opacity:1}54%{opacity:1}55%{opacity:.88}57%{opacity:1}81%{opacity:.98}82%{opacity:1}93%{opacity:.9}94%{opacity:1}}
+@keyframes zpSweep{0%{transform:translateY(-120%)}100%{transform:translateY(430%)}}
+@keyframes zpHead{0%{transform:translateX(-6px)}50%{transform:translateX(5px)}100%{transform:translateX(-2px)}}
+@keyframes zpTrack{0%{transform:translateY(-30%)}100%{transform:translateY(830%)}}
+@keyframes zpGrain{0%{background-position:0 0}50%{background-position:72px -104px}100%{background-position:-56px 40px}}
+@keyframes zpSnow{0%{opacity:.5}100%{opacity:.055}}
 @keyframes zpJit{
   0%{transform:translate(-50%,-50%)}
   25%{transform:translate(calc(-50% - 2px),calc(-50% + 1px))}
@@ -122,128 +223,46 @@ html.zp-boot-on #zp-boot{
   75%{transform:translate(calc(-50% - 1px),calc(-50% - 1px))}
   100%{transform:translate(-50%,-50%)}
 }
-@keyframes zpAlert{0%,19%{opacity:1}20%,49%{opacity:0}50%,69%{opacity:1}70%,100%{opacity:0}}
+@keyframes zpTear{0%{opacity:.55;transform:translateX(-18px)}50%{opacity:.32;transform:translateX(14px)}100%{opacity:0;transform:translateX(-6px)}}
+@keyframes zpAlert{0%,19%{opacity:1}20%,49%{opacity:0}50%,72%{opacity:1}73%,100%{opacity:0}}
+@keyframes zpRoll{
+  0%{transform:translateY(0)}
+  12%{transform:translateY(-14%)}
+  34%{transform:translateY(-62%)}
+  52%{transform:translateY(34%)}
+  72%{transform:translateY(-9%)}
+  88%{transform:translateY(4%)}
+  100%{transform:translateY(0)}
+}
+@keyframes zpVu{from{transform:scaleY(.12)}to{transform:scaleY(1)}}
+@keyframes zpHintIn{from{opacity:0}to{opacity:1}}
+@keyframes zpHintPulse{0%,100%{opacity:.85}50%{opacity:.32}}
 @keyframes zpPowerOn{
-  0%{transform:scale(1,.004);filter:brightness(3)}
-  45%{transform:scale(1,.004);filter:brightness(2.6)}
-  70%{transform:scale(1,1.02);filter:brightness(1.5)}
+  0%{transform:scale(1,.004);filter:brightness(3.4) saturate(1.6)}
+  42%{transform:scale(1,.004);filter:brightness(2.8)}
+  66%{transform:scale(1,1.03);filter:brightness(1.6)}
   100%{transform:scale(1,1);filter:brightness(1)}
 }
 @keyframes zpCollapse{
   0%{transform:scale(1,1);filter:brightness(1);opacity:1}
-  55%{transform:scale(1.015,.012);filter:brightness(2.4);opacity:1}
-  78%{transform:scale(.35,.012);filter:brightness(3)}
-  100%{transform:scale(0,.012);filter:brightness(3);opacity:0}
+  46%{transform:scale(1.02,.02);filter:brightness(2.6) saturate(1.5);opacity:1}
+  72%{transform:scale(.4,.014);filter:brightness(3.4);opacity:1}
+  100%{transform:scale(.03,.012);filter:brightness(4);opacity:0}
 }
 @keyframes zpOvFade{0%,55%{opacity:1}100%{opacity:0}}
 @keyframes zpForceHide{to{visibility:hidden;opacity:0;pointer-events:none}}
 @media (max-width:640px){
-  .zp-osd{font-size:10px}
-  .zp-term{width:90vw;top:47%}
+  .zp-osd{font-size:9.5px;letter-spacing:.09em}
+  .zp-osd .zp-side{display:none}
+  .zp-term{width:90vw;top:47%;max-height:66vh}
+  .zp-wave{width:84vw;bottom:11%;height:26px}
+  .zp-hint{font-size:8px;letter-spacing:.24em}
 }
-
-/* ═══════════════════════════════════════════════════════════════════
-   ZP ARCHIVE BOOT v2 — deeper analog layer
-   Live VHS grain · tape-tear slivers · sync slip · curved CRT glass ·
-   VHS clock · tape-state readout · audio hint + level meter.
-   Everything below only exists while #zp-boot is on screen and is
-   removed with the overlay. No flashes >3Hz at >10% luminance.
-   ═══════════════════════════════════════════════════════════════════ */
-/* CRT glass: curved rim + inset depth */
-.zp-screen{
-  border-radius:clamp(18px,3.5vmin,42px);
-  box-shadow:inset 0 0 0 1px rgba(240,235,227,.06),inset 0 0 90px rgba(0,0,0,.55);
+@media (prefers-reduced-motion:reduce){
+  #zp-boot,#zp-boot *{animation:none!important}
+  #zp-boot.zp-off{opacity:0;transition:opacity .3s ease}
+  .zp-wave{display:none}
 }
-/* Live VHS grain — texture painted by the driver (inline canvas, zero requests) */
-.zp-noise{
-  position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.05;
-  background-repeat:repeat;mix-blend-mode:screen;
-  animation:zpGrain .34s steps(2) infinite;
-}
-@keyframes zpGrain{0%{background-position:0 0}50%{background-position:64px -96px}100%{background-position:-48px 32px}}
-.zp-noise.zp-startflash{animation:zpSnowA .5s ease-out both,zpGrain .34s steps(2) .5s infinite}
-@keyframes zpSnowA{0%{opacity:.42}100%{opacity:.05}}
-#zp-boot.zp-audio-on .zp-noise{opacity:.065}
-.zp-noise.zp-audioflash{animation:zpSnowB .55s ease-out both,zpGrain .34s steps(2) .55s infinite}
-@keyframes zpSnowB{0%{opacity:.5}100%{opacity:.065}}
-/* Audio power-on: the set "settles" (scoped so it never overrides exit collapse) */
-#zp-boot.zp-audio-on:not(.zp-off) .zp-screen{animation:zpAvSettle .55s ease-out 1}
-@keyframes zpAvSettle{0%{filter:brightness(1.65) saturate(1.15)}40%{filter:brightness(.9)}100%{filter:brightness(1)}}
-/* Tape-tear slivers + one-frame sync slip */
-.zp-tears{position:absolute;inset:0;z-index:4;pointer-events:none;overflow:hidden}
-.zp-tear{
-  position:absolute;left:-5%;width:110%;height:3px;opacity:0;
-  background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.55) 20%,rgba(255,255,255,.85) 50%,rgba(255,255,255,.55) 80%,transparent 100%);
-  mix-blend-mode:screen;
-}
-.zp-tear.zp-tear-dark{background:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.85) 25%,rgba(0,0,0,.95) 55%,transparent 100%);mix-blend-mode:normal}
-.zp-tear.zp-tear-on{animation:zpTear .55s steps(3) both}
-@keyframes zpTear{0%{opacity:.5;transform:translateX(-16px)}50%{opacity:.3;transform:translateX(12px)}100%{opacity:0;transform:translateX(-6px)}}
-#zp-boot.zp-shift{transform:translateY(3px)}
-/* OSD extras: VHS clock · tape state · audio hint + level meter */
-.zp-clock{
-  position:absolute;top:4.5%;left:50%;transform:translateX(-50%);
-  opacity:.8;letter-spacing:.14em;font-variant-numeric:tabular-nums;
-}
-.zp-tape{position:absolute;bottom:4.5%;left:50%;transform:translateX(-50%);opacity:.9;letter-spacing:.22em}
-.zp-tape.zp-tape-err{color:#ff2a2a;text-shadow:0 0 9px rgba(255,42,42,.7)}
-.zp-audio{
-  position:absolute;bottom:4.5%;left:5%;opacity:.6;
-  display:flex;align-items:center;gap:.6em;transition:opacity .5s;
-}
-.zp-audio.zp-audio-on{opacity:.85}
-.zp-vu{display:inline-flex;align-items:flex-end;gap:2px;height:11px}
-.zp-vu i{display:block;width:3px;background:#9a9590;opacity:.15}
-.zp-vu i:nth-child(1){height:4px}
-.zp-vu i:nth-child(2){height:6px}
-.zp-vu i:nth-child(3){height:9px}
-.zp-vu i:nth-child(4){height:11px}
-@media (max-width:640px){
-  .zp-clock,.zp-tape,.zp-audio{font-size:9px}
-}
-
-/* Minimal return of the archive terminal: quiet, brief, and skippable. */
-html.zp-boot-on #zp-boot{
-  background:#030303;
-  animation:zpForceHide .25s linear 7s forwards;
-}
-#zp-boot.zp-off{animation:zpOvFade .38s ease forwards,zpForceHide .1s linear .5s forwards}
-.zp-screen{
-  border-radius:0;
-  background:radial-gradient(90% 70% at 50% 48%,#080908 0%,#040504 62%,#010101 100%);
-  box-shadow:none;
-  animation:zpMinimalIn .42s ease both;
-}
-#zp-boot.zp-off .zp-screen{animation:none}
-.zp-term{
-  width:min(84vw,560px);
-  max-height:60vh;
-  font:400 clamp(11px,.72rem + .28vw,13px)/1.78 var(--zp-mono);
-  letter-spacing:.045em;
-  color:#e8e0d3;
-  text-shadow:0 0 14px rgba(232,224,211,.12);
-}
-.zp-hi{font-weight:500;letter-spacing:.18em;color:#f0ebe3}
-.zp-dim{color:#817b73;text-shadow:none}
-.zp-ok,.zp-prompt{color:#c9c1b6}
-.zp-bad,.zp-corrupt{color:#c9c1b6;text-shadow:none}
-.zp-gate{margin-top:.9em;color:#817b73;letter-spacing:.16em;animation:none}
-.zp-cursor{width:.55em;height:1em;background:#c9c1b6;box-shadow:0 0 8px rgba(201,193,182,.28)}
-.zp-crt{
-  background:
-    repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 4px),
-    radial-gradient(110% 100% at 50% 50%,transparent 66%,rgba(0,0,0,.62) 100%);
-  animation:none;
-  opacity:.75;
-}
-.zp-noise{opacity:.025;mix-blend-mode:screen;animation:none}
-.zp-noise.zp-startflash,.zp-noise.zp-audioflash{animation:none;opacity:.025}
-.zp-track,.zp-tears,.zp-alertframe,.zp-osd{display:none!important}
-.zp-glitch .zp-term{animation:none;text-shadow:0 0 14px rgba(232,224,211,.12)}
-#zp-boot.zp-shift{transform:none}
-#zp-boot.zp-audio-on:not(.zp-off) .zp-screen{animation:zpMinimalIn .42s ease both}
-@keyframes zpMinimalIn{from{opacity:0;filter:brightness(.75)}to{opacity:1;filter:brightness(1)}}
-@media (max-width:640px){.zp-term{width:86vw;top:48%;font-size:11px}}
 </style>
 <link href="favicon.svg" rel="icon" type="image/svg+xml"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
@@ -1060,30 +1079,53 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
      ═══════════════════════════════════════════════════════════════════ -->
 <div id="zp-boot" role="presentation" aria-hidden="true">
   <div class="zp-screen">
-    <div class="zp-noise" aria-hidden="true"></div>
-    <pre class="zp-term" id="zp-term"></pre>
+    <div class="zp-stage">
+      <div class="zp-noise zp-snow" id="zp-noise" aria-hidden="true"></div>
+      <pre class="zp-term" id="zp-term"></pre>
+      <div class="zp-wave" id="zp-wave" aria-hidden="true"></div>
+      <div class="zp-scanbar" aria-hidden="true"></div>
+      <div class="zp-track" aria-hidden="true"></div>
+      <div class="zp-headband" aria-hidden="true"></div>
+      <div class="zp-tears" id="zp-tears" aria-hidden="true"></div>
+    </div>
     <div class="zp-crt" aria-hidden="true"></div>
+    <div class="zp-bloom" aria-hidden="true"></div>
+    <div class="zp-frame" aria-hidden="true"></div>
+    <div class="zp-alertframe" aria-hidden="true"></div>
+    <div class="zp-osd" aria-hidden="true">
+      <span class="zp-play">&#9654; PLAY</span>
+      <span class="zp-clock" id="zp-clock">JUL 14 1987 11:47:00 PM</span>
+      <span class="zp-rec"><i></i>REC</span>
+      <span class="zp-audio">HI-FI <span class="zp-vu"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></span>
+      <span class="zp-tape" id="zp-tape">TAPE 00 · PLAY</span>
+      <span class="zp-count" id="zp-count">SP 0:00:00</span>
+      <span class="zp-side">ZP ARCHIVE · TAPE 00</span>
+    </div>
+    <div class="zp-hint" id="zp-hint">click or press any key to skip</div>
   </div>
 </div>
 <script>
-/* ZP ARCHIVE BOOT — sequence driver (runs only if <html> has .zp-boot-on) */
+/* ZP ARCHIVE BOOT — analog-horror sequence driver.
+   Runs only when <html> carries .zp-boot-on (set by the synchronous head gate).
+   Zero requests · no audio · any input skips · JS hard cap 11.5 s · CSS force-hide
+   as the last resort. Every effect is transform/opacity/filter only and the whole
+   node is destroyed on exit. */
 (function(){
   var d=document,w=window,root=d.documentElement,ov=d.getElementById('zp-boot');
   if(!ov||!('classList' in root)||!root.classList.contains('zp-boot-on'))return;
-  var term=d.getElementById('zp-term'),cnt=d.getElementById('zp-count');
-  var clockEl=d.getElementById('zp-clock'),tapeEl=d.getElementById('zp-tape'),
+  var term=d.getElementById('zp-term'),clockEl=d.getElementById('zp-clock'),
+      tapeEl=d.getElementById('zp-tape'),countEl=d.getElementById('zp-count'),
       noiseEl=d.getElementById('zp-noise'),tearsEl=d.getElementById('zp-tears'),
-      audioEl=d.getElementById('zp-audio'),vuEl=d.getElementById('zp-vu'),
-      audioLabelEl=d.getElementById('zp-audiolabel');
-  var done=false,skipReq=false,timers=[],skipFns=[],autoTimer=null,trackLine=null,cursor=null;
+      waveEl=d.getElementById('zp-wave');
+  var rm=!!(w.matchMedia&&w.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var done=false,autoTimer=null,trackLine=null,cursor=null,clockSec=0,timers=[];
   var t0=(w.performance&&w.performance.now)?w.performance.now():Date.now();
 
-  function clearTimers(){while(timers.length)clearTimeout(timers.pop());}
+  function after(ms,fn){var id=setTimeout(fn,ms);timers.push(id);return id;}
+  /* sequence sleeps: capped to a blink when the visitor asked for reduced motion */
   function sleep(ms){
-    if(skipReq)return Promise.resolve();
     return new Promise(function(res){
-      var id=setTimeout(function(){res();},ms);timers.push(id);
-      skipFns.push(function(){clearTimeout(id);res();});
+      var id=setTimeout(res,rm?Math.min(ms,40):ms);timers.push(id);
     });
   }
   function repeat(s,n){var o='';while(n-->0)o+=s;return o;}
@@ -1095,190 +1137,219 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
     if(cursor&&cursor.parentNode)cursor.parentNode.removeChild(cursor);
     cursor=d.createElement('span');cursor.className='zp-cursor';l.appendChild(cursor);
   }
+  function typeLine(text,cls,cps){
+    var l=newline(cls),span=d.createElement('span');l.appendChild(span);adopt(l);
+    cps=cps||150;
+    return new Promise(function(res){
+      var step=Math.max(1,Math.round(cps/60)),i=0;
+      (function tick(){
+        if(done)return;
+        if(rm||i>=text.length){span.textContent=text;return res();}
+        i=Math.min(text.length,i+step);span.textContent=text.slice(0,i);
+        if(i>=text.length)return res();
+        var id=setTimeout(tick,Math.max(12,Math.round(1000/cps)));timers.push(id);
+      })();
+    });
+  }
 
-  /* ── MINIMAL SOUND STUBS ─────────────────────────────────────────
-     The tasteful loader is silent. These no-op hooks keep the older sequence
-     helpers harmless if a future edit reuses them. */
-  var S={on:false,dead:true};
-  function powerOn(){}
-  function powerDown(){}
-  var sfx={
-    key:function(){}, ok:function(){}, seekUp:function(){}, seekDown:function(){},
-    tick:function(){}, trackDone:function(){}, glitch:function(){}, alarm:function(){},
-    sting:function(){}, gate:function(){}
-  };
-  function scheduleAmbient(){}
-  function startVu(){}
-
-  /* ── VISUAL EXTRAS ──────────────────────────────────────────────── */
-  /* VHS grain texture: one 160px canvas painted once, tiled by CSS */
+  /* ── VISUAL EXTRAS ────────────────────────────────────────────────── */
+  /* red-tinted tape grain, painted once into a 128px canvas and tiled by CSS */
   function makeNoise(){
     try{
-      var c=d.createElement('canvas');c.width=160;c.height=160;
+      var c=d.createElement('canvas');c.width=128;c.height=128;
       var x=c.getContext('2d');if(!x)return;
-      var img=x.createImageData(160,160),dd=img.data;
+      var img=x.createImageData(128,128),dd=img.data;
       for(var i=0;i<dd.length;i+=4){
         var v=(Math.random()*255)|0;
-        dd[i]=v;dd[i+1]=v;dd[i+2]=v;dd[i+3]=255;
+        dd[i]=v;dd[i+1]=(v*0.18)|0;dd[i+2]=(v*0.14)|0;dd[i+3]=255;
       }
       x.putImageData(img,0,0);
       if(noiseEl){
         noiseEl.style.backgroundImage='url('+c.toDataURL('image/png')+')';
-        noiseEl.style.backgroundSize='160px 160px';
+        noiseEl.style.backgroundSize='128px 128px';
       }
     }catch(e){}
   }
-  /* thin horizontal tear that slices the frame; strong tears slip the sync */
+  /* the cue-index trace under the terminal: one bar per cue on the tape */
+  function buildWave(){
+    if(!waveEl)return;
+    var f=d.createDocumentFragment(),n=56,i,b;
+    for(i=0;i<n;i++){
+      b=d.createElement('i');
+      b.style.transform='scaleY('+(0.16+Math.random()*0.84).toFixed(3)+')';
+      b.style.animationDuration=(0.7+Math.random()*1.15).toFixed(2)+'s';
+      b.style.animationDelay=(-Math.random()*1.3).toFixed(2)+'s';
+      b.style.opacity=(0.42+Math.random()*0.58).toFixed(2);
+      f.appendChild(b);
+    }
+    waveEl.appendChild(f);
+  }
+  /* tape-tear sliver; strong tears also slip the whole frame */
   function tear(strong){
     if(!tearsEl||done)return;
     try{
       var n=d.createElement('div');
-      n.className='zp-tear'+(Math.random()<0.4?' zp-tear-dark':'');
-      n.style.top=(8+Math.random()*80)+'%';
+      n.className='zp-tear'+(Math.random()<0.35?' zp-tear-dark':'');
+      n.style.top=(6+Math.random()*84)+'%';
       n.style.height=(Math.round((1.5+Math.random()*(strong?5:2.5))*2)/2)+'px';
       tearsEl.appendChild(n);
       n.getBoundingClientRect();
       n.classList.add('zp-tear-on');
-      if(strong){
-        ov.classList.add('zp-shift');
-        setTimeout(function(){ov.classList.remove('zp-shift');},90);
-      }
-      setTimeout(function(){if(n.parentNode)n.parentNode.removeChild(n);},620);
+      after(640,function(){if(n.parentNode)n.parentNode.removeChild(n);});
     }catch(e){}
   }
-  function tearBurst(){
-    for(var i=0;i<5;i++)timers.push(setTimeout(function(){tear(true);},i*110));
-  }
+  function tearBurst(){for(var i=0;i<6;i++)after(i*95,function(){tear(true);});}
   function idleTears(){
     if(done)return;
     tear(false);
-    timers.push(setTimeout(idleTears,1700+Math.random()*2800));
+    after(1400+Math.random()*2400,idleTears);
   }
-  /* the VHS on-screen clock — frozen in JULY 1987 */
-  var clockSec=14;
+  function glitch(on,ms){
+    if(done)return;
+    if(!on){ov.classList.remove('zp-glitch');return;}
+    ov.classList.add('zp-glitch');
+    after(ms||240,function(){ov.classList.remove('zp-glitch');});
+  }
+  function alertFrame(){
+    if(done)return;
+    ov.classList.add('zp-alert');
+    after(460,function(){ov.classList.remove('zp-alert');});
+  }
+  function roll(){ /* vertical-hold loss: the picture slides and re-syncs */
+    if(done)return;
+    ov.classList.add('zp-roll');
+    after(1620,function(){ov.classList.remove('zp-roll');});
+  }
+  function glitchLoop(){
+    if(done)return;
+    if(Math.random()<0.72)glitch(true,80+Math.random()*140);
+    after(900+Math.random()*1700,glitchLoop);
+  }
+
+  /* ── OSD READOUTS ─────────────────────────────────────────────────── */
+  var MONTH='JUL';
   function clockStep(){
-    if(done||!clockEl)return;
+    if(done)return;
     clockSec++;
-    var s=clockSec%60,m=47+Math.floor(clockSec/60);
-    clockEl.textContent='JUL 14 1987 11:'+pad(m%60)+':'+pad(s)+' PM';
-    timers.push(setTimeout(clockStep,1000));
+    var s=clockSec%60,m=(47+Math.floor(clockSec/60))%60;
+    if(clockEl)clockEl.textContent=MONTH+' 14 1987 11:'+pad(m)+':'+pad(s)+' PM';
+    after(1000,clockStep);
   }
   function tapeState(txt,err){
     if(!tapeEl)return;
     tapeEl.textContent=txt;
-    if(err)tapeEl.classList.add('zp-tape-err');
-    else tapeEl.classList.remove('zp-tape-err');
+    if(err)tapeEl.classList.add('zp-err');else tapeEl.classList.remove('zp-err');
+  }
+  function countLoop(){
+    if(done||!countEl)return;
+    var n=(w.performance&&w.performance.now)?w.performance.now():Date.now();
+    var s=Math.max(0,Math.floor((n-t0)/1000));
+    countEl.textContent='SP 0:'+pad(Math.floor(s/60)%60)+':'+pad(s%60);
+    w.requestAnimationFrame(countLoop);
   }
 
-  function typeLine(text,cls,cps){
-    var l=newline(cls),span=d.createElement('span');l.appendChild(span);adopt(l);
-    cps=cps||120;
-    return new Promise(function(res){
-      var step=Math.max(1,Math.round(cps/60)),i=0;
-      (function tick(){
-        if(done)return res();
-        if(skipReq){span.textContent=text;return res();}
-        i=Math.min(text.length,i+step);
-        span.textContent=text.slice(0,i);
-        if(i>=text.length)return res();
-        sfx.key();
-        var id=setTimeout(tick,Math.round(1000/cps));timers.push(id);
-      })();
-    });
-  }
-  function tracking(){
+  /* ── SEQUENCE PIECES ──────────────────────────────────────────────── */
+  function tracking(target){
     var l=newline('zp-ok');trackLine=l;
     var span=d.createElement('span');l.appendChild(span);adopt(l);
-    var target=61,p=0,lastB=-1;
+    var p=0,lastB=-1;
     return new Promise(function(res){
       (function draw(){
-        if(done)return res();
-        if(skipReq){p=100;}
-        else{
-          p=Math.min(target,p+3+Math.random()*7);
-          var b=Math.round(p/10);
-          if(b!==lastB){lastB=b;sfx.tick();}
-        }
-        var blocks=Math.round(p/10);
-        span.textContent='  TRACKING ['+repeat('\u2588',blocks)+repeat('\u2591',10-blocks)+'] '+pad(p)+'%';
-        if(p>=target||skipReq){span.textContent='  TRACKING ['+repeat('\u2588',10)+'] 100%';return res();}
-        var id=setTimeout(draw,55);timers.push(id);
+        if(done)return;
+        p=Math.min(target,p+3+Math.random()*9);
+        var b=Math.min(10,Math.round(p/10));
+        if(b!==lastB){lastB=b;}
+        span.textContent='  TRACKING ['+repeat('\u2588',b)+repeat('\u2591',10-b)+'] '+pad(Math.floor(p))+'%';
+        if(rm||p>=target)return res();
+        var id=setTimeout(draw,60);timers.push(id);
       })();
     });
   }
   function corruptTracking(){
     if(!trackLine)return;
+    trackLine.classList.remove('zp-ok');
     trackLine.classList.add('zp-corrupt');
-    if(trackLine.firstChild)trackLine.firstChild.textContent='  TRACKING [\u2588\u2593\u2592\u2588\u2591\u2593-\u2592\u2591-] \u2592%';
-  }
-  function glitch(on){ov.classList.add('zp-glitch');}
-  function glitchOff(){ov.classList.remove('zp-glitch');}
-  function alertBlink(){
-    ov.classList.add('zp-alert');
-    var id=setTimeout(function(){ov.classList.remove('zp-alert');},380);timers.push(id);
+    if(trackLine.firstChild)trackLine.firstChild.textContent='  TRACKING [\u2588\u2593\u2592\u2588\u2591\u2593-\u2592\u2591-] \u2592\u2592%';
   }
   function gate(){
-    var l=newline('zp-gate');
-    l.textContent='entering site';
-    var f=newline('zp-dim');
-    f.textContent='ZAZIE PRODUCTIONS · SHOWREEL';
-  }
-  function countLoop(){
-    if(done||!cnt)return;
-    var nowMs=(w.performance&&w.performance.now)?w.performance.now():Date.now();
-    var s=Math.max(0,Math.floor((nowMs-t0)/1000));
-    cnt.textContent='SP 0:'+pad(Math.floor(s/60)%60)+':'+pad(s%60);
-    w.requestAnimationFrame(countLoop);
+    var l=newline('zp-gate');l.textContent='ENTERING SITE';
+    var f=newline('zp-dim');f.textContent='ZAZIE PRODUCTIONS \u00b7 PSYCHOLOGICAL HORROR SCORES';
   }
   function finish(byUser){
     if(done)return;done=true;
-    clearTimers();skipFns.length=0;
+    while(timers.length)clearTimeout(timers.pop());
     if(autoTimer)clearTimeout(autoTimer);
     try{sessionStorage.setItem('zpBootShown','1');}catch(e){}
-    powerDown();
+    ov.classList.remove('zp-live','zp-glitch','zp-alert','zp-roll');
     root.classList.remove('zp-boot-on');
     ov.classList.add('zp-off');
     setTimeout(function(){
       if(ov&&ov.parentNode)ov.parentNode.removeChild(ov);
       try{w.dispatchEvent(new CustomEvent('zp:bootdone'));}catch(e){}
-    },580);
+    },rm?360:(byUser?480:700));
   }
 
-  /* Minimal loader: any intentional input skips straight to the site. */
+  /* ── INPUT: any intent skips straight to the site ─────────────────── */
   function onPointer(){if(done)return;finish(true);}
-  function onKey(e){
-    if(done)return;
-    if(e&&e.repeat)return;
-    finish(true);
-  }
+  function onKey(e){if(done)return;if(e&&e.repeat)return;finish(true);}
   ov.addEventListener('pointerdown',onPointer);
   d.addEventListener('keydown',onKey);
   d.addEventListener('wheel',function(){if(done)return;finish(true);},{passive:true});
   /* bfcache restore mid-boot -> get out instantly */
   w.addEventListener('pageshow',function(e){if(e.persisted&&!done)finish(false);});
-  /* hard cap */
-  timers.push(setTimeout(function(){finish(false);},9200));
+  /* hard cap, independent of the sequence */
+  autoTimer=setTimeout(function(){finish(false);},11500);
 
   async function run(){
-    makeNoise();
-    await sleep(220);
+    makeNoise();buildWave();
+    ov.classList.add('zp-live');
+    countLoop();clockStep();idleTears();
+    await sleep(160);
     now('ZAZIE PRODUCTIONS','zp-hi');
-    now('ARCHIVE TERMINAL','zp-dim');
+    now('ZP ARCHIVE \u00b7 TAPE 00 \u00b7 "SHOWREEL"','zp-dim');
+    now('PROPERTY OF Z. KANWAR-TORGE \u00b7 DO NOT DUPLICATE','zp-dim');
     blank();
-    await sleep(180);
-    await typeLine('> initializing showreel archive','zp-prompt',95);
+    await sleep(160);
+    await typeLine('> boot tape transport','zp-prompt',110);
+    await sleep(80);
+    await typeLine('  head engaging ................ ok','zp-ok',260);
+    await typeLine('  cue index .................... 29 entries','zp-ok',260);
+    await typeLine('  film samples ................. 8 mounted','zp-ok',260);
+    await typeLine('  score masters ................ 29 reels','zp-ok',260);
+    blank();
+    tapeState('TAPE 00 \u00b7 TRACKING');
+    await tracking(61);
+    /* the tape fights back */
     await sleep(120);
-    await typeLine('  cue index ............ 29 entries','zp-ok',145);
-    await typeLine('  film samples ......... mounted','zp-ok',145);
-    await typeLine('  signal path .......... clean','zp-ok',145);
+    corruptTracking();
+    tapeState('TAPE 00 \u00b7 ERROR',true);
+    glitch(true,520);alertFrame();tearBurst();
+    await typeLine('  signal path .................. DEGRADED','zp-bad',75);
+    await sleep(200);
+    await typeLine('  unknown source detected on tape 00','zp-bad',70);
+    await sleep(120);
+    await typeLine('  \u2593\u2592\u2591 something wrote itself onto this tape \u2591\u2592\u2593','zp-corrupt',40);
+    roll();glitch(true,620);tearBurst();
+    await sleep(380);
+    blank();
+    await tracking(100);
+    await typeLine('  noise floor .................. -63 dB','zp-ok',220);
+    await typeLine('  last playback ................ JUL 14 1987 \u00b7 23:47','zp-ok',220);
+    tapeState('TAPE 00 \u00b7 PLAY');
     await sleep(180);
     blank();
     await typeLine('ready.','zp-hi',90);
-    await sleep(520);
+    await sleep(430);
     gate();
-    autoTimer=setTimeout(function(){finish(false);},520);
+    alertFrame();tear(true);
+    autoTimer=setTimeout(function(){finish(false);},rm?1300:780);
   }
-  try{run();}catch(e){finish(false);}
+  /* start once the first frame is composed, so the power-on is seen rather than skipped */
+  w.requestAnimationFrame(function(){
+    w.requestAnimationFrame(function(){
+      try{glitchLoop();run();}catch(e){finish(false);}
+    });
+  });
 })();
 </script>
 <div id="root" tabindex="-1">
