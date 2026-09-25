@@ -356,6 +356,15 @@ td code,th code{white-space:nowrap}
 .hub-card a.stretch{color:inherit}
 .hub-card a.stretch:focus-visible{outline:1px solid var(--ember);outline-offset:3px}
 
+/* --- Site map (/sitemap) ------------------------------------------------- */
+/* Page entries are h3 + one-line summary + a list of that page's sections.
+   Long section lists run in two columns on wide screens; padding instead of
+   margin keeps the column tops level. */
+.site-map > p + ul{margin-top:.75rem}
+.site-map > ul > li{padding-bottom:.5rem;break-inside:avoid}
+.doc-body .site-map > ul > li + li{margin-top:0}
+@media (min-width:760px){.site-map > ul{columns:2;column-gap:2.5rem}}
+
 
 /* --- Breadcrumbs -------------------------------------------------------- */
 .breadcrumbs{margin:0 0 .85rem;font-size:.6875rem;letter-spacing:.22em;text-transform:uppercase}

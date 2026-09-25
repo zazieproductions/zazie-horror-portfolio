@@ -14,6 +14,16 @@ This record covers what was built, how it deploys, what was verified, and what
 is deliberately not here. Facts that create obligations and need a human
 decision are collected in **`RATIFY.md`**, not silently resolved.
 
+> **Addendum, 2026-09-25.** The pipeline now builds an eighth page, `/sitemap`
+> (`legal-src/pages/sitemap.html`). It is an HTML site map, not a legal
+> document, and it reuses this chrome and stylesheet: the new `.site-map`
+> rules moved the stylesheet to `legal-24ac8394.css`. The shared footer's
+> Documents row ends with "Site map". Its link row now uses short page names
+> ("Full showreel", "Scoring process", "Rate card", "Contact", "Catalogue").
+> `/accessibility` gained *More than one way to find a page* (WCAG 2.4.5) and
+> is dated 25 September 2026. No legal text changed. See `SITEMAP.md` →
+> *Update, 2026-09-25*.
+
 ---
 
 ## 1. System as found (evidence from repo inspection)

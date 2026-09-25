@@ -214,5 +214,19 @@
   Cache-Control: public, max-age=0, must-revalidate
   Link: <https://horror.zazieproductions.com/accessibility>; rel="canonical"
 
+# HTML site map (every page and its sections, for people). Not to be confused with
+# /sitemap.xml above, which is the machine-readable list for search engines.
+/sitemap
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/sitemap>; rel="canonical"
+
+/sitemap/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/sitemap>; rel="canonical"
+
+/sitemap/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/sitemap>; rel="canonical"
+
 /404.html
   Cache-Control: public, max-age=0, must-revalidate

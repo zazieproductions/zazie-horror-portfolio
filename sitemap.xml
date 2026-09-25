@@ -18,7 +18,7 @@
     * Nothing listed here is disallowed by robots.txt.
 
   Validate locally before submitting:  node tools/check-sitemap.mjs
-  Last regenerated: 2026-09-18
+  Last regenerated: 2026-09-25
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
@@ -29,7 +29,7 @@
        ============================================================ -->
   <url>
     <loc>https://horror.zazieproductions.com/</loc>
-    <lastmod>2026-09-18</lastmod>
+    <lastmod>2026-09-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
 
@@ -186,7 +186,7 @@
        ============================================================ -->
   <url>
     <loc>https://horror.zazieproductions.com/work</loc>
-    <lastmod>2026-09-18</lastmod>
+    <lastmod>2026-09-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
 
@@ -282,7 +282,7 @@
        ============================================================ -->
   <url>
     <loc>https://horror.zazieproductions.com/reel</loc>
-    <lastmod>2026-09-18</lastmod>
+    <lastmod>2026-09-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
     <image:image>
@@ -297,7 +297,7 @@
        ============================================================ -->
   <url>
     <loc>https://horror.zazieproductions.com/composer</loc>
-    <lastmod>2026-09-18</lastmod>
+    <lastmod>2026-09-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
 
@@ -323,7 +323,7 @@
        ============================================================ -->
   <url>
     <loc>https://horror.zazieproductions.com/process</loc>
-    <lastmod>2026-09-18</lastmod>
+    <lastmod>2026-09-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
     <image:image>
@@ -338,7 +338,7 @@
        ============================================================ -->
   <url>
     <loc>https://horror.zazieproductions.com/services</loc>
-    <lastmod>2026-09-18</lastmod>
+    <lastmod>2026-09-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -353,7 +353,7 @@
        ============================================================ -->
   <url>
     <loc>https://horror.zazieproductions.com/store</loc>
-    <lastmod>2026-09-24</lastmod>
+    <lastmod>2026-09-25</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
 
@@ -404,7 +404,7 @@
        ============================================================ -->
   <url>
     <loc>https://horror.zazieproductions.com/contact</loc>
-    <lastmod>2026-09-18</lastmod>
+    <lastmod>2026-09-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
     <image:image>
@@ -419,7 +419,7 @@
        ============================================================ -->
   <url>
     <loc>https://horror.zazieproductions.com/faq</loc>
-    <lastmod>2026-09-18</lastmod>
+    <lastmod>2026-09-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -429,43 +429,52 @@
        ============================================================ -->
   <url>
     <loc>https://horror.zazieproductions.com/legal</loc>
-    <lastmod>2026-09-18</lastmod>
+    <lastmod>2026-09-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/licensing</loc>
-    <lastmod>2026-09-18</lastmod>
+    <lastmod>2026-09-25</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/purchases</loc>
-    <lastmod>2026-09-18</lastmod>
+    <lastmod>2026-09-25</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/terms</loc>
-    <lastmod>2026-09-18</lastmod>
+    <lastmod>2026-09-25</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/privacy</loc>
-    <lastmod>2026-09-18</lastmod>
+    <lastmod>2026-09-25</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/accessibility</loc>
-    <lastmod>2026-09-18</lastmod>
+    <lastmod>2026-09-25</lastmod>
     <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <!-- HTML site map: every page and its in-page sections, linked from every
+       footer. The human-readable counterpart of this file. -->
+  <url>
+    <loc>https://horror.zazieproductions.com/sitemap</loc>
+    <lastmod>2026-09-25</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
 
