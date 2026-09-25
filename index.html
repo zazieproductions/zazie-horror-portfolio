@@ -5,8 +5,8 @@
 <meta charset="utf-8"/>
 <!-- ═══════════════════════════════════════════════════════════════════
      ZP ARCHIVE BOOT — analog signal terminal (inline, zero requests)
-     Shows once per session on production; preview/dev hosts replay on reload.
-     ?boot=1 / #boot forces a replay; ?boot=0 / #noboot disables it.
+     Plays on every load of the homepage (short, silent, skippable by any input).
+     ?boot=1 / #boot forces it past the reduced-motion gate; ?boot=0 / #noboot disables it.
      Silent and skippable: no audio or jump scare; any click/key/scroll skips.
      Failsafes: no-JS → never shows · reduced-motion/bots → never shows unless forced ·
      JS error mid-run → CSS force-hide at 7s · bfcache restore → instant out.
@@ -20,11 +20,6 @@
   var disabled=boot==='0'||location.hash.indexOf('noboot')>-1;
   if(disabled)return;
   if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches&&!force)return;
-  var host=location.hostname||'';
-  var dev=/^(localhost|127\.0\.0\.1)$/.test(host)||/\.(e2b\.app|pages\.dev)$/.test(host);
-  var shown=false;
-  try{shown=sessionStorage.getItem('zpBootShown')==='1';}catch(e){}
-  if(!force&&!dev&&shown)return;
   var de=document.documentElement;
   if(de.classList){de.classList.add('zp-boot-on');if(force)de.classList.add('zp-boot-force');}
   else de.className+=' zp-boot-on';
@@ -285,7 +280,9 @@ html.zp-boot-on #zp-boot,#zp-boot.zp-off{display:block}
 </style>
 <script type="module">
 // 1. Service Worker for instant sub-5ms repeat visits anytime anyone visits
-if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("/sw.js").catch(()=>{})},{once:true})}
+//    updateViaCache:none - the sw.js update check must always see fresh bytes,
+//    so no returning visitor (or the studio) is stuck on an old cached build.
+if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("/sw.js",{updateViaCache:"none"}).catch(()=>{})},{once:true})}
 
 // 2. Below-fold media is intentionally scheduled by native loading=lazy or
 // by an explicit user action. Do not warm the whole portfolio from the home
@@ -1054,7 +1051,6 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
     d.removeEventListener('keydown',onKey);
     d.removeEventListener('wheel',onWheel);
     w.removeEventListener('pageshow',onPageShow);
-    try{sessionStorage.setItem('zpBootShown','1');}catch(e){}
     root.classList.remove('zp-boot-on');
     ov.classList.add('zp-off');
     setTimeout(function(){

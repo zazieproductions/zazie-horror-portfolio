@@ -34,8 +34,9 @@ decision are collected in **`RATIFY.md`**, not silently resolved.
   posted anywhere. There are no accounts, no database, no newsletter.
 * **No analytics, no cookies, no trackers.** `document.cookie` appears zero
   times in `index.html`, the bundle and `store.js`; `localStorage` zero times;
-  `sessionStorage` exactly twice, both for the one key `zpBootShown` written
-  by the opening sequence. No `gtag`, GA, Plausible, Fathom, PostHog, Clarity
+  `sessionStorage` zero times. (The opening sequence used to write one
+  `zpBootShown` session key so it would not replay in the same tab; the boot
+  now plays on every load and writes nothing.) No `gtag`, GA, Plausible, Fathom, PostHog, Clarity
   or pixel of any kind.
 * **Store takes no payment.** All 20 catalogue items link out to Bandcamp,
   itch.io, Gumroad and eBay, which run the checkout (`STORE.md` section 3).
