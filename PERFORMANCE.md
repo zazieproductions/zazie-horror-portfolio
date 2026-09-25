@@ -1,7 +1,112 @@
 # Performance Mandate: Implementation Record
 
-Date: 2026-09-17 · Branch: `arena/01a0acb2-zazie-horror-portfolio`
+Date: 2026-09-25 · Branch: `arena/01a0d613-zazie-horror-portfolio`
 Scope: horror.zazieproductions.com (static prerendered React build on an edge host with `_headers`/`_redirects` semantics, i.e. Netlify/Cloudflare-Pages style).
+
+
+## 0. Mobile loading follow-up: 2026-09-25
+
+This section supersedes the older entries below for the current `main`-derived
+build. It records repository evidence, not field telemetry: the sandbox had no
+browser/Chrome trace, and the PageSpeed Insights API request for the live URL
+returned HTTP 429 (project quota exhausted). No Lighthouse score, LCP, INP,
+CLS, or TTFB number is invented here.
+
+### Audit findings
+
+- **LCP candidate**: the full-bleed `/images/atmosphere-bg.jpg` in `#top` is the
+  only intentional first-screen image at 320, 375, 768, and desktop widths. It
+  is 940 × 625, is not lazy, and is the only homepage image preload. The
+  desktop portrait is decorative and remains in the client `<picture>` without
+  a competing preload.
+- **Before the pass**, the document contained 26 `<link rel="prefetch">`
+  elements plus an inline warmer that created high-priority `Image` objects for
+  the homepage image list. It also had six document preloads, eight eager
+  project images, eight third-party connection hints, and the service worker
+  install list included 35 poster/project media files. Those requests were
+  independent of whether a mobile visitor ever reached the gallery or played a
+  film.
+- The React bundle created an `Audio` element with `preload="metadata"` and
+  mounted the first track source before playback. Project thumbnails were
+  eager in the client render, and the hover video path could warm YouTube while
+  a pointer merely crossed a card. The bundle also replaces the prerendered
+  DOM on mount, so preserving dimensions across both renders matters for CLS.
+- The dominant non-network perceived-speed delay is the cinematic boot overlay.
+  It is retained for the brand experience, but its normal handoff was tightened
+  from an approximately 6.5-second safety schedule / 850 ms final hold to a
+  4.5-second cap / 400 ms final hold; keyboard, wheel, reduced-motion, and
+  existing error fallback behavior remain intact.
+
+### Implemented changes
+
+1. `index.html` now preloads only the atmosphere image and the two actually
+   used normal font faces; it removes document-level gallery/YouTube prefetch,
+   the eager image warmer, and third-party preconnect/DNS hints. Static hero,
+   poster, project, press, and headshot images have intrinsic dimensions;
+   below-fold images are lazy and poster cards use the existing 640 AVIF/JPEG
+   plus 1200 JPEG responsive candidates. The remaining YouTube prefetch is
+   intent-only: mouse hover must persist for 240 ms and touch crossings do not
+   trigger it. Explicit click/keyboard video activation is unchanged.
+2. `index-6568477e.js` applies the same poster candidates and dimensions after
+   the React swap, makes project/press/headshot imagery lazy, sets audio to
+   `preload="none"`, and assigns the selected track source only after an
+   explicit play/toggle/track action. Controls, progress, volume, track
+   switching, and error handling remain present.
+3. `index-2c12e5bc.css` keeps the grain and red ambient treatment but, below
+   768 px, removes expensive full-screen blur/backdrop filters and orb/hero
+   animation, replacing the grain with a light repeating texture. The same
+   narrowly scoped guardrails are retained in `store-src/store.css` and
+   `legal-src/legal.css`, and their generated CSS files were rehashed.
+4. `sw.js` is now `zazie-v15`. Install precache falls from 78 to 40 URLs and
+   from 41 to 3 images: only the atmosphere and hero portrait variants remain
+   in the install-critical media set. Posters, project stills, press, and
+   headshot are still cache-first after the browser requests them, so media
+   features and repeat visits are not removed; first-install mobile bandwidth
+   is no longer spent on below-fold media.
+5. Generated asset references were synchronized to content-derived names:
+   `index-6568477e.js`, `index-2c12e5bc.css`, `store-94c90049.css`, and
+   `legal-4ae9963e.css`. Contact/work route images also received AVIF or
+   responsive poster candidates and correct dimensions where the route had
+   static markup.
+
+### Measured repository deltas (raw / gzip, before → current)
+
+| Surface | Before | Current | Effect |
+| --- | ---: | ---: | --- |
+| Homepage HTML | 217,499 / 35,921 B | 215,010 / 35,750 B | fewer head hints and warmer code |
+| Homepage JS | 425,959 / 125,331 B | 426,556 / 125,482 B | +597 B raw for lazy media/audio guards; fetched after load/idle |
+| Homepage CSS | 74,867 / 13,028 B | 75,660 / 13,315 B | +793 B for mobile guardrails |
+| Service-worker install URLs | 78 | 40 | 48.7% fewer install requests |
+| Service-worker install images | 41 | 3 | below-fold images move to demand-time caching |
+| Homepage document prefetch links | 26 | 0 | no speculative first-load warming |
+| Homepage document preloads | 6 | 3 | atmosphere + two normal fonts only |
+
+These byte/request deltas are reproducible with the repository files and do
+not claim a Core Web Vital improvement without a real mobile run.
+
+### Verification and remaining bottlenecks
+
+- `node --check` passes for the patched homepage bundle and service worker;
+  the route build scripts pass for store and legal, and all generated asset
+  references now point at existing files. Static HTML parsing and image
+  dimension checks pass for the tested pages.
+- Required viewport review was performed as a static responsive audit at 320,
+  375, 768, and desktop breakpoints (the mobile CSS cutoff is 767 px; the
+  layout switches at 1024 px). A real screenshot/keyboard/form/audio/video
+  interaction run still requires a browser; it was not available in this
+  sandbox.
+- Remaining work for a production measurement pass: run Lighthouse mobile or
+  PSI after deployment, then validate LCP/INP/CLS, network waterfalls, boot
+  handoff, form submission, audio controls, keyboard video activation, and
+  visual parity at the four widths. The 426 KB JS bundle and its React DOM
+  replacement remain the largest post-load main-thread bottleneck. Third-party
+  Bandcamp artwork on `/store`, YouTube/Drive embeds after explicit activation,
+  and 85 MB of audio tracks remain intentionally available but not downloaded
+  on first paint.
+- No audio master, video source, schema, analytics, contact form, SEO copy,
+  or conversion path was removed. Changing audio encoding, replacing the
+  React mount with hydration, or removing the cinematic boot would need a
+  separate product/brand decision; none is silently done here.
 
 ## 1. System as found (evidence from repo inspection)
 

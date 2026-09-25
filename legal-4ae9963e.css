@@ -443,3 +443,13 @@ td code,th code{white-space:nowrap}
   .clause{break-inside:avoid-page}
   .has-js .reveal{opacity:1;transform:none}
 }
+
+/* Small-screen reading/performance pass: keep the texture, drop the costly
+   full-viewport turbulence and backdrop work on touch devices. */
+@media (max-width:767px) {
+  .grain {
+    opacity:.025;
+    mix-blend-mode:normal;
+    background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 3px);
+  }
+}
