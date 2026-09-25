@@ -409,3 +409,35 @@ All changes preserve atmospheric horror aesthetic, existing equity, performance 
 - `robots.txt` enriched with modern AI search engine allowances (GPTBot, OAI-SearchBot, PerplexityBot, ClaudeBot, Applebot-Extended, Cohere-ai).
 - `sitemap.xml` updated to 15 URLs, 44 images (including 9th poster THE DARK AWAITS and studio photos), and 8 videos; passes `node tools/check-sitemap.mjs` with 0 warnings and 0 errors.
 - `sw.js` cache upgraded to `zazie-v5` with updated CSS asset hashes.
+
+---
+
+### 2026-09-25 Addendum: Sitelinks and Jump-To Links
+
+**Problem found:** the homepage (the only URL with real external authority) linked to NONE of the six
+hub pages. Header nav and footer were hash anchors only (`#showreel #work #services #contact`), so
+`/work /reel /composer /process /services /contact` were reachable from the home URL only via
+`/store` and `/faq`. Google builds sitelinks from internal link structure starting at the homepage,
+so the hubs had almost no chance of appearing as sitelinks under the brand result.
+
+**Fix (index.html only, no rebuild needed):**
+
+1. **Crawlable site directory** - a static `<nav id="site-directory">` injected AFTER `</div id="root">`
+   so React hydration never sees it (anything added inside `#root` would be wiped on a hydration
+   mismatch). It carries descriptive anchor text + one-line summaries for all 8 indexable hubs
+   (`/work /reel /composer /process /services /contact /store /faq`) plus a "Jump to a section on
+   this page" list of the 9 homepage section anchors (`#showreel #work #posters #about #method
+   #services #reviews #press #contact`), which is what Google uses for in-result "Jump to" links.
+   Styled with the site's own CSS variables (void/bone/mist/blood, Cormorant display).
+2. **`SiteNavigationElement` JSON-LD** - an `ItemList` of 8 `SiteNavigationElement` nodes
+   (`#sitenav`) added above the `WebSite` block. Not a ranking factor on its own but it labels the
+   nav for crawlers and matches the HTML directory 1:1.
+
+**What to expect:** sitelinks are algorithmic and take weeks to appear after recrawl. Request
+indexing of `/` in Search Console after deploy. If a hub still fails to show, its `<title>` is the
+lever - Google uses the target page's title, not the anchor text, for the sitelink label.
+
+**Optional next step (needs a React rebuild):** point the header nav at the real hubs
+(`/reel /work /services /contact`) instead of hash anchors. Not done here because the built bundle
+would have to be edited in lockstep with the prerendered markup and it changes the one-page
+scrolling UX.
