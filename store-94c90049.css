@@ -437,3 +437,19 @@ i{font-style:italic}
   .card{border-color:#999;transform:none}
   .has-js .reveal{opacity:1;transform:none}
 }
+
+/* The catalogue keeps its red light, but avoids filter/backdrop repaints on
+   narrow touch screens where the cards are scrolled rather than hovered. */
+@media (max-width:767px) {
+  .grain {
+    opacity:.025;
+    mix-blend-mode:normal;
+    background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 3px);
+  }
+  .backdrop-blur,
+  .backdrop-blur-sm,
+  .backdrop-blur-xl {
+    -webkit-backdrop-filter:none !important;
+    backdrop-filter:none !important;
+  }
+}

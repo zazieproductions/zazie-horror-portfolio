@@ -12,7 +12,10 @@
 // document from the previous build - its header nav was missing the Process tab.
 // v12: the catalogue adds CRYPTOTYPE-9 as a free tool and refreshes item totals.
 // v13: catalogue adds TEA5767 DIY radio kit and HD X60 sound mixer to eBay gear.
-const CACHE_NAME = 'zazie-v14';
+// v15: do not download the poster wall, film stills, or lightbox originals during
+// service-worker install. They are cached on demand after native lazy loading
+// or an explicit poster/video interaction.
+const CACHE_NAME = 'zazie-v15';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -46,57 +49,16 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-normal.woff2',
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
-  '/index-ba4ce5d7.css',
-  '/index-ff0a0dcf.js',
-  '/store-8af6034d.css',
+  '/index-2c12e5bc.css',
+  '/index-6568477e.js',
+  '/store-94c90049.css',
   '/store-3fc01be0.js',
-  '/legal-7c07784d.css',
+  '/legal-4ae9963e.css',
   '/legal-ea8a33ec.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',
   '/images/hero-portrait.avif',
-  '/images/hero-portrait.jpg',
-  // Poster Wall (640w grid & 1200w lightbox)
-  '/images/posters/expire-red-check-640.avif',
-  '/images/posters/expire-red-check-640.jpg',
-  '/images/posters/expire-red-check-1200.jpg',
-  '/images/posters/unseen-640.avif',
-  '/images/posters/unseen-640.jpg',
-  '/images/posters/unseen-1200.jpg',
-  '/images/posters/peregrinus-640.avif',
-  '/images/posters/peregrinus-640.jpg',
-  '/images/posters/peregrinus-1200.jpg',
-  '/images/posters/phantom-requiem-640.avif',
-  '/images/posters/phantom-requiem-640.jpg',
-  '/images/posters/phantom-requiem-1200.jpg',
-  '/images/posters/eclipsed-640.avif',
-  '/images/posters/eclipsed-640.jpg',
-  '/images/posters/eclipsed-1200.jpg',
-  '/images/posters/the-haunted-640.avif',
-  '/images/posters/the-haunted-640.jpg',
-  '/images/posters/the-haunted-1200.jpg',
-  '/images/posters/choleric-640.avif',
-  '/images/posters/choleric-640.jpg',
-  '/images/posters/choleric-1200.jpg',
-  '/images/posters/mike-has-a-visitor-640.avif',
-  '/images/posters/mike-has-a-visitor-640.jpg',
-  '/images/posters/mike-has-a-visitor-1200.jpg',
-  '/images/posters/the-dark-awaits-640.avif',
-  '/images/posters/the-dark-awaits-640.jpg',
-  '/images/posters/the-dark-awaits-1200.jpg',
-  // Film Sample Video Thumbnails
-  '/images/project-HaVJP08j77U.jpg',
-  '/images/project-eclipsed-drive.jpg',
-  '/images/project-ItrrcilS0ro.jpg',
-  '/images/project-riCvy2abhlc.jpg',
-  '/images/project-Ty8tPp59mDc.jpg',
-  '/images/project-rvCGO0BJ_2E.jpg',
-  '/images/project-6qa3Uwj47fc.jpg',
-  '/images/project-UX2kv3G89Jw.jpg',
-  // Bio & Press
-  '/images/headshot.avif',
-  '/images/headshot.jpg',
-  '/images/press-photo.jpg'
+  '/images/hero-portrait.jpg'
 ];
 
 self.addEventListener('install', (event) => {
