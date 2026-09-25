@@ -12,7 +12,7 @@
 // document from the previous build - its header nav was missing the Process tab.
 // v12: the catalogue adds CRYPTOTYPE-9 as a free tool and refreshes item totals.
 // v13: catalogue adds TEA5767 DIY radio kit and HD X60 sound mixer to eBay gear.
-const CACHE_NAME = 'zazie-v13';
+const CACHE_NAME = 'zazie-v14';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -47,7 +47,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-ba4ce5d7.css',
-  '/index-c7104566.js',
+  '/index-ff0a0dcf.js',
   '/store-8af6034d.css',
   '/store-3fc01be0.js',
   '/legal-7c07784d.css',
