@@ -18,7 +18,9 @@
 // v16: /sitemap (HTML site map) joins the precache and the network-first set; the
 // portfolio footer links every archive page (new bundle hash) and the documents
 // stylesheet moved hash for the site map layout.
-const CACHE_NAME = 'zazie-v16';
+// v17: biography rewritten on / and /composer (prerendered HTML + bundle bio/bio2,
+// new bundle hash); the bump drops the precached previous copies.
+const CACHE_NAME = 'zazie-v17';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -54,7 +56,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-2c12e5bc.css',
-  '/index-4a247d5c.js',
+  '/index-db6f413a.js',
   '/store-94c90049.css',
   '/store-3fc01be0.js',
   '/legal-24ac8394.css',
