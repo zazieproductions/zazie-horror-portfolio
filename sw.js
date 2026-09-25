@@ -18,7 +18,11 @@
 // v16: /sitemap (HTML site map) joins the precache and the network-first set; the
 // portfolio footer links every archive page (new bundle hash) and the documents
 // stylesheet moved hash for the site map layout.
-const CACHE_NAME = 'zazie-v16';
+// v17: the homepage (/ and /index.html) joins the network-first set. The page that
+// changes most often must never be handed to a returning visitor from the precache
+// while the network is reachable - that is what made the boot sequence look like it
+// had stopped working for anyone testing against a previously cached build.
+const CACHE_NAME = 'zazie-v17';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -103,14 +107,16 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(req.url);
 
-  // Legal and operating documents, plus the catalogue: network first, cache
-  // only as a fallback. A terms or privacy page must never be served stale
-  // while a network is reachable, and the same goes for /store, where the
-  // prices, the stock notes and the primary nav are the page - a returning
-  // visitor must not be handed yesterday's build out of the cache. Everything
-  // else stays stale-while-revalidate for the 0ms repeat render.
-  const NETWORK_FIRST = ['/legal', '/faq', '/terms', '/privacy', '/licensing', '/purchases', '/accessibility', '/sitemap', '/store', '/work', '/reel', '/composer', '/process', '/services', '/contact'];
-  if (url.origin === self.location.origin && req.mode === 'navigate' && NETWORK_FIRST.includes(url.pathname.replace(/\/$/, ''))) {
+  // Legal and operating documents, the catalogue, the IA silos and the homepage:
+  // network first, cache only as a fallback. A terms or privacy page must never be
+  // served stale while a network is reachable, and the same goes for /store, where
+  // the prices, the stock notes and the primary nav are the page - and for the
+  // homepage itself, which carries the boot sequence, hero and schema and is the
+  // page a returning visitor (or the studio checking a fresh deploy) hits first.
+  // Everything else stays stale-while-revalidate for the 0ms repeat render.
+  const NETWORK_FIRST = ['/', '/index.html', '/legal', '/faq', '/terms', '/privacy', '/licensing', '/purchases', '/accessibility', '/sitemap', '/store', '/work', '/reel', '/composer', '/process', '/services', '/contact'];
+  const path = url.pathname.replace(/\/+$/, '') || '/';
+  if (url.origin === self.location.origin && req.mode === 'navigate' && NETWORK_FIRST.includes(path)) {
     event.respondWith(
       fetch(req).then((res) => {
         if (res && res.status === 200) {

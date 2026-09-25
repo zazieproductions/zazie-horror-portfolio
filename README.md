@@ -92,7 +92,7 @@ Unconventional choices exist for artistic or experiential reasons and are docume
 - **Press kit** — features and coverage (Visual Container award-winners press release PDF, Grammy Weekly, Limitless Magazine, Billboard Wire).
 - **Approach / Rates / Composer / Reviews / Inquiry** — scoring method, scope-and-estimate bands (student films from $75.99; sliding scale by project funding, typically a few hundred dollars, as published on `/services`), biography, 5.0 collaborator rating with 4 featured reviews, and a structured inquiry form that builds a `mailto:` handoff.
 
-**The ZP Archive Boot** — a minimal terminal loading screen, inline in `index.html` (zero network requests): quiet monochrome archive text, subtle scanlines/noise, and a short typed handoff into the site. It runs once per session on production, can be replayed with `?boot=1` or `#boot`, disabled with `?boot=0` or `#noboot`, is skipped for bots and `prefers-reduced-motion` users unless forced, contains no audio, is skippable by any input, and hard-caps itself at ~7 s.
+**The ZP Archive Boot** — a minimal terminal loading screen, inline in `index.html` (zero network requests): quiet monochrome archive text, subtle scanlines/noise, and a short typed handoff into the site. It plays on every load of the homepage, can be forced past the reduced-motion gate with `?boot=1` or `#boot`, disabled with `?boot=0` or `#noboot`, is skipped for bots and `prefers-reduced-motion` users unless forced, contains no audio, is skippable by any input, and hard-caps itself at ~7 s.
 
 **The Catalogue (`/store`)** — 24 items across Records / Objects / Sound libraries / Tools and scores. Progressive enhancement only: without JavaScript every card is visible and links straight to its listing; with JavaScript you get filter chips, audio previews with a **room-tone ambience** that ducks under them, a torch-light cursor, and card tilt.
 
@@ -116,7 +116,7 @@ All artwork © the respective productions. See the [live site](https://horror.za
 | Mood clusters | `tracks` array in the bundle (29 entries: `id, title, src, duration, tag`) | Each cue carries one mood tag; `/reel` mirrors the list with `AudioObject`/`MusicRecording` schema. |
 | Sticky player | `StickyPlayer.tsx` | Hidden until first play; animated wave-bar visualisation; respects `prefers-reduced-motion`. |
 | Film samples | `Projects.tsx` data + prerendered covers | 6 YouTube-nocookie iframes get a real `src` only when lazy-loaded; 1 Google Drive embed; `preconnect` to YouTube deferred off the critical path. |
-| Boot terminal | inline in `index.html` | Minimal typed loading screen, zero network requests, silent, once per session with replay/disable query hooks. |
+| Boot terminal | inline in `index.html` | Minimal typed loading screen, zero network requests, silent, plays on every homepage load with force/disable query hooks. |
 | Store previews & room tone | `store-src/store.js` | Per-card audio previews (`data-preview`); a looping room tone (`data-ambience`) crossfades down while previews play. `preload="none"`. |
 | External score player | Reelcrafter | Allowlisted in CSP (`frame-src`) and referenced as a `significantLink` in JSON-LD; currently linked, not embedded. |
 
@@ -446,7 +446,7 @@ For future AI-assisted development sessions. **Before changing anything:**
 **Implemented** (all verifiable in this tree):
 
 - Full portfolio experience: poster wall + lightbox (9 productions), 29-cue showreel with mood clusters and sticky player, 7 film samples, press kit, scope-and-estimate, reviews, `mailto:` inquiry
-- Minimal once-per-session terminal boot sequence (`?boot=1` / `#boot` replay, `?boot=0` / `#noboot` disable), fully gated and failsafed
+- Terminal boot sequence on every homepage load (`?boot=1` / `#boot` force, `?boot=0` / `#noboot` disable), fully gated and failsafed
 - Six indexable hub pages, seven legal/operating documents with generated FAQ schema, an HTML site map, 24-item catalogue with progressive enhancement
 - Service worker (SWR / network-first / cache-first tiers), CSP + canonical headers, 301 map, real 404
 - Sitemap with image/video extensions plus a 22-check validator (GSC + internal links); JSON-LD matrix; AI-crawler policy

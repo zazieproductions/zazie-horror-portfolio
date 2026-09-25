@@ -234,7 +234,7 @@ Date: 2026-09-17 · Branch: `arena/01a0b074-zazie-horror-portfolio`
 
 ## What it is
 
-A terminal-style loading screen shown once per session on first paint: a quiet monochrome archive header, a few typed status lines (`29 entries`, film samples mounted, signal path clean), subtle scanlines/noise, and a brief handoff before the page is revealed. The earlier VHS/glitch/audio treatment has been intentionally pared back so the effect reads as tasteful loading atmosphere rather than a set piece.
+A terminal-style loading screen shown on every load of the homepage at first paint: a quiet monochrome archive header, a few typed status lines (`29 entries`, film samples mounted, signal path clean), subtle scanlines/noise, and a brief handoff before the page is revealed. The earlier VHS/glitch/audio treatment has been intentionally pared back so the effect reads as tasteful loading atmosphere rather than a set piece.
 
 ## Cost & performance guardrails
 
@@ -254,7 +254,7 @@ A terminal-style loading screen shown once per session on first paint: a quiet m
 - **JS error mid-sequence**: try/catch to `finish()`; CSS `zpForceHide` animation hides the overlay
   even if every JS path dies.
 - **bfcache restore mid-boot** (`pageshow.persisted`) to instant teardown.
-- **Once per session** via `sessionStorage` (`zpBootShown`); replay with `?boot=1` or `#boot` (force also bypasses reduced motion via a `zp-boot-force` class). Preview/dev hosts (e2b.app, pages.dev, localhost, 127.0.0.1) ignore the session flag and replay on every load, so the intro stays demoable while building; production domains keep the once-per-session gate.
+- **Every load**: the boot plays each time the homepage renders, on production and preview/dev hosts alike. It writes no storage key at all. `?boot=1` or `#boot` still forces it past the reduced-motion gate (via the `zp-boot-force` class), and `?boot=0` / `#noboot` disables it entirely. (It was previously once-per-session via a `sessionStorage` flag, which made it look broken to anyone testing repeat visits; the flag and the write were removed.)
 - Emits `zp:bootdone` on `window` after teardown, future hook for starting ambience/music
   from the site's own player.
 
