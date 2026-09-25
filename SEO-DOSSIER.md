@@ -2,6 +2,28 @@
 ## horror.zazieproductions.com | 2026-09-18
 ## Grey-hat aggressive but defensible | Preserve atmospheric horror aesthetic
 
+> **Correction, 2026-09-25 (sitelinks pass).** Some claims below were no longer
+> true in the tree when this pass started. Each was checked against the files:
+>
+> - **"30+ internal hub links" on the home page** (Internal link graph, the
+>   checklist, the scorecard): the home page linked **none** of the six hub
+>   pages in either DOM copy. Those links existed only in the prerender, and
+>   they went when the prerender was made to match the React render (`sw.js`
+>   v9). The home footer now has an "Archive" row in both copies.
+>   `tools/check-sitemap.mjs` fails if a top-level page loses its home-page
+>   link, or if the prerender and the bundle stop agreeing.
+> - **"WebSite (with SearchAction potentialAction)"**: the search target
+>   (`/reel#search=`) was never built, and Google retired the sitelinks search
+>   box in November 2024, so it has been removed. `WebSite.name` was a
+>   75-character title. It is now the site name "Zazie Productions", which
+>   matches `og:site_name` on every page.
+> - **"BreadcrumbList 8" on `index.html`**: eight sibling pages presented as
+>   one nested trail on the home page. It has been removed. The inner pages
+>   keep their breadcrumbs, which describe real trails.
+> - **Sitelinks cannot be earned with markup.** Google builds them from the
+>   site's own links. What changed, and how to verify it, is in `SITEMAP.md`
+>   under *Update, 2026-09-25*.
+
 ---
 
 ### Executive Summary: Before vs After

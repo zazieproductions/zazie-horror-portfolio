@@ -30,6 +30,16 @@
  *                                                    loop) on the host
  *  17.  No _redirects rule sends a directory     -> ERR_TOO_MANY_REDIRECTS on
  *       route back into the host's 308               every link to that route
+ *  18.  Every in-site #fragment link resolves   -> dead "Jump to" / section
+ *       to an id on its target page                  links
+ *  19.  No orphans; every top-level page is      -> Google builds sitelinks from
+ *       linked from the home page                    the home page's own links
+ *  20.  The React bundle links every page the    -> dual DOM: a link only in the
+ *       prerendered home page links, and its         prerender vanishes when React
+ *       file name matches its sha256[:8]             renders
+ *  21.  /sitemap (HTML) lists every sitemap URL  -> the human index stays whole
+ *  22.  sw.js precaches only hashed assets that  -> 404s on service worker
+ *       exist                                        install
  *
  * Usage:
  *   node tools/check-sitemap.mjs                 # offline / structural checks
@@ -40,6 +50,7 @@
  * -----------------------------------------------------------------------------
  */
 
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -614,7 +625,125 @@ if (fs.existsSync(redirectsFile)) {
   note('_redirects: no rule sends a directory route back into the host 308');
 }
 
-/* 8. optional live HTTP check --------------------------------------------- */
+/* 8. internal links: sitelinks structure, dual DOM, section anchors ------- */
+// Google builds sitelinks from the site's own link structure, above all from
+// the links on the home page; no markup can request them. These checks keep
+// that structure from eroding unnoticed (a prerender cleanup once removed
+// every archive-page link from the home page and nothing failed).
+const ORIGIN = `https://${SITE_HOST}`;
+const markupOnly = (h) => h.replace(/<script\b[\s\S]*?<\/script>/gi, '').replace(/<!--[\s\S]*?-->/g, '');
+const normPath = (p) => {
+  let x = p.replace(/\/index\.html$/, '/').replace(/\.html$/, '');
+  if (x.length > 1) x = x.replace(/\/+$/, '');
+  return x || '/';
+};
+const htmlPages = new Map(); // route path -> html, for every page on disk
+for (const p of pageFiles) {
+  htmlPages.set(p, fs.readFileSync(path.join(ROOT, p === '/' ? '' : p.slice(1), 'index.html'), 'utf8'));
+}
+const linkSources = new Map(htmlPages);
+const notFoundFile = path.join(ROOT, '404.html');
+if (fs.existsSync(notFoundFile)) linkSources.set('/404', fs.readFileSync(notFoundFile, 'utf8'));
+
+function linksOf(pagePath, html) {
+  const out = [];
+  for (const m of markupOnly(html).matchAll(/<a\b[^>]*?\shref="([^"]*)"/gi)) {
+    const raw = m[1].replace(/&amp;/g, '&');
+    if (/^(mailto|tel|javascript|data):/i.test(raw)) continue;
+    let u;
+    try { u = new URL(raw, ORIGIN + pagePath); } catch { continue; }
+    if (u.host !== SITE_HOST) continue;
+    let frag = u.hash.slice(1);
+    try { frag = decodeURIComponent(frag); } catch { /* keep raw */ }
+    out.push({ raw, path: normPath(u.pathname), frag: frag.split('?')[0] }); // "#contact?type=..." targets #contact
+  }
+  return out;
+}
+const idCache = new Map();
+const idsOn = (p) => {
+  if (!idCache.has(p)) idCache.set(p, new Set([...markupOnly(htmlPages.get(p)).matchAll(/\sid="([^"]+)"/g)].map((m) => m[1])));
+  return idCache.get(p);
+};
+
+// 8a. every in-site #fragment link lands on a real id ("Jump to" targets)
+const graph = new Map();
+let fragmentLinks = 0;
+for (const [src, html] of linkSources) {
+  const links = linksOf(src, html);
+  graph.set(src, new Set(links.map((l) => l.path)));
+  for (const l of links) {
+    if (!l.frag || !htmlPages.has(l.path)) continue; // no fragment, or not a page (sitemap.xml, audio...)
+    fragmentLinks++;
+    if (!idsOn(l.path).has(l.frag)) err(`section link: ${src} links "${l.raw}" but ${l.path} has no id="${l.frag}"`);
+  }
+}
+note(`section links: ${fragmentLinks} in-site #fragment links, each resolves to an id on its page`);
+
+// 8b. no orphans, and every top-level page is linked from the home page
+const reached = new Set(['/']);
+for (const queue = ['/']; queue.length;) {
+  for (const q of graph.get(queue.shift()) || []) {
+    if (htmlPages.has(q) && !reached.has(q)) { reached.add(q); queue.push(q); }
+  }
+}
+const homeLinks = graph.get('/') || new Set();
+const sitemapPaths = [...seenLocs.keys()].map((l) => normPath(new URL(l).pathname));
+let topLevel = 0;
+for (const p of sitemapPaths) {
+  if (p === '/') continue;
+  if (!reached.has(p)) { err(`internal links: ${p} is in the sitemap but no link path from the home page reaches it (orphan)`); continue; }
+  if (p.split('/').length === 2) {
+    topLevel++;
+    if (!homeLinks.has(p)) err(`internal links: top-level page ${p} is not linked from the home page - sitelinks are built from the home page's own links`);
+  }
+}
+note(`internal links: every sitemap URL is reachable from /, and all ${topLevel} top-level pages are linked from the home page`);
+
+// 8c. dual DOM: the React bundle must render every page link the prerender has
+const homeHtml = htmlPages.get('/') || '';
+const bundleName = (/import\("\/(index-[0-9a-f]{8}\.js)"\)/.exec(homeHtml) || [])[1];
+if (!bundleName) {
+  warn('dual DOM: no React bundle import found in index.html - home page link parity not checked');
+} else if (!fs.existsSync(path.join(ROOT, bundleName))) {
+  err(`dual DOM: index.html imports /${bundleName}, which does not exist`);
+} else {
+  const buf = fs.readFileSync(path.join(ROOT, bundleName));
+  const digest = crypto.createHash('sha256').update(buf).digest('hex').slice(0, 8);
+  if (bundleName !== `index-${digest}.js`) {
+    err(`dual DOM: /${bundleName} now hashes to ${digest} - rename it index-${digest}.js and update index.html and sw.js`);
+  }
+  const bundle = buf.toString('utf8');
+  const pageLinks = [...homeLinks].filter((p) => p !== '/');
+  const lost = pageLinks.filter((p) => !bundle.includes(`"${p}"`));
+  if (lost.length) err(`dual DOM: the prerendered home page links ${lost.join(', ')} but /${bundleName} does not - those links vanish when React renders`);
+  else note(`dual DOM: all ${pageLinks.length} pages linked from the prerendered home page are linked by /${bundleName} too`);
+}
+
+// 8d. the HTML site map lists every sitemap URL in its own content
+if (htmlPages.has('/sitemap')) {
+  const main = (/<main\b[\s\S]*?<\/main>/i.exec(htmlPages.get('/sitemap')) || [''])[0];
+  const listed = new Set(linksOf('/sitemap', main).map((l) => l.path));
+  const unlisted = sitemapPaths.filter((p) => p !== '/sitemap' && !listed.has(p));
+  if (unlisted.length) err(`HTML site map: /sitemap does not list ${unlisted.join(', ')} - add them to legal-src/pages/sitemap.html`);
+  else note('HTML site map: /sitemap lists every sitemap URL');
+}
+
+// 8e. sw.js precaches hashed assets that actually exist
+const swFile = path.join(ROOT, 'sw.js');
+if (fs.existsSync(swFile)) {
+  const precached = [...fs.readFileSync(swFile, 'utf8').matchAll(/'\/((?:index|legal|store)-[0-9a-f]{8}\.(?:js|css))'/g)].map((m) => m[1]);
+  for (const a of precached) {
+    if (!fs.existsSync(path.join(ROOT, a))) err(`sw.js precaches /${a}, which does not exist - update PRECACHE_ASSETS and bump CACHE_NAME`);
+  }
+  const loaded = new Set();
+  for (const html of linkSources.values()) {
+    for (const m of html.matchAll(/["'(]\/?((?:index|legal|store)-[0-9a-f]{8}\.(?:js|css))["')]/g)) loaded.add(m[1]);
+  }
+  const uncached = [...loaded].filter((a) => !precached.includes(a));
+  if (uncached.length) warn(`sw.js does not precache ${uncached.join(', ')}, which pages load`);
+}
+
+/* 9. optional live HTTP check --------------------------------------------- */
 let liveFails = 0;
 if (LIVE) {
   console.log('live checks:');

@@ -5,7 +5,12 @@
 User-agent: *
 Allow: /
 
-# Crawl budget weaponization: block infinite param spaces while allowing clean URLs
+# Crawl budget weaponization: block infinite param spaces while allowing clean URLs.
+# Scope: a crawler obeys only the most specific group that names it, so these
+# lines bind unnamed crawlers only. Googlebot, Bingbot and the other named groups
+# below skip them by design: for those engines, parameter URLs (?utm_, ?fbclid...)
+# are consolidated by rel=canonical (in each page and in the Link header), and a
+# canonical can only be read on a URL that is allowed to be crawled.
 Disallow: /*?*boot=
 Disallow: /*?*utm_
 Disallow: /*?*fbclid=

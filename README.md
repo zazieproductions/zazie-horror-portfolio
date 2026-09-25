@@ -53,6 +53,7 @@ Primary routes:
 | `/work` · `/reel` · `/composer` · `/process` · `/services` · `/contact` | Indexable hub pages mirroring the portfolio's content silos |
 | `/store` | The Catalogue: records, sound libraries, tools and objects — 24 items, checkout delegated to Bandcamp, itch.io, Gumroad and eBay |
 | `/legal` · `/faq` · `/terms` · `/privacy` · `/licensing` · `/purchases` · `/accessibility` | Trust, legal and operating documents |
+| `/sitemap` | HTML site map: every page and its in-page sections, linked from every footer (the human counterpart of `/sitemap.xml`) |
 | `/404.html` | "Signal Lost: Archive Entry Not Found" — a real 404 status with a recovery grid of all routes |
 
 Every route is a **real static path** (`<slug>/index.html`). There is deliberately no SPA rewrite fallback — see [Deployment](#deployment) for the redirect-loop history that decision comes from.
@@ -95,7 +96,7 @@ Unconventional choices exist for artistic or experiential reasons and are docume
 
 **The Catalogue (`/store`)** — 24 items across Records / Objects / Sound libraries / Tools and scores. Progressive enhancement only: without JavaScript every card is visible and links straight to its listing; with JavaScript you get filter chips, audio previews with a **room-tone ambience** that ducks under them, a torch-light cursor, and card tilt.
 
-**The documents** — `/legal`, `/faq` (36 questions), `/terms` (25 clauses), `/privacy` (15 sections), `/licensing`, `/purchases`, `/accessibility`. Share one stylesheet, one script and two partials; ship fully open without JavaScript; served **network-first** through the service worker because their effective dates matter.
+**The documents** — `/legal`, `/faq` (36 questions), `/terms` (25 clauses), `/privacy` (15 sections), `/licensing`, `/purchases`, `/accessibility`. Share one stylesheet, one script and two partials; ship fully open without JavaScript; served **network-first** through the service worker because their effective dates matter. The same pipeline builds the **`/sitemap`** index (`legal-src/pages/sitemap.html`), which deep-links every page and the sections inside each one.
 
 ## Visual preview
 
@@ -200,14 +201,15 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 
 ```
 .
-├── index.html                  # Home: prerendered DOM + inline boot system + 15 JSON-LD blocks
+├── index.html                  # Home: prerendered DOM + inline boot system + 14 JSON-LD blocks
 ├── index-<hash>.js / .css      # React bundle (built; rename per raw-sha256[:8] convention)
 ├── 404.html                    # "Signal Lost" — served with real 404 status
-├── sw.js                       # Service worker v9 (bump CACHE_NAME on any hash change)
+├── sw.js                       # Service worker (CACHE_NAME zazie-v16; bump it on any hash change)
 ├── server.mjs                  # Local static server, clean routes + 404 fallback
 ├── _headers                    # CSP, canonical Link headers, cache policy
 ├── _redirects                  # 301 map ONLY (no SPA rewrite — see Deployment)
-├── robots.txt / sitemap.xml    # Crawl control; 15 URLs / 44 images / 8 videos
+├── robots.txt / sitemap.xml    # Crawl control; 16 URLs / 44 images / 8 videos
+├── <32-hex>.txt                # IndexNow key file (public by design; see tools/indexnow.mjs)
 ├── audio/
 │   └── track-00..28.mp3        # 29 showreel cues (~95 MB) — the audio library
 ├── fonts/                      # Cormorant Garamond 400 n/i + Inter variable (woff2)
@@ -220,10 +222,12 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 │   └── index.html              # Hub pages — COMMITTED OUTPUT, no in-repo source
 ├── store.html → store/index.html   # Catalogue — GENERATED, do not hand-edit
 ├── store-src/                  # Catalogue source (store.html/.css/.js + build.sh)
-├── legal/ faq/ terms/ privacy/ licensing/ purchases/ accessibility/
-│   └── index.html              # Documents — GENERATED, do not hand-edit
+├── legal/ faq/ terms/ privacy/ licensing/ purchases/ accessibility/ sitemap/
+│   └── index.html              # Documents + HTML site map — GENERATED, do not hand-edit
 ├── legal-src/                  # Document sources, shared partials, CSS/JS, build.sh
-├── tools/check-sitemap.mjs     # Sitemap pre-flight validator (15 GSC checks)
+├── tools/check-sitemap.mjs     # Pre-flight validator: 17 GSC checks + 5 internal-link checks
+├── tools/route-aliases.mjs     # Writes/checks the root <route>.html twin of every directory route
+├── tools/indexnow.mjs          # Post-deploy IndexNow ping (Bing, Yandex, Seznam, Naver, Yep...)
 ├── The Dark Awaits.png         # Raw poster upload kept for provenance (unreferenced)
 ├── PERFORMANCE.md LEGAL.md RATIFY.md SEO-DOSSIER.md SITEMAP.md STORE.md
 │                               # Dated implementation records — the repo's memory
@@ -292,14 +296,17 @@ node server.mjs                 # → http://localhost:8080  (PORT env overrides
 ./store-src/build.sh            # writes store-<hash>.* , store.html , store/index.html
 
 # Rebuild the documents after editing legal-src/*
-./legal-src/build.sh            # writes legal-<hash>.* and all seven <slug>/index.html
+./legal-src/build.sh            # writes legal-<hash>.* and all eight <slug>/index.html (7 documents + /sitemap)
 
 # Validate the sitemap (structure, files, canonicals, robots)
 node tools/check-sitemap.mjs          # offline
 node tools/check-sitemap.mjs --live   # + HTTP status of every URL
+
+# After a deploy is live: tell IndexNow engines what changed (not Google)
+node tools/indexnow.mjs /reel /faq     # changed pages only; no args = every sitemap URL
 ```
 
-**Never hand-edit generated files:** `store.html`, `store/index.html`, `legal/*/index.html`, `faq/`, `terms/`, `privacy/`, `licensing/`, `purchases/`, `accessibility/`, and any `*-<hash>.js/.css`. Edit the sources, run the build. The React bundle has no in-repo build — see [Known technical debt](#known-technical-debt).
+**Never hand-edit generated files:** `store.html`, `store/index.html`, `legal/*/index.html`, `faq/`, `terms/`, `privacy/`, `licensing/`, `purchases/`, `accessibility/`, `sitemap/`, and any `*-<hash>.js/.css`. Edit the sources, run the build. The React bundle has no in-repo build — see [Known technical debt](#known-technical-debt).
 
 ## Configuration & environment
 
@@ -373,8 +380,11 @@ Target: **WCAG 2.2 Level AA, partially conformant** — stated precisely on [`/a
 The site runs a deliberately deep SEO layer (the repo's `SEO-DOSSIER.md` and `SITEMAP.md` record the full programme):
 
 - A **JSON-LD matrix** per page: `Person`/`Organization` entity graph, `Service`/`Offer` catalogue, `VideoObject` ×8, `FAQPage`, `Review`/`AggregateRating`, `CollectionPage`+`ItemList` per hub, `MusicPlaylist`+29 `MusicRecording`/`AudioObject` on `/reel`, `HowTo` on `/process`.
-- `sitemap.xml` (15 URLs / 44 images / 8 videos) enforced by `tools/check-sitemap.mjs` — a pre-flight validator that replicates 15 Google Search Console checks (canonical equality, schema element order, robots interplay, on-disk asset existence) and fails loudly. **Run it before every deploy that touches routes or media.**
-- Canonical `Link:` headers at the edge for 45 variants; 301s for legacy `.html` URLs; a real 404 (no soft-404 SPA fallback); robots policy including explicit AI-crawler allowances.
+- `sitemap.xml` (16 URLs / 44 images / 8 videos) enforced by `tools/check-sitemap.mjs` — a pre-flight validator that replicates 17 Google Search Console checks (canonical equality, schema element order, robots interplay, on-disk asset existence) plus 5 internal-link checks, and fails loudly. **Run it before every deploy that touches routes, links, media or schema.**
+- **Sitelinks structure** (Google generates sitelinks from the site's own links; no markup requests them): the home page links every top-level page in *both* DOM copies (footer "Archive" and "Documents" rows); every other page links every page through its masthead and footer; footer anchors are short page names; titles carry one brand suffix, `| Zazie Productions`. The validator fails if a top-level page loses its home-page link, if the bundle drops a link the prerender has, or if any `#section` link stops resolving (396 checked).
+- **Site name**: one `WebSite` node on `/` (`name` "Zazie Productions", `alternateName` "Zazie Productions Horror", "ZKT Productions"), matched by `og:site_name` on every page. No `SearchAction` (Google retired the sitelinks search box in November 2024) and no home-page `BreadcrumbList` (the home page is the root of the trail, not a trail).
+- **Beyond Google**: `sitemap.xml` is advertised in `robots.txt` for every engine; `tools/indexnow.mjs` pushes changed URLs to the IndexNow engines after a deploy.
+- Canonical `Link:` headers at the edge for 48 variants; 301s for legacy `.html` URLs; a real 404 (no soft-404 SPA fallback); robots policy including explicit AI-crawler allowances.
 
 ## Deployment
 
@@ -391,10 +401,10 @@ Documented honestly, in priority order — these are real, verified in the tree:
 
 1. **The React source tree is not in this repository.** The home experience can only be changed by patching the built bundle and the prerendered HTML in tandem. The bundle's `data-source-loc` attributes preserve the original component map (documented above) so edits can find their targets, but this is surgery on artifacts. The recorded end-state (`PERFORMANCE.md`): regenerate the static HTML from the app and switch `createRoot` → `hydrateRoot`, with source under version control.
 2. **Hub pages have no in-repo source.** `/work`, `/reel`, `/composer`, `/process`, `/services`, `/contact` are committed output sharing the legal CSS/JS, produced during the SEO pass but not generated by `legal-src/build.sh`. They are edited directly; treat them as generated files without a generator.
-3. **`sw.js` precache drift.** The manifest lists `store-ec9af1c2.css`; the shipped file is `store-8af6034d.css`. Install survives (all-settled) and runtime cache-first still fetches the real file, but the stale entry should be corrected and the file's hash-sync rule reinforced.
+3. ~~**`sw.js` precache drift.**~~ Resolved: the manifest lists the store stylesheet that actually ships, and since 2026-09-25 `tools/check-sitemap.mjs` fails on any precached hashed asset that does not exist (check 22).
 4. **95 MB of MP3 in Git.** The audio library lives in the repo and grows with every cue. Fine at this scale; will eventually need Git LFS or external storage.
 5. **Two hash conventions.** `legal-src`/`store-src` hash `"$(cat file)"` (trailing newline stripped); the React bundle hash is `sha256` over raw bytes. Both are content-hashes; know which one you're reproducing.
-6. **Duplicate footers by construction.** Three footers exist (prerendered, bundle, legal partial) because three systems render chrome. They must be kept in sync manually — a known, accepted cost of the current architecture, not an invitation to add a fourth.
+6. **Duplicate footers by construction.** Three footers exist (prerendered, bundle, legal partial) because three systems render chrome, and the hub pages, `store-src/store.html` and `404.html` carry their own copies of the partial. They must be kept in sync manually — a known, accepted cost of the current architecture, not an invitation to add another. The "Documents" row (`nav.foot-law`) is byte-identical on every non-home page; keep it that way.
 
 ## Development guardrails
 
@@ -437,9 +447,10 @@ For future AI-assisted development sessions. **Before changing anything:**
 
 - Full portfolio experience: poster wall + lightbox (9 productions), 29-cue showreel with mood clusters and sticky player, 7 film samples, press kit, scope-and-estimate, reviews, `mailto:` inquiry
 - Minimal once-per-session terminal boot sequence (`?boot=1` / `#boot` replay, `?boot=0` / `#noboot` disable), fully gated and failsafed
-- Six indexable hub pages, seven legal/operating documents with generated FAQ schema, 20-item catalogue with progressive enhancement
+- Six indexable hub pages, seven legal/operating documents with generated FAQ schema, an HTML site map, 24-item catalogue with progressive enhancement
 - Service worker (SWR / network-first / cache-first tiers), CSP + canonical headers, 301 map, real 404
-- Sitemap with image/video extensions plus a 15-check validator; JSON-LD matrix; AI-crawler policy
+- Sitemap with image/video extensions plus a 22-check validator (GSC + internal links); JSON-LD matrix; AI-crawler policy
+- Sitelinks groundwork: home page links every top-level page in both DOM copies, concise footer anchors, single site name, IndexNow tool
 - Performance mandate executed (deferred bundle, AVIF pipeline, self-hosted fonts, prerendered first paint)
 
 **Open items recorded in the repo** (in development / awaiting a decision):
@@ -447,7 +458,7 @@ For future AI-assisted development sessions. **Before changing anything:**
 - Human decisions collected in `RATIFY.md` (contracting entity confirmation, governing law, rights language — facts that create obligations, deliberately not invented)
 - Eclipsed Google Drive sample: if it stops streaming, the fix is a re-upload on the Drive side (`PERFORMANCE.md`)
 - THE DARK AWAITS: no title IMDb/video link known yet; falls back to the composer's IMDb
-- Correct the stale `sw.js` store-CSS precache hash (debt #3); reconcile hub-page sources (debt #2)
+- Reconcile hub-page sources (debt #2)
 
 **Potential / experimental** (recorded direction, not built):
 

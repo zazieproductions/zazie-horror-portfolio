@@ -2,8 +2,56 @@
 
 **File:** `sitemap.xml` → `https://horror.zazieproductions.com/sitemap.xml`
 **Validator:** `node tools/check-sitemap.mjs`
-**Status:** ✅ `PASS — 15 URLs, 37 images, 7 videos. Safe to submit.`
-**Date:** 2026-09-18
+**Status:** ✅ `PASS — 16 URLs, 44 images, 8 videos. Safe to submit.`
+**Date:** 2026-09-25 (first written 2026-09-18; §1–5 below are that pass)
+
+---
+
+## Update, 2026-09-25: sitelinks structure, HTML site map, IndexNow
+
+**Why.** The home page linked none of the six archive pages (`/work`, `/reel`,
+`/composer`, `/process`, `/services`, `/contact`) in either DOM copy. They were
+reachable only through the sitemap and other inner pages. Google builds
+sitelinks from a site's own links, above all the home page's, so those pages
+had little chance of showing as sitelinks. The links existed only in the
+prerender, so they went with the other prerender-only copy when the prerender
+was made to match the React render exactly (`sw.js` v9). They should have been
+added to the bundle instead.
+
+| Change | Where |
+|---|---|
+| "Archive" row in the home footer (Full showreel, Selected productions, Composer biography, Scoring process, Rate card, Contact) and "Site map" in its Documents row | `index.html` **and** the bundle, now `index-4a247d5c.js`. The compiled Footer was rendered and compared with the prerender: byte-identical |
+| New `/sitemap` HTML page: every page, plus 112 links to sections inside them | `legal-src/pages/sitemap.html` → `sitemap/index.html` + `sitemap.html` |
+| "Site map" in the Documents row of every footer; a site map card on the 404 | legal partial, 6 hubs, `store-src/store.html`, `404.html` |
+| Concise footer anchors ("Rates: from $75.99, sliding by funding" → "Rate card", "Hire horror composer" → "Contact", …) | legal partial + 6 hubs |
+| One brand suffix in titles, `\| Zazie Productions` | `/faq`, `/legal`, `/privacy`, `/accessibility`, `/store` |
+| Site name: `WebSite.name` "Zazie Productions" (alternates "Zazie Productions Horror", "ZKT Productions") and `og:site_name` "Zazie Productions" on every page. Removed the `SearchAction` (feature retired by Google, target never implemented) and the home page `BreadcrumbList` (eight sibling pages posing as one trail) | `index.html` head; `og:site_name` everywhere |
+| Two dead deep links on `/services` repointed: `/faq#q-fees` → `#q-what-it-costs`, `/faq#q-game-scoring` → `#q-games` | `services/index.html` |
+| `/sitemap` added (priority 0.3). Every `lastmod` → 2026-09-25, because every page's links changed, which Google counts as a significant update | `sitemap.xml` |
+| IndexNow key file and `tools/indexnow.mjs` for Bing, Yandex, Seznam, Naver, Yep | site root, `tools/` |
+
+**New validator checks.**
+
+- **18:** every in-site `#fragment` link resolves to an id on its target page (396 today).
+- **19:** no orphans, and every top-level sitemap URL is linked from the home page.
+- **20:** the React bundle links every page the prerendered home page links, and its file name equals its raw `sha256[:8]`.
+- **21:** `/sitemap` lists every sitemap URL inside its own `<main>`.
+- **22:** every hashed asset in the `sw.js` precache exists.
+
+Run against the previous tree, checks 18 and 19 report the eight defects this
+update fixes.
+
+**After deploying.**
+
+1. Search Console → Sitemaps → resubmit `sitemap.xml` (expect 16 pages).
+2. URL Inspection → Request indexing for `/` (the page whose links changed
+   most), then `/sitemap`.
+3. Bing Webmaster Tools → import the site from Search Console, or add it and
+   submit `sitemap.xml`. Then run `node tools/indexnow.mjs` once, from a machine
+   with internet access.
+4. Sitelinks are Google's decision. If they come, it takes weeks, and only for
+   queries where this site is the obvious answer, such as "zazie productions".
+   There is no way to request them.
 
 ---
 
@@ -64,7 +112,7 @@ Run it:
 
 ```bash
 node tools/check-sitemap.mjs              # offline: structure, files, canonicals, robots
-node tools/check-sitemap.mjs --live       # + real HTTP status for all 15 URLs
+node tools/check-sitemap.mjs --live       # + real HTTP status for every URL
 node tools/check-sitemap.mjs --host example.com --root ./dist --sitemap other.xml
 ```
 
@@ -117,7 +165,7 @@ above and fails — so the checks are real, not decorative.
 
 ## 4. Maintenance
 
-- **lastmod** is currently `2026-09-18` on every URL. It is honest only for the
+- **lastmod** is currently `2026-09-25` on every URL. It is honest only for the
   day it was written. When a page changes, bump its `lastmod` — or leave the tag
   off entirely rather than lying. Google ignores `lastmod` values that are
   demonstrably fake.
@@ -125,7 +173,9 @@ above and fails — so the checks are real, not decorative.
   It is fast and exits non-zero, so it can drop straight into CI.
 - Add new pages to `sitemap.xml`, to `robots.txt` if needed, to `_headers`
   (canonical + `Cache-Control: max-age=0, must-revalidate`), to `server.mjs`
-  `CLEAN_ROUTES`, and to `sw.js`.
+  `CLEAN_ROUTES`, to `sw.js`, and to the HTML site map
+  (`legal-src/pages/sitemap.html`, check 21). A new top-level page also needs a
+  link from the home page, in both `index.html` and the bundle (checks 19–20).
 - Give every new `<route>/index.html` its root twin: `node
   tools/route-aliases.mjs` (add `--check` in CI). The twins are generated, never
   hand-edited; `legal-src/build.sh` and `store-src/build.sh` write their own on

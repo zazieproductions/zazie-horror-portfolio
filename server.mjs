@@ -25,7 +25,8 @@ const MIME = {
 
 const CLEAN_ROUTES = [
   '/work', '/reel', '/composer', '/process', '/services', '/contact',
-  '/store', '/legal', '/faq', '/terms', '/privacy', '/licensing', '/purchases', '/accessibility'
+  '/store', '/legal', '/faq', '/terms', '/privacy', '/licensing', '/purchases', '/accessibility',
+  '/sitemap'
 ];
 
 const server = http.createServer((req, res) => {

@@ -15,7 +15,10 @@
 // v15: do not download the poster wall, film stills, or lightbox originals during
 // service-worker install. They are cached on demand after native lazy loading
 // or an explicit poster/video interaction.
-const CACHE_NAME = 'zazie-v15';
+// v16: /sitemap (HTML site map) joins the precache and the network-first set; the
+// portfolio footer links every archive page (new bundle hash) and the documents
+// stylesheet moved hash for the site map layout.
+const CACHE_NAME = 'zazie-v16';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -42,6 +45,7 @@ const PRECACHE_ASSETS = [
   '/licensing',
   '/purchases',
   '/accessibility',
+  '/sitemap',
   '/404.html',
   '/sitemap.xml',
   '/robots.txt',
@@ -50,10 +54,10 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-2c12e5bc.css',
-  '/index-6568477e.js',
+  '/index-4a247d5c.js',
   '/store-94c90049.css',
   '/store-3fc01be0.js',
-  '/legal-4ae9963e.css',
+  '/legal-24ac8394.css',
   '/legal-ea8a33ec.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',
@@ -105,7 +109,7 @@ self.addEventListener('fetch', (event) => {
   // prices, the stock notes and the primary nav are the page - a returning
   // visitor must not be handed yesterday's build out of the cache. Everything
   // else stays stale-while-revalidate for the 0ms repeat render.
-  const NETWORK_FIRST = ['/legal', '/faq', '/terms', '/privacy', '/licensing', '/purchases', '/accessibility', '/store', '/work', '/reel', '/composer', '/process', '/services', '/contact'];
+  const NETWORK_FIRST = ['/legal', '/faq', '/terms', '/privacy', '/licensing', '/purchases', '/accessibility', '/sitemap', '/store', '/work', '/reel', '/composer', '/process', '/services', '/contact'];
   if (url.origin === self.location.origin && req.mode === 'navigate' && NETWORK_FIRST.includes(url.pathname.replace(/\/$/, ''))) {
     event.respondWith(
       fetch(req).then((res) => {
