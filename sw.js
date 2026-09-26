@@ -22,7 +22,8 @@
 // changes most often must never be handed to a returning visitor from the precache
 // while the network is reachable - that is what made the boot sequence look like it
 // had stopped working for anyone testing against a previously cached build.
-const CACHE_NAME = 'zazie-v17';
+// v18: Eclipsed Drive player fix - rm=minimal to hide top bar, bottom controls, custom fullscreen button, data-video-card attributes restored for instant inline player
+const CACHE_NAME = 'zazie-v18';
 
 const PRECACHE_ASSETS = [
   '/',
