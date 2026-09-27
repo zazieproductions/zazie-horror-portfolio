@@ -23,7 +23,13 @@
 // while the network is reachable - that is what made the boot sequence look like it
 // had stopped working for anyone testing against a previously cached build.
 // v18: Eclipsed Drive player fix - rm=minimal to hide top bar, bottom controls, custom fullscreen button, data-video-card attributes restored for instant inline player
-const CACHE_NAME = 'zazie-v18';
+// v19: showreel grows to 30 cues - Fractured Requiem joins as /audio/track-29.mp3 under the
+// Psychological mood. Bundle re-hashed with the new track entry, so the cache name moves with it:
+// without the bump a returning visitor would keep the previous index.html/JS pair from the old cache.
+// v20: showreel moods consolidated - 28 one-off tags collapse into 6 shared moods (Psychological,
+// Stinger, Thriller, Dark Ambient, Body Horror, Cosmic Horror) so every filter chip is a full shelf.
+// Bundle re-hashed with the new taxonomy; cache name moves with it.
+const CACHE_NAME = 'zazie-v20';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -59,7 +65,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-2c12e5bc.css',
-  '/index-4a247d5c.js',
+  '/index-2bd891ad.js',
   '/store-94c90049.css',
   '/store-3fc01be0.js',
   '/legal-24ac8394.css',
