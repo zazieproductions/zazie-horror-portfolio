@@ -29,7 +29,10 @@
 // v20: showreel moods consolidated - 28 one-off tags collapse into 6 shared moods (Psychological,
 // Stinger, Thriller, Dark Ambient, Body Horror, Cosmic Horror) so every filter chip is a full shelf.
 // Bundle re-hashed with the new taxonomy; cache name moves with it.
-const CACHE_NAME = 'zazie-v20';
+// v21: Eclipsed uses the standard Drive preview. Fullscreen actions move below
+// the picture, phone frames have room for native controls, and the duplicate
+// Drive loader is removed. Fresh bundle/CSS hashes prevent stale mobile layouts.
+const CACHE_NAME = 'zazie-v21';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -64,8 +67,8 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-normal.woff2',
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
-  '/index-2c12e5bc.css',
-  '/index-2bd891ad.js',
+  '/index-f509fde0.css',
+  '/index-f154880c.js',
   '/store-94c90049.css',
   '/store-3fc01be0.js',
   '/legal-24ac8394.css',

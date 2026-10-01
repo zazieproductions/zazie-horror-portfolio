@@ -298,6 +298,9 @@ node server.mjs                 # → http://localhost:8080  (PORT env overrides
 # Rebuild the documents after editing legal-src/*
 ./legal-src/build.sh            # writes legal-<hash>.* and all eight <slug>/index.html (7 documents + /sitemap)
 
+# Check both film-player implementations (markup, controls, switching, cache hashes)
+node --test tools/film-player.test.mjs # built-in Node test runner; no dependencies
+
 # Validate the sitemap (structure, files, canonicals, robots)
 node tools/check-sitemap.mjs          # offline
 node tools/check-sitemap.mjs --live   # + HTTP status of every URL
