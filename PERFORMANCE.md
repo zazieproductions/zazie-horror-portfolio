@@ -574,3 +574,58 @@ the line is gone and the poster now reads as a poster: title only.
 - Assumptions to confirm with the filmmaker credit: format label (`Feature`),
   genre pair, and the future IMDb/YouTube URL (one-line change in the bundle
   entry + prerender `<a href>` + `/work` hub-card when known).
+
+# Eclipsed: mobile playback controls and unobscured film — 2026-10-01
+
+## Site-side problems found
+
+- The custom Drive fullscreen button was permanently positioned over the
+  iframe at `right:12px; bottom:12px`. On a 390px phone, its 40×40px hit area
+  covered the provider's bottom-right controls in a 356×200px player.
+- Early playback appended a `.zp-vembed` **wrapper** inside the poster, but
+  `.zp-poster.is-live>*:not(iframe)` hid that wrapper, including its iframe.
+  The React path rendered a different structure, so the failure depended on
+  whether the bundle had mounted.
+- An unused third Drive loader duplicated the overlay and embed parameters.
+  `rm=minimal` was being relied on to control chrome inside a cross-origin
+  Google Drive iframe; that chrome is not ours to style or reposition.
+- In landscape, the active card could fit the viewport but not the space
+  below the fixed navigation, leaving the top of the picture covered.
+
+## Fix
+
+- Both implementations now emit a single standard `/preview?autoplay=1`
+  iframe, preserving fullscreen permission, title and referrer policy.
+  `/work` links and VideoObject URLs also use the standard preview.
+- Site fullscreen actions live in the caption **below** the picture, with a
+  44px touch target, not over the playback bar. Where arbitrary-element
+  fullscreen is unsupported, only the provider's native controls are used.
+  Fullscreen requests target the film frame and handle rejected promises.
+- Phone Drive frames have a 240px minimum height. The cinematic width cap
+  reserves room for navigation and the caption on short/landscape screens;
+  scroll margins keep the picture below the fixed header. Fullscreen uses
+  the dynamic viewport where supported. No film or controls are rotated,
+  flipped, scaled or cropped by site CSS.
+- Switching films removes the prior iframe, Drive-specific sizing and custom
+  action. Space activation prevents accidental page scrolling in React too.
+- Removed the duplicate Drive loader and kept the inline/bundled cinema CSS
+  identical. Rehashed JS to `index-f154880c.js`, CSS to
+  `index-f509fde0.css`, and bumped the service worker to `zazie-v21`.
+
+## Verification
+
+- `node --test tools/film-player.test.mjs`: 11 dependency-free regression
+  checks pass over the early DOM and React JSX/hooks fixtures, including
+  switching/replay, keyboard activation, unsupported/prefixed fullscreen,
+  rejected requests, native iframe attributes, CSS parity and asset hashes.
+- Headless Chromium: early and React layouts tested at 320×568, 390×844,
+  414×896, 844×390, 768×1024 and 1440×900. Site actions were below the iframe
+  in every case (16px phone / 20px wider-layout gap), with no horizontal
+  clipping or fixed-header/control overlap. Fullscreen entry/exit,
+  switching/replay, and unsupported-fullscreen handoff passed; no page errors.
+- **Provider limitation:** browser checks used a cross-origin player fixture
+  with a bottom control bar. Outbound Google Drive access is unavailable in
+  this environment; actual film streaming and Google's own mobile chrome
+  still need a real-device check. The tests do not claim to verify those.
+- Bundle/SW syntax, root/directory route parity, JSON-LD, local HTTP asset
+  responses and `node tools/check-sitemap.mjs` pass.
