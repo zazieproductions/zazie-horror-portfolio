@@ -629,3 +629,41 @@ the line is gone and the poster now reads as a poster: title only.
   still need a real-device check. The tests do not claim to verify those.
 - Bundle/SW syntax, root/directory route parity, JSON-LD, local HTTP asset
   responses and `node tools/check-sitemap.mjs` pass.
+
+---
+
+# Poster wall: "Select a poster" hint line removed — 2026-10-02
+
+Date: 2026-10-02 · Branch: `arena/01a0fd91-zazie-horror-portfolio`
+
+Removed on request: the single 11px line under the poster grid, "Select a
+poster for details · full IMDb profile". The whole line goes, link included.
+
+- **Both copies patched**: the prerendered `<p class="mt-8 text-center
+  text-[11px] text-mist">` in `index.html` and the `PosterWall.tsx:52` element
+  in the bundle (one contiguous 356-byte removal; the container's children are
+  now `[header, grid]`). Both renderings of the section come out 1,775px tall
+  on desktop, so nothing moves when React replaces the prerendered DOM.
+- **Nothing else touched**: the nine posters, the lightbox they open and the
+  footer's `imdb` link stay. `It.links.imdb` is still the lightbox's fallback
+  link, so no data became unused. No CSS change: `mt-8`, `text-[11px]` and
+  `text-mist` are shared utilities.
+- **Cost**: bundle 428,310 → 427,954 bytes, `index.html` 218,953 → 218,732. The
+  poster section is 48px shorter on desktop (1,823 → 1,775px) and 49px on a
+  390px phone (1,653 → 1,604px); the gap to "Film samples" is now just the
+  section's own bottom padding.
+- **Content-hashed rename**, per the `immutable` discipline in `_headers`:
+  `index-f154880c.js` → `index-0e50167c.js` (raw file sha256, first 8 hex).
+  `index.html`'s dynamic import and the `sw.js` precache entry updated and
+  `CACHE_NAME` bumped `zazie-v21` → `zazie-v22`; no stale references remain in
+  any served file.
+- **Verification**: `node --test tools/film-player.test.mjs` (11/11),
+  `node tools/check-sitemap.mjs` (PASS; its dual-DOM check follows the new
+  bundle name) and `node --input-type=module --check` on the renamed bundle.
+  Headless Chromium, before vs. after, at 1440×900 and 390×844, prerendered
+  (JS off) and React-mounted: the visible text of the whole page differs by
+  exactly the one removed line in both renderings, all nine posters remain, the
+  lightbox opens and closes, and there are no page errors. A returning visitor
+  holding the `zazie-v21` cache (old bundle precached) lands on `zazie-v22` with
+  only `index-0e50167c.js` loaded and no hint. Local HTTP: 200 on `/`,
+  `/index.html` and `/index-0e50167c.js`; 404 on the old hash.
