@@ -32,7 +32,11 @@
 // v21: Eclipsed uses the standard Drive preview. Fullscreen actions move below
 // the picture, phone frames have room for native controls, and the duplicate
 // Drive loader is removed. Fresh bundle/CSS hashes prevent stale mobile layouts.
-const CACHE_NAME = 'zazie-v21';
+// v22: the small hint line under the poster wall (and its IMDb profile link) is gone from
+// both the prerendered index.html and the bundle. Bundle re-hashed, so the cache name
+// moves with it: without the bump a returning visitor would keep the previous index.html/JS
+// pair from the old cache (they are immutable for a year).
+const CACHE_NAME = 'zazie-v22';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -68,7 +72,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-f509fde0.css',
-  '/index-f154880c.js',
+  '/index-0e50167c.js',
   '/store-94c90049.css',
   '/store-3fc01be0.js',
   '/legal-24ac8394.css',
