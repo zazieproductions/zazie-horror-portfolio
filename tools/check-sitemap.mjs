@@ -575,20 +575,36 @@ for (const urlEl of urls) {
 
 /* 5. coverage report ------------------------------------------------------- */
 const pageFiles = [];
+const pageFilePath = new Map(); // route path -> the file that serves it
+// Directories that are sources, tooling or build output, never routes.
+const NOT_PAGES = new Set(['node_modules', 'build', 'public', 'src', 'scripts', 'tools']);
+const isPageFile = (name) => name.endsWith('.html') && name !== '404.html';
 const walk = (dir) => {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (e.name.startsWith('.') || e.name === 'node_modules') continue;
+    if (e.name.startsWith('.') || NOT_PAGES.has(e.name)) continue;
     const abs = path.join(dir, e.name);
     if (e.isDirectory()) { if (e.name.endsWith('-src')) continue; walk(abs); }
-    else if (e.isFile() && e.name === 'index.html') {
-      const rel = path.relative(ROOT, abs).replace(/[/\\]index\.html$/, '');
-      const clean = rel === 'index.html' ? '' : rel;
-      pageFiles.push('/' + clean);
+    else if (e.isFile() && isPageFile(e.name)) {
+      // Both shapes are routes: `<slug>/index.html` (a directory route, which
+      // the host 308s to its trailing-slash form unless a root twin exists) and
+      // the flat `<hub>/<slug>.html` item pages, which the host serves
+      // extensionless at `/hub/<slug>` with no redirect hop. Root twins
+      // (`work.html` beside `work/index.html`) map to the same path and are
+      // deduplicated here.
+      const rel = path.relative(ROOT, abs);
+      const clean =
+        e.name === 'index.html'
+          ? rel.replace(/[/\\]index\.html$/, '')
+          : rel.slice(0, -'.html'.length);
+      const route = clean === 'index.html' || clean === '' ? '/' : '/' + clean.split(path.sep).join('/');
+      if (!pageFilePath.has(route)) pageFilePath.set(route, abs);
+      pageFiles.push(route);
     }
   }
 };
 walk(ROOT);
-const missing = pageFiles.filter((p) => !seenLocs.has(`https://${SITE_HOST}${p === '/' ? '/' : p}`));
+const uniquePageFiles = [...new Set(pageFiles)];
+const missing = uniquePageFiles.filter((p) => !seenLocs.has(`https://${SITE_HOST}${p === '/' ? '/' : p}`));
 if (missing.length) {
   warn(`pages on disk that are NOT in the sitemap: ${missing.join(', ')}`);
 }
@@ -638,8 +654,8 @@ const normPath = (p) => {
   return x || '/';
 };
 const htmlPages = new Map(); // route path -> html, for every page on disk
-for (const p of pageFiles) {
-  htmlPages.set(p, fs.readFileSync(path.join(ROOT, p === '/' ? '' : p.slice(1), 'index.html'), 'utf8'));
+for (const p of uniquePageFiles) {
+  htmlPages.set(p, fs.readFileSync(pageFilePath.get(p), 'utf8'));
 }
 const linkSources = new Map(htmlPages);
 const notFoundFile = path.join(ROOT, '404.html');

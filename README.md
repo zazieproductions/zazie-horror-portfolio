@@ -8,7 +8,7 @@ An immersive web environment for psychological horror scoring, experimental comp
 [![Architecture](https://img.shields.io/badge/architecture-static_%C2%B7_zero_backend-1e1e1e)](#architecture)
 [![Hosting](https://img.shields.io/badge/host-Cloudflare_Pages-1e1e1e)](#deployment)
 [![Showreel](https://img.shields.io/badge/showreel-32_cues_%C2%B7_9_productions-1e1e1e)](#core-experiences--features)
-[![Sitemap](https://img.shields.io/badge/sitemap-19_urls_%C2%B7_47_images_%C2%B7_8_videos-1e1e1e)](#seo--structured-data)
+[![Sitemap](https://img.shields.io/badge/sitemap-84_urls_%C2%B7_81_images_%C2%B7_8_videos-1e1e1e)](#seo--structured-data)
 
 ---
 
@@ -205,11 +205,11 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 ├── index.html                  # Home: prerendered DOM + inline boot system + 14 JSON-LD blocks
 ├── index-<hash>.js / .css      # React bundle (built; rename per raw-sha256[:8] convention)
 ├── 404.html                    # "Signal Lost" — served with real 404 status
-├── sw.js                       # Service worker (CACHE_NAME zazie-v26; bump it on any hash change)
+├── sw.js                       # Service worker (CACHE_NAME zazie-v29; bump it on any hash change)
 ├── server.mjs                  # Local static server, clean routes + 404 fallback
 ├── _headers                    # CSP, canonical Link headers, cache policy
 ├── _redirects                  # 301 map ONLY (no SPA rewrite — see Deployment)
-├── robots.txt / sitemap.xml    # Crawl control; 19 URLs / 47 images / 8 videos
+├── robots.txt / sitemap.xml    # Crawl control; 84 URLs / 81 images / 8 videos (GENERATED - see src/data)
 ├── <32-hex>.txt                # IndexNow key file (public by design; see tools/indexnow.mjs)
 ├── audio/
 │   └── track-00..31.mp3        # 32 showreel cues (~98 MB) — the audio library
@@ -221,19 +221,23 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 │   ├── project-*.jpg           # film-sample covers (one per YouTube video)
 │   └── eclipsed-cover-1280.jpg # Eclipsed cover frame, from the root Eclipsed.png upload
 ├── work/ reel/ composer/ process/ services/ contact/
-│   └── index.html              # Hub pages — COMMITTED OUTPUT, no in-repo source
+│   ├── index.html              # Hub pages — COMMITTED OUTPUT, no in-repo source
+│   └── <slug>.html             # One entry page per production / cue / catalogue item — GENERATED
 ├── store.html → store/index.html   # Catalogue — GENERATED, do not hand-edit
 ├── store-src/                  # Catalogue source (store.html/.css/.js + build.sh)
 ├── legal/ faq/ terms/ privacy/ licensing/ purchases/ accessibility/ sitemap/
 │   └── index.html              # Documents + HTML site map — GENERATED, do not hand-edit
 ├── legal-src/                  # Document sources, shared partials, CSS/JS, build.sh
+├── src/data/                   # SOURCE OF TRUTH for the 65 entry pages + sitemap (TypeScript)
+├── scripts/                    # tsc.mjs, generate-sitemap.mjs, render-pages.mjs, prerender.mjs
 ├── tools/check-sitemap.mjs     # Pre-flight validator: 17 GSC checks + 5 internal-link checks
 ├── tools/route-aliases.mjs     # Writes/checks the root <route>.html twin of every directory route
 ├── tools/indexnow.mjs          # Post-deploy IndexNow ping (Bing, Yandex, Seznam, Naver, Yep...)
 ├── Eclipsed.png                # Raw cover upload: source of images/eclipsed-cover-1280.jpg
 ├── The Dark Awaits.png         # Raw poster upload kept for provenance (unreferenced)
 ├── PERFORMANCE.md LEGAL.md RATIFY.md SEO-DOSSIER.md SITEMAP.md STORE.md
-│                               # Dated implementation records — the repo's memory
+│  ITEM-URLS.md                # Dated implementation records — the repo's memory
+│                               # (this build's record: ITEM-URLS.md)
 └── .nojekyll
 ```
 
@@ -241,7 +245,7 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 
 | Concern | Location |
 | --- | --- |
-| Pages / routes | `<slug>/index.html` at root; home in `index.html` |
+| Pages / routes | `<slug>/index.html` at root; home in `index.html`; one entry page per item at `work/<slug>.html`, `reel/<slug>.html`, `store/<slug>.html` (generated) |
 | Portfolio entries & film data | `n1` array in `index-<hash>.js` (original: `Projects.tsx`); prerendered grid in `index.html` |
 | Scoring work / showreel data | `tracks` array in `index-<hash>.js` (original: `Showreel.tsx` + `src/lib/audioContext.tsx`) |
 | Audio | `/audio/track-NN.mp3` |
@@ -250,17 +254,17 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 | Interactive components | React bundle (portfolio); `store-src/store.js` (catalogue); inline boot in `index.html` |
 | Animation systems | CSS in `index-<hash>.css` + inline `<style>` blocks (boot); all `prefers-reduced-motion`-aware |
 | Styling / design tokens | Tailwind theme in `index-<hash>.css` (`--color-void` … `--color-ember`); `legal-src/legal.css` and `store-src/store.css` restate the same tokens |
-| Metadata / SEO | Inline JSON-LD matrix in each page; `sitemap.xml`; `robots.txt`; canonical `Link:` headers in `_headers` |
-| Configuration | `_headers`, `_redirects`, `sw.js` — no environment variables |
-| Utilities | `tools/check-sitemap.mjs`, `server.mjs` |
+| Metadata / SEO | Inline JSON-LD matrix in each page; `sitemap.xml`; `robots.txt`; canonical `Link:` headers in `_headers` (19 hub routes) and a static `<link rel="canonical">` in each of the 65 entry pages |
+| Configuration | `_headers`, `_redirects`, `sw.js`, `package.json` / `tsconfig.json` (item-URL build) — no environment variables |
+| Utilities | `tools/check-sitemap.mjs`, `tools/route-aliases.mjs`, `tools/indexnow.mjs`, `server.mjs`, `scripts/*.mjs` |
 | Public/static assets | root + `/audio` + `/fonts` + `/images` |
-| Data / content files | `store-src/store.html` (catalogue data), `legal-src/pages/*.html` (document content), bundle arrays (films, tracks, reviews) |
+| Data / content files | `src/data/*.ts` (productions, cues, releases, routes — source of the 65 entry pages and of `sitemap.xml`), `store-src/store.html` (catalogue data), `legal-src/pages/*.html` (document content), bundle arrays (films, tracks, reviews) |
 
 ## Where to add new work
 
 Recipes for the six most likely changes. In every case: **grep the counts** — production (9), cue (32) and item (24) totals appear in meta descriptions, FAQ answers, schema `numberOfItems`, hero copy and footers, and must move together.
 
-**New film / production** (touches both DOM copies):
+**New film / production** (touches both DOM copies **and** `src/data/productions.ts` — the entry page, its URL, its sitemap entry and its JSON-LD are all generated from there; run `npm run build`):
 1. Poster assets → `images/posters/<slug>-640.avif`, `-640.jpg`, `-1200.jpg` (see [pipeline](#media--asset-pipeline)).
 2. Entry in the `n1` array of the bundle (`title`, `year`, `tagline`, `detail`, `poster/thumb/thumbA`, optional `imdb` / `yt`).
 3. Matching `<li>` in the prerendered poster grid in `index.html` + `pageImages` / lightbox lists in the inline module script.
@@ -272,9 +276,10 @@ Recipes for the six most likely changes. In every case: **grep the counts** — 
 **New score / showreel cue:**
 1. Master to MP3 → `audio/track-NN.mp3` (next free index; filenames are positional, don't renumber).
 2. Entry in the bundle `tracks` array (`id`, `title`, `src`, `duration` in seconds, `tag`).
-3. `/reel/index.html` cue list + `AudioObject`/`MusicRecording` schema.
-4. `sitemap.xml` playlist entries → validator.
-5. Counts: "32 cues" lives in meta descriptions, `/reel` H1, hero copy.
+3. **Entry in `src/data/cues.ts`** — slug, title, mood (one of `MOODS`), exact seconds, MP3 path, summary, meta description, description, detail, usage, instrumentation, feel, `writtenFor`, `relatedReleases`. `npm run build` derives `/reel/<slug>`, its page, its sitemap entry and its JSON-LD from it; nothing is hand-typed.
+4. `/reel/index.html` cue list + `AudioObject`/`MusicRecording` schema; the `<!--ITEMLINK:reel/<slug>-->` marker is filled by `scripts/render-pages.mjs`.
+5. `sitemap.xml` playlist entries → validator (`node tools/check-sitemap.mjs`).
+6. Counts: "32 cues" lives in meta descriptions, `/reel` H1, hero copy.
 
 **New audio demo (non-showreel):** add under `/audio/` with a descriptive name, reference it from the page that presents it, and add any page-level schema it needs. Keep `preload="none"` or `"metadata"` — never `auto`.
 
@@ -291,7 +296,17 @@ Recipes for the six most likely changes. In every case: **grep the counts** — 
 
 ## Local development
 
-No `package.json`, no install step. Requirements: Node.js (built-in modules only), Bash + Python 3 (for the two build scripts).
+The item-URL build has one dependency pair (`typescript`, `@types/node` — devDependencies, for type-checking only) and falls back to Node's own type stripping if they are absent. Everything else, including the two shell build scripts and the local server, needs Node.js built-in modules plus Bash and Python 3.
+
+```bash
+npm install                 # optional: only needed for `tsc`
+npm run build               # tsc → sitemap → 65 entry pages → per-route head prerender
+npm run verify              # node tools/check-sitemap.mjs
+npm run serve               # node server.mjs on :8080 (PORT=… to change)
+node tools/route-aliases.mjs --check
+```
+
+`npm run build` writes: `build/data/*.js` (compiled `src/data`), `public/sitemap.xml` + `public/robots.txt` (staging copies), the served `sitemap.xml` + `robots.txt`, the 65 flat entry pages and the filled hub markers + `/sitemap` lists. It fails loudly on a duplicate URL, a non-HTTPS or off-domain URL, a trailing slash, a query or fragment in a route, a missing title or description, a slug that no longer matches its title, or a dangling cross-reference. Full record: **`ITEM-URLS.md`**.
 
 ```bash
 # Serve the built site locally (clean routes, correct 404 fallback)
@@ -314,7 +329,7 @@ node tools/check-sitemap.mjs --live   # + HTTP status of every URL
 node tools/indexnow.mjs /reel /faq     # changed pages only; no args = every sitemap URL
 ```
 
-**Never hand-edit generated files:** `store.html`, `store/index.html`, `legal/*/index.html`, `faq/`, `terms/`, `privacy/`, `licensing/`, `purchases/`, `accessibility/`, `sitemap/`, and any `*-<hash>.js/.css`. Edit the sources, run the build. The React bundle has no in-repo build — see [Known technical debt](#known-technical-debt).
+**Never hand-edit generated files:** `store.html`, `store/index.html`, `work/<slug>.html`, `reel/<slug>.html`, `store/<slug>.html`, `images/cues/*.svg`, `sitemap.xml`, `robots.txt`, `legal/*/index.html`, `faq/`, `terms/`, `privacy/`, `licensing/`, `purchases/`, `accessibility/`, `sitemap/`, and any `*-<hash>.js/.css`. Edit the sources, run the build. The React bundle has no in-repo build — see [Known technical debt](#known-technical-debt).
 
 ## Configuration & environment
 
@@ -323,9 +338,10 @@ There are **no environment variables and no secrets**. The `.gitignore` pre-empt
 | File | Controls |
 | --- | --- |
 | `_headers` | CSP allowlist, `X-Robots-Tag`, canonical `Link:` headers, per-path `Cache-Control` |
-| `_redirects` | Legacy 301 map (deliberately nothing else) |
+| `_redirects` | Legacy 301 map (deliberately nothing else — no SPA rewrite, no 404 rule; `404.html` gives real 404s on its own) |
 | `robots.txt` | Crawl rules, sitemap declaration, AI-crawler policy |
 | `sw.js` | Offline strategy; `CACHE_NAME` + precache manifest |
+| `src/data/*.ts` | The 65 entry URLs and every field on their pages; `scripts/` turn it into pages, `sitemap.xml` and `robots.txt` |
 | `server.mjs` | `PORT` (local dev only) |
 
 The zero-tracking privacy claim is structural: adding an analytics script or a cookie would invalidate `/privacy`, the footer statement on every page, and the device inspector on `/privacy`. Don't.
@@ -388,7 +404,7 @@ Target: **WCAG 2.2 Level AA, partially conformant** — stated precisely on [`/a
 The site runs a deliberately deep SEO layer (the repo's `SEO-DOSSIER.md` and `SITEMAP.md` record the full programme):
 
 - A **JSON-LD matrix** per page: `Person`/`Organization` entity graph, `Service`/`Offer` catalogue, `VideoObject` ×8, `FAQPage`, `Review`/`AggregateRating`, `CollectionPage`+`ItemList` per hub, `MusicPlaylist`+32 `MusicRecording`/`AudioObject` on `/reel`, `HowTo` on `/process`.
-- `sitemap.xml` (19 URLs / 47 images / 8 videos) enforced by `tools/check-sitemap.mjs` — a pre-flight validator that replicates 17 Google Search Console checks (canonical equality, schema element order, robots interplay, on-disk asset existence) plus 5 internal-link checks, and fails loudly. **Run it before every deploy that touches routes, links, media or schema.**
+- `sitemap.xml` (84 URLs / 81 images / 8 videos) enforced by `tools/check-sitemap.mjs` — a pre-flight validator that replicates 17 Google Search Console checks (canonical equality, schema element order, robots interplay, on-disk asset existence) plus 5 internal-link checks, and fails loudly. **Run it before every deploy that touches routes, links, media or schema.**
 - **Sitelinks structure** (Google generates sitelinks from the site's own links; no markup requests them): the home page links every top-level page in *both* DOM copies (footer "Archive" and "Documents" rows); every other page links every page through its masthead and footer; footer anchors are short page names; titles carry one brand suffix, `| Zazie Productions`. The validator fails if a top-level page loses its home-page link, if the bundle drops a link the prerender has, or if any `#section` link stops resolving (396 checked).
 - **Site name**: one `WebSite` node on `/` (`name` "Zazie Productions", `alternateName` "Zazie Productions Horror", "ZKT Productions"), matched by `og:site_name` on every page. No `SearchAction` (Google retired the sitelinks search box in November 2024) and no home-page `BreadcrumbList` (the home page is the root of the trail, not a trail).
 - **Beyond Google**: `sitemap.xml` is advertised in `robots.txt` for every engine; `tools/indexnow.mjs` pushes changed URLs to the IndexNow engines after a deploy.

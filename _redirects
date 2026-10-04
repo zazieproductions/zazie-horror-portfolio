@@ -48,3 +48,35 @@
 # Link header back to the slashless canonical, and sitemap.xml lists the
 # slashless form, so crawlers consolidate on /route with no redirect hop.
 # ---------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------
+# ITEM ENTRY ROUTES - /work/<slug>, /reel/<slug>, /store/<slug> (65 pages)
+#
+# Every entry is a flat file: work/expire.html, reel/needle-in-the-nerve.html,
+# store/anesthesia-for-the-signal-age.html, ... Cloudflare Pages serves the
+# extensionless slashless form straight from the file with a 200 (the same
+# mechanism /store.html has always used), and 308s the ".html" form to it, so
+# there is nothing to redirect here and nothing to normalise. No trailing-slash
+# rule may ever be added for them: a directory would bring back the 308 the
+# slashless canonical has to avoid. The URLs are generated, never typed - see
+# src/data and scripts/generate-sitemap.mjs.
+#
+# ---------------------------------------------------------------------------
+# WHY THERE IS STILL NO `/* /404.html 404` RULE
+#
+# Cloudflare Pages _redirects supports redirects (3xx) only - a rule with a 404
+# destination is a rewrite, which the platform does not implement
+# (https://developers.cloudflare.com/pages/configuration/redirects/ - "Rewrites
+# (other status codes)": not supported). Worse, "Redirects are always followed,
+# regardless of whether or not an asset matches the incoming request", so a
+# `/*` splat would shadow every real page on the site.
+#
+# A real 404 needs no rule at all: Cloudflare Pages disables SPA mode as soon as
+# a 404.html file exists in the output, and answers every unmatched path with
+# 404.html and HTTP 404. `_headers` pins X-Robots-Tag: noindex, follow on
+# /404.html so the error template can never be indexed as a page.
+#
+# ---------------------------------------------------------------------------
+# NO RENAMES. The 19 URLs that existed before this build (/work, /reel,
+# /store, ...) keep their exact paths, their canonicals and their sitemap
+# entries; the 65 entry URLs are additions, never replacements.

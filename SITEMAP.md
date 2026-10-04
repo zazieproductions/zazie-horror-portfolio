@@ -2,7 +2,7 @@
 
 **File:** `sitemap.xml` → `https://horror.zazieproductions.com/sitemap.xml`
 **Validator:** `node tools/check-sitemap.mjs`
-**Status:** ✅ `PASS — 19 URLs, 47 images, 8 videos. Safe to submit.`
+**Status:** ✅ `PASS — 84 URLs, 81 images, 8 videos. Safe to submit.`
 **Date:** 2026-10-04 (first written 2026-09-18; §1–5 below are the 2026-09-25 pass)
 
 ---
