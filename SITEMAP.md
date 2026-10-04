@@ -45,7 +45,7 @@ added to the bundle instead.
 
 | Change | Where |
 |---|---|
-| "Archive" row in the home footer (Full showreel, Selected productions, Composer biography, Scoring process, Rate card, Contact) and "Site map" in its Documents row | `index.html` **and** the bundle, now `index-2bd891ad.js`. The compiled Footer was rendered and compared with the prerender: byte-identical |
+| "Archive" row in the home footer (Full showreel, Selected productions, Composer biography, Scoring process, Rate card, Contact) and "Site map" in its Documents row | `index.html` **and** the bundle, now `index-f1f9eeba.js`. The compiled Footer was rendered and compared with the prerender: byte-identical |
 | New `/sitemap` HTML page: every page, plus 112 links to sections inside them | `legal-src/pages/sitemap.html` → `sitemap/index.html` + `sitemap.html` |
 | "Site map" in the Documents row of every footer; a site map card on the 404 | legal partial, 6 hubs, `store-src/store.html`, `404.html` |
 | Concise footer anchors ("Rates: from $75.99, sliding by funding" → "Rate card", "Hire horror composer" → "Contact", …) | legal partial + 6 hubs |

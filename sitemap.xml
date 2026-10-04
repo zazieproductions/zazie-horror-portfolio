@@ -278,7 +278,7 @@
   </url>
 
   <!-- ============================================================
-       SILO 2 - Reel / showreel (30 AudioObject cues)
+       SILO 2 - Reel / showreel (32 AudioObject cues)
        ============================================================ -->
   <url>
     <loc>https://horror.zazieproductions.com/reel</loc>
@@ -288,7 +288,7 @@
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/hero-portrait.jpg</image:loc>
       <image:caption>Zazie Kanwar-Torge, psychological horror composer showreel artwork</image:caption>
-      <image:title>Horror Composer Showreel - 30 Cues</image:title>
+      <image:title>Horror Composer Showreel - 32 Cues</image:title>
     </image:image>
   </url>
 
@@ -419,7 +419,7 @@
        ============================================================ -->
   <url>
     <loc>https://horror.zazieproductions.com/faq</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -429,42 +429,42 @@
        ============================================================ -->
   <url>
     <loc>https://horror.zazieproductions.com/legal</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.55</priority>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/licensing</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/purchases</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/terms</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/privacy</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/accessibility</loc>
-    <lastmod>2026-09-26</lastmod>
+    <lastmod>2026-10-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
