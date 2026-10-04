@@ -58,7 +58,12 @@
 // meta/schema/footer mention. The scope builder's lowest tier is now the short
 // film score and the floor moves to $250. The bundle re-hashes and the cache
 // name moves with it, so a returning visitor never gets the old pair.
-const CACHE_NAME = 'zazie-v28';
+// v29: every production, cue and catalogue item gets its own URL - 84 indexable
+// URLs instead of 19. The entry pages (/work/<slug>, /reel/<slug>,
+// /store/<slug>) are flat files served extensionless; they join the
+// network-first set so a returning visitor never reads a stale entry, and the
+// cache name moves with the build so the previous documents are dropped.
+const CACHE_NAME = 'zazie-v29';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -157,8 +162,14 @@ self.addEventListener('fetch', (event) => {
   // page a returning visitor (or the studio checking a fresh deploy) hits first.
   // Everything else stays stale-while-revalidate for the 0ms repeat render.
   const NETWORK_FIRST = ['/', '/index.html', '/legal', '/faq', '/terms', '/privacy', '/licensing', '/purchases', '/accessibility', '/sitemap', '/store', '/work', '/reel', '/composer', '/process', '/services', '/contact'];
+  // The 65 entry pages under /work/, /reel/ and /store/ are content, not
+  // chrome: they are network-first too, and matched by prefix so a new slug
+  // never has to be added to a list here.
+  const NETWORK_FIRST_PREFIXES = ['/work/', '/reel/', '/store/'];
   const path = url.pathname.replace(/\/+$/, '') || '/';
-  if (url.origin === self.location.origin && req.mode === 'navigate' && NETWORK_FIRST.includes(path)) {
+  const networkFirst =
+    NETWORK_FIRST.includes(path) || NETWORK_FIRST_PREFIXES.some((p) => path.startsWith(p));
+  if (url.origin === self.location.origin && req.mode === 'navigate' && networkFirst) {
     event.respondWith(
       fetch(req).then((res) => {
         if (res && res.status === 200) {

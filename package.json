@@ -1,0 +1,19 @@
+{
+  "name": "zazie-horror-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "horror.zazieproductions.com — the horror-facing portfolio of Zazie Productions. Item routes, sitemap and per-route head are generated from src/data/*.ts.",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/tsc.mjs && node scripts/generate-sitemap.mjs && node scripts/render-pages.mjs && node scripts/prerender.mjs",
+    "verify": "node tools/check-sitemap.mjs",
+    "serve": "node server.mjs"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  }
+}
