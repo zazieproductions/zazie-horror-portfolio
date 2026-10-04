@@ -205,7 +205,7 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 ├── index.html                  # Home: prerendered DOM + inline boot system + 14 JSON-LD blocks
 ├── index-<hash>.js / .css      # React bundle (built; rename per raw-sha256[:8] convention)
 ├── 404.html                    # "Signal Lost" — served with real 404 status
-├── sw.js                       # Service worker (CACHE_NAME zazie-v24; bump it on any hash change)
+├── sw.js                       # Service worker (CACHE_NAME zazie-v26; bump it on any hash change)
 ├── server.mjs                  # Local static server, clean routes + 404 fallback
 ├── _headers                    # CSP, canonical Link headers, cache policy
 ├── _redirects                  # 301 map ONLY (no SPA rewrite — see Deployment)
@@ -218,7 +218,8 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 │   ├── posters/<slug>-{640.avif,640.jpg,1200.jpg}   # 9 productions × 3 variants
 │   ├── hero-portrait.{avif,jpg}, headshot.{avif,jpg}, press-photo.jpg
 │   ├── atmosphere-bg.jpg       # hero ken-burns layer
-│   └── project-*.jpg           # film-sample covers (YouTube IDs / -drive)
+│   ├── project-*.jpg           # film-sample covers (one per YouTube video)
+│   └── eclipsed-cover-1280.jpg # Eclipsed cover frame, from the root Eclipsed.png upload
 ├── work/ reel/ composer/ process/ services/ contact/
 │   └── index.html              # Hub pages — COMMITTED OUTPUT, no in-repo source
 ├── store.html → store/index.html   # Catalogue — GENERATED, do not hand-edit
@@ -229,6 +230,7 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 ├── tools/check-sitemap.mjs     # Pre-flight validator: 17 GSC checks + 5 internal-link checks
 ├── tools/route-aliases.mjs     # Writes/checks the root <route>.html twin of every directory route
 ├── tools/indexnow.mjs          # Post-deploy IndexNow ping (Bing, Yandex, Seznam, Naver, Yep...)
+├── Eclipsed.png                # Raw cover upload: source of images/eclipsed-cover-1280.jpg
 ├── The Dark Awaits.png         # Raw poster upload kept for provenance (unreferenced)
 ├── PERFORMANCE.md LEGAL.md RATIFY.md SEO-DOSSIER.md SITEMAP.md STORE.md
 │                               # Dated implementation records — the repo's memory
@@ -276,7 +278,9 @@ Recipes for the six most likely changes. In every case: **grep the counts** — 
 
 **New audio demo (non-showreel):** add under `/audio/` with a descriptive name, reference it from the page that presents it, and add any page-level schema it needs. Keep `preload="none"` or `"metadata"` — never `auto`.
 
-**New visual project / film sample:** cover image → `images/project-<id>.jpg` pattern; entry beside the film-sample data in the bundle **and** the prerendered covers in `index.html`; schema `VideoObject` + sitemap `video:video` if it is a real embed.
+**New visual project / film sample:** cover image → `images/project-<id>.jpg` pattern (or a named cover derived from a root upload, as the Eclipsed frame is); entry beside the film-sample data in the bundle **and** the prerendered covers in `index.html`, both holding the same URL; schema `VideoObject` + sitemap `video:video` if it is a real embed.
+
+**Replacing an existing cover:** the image is immutable-cached on disk (`/images/*`: one day plus stale-while-revalidate) and cache-first in `sw.js`, so publish the replacement under a **new filename** and update every reference — prerendered `<img>`, bundle `thumb`, `thumbnailUrl`, sitemap — rather than overwriting the old path in place.
 
 **New portfolio category / hub page:**
 1. Create `<slug>/index.html` as a **real static path** — never a rewrite target (see [Deployment](#deployment)).
@@ -338,7 +342,7 @@ Each production ships exactly three derivatives, verified at display size:
 | `images/posters/<slug>-640.jpg` | grid fallback, progressive JPEG (q82) | `<picture>` fallback |
 | `images/posters/<slug>-1200.jpg` | lightbox only, on click (q82) | never loaded in the grid |
 
-Rules: always set `width`/`height` (CLS-safe); grid and client render must reference identical URLs (the React render swaps in and must not re-download); hero and portraits use the same `<picture>` AVIF→JPG pattern with `fetchpriority="high"` preloads. Raw uploads are **not** committed as site assets — they are cleaned, cropped to key art, and encoded per this table. (The one exception, `The Dark Awaits.png` at root, is kept only as provenance and referenced by nothing.)
+Rules: always set `width`/`height` (CLS-safe); grid and client render must reference identical URLs (the React render swaps in and must not re-download); hero and portraits use the same `<picture>` AVIF→JPG pattern with `fetchpriority="high"` preloads. Raw uploads are **not** committed as site assets — they are cleaned, cropped to key art, and encoded per this table. Two root PNGs are the exceptions, and neither is served: `The Dark Awaits.png`, kept as provenance and referenced by nothing, and `Eclipsed.png`, the raw upload behind `images/eclipsed-cover-1280.jpg`.
 
 ### Audio
 
@@ -350,7 +354,7 @@ No video files in the repo. Film samples are lazy `youtube-nocookie.com` iframes
 
 ### Adding media safely — checklist
 
-- [ ] Correct derivative set and naming (`<slug>-640.avif|-640.jpg|-1200.jpg` or `project-<id>.jpg`)
+- [ ] Correct derivative set and naming (`<slug>-640.avif|-640.jpg|-1200.jpg`, `project-<id>.jpg`, or a named cover derived from a root upload such as `eclipsed-cover-1280.jpg`)
 - [ ] `width`/`height` on every `<img>`/`<picture>`; `loading="lazy"` below the fold
 - [ ] Referenced from **both** DOM copies (prerendered + bundle) with identical URLs
 - [ ] Added to `pageImages` (inline module script), lightbox list if applicable, `sw.js` precache (+ `CACHE_NAME` bump), `sitemap.xml` (+ validator pass)

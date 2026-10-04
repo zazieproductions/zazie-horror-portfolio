@@ -40,9 +40,15 @@
 // both the prerendered index.html and the bundle. Bundle re-hashed, so the cache name
 // moves with it: without the bump a returning visitor would keep the previous index.html/JS
 // pair from the old cache (they are immutable for a year).
-// v24: remove the Cosmic Horror showreel filter and add Ambient Horror; R'lyeh's
+// v25: the Eclipsed cover frame is now the self hosted /images/eclipsed-cover-1280.jpg
+// (from the new root upload Eclipsed.png) instead of the Drive thumbnail, so the
+// card no longer contacts drive.google.com on page load. The merge with main also
+// removes the hero's "Student films from $75.99" link from the bundle, not only the
+// prerendered DOM (main's edit landed in one copy; React rebuilt the link on mount).
+// Bundle re-hashed twice, so the cache name moves with it.
+// v26: remove the Cosmic Horror showreel filter and add Ambient Horror; R'lyeh's
 // Xenolith is reclassified into that mood. The homepage bundle is re-hashed.
-const CACHE_NAME = 'zazie-v24';
+const CACHE_NAME = 'zazie-v26';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -84,7 +90,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-f509fde0.css',
-  '/index-d58eeb6a.js',
+  '/index-c6cdd6d2.js',
   '/store-94c90049.css',
   '/store-3fc01be0.js',
   '/legal-24ac8394.css',
