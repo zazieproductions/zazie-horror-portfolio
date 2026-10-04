@@ -2,8 +2,33 @@
 
 **File:** `sitemap.xml` → `https://horror.zazieproductions.com/sitemap.xml`
 **Validator:** `node tools/check-sitemap.mjs`
-**Status:** ✅ `PASS — 16 URLs, 44 images, 8 videos. Safe to submit.`
-**Date:** 2026-09-25 (first written 2026-09-18; §1–5 below are that pass)
+**Status:** ✅ `PASS — 19 URLs, 47 images, 8 videos. Safe to submit.`
+**Date:** 2026-10-04 (first written 2026-09-18; §1–5 below are the 2026-09-25 pass)
+
+---
+
+## Update, 2026-10-04: commission pages
+
+Three commission pages joined the site — `/hire-a-composer` (the commercial
+pillar), `/sound-design` and `/game-scoring` — with a `Hire` tab in every
+primary nav, links in every footer, entries in `sitemap.xml` with image
+metadata, canonical `Link:` headers and cache policy in `_headers`, precache
+entries in `sw.js` (CACHE_NAME `zazie-v23`), `CLEAN_ROUTES` in `server.mjs`,
+and their sections listed on the HTML site map. The React bundle was edited
+(nav array, footer array, hero H1) and re-hashed to `index-60c930a1.js`.
+
+Two technical items from §5 of this document were also closed on the home
+page: the seven `VideoObject.contentUrl` values pointing at YouTube watch
+pages and the one pointing at a Google Drive preview page were removed
+(`embedUrl` kept; the 30 `AudioObject` URLs pointing at real `/audio/*.mp3`
+files are valid and untouched), and `_headers` now carries an explicit
+`X-Robots-Tag: noindex, follow` for `/404.html` so the 404 template can never
+inherit the `/*` index,follow header again.
+
+Expected in Search Console after deploy: 19 pages discovered. The live
+deployment was still serving the 2026-09-18 revision when this pass was
+written (`/sitemap` answered 404), so merge first — see the audit,
+`SEO-COMPETITOR-AUDIT-WEARY-PINES.md` §7.1.
 
 ---
 

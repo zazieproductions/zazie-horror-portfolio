@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" style="background:#030303;color-scheme:dark">
+<head>
+<meta charset="utf-8"/>
+<link href="/favicon.svg" rel="icon" type="image/svg+xml"/>
+<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
+<meta content="#030303" name="theme-color"/>
+<title>Adaptive Horror Game Scoring & Music | Zazie Productions</title>
+<meta content="Adaptive horror scoring for games: states, seamless loops, layered stems, stingers and implementation notes for Wwise, FMOD, Unity and Unreal pipelines." name="description"/>
+<link rel="canonical" href="https://horror.zazieproductions.com/game-scoring"/>
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"/>
+<meta name="author" content="Zazie Kanwar-Torge"/>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/cormorant-garamond-latin-400-normal.woff2" crossorigin/>
+<link rel="preload" as="font" type="font/woff2" href="/fonts/inter-latin-wght-normal.woff2" crossorigin/>
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Zazie Productions"/>
+<meta property="og:locale" content="en_US"/>
+<meta property="og:title" content="Adaptive Horror Game Scoring & Music | Zazie Productions"/>
+<meta property="og:description" content="Adaptive horror scoring for games: states, seamless loops, layered stems, stingers and implementation notes for Wwise, FMOD, Unity and Unreal pipelines."/>
+<meta property="og:url" content="https://horror.zazieproductions.com/game-scoring"/>
+<meta property="og:image" content="https://horror.zazieproductions.com/images/press-photo.jpg"/>
+<meta property="og:image:alt" content="Zazie Productions horror scoring suite, Asheville NC"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="800"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Adaptive Horror Game Scoring & Music | Zazie Productions"/>
+<meta name="twitter:description" content="Adaptive horror scoring for games: states, seamless loops, layered stems, stingers and implementation notes for Wwise, FMOD, Unity and Unreal pipelines."/>
+<meta name="twitter:image" content="https://horror.zazieproductions.com/images/press-photo.jpg"/>
+<meta name="twitter:image:alt" content="Zazie Productions horror scoring suite, Asheville NC"/>
+<link href="/legal-24ac8394.css" rel="stylesheet"/>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "@id": "https://horror.zazieproductions.com/game-scoring#webpage",
+      "url": "https://horror.zazieproductions.com/game-scoring",
+      "name": "Adaptive Horror Scoring for Games and Interactive Work",
+      "description": "Adaptive horror scoring by Zazie Kanwar-Torge: states, loops, layered stems, stingers and implementation notes for Wwise, FMOD, Unity and Unreal pipelines.",
+      "isPartOf": {
+        "@id": "https://horror.zazieproductions.com/#website"
+      },
+      "about": {
+        "@id": "https://horror.zazieproductions.com/#person"
+      },
+      "primaryImageOfPage": "https://horror.zazieproductions.com/images/press-photo.jpg",
+      "datePublished": "2026-10-04",
+      "dateModified": "2026-10-04"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://horror.zazieproductions.com/game-scoring#service",
+      "name": "Adaptive horror scoring for games and interactive work",
+      "serviceType": "Interactive and adaptive music composition",
+      "provider": {
+        "@id": "https://horror.zazieproductions.com/#org"
+      },
+      "areaServed": "Worldwide",
+      "description": "States, seamless loops, layered stems, stingers and transition assets for horror and dark narrative games, delivered with implementation documentation for common engine and middleware pipelines.",
+      "url": "https://horror.zazieproductions.com/game-scoring"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Portfolio",
+          "item": "https://horror.zazieproductions.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Game Scoring",
+          "item": "https://horror.zazieproductions.com/game-scoring"
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#doc">Skip to the document</a>
+<div class="grain" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+<div class="frame" aria-hidden="true"></div>
+
+<header class="masthead">
+  <div class="shell masthead-inner">
+    <a class="brand" href="/" aria-label="Zazie Kanwar-Torge, Zazie Productions, back to the portfolio">
+      <span class="mark" aria-hidden="true">Z</span>
+      <span class="brand-name"><b>ZKT</b><span>Productions</span></span>
+    </a>
+    <nav class="tabs" aria-label="Primary">
+      <a href="/reel" title="Horror composer showreel: 30 original dark cinematic cues">Reel</a>
+      <a href="/work" title="Selected horror productions: psychological, folk, body horror scores">Work</a>
+      <a href="/composer" title="Zazie Kanwar-Torge: psychological horror composer biography">Composer</a>
+      <a href="/process" title="Horror film scoring process: spotting to stems">Process</a>
+      <a href="/services" title="Horror film scoring rates: micro-budget to feature">Rates</a>
+      <a href="/hire-a-composer" title="Hire a composer: original scores and cinematic sound design">Hire</a>
+      <a href="/store" title="Catalogue: horror sound libraries, dark ambient records, tools">Store</a>
+    </nav>
+    <a class="btn btn-sm" href="/contact" title="Scoring inquiry: tell me about your project">Scoring inquiry</a>
+  </div>
+  <div class="progress" aria-hidden="true"></div>
+</header>
+
+<header class="doc-head">
+  <div class="shell doc-head-inner">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ol itemscope itemtype="https://schema.org/BreadcrumbList">
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+          <a itemprop="item" href="/"><span itemprop="name">Portfolio</span></a>
+          <meta itemprop="position" content="1" />
+        </li>
+        <li aria-hidden="true" class="crumb-sep">/</li>
+        <li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" aria-current="page">
+          <span itemprop="name">Game Scoring</span>
+          <meta itemprop="position" content="2" />
+        </li>
+      </ol>
+    </nav>
+    <p class="eyebrow">Archive 08 · Interactive</p>
+    <h1>Adaptive horror scoring for <em>games and interactive work</em></h1>
+    <p class="doc-lead">In a game the score is a system. I write horror music that survives being played with — states that transition cleanly, loops that never announce themselves, stingers that fire without breaking the bed, and documentation your audio lead can actually implement from.</p>
+    <ul class="doc-meta">
+      <li>Format <b>Games, interactive narrative, adaptive horror systems</b></li>
+      <li>Prepared for <b>Engine and middleware delivery: loops, layers, states, stingers</b></li>
+      <li>Floors <b>Scoped to project funding, including indie and student projects</b></li>
+    </ul>
+  </div>
+</header>
+
+<main id="doc" class="doc">
+  <div class="shell doc-layout">
+    <nav class="doc-index" aria-label="On this page">
+      <p>Contents</p>
+      <ol>
+        <li><a href="#needs">I. What interactive horror scoring needs</a></li>
+        <li><a href="#built">II. How it is built</a></li>
+        <li><a href="#delivery">III. Deliverables</a></li>
+        <li><a href="#proof">IV. Proof</a></li>
+        <li><a href="#questions">V. Questions</a></li>
+        <li><a href="#start">VI. Start an inquiry</a></li>
+      </ol>
+    </nav>
+    <div class="doc-body">
+      <section class="clause" id="needs">
+        <h2><span class="no">I</span>What interactive horror scoring needs</h2>
+        <p>Music that behaves. In a game the score is a system as much as a composition — it has to survive being played with, looped, interrupted, and layered by a player who does not follow the timeline you imagined.</p>
+        <ul class="hub-grid">
+          <li class="hub-card"><span class="no">01</span><h3>States and intensity</h3><p>Calm, unease, pursuit, reveal: composed as a family that transitions cleanly rather than a set of unrelated tracks.</p></li>
+          <li class="hub-card" style="--i:1"><span class="no">02</span><h3>Loops and layers</h3><p>Seamless loops, stems that stack by rule, and stingers that can fire without breaking the bed underneath.</p></li>
+          <li class="hub-card" style="--i:2"><span class="no">03</span><h3>Mix behaviour</h3><p>Dialogue-safe music, ducking notes and headroom defined so the audio lead is not reverse-engineering your mix.</p></li>
+          <li class="hub-card" style="--i:3"><span class="no">04</span><h3>Implementation notes</h3><p>File naming, tempo and key metadata, transition points and parameter ranges documented for the engine side.</p></li>
+        </ul>
+      </section>
+      <section class="clause" id="built">
+        <h2><span class="no">II</span>How it is built</h2>
+        <ol>
+          <li><strong>Design conversation.</strong> What the player should feel at each stage, what triggers what, and which moments must land every single time. <!-- [VERIFY] confirm this workflow matches how you want to work on interactive projects --></li>
+          <li><strong>Vertical slice.</strong> One area or one scene scored first — loops, layers and transitions — so the team can hear the system working before the whole soundtrack is written.</li>
+          <li><strong>Expansion.</strong> The same palette extended across biomes, chapters, menus and boss encounters, with reusable material rather than one-off cues.</li>
+          <li><strong>Integration support.</strong> Delivery prepared for the engine and middleware the project already uses — including Wwise, FMOD, Unity or Unreal pipelines where that is the team's stack. <a href="/faq#games">Game scoring FAQ</a>.</li>
+        </ol>
+      </section>
+      <section class="clause" id="delivery">
+        <h2><span class="no">III</span>Deliverables</h2>
+        <ul>
+          <li><strong>Seamless loops</strong> with loop points and tempo documented, at production sample rate and bit depth.</li>
+          <li><strong>Layered stems</strong> per state, named to a convention the audio lead can script against.</li>
+          <li><strong>One-shots and stingers</strong> including safe variants that can fire over any bed.</li>
+          <li><strong>Transition assets</strong> — intros, outros, bridges and crossfade material between states.</li>
+          <li><strong>Documentation</strong> describing parameters, recommended volumes and behaviours per state.</li>
+        </ul>
+        <p>If the project is early enough to define the sound before the systems are built, that is usually cheaper than fixing audio architecture later — <a href="/hire-a-composer">hire a composer</a> and the score can be designed alongside the game. <a href="/services#rates">What game and interactive scoring costs</a>.</p>
+      </section>
+      <section class="clause" id="proof">
+        <h2><span class="no">IV</span>Proof</h2>
+        <figure class="composer-portrait">
+          <picture>
+            <source srcset="/images/posters/the-dark-awaits-640.avif" type="image/avif" />
+            <img src="/images/posters/the-dark-awaits-640.jpg" width="640" height="960" loading="lazy" decoding="async" alt="THE DARK AWAITS horror film poster - original score by Zazie Kanwar-Torge" title="THE DARK AWAITS - original score by Zazie Kanwar-Torge" />
+          </picture>
+          <figcaption>THE DARK AWAITS (2025) — the tonal register horror games are built from. <!-- [VERIFY] add shipped game credits here when they can be named --></figcaption>
+        </figure>
+        <ul class="hub-grid">
+          <li class="hub-card"><span class="no">01</span><h3><a class="stretch" href="/reel">Dread built as material</a></h3><p>Thirty cues of tension, atmosphere and pressure — the raw palette that becomes states and layers in a game.</p></li>
+          <li class="hub-card" style="--i:1"><span class="no">02</span><h3><a class="stretch" href="/work">Film work as tonal proof</a></h3><p>Nine productions scored for psychological, folk, supernatural and body horror: the tonal register horror games are built from.</p></li>
+          <li class="hub-card" style="--i:2"><span class="no">03</span><h3><a class="stretch" href="/store">Tools and libraries</a></h3><p>Released sound libraries and tools in the catalogue, including material designed for interactive use.</p></li>
+        </ul>
+              </section>
+      <section class="clause" id="questions">
+        <h2><span class="no">V</span>Questions</h2>
+        <h3 id="q-gs-mw">Which engines and middleware can you deliver for?</h3>
+        <p>Delivery is format-based: loops, stems, one-shots and documentation that work with Wwise, FMOD, Unity or Unreal pipelines. Name your stack in the inquiry and the export structure is matched to it.</p>
+        <h3 id="q-gs-scope">We do not have a full soundtrack budget. Can we start small?</h3>
+        <p>Yes — a vertical slice, a title theme, or a single area is a legitimate first milestone, and it is quoted from your funding rather than a fixed industry figure. <a href="/services">Rates and what moves the number</a>.</p>
+        <h3 id="q-gs-rev">How do revisions work on interactive work?</h3>
+        <p>Milestones are agreed per stage — the slice, the expansion, the integration pass — so feedback happens where it is cheap. <!-- [VERIFY] confirm milestone structure --></p>
+      </section>
+      <section class="clause" id="start">
+        <h2><span class="no">VI</span>Start an inquiry</h2>
+        <p>Send the engine, the scope, the feeling you want the player to have at the worst moment of the game, and your milestone timeline.</p>
+        <p><a class="btn" href="/contact">Open a scoring inquiry →</a></p>
+        <p class="stamp">Scoring a film instead? <a href="/hire-a-composer">Hire a composer</a> · Sound design only? <a href="/sound-design">Cinematic sound design</a></p>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="shell">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <p class="name">Zazie Kanwar-Torge</p>
+        <p class="tagline">Zazie Productions LLC · Atmospheric horror scores · Composer and sound designer for hire</p>
+      </div>
+      <nav class="foot-links" aria-label="Footer">
+        <a href="/">Portfolio</a>
+        <a href="/hire-a-composer">Hire a composer</a>
+        <a href="/reel">Full showreel</a>
+        <a href="/work">Selected productions</a>
+        <a href="/sound-design">Sound design</a>
+        <a href="/game-scoring">Game scoring</a>
+        <a href="/composer">Composer biography</a>
+        <a href="/process">Scoring process</a>
+        <a href="/services">Rate card</a>
+        <a href="/contact">Contact</a>
+        <a href="/store">Catalogue</a>
+        <a href="/#press">Press kit</a>
+        <a href="https://zazieproductions.bandcamp.com" target="_blank" rel="noopener">Bandcamp</a>
+        <a href="https://zazieproductions.itch.io/" target="_blank" rel="noopener">itch.io</a>
+        <a href="https://zazieproductions.gumroad.com/" target="_blank" rel="noopener">Gumroad</a>
+        <a href="https://www.ebay.com/usr/zazie_productions" target="_blank" rel="noopener">eBay</a>
+        <a href="https://www.imdb.com/name/nm17333332" target="_blank" rel="noopener">IMDb credited</a>
+        <a href="https://open.spotify.com/artist/4UOgvZEOo7xBhFBjJvlMm0" target="_blank" rel="noopener">Spotify</a>
+        <a href="https://youtube.com/@zazieproductions" target="_blank" rel="noopener">YouTube</a>
+      </nav>
+    </div>
+    <div class="foot-entity">
+      <p>Zazie Kanwar-Torge is an award-winning psychological horror composer, experimental producer, and multi-instrumentalist operating as Zazie Productions LLC from Asheville, NC. Original dark, atmospheric cinematic scores for psychological horror, folk horror, body horror, supernatural thrillers, cosmic horror, techno thrillers, and dark sci-fi. Film, TV, and game scoring: student films from $75.99; all other projects priced on a sliding scale tied to project funding, typically a few hundred dollars. 30-cue showreel, nine selected horror productions, eight film samples with instant playback. Services: original horror scoring, dread sound design, adaptive game audio, body horror SFX libraries. <a href="/composer">Composer biography</a> · <a href="/work">Selected horror productions</a> · <a href="/reel">Horror showreel</a> · <a href="/process">Scoring process</a> · <a href="/services">Scoring rates</a> · <a href="/hire-a-composer">Hire a composer</a> · <a href="/contact">Hire horror composer</a> · <a href="/faq">FAQ: 36 questions</a></p>
+    </div>
+    <nav class="foot-law" aria-label="Legal and operating documents">
+      <span class="lbl">Documents</span>
+      <a href="/legal">All documents</a>
+      <a href="/faq">FAQ</a>
+      <a href="/terms">Terms</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/licensing">Licensing and credits</a>
+      <a href="/purchases">Purchases and returns</a>
+      <a href="/accessibility">Accessibility</a>
+      <a href="/sitemap">Site map</a>
+    </nav>
+    <p class="foot-legal">
+      <span>© <span data-year>2026</span> Zazie Productions LLC. All rights reserved. Composer and sound designer for hire.</span>
+      <span>No advertising trackers · no cookies set by this site</span>
+    </p>
+  </div>
+</footer>
+
+<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("/sw.js").catch(()=>{})},{once:true})}</script>
+<script src="/legal-ea8a33ec.js" defer></script>
+</body>
+</html>

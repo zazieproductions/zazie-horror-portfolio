@@ -7,8 +7,8 @@ An immersive web environment for psychological horror scoring, experimental comp
 [![Live site](https://img.shields.io/badge/site-horror.zazieproductions.com-c41e1e)](https://horror.zazieproductions.com)
 [![Architecture](https://img.shields.io/badge/architecture-static_%C2%B7_zero_backend-1e1e1e)](#architecture)
 [![Hosting](https://img.shields.io/badge/host-Cloudflare_Pages-1e1e1e)](#deployment)
-[![Showreel](https://img.shields.io/badge/showreel-32_cues_%C2%B7_9_productions-1e1e1e)](#core-experiences--features)
-[![Sitemap](https://img.shields.io/badge/sitemap-15_urls_%C2%B7_44_images_%C2%B7_8_videos-1e1e1e)](#seo--structured-data)
+[![Showreel](https://img.shields.io/badge/showreel-30_cues_%C2%B7_9_productions-1e1e1e)](#core-experiences--features)
+[![Sitemap](https://img.shields.io/badge/sitemap-19_urls_%C2%B7_47_images_%C2%B7_8_videos-1e1e1e)](#seo--structured-data)
 
 ---
 
@@ -51,6 +51,7 @@ Primary routes:
 | --- | --- |
 | `/` | The portfolio: a single continuous React experience (productions, showreel, film samples, press, approach, rates, composer, reviews, inquiry) |
 | `/work` · `/reel` · `/composer` · `/process` · `/services` · `/contact` | Indexable hub pages mirroring the portfolio's content silos |
+| `/hire-a-composer` · `/sound-design` · `/game-scoring` | Commission pages: the commercial pillar and its first two format spokes |
 | `/store` | The Catalogue: records, sound libraries, tools and objects — 24 items, checkout delegated to Bandcamp, itch.io, Gumroad and eBay |
 | `/legal` · `/faq` · `/terms` · `/privacy` · `/licensing` · `/purchases` · `/accessibility` | Trust, legal and operating documents |
 | `/sitemap` | HTML site map: every page and its in-page sections, linked from every footer (the human counterpart of `/sitemap.xml`) |
@@ -77,7 +78,7 @@ The site is built to *demonstrate* rather than describe that identity:
 
 - **A restrained dark system, not decoration.** One palette (`void #030303`, `ink`, `smoke`, `ash`, `mist #9a9590`, `bone #f0ebe3`, `blood #c41e1e`, `ember #ff2a2a`), one serif voice (Cormorant Garamond) against one workhorse sans (Inter variable), and a fixed atmosphere layer (film grain, vignette, drifting ambient orbs, ken-burns hero) that is part of the first painted frame, not an after-effect of JavaScript.
 - **"The Archive" frame.** The 404 is an archive-entry error; the optional boot intro is a tape deck ("TAPE 00 · "SHOWREEL" · PROPERTY OF ZAZIE PRODUCTIONS"); the copy speaks in catalogue and signal language. The metaphor is consistent and quiet.
-- **Listen first.** The showreel — 32 original cues, playable inline, organised by mood — is the centre of gravity of the whole site. Film samples embed the scores *in context*. Commerce points outward to marketplaces rather than building a parallel shop.
+- **Listen first.** The showreel — 30 original cues, playable inline, organised by mood — is the centre of gravity of the whole site. Film samples embed the scores *in context*. Commerce points outward to marketplaces rather than building a parallel shop.
 - **No backend, no tracking.** The inquiry form composes an email in the visitor's own mail client. No cookies, no analytics, no accounts, no newsletter. The privacy notice inventories every third party the site can touch, and a device inspector lets the visitor verify the claims themselves.
 
 Unconventional choices exist for artistic or experiential reasons and are documented where they do. Do not flatten them into generic SaaS patterns.
@@ -87,7 +88,7 @@ Unconventional choices exist for artistic or experiential reasons and are docume
 **The portfolio (`/`)** — prerendered HTML that is fully meaningful before JavaScript, then re-rendered live by React:
 
 - **Selected productions** — 9 films/series with a poster wall (AVIF/JPG responsive images, click-through 1200 px lightbox): EXPIRE, UNSEEN, PEREGRINUS, Phantom Requiem, ECLIPSED, THE HAUNTED, CHOLERIC, MIKE HAS A VISITOR, THE DARK AWAITS.
-- **Showreel** — 32 original cues (`/audio/track-00.mp3` … `track-31.mp3`, ≈98 MB total) with consolidated mood tags (Psychological Orchestral, Stinger, Thriller, Dark Ambient, Body Horror, Cosmic Horror), mood-cluster browsing, and a **sticky global player** driven by a single shared `<audio>` element through a React context.
+- **Showreel** — 30 original cues (`/audio/track-00.mp3` … `track-29.mp3`, ≈98 MB total) with consolidated mood tags (Psychological, Stinger, Thriller, Dark Ambient, Body Horror, Ambient Horror), mood-cluster browsing, and a **sticky global player** driven by a single shared `<audio>` element through a React context.
 - **Film samples** — 7 embeds: 6 lazy `youtube-nocookie.com` players plus 1 Google Drive preview, with poster-`<picture>` covers.
 - **Press kit** — features and coverage (Visual Container award-winners press release PDF, Grammy Weekly, Limitless Magazine, Billboard Wire).
 - **Approach / Rates / Composer / Reviews / Inquiry** — scoring method, scope-and-estimate bands (student films from $75.99; sliding scale by project funding, typically a few hundred dollars, as published on `/services`), biography, 5.0 collaborator rating with 4 featured reviews, and a structured inquiry form that builds a `mailto:` handoff.
@@ -113,7 +114,7 @@ All artwork © the respective productions. See the [live site](https://horror.za
 | System | Where it lives | Notes |
 | --- | --- | --- |
 | Showreel audio engine | `src/lib/audioContext.tsx` (in bundle), rendered by `Showreel.tsx` + `StickyPlayer.tsx` | One `<audio>` element for the whole site, shared through React context: `playTrack / toggle / next / prev / seek / setVolume`. Previous-track restarts if >3 s in. `preload="metadata"`; MP3s stream from `/audio/`, cached `immutable` at the edge. |
-| Mood clusters | `tracks` array in the bundle (32 entries: `id, title, src, duration, tag`) | Each cue carries one mood tag; `/reel` mirrors the list with `AudioObject`/`MusicRecording` schema. |
+| Mood clusters | `tracks` array in the bundle (30 entries: `id, title, src, duration, tag`) | Each cue carries one mood tag; `/reel` mirrors the list with `AudioObject`/`MusicRecording` schema. |
 | Sticky player | `StickyPlayer.tsx` | Hidden until first play; animated wave-bar visualisation; respects `prefers-reduced-motion`. |
 | Film samples | `Projects.tsx` data + prerendered covers | 6 YouTube-nocookie iframes get a real `src` only when lazy-loaded; 1 Google Drive embed; `preconnect` to YouTube deferred off the critical path. |
 | Boot terminal | inline in `index.html` | Minimal typed loading screen, zero network requests, silent, plays on every homepage load with force/disable query hooks. |
@@ -165,7 +166,7 @@ src/
     ├── Hero.tsx              # atmosphere stack, ken-burns portrait
     ├── PosterWall.tsx        # 9 productions, lightbox
     ├── Projects.tsx          # film data (n1 array) + film samples
-    ├── Showreel.tsx          # 32 cues, mood browsing
+    ├── Showreel.tsx          # 30 cues, mood browsing
     ├── StickyPlayer.tsx      # persistent now-playing bar
     ├── PressKit.tsx          # press features + PDF
     ├── Method.tsx            # scoring approach
@@ -204,20 +205,21 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 ├── index.html                  # Home: prerendered DOM + inline boot system + 14 JSON-LD blocks
 ├── index-<hash>.js / .css      # React bundle (built; rename per raw-sha256[:8] convention)
 ├── 404.html                    # "Signal Lost" — served with real 404 status
-├── sw.js                       # Service worker (CACHE_NAME zazie-v16; bump it on any hash change)
+├── sw.js                       # Service worker (CACHE_NAME zazie-v26; bump it on any hash change)
 ├── server.mjs                  # Local static server, clean routes + 404 fallback
 ├── _headers                    # CSP, canonical Link headers, cache policy
 ├── _redirects                  # 301 map ONLY (no SPA rewrite — see Deployment)
-├── robots.txt / sitemap.xml    # Crawl control; 16 URLs / 44 images / 8 videos
+├── robots.txt / sitemap.xml    # Crawl control; 19 URLs / 47 images / 8 videos
 ├── <32-hex>.txt                # IndexNow key file (public by design; see tools/indexnow.mjs)
 ├── audio/
-│   └── track-00..31.mp3        # 32 showreel cues (~98 MB) — the audio library
+│   └── track-00..29.mp3        # 30 showreel cues (~98 MB) — the audio library
 ├── fonts/                      # Cormorant Garamond 400 n/i + Inter variable (woff2)
 ├── images/
 │   ├── posters/<slug>-{640.avif,640.jpg,1200.jpg}   # 9 productions × 3 variants
 │   ├── hero-portrait.{avif,jpg}, headshot.{avif,jpg}, press-photo.jpg
 │   ├── atmosphere-bg.jpg       # hero ken-burns layer
-│   └── project-*.jpg           # film-sample covers (YouTube IDs / -drive)
+│   ├── project-*.jpg           # film-sample covers (one per YouTube video)
+│   └── eclipsed-cover-1280.jpg # Eclipsed cover frame, from the root Eclipsed.png upload
 ├── work/ reel/ composer/ process/ services/ contact/
 │   └── index.html              # Hub pages — COMMITTED OUTPUT, no in-repo source
 ├── store.html → store/index.html   # Catalogue — GENERATED, do not hand-edit
@@ -228,6 +230,7 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 ├── tools/check-sitemap.mjs     # Pre-flight validator: 17 GSC checks + 5 internal-link checks
 ├── tools/route-aliases.mjs     # Writes/checks the root <route>.html twin of every directory route
 ├── tools/indexnow.mjs          # Post-deploy IndexNow ping (Bing, Yandex, Seznam, Naver, Yep...)
+├── Eclipsed.png                # Raw cover upload: source of images/eclipsed-cover-1280.jpg
 ├── The Dark Awaits.png         # Raw poster upload kept for provenance (unreferenced)
 ├── PERFORMANCE.md LEGAL.md RATIFY.md SEO-DOSSIER.md SITEMAP.md STORE.md
 │                               # Dated implementation records — the repo's memory
@@ -255,7 +258,7 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 
 ## Where to add new work
 
-Recipes for the six most likely changes. In every case: **grep the counts** — production (9), cue (32) and item (24) totals appear in meta descriptions, FAQ answers, schema `numberOfItems`, hero copy and footers, and must move together.
+Recipes for the six most likely changes. In every case: **grep the counts** — production (9), cue (30) and item (24) totals appear in meta descriptions, FAQ answers, schema `numberOfItems`, hero copy and footers, and must move together.
 
 **New film / production** (touches both DOM copies):
 1. Poster assets → `images/posters/<slug>-640.avif`, `-640.jpg`, `-1200.jpg` (see [pipeline](#media--asset-pipeline)).
@@ -271,11 +274,13 @@ Recipes for the six most likely changes. In every case: **grep the counts** — 
 2. Entry in the bundle `tracks` array (`id`, `title`, `src`, `duration` in seconds, `tag`).
 3. `/reel/index.html` cue list + `AudioObject`/`MusicRecording` schema.
 4. `sitemap.xml` playlist entries → validator.
-5. Counts: "32 cues" lives in meta descriptions, `/reel` H1, hero copy.
+5. Counts: "30 cues" lives in meta descriptions, `/reel` H1, hero copy.
 
 **New audio demo (non-showreel):** add under `/audio/` with a descriptive name, reference it from the page that presents it, and add any page-level schema it needs. Keep `preload="none"` or `"metadata"` — never `auto`.
 
-**New visual project / film sample:** cover image → `images/project-<id>.jpg` pattern; entry beside the film-sample data in the bundle **and** the prerendered covers in `index.html`; schema `VideoObject` + sitemap `video:video` if it is a real embed.
+**New visual project / film sample:** cover image → `images/project-<id>.jpg` pattern (or a named cover derived from a root upload, as the Eclipsed frame is); entry beside the film-sample data in the bundle **and** the prerendered covers in `index.html`, both holding the same URL; schema `VideoObject` + sitemap `video:video` if it is a real embed.
+
+**Replacing an existing cover:** the image is immutable-cached on disk (`/images/*`: one day plus stale-while-revalidate) and cache-first in `sw.js`, so publish the replacement under a **new filename** and update every reference — prerendered `<img>`, bundle `thumb`, `thumbnailUrl`, sitemap — rather than overwriting the old path in place.
 
 **New portfolio category / hub page:**
 1. Create `<slug>/index.html` as a **real static path** — never a rewrite target (see [Deployment](#deployment)).
@@ -337,11 +342,11 @@ Each production ships exactly three derivatives, verified at display size:
 | `images/posters/<slug>-640.jpg` | grid fallback, progressive JPEG (q82) | `<picture>` fallback |
 | `images/posters/<slug>-1200.jpg` | lightbox only, on click (q82) | never loaded in the grid |
 
-Rules: always set `width`/`height` (CLS-safe); grid and client render must reference identical URLs (the React render swaps in and must not re-download); hero and portraits use the same `<picture>` AVIF→JPG pattern with `fetchpriority="high"` preloads. Raw uploads are **not** committed as site assets — they are cleaned, cropped to key art, and encoded per this table. (The one exception, `The Dark Awaits.png` at root, is kept only as provenance and referenced by nothing.)
+Rules: always set `width`/`height` (CLS-safe); grid and client render must reference identical URLs (the React render swaps in and must not re-download); hero and portraits use the same `<picture>` AVIF→JPG pattern with `fetchpriority="high"` preloads. Raw uploads are **not** committed as site assets — they are cleaned, cropped to key art, and encoded per this table. Two root PNGs are the exceptions, and neither is served: `The Dark Awaits.png`, kept as provenance and referenced by nothing, and `Eclipsed.png`, the raw upload behind `images/eclipsed-cover-1280.jpg`.
 
 ### Audio
 
-`/audio/track-NN.mp3`, positional numbering, ~98 MB for 32 cues. Streamed with `preload="metadata"`; edge-cached `immutable` 1 y. Audio quality decisions belong to the composer — don't transcode the library without asking. This is the repo's largest payload and grows linearly with the catalogue; see [Known technical debt](#known-technical-debt).
+`/audio/track-NN.mp3`, positional numbering, ~98 MB for 30 cues. Streamed with `preload="metadata"`; edge-cached `immutable` 1 y. Audio quality decisions belong to the composer — don't transcode the library without asking. This is the repo's largest payload and grows linearly with the catalogue; see [Known technical debt](#known-technical-debt).
 
 ### Video & external embeds
 
@@ -349,7 +354,7 @@ No video files in the repo. Film samples are lazy `youtube-nocookie.com` iframes
 
 ### Adding media safely — checklist
 
-- [ ] Correct derivative set and naming (`<slug>-640.avif|-640.jpg|-1200.jpg` or `project-<id>.jpg`)
+- [ ] Correct derivative set and naming (`<slug>-640.avif|-640.jpg|-1200.jpg`, `project-<id>.jpg`, or a named cover derived from a root upload such as `eclipsed-cover-1280.jpg`)
 - [ ] `width`/`height` on every `<img>`/`<picture>`; `loading="lazy"` below the fold
 - [ ] Referenced from **both** DOM copies (prerendered + bundle) with identical URLs
 - [ ] Added to `pageImages` (inline module script), lightbox list if applicable, `sw.js` precache (+ `CACHE_NAME` bump), `sitemap.xml` (+ validator pass)
@@ -382,8 +387,8 @@ Target: **WCAG 2.2 Level AA, partially conformant** — stated precisely on [`/a
 
 The site runs a deliberately deep SEO layer (the repo's `SEO-DOSSIER.md` and `SITEMAP.md` record the full programme):
 
-- A **JSON-LD matrix** per page: `Person`/`Organization` entity graph, `Service`/`Offer` catalogue, `VideoObject` ×8, `FAQPage`, `Review`/`AggregateRating`, `CollectionPage`+`ItemList` per hub, `MusicPlaylist`+32 `MusicRecording`/`AudioObject` on `/reel`, `HowTo` on `/process`.
-- `sitemap.xml` (16 URLs / 44 images / 8 videos) enforced by `tools/check-sitemap.mjs` — a pre-flight validator that replicates 17 Google Search Console checks (canonical equality, schema element order, robots interplay, on-disk asset existence) plus 5 internal-link checks, and fails loudly. **Run it before every deploy that touches routes, links, media or schema.**
+- A **JSON-LD matrix** per page: `Person`/`Organization` entity graph, `Service`/`Offer` catalogue, `VideoObject` ×8, `FAQPage`, `Review`/`AggregateRating`, `CollectionPage`+`ItemList` per hub, `MusicPlaylist`+30 `MusicRecording`/`AudioObject` on `/reel`, `HowTo` on `/process`.
+- `sitemap.xml` (19 URLs / 47 images / 8 videos) enforced by `tools/check-sitemap.mjs` — a pre-flight validator that replicates 17 Google Search Console checks (canonical equality, schema element order, robots interplay, on-disk asset existence) plus 5 internal-link checks, and fails loudly. **Run it before every deploy that touches routes, links, media or schema.**
 - **Sitelinks structure** (Google generates sitelinks from the site's own links; no markup requests them): the home page links every top-level page in *both* DOM copies (footer "Archive" and "Documents" rows); every other page links every page through its masthead and footer; footer anchors are short page names; titles carry one brand suffix, `| Zazie Productions`. The validator fails if a top-level page loses its home-page link, if the bundle drops a link the prerender has, or if any `#section` link stops resolving (396 checked).
 - **Site name**: one `WebSite` node on `/` (`name` "Zazie Productions", `alternateName` "Zazie Productions Horror", "ZKT Productions"), matched by `og:site_name` on every page. No `SearchAction` (Google retired the sitelinks search box in November 2024) and no home-page `BreadcrumbList` (the home page is the root of the trail, not a trail).
 - **Beyond Google**: `sitemap.xml` is advertised in `robots.txt` for every engine; `tools/indexnow.mjs` pushes changed URLs to the IndexNow engines after a deploy.
@@ -448,7 +453,7 @@ For future AI-assisted development sessions. **Before changing anything:**
 
 **Implemented** (all verifiable in this tree):
 
-- Full portfolio experience: poster wall + lightbox (9 productions), 32-cue showreel with mood clusters and sticky player, 7 film samples, press kit, scope-and-estimate, reviews, `mailto:` inquiry
+- Full portfolio experience: poster wall + lightbox (9 productions), 30-cue showreel with mood clusters and sticky player, 7 film samples, press kit, scope-and-estimate, reviews, `mailto:` inquiry
 - Terminal boot sequence on every homepage load (`?boot=1` / `#boot` force, `?boot=0` / `#noboot` disable), fully gated and failsafed
 - Six indexable hub pages, seven legal/operating documents with generated FAQ schema, an HTML site map, 24-item catalogue with progressive enhancement
 - Service worker (SWR / network-first / cache-first tiers), CSP + canonical headers, 301 map, real 404
