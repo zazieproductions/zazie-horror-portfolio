@@ -88,7 +88,7 @@ Unconventional choices exist for artistic or experiential reasons and are docume
 **The portfolio (`/`)** — prerendered HTML that is fully meaningful before JavaScript, then re-rendered live by React:
 
 - **Selected productions** — 9 films/series with a poster wall (AVIF/JPG responsive images, click-through 1200 px lightbox): EXPIRE, UNSEEN, PEREGRINUS, Phantom Requiem, ECLIPSED, THE HAUNTED, CHOLERIC, MIKE HAS A VISITOR, THE DARK AWAITS.
-- **Showreel** — 30 original cues (`/audio/track-00.mp3` … `track-29.mp3`, ≈98 MB total) with consolidated mood tags (Psychological, Stinger, Thriller, Dark Ambient, Body Horror, Cosmic Horror), mood-cluster browsing, and a **sticky global player** driven by a single shared `<audio>` element through a React context.
+- **Showreel** — 30 original cues (`/audio/track-00.mp3` … `track-29.mp3`, ≈98 MB total) with consolidated mood tags (Psychological, Stinger, Thriller, Dark Ambient, Body Horror, Ambient Horror), mood-cluster browsing, and a **sticky global player** driven by a single shared `<audio>` element through a React context.
 - **Film samples** — 7 embeds: 6 lazy `youtube-nocookie.com` players plus 1 Google Drive preview, with poster-`<picture>` covers.
 - **Press kit** — features and coverage (Visual Container award-winners press release PDF, Grammy Weekly, Limitless Magazine, Billboard Wire).
 - **Approach / Rates / Composer / Reviews / Inquiry** — scoring method, scope-and-estimate bands (student films from $75.99; sliding scale by project funding, typically a few hundred dollars, as published on `/services`), biography, 5.0 collaborator rating with 4 featured reviews, and a structured inquiry form that builds a `mailto:` handoff.
@@ -205,7 +205,7 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 ├── index.html                  # Home: prerendered DOM + inline boot system + 14 JSON-LD blocks
 ├── index-<hash>.js / .css      # React bundle (built; rename per raw-sha256[:8] convention)
 ├── 404.html                    # "Signal Lost" — served with real 404 status
-├── sw.js                       # Service worker (CACHE_NAME zazie-v25; bump it on any hash change)
+├── sw.js                       # Service worker (CACHE_NAME zazie-v26; bump it on any hash change)
 ├── server.mjs                  # Local static server, clean routes + 404 fallback
 ├── _headers                    # CSP, canonical Link headers, cache policy
 ├── _redirects                  # 301 map ONLY (no SPA rewrite — see Deployment)
