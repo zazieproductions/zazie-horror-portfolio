@@ -253,13 +253,27 @@ async function run() {
     if (failures.length) {
       line('');
       line(`**${failures.length} failing request(s):**`);
-      line('');
-      line('```');
-      for (const f of failures.slice(0, 40)) {
-        line(`${String(f.status).padEnd(4)} ${f.url}${f.location ? ` -> ${f.location}` : ''}${f.error ? ` (${f.error})` : ''}`);
+      // Group them: when the 65 item URLs are all missing, a flat list buries
+      // the hub rows that say something real. Non-item paths sort first.
+      const groups = [
+        ['canonical URL (expected 200)', canonFail],
+        ['.html alias (expected 308 to canonical)', aliasFail.filter((f) => f.kind === '.html')],
+        ['trailing-slash alias (expected 308, or 200 for a hub directory index)', aliasFail.filter((f) => f.kind !== '.html')],
+        ['unknown path (expected 404)', unknownFail],
+      ];
+      const rank = (f) => (/^\/(work|reel|store)\/.+/.test(f.url) ? 1 : 0);
+      for (const [label, list] of groups) {
+        if (!list.length) continue;
+        line('');
+        line(`${label} — ${list.length} failing`);
+        line('');
+        line('```');
+        for (const f of [...list].sort((a, b) => rank(a) - rank(b) || a.url.localeCompare(b.url)).slice(0, 12)) {
+          line(`${String(f.status || 'ERR').padEnd(4)} ${f.url}${f.location ? ` -> ${f.location}` : ''}${f.error ? ` (${f.error})` : ''}`);
+        }
+        if (list.length > 12) line(`... and ${list.length - 12} more`);
+        line('```');
       }
-      if (failures.length > 40) line(`... ${failures.length - 40} more`);
-      line('```');
     }
     process.exit(failures.length ? 1 : 0);
   }
