@@ -216,6 +216,7 @@ Assumptions worth stating plainly: this is a **head-weight to intent and feasibi
 4. Home `<title>` 111–113 chars, meta ~300 chars → truncation in the one SERP where you are unknown.
 5. Home H1 has no genre/discipline keyword.
 6. No analytics/GSC → no learning loop.
+6b. **[RESOLVED — tool artifact]** The `Link: ; rel="canonical"` observation from the meta-extraction API is a quirk of that API, not a defect: the repository's `_headers` carries the full `Link: <https://horror.zazieproductions.com/>; rel="canonical"` value for every route, and the validator enforces canonical equality between each page's `<link rel=canonical>` and its sitemap URL. No change required.
 7. Bundle/prerender dual-DOM means every link change costs a bundle rehash (a process risk, not a bug — the validator catches drift).
 
 ### Conversion friction
