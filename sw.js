@@ -36,7 +36,10 @@
 // both the prerendered index.html and the bundle. Bundle re-hashed, so the cache name
 // moves with it: without the bump a returning visitor would keep the previous index.html/JS
 // pair from the old cache (they are immutable for a year).
-const CACHE_NAME = 'zazie-v22';
+// v23: the showreel removes the Cosmic Horror filter and adds Ambient Horror; R'lyeh's
+// Xenolith is reclassified into that mood. The immutable home bundle is re-hashed and
+// the cache is bumped to prevent the previous taxonomy from persisting for visitors.
+const CACHE_NAME = 'zazie-v23';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -72,7 +75,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-f509fde0.css',
-  '/index-0e50167c.js',
+  '/index-087daa9a.js',
   '/store-94c90049.css',
   '/store-3fc01be0.js',
   '/legal-24ac8394.css',
