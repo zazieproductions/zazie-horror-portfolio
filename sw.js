@@ -48,7 +48,12 @@
 // Bundle re-hashed twice, so the cache name moves with it.
 // v26: remove the Cosmic Horror showreel filter and add Ambient Horror; R'lyeh's
 // Xenolith is reclassified into that mood. The homepage bundle is re-hashed.
-const CACHE_NAME = 'zazie-v26';
+// v27: showreel grows to 32 cues - The Beautiful Wrongness (Psychological Orchestral) and
+// Earthpulse Protocol (Thriller) join. The showreel's first shelf becomes Psychological
+// Orchestral, which also absorbs Variations on a Vanishing Body, and #70's Ambient Horror
+// filter is preserved. Bundle re-hashed, so the cache name moves with it: without the bump a
+// returning visitor would keep the previous index.html/JS pair from the old cache.
+const CACHE_NAME = 'zazie-v27';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -90,7 +95,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-f509fde0.css',
-  '/index-c6cdd6d2.js',
+  '/index-4f8ab3de.js',
   '/store-94c90049.css',
   '/store-3fc01be0.js',
   '/legal-24ac8394.css',
