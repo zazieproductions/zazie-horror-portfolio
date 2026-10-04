@@ -81,7 +81,7 @@ and two partials:
 | Route | Role |
 | --- | --- |
 | `/legal` | Hub: precedence order, index of all six documents, status of the text |
-| `/faq` | 36 questions in 8 sections, `FAQPage` schema generated from the markup |
+| `/faq` | 35 questions in 8 sections, `FAQPage` schema generated from the markup |
 | `/terms` | 25 clauses: site use plus the commercial terms of a commission |
 | `/privacy` | 15 sections: real data inventory, third party table, rights, inspector |
 | `/licensing` | 14 sections: grant, options, retained rights, credits, cue sheets, AI |
@@ -282,6 +282,6 @@ values, not measured from a rendered page.
 * **Service worker staleness** is handled for the seven legal paths, the six
   IA hubs and `/store` (network first). Any future document route must be added
   to `NETWORK_FIRST` in `sw.js`.
-* **The FAQ count is load bearing.** `/faq` states 36 questions in its
+* **The FAQ count is load bearing.** `/faq` states 35 questions in its
   heading meta and the counter's static text. Adding a question means editing
   both; the build regenerates the schema automatically.
