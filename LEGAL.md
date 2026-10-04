@@ -24,6 +24,22 @@ decision are collected in **`RATIFY.md`**, not silently resolved.
 > is dated 25 September 2026. No legal text changed. See `SITEMAP.md` →
 > *Update, 2026-09-25*.
 
+> **Addendum, 2026-10-04.** The Eclipsed cover frame is self hosted again, and
+> the privacy notice is back to its stricter reading. The new root upload
+> `Eclipsed.png` (the film's blue still) is published as
+> `images/eclipsed-cover-1280.jpg`, cropped to the 16:9 card frame;
+> `index.html`, the bundle, `/work` and `sitemap.xml` reference it, and
+> `/images/project-eclipsed-drive.jpg` is retired. This is the mirror image of
+> the PR #26 entry in section 3: `drive.google.com` is now contacted **only
+> when you press play**, so the six statements that PR #26 had to amend were
+> restored to their stricter form — the third party row, the note under the
+> table ("every poster, still and cover frame on this site is a self hosted
+> image"), section 7's page-load image paragraph, FAQ 35 and terms clause 16 —
+> and the pages rebuilt, which regenerates the `FAQPage` schema from the
+> amended answer. Checked on the served tree: `index.html` carries zero
+> `drive.google.com/thumbnail` references and the card's `src` is the local
+> file.
+
 ---
 
 ## 1. System as found (evidence from repo inspection)

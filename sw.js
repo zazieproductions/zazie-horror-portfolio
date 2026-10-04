@@ -40,7 +40,11 @@
 // both the prerendered index.html and the bundle. Bundle re-hashed, so the cache name
 // moves with it: without the bump a returning visitor would keep the previous index.html/JS
 // pair from the old cache (they are immutable for a year).
-const CACHE_NAME = 'zazie-v23';
+// v24: the Eclipsed cover frame is now the self hosted /images/eclipsed-cover-1280.jpg
+// (from the new root upload Eclipsed.png) instead of the Drive thumbnail, so the
+// card no longer contacts drive.google.com on page load. Bundle re-hashed, so the
+// cache name moves with it.
+const CACHE_NAME = 'zazie-v24';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -82,7 +86,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-f509fde0.css',
-  '/index-60c930a1.js',
+  '/index-db4ffcea.js',
   '/store-94c90049.css',
   '/store-3fc01be0.js',
   '/legal-24ac8394.css',
