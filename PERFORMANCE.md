@@ -653,7 +653,7 @@ poster for details · full IMDb profile". The whole line goes, link included.
   390px phone (1,653 → 1,604px); the gap to "Film samples" is now just the
   section's own bottom padding.
 - **Content-hashed rename**, per the `immutable` discipline in `_headers`:
-  `index-f154880c.js` → `index-0e50167c.js` (raw file sha256, first 8 hex).
+  `index-f154880c.js` → `index-60c930a1.js` (raw file sha256, first 8 hex).
   `index.html`'s dynamic import and the `sw.js` precache entry updated and
   `CACHE_NAME` bumped `zazie-v21` → `zazie-v22`; no stale references remain in
   any served file.
@@ -665,5 +665,5 @@ poster for details · full IMDb profile". The whole line goes, link included.
   exactly the one removed line in both renderings, all nine posters remain, the
   lightbox opens and closes, and there are no page errors. A returning visitor
   holding the `zazie-v21` cache (old bundle precached) lands on `zazie-v22` with
-  only `index-0e50167c.js` loaded and no hint. Local HTTP: 200 on `/`,
-  `/index.html` and `/index-0e50167c.js`; 404 on the old hash.
+  only `index-60c930a1.js` loaded and no hint. Local HTTP: 200 on `/`,
+  `/index.html` and `/index-60c930a1.js`; 404 on the old hash.

@@ -32,11 +32,15 @@
 // v21: Eclipsed uses the standard Drive preview. Fullscreen actions move below
 // the picture, phone frames have room for native controls, and the duplicate
 // Drive loader is removed. Fresh bundle/CSS hashes prevent stale mobile layouts.
+// v23: three commission pages join the site - /hire-a-composer (the commercial
+// pillar), /sound-design and /game-scoring - with a new bundle hash, a Hire tab
+// in the primary nav, the three pages in every footer, and the home page H1 and
+// metadata rewritten around the horror composer phrase.
 // v22: the small hint line under the poster wall (and its IMDb profile link) is gone from
 // both the prerendered index.html and the bundle. Bundle re-hashed, so the cache name
 // moves with it: without the bump a returning visitor would keep the previous index.html/JS
 // pair from the old cache (they are immutable for a year).
-const CACHE_NAME = 'zazie-v22';
+const CACHE_NAME = 'zazie-v23';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -53,6 +57,12 @@ const PRECACHE_ASSETS = [
   '/services/index.html',
   '/contact',
   '/contact/index.html',
+  '/hire-a-composer',
+  '/hire-a-composer/index.html',
+  '/sound-design',
+  '/sound-design/index.html',
+  '/game-scoring',
+  '/game-scoring/index.html',
   '/store',
   '/store.html',
   '/store/index.html',
@@ -72,7 +82,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-f509fde0.css',
-  '/index-0e50167c.js',
+  '/index-60c930a1.js',
   '/store-94c90049.css',
   '/store-3fc01be0.js',
   '/legal-24ac8394.css',

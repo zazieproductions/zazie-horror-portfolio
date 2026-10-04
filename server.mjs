@@ -25,6 +25,7 @@ const MIME = {
 
 const CLEAN_ROUTES = [
   '/work', '/reel', '/composer', '/process', '/services', '/contact',
+  '/hire-a-composer', '/sound-design', '/game-scoring',
   '/store', '/legal', '/faq', '/terms', '/privacy', '/licensing', '/purchases', '/accessibility',
   '/sitemap'
 ];

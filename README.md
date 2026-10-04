@@ -8,7 +8,7 @@ An immersive web environment for psychological horror scoring, experimental comp
 [![Architecture](https://img.shields.io/badge/architecture-static_%C2%B7_zero_backend-1e1e1e)](#architecture)
 [![Hosting](https://img.shields.io/badge/host-Cloudflare_Pages-1e1e1e)](#deployment)
 [![Showreel](https://img.shields.io/badge/showreel-30_cues_%C2%B7_9_productions-1e1e1e)](#core-experiences--features)
-[![Sitemap](https://img.shields.io/badge/sitemap-15_urls_%C2%B7_44_images_%C2%B7_8_videos-1e1e1e)](#seo--structured-data)
+[![Sitemap](https://img.shields.io/badge/sitemap-19_urls_%C2%B7_47_images_%C2%B7_8_videos-1e1e1e)](#seo--structured-data)
 
 ---
 
@@ -51,6 +51,7 @@ Primary routes:
 | --- | --- |
 | `/` | The portfolio: a single continuous React experience (productions, showreel, film samples, press, approach, rates, composer, reviews, inquiry) |
 | `/work` · `/reel` · `/composer` · `/process` · `/services` · `/contact` | Indexable hub pages mirroring the portfolio's content silos |
+| `/hire-a-composer` · `/sound-design` · `/game-scoring` | Commission pages: the commercial pillar and its first two format spokes |
 | `/store` | The Catalogue: records, sound libraries, tools and objects — 24 items, checkout delegated to Bandcamp, itch.io, Gumroad and eBay |
 | `/legal` · `/faq` · `/terms` · `/privacy` · `/licensing` · `/purchases` · `/accessibility` | Trust, legal and operating documents |
 | `/sitemap` | HTML site map: every page and its in-page sections, linked from every footer (the human counterpart of `/sitemap.xml`) |
@@ -204,11 +205,11 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 ├── index.html                  # Home: prerendered DOM + inline boot system + 14 JSON-LD blocks
 ├── index-<hash>.js / .css      # React bundle (built; rename per raw-sha256[:8] convention)
 ├── 404.html                    # "Signal Lost" — served with real 404 status
-├── sw.js                       # Service worker (CACHE_NAME zazie-v16; bump it on any hash change)
+├── sw.js                       # Service worker (CACHE_NAME zazie-v23; bump it on any hash change)
 ├── server.mjs                  # Local static server, clean routes + 404 fallback
 ├── _headers                    # CSP, canonical Link headers, cache policy
 ├── _redirects                  # 301 map ONLY (no SPA rewrite — see Deployment)
-├── robots.txt / sitemap.xml    # Crawl control; 16 URLs / 44 images / 8 videos
+├── robots.txt / sitemap.xml    # Crawl control; 19 URLs / 47 images / 8 videos
 ├── <32-hex>.txt                # IndexNow key file (public by design; see tools/indexnow.mjs)
 ├── audio/
 │   └── track-00..29.mp3        # 30 showreel cues (~98 MB) — the audio library
@@ -383,7 +384,7 @@ Target: **WCAG 2.2 Level AA, partially conformant** — stated precisely on [`/a
 The site runs a deliberately deep SEO layer (the repo's `SEO-DOSSIER.md` and `SITEMAP.md` record the full programme):
 
 - A **JSON-LD matrix** per page: `Person`/`Organization` entity graph, `Service`/`Offer` catalogue, `VideoObject` ×8, `FAQPage`, `Review`/`AggregateRating`, `CollectionPage`+`ItemList` per hub, `MusicPlaylist`+30 `MusicRecording`/`AudioObject` on `/reel`, `HowTo` on `/process`.
-- `sitemap.xml` (16 URLs / 44 images / 8 videos) enforced by `tools/check-sitemap.mjs` — a pre-flight validator that replicates 17 Google Search Console checks (canonical equality, schema element order, robots interplay, on-disk asset existence) plus 5 internal-link checks, and fails loudly. **Run it before every deploy that touches routes, links, media or schema.**
+- `sitemap.xml` (19 URLs / 47 images / 8 videos) enforced by `tools/check-sitemap.mjs` — a pre-flight validator that replicates 17 Google Search Console checks (canonical equality, schema element order, robots interplay, on-disk asset existence) plus 5 internal-link checks, and fails loudly. **Run it before every deploy that touches routes, links, media or schema.**
 - **Sitelinks structure** (Google generates sitelinks from the site's own links; no markup requests them): the home page links every top-level page in *both* DOM copies (footer "Archive" and "Documents" rows); every other page links every page through its masthead and footer; footer anchors are short page names; titles carry one brand suffix, `| Zazie Productions`. The validator fails if a top-level page loses its home-page link, if the bundle drops a link the prerender has, or if any `#section` link stops resolving (396 checked).
 - **Site name**: one `WebSite` node on `/` (`name` "Zazie Productions", `alternateName` "Zazie Productions Horror", "ZKT Productions"), matched by `og:site_name` on every page. No `SearchAction` (Google retired the sitelinks search box in November 2024) and no home-page `BreadcrumbList` (the home page is the root of the trail, not a trail).
 - **Beyond Google**: `sitemap.xml` is advertised in `robots.txt` for every engine; `tools/indexnow.mjs` pushes changed URLs to the IndexNow engines after a deploy.

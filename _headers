@@ -127,6 +127,42 @@
   Cache-Control: public, max-age=0, must-revalidate
   Link: <https://horror.zazieproductions.com/contact>; rel="canonical"
 
+/hire-a-composer
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/hire-a-composer>; rel="canonical"
+
+/hire-a-composer/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/hire-a-composer>; rel="canonical"
+
+/hire-a-composer/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/hire-a-composer>; rel="canonical"
+
+/sound-design
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/sound-design>; rel="canonical"
+
+/sound-design/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/sound-design>; rel="canonical"
+
+/sound-design/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/sound-design>; rel="canonical"
+
+/game-scoring
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/game-scoring>; rel="canonical"
+
+/game-scoring/
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/game-scoring>; rel="canonical"
+
+/game-scoring/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+  Link: <https://horror.zazieproductions.com/game-scoring>; rel="canonical"
+
 /sw.js
   Cache-Control: public, max-age=0, must-revalidate
 
@@ -228,5 +264,10 @@
   Cache-Control: public, max-age=0, must-revalidate
   Link: <https://horror.zazieproductions.com/sitemap>; rel="canonical"
 
+
+# 404 must never be indexable, whatever the /* block above says: the 404 template
+# is served with a real 404 status, and an index,follow header on it fights the
+# page's own meta robots and is the first thing a soft-404 audit looks for.
 /404.html
+  X-Robots-Tag: noindex, follow
   Cache-Control: public, max-age=0, must-revalidate
