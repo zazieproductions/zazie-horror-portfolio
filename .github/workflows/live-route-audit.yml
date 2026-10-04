@@ -16,6 +16,21 @@ name: Live route audit
 # into ITEM-URLS.md §9.
 
 on:
+  # The pull_request trigger is what makes this usable from a branch: GitHub
+  # only registers workflows that exist on the default branch, so a
+  # workflow_dispatch cannot be sent until this file is on main. Workflows in
+  # the PR head do run for pull_request events, so opening the PR runs the
+  # audit on a runner -- one that can reach the host.
+  pull_request:
+    paths:
+      - sitemap.xml
+      - robots.txt
+      - _headers
+      - _redirects
+      - tools/live-route-audit.mjs
+      - scripts/**
+      - src/data/**
+      - '.github/workflows/live-route-audit.yml'
   workflow_dispatch:
     inputs:
       base_url:
@@ -46,13 +61,13 @@ jobs:
         id: audit
         run: node tools/live-route-audit.mjs "$BASE_URL"
         env:
-          BASE_URL: ${{ inputs.base_url }}
+          BASE_URL: ${{ inputs.base_url || 'https://horror.zazieproductions.com' }}
 
       - name: Markdown table for ITEM-URLS.md §9
         if: always()
         run: node tools/live-route-audit.mjs "$BASE_URL" --markdown | tee live-route-audit.md
         env:
-          BASE_URL: ${{ inputs.base_url }}
+          BASE_URL: ${{ inputs.base_url || 'https://horror.zazieproductions.com' }}
 
       - name: Upload route table
         if: always()

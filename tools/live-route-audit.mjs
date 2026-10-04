@@ -54,7 +54,7 @@ const argv = process.argv.slice(2);
 const flags = new Set(argv.filter((a) => a.startsWith('--')));
 const positional = argv.filter((a) => !a.startsWith('--'));
 const markdown = flags.has('--markdown');
-const BASE = (positional[0] || DEFAULT_BASE).replace(/\/+$/, '');
+const BASE = (positional.filter(Boolean)[0] || DEFAULT_BASE).replace(/\/+$/, '');
 
 /* --------------------------------------------------------------- sitemap */
 
