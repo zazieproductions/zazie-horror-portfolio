@@ -43,7 +43,7 @@
 // v25: the Eclipsed cover frame is now the self hosted /images/eclipsed-cover-1280.jpg
 // (from the new root upload Eclipsed.png) instead of the Drive thumbnail, so the
 // card no longer contacts drive.google.com on page load. The merge with main also
-// removes the hero's "Student films from $75.99" link from the bundle, not only the
+// removes the hero's pricing link from the bundle, not only the
 // prerendered DOM (main's edit landed in one copy; React rebuilt the link on mount).
 // Bundle re-hashed twice, so the cache name moves with it.
 // v26: remove the Cosmic Horror showreel filter and add Ambient Horror; R'lyeh's
@@ -53,7 +53,12 @@
 // Orchestral, which also absorbs Variations on a Vanishing Body, and #70's Ambient Horror
 // filter is preserved. Bundle re-hashed, so the cache name moves with it: without the bump a
 // returning visitor would keep the previous index.html/JS pair from the old cache.
-const CACHE_NAME = 'zazie-v27';
+// v28: the sub-$250 entry tier is retired across the archive - the rate card, the
+// FAQ question, the collaborator review, the inquiry form options and every
+// meta/schema/footer mention. The scope builder's lowest tier is now the short
+// film score and the floor moves to $250. The bundle re-hashes and the cache
+// name moves with it, so a returning visitor never gets the old pair.
+const CACHE_NAME = 'zazie-v28';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -95,7 +100,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-f509fde0.css',
-  '/index-4f8ab3de.js',
+  '/index-9388c759.js',
   '/store-94c90049.css',
   '/store-3fc01be0.js',
   '/legal-24ac8394.css',
