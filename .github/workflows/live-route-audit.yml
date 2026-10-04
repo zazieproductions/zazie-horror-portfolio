@@ -1,0 +1,63 @@
+name: Live route audit
+
+# Runs tools/live-route-audit.mjs against a real host.
+#
+# The build sandbox cannot reach horror.zazieproductions.com -- its egress is
+# allow-listed (github.com and registry.npmjs.org answer; the site does not),
+# which is why every status in ITEM-URLS.md §9 used to come from the local
+# mirror in server.mjs. A runner has unrestricted egress, so this is where the
+# live numbers come from.
+#
+#   gh workflow run live-route-audit.yml
+#   gh workflow run live-route-audit.yml -f base_url=https://<hash>.pages.dev
+#
+# The job prints the route table, exits non-zero if any URL answers
+# unexpectedly, and uploads the markdown table as an artifact ready to paste
+# into ITEM-URLS.md §9.
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: Base URL to audit
+        required: true
+        default: https://horror.zazieproductions.com
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: live-route-audit
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Route table
+        id: audit
+        run: node tools/live-route-audit.mjs "$BASE_URL"
+        env:
+          BASE_URL: ${{ inputs.base_url }}
+
+      - name: Markdown table for ITEM-URLS.md §9
+        if: always()
+        run: node tools/live-route-audit.mjs "$BASE_URL" --markdown | tee live-route-audit.md
+        env:
+          BASE_URL: ${{ inputs.base_url }}
+
+      - name: Upload route table
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-route-audit
+          path: live-route-audit.md
+          if-no-files-found: warn
