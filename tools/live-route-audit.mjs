@@ -157,48 +157,96 @@ const canonicalPath = (p) => p.replace(/\/+$/, '') || '/';
 /** The canonical an alias form is supposed to point at: strip ".html" and any trailing slash. */
 const targetOf = (p) => canonicalPath(p.endsWith('.html') ? p.slice(0, -'.html'.length) : p);
 
+/**
+ * Explicit `_redirects` rules win over the host's own conventions: eight legacy
+ * `.html` forms carry a hand-written 301 there, so they answer 301 where every
+ * other `.html` form is 308'd by Pages itself. Only exact paths are honoured --
+ * splats and placeholders are left to the host.
+ */
+function redirectRules() {
+  const file = path.join(ROOT, '_redirects');
+  if (!fs.existsSync(file)) return new Map();
+  const rules = new Map();
+  for (const raw of fs.readFileSync(file, 'utf8').split('\n')) {
+    const line = raw.trim();
+    if (!line || line.startsWith('#')) continue;
+    const [from, to, status] = line.split(/\s+/);
+    if (!from || !to || /[*:(]/.test(from)) continue;
+    rules.set(from, { to, status: Number(status) || 301 });
+  }
+  return rules;
+}
+
+const RULES = redirectRules();
+
+
+/* Paths that are not in the sitemap and never should be: these must 404. */
+const unknownPaths = ['/work/does-not-exist', '/reel/does-not-exist', '/store/does-not-exist', '/nope'];
+
 async function run() {
   const started = Date.now();
   const line = (s = '') => process.stdout.write(`${s}\n`);
 
-  if (!markdown) {
-    line(`live-route-audit: ${BASE}`);
-    line(`sitemap.xml: ${SITEMAP_URLS.length} URLs ` +
-      Object.entries(tally(SITEMAP_PATHS)).map(([k, v]) => `${k} ${v}`).join(' / '));
-    line('');
-  }
+  /* ------------------------------------------------------ expectations */
 
-  /* ---- 1. every sitemap URL -------------------------------------------- */
+  /** What this request should answer, honouring _redirects over host convention. */
+  const expectedFor = (p) => {
+    const rule = RULES.get(p);
+    if (rule) return { status: rule.status, to: rule.to };
+    if (unknownPaths.includes(p)) return { status: 404, to: null };
+    if (SITEMAP_PATHS.includes(targetOf(p))) {
+      if (p.endsWith('.html')) return { status: 308, to: targetOf(p) };
+      if (p.endsWith('/') && p !== '/') {
+        // A hub route is a directory: Pages serves /work/ from work/index.html.
+        return hasDirectoryIndex(targetOf(p)) ? { status: 200, to: null } : { status: 308, to: targetOf(p) };
+      }
+      return { status: 200, to: null };
+    }
+    return { status: 200, to: null }; // /work and friends, /sitemap.xml, /robots.txt
+  };
+
+  /** Does a probe match its expectation? */
+  const rowOk = (r) => {
+    const want = expectedFor(r.url);
+    if (r.status !== want.status) return false;
+    if (want.to && r.location !== want.to) return false;
+    if (want.status === 200 && r.canonical && r.canonical !== targetOf(r.url)) return false;
+    return true;
+  };
+
+  const row = (r) => {
+    const want = expectedFor(r.url);
+    return {
+      request: r.url,
+      status: r.status || 'ERR',
+      location: r.location || '-',
+      want: want.status,
+      ok: rowOk(r),
+      note: r.error ? ` (${r.error})` : '',
+    };
+  };
+
+  /* ------------------------------------------------------------- probes */
+
+  /* 1. every <loc> in sitemap.xml */
   const canonical = await mapLimit(SITEMAP_PATHS, (p) => probe(p));
-  const canonFail = canonical.filter((r) => {
-    if (r.status !== 200) return true;
-    if (r.canonical && r.canonical !== canonicalPath(r.url)) return true;
-    if (!r.title) return true;
-    if (r.noindex) return true;
-    return false;
-  });
+  const canonFail = canonical.filter((r) => !rowOk(r) || !r.title || r.noindex);
 
-  /* ---- 2 + 3. the alias forms ------------------------------------------ */
+  /* 2 + 3. the alias forms of every URL */
   const aliasJobs = [];
   for (const p of SITEMAP_PATHS) {
     if (p === '/') continue;
-    aliasJobs.push({ path: `${p}.html`, expect: 308, to: p, kind: '.html' });
-    aliasJobs.push({ path: `${p}/`, expect: hasDirectoryIndex(p) ? 200 : 308, to: p, kind: 'trailing slash' });
+    aliasJobs.push({ path: `${p}.html`, kind: '.html' });
+    aliasJobs.push({ path: `${p}/`, kind: 'trailing slash' });
   }
   const alias = await mapLimit(aliasJobs, (j) => probe(j.path).then((r) => ({ ...r, ...j })));
-  const aliasFail = alias.filter((r) => {
-    if (r.status !== r.expect) return true;
-    if (r.expect === 308 && r.location !== r.to) return true;
-    if (r.expect === 200 && r.canonical && r.canonical !== r.to) return true;
-    return false;
-  });
+  const aliasFail = alias.filter((r) => !rowOk(r));
 
-  /* ---- 4. unknown paths ------------------------------------------------- */
-  const unknownPaths = ['/work/does-not-exist', '/reel/does-not-exist', '/store/does-not-exist', '/nope'];
+  /* 4. unknown paths */
   const unknown = await mapLimit(unknownPaths, (p) => probe(p));
-  const unknownFail = unknown.filter((r) => r.status !== 404);
+  const unknownFail = unknown.filter((r) => !rowOk(r));
 
-  /* ---- §9.1 route table ------------------------------------------------- */
+  /* the §9.1 route table */
   const tablePaths = [
     '/', '/work', '/work/', '/work/expire', '/work/expire.html', '/work/expire/',
     '/work/the-dark-awaits', '/reel', '/reel/needle-in-the-nerve', '/reel/rlyehs-xenolith',
@@ -206,43 +254,17 @@ async function run() {
     '/sitemap', '/sitemap.xml', '/robots.txt',
     ...unknownPaths,
   ];
-  const table = await mapLimit(tablePaths, (p) => probe(p));
-
-  const byPath = new Map();
-  for (const r of [...canonical, ...alias, ...unknown, ...table]) byPath.set(r.url, r);
-  const expectOf = (p) => {
-    if (unknownPaths.includes(p)) return 404;
-    if (SITEMAP_PATHS.includes(targetOf(p))) {
-      if (p.endsWith('.html')) return 308;
-      if (p.endsWith('/') && p !== '/') return hasDirectoryIndex(canonicalPath(p)) ? 200 : 308;
-      return 200;
-    }
-    if (['/sitemap.xml', '/robots.txt'].includes(p)) return 200;
-    return 200; // /work/ etc: 200 either from the root twin or the directory index
-  };
-
-  const row = (r) => {
-    const want = expectOf(r.url);
-    const ok = r.status === want && (want !== 308 || r.location === targetOf(r.url));
-    return {
-      request: r.url,
-      status: r.status || 'ERR',
-      location: r.location || '-',
-      want,
-      ok,
-      note: r.error ? ` (${r.error})` : '',
-    };
-  };
-
-  const rows = table.map(row);
+  const rows = (await mapLimit(tablePaths, (p) => probe(p))).map(row);
   const failures = [...canonFail, ...aliasFail, ...unknownFail];
 
-  /* ---- output ----------------------------------------------------------- */
+  /* ------------------------------------------------------------- output */
+
   if (markdown) {
     line('| request | status | Location |');
     line('|---|---|---|');
     for (const r of rows) {
-      line(`| \`${r.request}\` | ${r.ok ? r.status : `**${r.status}** (expected ${r.want})`}${r.note} | ${r.location ? `\`${r.location}\`` : '-'} |`);
+      const status = r.ok ? r.status : `**${r.status}** (expected ${r.want})${r.note}`;
+      line(`| \`${r.request}\` | ${status} | ${r.location !== '-' ? `\`${r.location}\`` : '-'} |`);
     }
     line('');
     line('```');
@@ -257,7 +279,7 @@ async function run() {
       // the hub rows that say something real. Non-item paths sort first.
       const groups = [
         ['canonical URL (expected 200)', canonFail],
-        ['.html alias (expected 308 to canonical)', aliasFail.filter((f) => f.kind === '.html')],
+        ['.html alias (expected 308 to the canonical, or the 301 _redirects wrote)', aliasFail.filter((f) => f.kind === '.html')],
         ['trailing-slash alias (expected 308, or 200 for a hub directory index)', aliasFail.filter((f) => f.kind !== '.html')],
         ['unknown path (expected 404)', unknownFail],
       ];
@@ -278,6 +300,10 @@ async function run() {
     process.exit(failures.length ? 1 : 0);
   }
 
+  line(`live-route-audit: ${BASE}`);
+  line(`sitemap.xml: ${SITEMAP_URLS.length} URLs ` +
+    Object.entries(tally(SITEMAP_PATHS)).map(([k, v]) => `${k} ${v}`).join(' / '));
+  line('');
   line('### route table');
   line('');
   line('  status  location              request');
@@ -286,7 +312,7 @@ async function run() {
   }
   line('');
   line(`### every sitemap URL (${SITEMAP_URLS.length})`);
-  line(`  expected 200, no redirect hop, in-page canonical == <loc>, <title> present, not noindex`);
+  line('  expected 200, no redirect hop, in-page canonical == <loc>, <title> present, not noindex');
   line(`  200: ${canonical.filter((r) => r.status === 200).length}   other: ${canonical.filter((r) => r.status !== 200).length}   failing: ${canonFail.length}`);
   line('');
   line(`### alias forms (${alias.length})`);
@@ -303,10 +329,11 @@ async function run() {
   line('');
   if (failures.length) {
     line(`### FAIL — ${failures.length} request(s) did not answer as expected`);
-    for (const f of failures.slice(0, 40)) {
+    const rank = (f) => (/^\/(work|reel|store)\/.+/.test(f.url) ? 1 : 0);
+    for (const f of [...failures].sort((a, b) => rank(a) - rank(b) || a.url.localeCompare(b.url)).slice(0, 25)) {
       line(`  ${String(f.status || 'ERR').padEnd(7)} ${f.url}${f.location ? ` -> ${f.location}` : ''}${f.error ? ` (${f.error})` : ''}`);
     }
-    if (failures.length > 40) line(`  ... ${failures.length - 40} more`);
+    if (failures.length > 25) line(`  ... and ${failures.length - 25} more`);
   } else {
     line(`### PASS — ${SITEMAP_URLS.length} sitemap URLs, ${alias.length} alias forms, ${unknown.length} unknown paths, all as expected`);
   }
