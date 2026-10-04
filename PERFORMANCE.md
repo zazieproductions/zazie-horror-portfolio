@@ -703,7 +703,9 @@ bullet "Local Fallback for Drive Assets".
   `index-60c930a1.js` → `index-db4ffcea.js` (raw sha256[:8]); `index.html`'s
   dynamic import and the `sw.js` precache entry updated and `CACHE_NAME`
   bumped `zazie-v23` → `zazie-v24`, so no stale reference remains in any
-  served file. No CSS change.
+  served file. No CSS change. The merge with `main` re-hashed it once more —
+  see *Merge with `main` (PR #68)* below; the shipped names are
+  `index-30a198e9.js` and `zazie-v25`.
 - **Schema/SEO follow-through**: `VideoObject.thumbnailUrl` on `/` and
   `/work`, plus `video:thumbnail_loc` and `image:loc` in `sitemap.xml`.
 - **Privacy follow-through**: the notice stated that the Eclipsed cover frame
@@ -718,7 +720,33 @@ bullet "Local Fallback for Drive Assets".
   8 videos, and the validator resolves the new thumbnail on disk);
   `node tools/route-aliases.mjs --check` clean; `node --input-type=module
   --check` on the renamed bundle. Local HTTP: 200 on
-  `/images/eclipsed-cover-1280.jpg` and on `index-db4ffcea.js`, 404 on the
-  retired image; `/` and `/work` reference only the local cover, `/privacy`
-  serves the amended row. No headless-browser pass was run for this change;
-  the edits are markup/data, not layout.
+  `/images/eclipsed-cover-1280.jpg` and on the bundle, 404 on the retired
+  image; `/` and `/work` reference only the local cover, `/privacy` serves the
+  amended row. No headless-browser pass was run for this change; the edits are
+  markup/data, not layout.
+
+### Merge with `main` (PR #68), and the hero link React was rebuilding
+
+`main` moved while this branch was open: PR #68 removed the hero's
+`<a href="#services">Student films from $75.99</a>` link. It landed in
+`index.html` only — the bundle still emitted the node at
+`Hero.tsx:190:14` — and the home render is `createRoot`, not `hydrateRoot`, so
+the React mount would have put the removed link back after hydration. That is
+the dual-DOM rule inverted: a prerendered-only edit is as much a bug as a
+bundle-only one.
+
+- The conflict was in `index.html` (one 3.4-million-character line: the
+  prerendered DOM — neither side's edit is separable by git). It was resolved
+  by taking **`main`'s** file and re-applying this branch's three edits to it
+  (the two cover-frame strings and the batch import). `git diff origin/main --
+  index.html` is exactly 3 insertions / 3 deletions, and the three pricing
+  mentions in schema and copy are untouched, as PR #68 intended.
+- The bundle was then patched to drop the same node (one contiguous removal
+  from the hero's status row, `children` back to `[sparkles-icon, "IMDb
+  credited"]`), so both renders agree: the row now ends at "IMDb credited".
+  Re-hashed `index-db4ffcea.js` → `index-30a198e9.js`, 428,054 → 427,890
+  bytes; `index.html`'s import and the `sw.js` precache entry updated,
+  `CACHE_NAME` bumped `zazie-v24` → `zazie-v25`.
+- `tools/film-player.test.mjs` re-derives the bundle name from `index.html`
+  and checks precache membership, so the three-way rename cannot drift
+  silently; it passes with the merged tree.
