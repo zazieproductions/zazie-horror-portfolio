@@ -195,60 +195,90 @@ real content shared that fate.
 
 ## 9. Audit — AFTER
 
-### 9.1 Route table (same local harness)
+### 9.1 Route table — live host, 2026-10-04 21:40 UTC
+
+Run by `tools/live-route-audit.mjs` on a GitHub runner
+(`.github/workflows/live-route-audit.yml`). The build sandbox cannot reach the
+host at all: its egress is allow-listed to `github.com` and the npm registry,
+and `horror.zazieproductions.com` does not resolve there. That — not a host
+outage — is what the six socket-level failures of the earlier pass were.
 
 | request | status | Location |
 |---|---|---|
 | `/` | 200 | - |
 | `/work` | 200 | - |
-| `/work/` | 308 | `/work` |
-| `/work/expire` | **200** | - |
-| `/work/expire.html` | 308 | `/work/expire` |
-| `/work/expire/` | 308 | `/work/expire` |
-| `/work/the-dark-awaits` | **200** | - |
+| `/work/` | 200 | - |
+| `/work/expire` | **404** (expected 200) | - |
+| `/work/expire.html` | **404** (expected 308) | - |
+| `/work/expire/` | **404** (expected 308) | - |
+| `/work/the-dark-awaits` | **404** (expected 200) | - |
 | `/reel` | 200 | - |
-| `/reel/needle-in-the-nerve` | **200** | - |
-| `/reel/rlyehs-xenolith` | **200** | - |
+| `/reel/needle-in-the-nerve` | **404** (expected 200) | - |
+| `/reel/rlyehs-xenolith` | **404** (expected 200) | - |
 | `/store` | 200 | - |
-| `/store/anesthesia-for-the-signal-age` | **200** | - |
-| `/store/f998pro-live-sound-card` | **200** | - |
+| `/store/anesthesia-for-the-signal-age` | **404** (expected 200) | - |
+| `/store/f998pro-live-sound-card` | **404** (expected 200) | - |
 | `/sitemap` | 200 | - |
 | `/sitemap.xml` | 200 | - |
 | `/robots.txt` | 200 | - |
-| `/work/does-not-exist` | **404** | - |
-| `/reel/does-not-exist` | **404** | - |
-| `/store/does-not-exist` | **404** | - |
-| `/nope` | **404** | - |
+| `/work/does-not-exist` | 404 | - |
+| `/reel/does-not-exist` | 404 | - |
+| `/store/does-not-exist` | 404 | - |
+| `/nope` | 404 | - |
 
-### 9.2 Every sitemap URL, checked programmatically
+Every 404 on an item URL is a deploy gap, not a routing defect — see 9.3.
 
-84 URLs fetched from the local server; for each: HTTP status, no redirect hop,
-`<title>` present, canonical present and equal to the `<loc>`, robots present
-and not `noindex`, OG title inside `<head>`, and every JSON-LD block parses.
+The live host also answers two things differently from the local mirror in
+`server.mjs`, and the audit now expects the live behaviour:
+
+- **A hub's trailing-slash form is 200, not 308.** Pages serves `/work/` from
+  `work/index.html`. The mirror 308s it to the slashless form. Both finish on a
+  200 carrying the right canonical, so the canonical URL is unaffected — the
+  mirror is wrong about the *status*.
+- **Eight legacy `.html` forms are 301, not 308.** `/store.html`, `/legal.html`,
+  `/faq.html`, `/terms.html`, `/privacy.html`, `/licensing.html`,
+  `/purchases.html` and `/accessibility.html` carry a hand-written 301 in
+  `_redirects`; every other `.html` form is 308'd by Pages itself. Both land on
+  the canonical.
+
+### 9.2 Every sitemap URL, checked against the live host
+
+For each of the 84: HTTP status, no redirect hop, `<title>` present, canonical
+present and equal to the `<loc>`, robots present and not `noindex`.
 
 ```
-checked 84 sitemap URLs against the local server; failing: 0
+checked 84 sitemap URLs against https://horror.zazieproductions.com; failing: 65
+checked 166 alias forms (.html / trailing slash); failing: 130
+checked   4 unknown paths; failing: 0
 ```
 
-Sample of the static head (metadata precedes every `<script>`):
+Read the other way round: **all 19 hub URLs and all 36 of their alias forms
+answer exactly as designed on the real host**, and every unknown path 404s. The
+195 failures are the 65 item URLs and their 130 alias forms — pages the edge has
+not been given yet.
 
-```
-$ curl -s http://127.0.0.1:8080/work/expire | grep -o '<link rel="canonical"[^>]*>'
-<link rel="canonical" href="https://horror.zazieproductions.com/work/expire"/>
+### 9.3 The edge is six merges behind — why the 65 item URLs 404
 
-$ curl -s http://127.0.0.1:8080/work/expire | head -c 400
-<!DOCTYPE html>
-<html lang="en" style="background:#030303;color-scheme:dark">
-<head>
-<meta charset="utf-8"/>
-<link href="/favicon.svg" rel="icon" type="image/svg+xml"/>
-<meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
-<meta content="#030303" name="theme-color"/>
-<!--SEO:START-->
-<title>EXPIRE (2025) — Psychological Horror &amp; Body Horror Score | Zazie
-```
+The item pages are in `main`, but the deployment serving
+`horror.zazieproductions.com` predates them. Five independent checks:
 
-### 9.3 Link graph
+| what the live site serves | what `main` says | which merge | merged (UTC) |
+|---|---|---|---|
+| `sitemap.xml` with 19 URLs | 84 URLs | #72 | 21:14 |
+| `/services` with a **Student / Micro / Low-Budget · From $75.99** tier | the tier is gone | #71 | 16:46 |
+| "Horror showreel: 30 original cues" | 32 cues | #66 | 16:42 |
+| `404.html` with the same student pricing | string removed | #68 | 16:10 |
+| `sitemap.xml` with `/hire-a-composer`, `/sound-design`, `/game-scoring` | present | #67 | 16:00 |
+
+The last row is live and the four above it are not, so the last deploy to reach
+the edge landed between #67 (16:00 UTC) and #68 (16:10 UTC). Six merges have
+queued up behind it. Until a deploy runs, the 65 item URLs will 404.
+
+**Do not ping IndexNow yet.** The submission would tell five engines to crawl
+65 URLs that currently answer 404. Re-run the audit, confirm 0 failing, then
+submit.
+
+### 9.4 Link graph
 
 - Every item page links its hub (breadcrumb + footer): 65/65.
 - Sibling links per item page: **min 3, median 4**, max 32.
@@ -257,7 +287,7 @@ $ curl -s http://127.0.0.1:8080/work/expire | head -c 400
 - `check-sitemap.mjs`: 873 in-site `#fragment` links resolve; every sitemap URL
   is reachable from `/`; dual-DOM parity holds.
 
-### 9.4 Build + validator output
+### 9.5 Build + validator output
 
 ```
 $ npm run build
@@ -291,11 +321,19 @@ No sitemap URL points at a missing file — `prerender.mjs` would have exited 1.
 
 ## 10. Two things a reviewer should know
 
-1. **The after-audit is local.** The host is unreachable from the build
-   sandbox, so every status above comes from `node server.mjs` against the same
-   tree Cloudflare Pages deploys. Re-run §9.1 against the preview deploy before
-   merge if you want live confirmation; the expectations are 200 on all 84 URLs,
-   308 on `.html` and trailing-slash variants, 404 on anything else.
+1. **§9.1 is live now, but it is only half-green.** The 19 hub URLs, their 36
+   alias forms and all four unknown paths were checked against
+   `horror.zazieproductions.com` and answer exactly as designed. The 65 item
+   URLs 404 — not because the routing is wrong, but because the deployment has
+   not shipped them (§9.3). Re-run the audit after the next deploy:
+
+   ```
+   node tools/live-route-audit.mjs                         # from anywhere with internet
+   gh workflow run live-route-audit.yml                    # or on a runner, once it is on main
+   ```
+
+   Expected when the deploy lands: 84/84 sitemap URLs 200, 166/166 alias forms
+   redirecting to the canonical, 4/4 unknown paths 404, 0 failing.
 2. **`_headers` is near its limit.** It holds 71 rules against Cloudflare's cap
    of 100. The 19 hub routes keep their canonical `Link:` headers there; the 65
    item pages use an in-page canonical instead, deliberately. Adding per-item
@@ -318,6 +356,9 @@ public/sitemap.xml, public/robots.txt, sitemap.xml, robots.txt     regenerated
 work/index.html, reel/index.html, store-src/store.html (+ store.html, store/index.html)
 legal-src/pages/sitemap.html (+ sitemap/index.html)                hub → item links, "Every entry, one URL" section
 tools/check-sitemap.mjs, tools/route-aliases.mjs                   flat-page discovery, NOT_ROUTES
+tools/live-route-audit.mjs                                        new — the §9 table against a real host
+.github/workflows/live-route-audit.yml                            new — runs it on a runner (pull_request + dispatch)
+.github/workflows/indexnow.yml                                    new — post-deploy IndexNow ping, dispatch-only
 sw.js (v29), server.mjs (Pages-mirror routing), _headers, _redirects
 package.json, package-lock.json, tsconfig.json                     new build
 README.md, SITEMAP.md, PERFORMANCE.md                              counts 19/47/8 → 84/81/8

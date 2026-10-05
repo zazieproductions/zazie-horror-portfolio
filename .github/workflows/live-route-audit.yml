@@ -1,0 +1,126 @@
+name: Live route audit
+
+# Runs tools/live-route-audit.mjs against a real host.
+#
+# The build sandbox cannot reach horror.zazieproductions.com -- its egress is
+# allow-listed (github.com and registry.npmjs.org answer; the site does not),
+# which is why every status in ITEM-URLS.md §9 used to come from the local
+# mirror in server.mjs. A runner has unrestricted egress, so this is where the
+# live numbers come from.
+#
+#   gh workflow run live-route-audit.yml
+#   gh workflow run live-route-audit.yml -f base_url=https://<hash>.pages.dev
+#
+# The job prints the route table, exits non-zero if any URL answers
+# unexpectedly, and uploads the markdown table as an artifact ready to paste
+# into ITEM-URLS.md §9.
+
+on:
+  # The pull_request trigger is what makes this usable from a branch: GitHub
+  # only registers workflows that exist on the default branch, so a
+  # workflow_dispatch cannot be sent until this file is on main. Workflows in
+  # the PR head do run for pull_request events, so opening the PR runs the
+  # audit on a runner -- one that can reach the host.
+  pull_request:
+    paths:
+      - sitemap.xml
+      - robots.txt
+      - _headers
+      - _redirects
+      - tools/live-route-audit.mjs
+      - scripts/**
+      - src/data/**
+      - '.github/workflows/live-route-audit.yml'
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: Base URL to audit
+        required: true
+        default: https://horror.zazieproductions.com
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: live-route-audit
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Route table
+        id: audit
+        run: node tools/live-route-audit.mjs "$BASE_URL"
+        env:
+          BASE_URL: ${{ inputs.base_url || 'https://horror.zazieproductions.com' }}
+
+      - name: Markdown table for ITEM-URLS.md §9
+        if: always()
+        run: node tools/live-route-audit.mjs "$BASE_URL" --markdown | tee live-route-audit.md
+        env:
+          BASE_URL: ${{ inputs.base_url || 'https://horror.zazieproductions.com' }}
+
+      - name: Upload route table
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-route-audit
+          path: live-route-audit.md
+          if-no-files-found: warn
+
+      # The build sandbox can reach api.github.com but not
+      # results-receiver.actions.githubusercontent.com, so runner logs are
+      # unreadable from there. These two steps put the output where it can be
+      # read back through the API instead.
+      - name: Post the table to the PR
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        env:
+          BASE_URL: ${{ inputs.base_url || 'https://horror.zazieproductions.com' }}
+        with:
+          script: |
+            const fs = require('fs');
+            const marker = '<!-- live-route-audit -->';
+            const body = [
+              marker,
+              `### Live route audit — ${new Date().toISOString()}`,
+              '',
+              `Base: \`${process.env.BASE_URL}\` · run <${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}>`,
+              '',
+              fs.readFileSync('live-route-audit.md', 'utf8'),
+            ].join('\n');
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number,
+            });
+            const existing = comments.find((c) => c.body && c.body.includes(marker));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner, repo: context.repo.repo, comment_id: existing.id, body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner, repo: context.repo.repo, issue_number: context.issue.number, body,
+              });
+            }
+
+      - name: Commit the table (dispatch runs have no PR to comment on)
+        if: always() && github.event_name == 'workflow_dispatch'
+        run: |
+          mkdir -p .audit
+          mv live-route-audit.md ".audit/live-route-audit-$(date -u +%Y%m%dT%H%M%SZ).md"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .audit
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "audit: live route table for $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          git push origin HEAD:"${GITHUB_REF#refs/heads/}"
