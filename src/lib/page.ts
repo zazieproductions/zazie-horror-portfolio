@@ -174,11 +174,14 @@ function figure(image: Image, shape: 'poster' | 'still' | 'square', loading: 'ea
 }
 
 function embedMarkup(sample: { kind: 'youtube' | 'drive'; embedUrl: string; title: string }): string {
+  // Keep Drive's standard preview UI; its controls are owned by the provider.
+  // Include fullscreen + picture-in-picture + encrypted-media so mobile
+  // browsers don't fall back to a cramped audio-only UI with an inverted bar.
   const allow = sample.kind === 'youtube'
-    ? 'accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
-    : 'autoplay';
+    ? 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen'
+    : 'autoplay; clipboard-write; encrypted-media; picture-in-picture; fullscreen';
   return `        <div class="entry-embed">
-          <iframe src="${esc(sample.embedUrl)}" title="${esc(sample.title)}" loading="lazy" allow="${allow}" allowfullscreen></iframe>
+          <iframe src="${esc(sample.embedUrl)}" title="${esc(sample.title)}" loading="lazy" allow="${allow}" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
         </div>`;
 }
 
