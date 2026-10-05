@@ -137,4 +137,4 @@ jobs:
 
       - name: Not deployed
         if: steps.creds.outputs.ok != 'true'
-        run: echo "Skipped: no Cloudflare credentials. This run changed nothing at the edge."
+        run: 'echo "Skipped (no Cloudflare credentials): this run changed nothing at the edge."'
