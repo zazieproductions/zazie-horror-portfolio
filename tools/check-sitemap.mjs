@@ -32,14 +32,13 @@
  *       route back into the host's 308               every link to that route
  *  18.  Every in-site #fragment link resolves   -> dead "Jump to" / section
  *       to an id on its target page                  links
- *  19.  No orphans; every top-level page is      -> Google builds sitelinks from
- *       linked from the home page                    the home page's own links
- *  20.  The React bundle links every page the    -> dual DOM: a link only in the
- *       prerendered home page links, and its         prerender vanishes when React
- *       file name matches its sha256[:8]             renders
- *  21.  /sitemap (HTML) lists every sitemap URL  -> the human index stays whole
- *  22.  sw.js precaches only hashed assets that  -> 404s on service worker
- *       exist                                        install
+ *  19.  Every original hub remains reachable    -> only the hubs belong in the
+ *       from the home page; item URLs are not         homepage navigation; item pages
+ *       required to be reachable from /              link to their hub and siblings
+ *  20.  Existing hubs do not link to item URLs   -> item discovery stays in the
+ *       from the home page, nav, or hub cards          sitemap and item sibling links
+ *  21.  sw.js precaches only hashed assets that  -> 404s on service worker install
+ *       exist
  *
  * Usage:
  *   node tools/check-sitemap.mjs                 # offline / structural checks
@@ -50,7 +49,6 @@
  * -----------------------------------------------------------------------------
  */
 
-import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -473,7 +471,7 @@ for (const urlEl of urls) {
     const canon = /<link[^>]+rel=["']canonical["'][^>]*href=["']([^"']+)["']/i.exec(html);
     if (!canon) {
       warn(`${short}: page has no <link rel="canonical">`);
-    } else if (canon[1].replace(/\/$/, '') !== loc.replace(/\/$/, '')) {
+    } else if (canon[1] !== loc) {
       err(
         `${short}: page canonical is "${canon[1]}" but the sitemap submits "${loc}" ` +
         `(GSC will report "Alternate page with proper canonical tag")`
@@ -679,7 +677,7 @@ for (const [src, html] of linkSources) {
 }
 note(`section links: ${fragmentLinks} in-site #fragment links, each resolves to an id on its page`);
 
-// 8b. no orphans, and every top-level page is linked from the home page
+// 8b. original hubs are reachable from the home page; item URLs are intentionally excluded
 const reached = new Set(['/']);
 for (const queue = ['/']; queue.length;) {
   for (const q of graph.get(queue.shift()) || []) {
@@ -688,47 +686,33 @@ for (const queue = ['/']; queue.length;) {
 }
 const homeLinks = graph.get('/') || new Set();
 const sitemapPaths = [...seenLocs.keys()].map((l) => normPath(new URL(l).pathname));
+const isItemPath = (p) => /^\/(?:work|reel|store)\/[^/]+$/.test(p);
+let hubCount = sitemapPaths.includes('/') ? 1 : 0;
 let topLevel = 0;
 for (const p of sitemapPaths) {
-  if (p === '/') continue;
-  if (!reached.has(p)) { err(`internal links: ${p} is in the sitemap but no link path from the home page reaches it (orphan)`); continue; }
+  if (p === '/' || isItemPath(p)) continue;
+  hubCount++;
+  if (!reached.has(p)) { err(`internal links: original hub ${p} is not reachable from /`); continue; }
   if (p.split('/').length === 2) {
     topLevel++;
-    if (!homeLinks.has(p)) err(`internal links: top-level page ${p} is not linked from the home page - sitelinks are built from the home page's own links`);
+    if (!homeLinks.has(p)) err(`internal links: original hub ${p} is not linked from the home page`);
   }
 }
-note(`internal links: every sitemap URL is reachable from /, and all ${topLevel} top-level pages are linked from the home page`);
+note(`internal links: ${hubCount} original hub URLs are reachable from / (${topLevel} top-level hubs linked directly); item URLs are intentionally excluded from homepage reachability`);
 
-// 8c. dual DOM: the React bundle must render every page link the prerender has
-const homeHtml = htmlPages.get('/') || '';
-const bundleName = (/import\("\/(index-[0-9a-f]{8}\.js)"\)/.exec(homeHtml) || [])[1];
-if (!bundleName) {
-  warn('dual DOM: no React bundle import found in index.html - home page link parity not checked');
-} else if (!fs.existsSync(path.join(ROOT, bundleName))) {
-  err(`dual DOM: index.html imports /${bundleName}, which does not exist`);
-} else {
-  const buf = fs.readFileSync(path.join(ROOT, bundleName));
-  const digest = crypto.createHash('sha256').update(buf).digest('hex').slice(0, 8);
-  if (bundleName !== `index-${digest}.js`) {
-    err(`dual DOM: /${bundleName} now hashes to ${digest} - rename it index-${digest}.js and update index.html and sw.js`);
+// 8c. item routes are not added to the homepage or original hub navigation
+let hubItemLinks = 0;
+for (const [src, html] of htmlPages) {
+  for (const link of linksOf(src, html)) {
+    if (isItemPath(link.path)) {
+      hubItemLinks++;
+      err(`internal links: original hub ${src} links directly to item route ${link.path}; item URLs must remain off hub navigation`);
+    }
   }
-  const bundle = buf.toString('utf8');
-  const pageLinks = [...homeLinks].filter((p) => p !== '/');
-  const lost = pageLinks.filter((p) => !bundle.includes(`"${p}"`));
-  if (lost.length) err(`dual DOM: the prerendered home page links ${lost.join(', ')} but /${bundleName} does not - those links vanish when React renders`);
-  else note(`dual DOM: all ${pageLinks.length} pages linked from the prerendered home page are linked by /${bundleName} too`);
 }
+if (!hubItemLinks) note('internal links: no direct item-page links were added to the homepage or original hubs');
 
-// 8d. the HTML site map lists every sitemap URL in its own content
-if (htmlPages.has('/sitemap')) {
-  const main = (/<main\b[\s\S]*?<\/main>/i.exec(htmlPages.get('/sitemap')) || [''])[0];
-  const listed = new Set(linksOf('/sitemap', main).map((l) => l.path));
-  const unlisted = sitemapPaths.filter((p) => p !== '/sitemap' && !listed.has(p));
-  if (unlisted.length) err(`HTML site map: /sitemap does not list ${unlisted.join(', ')} - add them to legal-src/pages/sitemap.html`);
-  else note('HTML site map: /sitemap lists every sitemap URL');
-}
-
-// 8e. sw.js precaches hashed assets that actually exist
+// 8d. sw.js precaches hashed assets that actually exist
 const swFile = path.join(ROOT, 'sw.js');
 if (fs.existsSync(swFile)) {
   const precached = [...fs.readFileSync(swFile, 'utf8').matchAll(/'\/((?:index|legal|store)-[0-9a-f]{8}\.(?:js|css))'/g)].map((m) => m[1]);

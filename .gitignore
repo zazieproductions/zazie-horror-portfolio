@@ -2,3 +2,8 @@
 .env
 .env.*
 .DS_Store
+
+# Build tooling
+node_modules/
+build/
+.vite/

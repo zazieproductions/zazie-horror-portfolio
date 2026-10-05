@@ -48,3 +48,6 @@
 # Link header back to the slashless canonical, and sitemap.xml lists the
 # slashless form, so crawlers consolidate on /route with no redirect hop.
 # ---------------------------------------------------------------------------
+
+# Unknown paths serve the not-found document with an HTTP 404 (not a soft 404).
+/* /404.html 404

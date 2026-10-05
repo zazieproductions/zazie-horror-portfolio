@@ -1,0 +1,129 @@
+/* ==========================================================================
+   Zazie Productions - per-item archive pages (/work/<slug>, /reel/<slug>,
+   /store/<slug>).
+
+   These routes reuse the document stylesheet (legal-<hash>.css) for every
+   shared surface - masthead, breadcrumbs, doc-head, clauses, hub cards, tables,
+   footer. This file only adds what the item pages have and the hubs do not:
+   the hero figure proportions, the embed frame and the audio player. Same
+   tokens, same type stack, no new palette.
+   ========================================================================== */
+
+.entry-figure {
+  margin-bottom: 1.5rem;
+}
+
+.entry-figure.still picture,
+.entry-figure.still img {
+  aspect-ratio: 16 / 9;
+}
+
+.entry-figure.square picture,
+.entry-figure.square img {
+  aspect-ratio: 1 / 1;
+}
+
+@media (min-width: 760px) {
+  .entry-figure.poster,
+  .entry-figure.square {
+    max-width: 26rem;
+  }
+}
+
+/* --- Embed frame (film samples) ----------------------------------------- */
+.entry-embed {
+  position: relative;
+  margin: 1.25rem 0 0;
+  border: 1px solid var(--ash);
+  background: var(--ink);
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+}
+
+.entry-embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* --- Audio -------------------------------------------------------------- */
+audio.audio-player {
+  display: block;
+  width: 100%;
+  max-width: 42rem;
+  margin: 0.9rem 0 0.5rem;
+  background: var(--ink);
+  border: 1px solid var(--ash);
+  border-radius: 0;
+  color-scheme: dark;
+}
+
+audio.audio-player:focus-visible {
+  outline: 1px solid var(--ember);
+  outline-offset: 2px;
+}
+
+/* --- Metadata block ----------------------------------------------------- */
+.doc-body .table-wrap {
+  margin-top: 1.25rem;
+}
+
+.doc-body .table-wrap th {
+  width: 12rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--mist);
+}
+
+.doc-body .table-wrap td {
+  font-size: 0.875rem;
+}
+
+.doc-body .table-wrap a {
+  color: inherit;
+}
+
+/* --- Sibling entries ---------------------------------------------------- */
+.doc-body .hub-card h3 a.stretch {
+  text-decoration: none;
+}
+
+.doc-body .hub-card .stamp {
+  color: rgba(154, 149, 144, 0.75);
+}
+
+/* --- Credit line -------------------------------------------------------- */
+.doc-body .stamp time {
+  color: var(--mist);
+}
+
+/* --- Print -------------------------------------------------------------- */
+/* legal.css flips the document to black-on-white for paper. Anything these
+   pages add has to survive that flip: an iframe prints as an empty frame, a
+   native audio player prints as a grey bar, and the muted greys used on screen
+   are unreadable at 11pt. The direct MP3 link next to the player is text, so
+   hiding the element loses nothing. */
+@media print {
+  .entry-embed {
+    display: none;
+  }
+
+  audio.audio-player {
+    display: none;
+  }
+
+  .entry-figure {
+    break-inside: avoid-page;
+    border-color: #999;
+  }
+
+  .doc-body .table-wrap th,
+  .doc-body .hub-card .stamp,
+  .doc-body .stamp,
+  .doc-body .stamp time {
+    color: #111;
+  }
+}
