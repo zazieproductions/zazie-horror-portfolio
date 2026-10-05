@@ -2,32 +2,28 @@
 /**
  * live-route-audit.mjs
  * -----------------------------------------------------------------------------
- * Runs the ITEM-URLS.md §9 route table against a real host, not a local mirror.
+ * Runs the route audit against a real host, not a local mirror.
  *
- * WHY THIS EXISTS
- *
- * Every status in §9.1 came out of `node server.mjs` -- a faithful mirror of
- * how Cloudflare Pages answers this tree, but still a mirror. The host was
- * unreachable from the sandbox that produced it (the sandbox egress is
- * allow-listed: github.com and registry.npmjs.org answer, everything else --
- * including this host -- dies at the socket), so the local run was the only
- * evidence available. This tool is the other half: it asks the real origin the
- * same questions and prints the same table, so the two can be compared.
+ * The sandbox cannot reach the production domain (egress is allow-listed), so
+ * `server.mjs` supplies the local HTTP check while this tool is intended for a
+ * runner or machine that can reach the selected host. A local audit is not
+ * represented as a live production status table.
  *
  *   node tools/live-route-audit.mjs                        # the live host
  *   node tools/live-route-audit.mjs https://<hash>.pages.dev
- *   node tools/live-route-audit.mjs https://host --markdown # table for §9.1
+ *   node tools/live-route-audit.mjs https://host --markdown # table output
  *
  * WHAT IT CHECKS
  *
  *   1. every <loc> in sitemap.xml          -> 200, no redirect hop, and the
  *                                             in-page canonical equals the URL
  *                                             the sitemap advertised
- *   2. the ".html" form of each URL        -> 308 to the canonical
- *   3. the trailing-slash form of each URL -> 308 to the canonical, or 200 for
- *                                             the 19 hub routes that Pages
- *                                             serves from <route>/index.html
- *   4. unknown paths                       -> 404
+ *   2. the ".html" form of each URL        -> 308 to the canonical (or an
+ *                                             explicit legacy 301 in _redirects)
+ *   3. trailing-slash form of each URL      -> 200 for the original directory
+ *                                             hubs, 404 for flat item routes
+ *                                             (there is no item slash twin)
+ *   4. unknown paths and slash twins        -> HTML 404 with noindex
  *
  * Run it from anywhere with internet access. From the build sandbox it dies on
  * the first fetch, by design -- see .github/workflows/live-route-audit.yml for
@@ -104,7 +100,7 @@ async function probe(urlPath) {
       const location = res.headers.get('location') || '';
       const type = res.headers.get('content-type') || '';
       const out = { url: urlPath, status: res.status, location: relative(location), type };
-      if (type.includes('html') && res.status === 200) {
+      if (type.toLowerCase().includes('html')) {
         const body = await res.text();
         out.canonical = relative((/<link\b[^>]*\brel=["']canonical["'][^>]*>/i.exec(body) || [])[0]
           ? (/\bhref=["']([^"']+)["']/i.exec(/<link\b[^>]*\brel=["']canonical["'][^>]*>/i.exec(body)[0]) || [])[1] || ''
@@ -181,7 +177,16 @@ const RULES = redirectRules();
 
 
 /* Paths that are not in the sitemap and never should be: these must 404. */
-const unknownPaths = ['/work/does-not-exist', '/reel/does-not-exist', '/store/does-not-exist', '/nope'];
+const unknownPaths = [
+  '/work/does-not-exist',
+  '/work/does-not-exist/',
+  '/reel/does-not-exist',
+  '/store/does-not-exist',
+  '/store/motion-sensor-skull-heads', // main's alternate slug is not a second item URL
+  '/store/motion-sensor-skull-heads.html',
+  '/work/does-not-exist.html',
+  '/nope',
+];
 
 async function run() {
   const started = Date.now();
@@ -193,12 +198,13 @@ async function run() {
   const expectedFor = (p) => {
     const rule = RULES.get(p);
     if (rule) return { status: rule.status, to: rule.to };
-    if (unknownPaths.includes(p)) return { status: 404, to: null };
+    if (unknownPaths.includes(p) || unknownPaths.includes(targetOf(p))) return { status: 404, to: null };
     if (SITEMAP_PATHS.includes(targetOf(p))) {
       if (p.endsWith('.html')) return { status: 308, to: targetOf(p) };
       if (p.endsWith('/') && p !== '/') {
-        // A hub route is a directory: Pages serves /work/ from work/index.html.
-        return hasDirectoryIndex(targetOf(p)) ? { status: 200, to: null } : { status: 308, to: targetOf(p) };
+        // Original hubs still have directory indexes; a flat item has no
+        // <slug>/index.html twin and must remain a real noindex 404.
+        return hasDirectoryIndex(targetOf(p)) ? { status: 200, to: null } : { status: 404, to: null };
       }
       return { status: 200, to: null };
     }
@@ -210,7 +216,11 @@ async function run() {
     const want = expectedFor(r.url);
     if (r.status !== want.status) return false;
     if (want.to && r.location !== want.to) return false;
-    if (want.status === 200 && r.canonical && r.canonical !== targetOf(r.url)) return false;
+    if (want.status === 200 && SITEMAP_PATHS.includes(targetOf(r.url))) {
+      if (!r.type?.toLowerCase().includes('html')) return false;
+      if (r.canonical !== targetOf(r.url)) return false;
+    }
+    if (want.status === 404 && (!r.type?.toLowerCase().includes('html') || !r.noindex)) return false;
     return true;
   };
 
@@ -222,7 +232,7 @@ async function run() {
       location: r.location || '-',
       want: want.status,
       ok: rowOk(r),
-      note: r.error ? ` (${r.error})` : '',
+      note: r.error ? ` (${r.error})` : want.status === 404 && !r.noindex ? ' (missing noindex)' : '',
     };
   };
 
@@ -244,7 +254,7 @@ async function run() {
 
   /* 4. unknown paths */
   const unknown = await mapLimit(unknownPaths, (p) => probe(p));
-  const unknownFail = unknown.filter((r) => !rowOk(r));
+  const unknownFail = unknown.filter((r) => !rowOk(r) || !r.noindex);
 
   /* the §9.1 route table */
   const tablePaths = [
@@ -260,17 +270,34 @@ async function run() {
   /* ------------------------------------------------------------- output */
 
   if (markdown) {
-    line('| request | status | Location |');
-    line('|---|---|---|');
+    line(`# Live route audit — ${BASE}`);
+    line('');
+    line(`Checked ${SITEMAP_URLS.length} sitemap URLs, ${alias.length} alias forms, and ${unknown.length} unknown paths.`);
+    line('');
+    line('## Sitemap URLs');
+    line('');
+    line('| URL path | HTTP | Canonical | Result |');
+    line('|---|---:|---|---|');
+    for (const r of canonical) {
+      const ok = rowOk(r) && Boolean(r.title) && !r.noindex;
+      const status = ok ? String(r.status) : `**${r.status || 'ERR'}**`;
+      const canon = r.canonical ? `\`${r.canonical}\`` : '-';
+      line(`| \`${r.url}\` | ${status} | ${canon} | ${ok ? 'PASS' : 'FAIL'} |`);
+    }
+    line('');
+    line('## Representative route and error cases');
+    line('');
+    line('| Request | HTTP | Location | Result |');
+    line('|---|---:|---|---|');
     for (const r of rows) {
-      const status = r.ok ? r.status : `**${r.status}** (expected ${r.want})${r.note}`;
-      line(`| \`${r.request}\` | ${status} | ${r.location !== '-' ? `\`${r.location}\`` : '-'} |`);
+      const status = r.ok ? String(r.status) : `**${r.status || 'ERR'}** (expected ${r.want})`;
+      line(`| \`${r.request}\` | ${status} | ${r.location !== '-' ? `\`${r.location}\`` : '-'} | ${r.ok ? 'PASS' : 'FAIL'}${r.note} |`);
     }
     line('');
     line('```');
-    line(`checked ${SITEMAP_URLS.length} sitemap URLs against ${BASE}; failing: ${canonFail.length}`);
-    line(`checked ${alias.length} alias forms (.html / trailing slash); failing: ${aliasFail.length}`);
-    line(`checked ${unknown.length} unknown paths; failing: ${unknownFail.length}`);
+    line(`sitemap URLs: ${canonical.filter((r) => rowOk(r) && r.title && !r.noindex).length}/${SITEMAP_URLS.length} passed; failing: ${canonFail.length}`);
+    line(`alias forms: ${alias.length} checked (.html / trailing slash); failing: ${aliasFail.length}`);
+    line(`unknown paths: ${unknown.length} checked (404 + noindex); failing: ${unknownFail.length}`);
     line('```');
     if (failures.length) {
       line('');
@@ -280,8 +307,8 @@ async function run() {
       const groups = [
         ['canonical URL (expected 200)', canonFail],
         ['.html alias (expected 308 to the canonical, or the 301 _redirects wrote)', aliasFail.filter((f) => f.kind === '.html')],
-        ['trailing-slash alias (expected 308, or 200 for a hub directory index)', aliasFail.filter((f) => f.kind !== '.html')],
-        ['unknown path (expected 404)', unknownFail],
+        ['trailing-slash alias (expected 200 for a hub directory index, 404 for an item)', aliasFail.filter((f) => f.kind !== '.html')],
+        ['unknown path (expected 404 with noindex)', unknownFail],
       ];
       const rank = (f) => (/^\/(work|reel|store)\/.+/.test(f.url) ? 1 : 0);
       for (const [label, list] of groups) {
@@ -316,6 +343,7 @@ async function run() {
   line(`  200: ${canonical.filter((r) => r.status === 200).length}   other: ${canonical.filter((r) => r.status !== 200).length}   failing: ${canonFail.length}`);
   line('');
   line(`### alias forms (${alias.length})`);
+  line('  .html: 308 (or the explicit legacy 301); hub slash form: 200; item slash twin: 404 with noindex');
   const shapes = alias.reduce((acc, r) => {
     const key = `${r.kind} -> ${r.status}`;
     acc[key] = (acc[key] || 0) + 1;

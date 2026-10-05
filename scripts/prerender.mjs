@@ -1,339 +1,325 @@
 #!/usr/bin/env node
 /**
- * prerender.mjs — the last step of the build.
+ * scripts/prerender.mjs
+ * ----------------------------------------------------------------------------
+ * Writes one flat HTML file per production, cue and store item:
  *
- * Every generated page ships an empty head block:
+ *   work/<slug>.html     served by the host at /work/<slug>
+ *   reel/<slug>.html     served by the host at /reel/<slug>
+ *   store/<slug>.html    served by the host at /store/<slug>
  *
- *     <!--SEO:START-->
- *     <!--PRERENDER:SEO-->
- *     <!--SEO:END-->
+ * Flat files, not directories: the host answers the extensionless path from
+ * `<route>.html` directly, so /work/expire is a 200 with no redirect hop and
+ * there is no /work/expire/ twin for a crawler to find. The 19 routes that
+ * already existed keep their existing shape (`<route>/index.html` plus the root
+ * `<route>.html` twin) and are not touched by this script.
  *
- * This script replaces that block, for every route, with the route's own
- * title, meta description, self-referential canonical, robots directive, Open
- * Graph and Twitter tags and JSON-LD — in the static file, in the first bytes
- * of the response, with no JavaScript involved. It then appends a <noscript>
- * block carrying the page's H1 and description, so a crawler that never runs
- * script still reads the entry as text.
+ * The document is built by src/lib/page.ts (compiled to build/lib/page.js) from
+ * src/data/*.ts, with the same masthead, footer and stylesheet the rest of the
+ * archive uses. The <head> of every page is written here, in the first byte:
+ * title, meta description, self-referential canonical, robots, Open Graph,
+ * Twitter and the per-type JSON-LD. Nothing about a URL on this site is ever
+ * injected by JavaScript.
  *
- * The home page keeps its hand-authored head — the SPA's boot system lives in
- * there — so for `/` the markers are attached around the existing metadata and
- * the block is *verified* rather than rewritten. The hubs (the 19 legacy
- * routes) are verified the same way: they are hand-maintained pages that
- * already publish a per-route head.
+ * It then verifies itself:
  *
- * Finally it proves the deploy: every <loc> in sitemap.xml must resolve to a
- * file the host serves at that exact path (no redirect hop, no trailing-slash
- * twin, no soft 404). If one does not, the build fails.
+ *   * every route in src/data/routes.ts resolves to a file the host can serve
+ *     at that exact path (hub routes -> <path>/index.html + root twin, item
+ *     routes -> <hub>/<slug>.html);
+ *   * every generated page carries exactly one title, canonical, robots meta,
+ *     og/twitter set and JSON-LD block, and the canonical points at the page's
+ *     own URL;
+ *   * the page body really contains its H1, its intro paragraph and a
+ *     <noscript> fallback, so nothing on the page depends on JavaScript.
  *
- *     npm run build   →   … "84 URLs, 84 resolve to prerendered files"
+ * Usage:
+ *   node scripts/prerender.mjs                 all item routes
+ *   node scripts/prerender.mjs --only=expire   one item, for design review
+ *   node scripts/prerender.mjs --only=/work/expire,/reel/needle-in-the-nerve
  */
 
+import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
-import {
-  ROOT,
-  SITE,
-  absolute,
-  assertDataIntegrity,
-  cueRoutes,
-  hubs,
-  itemRoutes,
-  productionRoutes,
-  read,
-  releaseRoutes,
-  write,
-} from './lib/data.mjs';
-import { cueGraph, headBlock, productionGraph, releaseGraph } from './lib/seo.mjs';
+import { fileURLToPath } from 'node:url';
 
-assertDataIntegrity();
+import { hubs } from '../build/data/hubs.js';
+import { allRoutes, items } from '../build/data/routes.js';
+import * as site from '../build/data/site.js';
+import { renderHomePosterCards, renderHomeSeo } from '../build/lib/home.js';
+import { renderItemPage } from '../build/lib/page.js';
 
-const errors = [];
-const notes = [];
+const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const { url, SITE_HOST } = site;
+
+/* -------------------------------------------------------- build environment */
+
+function readChrome() {
+  const mastheadFile = path.join(repoRoot, 'legal-src', 'partials', 'masthead.html');
+  const footerFile = path.join(repoRoot, 'legal-src', 'partials', 'footer.html');
+  for (const file of [mastheadFile, footerFile]) {
+    if (!fs.existsSync(file)) {
+      console.error(`prerender: ${path.relative(repoRoot, file)} is missing - the masthead and footer are shared with the hub pages, not copied.`);
+      process.exit(1);
+    }
+  }
+
+  const manifestFile = path.join(repoRoot, 'build', 'item-assets', 'item-manifest.json');
+  if (!fs.existsSync(manifestFile)) {
+    console.error('prerender: build/item-assets/item-manifest.json is missing - run `npx vite build` first (npm run build does it in order).');
+    process.exit(1);
+  }
+  const manifest = JSON.parse(fs.readFileSync(manifestFile, 'utf8'));
+  const entry = Object.values(manifest).find((record) => record.isEntry);
+  const stylesheet = Object.values(manifest).find((record) => record.file?.endsWith('.css'));
+  if (!entry?.file || !stylesheet?.file) {
+    console.error('prerender: the item manifest has no entry script or stylesheet - rerun `npx vite build`.');
+    process.exit(1);
+  }
+  for (const asset of [entry.file, stylesheet.file]) {
+    if (!fs.existsSync(path.join(repoRoot, asset))) {
+      console.error(`prerender: ${asset} is absent from the served root - Vite must export the item bundle assets before rendering pages.`);
+      process.exit(1);
+    }
+  }
+
+  // The documents stylesheet is content-hashed from its source, so the name is
+  // derived rather than typed: same hash function as legal-src/build.sh.
+  const legalCss = namedAsset('legal', 'legal.css', 'css');
+  const legalJs = namedAsset('legal', 'legal.js', 'js');
+
+  return {
+    masthead: fs.readFileSync(mastheadFile, 'utf8'),
+    footer: fs.readFileSync(footerFile, 'utf8'),
+    legalCss,
+    legalJs,
+    itemCss: stylesheet.file,
+    itemJs: entry.file,
+  };
+}
+
+function namedAsset(prefix, source, extension) {
+  // build.sh hashes "$(cat file)": the shell strips trailing newlines before
+  // sha256sum sees the content, so the same strip has to happen here.
+  const body = fs.readFileSync(path.join(repoRoot, 'legal-src', source), 'utf8').replace(/\n+$/, '');
+  // Same 8-hex-character content hash legal-src/build.sh uses (sha256sum | cut -c1-8).
+  const hash = createHash('sha256').update(body).digest('hex').slice(0, 8);
+  const expected = `${prefix}-${hash}.${extension}`;
+  if (!fs.existsSync(path.join(repoRoot, expected))) {
+    const present = fs
+      .readdirSync(repoRoot)
+      .filter((name) => name.startsWith(`${prefix}-`) && name.endsWith(`.${extension}`));
+    console.error(
+      `prerender: expected ${expected} (sha256 of legal-src/${source}) but only found ${present.join(', ') || 'nothing'}.\n` +
+        '           Run ./legal-src/build.sh - the pages must not point at a stale asset name.',
+    );
+    process.exit(1);
+  }
+  return expected;
+}
+
+/* ------------------------------------------------------------------ writing */
+
 const SEO_START = '<!--SEO:START-->';
 const SEO_END = '<!--SEO:END-->';
-const SEPARATOR_START = `${SEO_START}\n`;
-const SEPARATOR_END = `\n${SEO_END}`;
+const HOME_POSTERS_START = '<!--HOME-POSTERS:START-->';
+const HOME_POSTERS_END = '<!--HOME-POSTERS:END-->';
 
-/* ------------------------------------------------------------- head baking */
+function replaceMarkedContents(html, startMarker, endMarker, replacement, label) {
+  const start = html.indexOf(startMarker);
+  const end = html.indexOf(endMarker);
+  if (start === -1 || end === -1 || end < start) {
+    throw new Error(`index.html is missing a matching ${label} marker pair`);
+  }
+  const contentStart = start + startMarker.length;
+  return html.slice(0, contentStart) + '\n' + replacement + '\n' + html.slice(end);
+}
 
-function bakeHead(routePath, html, graph, meta) {
-  const block = headBlock({ ...meta, graph });
+/**
+ * Replace the homepage's complete <head> element from the source template.
+ * Keeping only non-SEO resources from the old head preserves the current boot
+ * and player treatments; every title/description/canonical/robots/OG/Twitter
+ * tag and every JSON-LD block is then rebuilt together from home data.
+ */
+function buildHomeDocument() {
+  const indexFile = path.join(repoRoot, 'index.html');
+  let html = fs.readFileSync(indexFile, 'utf8');
   const start = html.indexOf(SEO_START);
   const end = html.indexOf(SEO_END);
   if (start === -1 || end === -1 || end < start) {
-    errors.push(`${routePath}: no ${SEO_START} … ${SEO_END} block to bake into`);
-    return html;
+    throw new Error('index.html must wrap its complete <head> with <!--SEO:START--> and <!--SEO:END-->');
   }
-  return (
-    html.slice(0, start) +
-    `${SEO_START}\n${block}\n${SEO_END}` +
-    html.slice(end + SEO_END.length)
-  );
-}
 
-function noscriptBlock(h1, description) {
-  return `<noscript>
-  <div style="max-width:52rem;margin:0 auto;padding:2rem 1.25rem;font-family:Georgia,serif;color:#f0ebe3">
-    <h1>${h1}</h1>
-    <p>${description}</p>
-  </div>
-</noscript>
-`;
-}
+  const contentStart = start + SEO_START.length;
+  const markedHead = html.slice(contentStart, end).trim();
+  if (!/^<head\b/i.test(markedHead) || !/<\/head>\s*$/i.test(markedHead)) {
+    throw new Error('index.html SEO markers must enclose one complete <head>...</head>');
+  }
 
-/* --------------------------------------------------------- item page routes */
-
-const cueByPath = new Map(cueRoutes.map((r) => [r.path, r]));
-const releaseByPath = new Map(releaseRoutes.map((r) => [r.path, r]));
-
-for (const route of itemRoutes) {
-  const file =
-    route.section === 'work'
-      ? `work/${route.slug}.html`
-      : route.section === 'reel'
-        ? `reel/${route.slug}.html`
-        : `store/${route.slug}.html`;
-
-  let html = read(file);
-  const item = route.item;
-
-  const graph =
-    route.section === 'work'
-      ? productionGraph(item)
-      : route.section === 'reel'
-        ? cueGraph(
-            item,
-            (item.relatedReleases ?? [])
-              .map((slug) => releaseRoutes.find((r) => r.slug === slug))
-              .filter(Boolean)
-          )
-        : releaseGraph(
-            item,
-            (item.relatedCues ?? [])
-              .map((slug) => cueByPath.get(`/reel/${slug}`))
-              .filter(Boolean)
-          );
-
-  const h1Match = /<h1>([\s\S]*?)<\/h1>/.exec(html);
-  if (!h1Match) errors.push(`${route.path}: no <h1>`);
-  const h1 = h1Match ? h1Match[1].replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim() : route.title;
-
-  html = bakeHead(route.path, html, graph, {
-    path: route.path,
-    title: route.title,
-    description: route.description,
-    image:
-      route.section === 'work'
-        ? {
-            src:
-              (route.item.poster ?? {}).large ??
-              (route.item.poster ?? {}).src ??
-              '/images/hero-portrait.jpg',
-            alt: (route.item.poster ?? {}).alt ?? item.title,
-            width: (route.item.poster ?? {}).width,
-            height: (route.item.poster ?? {}).height,
-          }
-        : route.section === 'store'
-          ? {
-              src: item.image.src,
-              alt: item.image.alt,
-              width: item.image.width,
-              height: item.image.height,
-              external: item.image.external,
-            }
-          : {
-              src: '/images/hero-portrait.jpg',
-              alt: `Zazie Kanwar-Torge — horror composer showreel cue: ${item.title} (${item.mood})`,
-              width: 1200,
-              height: 1500,
-            },
+  let templateHead = markedHead;
+  templateHead = templateHead.replace(/<title\b[^>]*>[\s\S]*?<\/title>/gi, '');
+  templateHead = templateHead.replace(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '');
+  templateHead = templateHead.replace(/<meta\b[^>]*>/gi, (tag) => {
+    const name = /\bname\s*=\s*(["'])(.*?)\1/i.exec(tag)?.[2]?.toLowerCase() ?? '';
+    const property = /\bproperty\s*=\s*(["'])(.*?)\1/i.exec(tag)?.[2]?.toLowerCase() ?? '';
+    if (name === 'description' || name === 'robots' || name === 'author' || name.startsWith('twitter:')) return '';
+    if (property.startsWith('og:')) return '';
+    return tag;
   });
+  templateHead = templateHead.replace(/<link\b[^>]*>/gi, (tag) => /\brel\s*=\s*(["'])canonical\1/i.test(tag) ? '' : tag);
+  templateHead = templateHead.replace(/<!--[\s\S]*?-->/g, (comment) =>
+    /JSON-LD|STRUCTURED DATA/i.test(comment) ? '' : comment,
+  );
+  const close = templateHead.lastIndexOf('</head>');
+  if (close === -1) throw new Error('index.html source head lost its </head> while rebuilding');
+  const fullHead = `${templateHead.slice(0, close).trimEnd()}\n${renderHomeSeo()}\n</head>`;
+  html = replaceMarkedContents(html, SEO_START, SEO_END, fullHead, 'SEO');
+  html = replaceMarkedContents(html, HOME_POSTERS_START, HOME_POSTERS_END, renderHomePosterCards(), 'home-poster');
+  fs.writeFileSync(indexFile, html, 'utf8');
+  console.log('prerender: replaced the complete homepage <head> from src/lib/home.ts + home entities');
+  console.log('prerender: rendered 9 curated poster-wall cards from src/data/home.ts + productions.ts');
+}
+const chrome = readChrome();
+const only = process.argv
+  .filter((argument) => argument.startsWith('--only='))
+  .flatMap((argument) => argument.slice('--only='.length).split(','))
+  .map((value) => value.trim())
+  .filter(Boolean);
 
-  if (!html.includes('<noscript>')) {
-    html = html.replace('</body>', `${noscriptBlock(h1, route.description)}\n</body>`);
-  }
+if (!only.length) buildHomeDocument();
 
-  write(file, html);
+const targets = only.length
+  ? items.filter((item) => only.includes(item.path) || only.includes(item.slug))
+  : items;
+
+if (!targets.length) {
+  console.error(`prerender: --only matched no item route (${only.join(', ')})`);
+  process.exit(1);
 }
 
-/* ------------------------------------------------------------ hub validation */
-
-function metaContent(html, name) {
-  const tag = new RegExp(`<meta[^>]*\\bname=["']${name}["'][^>]*>`).exec(html);
-  if (!tag) return null;
-  const content = /\bcontent="([^"]*)"/.exec(tag[0]) || /\bcontent='([^']*)'/.exec(tag[0]);
-  return content ? content[1] : null;
+const written = [];
+for (const item of targets) {
+  const page = renderItemPage(item, chrome);
+  const file = path.join(repoRoot, `${item.path.slice(1)}.html`);
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  fs.writeFileSync(file, page.html, 'utf8');
+  written.push({ item, file, page });
 }
 
-function propertyContent(html, property) {
-  const tag = new RegExp(`<meta[^>]*\\bproperty=["']${property}["'][^>]*>`).exec(html);
-  if (!tag) return null;
-  const content = /\bcontent="([^"]*)"/.exec(tag[0]) || /\bcontent='([^']*)'/.exec(tag[0]);
-  return content ? content[1] : null;
+/* ------------------------------------------------------------- verification */
+
+const problems = [];
+
+/**
+ * The file the host serves for a path. Hub routes are directories
+ * (/work -> work/index.html); item routes are flat files
+ * (/work/expire -> work/expire.html) and are never directories.
+ */
+const routeByPath = new Map(allRoutes.map((route) => [route.path, route]));
+const routeList = allRoutes;
+const sitemapFile = path.join(repoRoot, 'sitemap.xml');
+const sitemapXml = fs.existsSync(sitemapFile) ? fs.readFileSync(sitemapFile, 'utf8') : '';
+const sitemapLocs = [...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1].replace(/&amp;/g, '&'));
+const seenSitemapUrls = new Set();
+for (const loc of sitemapLocs) {
+  try {
+    const parsed = new URL(loc);
+    if (parsed.protocol !== 'https:' || parsed.host !== SITE_HOST) problems.push(`sitemap: off-domain or non-HTTPS URL ${loc}`);
+    if (parsed.search || parsed.hash || (parsed.pathname !== '/' && parsed.pathname.endsWith('/'))) problems.push(`sitemap: non-canonical URL ${loc}`);
+    if (seenSitemapUrls.has(loc)) problems.push(`sitemap: duplicate URL ${loc}`);
+    seenSitemapUrls.add(loc);
+    if (!routeByPath.has(parsed.pathname)) problems.push(`sitemap: ${parsed.pathname} has no data route`);
+  } catch {
+    problems.push(`sitemap: malformed URL ${loc}`);
+  }
 }
+if (!sitemapLocs.length) problems.push('sitemap.xml is missing or has no <loc> entries');
+const expectedSitemapUrls = new Set(routeList.map((route) => url(route.path)));
+for (const expected of expectedSitemapUrls) if (!seenSitemapUrls.has(expected)) problems.push(`sitemap: missing expected route ${expected}`);
+for (const actual of seenSitemapUrls) if (!expectedSitemapUrls.has(actual)) problems.push(`sitemap: unexpected route ${actual}`);
 
-function validateRoute(routePath, file, { expectNoscript }) {
-  const html = read(file);
-  const start = html.indexOf(SEO_START);
-  const end = html.indexOf(SEO_END);
-
-  const title = /<title>([\s\S]*?)<\/title>/.exec(html);
-  if (!title || !title[1].trim()) errors.push(`${routePath}: no <title>`);
-  const description = metaContent(html, 'description');
-  if (!description || description.trim().length < 40) {
-    errors.push(`${routePath}: no usable <meta name="description">`);
+/** Resolve an existing hub document or a generated flat item file. */
+function fileForRoute(route) {
+  if (route.path === '/') return path.join(repoRoot, 'index.html');
+  if (route.kind === 'hub') {
+    const indexFile = path.join(repoRoot, route.path.slice(1), 'index.html');
+    if (fs.existsSync(indexFile)) return indexFile;
+    const flatHub = path.join(repoRoot, `${route.path.slice(1)}.html`);
+    return fs.existsSync(flatHub) ? flatHub : null;
   }
-  const canonical = /<link[^>]+rel="canonical"[^>]*href="([^"]+)"/.exec(html);
-  if (!canonical) {
-    errors.push(`${routePath}: no <link rel="canonical">`);
-  } else if (canonical[1].replace(/\/$/, '') !== absolute(routePath).replace(/\/$/, '')) {
-    errors.push(
-      `${routePath}: canonical is "${canonical[1]}" but the route is "${absolute(routePath)}" — it must be self-referential`
-    );
-  }
-  const robots = metaContent(html, 'robots');
-  if (!robots) errors.push(`${routePath}: no <meta name="robots">`);
-  else if (/\bnoindex\b/i.test(robots)) {
-    errors.push(`${routePath}: is noindex but is a crawlable route`);
-  }
-  for (const [label, value] of [
-    ['og:title', propertyContent(html, 'og:title')],
-    ['og:description', propertyContent(html, 'og:description')],
-    ['og:url', propertyContent(html, 'og:url')],
-    ['og:image', propertyContent(html, 'og:image')],
-    ['twitter:card', metaContent(html, 'twitter:card')],
-    ['twitter:title', metaContent(html, 'twitter:title')],
-    ['twitter:image', metaContent(html, 'twitter:image')],
-  ]) {
-    if (!value) errors.push(`${routePath}: missing ${label}`);
-  }
-
-  const blocks = [...html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
-  if (!blocks.length) errors.push(`${routePath}: no JSON-LD`);
-  for (const [, body] of blocks) {
-    try {
-      JSON.parse(body);
-    } catch (err) {
-      errors.push(`${routePath}: JSON-LD does not parse (${err.message})`);
-    }
-  }
-
-  if (expectNoscript && !html.includes('<noscript>')) {
-    errors.push(`${routePath}: no <noscript> block with the entry's H1 and description`);
-  }
-
-  // Static head rule: the title and canonical must be in the head, before any
-  // external script — nothing may depend on JavaScript running first.
-  const headEnd = html.indexOf('</head>');
-  const titleAt = html.indexOf('<title>');
-  const firstScript = html.search(/<script[^>]+src=/i);
-  const staticHead =
-    titleAt !== -1 &&
-    headEnd !== -1 &&
-    titleAt < headEnd &&
-    (firstScript === -1 || titleAt < firstScript || titleAt > headEnd - 1);
-  if (!staticHead || titleAt > headEnd) {
-    errors.push(`${routePath}: the <title> is not in the static head`);
-  }
-  if (firstScript !== -1 && firstScript < headEnd && headEnd < firstScript) {
-    errors.push(`${routePath}: metadata appears after an external script`);
-  }
-  if (start !== -1 && firstScript !== -1 && start > firstScript) {
-    errors.push(`${routePath}: the metadata block follows an external script`);
-  }
-  return start !== -1 && end > start ? html.slice(start, end) : null;
-}
-
-for (const route of itemRoutes) {
-  const file =
-    route.section === 'work'
-      ? `work/${route.slug}.html`
-      : route.section === 'reel'
-        ? `reel/${route.slug}.html`
-        : `store/${route.slug}.html`;
-  validateRoute(route.path, file, { expectNoscript: true });
-}
-
-/* ------------------------------------------------- home page: markers + check */
-
-{
-  let home = read('index.html');
-  if (!home.includes(SEO_START)) {
-    const titleAt = home.indexOf('<title>');
-    const tags = [...home.matchAll(/<script type="application\/ld\+json">[\s\S]*?<\/script>/g)];
-    if (titleAt === -1 || !tags.length) {
-      errors.push('/: cannot locate the head block to wrap');
-    } else {
-      const lastEnd = tags[tags.length - 1].index + tags[tags.length - 1][0].length;
-      home =
-        home.slice(0, titleAt) +
-        SEPARATOR_START +
-        home.slice(titleAt, lastEnd) +
-        SEPARATOR_END +
-        home.slice(lastEnd);
-      write('index.html', home);
-      notes.push('/: wrapped the existing head block in SEO markers (comments only)');
-    }
-  }
-  if (home.includes(SEO_START) && !home.includes('<!--PRERENDER:SEO-->')) {
-    notes.push('/: head is hand-authored (boot system) — verified, not rewritten');
-  }
-  validateRoute('/', 'index.html', { expectNoscript: false });
-}
-
-for (const hub of hubs.filter((h) => h.path !== '/')) {
-  const file = `${hub.path.replace(/^\//, '')}/index.html`;
-  if (!fs.existsSync(path.join(ROOT, file))) {
-    errors.push(`${hub.path}: no file at ${file}`);
-    continue;
-  }
-  validateRoute(hub.path, file, { expectNoscript: false });
-}
-
-/* ------------------------------------------------------ sitemap → file proof */
-
-const sitemap = read('sitemap.xml');
-const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
-
-/** The same resolution order the host and tools/check-sitemap.mjs use. */
-function servedFile(loc) {
-  const pathname = decodeURIComponent(new URL(loc).pathname);
-  const trimmed = pathname.replace(/\/$/, '') || '/';
-  const candidates =
-    pathname === '/'
-      ? ['index.html']
-      : [path.join(trimmed, 'index.html'), trimmed + '.html', pathname.replace(/^\//, '')];
-  for (const c of candidates) {
-    const abs = path.join(ROOT, c);
-    if (fs.existsSync(abs) && fs.statSync(abs).isFile()) return c;
-  }
-  return null;
+  const flatFile = path.join(repoRoot, `${route.path.slice(1)}.html`);
+  return fs.existsSync(flatFile) ? flatFile : null;
 }
 
 let resolved = 0;
-const unresolved = [];
-for (const loc of locs) {
-  const file = servedFile(loc);
-  if (file) resolved++;
-  else unresolved.push(loc);
-}
-if (unresolved.length) {
-  for (const loc of unresolved) {
-    errors.push(`${new URL(loc).pathname}: no file the host can serve at this exact path`);
+const missingFiles = [];
+const writtenPaths = new Set(written.map(({ item }) => item.path));
+for (const loc of sitemapLocs) {
+  let route;
+  try { route = routeByPath.get(new URL(loc).pathname); } catch { continue; }
+  if (!route) continue;
+  const file = fileForRoute(route);
+  if (!file) {
+    if (only.length && route.kind !== 'home' && route.kind !== 'hub' && !writtenPaths.has(route.path)) continue;
+    missingFiles.push(route.path);
+    problems.push(`${route.path}: no prerendered file resolves this sitemap URL`);
+    continue;
   }
+  resolved += 1;
+  const html = fs.readFileSync(file, 'utf8');
+  const titleCount = [...html.matchAll(/<title>/gi)].length;
+  const canonicalTags = [...html.matchAll(/<link\s+rel="canonical"\s+href="([^"]+)"/gi)];
+  const descriptionTags = [...html.matchAll(/<meta\b(?=[^>]*\bname=["']description["'])(?=[^>]*\bcontent=["'][^"']+["'])[^>]*>/gi)];
+  const robots = /<meta\s+name="robots"\s+content="([^"]*)"/i.exec(html)?.[1] ?? '';
+  const expected = url(route.path);
+  if (titleCount !== 1) problems.push(`${route.path}: expected one <title>, found ${titleCount}`);
+  if (descriptionTags.length !== 1) problems.push(`${route.path}: expected one meta description, found ${descriptionTags.length}`);
+  if (canonicalTags.length !== 1) problems.push(`${route.path}: expected one canonical, found ${canonicalTags.length}`);
+  else if (canonicalTags[0][1] !== expected) problems.push(`${route.path}: canonical is ${canonicalTags[0][1]}, expected ${expected}`);
+  if (!robots || /\bnoindex\b/i.test(robots) || !/\bindex\b/i.test(robots)) problems.push(`${route.path}: robots meta is missing or not indexable`);
+  if (!html.includes(`content="${expected}"`)) problems.push(`${route.path}: canonical / OG URL is missing from source HTML`);
+  if (!/<meta\s+name="twitter:card"/i.test(html)) problems.push(`${route.path}: twitter card is missing`);
+  if (!/<script\s+type="application\/ld\+json"/i.test(html)) problems.push(`${route.path}: JSON-LD is missing`);
+  if (/(?:href|src)="#"/.test(html)) problems.push(`${route.path}: contains a placeholder "#" link`);
 }
 
-/* ---------------------------------------------------------------- the report */
+for (const { item, file, page } of written) {
+  const html = page.html;
+  const relative = path.relative(repoRoot, file);
+  const head = html.slice(html.indexOf('<head>'), html.indexOf('</head>'));
+  if (!head.startsWith('<head>')) problems.push(`${relative}: metadata is not inside the source-rendered head`);
+  if (!head.includes(`<title>${site.escapeHtml(site.oneLine(item.title))}</title>`)) problems.push(`${relative}: title does not match the route data`);
+  if (!head.includes(`<link rel="canonical" href="${url(item.path)}"/>`)) problems.push(`${relative}: canonical is not self-referential`);
+  if ((html.match(/<h1(?:\s|>)/gi) ?? []).length !== 1) problems.push(`${relative}: expected exactly one H1`);
+  if (!html.includes('<noscript>')) problems.push(`${relative}: no <noscript> fallback`);
+  const noscript = /<noscript>([\s\S]*?)<\/noscript>/i.exec(html)?.[1] ?? '';
+  if (!noscript.includes(item.description)) problems.push(`${relative}: noscript description is missing`);
+  if (/<h1\b/i.test(noscript)) problems.push(`${relative}: noscript block adds a second H1`);
+  if (!/<\/html>\s*$/.test(html)) problems.push(`${relative}: document is not terminated`);
+  if (/\/tmp\/|arena|e2b|localhost/i.test(html)) problems.push(`${relative}: contains a sandbox-only path`);
+  if (/<div[^>]+id="zp-boot"/i.test(html)) problems.push(`${relative}: boot overlay must not cover item-page copy`);
+}
 
-for (const note of notes) console.log(`  note   ${note}`);
-if (errors.length) {
-  console.error(`\nprerender: ${errors.length} error(s) — the build is not deployable`);
-  for (const err of errors) console.error(`  x  ${err}`);
+if (missingFiles.length) console.error(`prerender missing-file report: ${missingFiles.join(', ')}`);
+else console.log(`prerender missing-file report: none; ${resolved} sitemap URLs resolve to prerendered files`);
+
+if (problems.length) {
+  console.error(`prerender: ${problems.length} problem(s)\n`);
+  for (const problem of problems) console.error(`  - ${problem}`);
   process.exit(1);
 }
-console.log(`prerender: ${resolved} URLs, ${resolved} resolve to prerendered files`);
+
+const counts = items.reduce((accumulator, item) => ({ ...accumulator, [item.kind]: (accumulator[item.kind] ?? 0) + 1 }), {});
 console.log(
-  `  ${productionRoutes.length} production + ${cueRoutes.length} cue + ${releaseRoutes.length} catalogue ` +
-    `+ ${hubs.length} hub pages, each with its own title, description, canonical, robots, OG/Twitter tags and JSON-LD in the first bytes`
+  `prerender: wrote ${written.length} item page(s) - ` +
+    `${counts.production ?? 0} productions, ${counts.cue ?? 0} cues, ${counts.release ?? 0} store items`,
 );
-console.log(`  unknown paths are served by 404.html with a real 404 status (see _redirects note)`);
+if (only.length) console.log(`  design-review run: only ${written.map(({ item }) => item.path).join(', ')} written`);
+console.log(
+  `${sitemapLocs.length} URLs, ${resolved} resolve to prerendered files ` +
+    `(${hubs.length} hub routes incl. the home page, ${items.length} item routes)`,
+);
+console.log(
+  `  every page: own <title>, meta description, self-referential canonical on ${SITE_HOST}, robots, OG + Twitter tags and JSON-LD in the first byte`,
+);
+for (const { item, file } of written) console.log(`  ${item.path}  ->  ${path.relative(repoRoot, file)}`);

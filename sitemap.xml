@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+<!--
+  Generated https://horror.zazieproductions.com/sitemap.xml from src/data/{hubs,productions,cues,releases,routes}.ts.
+  Do not edit by hand. Each URL is a canonical, extensionless route.
+  Route count: 84 (19 original hubs + 9 productions + 32 cues + 24 catalogue items).
+  Sitemap priority and changefreq are intentionally omitted.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+
   <url>
     <loc>https://horror.zazieproductions.com/</loc>
     <lastmod>2026-10-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/hero-portrait.jpg</image:loc>
-      <image:caption>Award-winning psychological horror composer specializing in dark, atmospheric, cinematic original scores for psychological horror, folk horror, body horror, supernatural thrillers, and dark sci-fi. Film, TV, and game scoring.</image:caption>
+      <image:caption>Portfolio portrait for Zazie Productions, a composer and sound-design studio working across screen and experimental media.</image:caption>
       <image:title>Zazie Kanwar-Torge: Psychological Horror Composer - Dark Atmospheric Scores</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/headshot.jpg</image:loc>
-      <image:caption>Zazie Kanwar-Torge, award-winning horror film composer and founder of Zazie Productions LLC, Asheville NC.</image:caption>
+      <image:caption>Zazie Kanwar-Torge, composer and sound designer associated with Zazie Productions LLC.</image:caption>
       <image:title>Zazie Kanwar-Torge headshot - horror film composer, Zazie Productions LLC</image:title>
     </image:image>
     <image:image>
@@ -22,57 +29,56 @@
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/expire-red-check-1200.jpg</image:loc>
-      <image:caption>EXPIRE theatrical poster - Muhammad Abed Baryal horror short, sound design by Zazie Kanwar-Torge</image:caption>
-      <image:title>EXPIRE (2025) - Horror Short Film Score by Zazie Kanwar-Torge</image:title>
+      <image:caption>EXPIRE poster artwork. IMDb credits Zazie Kanwar-Torge for sound design; the listed composers are Patricia Chaylade, Jorayo, and Brennan Mack.</image:caption>
+      <image:title>EXPIRE (2025) - Short Film; Sound Design Credit</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/unseen-1200.jpg</image:loc>
-      <image:caption>UNSEEN feature poster - Steve Merlo unseen killer feature, original horror score by Zazie Kanwar-Torge</image:caption>
-      <image:title>UNSEEN Feature Film - Psychological Horror Score by Zazie Kanwar-Torge</image:title>
+      <image:caption>UNSEEN poster artwork. IMDb lists Steve Merlo as composer; no Zazie composing credit is asserted here.</image:caption>
+      <image:title>UNSEEN - Feature Film Record; IMDb Composer Credit: Steve Merlo</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/the-haunted-1200.jpg</image:loc>
-      <image:caption>THE HAUNTED feature poster - perception is reality, Crystal Fox Films, original score by Zazie Kanwar-Torge</image:caption>
-      <image:title>THE HAUNTED - Supernatural Horror Feature Score</image:title>
+      <image:caption>THE HAUNTED poster artwork for the horror and science-fiction short; IMDb credits Zazie Kanwar-Torge and Robert Mason Sandifer as co-composers.</image:caption>
+      <image:title>THE HAUNTED - Horror and Science-Fiction Short</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/peregrinus-1200.jpg</image:loc>
-      <image:caption>PEREGRINUS series poster - original score by Zazie Kanwar-Torge</image:caption>
-      <image:title>PEREGRINUS - Series Score by Zazie Kanwar-Torge</image:title>
+      <image:caption>PEREGRINUS series poster. IMDb describes a science-fiction thriller and credits Zazie Kanwar-Torge as a co-composer.</image:caption>
+      <image:title>PEREGRINUS - Science-Fiction Thriller Series</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/phantom-requiem-1200.jpg</image:loc>
-      <image:caption>Phantom Requiem short film poster - gothic horror score by Zazie Kanwar-Torge</image:caption>
-      <image:title>Phantom Requiem - Short Film Score by Zazie Kanwar-Torge</image:title>
+      <image:caption>Poster artwork for Phantom Requiem, an experimental short published by Zazie Productions.</image:caption>
+      <image:title>Phantom Requiem - Experimental Short</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/eclipsed-1200.jpg</image:loc>
-      <image:caption>ECLIPSED feature poster - original horror score by Zazie Kanwar-Torge</image:caption>
-      <image:title>ECLIPSED - Feature Horror Score by Zazie Kanwar-Torge</image:title>
+      <image:caption>Poster artwork for ECLIPSED, a short whose IMDb composer credits include Zazie Kanwar-Torge and Noah C. Castro.</image:caption>
+      <image:title>ECLIPSED - Short Film; Composer Credits Include Zazie Kanwar-Torge and Noah C. Castro</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/choleric-1200.jpg</image:loc>
-      <image:caption>CHOLERIC short film poster - original horror score by Zazie Kanwar-Torge</image:caption>
-      <image:title>CHOLERIC - Short Film Score by Zazie Kanwar-Torge</image:title>
+      <image:caption>Poster artwork for CHOLERIC. IMDb credits Zazie Kanwar-Torge as co-producer.</image:caption>
+      <image:title>CHOLERIC - Short Film; Co-Producer Credit</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/mike-has-a-visitor-1200.jpg</image:loc>
-      <image:caption>Mike Has A Visitor short film poster - sleep paralysis horror score by Zazie Kanwar-Torge</image:caption>
-      <image:title>Mike Has A Visitor - Sleep Paralysis Horror Short Score</image:title>
+      <image:caption>Poster artwork for MIKE HAS A VISITOR; IMDb credits Zazie Kanwar-Torge as composer.</image:caption>
+      <image:title>MIKE HAS A VISITOR - Horror Short; Composer Credit</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/the-dark-awaits-1200.jpg</image:loc>
-      <image:caption>THE DARK AWAITS (2025) poster - supernatural horror score by Zazie Kanwar-Torge</image:caption>
-      <image:title>THE DARK AWAITS - Supernatural Horror Score</image:title>
+      <image:caption>Poster artwork for THE DARK AWAITS, a paranormal reality-TV series; IMDb credits Zazie Kanwar-Torge as composer.</image:caption>
+      <image:title>THE DARK AWAITS - Paranormal Reality-TV Series</image:title>
     </image:image>
     <video:video>
       <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-HaVJP08j77U.jpg</video:thumbnail_loc>
-      <video:title>Mike Has A Visitor: Original Psychological Horror Score - Sleep Paralysis Short</video:title>
-      <video:description>Sleep paralysis horror short scored by Zazie Kanwar-Torge. Dark, atmospheric, cinematic composition for psychological horror. Original score, themes, tension cues, and dread beds written to picture. Psychological horror composer showreel sample.</video:description>
+      <video:title>MIKE HAS A VISITOR: sleep-paralysis horror short</video:title>
+      <video:description>The 14:23 YouTube upload of MIKE HAS A VISITOR, published by director Marco Saikaley on June 30, 2025. IMDb separately credits Zazie Kanwar-Torge as composer.</video:description>
       <video:player_loc>https://www.youtube.com/embed/HaVJP08j77U</video:player_loc>
-      <video:duration>150</video:duration>
-      <video:publication_date>2025-01-15</video:publication_date>
-      <video:family_friendly>yes</video:family_friendly>
+      <video:duration>863</video:duration>
+      <video:publication_date>2025-06-30</video:publication_date>
       <video:tag>psychological horror composer</video:tag>
       <video:tag>horror film score</video:tag>
       <video:tag>sleep paralysis horror</video:tag>
@@ -83,7 +89,6 @@
       <video:title>GOODBYE, BROTHER: Original Dark Cinematic Film Score - Psychological Drama</video:title>
       <video:description>Dramatic short film scored by Zazie Kanwar-Torge. Atmospheric cinematic composition for dark psychological storytelling. Original themes and tension cues.</video:description>
       <video:player_loc>https://www.youtube.com/embed/ItrrcilS0ro</video:player_loc>
-      <video:family_friendly>yes</video:family_friendly>
       <video:tag>horror composer</video:tag>
       <video:tag>dark cinematic score</video:tag>
       <video:tag>psychological drama score</video:tag>
@@ -93,18 +98,15 @@
       <video:title>Home Intruder: Thriller Chase Cue - Tension-Driven Horror Composition</video:title>
       <video:description>Action thriller chase sequence scored by Zazie Kanwar-Torge. Tension-driven cinematic composition for thriller and horror. Dark, propulsive, dread-filled cue architecture.</video:description>
       <video:player_loc>https://www.youtube.com/embed/riCvy2abhlc</video:player_loc>
-      <video:family_friendly>yes</video:family_friendly>
       <video:tag>thriller chase music</video:tag>
       <video:tag>horror tension cue</video:tag>
     </video:video>
     <video:video>
       <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-Ty8tPp59mDc.jpg</video:thumbnail_loc>
-      <video:title>The Haunted: Horror Film Teaser Score - Supernatural Thriller</video:title>
-      <video:description>Official teaser for The Haunted by Crystal Fox Films. Original supernatural horror score by Zazie Kanwar-Torge. Atmospheric dread, dark ambient beds, and cinematic themes for supernatural thriller and haunted house horror.</video:description>
+      <video:title>THE HAUNTED: official trailer</video:title>
+      <video:description>Official trailer for THE HAUNTED from Crystal Fox Films. IMDb credits Zazie Kanwar-Torge and Robert Mason Sandifer as co-composers; the trailer is promotional film media, not a separate score excerpt.</video:description>
       <video:player_loc>https://www.youtube.com/embed/Ty8tPp59mDc</video:player_loc>
-      <video:duration>105</video:duration>
-      <video:publication_date>2024-11-20</video:publication_date>
-      <video:family_friendly>yes</video:family_friendly>
+      <video:duration>149</video:duration>
       <video:tag>supernatural horror score</video:tag>
       <video:tag>haunted house music</video:tag>
     </video:video>
@@ -114,7 +116,6 @@
       <video:description>Short horror film AQUAPHOBIA scored by Zazie Kanwar-Torge. Dark atmospheric composition for folk horror and psychological dread. Waterphone, bowed metal, hybrid orchestration.</video:description>
       <video:player_loc>https://www.youtube.com/embed/rvCGO0BJ_2E</video:player_loc>
       <video:publication_date>2024-09-10</video:publication_date>
-      <video:family_friendly>yes</video:family_friendly>
       <video:tag>folk horror music</video:tag>
       <video:tag>body horror score</video:tag>
       <video:tag>waterphone</video:tag>
@@ -124,82 +125,76 @@
       <video:title>Whispers In The Dark: Horror Short Score - Atmospheric Dread Composition</video:title>
       <video:description>Horror short Whispers In The Dark scored by Zazie Kanwar-Torge. Atmospheric dread composition for supernatural horror. Slow-burn tension beds and psychological horror architecture.</video:description>
       <video:player_loc>https://www.youtube.com/embed/6qa3Uwj47fc</video:player_loc>
-      <video:family_friendly>yes</video:family_friendly>
       <video:tag>atmospheric horror music</video:tag>
       <video:tag>dread soundscape</video:tag>
     </video:video>
     <video:video>
       <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-UX2kv3G89Jw.jpg</video:thumbnail_loc>
-      <video:title>Phantom Requiem: Short Film Score - Gothic Horror</video:title>
-      <video:description>Short film Phantom Requiem scored by Zazie Kanwar-Torge. Dark cinematic composition for psychological horror and gothic dread. Original themes, motifs, atmospheric beds.</video:description>
+      <video:title>Phantom Requiem: experimental short film</video:title>
+      <video:description>The complete 4:53 experimental short Phantom Requiem, published by Zazie Productions on June 20, 2024. The studio describes its visuals, sound, and music as part of the work.</video:description>
       <video:player_loc>https://www.youtube.com/embed/UX2kv3G89Jw</video:player_loc>
-      <video:family_friendly>yes</video:family_friendly>
-      <video:tag>gothic horror score</video:tag>
-      <video:tag>phantom requiem</video:tag>
+      <video:duration>293</video:duration>
+      <video:publication_date>2024-06-20</video:publication_date>
+      <video:tag>experimental short</video:tag>
+      <video:tag>Phantom Requiem</video:tag>
     </video:video>
     <video:video>
       <video:thumbnail_loc>https://horror.zazieproductions.com/images/eclipsed-cover-1280.jpg</video:thumbnail_loc>
-      <video:title>Eclipsed: Psychological Thriller Short - Unsettling Film Score</video:title>
-      <video:description>Psychological thriller short film scored by Zazie Kanwar-Torge. Experimental analog synthesis, prepared instruments, and psychoacoustic dread composition.</video:description>
+      <video:title>ECLIPSED project sample</video:title>
+      <video:description>A Drive-hosted project sample associated with the ECLIPSED short. IMDb describes the surreal horror premise and credits Zazie Kanwar-Torge and Noah C. Castro as composers.</video:description>
       <video:player_loc>https://drive.google.com/file/d/1zKtAavEx-Yjd2To_troEYlxTTt62Y2OU/preview</video:player_loc>
-      <video:duration>195</video:duration>
-      <video:publication_date>2024-10-05</video:publication_date>
-      <video:family_friendly>yes</video:family_friendly>
-      <video:tag>psychological horror score</video:tag>
-      <video:tag>horror film composer</video:tag>
-      <video:tag>dark thriller composition</video:tag>
-      <video:tag>analog synth dread</video:tag>
+      <video:tag>ECLIPSED</video:tag>
+      <video:tag>short film sample</video:tag>
     </video:video>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/work</loc>
     <lastmod>2026-10-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg</image:loc>
-      <image:caption>EXPIRE (2025) horror short - sound design and score by Zazie Kanwar-Torge</image:caption>
-      <image:title>EXPIRE - Horror Film Score Portfolio</image:title>
+      <image:caption>EXPIRE (2025) - IMDb credits Zazie Kanwar-Torge for sound design; other composers are listed separately.</image:caption>
+      <image:title>EXPIRE - Production Record and Sound-Design Credit</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/unseen-640.jpg</image:loc>
-      <image:caption>UNSEEN feature - original psychological horror score by Zazie Kanwar-Torge</image:caption>
-      <image:title>UNSEEN - Feature Horror Score</image:title>
+      <image:caption>UNSEEN feature; IMDb lists Steve Merlo as composer.</image:caption>
+      <image:title>UNSEEN - Feature Film Record</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/peregrinus-640.jpg</image:loc>
-      <image:caption>PEREGRINUS series - original score by Zazie Kanwar-Torge</image:caption>
-      <image:title>PEREGRINUS - Series Score</image:title>
+      <image:caption>PEREGRINUS science-fiction thriller series; IMDb credits Zazie Kanwar-Torge as co-composer.</image:caption>
+      <image:title>PEREGRINUS - Science-Fiction Thriller Series</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/phantom-requiem-640.jpg</image:loc>
-      <image:caption>Phantom Requiem short film - gothic horror score by Zazie Kanwar-Torge</image:caption>
-      <image:title>Phantom Requiem - Short Film Score</image:title>
+      <image:caption>Phantom Requiem - experimental short published by Zazie Productions.</image:caption>
+      <image:title>Phantom Requiem - Experimental Short</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/eclipsed-640.jpg</image:loc>
-      <image:caption>ECLIPSED feature - original horror score by Zazie Kanwar-Torge</image:caption>
-      <image:title>ECLIPSED - Feature Horror Score</image:title>
+      <image:caption>ECLIPSED short; IMDb lists Zazie Kanwar-Torge and Noah C. Castro as composers.</image:caption>
+      <image:title>ECLIPSED - Short Film; Composer Credits</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/the-haunted-640.jpg</image:loc>
-      <image:caption>THE HAUNTED feature - supernatural horror score by Zazie Kanwar-Torge</image:caption>
-      <image:title>THE HAUNTED - Supernatural Horror Feature Score</image:title>
+      <image:caption>THE HAUNTED horror and science-fiction short; IMDb credits Zazie Kanwar-Torge and Robert Mason Sandifer as co-composers.</image:caption>
+      <image:title>THE HAUNTED - Horror and Science-Fiction Short</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/choleric-640.jpg</image:loc>
-      <image:caption>CHOLERIC short film - original horror score by Zazie Kanwar-Torge</image:caption>
-      <image:title>CHOLERIC - Short Film Score</image:title>
+      <image:caption>CHOLERIC short; IMDb credits Zazie Kanwar-Torge as co-producer.</image:caption>
+      <image:title>CHOLERIC - Short Film; Co-Producer Credit</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/mike-has-a-visitor-640.jpg</image:loc>
-      <image:caption>Mike Has A Visitor short film - sleep paralysis horror score by Zazie Kanwar-Torge</image:caption>
-      <image:title>Mike Has A Visitor - Sleep Paralysis Horror Short Score</image:title>
+      <image:caption>MIKE HAS A VISITOR short; IMDb credits Zazie Kanwar-Torge as composer.</image:caption>
+      <image:title>MIKE HAS A VISITOR - Horror Short; Composer Credit</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/the-dark-awaits-640.jpg</image:loc>
-      <image:caption>THE DARK AWAITS horror film - original supernatural horror score by Zazie Kanwar-Torge</image:caption>
-      <image:title>THE DARK AWAITS - Supernatural Horror Film Score</image:title>
+      <image:caption>THE DARK AWAITS paranormal reality-TV series; IMDb credits Zazie Kanwar-Torge as composer.</image:caption>
+      <image:title>THE DARK AWAITS - Paranormal Reality-TV Series</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/project-HaVJP08j77U.jpg</image:loc>
@@ -242,22 +237,20 @@
       <image:title>Eclipsed - Psychological Thriller Film Sample</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel</loc>
     <lastmod>2026-10-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/hero-portrait.jpg</image:loc>
       <image:caption>Zazie Kanwar-Torge, psychological horror composer showreel artwork</image:caption>
       <image:title>Horror Composer Showreel - 32 Cues</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/composer</loc>
     <lastmod>2026-10-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/headshot.jpg</image:loc>
       <image:caption>Zazie Kanwar-Torge, psychological horror composer and founder of Zazie Productions LLC, Asheville NC.</image:caption>
@@ -274,36 +267,33 @@
       <image:title>Zazie Productions Press Photo - Horror Composer Portfolio</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/process</loc>
     <lastmod>2026-10-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
       <image:caption>Zazie Kanwar-Torge at the scoring desk, Asheville, NC studio</image:caption>
       <image:title>Horror Film Scoring Suite - Process</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/services</loc>
     <lastmod>2026-10-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
       <image:caption>Zazie Productions horror film scoring suite Asheville, NC</image:caption>
       <image:title>Horror Film Scoring Suite - Rates</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store</loc>
     <lastmod>2026-10-04</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
     <image:image>
       <image:loc>https://f4.bcbits.com/img/a4087485987_16.jpg</image:loc>
-      <image:caption>Anesthesia for the Signal Age - ten-track album of acousmatic modular percussion, glitch-lacerated IDM and scavenged sound objects by Zazie Productions.</image:caption>
+      <image:caption>Anesthesia for the Signal Age - ten-track experimental electronic album, released May 7, 2026.</image:caption>
       <image:title>Anesthesia for the Signal Age - Zazie Productions</image:title>
     </image:image>
     <image:image>
@@ -333,535 +323,608 @@
     </image:image>
     <image:image>
       <image:loc>https://f4.bcbits.com/img/a0281727228_16.jpg</image:loc>
-      <image:caption>Interference Archive 01010101 - five tracks of pseudo-retro industrial and EBM by Zazie Productions, released September 2021.</image:caption>
+      <image:caption>Interference Archive 01010101 - five-track synth-led electronic and experimental album, released September 8, 2021.</image:caption>
       <image:title>Interference Archive 01010101 - Zazie Productions</image:title>
     </image:image>
     <image:image>
       <image:loc>https://f4.bcbits.com/img/a1008810016_16.jpg</image:loc>
-      <image:caption>Stutter to stammer - musique concrete album built from hundreds of collected sounds by Zazie Productions, released November 2019.</image:caption>
+      <image:caption>Stutter to stammer - Bandcamp listing with one track, “List of Russian Spies on Wikipedia,” timed at 2:34.</image:caption>
       <image:title>Stutter to stammer - Zazie Productions</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/contact</loc>
     <lastmod>2026-10-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.75</priority>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/hero-portrait.jpg</image:loc>
       <image:caption>Zazie Kanwar-Torge, psychological horror composer available for commission</image:caption>
       <image:title>Hire a Horror Composer - Scoring Inquiry</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/faq</loc>
     <lastmod>2026-10-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/legal</loc>
     <lastmod>2026-10-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.55</priority>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/licensing</loc>
     <lastmod>2026-10-04</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.5</priority>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/purchases</loc>
     <lastmod>2026-10-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.5</priority>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/terms</loc>
     <lastmod>2026-10-04</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.4</priority>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/privacy</loc>
     <lastmod>2026-10-04</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.4</priority>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/accessibility</loc>
     <lastmod>2026-10-04</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/sitemap</loc>
     <lastmod>2026-10-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.3</priority>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/hire-a-composer</loc>
     <lastmod>2026-10-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
       <image:caption>Zazie Kanwar-Torge, composer and sound designer for hire: original scores and cinematic sound design for film, games and experimental projects.</image:caption>
       <image:title>Hire a Composer: Original Scores and Cinematic Sound Design</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/sound-design</loc>
     <lastmod>2026-10-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg</image:loc>
       <image:caption>EXPIRE horror short - sound design and score by Zazie Kanwar-Torge, from the cinematic sound design page.</image:caption>
       <image:title>Cinematic Sound Design for Horror Film - Zazie Productions</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/game-scoring</loc>
     <lastmod>2026-10-04</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/the-dark-awaits-640.jpg</image:loc>
       <image:caption>THE DARK AWAITS - the tonal register behind adaptive horror scoring for games, by Zazie Kanwar-Torge.</image:caption>
       <image:title>Adaptive Horror Game Scoring - Zazie Productions</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/work/expire</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/posters/expire-red-check-1200.jpg</image:loc>
-      <image:caption>EXPIRE (2025) theatrical poster - psychological horror short scored by Zazie Kanwar-Torge</image:caption>
-      <image:title>EXPIRE (2025) — Psychological Horror · Body Horror</image:title>
+      <image:loc>https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg</image:loc>
+      <image:caption>Poster artwork for EXPIRE</image:caption>
+      <image:title>EXPIRE</image:title>
     </image:image>
+    <video:video>
+      <video:thumbnail_loc>https://i.ytimg.com/vi/lWm4Ies7edI/hqdefault.jpg</video:thumbnail_loc>
+      <video:title>EXPIRE — official first-look clip</video:title>
+      <video:description>IMDb lists this YouTube video as the official first-look clip for the 2025 science-fiction short EXPIRE. It is a film clip, not represented here as a score excerpt.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/lWm4Ies7edI</video:player_loc>
+    </video:video>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/work/unseen</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/posters/unseen-1200.jpg</image:loc>
-      <image:caption>UNSEEN feature film poster - psychological thriller score by Zazie Kanwar-Torge</image:caption>
-      <image:title>UNSEEN (Feature) — Psychological Horror · Thriller</image:title>
+      <image:loc>https://horror.zazieproductions.com/images/posters/unseen-640.jpg</image:loc>
+      <image:caption>Poster artwork for UNSEEN</image:caption>
+      <image:title>UNSEEN</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/work/peregrinus</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/posters/peregrinus-1200.jpg</image:loc>
-      <image:caption>PEREGRINUS series poster - folk horror and supernatural thriller score by Zazie Kanwar-Torge</image:caption>
-      <image:title>PEREGRINUS (Series) — Folk Horror · Supernatural</image:title>
+      <image:loc>https://horror.zazieproductions.com/images/posters/peregrinus-640.jpg</image:loc>
+      <image:caption>Poster artwork for PEREGRINUS</image:caption>
+      <image:title>PEREGRINUS</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/work/phantom-requiem</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/posters/phantom-requiem-1200.jpg</image:loc>
-      <image:caption>Phantom Requiem short film poster - gothic horror score by Zazie Kanwar-Torge</image:caption>
-      <image:title>Phantom Requiem (Short) — Gothic Horror</image:title>
+      <image:loc>https://horror.zazieproductions.com/images/posters/phantom-requiem-640.jpg</image:loc>
+      <image:caption>Poster artwork for Phantom Requiem</image:caption>
+      <image:title>Phantom Requiem</image:title>
     </image:image>
+    <video:video>
+      <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-UX2kv3G89Jw.jpg</video:thumbnail_loc>
+      <video:title>Phantom Requiem — experimental short film</video:title>
+      <video:description>The complete experimental short Phantom Requiem, published by Zazie Productions on June 20, 2024. The video runs 4 minutes 53 seconds.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/UX2kv3G89Jw</video:player_loc>
+      <video:duration>293</video:duration>
+      <video:publication_date>2024-06-20</video:publication_date>
+    </video:video>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/work/eclipsed</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/posters/eclipsed-1200.jpg</image:loc>
-      <image:caption>ECLIPSED feature poster - psychological horror and dark sci-fi score by Zazie Kanwar-Torge</image:caption>
-      <image:title>ECLIPSED (Feature) — Psychological Horror · Dark Sci-Fi</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/eclipsed-cover-1280.jpg</image:loc>
-      <image:caption>ECLIPSED cover frame - psychological horror feature scored by Zazie Kanwar-Torge</image:caption>
-      <image:title>ECLIPSED — film still</image:title>
+      <image:loc>https://horror.zazieproductions.com/images/posters/eclipsed-640.jpg</image:loc>
+      <image:caption>Poster artwork for ECLIPSED</image:caption>
+      <image:title>ECLIPSED</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/work/the-haunted</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/posters/the-haunted-1200.jpg</image:loc>
-      <image:caption>THE HAUNTED teaser poster - supernatural horror score by Zazie Kanwar-Torge</image:caption>
-      <image:title>THE HAUNTED (Feature) — Supernatural Horror</image:title>
+      <image:loc>https://horror.zazieproductions.com/images/posters/the-haunted-640.jpg</image:loc>
+      <image:caption>Poster artwork for THE HAUNTED</image:caption>
+      <image:title>THE HAUNTED</image:title>
     </image:image>
+    <video:video>
+      <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-Ty8tPp59mDc.jpg</video:thumbnail_loc>
+      <video:title>THE HAUNTED — official trailer</video:title>
+      <video:description>Official trailer for THE HAUNTED from Crystal Fox Films. The trailer is promotional film media, not presented as a separate score excerpt.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/Ty8tPp59mDc</video:player_loc>
+      <video:duration>149</video:duration>
+    </video:video>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/work/choleric</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/posters/choleric-1200.jpg</image:loc>
-      <image:caption>CHOLERIC short film poster - psychological body horror score by Zazie Kanwar-Torge</image:caption>
-      <image:title>CHOLERIC (Short) — Body Horror · Psychological Horror</image:title>
+      <image:loc>https://horror.zazieproductions.com/images/posters/choleric-640.jpg</image:loc>
+      <image:caption>Poster artwork for CHOLERIC</image:caption>
+      <image:title>CHOLERIC</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/work/mike-has-a-visitor</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/posters/mike-has-a-visitor-1200.jpg</image:loc>
-      <image:caption>MIKE HAS A VISITOR short film poster - sleep paralysis horror score by Zazie Kanwar-Torge</image:caption>
-      <image:title>MIKE HAS A VISITOR (Short) — Sleep Paralysis Horror · Psychological Horror</image:title>
+      <image:loc>https://horror.zazieproductions.com/images/posters/mike-has-a-visitor-640.jpg</image:loc>
+      <image:caption>Poster artwork for MIKE HAS A VISITOR</image:caption>
+      <image:title>MIKE HAS A VISITOR</image:title>
     </image:image>
+    <video:video>
+      <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-HaVJP08j77U.jpg</video:thumbnail_loc>
+      <video:title>MIKE HAS A VISITOR — short film</video:title>
+      <video:description>The 14:23 YouTube upload of MIKE HAS A VISITOR, published by director Marco Saikaley on June 30, 2025. IMDb separately credits Zazie Kanwar-Torge as composer.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/HaVJP08j77U</video:player_loc>
+      <video:duration>863</video:duration>
+      <video:publication_date>2025-06-30</video:publication_date>
+    </video:video>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/work/the-dark-awaits</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/posters/the-dark-awaits-1200.jpg</image:loc>
-      <image:caption>THE DARK AWAITS film poster - supernatural horror score by Zazie Kanwar-Torge</image:caption>
-      <image:title>THE DARK AWAITS (Feature) — Supernatural Horror</image:title>
+      <image:loc>https://horror.zazieproductions.com/images/posters/the-dark-awaits-640.jpg</image:loc>
+      <image:caption>Poster artwork for THE DARK AWAITS</image:caption>
+      <image:title>THE DARK AWAITS</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/needle-in-the-nerve</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/dissociative-amnesia</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/brutalist-tension-stinger</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/scraping-psychophonic-bed</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/hidden-intentions-serene-purgatory</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/variations-on-a-vanishing-body</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/the-silence-began-crawling</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/timeless-retro-splurge</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/quarter-eater-poltergeist</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/dark-thriller-cinematic-cue</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/opaline-lament-life-from-the-beyond</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/ominous-drone</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/the-fatal-overdose</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/bone-colored-air</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/obsidian-hall</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/rlyehs-xenolith</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/deep-dystopian-synth-cue</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/panic-threshold</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/waterphone-shower-scene</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/the-room-forgets-you</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/dark-ambient-soundscape-no-1</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/subdued-drone-sensory-deprivation</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/dark-ambient-soundscape-no-2</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/screams-of-the-damned</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/narrow-pulse</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/dissonant-decay-soundscape-sampler</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/time-shifting-into-daylight</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/stinger-cello-cue</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/smell-of-bleach</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/fractured-requiem</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/the-beautiful-wrongness</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/reel/earthpulse-protocol</loc>
     <lastmod>2026-10-04</lastmod>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store/anesthesia-for-the-signal-age</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://f4.bcbits.com/img/a4087485987_16.jpg</image:loc>
-      <image:caption>Anesthesia for the Signal Age album cover - acousmatic modular percussion and glitch IDM by Zazie Productions</image:caption>
+      <image:caption>Cover artwork for Anesthesia for the Signal Age</image:caption>
       <image:title>Anesthesia for the Signal Age</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store/opaline-lament-life-from-the-beyond</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://f4.bcbits.com/img/a4110701137_16.jpg</image:loc>
-      <image:caption>Opaline Lament (Life From The Beyond) cover art - string-driven spectral cinema single by Zazie Productions</image:caption>
+      <image:caption>Cover artwork for Opaline Lament (Life From The Beyond)</image:caption>
       <image:title>Opaline Lament (Life From The Beyond)</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store/spectral-ode-to-synesthesia</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://f4.bcbits.com/img/a3756749177_16.jpg</image:loc>
-      <image:caption>Spectral Ode to Synesthesia album cover - binaural acousmatic granular synthesis soundscapes by Zazie Productions</image:caption>
+      <image:caption>Cover artwork for Spectral Ode to Synesthesia</image:caption>
       <image:title>Spectral Ode to Synesthesia</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store/to-halt-space-adrift</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://f4.bcbits.com/img/a0612904516_16.jpg</image:loc>
-      <image:caption>To Halt Space Adrift album cover - experimental dark ambient music by Zazie Productions</image:caption>
+      <image:caption>Cover artwork for To Halt Space Adrift</image:caption>
       <image:title>To Halt Space Adrift</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store/vermiform</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://f4.bcbits.com/img/a0050695008_16.jpg</image:loc>
-      <image:caption>Vermiform album cover - surreal avant-garde dark music by Zazie Productions</image:caption>
+      <image:caption>Cover artwork for Vermiform</image:caption>
       <image:title>Vermiform</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store/constrained-capacity</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://f4.bcbits.com/img/a0935502895_16.jpg</image:loc>
-      <image:caption>Constrained Capacity album cover - industrial dark ambient noise by Zazie Productions</image:caption>
+      <image:caption>Cover artwork for Constrained Capacity</image:caption>
       <image:title>Constrained Capacity</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store/interference-archive-01010101</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://f4.bcbits.com/img/a0281727228_16.jpg</image:loc>
-      <image:caption>Interference Archive 01010101 album cover - pseudo-retro industrial and cyberpunk EBM by Zazie Productions</image:caption>
+      <image:caption>Cover artwork for Interference Archive 01010101</image:caption>
       <image:title>Interference Archive 01010101</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store/stutter-to-stammer</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://f4.bcbits.com/img/a1008810016_16.jpg</image:loc>
-      <image:caption>Stutter to stammer album cover - musique concrete dark classical fragments by Zazie Productions</image:caption>
+      <image:caption>Cover artwork for Stutter to stammer</image:caption>
       <image:title>Stutter to stammer</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store/unholy-anatomy</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://img.itch.zone/aW1nLzI5MTYyOTA5LnBuZw==/347x500/%2F%2Bsnt7.png</image:loc>
-      <image:caption>UNHOLY ANATOMY: 209 Body Horror, Gore Sounds &amp; Creature Vocal SFX library cover by Zazie Productions</image:caption>
-      <image:title>Unholy Anatomy</image:title>
+      <image:caption>Cover art for UNHOLY ANATOMY</image:caption>
+      <image:title>UNHOLY ANATOMY</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store/fault-codes</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://img.itch.zone/aW1nLzI4NjA5NjM4LnBuZw==/347x500/xUrAIl.png</image:loc>
-      <image:caption>FAULT CODES: 25+ Minimal Error Beeps &amp; System Warning SFX library cover by Zazie Productions</image:caption>
-      <image:title>Fault Codes</image:title>
+      <image:caption>Cover art for FAULT CODES</image:caption>
+      <image:title>FAULT CODES</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store/galactic-requiem</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://public-files.gumroad.com/kxisasmtty6rugi2h6wyhz29lvb4</image:loc>
-      <image:caption>Galactic Requiem: Immersive 3D Sci-Fi Battle Soundscape library cover by Zazie Productions</image:caption>
+      <image:caption>Cover artwork for Galactic Requiem</image:caption>
       <image:title>Galactic Requiem</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store/plug-in-mega-vault</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://public-files.gumroad.com/gxx8r6nvhvokuqz8ktnou29qlm7c</image:loc>
-      <image:caption>World's Strangest Plug-in Mega-Vault: 200+ Banned, Cursed, and Unhinged VSTs audio software archive cover</image:caption>
+      <image:caption>Cover artwork for Plug-in Mega-Vault</image:caption>
       <image:title>Plug-in Mega-Vault</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store/micro-rupture-collection</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://public-files.gumroad.com/ggkcnd8qzh2wnynjbinyw2b54l0b</image:loc>
-      <image:caption>MICRO-RUPTURE Collection: 18 Short Glitch Cuts video effects pack cover</image:caption>
+      <image:caption>Cover artwork for the Micro-Rupture Collection</image:caption>
       <image:title>Micro-Rupture Collection</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store/the-forbidden-canticles</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://public-files.gumroad.com/h4mkhyng4g2dq47w82bof8aa1xa0</image:loc>
-      <image:caption>The Forbidden Canticles: Four Lost &amp; Esoteric Renaissance Manuscripts (1560-1700) sheet music facsimile cover</image:caption>
+      <image:caption>Cover artwork for The Forbidden Canticles</image:caption>
       <image:title>The Forbidden Canticles</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store/room-7g-the-hygiene-loop</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://img.itch.zone/aW1hZ2UvMzQ1Njk3Mi8yMDYyMDc4NC5qcGVn/347x500/bUXLKJ.jpeg</image:loc>
-      <image:caption>Room 7G: The Hygiene Loop liminal bathroom HDRI environment asset</image:caption>
+      <image:caption>Cover artwork for Room 7G: The Hygiene Loop</image:caption>
       <image:title>Room 7G: The Hygiene Loop</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store/cryptotype-9</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://img.itch.zone/aW1nLzIwNzcyOTUyLnBuZw==/347x500/3Ub2Qv.png</image:loc>
-      <image:caption>CRYPTOTYPE-9 pixel-art card frames and phantom game interface elements by Zazie Productions</image:caption>
+      <image:caption>Cover art for CRYPTOTYPE-9</image:caption>
       <image:title>CRYPTOTYPE-9</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store/aztec-death-whistle</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://i.ebayimg.com/images/g/v5cAAeSwYHhqrDTs/s-l500.webp</image:loc>
-      <image:caption>Aztec Death Whistle - realistic screaming skull sound effect instrument from scoring studio</image:caption>
+      <image:caption>Skull-shaped Aztec death whistle shown in the eBay listing</image:caption>
       <image:title>Aztec Death Whistle</image:title>
     </image:image>
   </url>
+
   <url>
-    <loc>https://horror.zazieproductions.com/store/motion-sensor-skull-heads</loc>
+    <loc>https://horror.zazieproductions.com/store/skull-heads-with-motion-sensor</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://i.ebayimg.com/images/g/4awAAeSwtpFqrDSI/s-l500.webp</image:loc>
-      <image:caption>Skull Heads with motion sensor horror decoration prop from studio</image:caption>
-      <image:title>Motion-Sensor Skull Heads</image:title>
+      <image:caption>Skull-head motion-sensor decoration shown in the eBay listing</image:caption>
+      <image:title>Skull Heads With Motion Sensor</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store/creepy-cricket-noise-generator</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://i.ebayimg.com/images/g/c-cAAeSwjBpqrDDB/s-l500.webp</image:loc>
-      <image:caption>Creepy Cricket noise generator electronic audio module</image:caption>
+      <image:caption>Creepy Cricket Noise Generator module shown in the eBay listing</image:caption>
       <image:title>Creepy Cricket Noise Generator</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store/ghost-glow-fruit-plate</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://i.ebayimg.com/images/g/99UAAeSwqhJqd3CA/s-l500.webp</image:loc>
-      <image:caption>Halloween Ghost Glow fruit plate with music prop</image:caption>
+      <image:caption>Halloween fruit plate shown in the Ghost Glow Fruit Plate eBay listing</image:caption>
       <image:title>Ghost Glow Fruit Plate</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store/f998pro-live-sound-card</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://i.ebayimg.com/images/g/7aAAAeSwAVhqd3Cg/s-l500.webp</image:loc>
-      <image:caption>F998Pro Live Sound Card audio interface equipment</image:caption>
+      <image:caption>White F998Pro live sound card shown in the eBay listing</image:caption>
       <image:title>F998Pro Live Sound Card</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store/voice-control-wifi-bulb</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://i.ebayimg.com/images/g/hkQAAeSwAfJqdiA1/s-l500.webp</image:loc>
-      <image:caption>Voice-Control WiFi RGBCW smart studio lighting bulb</image:caption>
+      <image:caption>Voice-control Wi-Fi bulb shown in the eBay listing</image:caption>
       <image:title>Voice-Control WiFi Bulb</image:title>
     </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store/tea5767-digital-radio-kit</loc>
     <lastmod>2026-10-04</lastmod>
-    <image:image>
-      <image:loc>https://i.ebayimg.com/images/g/FBIAAeSwSL1qta6W/s-l500.webp</image:loc>
-      <image:caption>TEA5767 digital broadcasting microcontroller DIY radio kit</image:caption>
-      <image:title>TEA5767 Digital Radio Kit</image:title>
-    </image:image>
   </url>
+
   <url>
     <loc>https://horror.zazieproductions.com/store/hd-x60-sound-card-mixer</loc>
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://i.ebayimg.com/images/g/77YAAeSwmdlqtauv/s-l500.webp</image:loc>
-      <image:caption>HD X60 live sound card and audio mixer interface</image:caption>
+      <image:caption>HD X60 sound card and mixer shown in the eBay listing</image:caption>
       <image:title>HD X60 Sound Card Mixer</image:title>
     </image:image>
   </url>
+
 </urlset>

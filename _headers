@@ -3,7 +3,6 @@
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.youtube-nocookie.com https://www.youtube.com https://drive.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' https://i.ytimg.com https://www.youtube-nocookie.com https://drive.google.com https://f4.bcbits.com https://img.itch.zone https://public-files.gumroad.com https://i.ebayimg.com data:; font-src 'self'; media-src 'self' https://www.youtube-nocookie.com https://drive.google.com; connect-src 'self' https://www.youtube-nocookie.com https://i.ytimg.com https://drive.google.com; frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://drive.google.com https://play.reelcrafter.com; object-src 'none'; base-uri 'self'
 
 /images/*
@@ -270,8 +269,8 @@
   Cache-Control: public, max-age=0, must-revalidate
   Link: <https://horror.zazieproductions.com/accessibility>; rel="canonical"
 
-# HTML site map (every page and its sections, for people). Not to be confused with
-# /sitemap.xml above, which is the machine-readable list for search engines.
+# Human-readable map of the existing portfolio hubs and sections. The XML sitemap
+# separately lists the original hub URLs and the data-generated item URLs.
 /sitemap
   Cache-Control: public, max-age=0, must-revalidate
   Link: <https://horror.zazieproductions.com/sitemap>; rel="canonical"
@@ -285,9 +284,8 @@
   Link: <https://horror.zazieproductions.com/sitemap>; rel="canonical"
 
 
-# 404 must never be indexable, whatever the /* block above says: the 404 template
-# is served with a real 404 status, and an index,follow header on it fights the
-# page's own meta robots and is the first thing a soft-404 audit looks for.
+# Unknown routes are rewritten to /404.html with status 404 by _redirects. Keep
+# this response explicitly noindex so the error template is never indexed.
 /404.html
   X-Robots-Tag: noindex, follow
   Cache-Control: public, max-age=0, must-revalidate

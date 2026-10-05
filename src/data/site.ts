@@ -1,105 +1,119 @@
 /**
- * Site-wide constants and the derivation rules every script shares.
- *
- * `EXPECTED_HOST` is the only place the production origin is written down. The
- * sitemap generator refuses to emit a URL on any other host, over any scheme
- * other than https, or with a trailing slash, a fragment or a query string.
+ * src/data/site.ts
+ * ----------------------------------------------------------------------------
+ * One place for the origin, the identity strings, the URL builders and the
+ * escaping rules. Nothing in this repository may write a absolute
+ * horror.zazieproductions.com URL by hand: route segments come from slug fields
+ * and this module turns them into URLs, so a moved route moves everywhere at
+ * once (or fails the build).
  */
 
-export const SITE = {
-  /** Canonical origin, no trailing slash. */
-  origin: 'https://horror.zazieproductions.com',
-  host: 'horror.zazieproductions.com',
-  name: 'Zazie Productions',
-  /** The entity the home page declares as schema.org/Person #person. */
-  person: 'Zazie Kanwar-Torge',
-  personId: 'https://horror.zazieproductions.com/#person',
-  orgId: 'https://horror.zazieproductions.com/#org',
-  websiteId: 'https://horror.zazieproductions.com/#website',
-  studio: 'Zazie Productions LLC',
-  location: 'Asheville, NC',
-  email: 'hello@zazieproductions.com',
-} as const;
+export const SITE_HOST = 'horror.zazieproductions.com';
+export const SITE_ORIGIN = `https://${SITE_HOST}`;
 
-/** Absolute URL for a site-relative path (always slashless, always https). */
-export function absolute(path: string): string {
-  const clean = path === '/' ? '/' : '/' + path.replace(/^\/+/, '').replace(/\/+$/, '');
-  return SITE.origin + clean;
+export const SITE_NAME = 'Zazie Productions';
+export const AUTHOR_NAME = 'Zazie Kanwar-Torge';
+export const STUDIO_NAME = 'Zazie Productions LLC';
+
+/** The entity @ids every item page references instead of re-declaring. */
+export const PERSON_ID = `${SITE_ORIGIN}/#person`;
+export const ORG_ID = `${SITE_ORIGIN}/#org`;
+export const WEBSITE_ID = `${SITE_ORIGIN}/#website`;
+
+/** Anchor id fragments used on every generated page, kept together. */
+export function anchorId(path: string, anchor: string): string {
+  return `${SITE_ORIGIN}${path}#${anchor}`;
 }
-
-/** The six consolidated showreel moods, in the order the reel shelves them. */
-export const MOODS = [
-  'Psychological Orchestral',
-  'Stinger',
-  'Thriller',
-  'Dark Ambient',
-  'Body Horror',
-  'Ambient Horror',
-  'Cosmic Horror',
-] as const;
 
 /**
- * Marketplace hosts the catalogue already links to. Used by the sitemap
- * validator to tell a documented outbound link from a mistake.
+ * Absolute URL for a route path or asset path.
+ * `/` stays `https://host/`; every other path keeps the exact form it is served
+ * at (no trailing slash, no `.html`).
  */
-export const KNOWN_EXTERNAL_HOSTS = [
-  'imdb.com',
-  'www.imdb.com',
-  'youtube.com',
-  'www.youtube.com',
-  'youtu.be',
-  'drive.google.com',
-  'zazieproductions.bandcamp.com',
-  'zazieproductions.itch.io',
-  'zazieproductions.gumroad.com',
-  'www.ebay.com',
-  'open.spotify.com',
-  'music.apple.com',
-  'play.reelcrafter.com',
-  'www.linkedin.com',
-];
+export function url(path: string): string {
+  if (/^https?:\/\//i.test(path)) return path;
+  if (path === '' || path === '/') return `${SITE_ORIGIN}/`;
+  return `${SITE_ORIGIN}${path.startsWith('/') ? path : `/${path}`}`;
+}
 
-/** Slug rule: lowercase ASCII letters, digits and single hyphens. */
-export const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+/** `Work` / `Showreel` / `Catalogue` labels for the third breadcrumb step. */
+export function hubLabel(hubPath: string): string {
+  switch (hubPath) {
+    case '/work':
+      return 'Selected productions';
+    case '/reel':
+      return 'Showreel';
+    case '/store':
+      return 'Catalogue';
+    default:
+      return hubPath.replace(/^\//, '');
+  }
+}
 
-/** Turn a display title into a stable slug. Digits and words only. */
-export function slugify(input: string): string {
-  return input
+/** Path form of `title` for slugs that are not fixed in the data. */
+export function slugify(value: string): string {
+  return value
     .normalize('NFKD')
-    .replace(/[\u2018\u2019\u02bc']/g, '')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
     .replace(/&/g, ' and ')
-    .replace(/[^a-zA-Z0-9]+/g, '-')
+    .replace(/['’]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
-    .replace(/-{2,}/g, '-')
-    .toLowerCase();
+    .replace(/-{2,}/g, '-');
 }
 
-/** Seconds -> ISO 8601 duration (PT1M12S). */
-export function isoDuration(seconds: number): string {
-  const total = Math.round(seconds);
-  const h = Math.floor(total / 3600);
-  const m = Math.floor((total % 3600) / 60);
-  const s = total % 60;
-  let out = 'PT';
-  if (h) out += `${h}H`;
-  if (m) out += `${m}M`;
-  if (s || (!h && !m)) out += `${s}S`;
-  return out;
+/** ISO-8601 duration for a JSON-LD payload (`PT1M12S`). */
+export function isoDuration(totalSeconds: number): string {
+  const s = Math.max(0, Math.round(totalSeconds));
+  const hours = Math.floor(s / 3600);
+  const minutes = Math.floor((s % 3600) / 60);
+  const seconds = s % 60;
+  const parts = [hours ? `${hours}H` : '', minutes ? `${minutes}M` : '', seconds || (!hours && !minutes) ? `${seconds}S` : ''];
+  return `PT${parts.join('')}`;
 }
 
-/** Seconds -> "1m 12s" with no rounding surprises. */
-export function humanDuration(seconds: number): string {
-  const total = Math.round(seconds);
-  const m = Math.floor(total / 60);
-  const s = total % 60;
-  if (!m) return `${s}s`;
-  return `${m}m ${String(s).padStart(2, '0')}s`;
+/** Minutes-and-seconds display form, `1m 12s`. */
+export function displayDuration(totalSeconds: number): string {
+  const s = Math.max(0, Math.round(totalSeconds));
+  const minutes = Math.floor(s / 60);
+  const seconds = s % 60;
+  return minutes ? `${minutes}m ${seconds}s` : `${seconds}s`;
 }
 
-/** Seconds -> "1:12" (used in track lists). */
-export function clockDuration(seconds: number): string {
-  const total = Math.round(seconds);
-  const m = Math.floor(total / 60);
-  const s = total % 60;
-  return `${m}:${String(s).padStart(2, '0')}`;
+export function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+/** Escape for an XML text node or attribute. */
+export function escapeXml(value: string): string {
+  return escapeHtml(value).replace(/'/g, '&apos;');
+}
+
+/** Render a `<script type="application/ld+json">` block. */
+export function jsonLdScript(payload: unknown): string {
+  const body = JSON.stringify(payload, null, 2);
+  return `<script type="application/ld+json">\n${body}\n</script>`;
+}
+
+/** Collapse whitespace so a description is one clean line in the head. */
+export function oneLine(value: string): string {
+  return value.replace(/\s+/g, ' ').trim();
+}
+
+/** The site-wide robots directive every indexable route ships. */
+export const INDEXABLE_ROBOTS =
+  'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
+
+/** Trim a description to a length a SERP will actually render. */
+export function clamp(value: string, max: number): string {
+  const clean = oneLine(value);
+  if (clean.length <= max) return clean;
+  const cut = clean.slice(0, max - 1);
+  const lastSpace = cut.lastIndexOf(' ');
+  return `${cut.slice(0, lastSpace > max * 0.6 ? lastSpace : cut.length).replace(/[.,;:]$/, '')}…`;
 }

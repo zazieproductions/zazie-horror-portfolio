@@ -14,13 +14,14 @@ import { fileURLToPath } from 'node:url';
  *   /work/                    → work/index.html                 [200]
  *   /work/expire              → work/expire.html (flat file)    [200]
  *   /work/expire.html         → 308 to /work/expire
- *   /work/expire/             → 308 to /work/expire
+ *   /work/expire/             → 404.html with HTTP 404 (no slash twin)
  *   /work/does-not-exist      → 404.html with HTTP 404
  *
- * Cloudflare Pages documents the same table (an `.html` request redirects to
- * its extensionless form, the extensionless form is served from the file, and
- * a 404.html in the output disables SPA mode so unmatched paths get a real
- * 404). See the notes at the foot of `_redirects`.
+ * The slashless item path resolves from its flat `.html` file, without a
+ * redirect hop. A trailing slash only resolves when the matching hub has a
+ * real `index.html`; item and unknown paths do not get normalized into a
+ * second URL. The `_redirects` fallback and 404.html keep unknown requests as
+ * real, noindex 404s.
  */
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -54,6 +55,16 @@ const isFile = (rel) => {
   }
 };
 
+/** Exact legacy redirects from _redirects; wildcard routes are handled by the 404 fallback. */
+const explicitRedirects = new Map();
+for (const raw of fs.readFileSync(file('_redirects'), 'utf8').split(/\r?\n/)) {
+  const line = raw.replace(/#.*$/, '').trim();
+  if (!line) continue;
+  const [from, to, rawStatus] = line.split(/\s+/);
+  if (!from || !to || /[*:(]/.test(from)) continue;
+  explicitRedirects.set(from, { to, status: Number(rawStatus) || 301 });
+}
+
 /** The file the host would serve for this path, or null. */
 function resolve(urlPath) {
   const rel = urlPath.replace(/^\/+/, '');
@@ -68,25 +79,27 @@ const server = http.createServer((req, res) => {
   const parsed = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   let urlPath = decodeURIComponent(parsed.pathname);
 
-  // Cloudflare Pages 308s the ".html" form and the trailing-slash form to the
-  // extensionless slashless canonical (the URL the sitemap and every page's
-  // <link rel="canonical"> use).
-  if (urlPath !== '/' && urlPath.endsWith('.html') && urlPath !== '/404.html' && urlPath !== '/index.html') {
-    const target = urlPath.slice(0, -'.html'.length) + parsed.search;
-    res.writeHead(308, { Location: target });
+  const explicit = explicitRedirects.get(urlPath);
+  if (explicit) {
+    res.writeHead(explicit.status, { Location: explicit.to + parsed.search });
     res.end();
     return;
   }
-  if (urlPath !== '/' && urlPath.endsWith('/')) {
-    const trimmed = urlPath.replace(/\/+$/, '');
-    if (resolve(trimmed) && trimmed !== '' && isFile(trimmed + '.html')) {
-      res.writeHead(308, { Location: trimmed + parsed.search });
+
+  // Serve the clean URL for a real flat .html file through one permanent
+  // alias redirect. Unknown .html paths are not redirected to another miss;
+  // they fall through to the real noindex 404 below.
+  if (urlPath !== '/' && urlPath.endsWith('.html') && urlPath !== '/404.html' && urlPath !== '/index.html') {
+    const targetPath = urlPath.slice(0, -'.html'.length);
+    if (resolve(targetPath)) {
+      res.writeHead(308, { Location: targetPath + parsed.search });
       res.end();
       return;
     }
-    urlPath = trimmed || '/';
   }
-
+  // Do not trim a trailing slash before resolution. Existing directory hubs
+  // have a real index.html and still resolve; flat item paths have no directory
+  // twin and therefore reach the noindex 404 below.
   const rel = resolve(urlPath);
   if (!rel) {
     const notFound = '404.html';

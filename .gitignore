@@ -2,7 +2,10 @@
 .env
 .env.*
 .DS_Store
+
+# Build tooling and local deploy/audit artifacts
 node_modules/
 build/
+.vite/
 dist/
 .audit/
