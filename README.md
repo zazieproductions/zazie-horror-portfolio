@@ -412,7 +412,32 @@ The site runs a deliberately deep SEO layer (the repo's `SEO-DOSSIER.md` and `SI
 
 ## Deployment
 
-**Cloudflare Pages**, serving the repository root as a static asset tree — merge to `main` and the edge updates. No build command, no output directory: the committed tree *is* the deploy.
+**Cloudflare Pages**, serving the repository root as a static asset tree — the committed tree *is* the deploy, with no build command and no output directory to configure.
+
+**What merges is not necessarily what is live.** Pages' git integration has not
+kept up: on 2026-09-24 the repo was rolled back to commit `9e79fc2` because
+nothing merged after PR #47 had ever reached the edge, and on 2026-10-04 the
+edge was five hours and six merges behind again (the 65 item URLs 404'd for
+hours after they merged — see `ITEM-URLS.md` §9.3). Do not assume a merge is a
+deploy; check, and do not roll `main` back to match the edge a second time —
+that discards the work rather than shipping it.
+
+`.github/workflows/deploy.yml` is the deploy: it validates the tree, uploads
+only the site (see below), and then runs `tools/live-route-audit.mjs` against
+what it just deployed, so a deploy that does not serve its own sitemap fails
+the workflow instead of passing silently. It needs two repository secrets —
+`CLOUDFLARE_API_TOKEN` (Pages:Edit) and `CLOUDFLARE_ACCOUNT_ID` — and until
+both exist it warns and deploys nothing.
+
+The upload is assembled by `scripts/build-deploy-dir.mjs`, which copies the root
+minus the parts that are not the site (`tools/`, `scripts/`, `src/`,
+`store-src/`, `legal-src/`, `public/`, `node_modules/`, `build/`, the markdown
+docs, `package.json`, `server.mjs`). The git integration published all of them —
+`/tools/indexnow.mjs` is on the public web at the time of writing. A direct
+upload gets to choose, and the script refuses to build a tree that is missing
+`index.html`, `404.html`, `sw.js`, `sitemap.xml`, `robots.txt` or the IndexNow
+key, that fails to resolve any of the 84 sitemap URLs, or that precaches a
+`store-<hash>` asset it does not carry.
 
 Two hard-won rules recorded in `STORE.md` / `LEGAL.md` / `SEO-DOSSIER.md`:
 
