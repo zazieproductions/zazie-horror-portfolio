@@ -21,6 +21,26 @@
 /*.css
   Cache-Control: public, max-age=31536000, immutable
 
+# Item entry pages: /work/<slug>, /reel/<slug> and /store/<slug> are flat files
+# (<hub>/<slug>.html) that Cloudflare Pages serves extensionless at the
+# slashless URL with a 200 and no redirect hop. They carry the same HTML cache
+# policy as every other page on the site.
+#
+# They deliberately do NOT get a per-route `Link: rel="canonical"` header. This
+# file is limited to 100 header rules by Cloudflare Pages, and 65 more rules
+# would take it to 133 - past the ceiling, at which point the platform drops
+# the rules (security headers included). Each item page's canonical is declared
+# in its own static <link rel="canonical"> instead, which is the signal that
+# actually consolidates the URL. The wildcards below are the only additions.
+/work/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/reel/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/store/*
+  Cache-Control: public, max-age=0, must-revalidate
+
 /favicon.svg
   Cache-Control: public, max-age=31536000, immutable
 

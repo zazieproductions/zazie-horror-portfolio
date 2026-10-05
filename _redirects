@@ -49,5 +49,11 @@
 # slashless form, so crawlers consolidate on /route with no redirect hop.
 # ---------------------------------------------------------------------------
 
+# Flat item routes have no directory index. Do not normalize a trailing-slash
+# twin to the canonical item URL: answer it as a real 404 with noindex instead.
+/work/*/  /404.html  404
+/reel/*/  /404.html  404
+/store/*/ /404.html  404
+
 # Unknown paths serve the not-found document with an HTTP 404 (not a soft 404).
 /* /404.html 404

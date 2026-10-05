@@ -1,0 +1,160 @@
+name: Deploy to Cloudflare Pages
+
+# Ship the site, and prove it shipped.
+#
+# WHY THIS EXISTS
+#
+# The static pages and build sources live at the repository root. The former
+# Pages git integration published the whole repository (including tooling and
+# sources), and the edge repeatedly drifted behind main. On 2026-09-24 the repo
+# was rolled back to commit 9e79fc2 because nothing merged after PR #47 had
+# deployed; the workflow meant to deploy it (.github/workflows/main.yml) failed
+# with "npm ci requires a package.json the repo does not have". As of
+# 2026-10-04 the edge was five hours and six merges behind again.
+#
+# So: validate the tree, upload only the site (see
+# scripts/build-deploy-dir.mjs -- the git integration publishes tools/, src/,
+# the markdown docs and server.mjs too), then run the live route audit against
+# what was just deployed. A deploy that does not serve its own sitemap fails
+# here rather than silently.
+#
+# SETUP (once)
+#
+#   CLOUDFLARE_API_TOKEN   repo secret   Pages:Edit
+#   CLOUDFLARE_ACCOUNT_ID  repo secret   the account owning the Pages project
+#
+# PRs and pushes always build, test, validate, and assemble the static tree.
+# Until both secrets exist, deploy and live-audit steps are skipped with a
+# warning; no edge files are changed. This keeps CI useful before setup.
+#
+#   gh workflow run deploy.yml                                  # production
+#   gh workflow run deploy.yml -f environment=preview           # preview URL
+
+on:
+  pull_request:
+    paths:
+      - package.json
+      - package-lock.json
+      - src/**
+      - scripts/**
+      - tools/**
+      - store-src/**
+      - legal-src/**
+      - '**/*.html'
+      - images/**
+      - audio/**
+      - sw.js
+      - server.mjs
+      - sitemap.xml
+      - robots.txt
+      - _headers
+      - _redirects
+      - vite.config.ts
+      - .github/workflows/deploy.yml
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Where to deploy
+        required: true
+        default: production
+        type: choice
+        options:
+          - production
+          - preview
+      project:
+        description: Cloudflare Pages project name
+        required: true
+        default: zazie-horror-portfolio
+        type: string
+      verify_live:
+        description: Run the live route audit after deploying
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      PROJECT: ${{ inputs.project || 'zazie-horror-portfolio' }}
+      ENVIRONMENT: ${{ inputs.environment || 'production' }}
+      BASE_URL: https://horror.zazieproductions.com
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Credentials present?
+        id: creds
+        if: github.event_name != 'pull_request'
+        env:
+          TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          ACCOUNT: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          ENVIRONMENT: ${{ inputs.environment || 'production' }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ] && [ "$ENVIRONMENT" = "production" ] && [ "$GITHUB_REF" != "refs/heads/main" ]; then
+            echo "Production deploys may only be dispatched from main." >&2
+            exit 1
+          fi
+          if [ -z "$TOKEN" ] || [ -z "$ACCOUNT" ]; then
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+            echo "::warning title=Nothing deployed::CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID are not both set. Add them as repository secrets (Pages:Edit token, and the account id that owns the Pages project), then re-run."
+          else
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install
+        run: npm ci
+
+      # Generated files are committed; rebuild and reject stale output so a PR
+      # or deploy cannot ship pages that differ from their checked-in sources.
+      - name: Build and validate
+        run: |
+          npm run build
+          npm run typecheck
+          node --test tools/film-player.test.mjs
+          node tools/check-sitemap.mjs
+          node tools/route-aliases.mjs --check
+          git diff --exit-code -- '*.html' '*.xml' robots.txt '*.js' '*.css' \
+            || { echo "Generated site output is stale; run npm run build and commit the result"; exit 1; }
+          untracked=$(git ls-files --others --exclude-standard -- '*.html' '*.xml' robots.txt '*.js' '*.css')
+          if [ -n "$untracked" ]; then
+            echo "Untracked generated site output:" >&2
+            printf '%s\n' "$untracked" >&2
+            exit 1
+          fi
+
+      - name: Assemble the upload
+        run: node scripts/build-deploy-dir.mjs dist
+
+      - name: Deploy
+        if: github.event_name != 'pull_request' && steps.creds.outputs.ok == 'true'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          args=(dist --project-name "$PROJECT")
+          [ "$ENVIRONMENT" = "production" ] && args+=(--branch main)
+          npx --yes "wrangler@^4" pages deploy "${args[@]}"
+
+      - name: Live route audit
+        if: ${{ github.event_name != 'pull_request' && steps.creds.outputs.ok == 'true' && (github.event_name != 'workflow_dispatch' || (inputs.verify_live && inputs.environment == 'production')) }}
+        run: |
+          sleep 45
+          node tools/live-route-audit.mjs "$BASE_URL"
+
+      - name: Not deployed
+        if: github.event_name != 'pull_request' && steps.creds.outputs.ok != 'true'
+        run: 'echo "Skipped (no Cloudflare credentials): validation passed, but this run changed nothing at the edge."'

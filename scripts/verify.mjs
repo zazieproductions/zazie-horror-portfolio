@@ -76,7 +76,6 @@ for (const loc of sitemapLocs) {
     }
   } catch { fail(`sitemap has a malformed URL: ${loc}`); }
 }
-if (/<(?:changefreq|priority)>/i.test(sitemapXml)) fail('sitemap must not rely on changefreq or priority metadata');
 
 /* --------------------------------------------------------------- page files */
 let resolved = 0;

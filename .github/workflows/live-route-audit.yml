@@ -1,0 +1,55 @@
+name: Live route audit
+
+# Run tools/live-route-audit.mjs against a host the runner can reach. The
+# production site is not a PR preview, so do not compare unmerged sitemap URLs
+# with it on pull_request events. The deploy workflow runs this automatically
+# after a production deploy; this manual workflow is for a deliberate re-audit.
+#
+#   gh workflow run live-route-audit.yml
+#   gh workflow run live-route-audit.yml -f base_url=https://<hash>.pages.dev
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: Base URL to audit
+        required: true
+        default: https://horror.zazieproductions.com
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: live-route-audit
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Route table
+        run: node tools/live-route-audit.mjs "$BASE_URL"
+        env:
+          BASE_URL: ${{ inputs.base_url || 'https://horror.zazieproductions.com' }}
+
+      - name: Markdown table
+        if: always()
+        run: node tools/live-route-audit.mjs "$BASE_URL" --markdown | tee live-route-audit.md
+        env:
+          BASE_URL: ${{ inputs.base_url || 'https://horror.zazieproductions.com' }}
+
+      - name: Upload route table
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-route-audit
+          path: live-route-audit.md
+          if-no-files-found: warn

@@ -716,8 +716,7 @@ bullet "Local Fallback for Drive Assets".
   automatically. Full detail in the `LEGAL.md` addendum of the same date.
 - **Verification**: `node --test tools/film-player.test.mjs` 11/11 — including
   the content-hash/precache check, which re-derives the bundle name from
-  `index.html`; `node tools/check-sitemap.mjs` PASS (19 URLs / 47 images /
-  8 videos, and the validator resolves the new thumbnail on disk);
+  `index.html`; `node tools/check-sitemap.mjs` PASS (the 84-URL tree: 19 hubs + 65 item pages / 79 images / 12 videos — see `ITEM-URLS.md`);
   `node tools/route-aliases.mjs --check` clean; `node --input-type=module
   --check` on the renamed bundle. Local HTTP: 200 on
   `/images/eclipsed-cover-1280.jpg` and on the bundle, 404 on the retired

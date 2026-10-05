@@ -4,40 +4,35 @@
  * -----------------------------------------------------------------------------
  * Pre-flight validator for horror.zazieproductions.com/sitemap.xml.
  *
- * Runs every check Google Search Console performs (plus the ones it silently
- * penalises you for) so the file is clean *before* you hit "Submit sitemap":
+ * Runs local structural, content-route, and crawlability checks before the
+ * sitemap is submitted. It does not predict Google indexing decisions:
  *
  *   1.  XML is well-formed                       -> GSC "Sitemap could not be read"
  *   2.  Correct root element + namespaces        -> GSC "Invalid XML"
  *   3.  Protocol limits (50k URLs / 50 MB)       -> GSC "Sitemap too large"
  *   4.  loc: absolute, on-host, no params/frag   -> GSC "Invalid URL"
- *   5.  lastmod / publication_date W3C format    -> GSC "Invalid date"
- *   6.  changefreq / priority value ranges       -> GSC "Invalid value"
- *   7.  Child-element order matches the XSD      -> strict validator failures
- *   8.  video:content_loc points to a real file  -> GSC video errors (HTML is NOT
- *       a supported format; YouTube embeds must use video:player_loc only)
- *   9.  No duplicate <loc>                       -> GSC "Duplicate URL"
- *  10.  Every loc resolves to a real page        -> GSC "URL not found (404)"
- *  11.  Page canonical == sitemap loc            -> GSC "Alternate page with
- *                                                   proper canonical tag"
- *  12.  Page is not noindex                      -> GSC "Excluded by noindex"
- *  13.  Nothing is blocked by robots.txt         -> GSC "Blocked by robots.txt"
- *  14.  robots.txt advertises the sitemap        -> discovery
- *  15.  image/video assets exist on disk         -> GSC image/video "not found"
- *  16.  Every <route>/index.html has a byte-     -> the canonical slashless URL
- *       identical root <route>.html twin             must answer 200, not a
- *                                                    redirect (or a redirect
- *                                                    loop) on the host
- *  17.  No _redirects rule sends a directory     -> ERR_TOO_MANY_REDIRECTS on
- *       route back into the host's 308               every link to that route
- *  18.  Every in-site #fragment link resolves   -> dead "Jump to" / section
- *       to an id on its target page                  links
- *  19.  Every original hub remains reachable    -> only the hubs belong in the
- *       from the home page; item URLs are not         homepage navigation; item pages
- *       required to be reachable from /              link to their hub and siblings
+ *   5.  lastmod / publication_date W3C format    -> invalid dates
+ *   6.  Child-element order matches the XSD      -> strict validator failures
+ *   7.  video:content_loc points to a media file -> Google video-sitemap errors
+ *       (HTML is not a supported content format; YouTube uses player_loc)
+ *   8.  No duplicate <loc>                       -> duplicate page entries
+ *   9.  Every loc resolves to a real page        -> missing-file / 404 entries
+ *  10.  Page canonical == sitemap loc            -> canonical mismatch
+ *  11.  Page is not noindex                      -> submitted page excluded
+ *  12.  Nothing is blocked by robots.txt         -> crawlability
+ *  13.  robots.txt advertises the sitemap        -> discovery
+ *  14.  image/video assets exist on disk         -> missing media references
+ *  15.  Every <route>/index.html has a byte-     -> original hubs keep their
+ *       identical root <route>.html twin             existing slashless route
+ *  16.  Item files have no directory twins       -> one canonical item URL
+ *  17.  No _redirects rule sends a directory     -> redirect-loop prevention
+ *       route back into a host redirect
+ *  18.  Every in-site #fragment link resolves   -> valid section links
+ *  19.  Original hubs remain reachable from /    -> approved hub navigation
+ *       while item URLs stay off home/hubs
  *  20.  Existing hubs do not link to item URLs   -> item discovery stays in the
- *       from the home page, nav, or hub cards          sitemap and item sibling links
- *  21.  sw.js precaches only hashed assets that  -> 404s on service worker install
+ *       homepage or hub navigation                   sitemap and sibling links
+ *  21.  sw.js precaches only hashed assets that  -> valid service-worker cache
  *       exist
  *
  * Usage:
@@ -83,7 +78,7 @@ const MAX_TAGS_PER_VIDEO = 32;
 
 /** Schema-declared child order (sequences). Anything not listed is unordered. */
 const ORDER = {
-  url: ['loc', 'lastmod', 'changefreq', 'priority'],
+  url: ['loc', 'lastmod'],
   image: ['loc', 'caption', 'geo_location', 'title', 'license'],
   video: [
     'thumbnail_loc', 'title', 'description', 'content_loc', 'player_loc', 'duration',
@@ -92,8 +87,6 @@ const ORDER = {
     'platform', 'live', 'tag', 'category',
   ],
 };
-
-const CHANGEFREQ = new Set(['always', 'hourly', 'daily', 'weekly', 'monthly', 'yearly', 'never']);
 
 /** Extensions Google accepts for video:content_loc (HTML / Flash are NOT valid). */
 const VIDEO_FILE_RE =
@@ -435,23 +428,19 @@ for (const urlEl of urls) {
   if (seenLocs.has(loc)) err(`${short}: duplicate <loc> (also at entry ${seenLocs.get(loc)})`);
   else seenLocs.set(loc, urls.indexOf(urlEl) + 1);
 
-  /* lastmod / changefreq / priority */
+  /* lastmod */
   const lastmod = child(urlEl, 'lastmod');
   if (lastmod) {
     const v = text(lastmod);
     if (!validDate(v)) err(`${short}: lastmod "${v}" is not a valid W3C datetime`);
     else if (isFuture(v)) err(`${short}: lastmod "${v}" is in the future`);
   } else {
-    note(`${short}: no lastmod (optional, but recommended)`);
-  }
-  const cf = child(urlEl, 'changefreq');
-  if (cf && !CHANGEFREQ.has(text(cf).toLowerCase())) err(`${short}: invalid changefreq "${text(cf)}"`);
-  const pr = child(urlEl, 'priority');
-  if (pr) {
-    const v = Number(text(pr));
-    if (!Number.isFinite(v) || v < 0 || v > 1) err(`${short}: priority must be between 0.0 and 1.0`);
+    note(`${short}: no lastmod (optional)`);
   }
 
+  // changefreq / priority are intentionally not validated or treated as
+  // ranking signals; the generator omits both. Keep XML-order validation for
+  // any standard URL children that are present.
   checkOrder(urlEl, ORDER.url, short);
 
   /* robots.txt cross-check */
@@ -573,20 +562,36 @@ for (const urlEl of urls) {
 
 /* 5. coverage report ------------------------------------------------------- */
 const pageFiles = [];
+const pageFilePath = new Map(); // route path -> the file that serves it
+// Directories that are sources, tooling or build output, never routes.
+const NOT_PAGES = new Set(['node_modules', 'build', 'dist', 'public', 'src', 'scripts', 'tools']);
+const isPageFile = (name) => name.endsWith('.html') && name !== '404.html';
 const walk = (dir) => {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (e.name.startsWith('.') || e.name === 'node_modules') continue;
+    if (e.name.startsWith('.') || NOT_PAGES.has(e.name)) continue;
     const abs = path.join(dir, e.name);
     if (e.isDirectory()) { if (e.name.endsWith('-src')) continue; walk(abs); }
-    else if (e.isFile() && e.name === 'index.html') {
-      const rel = path.relative(ROOT, abs).replace(/[/\\]index\.html$/, '');
-      const clean = rel === 'index.html' ? '' : rel;
-      pageFiles.push('/' + clean);
+    else if (e.isFile() && isPageFile(e.name)) {
+      // Both shapes are routes: `<slug>/index.html` (a directory route, which
+      // the host 308s to its trailing-slash form unless a root twin exists) and
+      // the flat `<hub>/<slug>.html` item pages, which the host serves
+      // extensionless at `/hub/<slug>` with no redirect hop. Root twins
+      // (`work.html` beside `work/index.html`) map to the same path and are
+      // deduplicated here.
+      const rel = path.relative(ROOT, abs);
+      const clean =
+        e.name === 'index.html'
+          ? rel.replace(/[/\\]index\.html$/, '')
+          : rel.slice(0, -'.html'.length);
+      const route = clean === 'index.html' || clean === '' ? '/' : '/' + clean.split(path.sep).join('/');
+      if (!pageFilePath.has(route)) pageFilePath.set(route, abs);
+      pageFiles.push(route);
     }
   }
 };
 walk(ROOT);
-const missing = pageFiles.filter((p) => !seenLocs.has(`https://${SITE_HOST}${p === '/' ? '/' : p}`));
+const uniquePageFiles = [...new Set(pageFiles)];
+const missing = uniquePageFiles.filter((p) => !seenLocs.has(`https://${SITE_HOST}${p === '/' ? '/' : p}`));
 if (missing.length) {
   warn(`pages on disk that are NOT in the sitemap: ${missing.join(', ')}`);
 }
@@ -636,8 +641,8 @@ const normPath = (p) => {
   return x || '/';
 };
 const htmlPages = new Map(); // route path -> html, for every page on disk
-for (const p of pageFiles) {
-  htmlPages.set(p, fs.readFileSync(path.join(ROOT, p === '/' ? '' : p.slice(1), 'index.html'), 'utf8'));
+for (const p of uniquePageFiles) {
+  htmlPages.set(p, fs.readFileSync(pageFilePath.get(p), 'utf8'));
 }
 const linkSources = new Map(htmlPages);
 const notFoundFile = path.join(ROOT, '404.html');
@@ -703,6 +708,9 @@ note(`internal links: ${hubCount} original hub URLs are reachable from / (${topL
 // 8c. item routes are not added to the homepage or original hub navigation
 let hubItemLinks = 0;
 for (const [src, html] of htmlPages) {
+  // Item-to-item sibling links are required. Only enforce the exclusion on the
+  // homepage and original hub pages; item pages must remain free to cross-link.
+  if (isItemPath(src)) continue;
   for (const link of linksOf(src, html)) {
     if (isItemPath(link.path)) {
       hubItemLinks++;

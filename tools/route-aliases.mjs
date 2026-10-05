@@ -46,6 +46,8 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 /* Directories that are assets or sources, never routes. */
 const NOT_ROUTES = new Set([
   'images', 'fonts', 'audio', 'tools', 'legal-src', 'store-src', 'node_modules',
+  // build output and sources: never routes, whatever they contain
+  'build', 'dist', 'public', 'scripts', 'src',
 ]);
 
 /* ------------------------------------------------------------------ helpers */

@@ -8,7 +8,7 @@ An immersive web environment for psychological horror scoring, experimental comp
 [![Architecture](https://img.shields.io/badge/architecture-static_%C2%B7_zero_backend-1e1e1e)](#architecture)
 [![Hosting](https://img.shields.io/badge/host-Cloudflare_Pages-1e1e1e)](#deployment)
 [![Showreel](https://img.shields.io/badge/showreel-32_cues_%C2%B7_9_productions-1e1e1e)](#core-experiences--features)
-[![Sitemap](https://img.shields.io/badge/sitemap-19_urls_%C2%B7_47_images_%C2%B7_8_videos-1e1e1e)](#seo--structured-data)
+[![Sitemap](https://img.shields.io/badge/sitemap-84_urls_%C2%B7_79_images_%C2%B7_12_videos-1e1e1e)](#seo--structured-data)
 
 ---
 
@@ -55,7 +55,7 @@ Primary routes:
 | `/store` | The Catalogue: records, sound libraries, tools and objects — 24 items, checkout delegated to Bandcamp, itch.io, Gumroad and eBay |
 | `/legal` · `/faq` · `/terms` · `/privacy` · `/licensing` · `/purchases` · `/accessibility` | Trust, legal and operating documents |
 | `/sitemap` | HTML site map: original hub pages and their in-page sections, linked from every footer (item URLs are listed in `/sitemap.xml`) |
-| `/404.html` | "Signal Lost: Archive Entry Not Found" — a real 404 status with a recovery grid of all routes |
+| `404.html` (fallback document) | "Signal Lost: Archive Entry Not Found" — served with HTTP 404 and `noindex` for unknown paths |
 
 Every route is a **real static path**: original hubs use `<hub>/index.html` plus a byte-identical root twin, while generated item URLs use flat `<hub>/<slug>.html` files with no slash twin. There is deliberately no SPA rewrite fallback.
 
@@ -66,7 +66,7 @@ This repository is simultaneously:
 - **Portfolio documentation** — what the site is, for directors, producers, supervisors and collaborators.
 - **An architectural map** — where every system lives, so development resumes without re-discovery.
 - **A contributor guide & development memory** — guardrails, recipes, and dated implementation records (`*.md` at root).
-- **The deployment artifact itself.** The served site is checked in at the repository root. There is no CI build: what is on `main` is what the edge serves.
+- **The deployment artifact itself.** The served site is checked in at the repository root. GitHub Actions builds and validates pull requests and main-branch deployments; it uploads only the static site when the Cloudflare credentials are configured.
 
 > **Important architecture note:** the original main-portfolio React/TypeScript source tree is not included, and the legacy `index-<hash>.js` / `.css` artifacts are not rebuilt by this package. This repository now has a separate, typed content model and static prerender pipeline for 9 production, 32 cue, and 24 catalogue item pages. `npm run build` regenerates the catalogue and documents, validates the 84-URL sitemap, builds the item assets, prerenders all 65 item pages, and runs route/link/schema checks. Item content lives in `src/data/`; shared page layout lives in `src/lib/`.
 
@@ -114,7 +114,7 @@ All artwork © the respective productions. See the [live site](https://horror.za
 | System | Where it lives | Notes |
 | --- | --- | --- |
 | Showreel audio engine | `src/lib/audioContext.tsx` (in bundle), rendered by `Showreel.tsx` + `StickyPlayer.tsx` | One `<audio>` element for the whole site, shared through React context: `playTrack / toggle / next / prev / seek / setVolume`. Previous-track restarts if >3 s in. `preload="metadata"`; MP3s stream from `/audio/`, cached `immutable` at the edge. |
-| Mood clusters | `tracks` array in the bundle (32 entries: `id, title, src, duration, tag`) | Each cue carries one mood tag; `/reel` mirrors the list with `AudioObject`/`MusicRecording` schema. |
+| Mood clusters | `tracks` array in the bundle (32 entries: `id, title, src, duration, tag`) | Each cue carries one mood tag; its dedicated item page uses `MusicComposition` + `AudioObject` schema. |
 | Sticky player | `StickyPlayer.tsx` | Hidden until first play; animated wave-bar visualisation; respects `prefers-reduced-motion`. |
 | Film samples | `Projects.tsx` data + prerendered covers | 6 YouTube-nocookie iframes get a real `src` only when lazy-loaded; 1 Google Drive embed; `preconnect` to YouTube deferred off the critical path. |
 | Boot overlay | legacy inline markup in `index.html` | Disabled by default; never covers the readable homepage content. |
@@ -203,7 +203,7 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 ├── index.html                  # Home: prerendered DOM + inactive boot markup + 4 generated JSON-LD blocks
 ├── index-<hash>.js / .css      # Retained legacy homepage assets (not rebuilt here)
 ├── 404.html                    # "Signal Lost" — served with real 404 status
-├── sw.js                       # Service worker (CACHE_NAME zazie-v26; bump it on any hash change)
+├── sw.js                       # Service worker (CACHE_NAME zazie-v29; bump it on any precache change)
 ├── server.mjs                  # Local static server, clean routes + 404 fallback
 ├── _headers                    # CSP, canonical Link headers, cache policy
 ├── _redirects                  # Legacy aliases + explicit real-404 fallback
@@ -381,7 +381,7 @@ The site serves source-rendered SEO metadata and structured data (the repo's `SE
 
 ## Deployment
 
-**Cloudflare Pages**, serving the repository root as a static asset tree. `npm run build` runs locally before deployment; the generated root tree is the deploy artifact, and Cloudflare does not run the Node build itself.
+**Cloudflare Pages**, served as a static asset tree. `.github/workflows/deploy.yml` runs on relevant pull requests and main-branch pushes: it runs `npm ci`, the full build, type and film-player tests, sitemap/route checks, and assembles the site-only upload. On main it also deploys with Wrangler and runs the live route audit when `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` are configured. Without those secrets, validation still runs and deployment is skipped; Cloudflare does not run the Node build itself.
 
 Two hard-won rules recorded in `STORE.md` / `LEGAL.md` / `SEO-DOSSIER.md`:
 

@@ -1,0 +1,64 @@
+name: IndexNow
+
+# Submits URLs to the IndexNow engines (Bing, Yandex, Seznam, Naver, Yep --
+# everyone except Google, which does not participate).
+#
+# tools/indexnow.mjs has to run from a host that can reach both the site and
+# api.indexnow.org, which rules out the build sandbox for the same reason as
+# the live route audit: egress is allow-listed. Dispatch this instead.
+#
+#   gh workflow run indexnow.yml                          # dry run
+#   gh workflow run indexnow.yml -f dry_run=false         # actually submit
+#   gh workflow run indexnow.yml -f paths="/reel /faq" -f dry_run=false
+#
+# Only submit URLs that are live and answering 200 -- run the live route audit
+# first. The engines fetch the key file from the site to verify the submission,
+# so a key file that has not deployed yet answers 403.
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Dry run (print the request, send nothing)
+        required: true
+        default: true
+        type: boolean
+      paths:
+        description: Paths to submit (blank = every <loc> in sitemap.xml)
+        required: false
+        default: ''
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: indexnow
+  cancel-in-progress: false
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Key file is live
+        run: |
+          key=$(ls | grep -E '^[a-f0-9]{32}\.txt$' | head -1)
+          echo "key file: $key"
+          curl -fsS "https://horror.zazieproductions.com/$key"
+
+      - name: Submit
+        run: |
+          args=()
+          [ "${DRY_RUN}" = "true" ] && args+=(--dry-run)
+          [ -n "${PATHS}" ] && args+=(${PATHS})
+          node tools/indexnow.mjs "${args[@]}"
+        env:
+          DRY_RUN: ${{ inputs.dry_run }}
+          PATHS: ${{ inputs.paths }}
