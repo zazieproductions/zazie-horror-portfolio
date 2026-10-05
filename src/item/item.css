@@ -31,24 +31,92 @@
 }
 
 /* --- Embed frame (film samples) ----------------------------------------- */
+/* Cinema players stay upright at their real size. The provider owns the
+   playback bar; site chrome lives outside the iframe. No rotate/scale/filter
+   here - those would flip or dim the native controls and make the picture
+   hard to see, especially on mobile where Drive's toolbar is already tight. */
 .entry-embed {
   position: relative;
   margin: 1.25rem 0 0;
   border: 1px solid var(--ash);
-  background: var(--ink);
+  background: #000;
   overflow: hidden;
   aspect-ratio: 16 / 9;
+  isolation: isolate;
+  z-index: 91;
+  transform: none;
+  filter: none;
+  box-shadow:
+    inset 0 0 0 1px rgba(196, 30, 30, 0.22),
+    0 18px 48px rgba(0, 0, 0, 0.75),
+    0 0 64px rgba(196, 30, 30, 0.1);
 }
 
 .entry-embed iframe {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: none !important;
+  max-height: none !important;
   border: 0;
+  background: #000;
+  transform: none;
+  filter: none;
+}
+
+/* A 160-200px-tall phone embed crowds Drive's own toolbar and can make its
+   volume/progress UI appear cramped or inverted. Give it room without
+   cropping, scaling or rotating the film or its native controls. */
+@media (max-width: 767px) {
+  .entry-embed {
+    min-height: 260px;
+  }
+}
+
+/* Ensure decorative overlays never dim the film frame - the player owns its
+   own chrome. Grain/vignette are pointer-events:none but visually overlay;
+   lifting the embed above them keeps the picture clear on mobile. */
+.entry-embed:fullscreen {
+  width: 100vw !important;
+  height: 100vh !important;
+  min-height: 0;
+  aspect-ratio: auto;
+  z-index: 2147483647;
+}
+
+.entry-embed:fullscreen iframe {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.entry-embed:-webkit-full-screen {
+  width: 100vw !important;
+  height: 100vh !important;
+  min-height: 0;
+  aspect-ratio: auto;
+  z-index: 2147483647;
+}
+
+.entry-embed:-webkit-full-screen iframe {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+@supports (height: 100dvh) {
+  .entry-embed:fullscreen {
+    height: 100dvh !important;
+  }
+  .entry-embed:-webkit-full-screen {
+    height: 100dvh !important;
+  }
 }
 
 /* --- Audio -------------------------------------------------------------- */
+/* Override legal.css .audio-player filter:invert(0.9) hue-rotate(180deg) which
+   inverts colors and on some mobile browsers makes the native timeline/volume
+   appear washed or flipped. Keep it dark, upright, and unfiltered. */
 audio.audio-player {
   display: block;
   width: 100%;
@@ -58,11 +126,22 @@ audio.audio-player {
   border: 1px solid var(--ash);
   border-radius: 0;
   color-scheme: dark;
+  filter: none !important;
+  transform: none !important;
+  accent-color: var(--blood);
 }
 
 audio.audio-player:focus-visible {
   outline: 1px solid var(--ember);
   outline-offset: 2px;
+}
+
+/* Extra safety: no page-level transform should ever hit media elements */
+.entry-embed,
+.entry-embed iframe,
+audio.audio-player {
+  rotate: none !important;
+  scale: none !important;
 }
 
 /* --- Metadata block ----------------------------------------------------- */
