@@ -285,3 +285,32 @@ values, not measured from a rendered page.
 * **The FAQ count is load bearing.** `/faq` states 35 questions in its
   heading meta and the counter's static text. Adding a question means editing
   both; the build regenerates the schema automatically.
+
+### 2026-10-09: the Eclipsed sample moves onto this domain
+
+The portfolio's one Drive-hosted film sample is now streamed from this domain
+(`/media/eclipsed`, native `<video>`, see `PERFORMANCE.md` for the player) with
+the Drive preview kept only as an automatic fallback. By the rule recorded
+above, that is a privacy notice change:
+
+* **Privacy** section 1 ("most video comes from a third party host ... one film
+  sample and all showreel audio stream from this domain"), the
+  `drive.google.com` row ("only as a fallback ... solely if that stream cannot
+  be played"), and section 7, which now describes the self hosted stream, the
+  `/media` noindex policy, the on-demand open source playback helper served
+  from this domain, and the fallback condition.
+* **Terms** clause 16 now states that one sample streams from this domain with
+  its director's permission for this portfolio only, and ties it to clause 3's
+  prohibition on republishing, rehosting or downloading.
+* **FAQ** question 34's second paragraph no longer claims that all video is
+  hosted elsewhere.
+* Effective dates on `/privacy` and `/terms`, the FAQ's updated date, the
+  `/legal` index stamps, `dateModified` in each page's schema and the hub
+  `lastmod` values move to 2026-10-09. The documents promise that the date
+  changes when they do, so it does.
+
+Third party code note: `hls-<hash>.js` is hls.js 1.7.3 (light build) by
+Dailymotion and contributors, Apache License 2.0; the licence header is kept in
+the served file and the notice text in `src/film/HLS.JS-LICENSE.txt`. It is
+loaded from this domain only when a browser lacks native HLS playback, and it
+contacts no one but this domain.

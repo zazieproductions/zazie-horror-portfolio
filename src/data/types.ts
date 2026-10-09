@@ -59,17 +59,38 @@ export interface Credit {
   name: string;
 }
 
-export interface VideoSample {
-  kind: 'youtube' | 'drive';
-  embedUrl: string;
+interface VideoSampleBase {
   title: string;
   description: string;
   thumbnail: Image;
   durationSeconds?: number;
   publicationDate?: string;
-  watchUrl?: string;
   creator?: { name: string; type: 'Person' | 'Organization' };
 }
+
+/** A sample published on a third-party platform and embedded through its player. */
+export interface EmbeddedVideoSample extends VideoSampleBase {
+  kind: 'youtube' | 'drive';
+  embedUrl: string;
+  watchUrl?: string;
+}
+
+/**
+ * A sample streamed from this domain for the portfolio only - typically a film
+ * whose makers do not want it distributed beyond the private reel. It plays in
+ * a native <video> (src/film/player.js) from an HLS playlist or MP4 under
+ * /media, is never listed in sitemaps or VideoObject schema, and /media is
+ * disallowed in robots.txt. `fallbackEmbedUrl` names the provider preview the
+ * player uses only if the self hosted stream cannot be played.
+ */
+export interface SelfHostedVideoSample extends VideoSampleBase {
+  kind: 'self';
+  /** Root-absolute path to the playlist (.m3u8) or MP4 inside /media. */
+  src: string;
+  fallbackEmbedUrl?: string;
+}
+
+export type VideoSample = EmbeddedVideoSample | SelfHostedVideoSample;
 
 export type ProductionSchemaType = 'Movie' | 'TVSeries' | 'CreativeWork';
 

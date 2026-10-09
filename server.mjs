@@ -22,10 +22,18 @@ import { fileURLToPath } from 'node:url';
  * real `index.html`; item and unknown paths do not get normalized into a
  * second URL. The `_redirects` fallback and 404.html keep unknown requests as
  * real, noindex 404s.
+ *
+ * Self hosted film samples (/media/<slug>/...) are served with HTTP Range
+ * support, the HLS media types and the same noindex/no-store-elsewhere hints
+ * as the production `_headers` rule. Set MEDIA_ROOT to a directory that holds
+ * <slug>/master.m3u8 to preview a ladder that is not committed yet (for
+ * example the output of `node tools/encode-film.mjs ... --out build/test-media/eclipsed`:
+ * `MEDIA_ROOT=build/test-media node server.mjs`).
  */
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 8080;
+const MEDIA_ROOT = process.env.MEDIA_ROOT ? path.resolve(process.env.MEDIA_ROOT) : path.join(__dirname, 'media');
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',
@@ -41,12 +49,17 @@ const MIME = {
   '.svg': 'image/svg+xml',
   '.woff2': 'font/woff2',
   '.mp3': 'audio/mpeg',
+  '.mp4': 'video/mp4',
+  '.m4s': 'video/iso.segment',
+  '.m3u8': 'application/vnd.apple.mpegurl',
+  '.webm': 'video/webm',
+  '.vtt': 'text/vtt; charset=utf-8',
   '.xml': 'application/xml',
   '.txt': 'text/plain',
   '.webmanifest': 'application/manifest+json',
 };
 
-const file = (rel) => path.join(__dirname, rel);
+const file = (rel) => (rel.startsWith('media/') ? path.join(MEDIA_ROOT, rel.slice('media/'.length)) : path.join(__dirname, rel));
 const isFile = (rel) => {
   try {
     return fs.statSync(file(rel)).isFile();
@@ -119,6 +132,10 @@ const server = http.createServer((req, res) => {
   }
 
   const ext = path.extname(rel).toLowerCase();
+  if (rel.startsWith('media/')) {
+    serveMedia(req, res, file(rel), MIME[ext] || 'application/octet-stream');
+    return;
+  }
   res.writeHead(200, {
     'Content-Type': MIME[ext] || 'application/octet-stream',
     'Access-Control-Allow-Origin': '*',
@@ -126,6 +143,35 @@ const server = http.createServer((req, res) => {
   });
   fs.createReadStream(file(rel)).pipe(res);
 });
+
+/** Range-capable media response mirroring the production /media/* header rule. */
+function serveMedia(req, res, absolute, type) {
+  const { size } = fs.statSync(absolute);
+  const headers = {
+    'Content-Type': type,
+    'Accept-Ranges': 'bytes',
+    'Cache-Control': 'public, max-age=86400, stale-while-revalidate=604800',
+    'X-Robots-Tag': 'noindex, nofollow, noarchive',
+    'Cross-Origin-Resource-Policy': 'same-origin',
+  };
+  const range = /^bytes=(\d*)-(\d*)$/.exec(req.headers.range || '');
+  if (range && (range[1] || range[2])) {
+    let start = range[1] ? Number(range[1]) : Math.max(0, size - Number(range[2]));
+    let end = range[1] && range[2] ? Math.min(Number(range[2]), size - 1) : size - 1;
+    if (Number.isNaN(start) || Number.isNaN(end) || start > end || start >= size) {
+      res.writeHead(416, { ...headers, 'Content-Range': `bytes */${size}` });
+      res.end();
+      return;
+    }
+    res.writeHead(206, { ...headers, 'Content-Range': `bytes ${start}-${end}/${size}`, 'Content-Length': end - start + 1 });
+    if (req.method === 'HEAD') { res.end(); return; }
+    fs.createReadStream(absolute, { start, end }).pipe(res);
+    return;
+  }
+  res.writeHead(200, { ...headers, 'Content-Length': size });
+  if (req.method === 'HEAD') { res.end(); return; }
+  fs.createReadStream(absolute).pipe(res);
+}
 
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`Server listening on http://0.0.0.0:${PORT}`);

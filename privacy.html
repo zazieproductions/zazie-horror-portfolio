@@ -45,7 +45,7 @@
       "publisher": {"@id": "https://horror.zazieproductions.com/#org"},
       "inLanguage": "en",
       "datePublished": "2026-09-18",
-      "dateModified": "2026-09-18"
+      "dateModified": "2026-10-09"
     },
     {
       "@type": "BreadcrumbList",
@@ -109,7 +109,7 @@
     <h1>Privacy notice: <em>no trackers, no cookies set by this site</em></h1>
     <p class="doc-lead">This site runs no analytics, sets no cookies, has no accounts and sells nothing to anybody. That makes the honest version of this page short, so the rest of it is the detail: every third party that gets contacted, when it happens, and how you can check the claim on your own machine.</p>
     <ul class="doc-meta">
-      <li>Effective <time datetime="2026-09-18">18 September 2026</time></li>
+      <li>Effective <time datetime="2026-10-09">9 October 2026</time></li>
       <li>Controller <b>Zazie Productions LLC</b></li>
       <li>Contact <b>zaziediya@gmail.com</b></li>
     </ul>
@@ -162,7 +162,7 @@
           <li>The scoring form does not send your details to a server. It composes an email in your own mail application, and you press send.</li>
           <li>Nothing about you is sold, rented or shared. There is nothing here to sell.</li>
           <li>The only personal data that reaches the studio is what you choose to put in an email.</li>
-          <li>Video and audio come from third party hosts. Their players load only when you press play; one film sample’s cover image is fetched from its host when the page loads. The inventory is in <a href="#third-parties">section 6</a>.</li>
+          <li>Most video comes from a third party host whose player loads only when you press play; one film sample and all showreel audio stream from this domain. The inventory is in <a href="#third-parties">section 6</a>.</li>
         </ul>
         <p>The rest of this notice exists because "we value your privacy" is not a statement anybody can check. What follows is checkable.</p>
       </section>
@@ -262,7 +262,7 @@
               </tr>
               <tr>
                 <th scope="row">drive.google.com<br/><span class="small">Google LLC</span></th>
-                <td>When you press play on the one film sample hosted there rather than on YouTube, for its embedded player. The cover frame shown before you press play is a self hosted image on this domain, so the page load makes no request to this host.</td>
+                <td>Only as a fallback: the ECLIPSED sample streams from this domain, and the Drive preview is loaded in its place solely if that stream cannot be played in your browser. The cover frame shown before you press play is a self hosted image on this domain, so the page load makes no request to this host.</td>
                 <td>Your IP address, user agent and the file identifier, under Google's own policies.</td>
               </tr>
               <tr>
@@ -297,7 +297,7 @@
 
       <section class="clause" id="video">
         <h2><span class="no">7</span>Embedded video and audio</h2>
-        <p>Film samples are embedded with the privacy enhancing <code>youtube-nocookie.com</code> host and no iframe exists in the page until you press play, so a visit that never plays anything never loads a player. The showreel audio is served from this domain.</p>
+        <p>Film samples are embedded with the privacy enhancing <code>youtube-nocookie.com</code> host and no iframe exists in the page until you press play, so a visit that never plays anything never loads a player. The showreel audio is served from this domain, and so is the ECLIPSED film sample: it plays in your browser's own video element from files under <code>/media</code> on this domain, which the site asks search engines not to index. Browsers without built in support for that streaming format load a small open source playback helper from this domain as well; no third party is contacted for it. Only if the stream cannot be played does the page fall back to the Drive preview described in section 6.</p>
         <p>Every image on this site is self hosted, the film sample cover frames included, so no image request leaves this domain. A visit that never presses play, and never hovers a sample, makes no third party request at all.</p>
         <p>One behaviour is worth stating precisely because it is easy to hide: hovering a film sample pre fetches the embed document from YouTube so that playback starts instantly. That is a network request to a third party made before you press play, and it is disclosed here rather than buried.</p>
         <p>If you would rather no third party were contacted at all, browse with images and media blocked, or use a browser that partitions or blocks third party requests. Every cue title, credit and description on this site is readable as text without loading a single embedded player.</p>

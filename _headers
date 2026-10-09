@@ -3,7 +3,7 @@
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.youtube-nocookie.com https://www.youtube.com https://drive.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' https://i.ytimg.com https://www.youtube-nocookie.com https://drive.google.com https://f4.bcbits.com https://img.itch.zone https://public-files.gumroad.com https://i.ebayimg.com data:; font-src 'self'; media-src 'self' https://www.youtube-nocookie.com https://drive.google.com; connect-src 'self' https://www.youtube-nocookie.com https://i.ytimg.com https://drive.google.com; frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://drive.google.com https://play.reelcrafter.com; object-src 'none'; base-uri 'self'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://www.youtube-nocookie.com https://www.youtube.com https://drive.google.com; style-src 'self' 'unsafe-inline'; img-src 'self' https://i.ytimg.com https://www.youtube-nocookie.com https://drive.google.com https://f4.bcbits.com https://img.itch.zone https://public-files.gumroad.com https://i.ebayimg.com data:; font-src 'self'; media-src 'self' blob: https://www.youtube-nocookie.com https://drive.google.com; connect-src 'self' https://www.youtube-nocookie.com https://i.ytimg.com https://drive.google.com; frame-src 'self' https://www.youtube-nocookie.com https://www.youtube.com https://drive.google.com https://play.reelcrafter.com; object-src 'none'; base-uri 'self'
 
 /images/*
   Cache-Control: public, max-age=86400, stale-while-revalidate=2592000
@@ -14,6 +14,16 @@
 /audio/*
   Cache-Control: public, max-age=31536000, immutable
   X-Robots-Tag: index, follow, max-image-preview:large
+
+# Self hosted film samples (HLS playlists and fMP4 segments written by
+# tools/encode-film.mjs). Portfolio-only material: never indexed, never listed,
+# cached for a day so a re-encode propagates without a rename, and served with
+# a same-origin-only hint for the browsers that honour it. The site's own CSP
+# (media-src 'self' blob:) is what keeps the stream inside this domain's pages.
+/media/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cross-Origin-Resource-Policy: same-origin
 
 /*.js
   Cache-Control: public, max-age=31536000, immutable

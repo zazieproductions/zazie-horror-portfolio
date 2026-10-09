@@ -1,0 +1,142 @@
+name: Encode film sample
+
+# Build the self hosted HLS ladder for a film sample on a GitHub runner and
+# commit it to the branch this workflow is dispatched from.
+#
+# WHY THIS EXISTS
+#
+# The Eclipsed sample is streamed from this domain (/media/eclipsed, see
+# src/film/player.js) because the director allows the film on the private reel
+# only. The 373 MB ProRes-style master cannot be served as one file (Cloudflare
+# Pages refuses anything over 25 MB), so tools/encode-film.mjs cuts an
+# adaptive ladder of 6 second fMP4 segments. That needs ffmpeg and a few
+# minutes of CPU; running it here means nobody has to install ffmpeg locally.
+#
+# HOW TO RUN IT
+#
+#   gh workflow run encode-film.yml --ref <branch> \
+#     -f source_url="https://drive.google.com/file/d/<id>/view" -f slug=eclipsed
+#
+# or Actions > Encode film sample > Run workflow. The source may be a Google
+# Drive share link (the file must be shared "anyone with the link" while the
+# job runs; make it private again afterwards) or any direct download URL.
+# Review the result on a preview or locally (node server.mjs), then merge.
+#
+# The commit is pushed with the default GITHUB_TOKEN, and GitHub does not start
+# other workflows from such pushes: when the media lands on main, trigger the
+# deploy yourself (Actions > Deploy > Run workflow, or
+# gh workflow run deploy.yml -f environment=production -f project=zazie-horror-portfolio)
+# or let the next ordinary push to main carry it.
+#
+# Git keeps every byte of the encode in history for good: run this once with
+# settings you are happy with rather than iterating in commits. Expect roughly
+# 120-280 MB for a 4 min 30 s 1080p film at the default ladder; pass
+# ladder=720,480 for about half of that.
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_url:
+        description: Google Drive share link or direct URL of the master
+        required: true
+        default: https://drive.google.com/file/d/1zKtAavEx-Yjd2To_troEYlxTTt62Y2OU/view
+        type: string
+      slug:
+        description: Production slug (output goes to media/<slug>/ and the site expects /media/<slug>/master.m3u8)
+        required: true
+        default: eclipsed
+        type: string
+      ladder:
+        description: Rung heights, highest first
+        required: true
+        default: 1080,720,480
+        type: string
+      crf:
+        description: x264 CRF (lower is better and larger; 20-23 is the usual range)
+        required: true
+        default: '22'
+        type: string
+      preset:
+        description: x264 preset (slow is the default; medium is quicker and slightly larger)
+        required: true
+        default: slow
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: encode-film-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  encode:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    env:
+      SOURCE_URL: ${{ inputs.source_url }}
+      SLUG: ${{ inputs.slug }}
+      LADDER: ${{ inputs.ladder }}
+      CRF: ${{ inputs.crf }}
+      PRESET: ${{ inputs.preset }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends ffmpeg
+          ffmpeg -version | head -n 1
+
+      - name: Fetch the master
+        id: fetch
+        run: |
+          set -euo pipefail
+          dir="$RUNNER_TEMP/master"
+          mkdir -p "$dir"
+          case "$SOURCE_URL" in
+            *drive.google.com*|*docs.google.com*)
+              python3 -m pip install --quiet --user gdown
+              # --fuzzy accepts the share link; a trailing slash keeps the original file name.
+              python3 -m gdown --fuzzy "$SOURCE_URL" -O "$dir/"
+              ;;
+            *)
+              curl -fL --retry 3 --retry-delay 5 -o "$dir/source" "$SOURCE_URL"
+              ;;
+          esac
+          file=$(find "$dir" -type f | head -n 1)
+          if [ -z "$file" ]; then
+            echo "Nothing was downloaded. For Drive, the file must be shared 'anyone with the link' while this runs." >&2
+            exit 1
+          fi
+          ls -la "$file"
+          echo "file=$file" >> "$GITHUB_OUTPUT"
+
+      - name: Encode the ladder
+        run: node tools/encode-film.mjs "${{ steps.fetch.outputs.file }}" --slug "$SLUG" --ladder "$LADDER" --crf "$CRF" --preset "$PRESET"
+
+      - name: Check the upload limits
+        run: |
+          npm ci
+          node scripts/build-deploy-dir.mjs "$RUNNER_TEMP/dist" | tail -n 8
+
+      - name: Commit the media directory
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A -- "media/$SLUG"
+          if git diff --cached --quiet; then
+            echo "media/$SLUG is unchanged; nothing to commit."
+            exit 0
+          fi
+          size=$(du -sh "media/$SLUG" | cut -f1)
+          git commit -m "media: self hosted HLS ladder for $SLUG ($size, ladder $LADDER, crf $CRF, $PRESET)"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+          echo "Committed media/$SLUG ($size) to ${GITHUB_REF_NAME}."

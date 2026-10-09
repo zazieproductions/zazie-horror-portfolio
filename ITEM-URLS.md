@@ -45,7 +45,7 @@ Cue copy is readable before playback and each cue has a native optional `<audio>
 
 ## 4. Sitemap and robots
 
-`scripts/generate-sitemap.mjs` creates root `sitemap.xml` and `robots.txt`. It fails on duplicate, malformed, off-domain, query/fragment, or trailing-slash URLs; missing titles/descriptions; and invalid `lastmod` dates. The sitemap is 84 URLs (19 hubs + 65 items), currently with 79 artwork entries and 12 video entries. All sitemap URLs remain crawlable.
+`scripts/generate-sitemap.mjs` creates root `sitemap.xml` and `robots.txt`. It fails on duplicate, malformed, off-domain, query/fragment, or trailing-slash URLs; missing titles/descriptions; and invalid `lastmod` dates. The sitemap is 84 URLs (19 hubs + 65 items), currently with 79 artwork entries and 11 video entries (the self hosted ECLIPSED sample is deliberately not listed; `robots.txt` disallows `/media/` and the script fails if the sitemap ever references it). All sitemap URLs remain crawlable.
 
 The human-readable `/sitemap` is intentionally a hub-and-section guide, not a second item directory. This preserves the approved navigation structure: only the original hubs are reachable directly from `/`; item discovery comes from the XML sitemap and item-to-hub/sibling links.
 

@@ -6,7 +6,7 @@
   "description": "Build pipeline for horror.zazieproductions.com - data-driven per-item routes, per-route <head>, generated sitemap.xml and robots.txt, item-page asset bundle.",
   "license": "UNLICENSED",
   "scripts": {
-    "build": "./store-src/build.sh && ./legal-src/build.sh && node tools/route-aliases.mjs && tsc && node scripts/generate-sitemap.mjs && vite build && node scripts/prerender.mjs && node scripts/verify.mjs && node tools/route-aliases.mjs --check && node tools/check-sitemap.mjs",
+    "build": "./store-src/build.sh && ./legal-src/build.sh && node tools/route-aliases.mjs && node tools/sync-film-player.mjs && tsc && node scripts/generate-sitemap.mjs && vite build && node scripts/prerender.mjs && node scripts/verify.mjs && node tools/route-aliases.mjs --check && node tools/check-sitemap.mjs",
     "generate:sitemap": "node scripts/generate-sitemap.mjs",
     "prerender": "node scripts/prerender.mjs",
     "verify": "node scripts/verify.mjs",

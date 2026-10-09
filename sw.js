@@ -66,7 +66,14 @@
 // refetched once. Item routes are deliberately NOT in PRECACHE_ASSETS: 65 extra
 // documents at install time would cost a visitor far more than they gain, and
 // the static-asset path already caches the item bundle on first use.
-const CACHE_NAME = 'zazie-v29';
+// v30: the Eclipsed sample moves from the Google Drive preview to a native <video>
+// streamed from this domain (/media/eclipsed, HLS; src/film/player.js). The home
+// page bundle and stylesheet re-hash, so the cache name moves with them. The
+// stream itself is never touched by this worker: /media requests go straight to
+// the network (Range requests and a 4 min 30 s film do not belong in a precache),
+// and the on-demand hls.js helper (/hls-<hash>.js) is cached like any other script
+// the first time a non-Safari browser asks for it.
+const CACHE_NAME = 'zazie-v30';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -107,8 +114,8 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-normal.woff2',
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
-  '/index-f509fde0.css',
-  '/index-9388c759.js',
+  '/index-d2cf9a18.css',
+  '/index-65f35637.js',
   '/store-94c90049.css',
   '/store-3fc01be0.js',
   '/legal-24ac8394.css',
@@ -156,6 +163,10 @@ self.addEventListener('fetch', (event) => {
   if (req.method !== 'GET') return;
 
   const url = new URL(req.url);
+
+  // Self hosted film samples stream straight from the network: playlists and
+  // segments are fetched by the player with their own Range/caching semantics.
+  if (url.origin === self.location.origin && url.pathname.startsWith('/media/')) return;
 
   // Legal and operating documents, the catalogue, the IA silos and the homepage:
   // network first, cache only as a fallback. A terms or privacy page must never be
