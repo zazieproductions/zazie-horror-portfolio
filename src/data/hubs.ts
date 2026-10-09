@@ -25,7 +25,7 @@ export const hubs: Hub[] = [
     name: "Portfolio",
     title: "Horror Composer for Film, TV & Games | Zazie Productions",
     description: "A portfolio of selected production records, a 32-cue showreel, and a 24-item catalogue spanning music, sound assets, and objects.",
-    lastmod: "2026-10-04",
+    lastmod: "2026-10-09",
     images: [
       { loc: "https://horror.zazieproductions.com/images/hero-portrait.jpg", caption: "Portfolio portrait for Zazie Productions, a composer and sound-design studio working across screen and experimental media.", title: "Zazie Kanwar-Torge: Psychological Horror Composer - Dark Atmospheric Scores" },
       { loc: "https://horror.zazieproductions.com/images/headshot.jpg", caption: "Zazie Kanwar-Torge, composer and sound designer associated with Zazie Productions LLC.", title: "Zazie Kanwar-Torge headshot - horror film composer, Zazie Productions LLC" },
@@ -96,13 +96,8 @@ export const hubs: Hub[] = [
         publicationDate: "2024-06-20",
         tags: ["experimental short", "Phantom Requiem"],
       },
-      {
-        thumbnailLoc: "https://horror.zazieproductions.com/images/eclipsed-cover-1280.jpg",
-        title: "ECLIPSED project sample",
-        description: "A Drive-hosted project sample associated with the ECLIPSED short. IMDb describes the surreal horror premise and credits Zazie Kanwar-Torge and Noah C. Castro as composers.",
-        playerLoc: "https://drive.google.com/file/d/1zKtAavEx-Yjd2To_troEYlxTTt62Y2OU/preview",
-        tags: ["ECLIPSED", "short film sample"],
-      },
+      // ECLIPSED is deliberately absent: its sample is self hosted for the
+      // portfolio only (see productions.ts) and is not advertised to crawlers.
     ],
   },
   {
@@ -110,7 +105,7 @@ export const hubs: Hub[] = [
     name: "Selected productions",
     title: "Selected Production Records: Film, Television and Experimental Work | Zazie Productions",
     description: "Nine selected production records across films, television, and experimental work. Project notes distinguish verified composing, co-composing, sound-design, and production credits.",
-    lastmod: "2026-10-04",
+    lastmod: "2026-10-09",
     images: [
       { loc: "https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg", caption: "EXPIRE (2025) - IMDb credits Zazie Kanwar-Torge for sound design; other composers are listed separately.", title: "EXPIRE - Production Record and Sound-Design Credit" },
       { loc: "https://horror.zazieproductions.com/images/posters/unseen-640.jpg", caption: "UNSEEN feature; IMDb lists Steve Merlo as composer.", title: "UNSEEN - Feature Film Record" },
@@ -212,7 +207,7 @@ export const hubs: Hub[] = [
     name: "FAQ",
     title: "Horror Film Scoring FAQ: Fees, Process, Rights, Delivery - 35 Questions | Zazie Productions",
     description: "35 questions filmmakers ask psychological horror composer Zazie Kanwar-Torge before commissioning: what a horror score costs on a sliding scale tied to project funding (most projects a few hundred dollars), what moves price, spotting to stems process, revisions, who owns music, cue sheets, game scoring, catalogue delivery. Horror film scoring FAQ.",
-    lastmod: "2026-10-04",
+    lastmod: "2026-10-09",
     images: [],
     videos: [],
   },
@@ -248,7 +243,7 @@ export const hubs: Hub[] = [
     name: "Terms",
     title: "Terms: Horror Film Scoring Commissioning, Quotes, Deposits | Zazie Productions",
     description: "Terms of use and commissioning for psychological horror composer Zazie Kanwar-Torge, Zazie Productions LLC: quotes for horror scores scaled to project funding (most projects a few hundred dollars), deposits, scope changes, spotting to stems delivery, acceptance, cancellation, kill fee, clearances, confidentiality, liability, governing law. Horror scoring terms.",
-    lastmod: "2026-10-04",
+    lastmod: "2026-10-09",
     images: [],
     videos: [],
   },
@@ -257,7 +252,7 @@ export const hubs: Hub[] = [
     name: "Privacy notice",
     title: "Privacy Notice: No Trackers, No Cookies | Zazie Productions",
     description: "Privacy notice for psychological horror composer Zazie Kanwar-Torge portfolio horror.zazieproductions.com: no analytics, no advertising trackers, no cookies set by site, one storage key for boot sequence, service worker cache, full inventory of third parties contacted when you press play, device inspector. No tracking horror composer site.",
-    lastmod: "2026-10-04",
+    lastmod: "2026-10-09",
     images: [],
     videos: [],
   },

@@ -196,7 +196,7 @@ export const productions: Production[] = [
     logline: 'ECLIPSED is a 2025 surreal horror short about a woman trapped in a dreamlike confrontation with her darker self; IMDb credits Zazie Kanwar-Torge and Noah C. Castro as composers.',
     paragraphs: [
       'IMDb describes a woman drawn into a dreamlike confrontation with her darker self. Desire, fear, and violence shape the encounter, and her attempt to destroy what haunts her becomes a story about duality, identity, and transformation.',
-      'The short was directed and written by William Viera. The IMDb credit listing names Zazie Kanwar-Torge and Noah C. Castro as composers. A Drive-hosted project sample is embedded below; no separate running time or release date is assigned to that sample.',
+      'The short was directed and written by William Viera. The IMDb credit listing names Zazie Kanwar-Torge and Noah C. Castro as composers. The project sample below is streamed from this site\u2019s own player rather than a public video platform; the running time shown is that of the sample.',
     ],
     poster: {
       src: '/images/posters/eclipsed-640.jpg',
@@ -207,20 +207,27 @@ export const productions: Production[] = [
       height: 960,
     },
     sample: {
-      kind: 'drive',
-      embedUrl: 'https://drive.google.com/file/d/1zKtAavEx-Yjd2To_troEYlxTTt62Y2OU/preview',
+      // Self hosted at the director's request: the film had a limited release
+      // and is not published on a public video platform. The HLS ladder under
+      // /media/eclipsed is produced by `node tools/encode-film.mjs` (or the
+      // encode-film workflow) from the 1920x1080, 4 min 30 s master. Until it
+      // is committed, the player falls back to the Drive preview.
+      kind: 'self',
+      src: '/media/eclipsed/master.m3u8',
+      fallbackEmbedUrl: 'https://drive.google.com/file/d/1zKtAavEx-Yjd2To_troEYlxTTt62Y2OU/preview',
       title: 'ECLIPSED project sample',
-      description: 'A Google Drive-hosted project sample associated with the existing ECLIPSED work entry. IMDb identifies ECLIPSED as a 2025 short and lists Zazie Kanwar-Torge and Noah C. Castro as composers.',
+      description: 'A project sample associated with the existing ECLIPSED work entry, streamed from this site. IMDb identifies ECLIPSED as a 2025 short and lists Zazie Kanwar-Torge and Noah C. Castro as composers.',
       thumbnail: {
         src: '/images/eclipsed-cover-1280.jpg',
         alt: 'Artwork associated with the ECLIPSED project sample',
         width: 1280,
         height: 720,
       },
+      durationSeconds: 270,
     },
     links: [{ label: 'ECLIPSED on IMDb', href: 'https://www.imdb.com/title/tt36984141/', kind: 'imdb', external: true }],
     relatedCueSlugs: ['the-room-forgets-you', 'time-shifting-into-daylight', 'variations-on-a-vanishing-body'],
-    updatedAt,
+    updatedAt: '2026-10-09', // sample moved to the self hosted player
   },
   {
     slug: 'the-haunted',

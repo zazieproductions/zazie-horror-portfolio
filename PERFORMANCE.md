@@ -749,3 +749,107 @@ bundle-only one.
 - `tools/film-player.test.mjs` re-derives the bundle name from `index.html`
   and checks precache membership, so the three-way rename cannot drift
   silently; it passes with the merged tree.
+
+---
+
+# Eclipsed: self hosted native player replaces the Drive preview — 2026-10-09
+
+## Why
+
+- The 2026-10-01 pass took every site-side variable out of the Drive embed and
+  left one fact standing: the preview's chrome (title bar, pop-out button, the
+  bottom bar and the "can't scan for viruses" interstitial) is cross-origin UI
+  that no CSS, parameter or wrapper on this domain can move. On phones it still
+  covered the picture, and playback stalled behind Google's scanner.
+- Public re-hosting is not an option. The director permits the film on this
+  private reel only, so it must stay confined to the site: no YouTube upload,
+  no public listing, nothing a search engine is invited to feature.
+- One MP4 is not an option either. The master is 373 MB (1920×1080, 4 min 30 s)
+  and Cloudflare Pages refuses any file over 25 MB, which
+  `scripts/build-deploy-dir.mjs` enforces before every deploy.
+
+## What changed (both copies: prerendered `index.html` and the bundle)
+
+- **One shared player, `src/film/player.js`** (`window.zpFilm`): a plain
+  `<video controls playsinline preload="metadata" controlsList="nodownload">`
+  that fills `.zp-vframe`. Safari and iOS play the HLS playlist natively; every
+  other browser loads the vendored `hls-d5c095ec.js` (hls.js 1.7.3 light,
+  Apache-2.0, 377 KB / 119 KB gz) on demand and attaches through MediaSource.
+  `play()` is called inside the visitor's gesture; focus moves to the video
+  without scrolling. No CSS touches the picture: the browser's own controls
+  are the only thing on top of it, and fullscreen is the native button.
+- **Streamed from this domain**: `/media/eclipsed/master.m3u8` plus a
+  1080p/720p/480p ladder of 6 s fMP4 segments (`tools/encode-film.mjs`, or the
+  `Encode film sample` workflow). Every segment is a few MB, so the 25 MB limit
+  holds and a phone can pick the rung its connection sustains.
+- **Automatic fallback**: a fatal error (playlist not uploaded yet, blocked,
+  unsupported browser, hls.js not loadable, one unrecoverable media error) tears
+  the video down and appends the exact Drive `/preview?autoplay=1` iframe the
+  cards used before, with `.is-drive` sizing and the below-picture fullscreen
+  action. The 2026-10-01 behaviour therefore survives untouched for the
+  fallback case, and the Drive file must stay shared until the ladder is live.
+- **Early → React handoff**: the inline player starts the film before the
+  bundle boots; the React mount (`div.zp-film-mount` with a stable React 19
+  ref callback) adopts the same `<video>` element instead of rebuilding it, so
+  the buffer and position survive. The ref's cleanup stops the stream on
+  unmount, and `zpCloseAll` does the same on the early path.
+- **Confidentiality**: no `VideoObject`, no `og:video`, no sitemap video entry
+  (12 → 11), `Disallow: /media/` in robots.txt (the sitemap script now fails if
+  the tree is ever referenced), `/media/*` headers `X-Robots-Tag: noindex,
+  nofollow, noarchive` + `Cross-Origin-Resource-Policy: same-origin` + a one
+  day cache, CSP `media-src` gains `blob:` for MediaSource. The Eclipsed cards
+  lose their "Open on Google Drive" link (replaced by a quiet "Private reel"
+  label) and the `/work` hub card points at `/#work` instead of the Drive URL.
+- **Item page** `/work/eclipsed`: the `#sample` section prerenders a poster
+  button; `src/item/main.ts` bundles the same player and mounts it on tap,
+  with the same fallback. Verified-fact wording updated ("streamed from this
+  site's own player rather than a public video platform").
+- **Data model**: `VideoSample` is now a discriminated union
+  (`EmbeddedVideoSample` | `SelfHostedVideoSample { kind: 'self', src,
+  fallbackEmbedUrl }`); `verify.mjs` requires the player hook on self hosted
+  entries, forbids `og:video`, and reports whether the playlist exists on disk.
+- Rehashed JS to `index-65f35637.js`, CSS to `index-d2cf9a18.css`, bumped the
+  service worker to `zazie-v30` (which also bypasses `/media/` entirely).
+  `server.mjs` gained the HLS MIME types, Range requests and `MEDIA_ROOT`.
+- Privacy notice (Drive row now "only as a fallback", section 7 describes the
+  self hosted stream and the on-demand helper) and terms clause 16 updated;
+  both documents carry a new effective date.
+
+## Encoding
+
+`ffmpeg … -c:v libx264 -preset slow -profile:v high -pix_fmt yuv420p -crf 22
+-x264-params aq-mode=3` (dark material: variance AQ keeps shadow gradients from
+banding) with per-rung caps 4500k/2400k/1100k, AAC 160 kb/s stereo, keyframes
+forced every 6 s with scene-cut keyframes disabled so the rungs stay aligned,
+`-hls_segment_type fmp4 -hls_flags independent_segments`. The script drops
+rungs above the source height, replaces the output directory wholesale,
+validates `master.m3u8` → media playlists → `EXT-X-MAP` init + every segment,
+and refuses any file over 25 MB. Expect roughly 120–280 MB for the whole
+ladder of this film; `--ladder 720,480` is about half. The encode could not be
+run here (no outbound access to Drive and no ffmpeg in the sandbox image); the
+pipeline was proven on a synthetic 20 s 1080p24 clip with a static ffmpeg
+7.0.2 build: 19 files, largest segment 3.7 MB, playlists valid.
+
+## Verification
+
+- `node --test tools/film-player.test.mjs`: 16 dependency-free checks over
+  the early DOM, the React JSX/hooks fixture (now with re-render), the item
+  bundle and the shared player: identical `<video>` from both home-page paths,
+  native-HLS vs hls.js attach (helper loaded once, config, recover-once-then-
+  fall-back), fallback iframe attributes and `.is-drive` sizing/fullscreen,
+  early → React adoption and cleanup, switching/replay, live-card click/Space
+  guards, YouTube unchanged, item-page poster button, no `/media` or Drive URL
+  in sitemap/schema/OG/robots/hub links, inline/bundled CSS parity, hashes
+  and `sw.js` references.
+- `npm run build` (with the new `sync-film-player` step), `tsc --noEmit`,
+  `node tools/check-sitemap.mjs` (PASS 84 URLs / 79 images / 11 videos),
+  `node tools/route-aliases.mjs --check`, `node scripts/build-deploy-dir.mjs`
+  all pass; the tree is clean after the build.
+- Local preview with the synthetic ladder served through
+  `MEDIA_ROOT=build/test-media node server.mjs`: `/media/eclipsed/master.m3u8`
+  answers 200 with `application/vnd.apple.mpegurl`, segments answer Range
+  requests with 206, the noindex/CORP headers are present.
+- **Not verified here:** real-device playback of the actual film. The sandbox
+  has no browser and cannot reach Drive; the native `<video>` path, autoplay
+  within the tap gesture and the hls.js path still need a phone check once
+  `media/eclipsed/` is committed.

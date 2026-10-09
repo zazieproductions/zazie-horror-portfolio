@@ -9,11 +9,17 @@
  *      which matters on production pages that offer several palette cues;
  *   2. play state on <html>, so the stylesheet can mark the cue being listened
  *      to without touching the document head;
- *   3. nothing else. The <head> this script runs under is the same head that
+ *   3. the self hosted film sample player: a production page whose sample is
+ *      streamed from this domain prerenders a poster button, and a tap turns
+ *      it into a native <video> through the shared player (src/film/player.js,
+ *      the same code the home page runs). If the stream cannot play, the
+ *      player puts the provider preview in its place;
+ *   4. nothing else. The <head> this script runs under is the same head that
  *      was prerendered, so the hydrated DOM never disagrees with the crawl.
  */
 
 import './item.css';
+import '../film/player.js';
 
 const documentElement = document.documentElement;
 documentElement.classList.add('has-item-js');
@@ -46,4 +52,25 @@ if (players.length) {
       }
     });
   }
+}
+
+/* --- Self hosted film sample ------------------------------------------- */
+
+for (const embed of Array.from(document.querySelectorAll<HTMLElement>('.entry-embed[data-film]'))) {
+  const button = embed.querySelector<HTMLButtonElement>('.entry-play');
+  const src = embed.dataset.film;
+  if (!button || !src) continue;
+  button.addEventListener('click', () => {
+    if (embed.classList.contains('is-live')) return;
+    embed.classList.add('is-live');
+    for (const player of players) if (!player.paused) player.pause();
+    window.__zpPlayer = { id: src };
+    window.zpFilm.mount(embed, {
+      src,
+      poster: embed.dataset.poster,
+      title: embed.dataset.title,
+      drive: embed.dataset.drive,
+      onFallback: () => embed.classList.add('is-drive'),
+    });
+  });
 }

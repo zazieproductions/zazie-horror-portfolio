@@ -17,7 +17,7 @@ import {
   seoBlock,
   webPageNode,
 } from './head.js';
-import type { Cue, Image, ItemRoute, Json, Production, Release } from '../data/types.js';
+import type { Cue, Image, ItemRoute, Json, Production, Release, VideoSample } from '../data/types.js';
 
 export interface PageChrome {
   masthead: string;
@@ -173,7 +173,31 @@ function figure(image: Image, shape: 'poster' | 'still' | 'square', loading: 'ea
           </figure>`;
 }
 
-function embedMarkup(sample: { kind: 'youtube' | 'drive'; embedUrl: string; title: string }): string {
+/** True when the production's sample is published on a platform (self hosted samples stay out of Open Graph and schema). */
+function hasPublishedVideo(production: Production | undefined): boolean {
+  return Boolean(production?.sample && production.sample.kind !== 'self');
+}
+
+/** The Drive file id inside a standard preview/view URL, for the player's fallback attribute. */
+export function driveIdFrom(embedUrl: string | undefined): string | undefined {
+  return embedUrl ? /\/file\/d\/([A-Za-z0-9_-]+)/.exec(embedUrl)?.[1] : undefined;
+}
+
+function embedMarkup(sample: VideoSample): string {
+  if (sample.kind === 'self') {
+    // Self hosted sample: a poster button that src/item/main.ts turns into a
+    // native <video> through the shared player (src/film/player.js). Nothing
+    // overlays the picture but the browser's own controls. The data-drive id
+    // is the provider fallback the player uses only if the stream cannot play.
+    const drive = driveIdFrom(sample.fallbackEmbedUrl);
+    return `        <div class="entry-embed entry-film" data-film="${esc(sample.src)}" data-poster="${esc(sample.thumbnail.src)}" data-title="${esc(sample.title)}"${drive ? ` data-drive="${esc(drive)}"` : ''}>
+          <button type="button" class="entry-play" aria-label="Play ${esc(sample.title)}">
+            <img src="${esc(sample.thumbnail.src)}" alt="" width="${sample.thumbnail.width}" height="${sample.thumbnail.height}" loading="lazy" decoding="async"/>
+            <span class="entry-play-badge" aria-hidden="true">Play sample</span>
+          </button>
+          <p class="entry-noscript">Streaming this sample needs JavaScript; the written entry above is complete without it.</p>
+        </div>`;
+  }
   // Keep Drive's standard preview UI; its controls are owned by the provider.
   // Include fullscreen + picture-in-picture + encrypted-media so mobile
   // browsers don't fall back to a cramped audio-only UI with an inverted bar.
@@ -263,7 +287,7 @@ function productionMeta(production: Production, item: ItemRoute): MetaSections {
         <h2><span class="no">III</span>Project video</h2>
         <p>${esc(sample.description)}${sample.durationSeconds ? ` Runtime ${esc(displayDuration(sample.durationSeconds))}.` : ''}</p>
 ${embedMarkup(sample)}
-${sample.watchUrl ? `        <p style="margin-top:1rem">If the embed is unavailable, <a href="${esc(sample.watchUrl)}" target="_blank" rel="noopener noreferrer">open the video on its original host</a>.</p>` : ''}
+${sample.kind !== 'self' && sample.watchUrl ? `        <p style="margin-top:1rem">If the embed is unavailable, <a href="${esc(sample.watchUrl)}" target="_blank" rel="noopener noreferrer">open the video on its original host</a>.</p>` : ''}
       </section>`
     : `      <section class="clause" id="sample">
         <h2><span class="no">III</span>Adjacent showreel listening</h2>
@@ -480,7 +504,7 @@ export function renderItemPage(item: ItemRoute, chrome: PageChrome): RenderedIte
     canonical: url(item.path),
     robots: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
     ogType: item.kind === 'production'
-      ? (productionBySlug.get(item.slug)?.sample ? OG_TYPES.video : OG_TYPES.website)
+      ? (hasPublishedVideo(productionBySlug.get(item.slug)) ? OG_TYPES.video : OG_TYPES.website)
       : item.kind === 'cue'
         ? OG_TYPES.music
         : OG_TYPES.product,

@@ -11,7 +11,7 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-09</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/hero-portrait.jpg</image:loc>
       <image:caption>Portfolio portrait for Zazie Productions, a composer and sound-design studio working across screen and experimental media.</image:caption>
@@ -138,19 +138,11 @@
       <video:tag>experimental short</video:tag>
       <video:tag>Phantom Requiem</video:tag>
     </video:video>
-    <video:video>
-      <video:thumbnail_loc>https://horror.zazieproductions.com/images/eclipsed-cover-1280.jpg</video:thumbnail_loc>
-      <video:title>ECLIPSED project sample</video:title>
-      <video:description>A Drive-hosted project sample associated with the ECLIPSED short. IMDb describes the surreal horror premise and credits Zazie Kanwar-Torge and Noah C. Castro as composers.</video:description>
-      <video:player_loc>https://drive.google.com/file/d/1zKtAavEx-Yjd2To_troEYlxTTt62Y2OU/preview</video:player_loc>
-      <video:tag>ECLIPSED</video:tag>
-      <video:tag>short film sample</video:tag>
-    </video:video>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/work</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-09</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg</image:loc>
       <image:caption>EXPIRE (2025) - IMDb credits Zazie Kanwar-Torge for sound design; other composers are listed separately.</image:caption>
@@ -345,7 +337,7 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/faq</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-09</lastmod>
   </url>
 
   <url>
@@ -365,12 +357,12 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/terms</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-09</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/privacy</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-09</lastmod>
   </url>
 
   <url>
@@ -469,7 +461,7 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/work/eclipsed</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-09</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/eclipsed-640.jpg</image:loc>
       <image:caption>Poster artwork for ECLIPSED</image:caption>

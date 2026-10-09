@@ -166,7 +166,9 @@ export function productionNodes(production: Production, path: string): Json[] {
   };
 
   const nodes: Json[] = [work];
-  if (production.sample) {
+  // Self hosted samples are portfolio-only material: no VideoObject, so no
+  // search engine is invited to fetch or feature the stream.
+  if (production.sample && production.sample.kind !== 'self') {
     const sample = production.sample;
     nodes.push({
       '@context': 'https://schema.org',

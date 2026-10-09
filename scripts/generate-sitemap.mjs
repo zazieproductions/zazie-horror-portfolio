@@ -171,7 +171,8 @@ for (const item of itemRoutes.production) {
   const poster = imageUrl(production.poster.src, `production ${item.slug} poster`);
   const images = poster ? [{ loc: poster, caption: production.poster.alt, title: production.title }] : [];
   const videos = [];
-  if (production.sample && /youtube(-nocookie)?\.com\/embed\//.test(production.sample.embedUrl)) {
+  // Self hosted samples (kind 'self') are portfolio-only and never listed.
+  if (production.sample && production.sample.kind !== 'self' && /youtube(-nocookie)?\.com\/embed\//.test(production.sample.embedUrl)) {
     const thumbnail = imageUrl(production.sample.thumbnail.src, `production ${item.slug} video thumbnail`);
     if (thumbnail) {
       videos.push({
@@ -221,6 +222,14 @@ for (const route of allRoutes) {
     const pattern = rule.replace(/[.+^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
     if (new RegExp(`^${pattern}`).test(route.path)) fail(`robots.txt Disallow: ${rule} blocks ${route.path}`);
   }
+}
+// Self hosted film samples live under /media for the portfolio only; the
+// sitemap must never advertise that tree (no <loc>, image or video URL).
+if (!disallowRules.some((rule) => rule === '/media/' || rule === '/media')) {
+  fail('robots.txt must keep crawlers out of the self hosted media tree (Disallow: /media/)');
+}
+if (/<[^>]*>[^<]*\/media\//.test(sitemapXml)) {
+  fail('sitemap.xml must not reference /media/ (self hosted samples are not published)');
 }
 
 /* ------------------------------------------------------------------- write */

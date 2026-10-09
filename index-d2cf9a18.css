@@ -43,15 +43,29 @@
     max-width:none!important;max-height:none!important;
     border:0;background:#000;
   }
+  /* Self hosted samples play in a native <video> (src/film/player.js): the
+     browser's own controls are the only thing on top of the picture. */
+  .zp-vframe video.zp-film{
+    position:absolute;inset:0;display:block;
+    width:100%!important;height:100%!important;
+    border:0;background:#000;object-fit:contain;
+  }
+  .zp-vframe video.zp-film:focus-visible{outline:2px solid #c41e1e;outline-offset:-2px}
   .zp-vcard.is-playing{border-color:#c41e1e73}
-  .zp-vcard.is-drive{scroll-margin-top:5rem;scroll-margin-bottom:.5rem}
+  .zp-vcard.is-drive,.zp-vcard.is-film{scroll-margin-top:5rem;scroll-margin-bottom:.5rem}
   .zp-vcard.is-playing .zp-vframe{
     box-shadow:inset 0 0 0 1px #c41e1e38,0 24px 70px #000000bf,0 0 90px #c41e1e1a;
   }
-  /* Both early playback and React use a single iframe, not a hidden wrapper. */
+  /* Both early playback and React put one iframe or one native video in the
+     poster card, not a hidden wrapper. */
   .zp-poster.is-live{cursor:default}
-  .zp-poster.is-live>*:not(iframe){display:none!important}
+  .zp-poster.is-live>*:not(iframe):not(video){display:none!important}
   .zp-vactions{display:flex;align-items:center;gap:4px;flex-shrink:0}
+  .zp-vprivate{
+    display:inline-block;padding:.45rem .6rem;border:1px solid rgba(240,235,227,.14);
+    font-size:9px;letter-spacing:.2em;text-transform:uppercase;white-space:nowrap;
+    color:#9a9590;cursor:help;
+  }
   .zp-drive-fs{
     display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;
     width:44px;height:44px;border:1px solid rgba(240,235,227,.25);

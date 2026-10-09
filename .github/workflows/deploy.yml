@@ -43,6 +43,7 @@ on:
       - '**/*.html'
       - images/**
       - audio/**
+      - media/**
       - sw.js
       - server.mjs
       - sitemap.xml

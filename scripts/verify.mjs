@@ -16,6 +16,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const errors = [];
 const fail = (message) => errors.push(message);
 const routeByPath = new Map(allRoutes.map((route) => [route.path, route]));
+const selfHostedPending = [];
 
 function fileFor(route) {
   if (route.path === '/') return path.join(root, 'index.html');
@@ -153,7 +154,18 @@ for (const item of items) {
     const production = productionBySlug.get(item.slug);
     const schemaType = production.schemaType;
     if (!types.includes(schemaType)) fail(`${item.path}: missing ${schemaType} structured data`);
-    if (Boolean(production.sample) !== types.includes('VideoObject')) fail(`${item.path}: VideoObject does not match verified sample availability`);
+    const published = Boolean(production.sample && production.sample.kind !== 'self');
+    if (published !== types.includes('VideoObject')) fail(`${item.path}: VideoObject does not match verified sample availability`);
+    if (production.sample?.kind === 'self') {
+      // Portfolio-only stream: the page carries the native player hook and
+      // nothing that would publish the stream (no VideoObject above, no
+      // og:video, no sitemap video entry - the sitemap script enforces that).
+      const sample = production.sample;
+      if (!sample.src.startsWith('/media/')) fail(`${item.path}: self hosted sample must live under /media/`);
+      if (!html.includes(`class="entry-embed entry-film" data-film="${escapeHtml(sample.src)}"`)) fail(`${item.path}: self hosted sample player hook is missing`);
+      if (/property="og:video/.test(html)) fail(`${item.path}: self hosted sample must not be advertised through og:video`);
+      if (!fs.existsSync(path.join(root, sample.src))) selfHostedPending.push(`${item.path} -> ${sample.src}`);
+    }
     const workNode = nodes.find((node) => node?.['@type'] === schemaType);
     const composerNames = production.credits.filter((credit) => /composer/i.test(credit.role)).map((credit) => credit.name);
     if (composerNames.length && !workNode?.composer) fail(`${item.path}: verified composer credit missing from schema`);
@@ -244,5 +256,10 @@ console.log(`  route-status audit: ${hubs.length} original hubs 200; ${productio
 console.log(`  internal-link audit: hubs reachable from /; item pages link to hub + ${items.length ? 'at least 3 siblings' : 'siblings'}; no item links added to hubs`);
 console.log('  SEO/schema audit: unique self-canonical, route-specific head, meta description, indexable robots, per-type JSON-LD');
 console.log('  media audit: 32 MP3 URLs, production samples only when supplied, catalogue artwork only when supplied');
+if (selfHostedPending.length) {
+  console.log(`  self hosted samples: ${selfHostedPending.length} not yet encoded (player falls back to the provider preview): ${selfHostedPending.join(', ')}`);
+} else {
+  console.log('  self hosted samples: every /media playlist referenced by a production is present');
+}
 console.log('  404 audit: /work/does-not-exist has no static page and Cloudflare fallback serves 404.html with noindex, follow');
 console.log('  missing-file report: none');

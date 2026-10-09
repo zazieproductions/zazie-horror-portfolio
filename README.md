@@ -8,7 +8,7 @@ An immersive web environment for psychological horror scoring, experimental comp
 [![Architecture](https://img.shields.io/badge/architecture-static_%C2%B7_zero_backend-1e1e1e)](#architecture)
 [![Hosting](https://img.shields.io/badge/host-Cloudflare_Pages-1e1e1e)](#deployment)
 [![Showreel](https://img.shields.io/badge/showreel-32_cues_%C2%B7_9_productions-1e1e1e)](#core-experiences--features)
-[![Sitemap](https://img.shields.io/badge/sitemap-84_urls_%C2%B7_79_images_%C2%B7_12_videos-1e1e1e)](#seo--structured-data)
+[![Sitemap](https://img.shields.io/badge/sitemap-84_urls_%C2%B7_79_images_%C2%B7_11_videos-1e1e1e)](#seo--structured-data)
 
 ---
 
@@ -89,7 +89,7 @@ Unconventional choices exist for artistic or experiential reasons and are docume
 
 - **Production records** — 9 individual project pages with source-linked, role-specific credits and verified artwork. The archive does not imply that every title is a Zazie composition credit.
 - **Showreel** — 32 title-derived cue pages plus the existing cue hub and MP3s (`/audio/track-00.mp3` … `track-31.mp3`). Each item page carries readable cue notes, duration/category, native optional playback, and sibling links.
-- **Film samples** — 8 embeds: 7 lazy `youtube-nocookie.com` players plus 1 Google Drive preview, with poster-`<picture>` covers.
+- **Film samples** — 8 players: 7 lazy `youtube-nocookie.com` embeds plus ECLIPSED in a native `<video>` streamed from this domain (HLS under `/media/eclipsed`; the Drive preview remains only as the automatic fallback), with poster-`<picture>` covers.
 - **Press kit** — features and coverage (Visual Container award-winners press release PDF, Grammy Weekly, Limitless Magazine, Billboard Wire).
 - **Approach / Rates / Composer / Reviews / Inquiry** — scoring method, scope-and-estimate bands (sliding scale tied to project funding, typically a few hundred dollars, as published on `/services`), biography, 5.0 collaborator rating with 3 featured reviews, and a structured inquiry form that builds a `mailto:` handoff.
 
@@ -116,7 +116,7 @@ All artwork © the respective productions. See the [live site](https://horror.za
 | Showreel audio engine | `src/lib/audioContext.tsx` (in bundle), rendered by `Showreel.tsx` + `StickyPlayer.tsx` | One `<audio>` element for the whole site, shared through React context: `playTrack / toggle / next / prev / seek / setVolume`. Previous-track restarts if >3 s in. `preload="metadata"`; MP3s stream from `/audio/`, cached `immutable` at the edge. |
 | Mood clusters | `tracks` array in the bundle (32 entries: `id, title, src, duration, tag`) | Each cue carries one mood tag; its dedicated item page uses `MusicComposition` + `AudioObject` schema. |
 | Sticky player | `StickyPlayer.tsx` | Hidden until first play; animated wave-bar visualisation; respects `prefers-reduced-motion`. |
-| Film samples | `Projects.tsx` data + prerendered covers | 6 YouTube-nocookie iframes get a real `src` only when lazy-loaded; 1 Google Drive embed; `preconnect` to YouTube deferred off the critical path. |
+| Film samples | `Projects.tsx` data + prerendered covers | 6 YouTube-nocookie iframes get a real `src` only when lazy-loaded; ECLIPSED is a native `<video>` from `/media` (`src/film/player.js`, hls.js loaded on demand outside Safari); `preconnect` to YouTube deferred off the critical path. |
 | Boot overlay | legacy inline markup in `index.html` | Disabled by default; never covers the readable homepage content. |
 | Store previews & room tone | `store-src/store.js` | Per-card audio previews (`data-preview`); a looping room tone (`data-ambience`) crossfades down while previews play. `preload="none"`. |
 | External score player | Reelcrafter | Allowlisted in CSP (`frame-src`) and referenced as a `significantLink` in JSON-LD; currently linked, not embedded. |
@@ -203,14 +203,18 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 ├── index.html                  # Home: prerendered DOM + inactive boot markup + 4 generated JSON-LD blocks
 ├── index-<hash>.js / .css      # Retained legacy homepage assets (not rebuilt here)
 ├── 404.html                    # "Signal Lost" — served with real 404 status
-├── sw.js                       # Service worker (CACHE_NAME zazie-v29; bump it on any precache change)
+├── sw.js                       # Service worker (CACHE_NAME zazie-v30; bump it on any precache change)
 ├── server.mjs                  # Local static server, clean routes + 404 fallback
 ├── _headers                    # CSP, canonical Link headers, cache policy
 ├── _redirects                  # Legacy aliases + explicit real-404 fallback
-├── robots.txt / sitemap.xml    # Crawl control; 84 URLs / 79 images / 12 videos
+├── robots.txt / sitemap.xml    # Crawl control; 84 URLs / 79 images / 11 videos; /media disallowed
 ├── <32-hex>.txt                # IndexNow key file (public by design; see tools/indexnow.mjs)
 ├── audio/
 │   └── track-00..31.mp3        # 32 showreel cues (~98 MB) — the audio library
+├── media/<slug>/               # Self hosted film samples: HLS ladder from tools/encode-film.mjs
+│   ├── master.m3u8             #   (portfolio-only material: noindex, not in the sitemap, Disallow in robots)
+│   └── 1080p|720p|480p/        #   init_N.mp4 + 6 s seg-NNN.m4s per rung, every file < 25 MB
+├── hls-<hash>.js               # Vendored hls.js 1.7.3 light (Apache-2.0), fetched only where HLS is not native
 ├── fonts/                      # Cormorant Garamond 400 n/i + Inter variable (woff2)
 ├── images/
 │   ├── posters/<slug>-{640.avif,640.jpg,1200.jpg}   # 9 productions × 3 variants
@@ -227,10 +231,13 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 ├── legal-src/                  # Document sources, shared partials, CSS/JS, build.sh
 ├── src/data/{hubs,productions,cues,releases,routes}.ts # Data-driven hub/item URLs and metadata
 ├── src/lib/{head,page,home}.ts # Source-rendered SEO heads and item-page layouts
+├── src/film/player.js          # The self hosted film player: inlined into index.html, bundled into item-<hash>.js
 ├── scripts/{generate-sitemap,prerender,verify}.mjs # 84-URL build and structural verification
 ├── tools/check-sitemap.mjs     # Sitemap, file, canonical, robot and hub-link audit
 ├── tools/route-aliases.mjs     # Checks 18 hub twins and flat item routes for slash twins
 ├── tools/indexnow.mjs          # Post-deploy IndexNow ping (Bing, Yandex, Seznam, Naver, Yep...)
+├── tools/encode-film.mjs       # ffmpeg wrapper: film master -> media/<slug>/ HLS ladder (also .github/workflows/encode-film.yml)
+├── tools/sync-film-player.mjs  # Re-inlines src/film/player.js into index.html (part of npm run build)
 ├── Eclipsed.png                # Raw cover upload: source of images/eclipsed-cover-1280.jpg
 ├── The Dark Awaits.png         # Raw poster upload kept for provenance (unreferenced)
 ├── PERFORMANCE.md LEGAL.md RATIFY.md SEO-DOSSIER.md SITEMAP.md STORE.md
@@ -287,8 +294,13 @@ npm run serve                   # → http://localhost:8080  (PORT env overrides
 ./legal-src/build.sh            # 7 documents + human sitemap + hashed assets
 node tools/route-aliases.mjs    # refresh 18 hub root twins
 
-# Check both film-player implementations (markup, controls, switching, cache hashes)
+# Check every film-player surface (early inline, React, item page, shared native player, cache hashes)
 node --test tools/film-player.test.mjs # built-in Node test runner; no dependencies
+
+# Encode a self hosted film sample (needs ffmpeg; or run the "Encode film sample" GitHub Action)
+node tools/encode-film.mjs "~/Movies/Eclipsed V3 Distortion.mov" --slug eclipsed            # -> media/eclipsed/
+node tools/encode-film.mjs master.mov --slug eclipsed --out build/test-media/eclipsed        # preview only
+MEDIA_ROOT=build/test-media node server.mjs                                                   # serve that preview
 
 # Validate the sitemap (structure, files, canonicals, robots)
 node tools/check-sitemap.mjs          # offline
@@ -334,7 +346,9 @@ Rules: always set `width`/`height` (CLS-safe); grid and client render must refer
 
 ### Video & external embeds
 
-No video files in the repo. Film samples are lazy `youtube-nocookie.com` iframes (real `src` assigned post-load so `loading="lazy"` holds) and one Google Drive preview. YouTube thumbnails come from `i.ytimg.com`; catalogue covers from four marketplace CDNs — all enumerated in the CSP. External embeds are a known fragility: the Drive preview depends on Google's scanner behaviour (recorded in `PERFORMANCE.md`).
+Seven film samples are lazy `youtube-nocookie.com` iframes (real `src` assigned post-load so `loading="lazy"` holds). ECLIPSED is the exception: its director allows the film on this private reel only, so it is **self hosted** under `media/eclipsed/` as an HLS ladder (1080p/720p/480p, 6 s fMP4 segments) and played in a native `<video>` by `src/film/player.js` — Safari and iOS decode HLS natively, every other browser fetches the vendored `hls-<hash>.js` on demand. The stream is portfolio-only material: no `VideoObject`, no `og:video`, no sitemap entry, `Disallow: /media/` in robots.txt, `X-Robots-Tag: noindex` and `Cross-Origin-Resource-Policy: same-origin` from `_headers`, `controlsList="nodownload"`, and no deep link to it anywhere on the site. If the stream cannot be played (not yet encoded, blocked, or an unsupported browser) the card falls back automatically to the standard Google Drive preview, so the Drive file must stay shared "anyone with the link" until the ladder is live.
+
+To (re)encode: `node tools/encode-film.mjs <master> --slug eclipsed` locally with ffmpeg, or dispatch `.github/workflows/encode-film.yml` with the Drive link; both validate the 25 MB per-file limit and the playlists, and the directory is committed like any other asset (expect 120–280 MB for the 4 min 30 s film; `--ladder 720,480` roughly halves it; git history keeps it for good). YouTube thumbnails come from `i.ytimg.com`; catalogue covers from four marketplace CDNs — all enumerated in the CSP.
 
 ### Adding media safely — checklist
 
@@ -373,7 +387,7 @@ The site serves source-rendered SEO metadata and structured data (the repo's `SE
 
 - **Homepage schema:** `Person`, `Organization`, `WebSite`, and `WebPage` with shared IDs.
 - **Item-page schema:** production `Movie`/`TVSeries`/`CreativeWork` plus verified `VideoObject` where supplied; cue `MusicComposition` + `AudioObject`; catalogue `Product`/`MusicAlbum` + `Offer`; all include `WebPage` and `BreadcrumbList`. Mutable price/stock claims are omitted.
-- `sitemap.xml` (84 URLs: 19 original hubs including home + 65 item routes; current build has 79 artwork and 12 video entries) is checked by `tools/check-sitemap.mjs`, `tools/route-aliases.mjs`, and `scripts/verify.mjs`. The build verifies canonical paths, static files, structured data, links, media, and a real unknown-route 404. **Run `npm run build` before deploys that touch routes, links, media, or schema.**
+- `sitemap.xml` (84 URLs: 19 original hubs including home + 65 item routes; current build has 79 artwork and 11 video entries) is checked by `tools/check-sitemap.mjs`, `tools/route-aliases.mjs`, and `scripts/verify.mjs`. The build verifies canonical paths, static files, structured data, links, media, and a real unknown-route 404. **Run `npm run build` before deploys that touch routes, links, media, or schema.**
 - **Sitelinks structure:** only the 19 original hub routes are reachable from `/`; the 65 data-generated item routes are intentionally not added to the homepage, hub navigation, or human sitemap. Each item page links to its own hub and at least three siblings. `scripts/verify.mjs` checks those relationships, and `tools/check-sitemap.mjs` audits hub reachability and section fragments.
 - **Site name**: one `WebSite` node on `/` (`name` "Zazie Productions", `alternateName` "Zazie Productions Horror", "ZKT Productions"), matched by `og:site_name` on every page. No `SearchAction` (Google retired the sitelinks search box in November 2024) and no home-page `BreadcrumbList` (the home page is the root of the trail, not a trail).
 - **Beyond Google**: `sitemap.xml` is advertised in `robots.txt` for every engine; `tools/indexnow.mjs` pushes changed URLs to the IndexNow engines after a deploy.
@@ -449,7 +463,7 @@ For future AI-assisted development sessions. **Before changing anything:**
 **Open items recorded in the repo** (in development / awaiting a decision):
 
 - Human decisions collected in `RATIFY.md` (contracting entity confirmation, governing law, rights language — facts that create obligations, deliberately not invented)
-- Eclipsed Google Drive sample: if it stops streaming, the fix is a re-upload on the Drive side (`PERFORMANCE.md`)
+- Eclipsed sample: encode and commit `media/eclipsed/` (see *Video & external embeds*); until then the player falls back to the Drive preview, which must stay shared
 - THE DARK AWAITS: no title IMDb/video link known yet; falls back to the composer's IMDb
 - Reconcile hub-page sources (debt #2)
 
