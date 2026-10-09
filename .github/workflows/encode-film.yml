@@ -22,6 +22,12 @@ name: Encode film sample
 # job runs; make it private again afterwards) or any direct download URL.
 # Review the result on a preview or locally (node server.mjs), then merge.
 #
+# The commit is pushed with the default GITHUB_TOKEN, and GitHub does not start
+# other workflows from such pushes: when the media lands on main, trigger the
+# deploy yourself (Actions > Deploy > Run workflow, or
+# gh workflow run deploy.yml -f environment=production -f project=zazie-horror-portfolio)
+# or let the next ordinary push to main carry it.
+#
 # Git keeps every byte of the encode in history for good: run this once with
 # settings you are happy with rather than iterating in commits. Expect roughly
 # 120-280 MB for a 4 min 30 s 1080p film at the default ladder; pass
