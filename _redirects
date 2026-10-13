@@ -1,59 +1,31 @@
-# Zazie Productions - Surgical redirect map
-# NO catch-all SPA rewrite - that caused soft 404 disaster (every 404 returned 200 with index.html)
-# All routes are REAL static paths: /, /store, /work, /reel, /composer, /process, /services, /contact, /legal, /faq, etc.
-# Cloudflare Pages serves /404.html automatically for missing routes with proper 404 status
-# Legacy aliases for old .html URLs - 301 to canonical pretty form
+# Cloudflare Pages redirect rules — canonical URL consolidation
+#
+# All canonical URLs are clean, slashless paths (except root `/`).
+# Direct requests to `.html` alias files are permanently redirected (301)
+# to their canonical slashless route so search engines consolidate signals
+# onto a single URL per page.
+#
+# Note: Cloudflare Pages `_redirects` only supports redirect/rewrite status
+# codes (200, 301, 302, 303, 307, 308). Do NOT add `404` status rules here —
+# Cloudflare Pages rejects invalid status codes in `_redirects` and natively
+# serves `/404.html` with HTTP status 404 for any unmatched path.
 
-/store.html  /store  301
-/legal.html  /legal  301
-/faq.html  /faq  301
-/terms.html  /terms  301
-/privacy.html  /privacy  301
-/licensing.html  /licensing  301
-/purchases.html  /purchases  301
-/accessibility.html  /accessibility  301
-
-# Hub pages - legacy hash anchors now have real pages, but preserve anchor jumps
-# If someone visits old hash URL, client-side JS handles scroll; no redirect needed
-
-# ---------------------------------------------------------------------------
-# NO TRAILING-SLASH REDIRECTS. Ever.
-#
-# These lines used to sit here, one per hub:
-#
-#   /composer/  /composer  301
-#   /work/      /work      301
-#   /reel/      /reel      301
-#   /process/   /process   301
-#   /services/  /services  301
-#   /contact/   /contact   301
-#
-# Every route above is served from <route>/index.html, and Cloudflare Pages
-# answers a slashless request for a directory route with its own 308 to the
-# trailing-slash form. So the 301 pointed straight back into that 308:
-#
-#   /work -> 308 /work/ -> 301 /work -> 308 /work/ -> ... ERR_TOO_MANY_REDIRECTS
-#
-# The page never loaded. Every REEL / WORK / COMPOSER / PROCESS / RATES /
-# contact link in the site - including the whole primary nav on /store - was
-# dead for as long as those rules were live (verified 2026-09-19: /work
-# answered 308, /reel/ answered 301, the pair is a loop).
-#
-# Both URL forms are served as 200s instead: <route>/index.html renders
-# /route/ natively, and the generated root twin <route>.html renders the
-# canonical slashless /route exactly the way store.html already renders
-# /store. Regenerate the twins with `node tools/route-aliases.mjs` after
-# editing a hub page (tools/check-sitemap.mjs fails if they drift).
-# _headers gives both forms the same cache policy and a rel="canonical"
-# Link header back to the slashless canonical, and sitemap.xml lists the
-# slashless form, so crawlers consolidate on /route with no redirect hop.
-# ---------------------------------------------------------------------------
-
-# Flat item routes have no directory index. Do not normalize a trailing-slash
-# twin to the canonical item URL: answer it as a real 404 with noindex instead.
-/work/*/  /404.html  404
-/reel/*/  /404.html  404
-/store/*/ /404.html  404
-
-# Unknown paths serve the not-found document with an HTTP 404 (not a soft 404).
-/* /404.html 404
+/index.html / 301
+/work.html /work 301
+/reel.html /reel 301
+/composer.html /composer 301
+/process.html /process 301
+/services.html /services 301
+/contact.html /contact 301
+/hire-a-composer.html /hire-a-composer 301
+/sound-design.html /sound-design 301
+/game-scoring.html /game-scoring 301
+/store.html /store 301
+/legal.html /legal 301
+/faq.html /faq 301
+/terms.html /terms 301
+/privacy.html /privacy 301
+/licensing.html /licensing 301
+/purchases.html /purchases 301
+/accessibility.html /accessibility 301
+/sitemap.html /sitemap 301

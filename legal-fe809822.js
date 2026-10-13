@@ -84,12 +84,11 @@
     var openCount = 0;
 
     items.forEach(function (d) {
-      /* Markup ships with every answer open so the page is complete with
-         JavaScript off. Collapse on load, keeping a deep-linked answer open. */
+      /* Keep all server-rendered answers/cues open on initial load so
+         search engine renderers (Googlebot WRS) index the full body copy
+         and FAQPage answers without requiring user interaction. */
       if (d.id === targetId) {
         d.open = true;
-      } else {
-        d.open = false;
       }
       if (d.open) openCount++;
       d.addEventListener("toggle", function () {

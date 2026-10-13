@@ -181,6 +181,30 @@ for page in sorted((src / "pages").glob("*.html")):
     detail = " (%d FAQ questions in schema)" % n if n else ""
     print("wrote %s/index.html + %s.html (%d bytes)%s" % (slug, slug, len(markup.encode("utf-8")), detail))
 
+# Keep shared legal-<hash>.css and legal-<hash>.js references in sync across
+# the portfolio hub pages, 404.html, and sw.js.
+shared_consumers = [
+    root / "404.html",
+    root / "sw.js",
+    root / "composer" / "index.html",
+    root / "contact" / "index.html",
+    root / "process" / "index.html",
+    root / "reel" / "index.html",
+    root / "work" / "index.html",
+    root / "services" / "index.html",
+    root / "hire-a-composer" / "index.html",
+    root / "sound-design" / "index.html",
+    root / "game-scoring" / "index.html",
+]
+for target in shared_consumers:
+    if not target.exists():
+        continue
+    original = target.read_text(encoding="utf-8")
+    updated = re.sub(r"legal-[0-9a-f]{8}\.css", css, original)
+    updated = re.sub(r"legal-[0-9a-f]{8}\.js", js, updated)
+    if updated != original:
+        target.write_text(updated, encoding="utf-8")
+
 print("pages: %d" % count)
 PY
 
