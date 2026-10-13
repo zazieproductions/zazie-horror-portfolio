@@ -41,14 +41,7 @@ printf 'wrote %s (%s bytes)\n' "$JS_OUT" "$(wc -c < "$JS_OUT")"
 printf 'wrote store.html (%s bytes)\n' "$(wc -c < store.html)"
 printf 'wrote store/index.html (%s bytes)\n' "$(wc -c < store/index.html)"
 
-# sw.js precaches this pair by filename. A hash that moved without the service
-# worker moving with it is a 404 on every install, and a CACHE_NAME bump that
-# goes with it is what stops a returning visitor being served the previous
-# /store build (prices, stock and the primary nav all live in that document).
-SW_CSS=$(grep -o 'store-[0-9a-f]\{8\}\.css' sw.js | head -1 || true)
-SW_JS=$(grep -o 'store-[0-9a-f]\{8\}\.js' sw.js | head -1 || true)
-if [ "$SW_CSS" != "$CSS_OUT" ] || [ "$SW_JS" != "$JS_OUT" ]; then
-  printf '\nWARNING: sw.js precaches %s / %s, this build wrote %s / %s\n' \
-    "${SW_CSS:-nothing}" "${SW_JS:-nothing}" "$CSS_OUT" "$JS_OUT" >&2
-  printf 'WARNING: update PRECACHE_ASSETS in sw.js and bump CACHE_NAME.\n' >&2
+# Keep sw.js PRECACHE_ASSETS in sync with the current store asset hashes.
+if [ -f sw.js ]; then
+  sed -i -e "s|store-[0-9a-f]\{8\}\.css|${CSS_OUT}|g" -e "s|store-[0-9a-f]\{8\}\.js|${JS_OUT}|g" sw.js
 fi

@@ -226,8 +226,18 @@ if (unreachableHubs.length) fail(`original hub routes not reachable from /: ${un
 /* --------------------------------------------------------------- real 404 */
 const notFound = fs.readFileSync(path.join(root, '404.html'), 'utf8');
 if (!/<meta[^>]+name="robots"[^>]+content="[^"]*noindex/i.test(notFound)) fail('404.html must carry noindex, follow');
-if (!fs.readFileSync(path.join(root, '_redirects'), 'utf8').split(/\r?\n/).some((line) => /^\/\*\s+\/404\.html\s+404\s*$/.test(line.trim()))) {
-  fail('_redirects must include the Cloudflare Pages /* /404.html 404 fallback');
+const redirectLines = fs.readFileSync(path.join(root, '_redirects'), 'utf8')
+  .split(/\r?\n/)
+  .map((line) => line.replace(/#.*$/, '').trim())
+  .filter(Boolean);
+if (redirectLines.some((line) => /\s404$/.test(line) || /^\/\*\s/.test(line))) {
+  fail('_redirects must not contain invalid 404 status rules or a /* catch-all (Cloudflare Pages serves 404.html natively)');
+}
+for (const hub of hubs) {
+  const expectedRule = hub.path === '/' ? '/index.html / 301' : `${hub.path}.html ${hub.path} 301`;
+  if (!redirectLines.includes(expectedRule)) {
+    fail(`_redirects is missing canonical 301 rule: ${expectedRule}`);
+  }
 }
 const unknownWorkFile = path.join(root, 'work', 'does-not-exist.html');
 if (fs.existsSync(unknownWorkFile) || routeByPath.has('/work/does-not-exist')) fail('unknown production route unexpectedly has a page');

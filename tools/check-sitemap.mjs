@@ -489,6 +489,8 @@ for (const urlEl of urls) {
       note(`${short}: image hosted off-site (${iu.host}) - allowed, but Google must be able to crawl it`);
     } else if (!fs.existsSync(path.join(ROOT, decodeURIComponent(iu.pathname)))) {
       err(`${short}: image file missing from disk: ${iu.pathname}`);
+    } else if (file && file.endsWith('.html') && !fs.readFileSync(file, 'utf8').includes(iu.pathname)) {
+      err(`${short}: sitemap <image:loc> ${iu.pathname} is not present in page HTML`);
     }
   }
 

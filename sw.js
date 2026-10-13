@@ -66,53 +66,20 @@
 // refetched once. Item routes are deliberately NOT in PRECACHE_ASSETS: 65 extra
 // documents at install time would cost a visitor far more than they gain, and
 // the static-asset path already caches the item bundle on first use.
-const CACHE_NAME = 'zazie-v29';
+const CACHE_NAME = 'zazie-v30';
 
 const PRECACHE_ASSETS = [
   '/',
-  '/index.html',
-  '/work',
-  '/work/index.html',
-  '/reel',
-  '/reel/index.html',
-  '/composer',
-  '/composer/index.html',
-  '/process',
-  '/process/index.html',
-  '/services',
-  '/services/index.html',
-  '/contact',
-  '/contact/index.html',
-  '/hire-a-composer',
-  '/hire-a-composer/index.html',
-  '/sound-design',
-  '/sound-design/index.html',
-  '/game-scoring',
-  '/game-scoring/index.html',
-  '/store',
-  '/store.html',
-  '/store/index.html',
-  '/legal',
-  '/faq',
-  '/terms',
-  '/privacy',
-  '/licensing',
-  '/purchases',
-  '/accessibility',
-  '/sitemap',
-  '/404.html',
-  '/sitemap.xml',
-  '/robots.txt',
   '/favicon.svg',
   '/fonts/cormorant-garamond-latin-400-normal.woff2',
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-f509fde0.css',
-  '/index-9388c759.js',
-  '/store-94c90049.css',
+  '/index-2afd4ec8.js',
+  '/store-eed3eeee.css',
   '/store-3fc01be0.js',
-  '/legal-24ac8394.css',
-  '/legal-ea8a33ec.js',
+  '/legal-b5d07e1a.css',
+  '/legal-fe809822.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',
   '/images/hero-portrait.avif',
@@ -157,43 +124,20 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(req.url);
 
-  // Legal and operating documents, the catalogue, the IA silos and the homepage:
-  // network first, cache only as a fallback. A terms or privacy page must never be
-  // served stale while a network is reachable, and the same goes for /store, where
-  // the prices, the stock notes and the primary nav are the page - and for the
-  // homepage itself, which carries the boot sequence, hero and schema and is the
-  // page a returning visitor (or the studio checking a fresh deploy) hits first.
-  // Everything else stays stale-while-revalidate for the 0ms repeat render.
-  const NETWORK_FIRST = ['/', '/index.html', '/legal', '/faq', '/terms', '/privacy', '/licensing', '/purchases', '/accessibility', '/sitemap', '/store', '/work', '/reel', '/composer', '/process', '/services', '/contact'];
-  const path = url.pathname.replace(/\/+$/, '') || '/';
-  if (url.origin === self.location.origin && req.mode === 'navigate' && NETWORK_FIRST.includes(path)) {
-    event.respondWith(
-      fetch(req).then((res) => {
-        if (res && res.status === 200) {
-          const resClone = res.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(req, resClone));
-        }
-        return res;
-      }).catch(() => caches.match(req).then((c) => c || caches.match('/index.html')))
-    );
-    return;
-  }
-
   // Same-origin handling
   if (url.origin === self.location.origin) {
-    // Navigation requests (HTML): Stale-While-Revalidate for 0ms render
+    // Navigation requests (HTML): always network-first, falling back only to
+    // the exact cached request URL (never fall back a subpage to /index.html,
+    // which would serve the homepage HTML and canonical tag on a subpage URL).
     if (req.mode === 'navigate') {
       event.respondWith(
-        caches.match(req).then((cached) => {
-          const networkFetch = fetch(req).then((res) => {
-            if (res && res.status === 200) {
-              const resClone = res.clone();
-              caches.open(CACHE_NAME).then((cache) => cache.put(req, resClone));
-            }
-            return res;
-          }).catch(() => cached);
-          return cached || networkFetch;
-        })
+        fetch(req).then((res) => {
+          if (res && res.status === 200) {
+            const resClone = res.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(req, resClone));
+          }
+          return res;
+        }).catch(() => caches.match(req))
       );
       return;
     }
