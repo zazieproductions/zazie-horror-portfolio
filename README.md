@@ -91,7 +91,7 @@ Unconventional choices exist for artistic or experiential reasons and are docume
 - **Showreel** — 32 title-derived cue pages plus the existing cue hub and MP3s (`/audio/track-00.mp3` … `track-31.mp3`). Each item page carries readable cue notes, duration/category, native optional playback, and sibling links.
 - **Film samples** — 8 embeds: 7 lazy `youtube-nocookie.com` players plus 1 Google Drive preview, with poster-`<picture>` covers.
 - **Press kit** — features and coverage (Visual Container award-winners press release PDF, Grammy Weekly, Limitless Magazine, Billboard Wire).
-- **Approach / Rates / Composer / Reviews / Inquiry** — scoring method, scope-and-estimate bands (sliding scale tied to project funding, typically a few hundred dollars, as published on `/services`), biography, 5.0 collaborator rating with 3 featured reviews, and a structured inquiry form that builds a `mailto:` handoff.
+- **Approach / Rates / Composer / Reviews / Inquiry** — scoring method, scope-and-estimate bands (packages priced by scored minutes of music, as published on `/services`), biography, 5.0 collaborator rating with 3 featured reviews, and a structured inquiry form that builds a `mailto:` handoff.
 
 **Boot overlay** — legacy overlay markup and its hidden-by-default CSS remain in `index.html`; no script adds `zp-boot-on`. Portfolio text is not gated behind an overlay, audio, or JavaScript.
 

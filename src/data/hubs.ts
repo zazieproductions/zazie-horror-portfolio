@@ -156,7 +156,7 @@ export const hubs: Hub[] = [
     path: "/process",
     name: "Scoring process",
     title: "Horror Film Scoring Process: Spotting to Stems | Zazie Productions",
-    description: "Four-stage horror film scoring process by Zazie Kanwar-Torge: spotting session, palette and motif sketches, scoring to picture with revisions, and final WAV stems.",
+    description: "Four-stage horror film scoring process by Zazie Kanwar-Torge: spotting session, palette and motif sketches, scoring to picture with revisions, and final WAV files.",
     lastmod: "2026-10-13",
     images: [
       { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Kanwar-Torge at the scoring desk, Asheville, NC studio", title: "Horror Film Scoring Suite - Process" },
@@ -166,8 +166,8 @@ export const hubs: Hub[] = [
   {
     path: "/services",
     name: "Rate card",
-    title: "Horror Film Scoring Rates: Micro-Budget to Feature | Zazie Productions",
-    description: "Horror film scoring rates by Zazie Kanwar-Torge: sliding-scale quotes from $250 for indie shorts, features, episodes, and games across Lean to Orchestral+ tiers.",
+    title: "Horror Score Packages and Quotes | Zazie Productions",
+    description: "Original music for psychological horror and experimental cinema, priced by scored minutes: Scene from $200, Focused from $500, Extended from $900. Indicative and nonbinding; feature work is quoted individually.",
     lastmod: "2026-10-13",
     images: [
       { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Productions horror film scoring suite Asheville, NC", title: "Horror Film Scoring Suite - Rates" },
@@ -196,7 +196,7 @@ export const hubs: Hub[] = [
     path: "/contact",
     name: "Contact",
     title: "Scoring Inquiry: Request a Score Quote | Zazie Productions",
-    description: "Request a film, series, or game score quote from Zazie Kanwar-Torge. Share your format, runtime, timeline, and budget for a direct reply within 48 hours.",
+    description: "Request a scoring quote for psychological horror, folk horror, supernatural or experimental film. Share scored minutes, format, deadline and references; a written, nonbinding quote follows review.",
     lastmod: "2026-10-13",
     images: [
       { loc: "https://horror.zazieproductions.com/images/hero-portrait.jpg", caption: "Zazie Kanwar-Torge, psychological horror composer available for commission", title: "Scoring Inquiry - Request a Score Quote" },
@@ -207,7 +207,7 @@ export const hubs: Hub[] = [
     path: "/faq",
     name: "FAQ",
     title: "Horror Film Scoring FAQ: Fees, Process, Rights, Delivery - 35 Questions | Zazie Productions",
-    description: "35 answers on commissioning a horror score from Zazie Kanwar-Torge: sliding-scale fees from $250, spotting to stems workflow, revisions, buyout rights, and cue sheets.",
+    description: "35 answers on commissioning a horror score from Zazie Kanwar-Torge: packages priced by scored minutes, spotting to delivery, revisions, licensing and cue sheets.",
     lastmod: "2026-10-13",
     images: [],
     videos: [],
@@ -243,7 +243,7 @@ export const hubs: Hub[] = [
     path: "/terms",
     name: "Terms",
     title: "Terms: Horror Film Scoring Commissioning, Quotes, Deposits | Zazie Productions",
-    description: "Commissioning terms and conditions for Zazie Productions LLC: written quotes, deposits, spotting to stems delivery, revisions, kill fees, clearances, and North Carolina law.",
+    description: "Commissioning terms and conditions for Zazie Productions LLC: written quotes, deposits, spotting to delivery, revisions, kill fees, clearances, and North Carolina law.",
     lastmod: "2026-10-13",
     images: [],
     videos: [],
@@ -301,7 +301,7 @@ export const hubs: Hub[] = [
     path: "/game-scoring",
     name: "Game scoring",
     title: "Adaptive Horror Game Scoring & Music | Zazie Productions",
-    description: "Adaptive horror scoring for games: states, seamless loops, layered stems, stingers and implementation notes for Wwise, FMOD, Unity and Unreal pipelines.",
+    description: "Adaptive horror scoring for games: states, seamless loops, layered cues, stingers and implementation notes for Wwise, FMOD, Unity and Unreal pipelines.",
     lastmod: "2026-10-13",
     images: [
       { loc: "https://horror.zazieproductions.com/images/posters/the-dark-awaits-640.jpg", caption: "THE DARK AWAITS - the tonal register behind adaptive horror scoring for games, by Zazie Kanwar-Torge.", title: "Adaptive Horror Game Scoring - Zazie Productions" },
