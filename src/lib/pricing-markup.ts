@@ -14,7 +14,7 @@ import {
   CURRENCY,
   DEADLINES,
   DEFAULT_SCOPE,
-  EXTRA_CUE_FEE,
+  EXTRA_REVISION_MINIMUM,
   EXTRA_REVISION_RATE,
   FORMATS,
   LICENCES,
@@ -72,7 +72,6 @@ export function tokenValue(key: string): string | null {
   const [head, field] = key.split('.');
   if (head === 'minimum' && !field) return usd(MINIMUM_FEE);
   if (head === 'long-form' && !field) return String(LONG_FORM_THRESHOLD_MINUTES);
-  if (head === 'extra-cue' && !field) return usd(EXTRA_CUE_FEE);
   if (head === 'notice' && !field) return PRICING_NOTICE;
   if (head === 'runtime-notice' && !field) return RUNTIME_NOTICE;
   if (head === 'reviewed' && !field) return PRICING_REVIEWED;
@@ -148,12 +147,12 @@ export function factorsHtml(): string {
   const pct = (m: number) => (m === 1 ? 'no change' : `+${Math.round((m - 1) * 100)}%`);
   const items: [string, string][] = [
     ['Scored music', `Priced by minutes of finished music. Packages cover up to ${LONG_FORM_THRESHOLD_MINUTES} scored minutes; longer work is quoted individually.`],
-    ['Cues', `Two cues per scored minute are included. Each additional cue is ${usd(EXTRA_CUE_FEE)} before the adjustments below.`],
+    ['Cues', 'Cue count is an approximate scope indicator; additional composition is individually quoted based on minutes, cue count and creative complexity.'],
     ['Musical complexity', COMPLEXITY.map((c) => `${c.label} ${pct(c.multiplier)}`).join('; ') + '.'],
     ['Schedule', DEADLINES.map((d) => `${d.label} ${pct(d.multiplier)}`).join('; ') + '.'],
-    ['Revisions', `Two rounds per cue are included. Each additional round adds ${Math.round(EXTRA_REVISION_RATE * 100)}%, up to ${MAX_EXTRA_REVISION_ROUNDS} rounds.`],
+    ['Revisions', `Scene and Focused include one consolidated revision round; Extended includes two. Additional rounds: ${usd(EXTRA_REVISION_MINIMUM)} minimum or 10% of commission fee, whichever is greater.`],
     ['Licence', LICENCES.filter((l) => !l.quoted).map((l) => `${l.label} ${pct(l.multiplier)}`).join('; ') + '. A full buyout or soundtrack album is quoted individually.'],
-    ['Minimum fee', `${usd(MINIMUM_FEE)}.`],
+    ['Minimum fee', `${usd(MINIMUM_FEE)} starting fee for a scene commission. Substantial feature-scoring engagements have an indicative $2,500 minimum; single scenes are excluded.`],
   ];
   return [
     `<dl class="zp-factors-list">`,
@@ -203,7 +202,7 @@ function licenceOptions(selected: LicenceId): string {
 function revisionOptions(selected: number): string {
   const options: string[] = [];
   for (let n = 0; n <= MAX_EXTRA_REVISION_ROUNDS; n += 1) {
-    const label = n === 0 ? 'None: two rounds per cue, included' : `${n} additional ${n === 1 ? 'round' : 'rounds'}`;
+    const label = n === 0 ? 'No additional rounds' : `${n} additional ${n === 1 ? 'round' : 'rounds'}`;
     options.push(`<option value="${n}"${n === selected ? ' selected' : ''}>${esc(label)}</option>`);
   }
   return options.join('');
@@ -220,12 +219,12 @@ export function estimatorFormHtml(scope: QuoteInput, cueText: string): string {
     `<small id="zp-min-help" class="zp-help">Minutes of finished music, not the length of the film. Over ${LONG_FORM_THRESHOLD_MINUTES} minutes is quoted individually.</small></label>`,
     `<label class="zp-field"><span class="zp-label">Number of cues <span class="zp-opt">(optional)</span></span>`,
     `<input class="zp-input" type="number" name="cues" min="0" max="${MAX_CUES}" step="1" inputmode="numeric" value="${esc(cueText)}" aria-describedby="zp-cue-help">`,
-    `<small id="zp-cue-help" class="zp-help">Leave blank if unsure. Two cues per scored minute are included.</small></label>`,
+    `<small id="zp-cue-help" class="zp-help">Leave blank if unsure. Cue count is an approximate scope indicator; additional composition is quoted individually.</small></label>`,
     `</div></fieldset>`,
     `<fieldset class="zp-group"><legend>Musical complexity</legend><div class="zp-choices">${complexityOptions(scope.complexity)}</div></fieldset>`,
     `<fieldset class="zp-group"><legend>Schedule</legend><div class="zp-choices">${deadlineOptions(scope.deadline)}</div></fieldset>`,
     `<fieldset class="zp-group"><legend>Revisions</legend>`,
-    `<label class="zp-field"><span class="zp-label">Beyond the two included rounds per cue</span>`,
+    `<label class="zp-field"><span class="zp-label">Additional rounds beyond the package allowance</span>`,
     `<select class="zp-input" name="rev">${revisionOptions(scope.extraRevisionRounds)}</select></label></fieldset>`,
     `<fieldset class="zp-group"><legend>Licence</legend><div class="zp-choices">${licenceOptions(scope.licence)}</div>`,
     `<p class="zp-help">Composition is priced separately from the rights it is licensed under. A full buyout and a soundtrack album are quoted individually.</p></fieldset>`,
@@ -400,7 +399,7 @@ export function offersGraph(serviceId: string, provider: string): object {
 
 /** The inline notice used at the foot of every pricing surface. */
 export function noticeHtml(): string {
-  return `<p class="zp-notice">${esc(PRICING_NOTICE)}</p>`;
+  return `<p class="zp-notice">${esc(PRICING_NOTICE)}</p><p class="zp-notice">Independent and micro-budget productions are welcome to inquire. Where appropriate, a reduced musical scope or licensing of existing material may offer a more accessible alternative.</p><p class="zp-notice">A 50% deposit is proposed before work begins; the remaining 50% is due before release of final approved deliverables, as set out in the written agreement.</p>`;
 }
 
 export { PACKAGES, quote, DEFAULT_SCOPE, budgetOptions, FORMATS, MINIMUM_FEE, PRICING_STATUS };
