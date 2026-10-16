@@ -28,25 +28,24 @@
  * "scored music minutes" everywhere.
  */
 
-export const PRICING_STATUS = 'provisional' as const;
+export const PRICING_STATUS = 'approved' as const;
 export const PRICING_REVIEWED = '2026-10-14' as const;
 export const CURRENCY = 'USD' as const;
 
 /** Lowest fee the studio quotes for a commission (the Individual Scene floor). */
-export const MINIMUM_FEE = 200;
+export const MINIMUM_FEE = 250;
 /** Estimates are rounded to this increment, in dollars. */
 export const ROUND_TO = 25;
 /** Scored music above this many minutes is quoted individually. */
 export const LONG_FORM_THRESHOLD_MINUTES = 12;
-/** Cues included per scored minute before extra cues are charged. */
+/** Approximate planning baseline for estimator routing; not a promised cue cap. */
 export const CUE_ALLOWANCE_PER_MINUTE = 2;
-/** Fee for each cue beyond the allowance, in dollars (before multipliers). */
-export const EXTRA_CUE_FEE = 35;
 /** Revision rounds included per cue group (the terms' studio default). */
-export const INCLUDED_REVISION_ROUNDS = 2;
+export const INCLUDED_REVISION_ROUNDS = 1;
 /** Surcharge for each revision round beyond the included rounds (fraction). */
-export const EXTRA_REVISION_RATE = 0.06;
-export const MAX_EXTRA_REVISION_ROUNDS = 3;
+export const EXTRA_REVISION_MINIMUM = 75;
+export const EXTRA_REVISION_RATE = 0.10;
+export const MAX_EXTRA_REVISION_ROUNDS = 6;
 export const MAX_CUES = 80;
 export const MAX_MINUTES_INPUT = 60;
 
@@ -79,54 +78,54 @@ export interface PricingPackage {
 
 /**
  * The four commissioning packages. Bands are linear in whole scored minutes.
- * Scene: 1-3 min, $200-$350 overall. Focused: 4-6 min, from $500.
- * Extended: 7-12 min, from $900. Feature & experimental: custom quotation.
+ * Scene: 1-2 scored minutes, from $250. Focused: up to 5 minutes, from $650.
+ * Extended: up to 12 minutes, from $1,500. Substantial feature engagements: custom, indicative minimum $2,500.
  * Bands join without overlap, so a larger scope never costs less than a smaller one.
  */
 export const PACKAGES: readonly PricingPackage[] = [
   {
     id: 'scene',
     name: 'Individual Scene Scoring',
-    minutesLabel: 'about 1–3 minutes',
-    minutes: { min: 1, max: 3 },
-    display: 'range',
-    low: { start: 200, step: 50 },
-    high: { start: 250, step: 50 },
+    minutesLabel: 'approximately 1–2 minutes',
+    minutes: { min: 1, max: 2 },
+    display: 'from',
+    low: { start: 250, step: 100 },
+    high: { start: 400, step: 100 },
     summary: 'A single sequence or moment composed to picture: a dread bed, a tension cue, a reveal or a stinger-led transition.',
     bestFor: 'Festival scenes, pitch sequences and a single pivotal moment in a longer edit.',
   },
   {
     id: 'focused',
     name: 'Focused Short-Film Scoring',
-    minutesLabel: 'about 3–6 minutes',
-    minutes: { min: 4, max: 6 },
+    minutesLabel: 'up to 5 scored minutes',
+    minutes: { min: 3, max: 5 },
     display: 'from',
-    low: { start: 500, step: 50 },
-    high: { start: 600, step: 75 },
+    low: { start: 650, step: 175 },
+    high: { start: 900, step: 200 },
     summary: 'A complete short film or a fully scored act, with its own motifs, a spotting session and a consistent sonic world.',
     bestFor: 'Narrative and experimental shorts where the score carries the story from the first frame.',
   },
   {
     id: 'extended',
     name: 'Extended Short-Film Scoring',
-    minutesLabel: 'about 7–12 minutes',
-    minutes: { min: 7, max: 12 },
+    minutesLabel: 'up to 12 scored minutes',
+    minutes: { min: 6, max: 12 },
     display: 'from',
-    low: { start: 900, step: 75 },
-    high: { start: 1050, step: 75 },
+    low: { start: 1500, step: 125 },
+    high: { start: 2000, step: 150 },
     summary: 'Longer shorts, multi-part short work or a developed theme set with a larger cue list and more tonal range.',
     bestFor: 'Longer shorts, series pilots and projects that need a developed thematic score.',
   },
   {
     id: 'feature',
-    name: 'Feature & Experimental Film Scoring',
-    minutesLabel: 'more than 12 minutes, or multi-part work',
+    name: 'Feature Film & Experimental Cinema',
+    minutesLabel: 'substantial feature work; single scenes remain eligible for scene scoring',
     minutes: null,
     display: 'custom',
     low: null,
     high: null,
-    summary: 'Features, series episodes at length, installation and experimental work with expanded scope, live players or complex delivery.',
-    bestFor: 'Features and longer experimental films. Quoted after the studio has watched a cut and agreed the schedule.',
+    summary: 'Substantial feature-scoring engagements and experimental cinema are quoted individually; a single feature scene can use Individual Scene Scoring.',
+    bestFor: 'Substantial feature engagements; indicative minimum $2,500. Single-scene commissions are not subject to this minimum.',
   },
 ] as const;
 
@@ -156,19 +155,19 @@ export const COMPLEXITY: readonly { id: ComplexityId; label: string; description
 export const DEADLINES: readonly { id: DeadlineId; label: string; description: string; multiplier: number }[] = [
   {
     id: 'standard',
-    label: 'Three weeks or more',
+    label: 'Standard schedule (no surcharge)',
     description: 'The usual schedule for a short.',
     multiplier: 1.0,
   },
   {
     id: 'expedited',
-    label: 'Two weeks',
+    label: 'Expedited (approximately 10–20 days)',
     description: 'Ten to twenty days, subject to availability.',
     multiplier: 1.15,
   },
   {
     id: 'rush',
-    label: 'Under ten days',
+    label: 'Rush (under 10 days)',
     description: 'Subject to availability and confirmed in writing before a quote is accepted.',
     multiplier: 1.3,
   },
@@ -188,29 +187,29 @@ export const LICENCES: readonly {
 }[] = [
   {
     id: 'nonexclusive',
-    label: 'Non-exclusive project licence',
-    description: 'Use in the named production, its festival run and its own release, as set out in the written quote.',
+    label: 'Standard project-use licence',
+    description: 'Non-exclusive use in the named production, festival exhibition and agreed distribution, as expressly defined in writing.',
     multiplier: 1.0,
     quoted: false,
   },
   {
     id: 'distribution',
     label: 'Expanded distribution',
-    description: 'Adds broadcast, streaming and paid video-on-demand to the project licence.',
-    multiplier: 1.25,
-    quoted: false,
+    description: 'Broadcast, streaming, paid VOD or other expanded use: scope and fee agreed in writing.',
+    multiplier: 1,
+    quoted: true,
   },
   {
     id: 'exclusive',
     label: 'Exclusive licence',
-    description: 'Exclusive to the production for an agreed term and territory. The composer keeps the copyright.',
-    multiplier: 1.4,
-    quoted: false,
+    description: 'Exclusivity is not included; terms and fee require a separate written agreement.',
+    multiplier: 1,
+    quoted: true,
   },
   {
     id: 'buyout',
     label: 'Full buyout (copyright transfer)',
-    description: 'Transfer of copyright on payment. Quoted individually; not part of a published estimate.',
+    description: 'Copyright assignment is not included; any transfer or expanded use requires a separate written agreement.',
     multiplier: 1.0,
     quoted: true,
   },
@@ -227,7 +226,7 @@ export const LICENCES: readonly {
 export const STANDARD_INCLUSIONS: readonly string[] = [
   'Original music composed to picture for the cues agreed in writing.',
   'Creative scope confirmed in writing before composition begins: spotting notes, cue list and tone references.',
-  'Two defined revision rounds per cue, collected into one set of notes per round.',
+  'Package-specific consolidated revision rounds: one for Scene and Focused; two for Extended.',
   'Professional stereo WAV delivery (24-bit, 48 kHz unless your project specifies otherwise).',
   'Cue titles and timings listed for your edit.',
 ];
@@ -267,7 +266,7 @@ export interface QuoteInput {
   cueCount?: number;
   complexity: ComplexityId;
   deadline: DeadlineId;
-  /** Revision rounds requested beyond the two included per cue. */
+  /** Additional consolidated revision rounds beyond the package allowance. */
   extraRevisionRounds: number;
   licence: LicenceId;
 }
@@ -289,8 +288,8 @@ export interface EstimateQuote {
 export interface CustomQuote {
   readonly kind: 'custom';
   readonly nonbinding: true;
-  readonly reason: 'long-form' | 'licence';
-  readonly packageId: 'feature' | LicenceId;
+  readonly reason: 'long-form' | 'licence' | 'cue-scope';
+  readonly packageId: PackageId | LicenceId;
   readonly message: string;
 }
 
@@ -364,12 +363,11 @@ export function roundEstimate(amount: number): number {
  * Indicative estimate. Pure and deterministic: the same input always gives the
  * same range on the homepage, on /services, and in the browser.
  *
- *   base(band) + extra-cue fee
- *     x complexity x deadline x (1 + revision surcharge) x licence
+ *   base(band) x complexity x deadline x licence, plus any extra revision fee
+ *     computed as max($75, 10% of commission fee) per additional round
  *   rounded to $25
  *
- * A standard scope (focused palette, three weeks, two revision rounds, a
- * non-exclusive licence, cues within the allowance) returns the published band.
+ * The estimate is deterministic; expanded rights, extra cue scopes and long-form work are routed to individual quotation.
  */
 export function quote(input: QuoteInput): Quote {
   const licence = licenceById(input.licence);
@@ -390,7 +388,7 @@ export function quote(input: QuoteInput): Quote {
       nonbinding: true,
       reason: 'long-form',
       packageId: 'feature',
-      message: `Scores over ${LONG_FORM_THRESHOLD_MINUTES} scored minutes, and multi-part or experimental work, are quoted individually after a cut has been reviewed.`,
+      message: `Feature Film & Experimental Cinema and scores over ${LONG_FORM_THRESHOLD_MINUTES} minutes are quoted individually. The $2,500 indicative minimum applies to substantial feature-scoring engagements only; a single scene in a feature may use Individual Scene Scoring.`,
     };
   }
 
@@ -402,16 +400,19 @@ export function quote(input: QuoteInput): Quote {
   const allowance = minutes * CUE_ALLOWANCE_PER_MINUTE;
   const cueCount = clamp(Math.round(input.cueCount ?? 0) || allowance, 1, MAX_CUES);
   const extraCues = Math.max(0, cueCount - allowance);
-  const cueFee = extraCues * EXTRA_CUE_FEE;
+  if (extraCues > 0) {
+    return { kind: 'custom', nonbinding: true, reason: 'cue-scope', packageId: pkg.id, message: `This cue count exceeds the approximate planning baseline; additional composition is quoted individually based on additional scored minutes, cue count and creative complexity.` };
+  }
 
   const complexity = complexityById(input.complexity);
   const deadline = deadlineById(input.deadline);
   const extraRounds = clamp(Math.round(input.extraRevisionRounds) || 0, 0, MAX_EXTRA_REVISION_ROUNDS);
-  const revisionFactor = 1 + extraRounds * EXTRA_REVISION_RATE;
-
-  const factor = complexity.multiplier * deadline.multiplier * revisionFactor * licence.multiplier;
-  const low = roundEstimate(Math.max(MINIMUM_FEE, (band.low + cueFee) * factor));
-  const high = roundEstimate(Math.max(MINIMUM_FEE, (band.high + cueFee) * factor));
+  const includedRounds = pkg.id === 'extended' ? 2 : 1;
+  const factor = complexity.multiplier * deadline.multiplier * licence.multiplier;
+  const revisionFeeLow = extraRounds * Math.max(EXTRA_REVISION_MINIMUM, band.low * factor * EXTRA_REVISION_RATE);
+  const revisionFeeHigh = extraRounds * Math.max(EXTRA_REVISION_MINIMUM, band.high * factor * EXTRA_REVISION_RATE);
+  const low = roundEstimate(Math.max(MINIMUM_FEE, band.low * factor + revisionFeeLow));
+  const high = roundEstimate(Math.max(MINIMUM_FEE, band.high * factor + revisionFeeHigh));
 
   const factors: { label: string; value: string }[] = [
     { label: 'Package', value: `${pkg.name} (${pkg.minutesLabel})` },
@@ -420,8 +421,8 @@ export function quote(input: QuoteInput): Quote {
   factors.push({
     label: 'Cues',
     value: extraCues > 0
-      ? `${cueCount} cues: ${allowance} included, ${extraCues} extra at ${usd(EXTRA_CUE_FEE)} each`
-      : `${cueCount} ${cueCount === 1 ? 'cue' : 'cues'}, within the ${allowance} included`,
+      ? `${cueCount} cues; ${extraCues} above the approximate cue-count baseline (additional composition quoted by scope)`
+      : `${cueCount} ${cueCount === 1 ? 'cue' : 'cues'} (rough planning baseline: ${allowance})`,
   });
   factors.push({
     label: 'Musical complexity',
@@ -434,8 +435,8 @@ export function quote(input: QuoteInput): Quote {
   factors.push({
     label: 'Revisions',
     value: extraRounds === 0
-      ? `Two rounds per cue, included`
-      : `Two rounds included, plus ${extraRounds} additional ${extraRounds === 1 ? 'round' : 'rounds'} (+${Math.round(extraRounds * EXTRA_REVISION_RATE * 100)}%)`,
+      ? `${includedRounds} consolidated ${includedRounds === 1 ? 'round' : 'rounds'} included`
+      : `Included rounds, plus ${extraRounds} additional (${usd(revisionFeeLow)}–${usd(revisionFeeHigh)} minimum rule)`,
   });
   factors.push({
     label: 'Licence',
@@ -479,7 +480,7 @@ export function budgetOptions(): string[] {
 
 /** Plain-language rules that every page repeats in the same words. */
 export const PRICING_NOTICE =
-  'Indicative and nonbinding. Estimates come from the scope you enter. A written quote follows review of your cut or cue list, the schedule and the licence you need. Complex composition, unusual deadlines, extensive revisions and expanded licensing can increase a quotation. Fees are in US dollars and exclude taxes, live players and third-party clearances.';
+  'Preliminary estimate — final quotation subject to creative scope and written agreement. Starting fees are not guaranteed maximums. Fees are in US dollars; complexity, cue count, additional composition, deadlines and licensing scope affect the final quotation.';
 
 export const RUNTIME_NOTICE =
   'Your film’s runtime does not set the amount of music. A 90-minute feature may need 4 scored minutes; a 6-minute short may need 9. Quotes are built from the music you need composed.';

@@ -22,19 +22,19 @@ const est = (over = {}) => {
 
 test('packages route by scored music minutes, not film runtime', () => {
   assert.equal(estimatePackageFor(1)?.id, 'scene');
-  assert.equal(estimatePackageFor(3)?.id, 'scene');
-  assert.equal(estimatePackageFor(4)?.id, 'focused');
-  assert.equal(estimatePackageFor(6)?.id, 'focused');
-  assert.equal(estimatePackageFor(7)?.id, 'extended');
+  assert.equal(estimatePackageFor(2)?.id, 'scene');
+  assert.equal(estimatePackageFor(3)?.id, 'focused');
+  assert.equal(estimatePackageFor(5)?.id, 'focused');
+  assert.equal(estimatePackageFor(6)?.id, 'extended');
   assert.equal(estimatePackageFor(12)?.id, 'extended');
   assert.equal(estimatePackageFor(13), null, 'above 12 scored minutes is custom');
 });
 
 test('standard scope matches the published Scene band', () => {
-  const q3 = est({ scoredMinutes: 3 });
+  const q3 = est({ scoredMinutes: 2 });
   assert.equal(q3.packageId, 'scene');
-  assert.equal(q3.low, 300);
-  assert.equal(q3.high, 350);
+  assert.equal(q3.low, 350);
+  assert.equal(q3.high, 500);
   const q1 = est({ scoredMinutes: 1 });
   assert.ok(q1.low >= MINIMUM_FEE, 'never below the minimum fee');
   assert.ok(q1.low <= q1.high);
@@ -64,7 +64,7 @@ test('surcharges only raise the quote: deadline, complexity, revisions, licence'
   assert.ok(est({ scoredMinutes: 5, deadline: 'rush' }).low > base.low, 'rush deadline');
   assert.ok(est({ scoredMinutes: 5, complexity: 'bespoke' }).low > base.low, 'bespoke complexity');
   assert.ok(est({ scoredMinutes: 5, extraRevisionRounds: 2 }).low > base.low, 'extra revisions');
-  assert.ok(est({ scoredMinutes: 5, licence: 'exclusive' }).low > base.low, 'exclusive licence');
+  assert.equal(quote({ ...std, scoredMinutes: 5, licence: 'exclusive' }).kind, 'custom', 'expanded rights require a separate quote');
 });
 
 test('a licence buyout or album is never added to an estimate', () => {
@@ -90,8 +90,32 @@ test('every published package has a band and a minute range', () => {
 
 test('budget options carry the published package names', () => {
   const opts = budgetOptions().join(' | ');
-  assert.match(opts, /Individual Scene Scoring: \$200–\$350/);
-  assert.match(opts, /Focused Short-Film Scoring: from \$500/);
-  assert.match(opts, /Extended Short-Film Scoring: from \$900/);
-  assert.doesNotMatch(opts, /\$250|few hundred|sliding/i);
+  assert.match(opts, /Individual Scene Scoring: from \$250/);
+  assert.match(opts, /Focused Short-Film Scoring: from \$650/);
+  assert.match(opts, /Extended Short-Film Scoring: from \$1,500/);
+  assert.doesNotMatch(opts, /\$75\.99|few hundred|sliding/i);
+});
+
+test('approved starting prices and package-specific revision allowances', () => {
+  assert.equal(PACKAGES[0].low.start, 250);
+  assert.equal(PACKAGES[1].low.start, 650);
+  assert.equal(PACKAGES[2].low.start, 1500);
+  const one = est({ scoredMinutes: 2 });
+  assert.match(one.factors.find((f) => f.label === 'Revisions').value, /1 consolidated round/);
+  const extended = est({ scoredMinutes: 6 });
+  assert.match(extended.factors.find((f) => f.label === 'Revisions').value, /2 consolidated rounds/);
+});
+
+test('additional cue counts route to an individually scoped quotation', () => {
+  const q = quote({ ...std, scoredMinutes: 2, cueCount: 6 });
+  assert.equal(q.kind, 'custom');
+  assert.equal(q.reason, 'cue-scope');
+  assert.match(q.message, /cue count.*quoted individually/i);
+});
+
+test('additional cue counts route to an individually scoped quotation', () => {
+  const q = quote({ ...std, scoredMinutes: 2, cueCount: 6 });
+  assert.equal(q.kind, 'custom');
+  assert.equal(q.reason, 'cue-scope');
+  assert.match(q.message, /cue count.*quoted individually/i);
 });

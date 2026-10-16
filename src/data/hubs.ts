@@ -167,7 +167,7 @@ export const hubs: Hub[] = [
     path: "/services",
     name: "Rate card",
     title: "Horror Score Packages and Quotes | Zazie Productions",
-    description: "Original music for psychological horror and experimental cinema, priced by scored minutes: Scene from $200, Focused from $500, Extended from $900. Indicative and nonbinding; feature work is quoted individually.",
+    description: "Original music for psychological horror and experimental cinema, priced by scored minutes: Scene from $250, Focused from $650, Extended from $1,500. Indicative and nonbinding; feature work is quoted individually.",
     lastmod: "2026-10-13",
     images: [
       { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Productions horror film scoring suite Asheville, NC", title: "Horror Film Scoring Suite - Rates" },
