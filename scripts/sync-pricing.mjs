@@ -11,7 +11,7 @@
  *                               marker blocks; the content between the markers
  *                               is replaced with generated markup
  *
- * Block names: packages, inclusions, estimator, inquiry, notice, factors,
+ * Block names: packages, inclusions, terms, estimator, inquiry, notice, factors,
  *               licences, offers.
  *
  * The script edits committed HTML in place, so every page carries the same
@@ -32,7 +32,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const check = process.argv.includes('--check');
 
 const markup = await import('../build/lib/pricing-markup.js');
-const { expandTokens, packagesHtml, inclusionsHtml, estimatorHtml, inquiryFormHtml, noticeHtml, offersGraph, tokenValue, factorsHtml, licencesHtml, SITE_ORIGIN } = markup;
+const { packagesHtml, inclusionsHtml, termsHtml, estimatorHtml, inquiryFormHtml, noticeHtml, offersGraph, tokenValue, factorsHtml, licencesHtml, SITE_ORIGIN } = markup;
 const { ORG_ID } = await import('../build/data/site.js');
 
 const SERVICE_ID = `${SITE_ORIGIN}/services#service`;
@@ -42,6 +42,7 @@ const PROVIDER_ID = ORG_ID;
 const BLOCKS = {
   packages: () => packagesHtml(),
   inclusions: () => inclusionsHtml(),
+  terms: () => termsHtml(),
   estimator: () => estimatorHtml(),
   inquiry: () => inquiryFormHtml(),
   notice: () => noticeHtml(),

@@ -269,10 +269,67 @@ Not changed by this work, flagged because the documents now give them weight:
 
 ---
 
+## 14. Commercial pricing overhaul (2026-10-16): conflicts with the legal documents
+
+The public pricing pages were rewritten to the owner-approved commercial model
+(see `COMMERCIAL-OVERHAUL.md`). The legal documents were **not** changed, because
+the brief requires that no new legal terms are published silently and no existing
+contract is altered. The public position is now:
+
+* the standard project licence is included in every published price;
+* expanded distribution, exclusivity, copyright assignment (buyout) and soundtrack
+  release are quoted separately in a written agreement, with no amount published;
+* 50% deposit before work, and the balance before release of the final approved
+  deliverables, subject to a written agreement;
+* standard deliverables are stereo WAV with a cue list, not stems, alternate
+  mixes or surround;
+* one consolidated revision round (Scene and Focused) or two (Extended), with
+  additional rounds at the greater of $75 or 10% of the fee.
+
+The following are the exact conflicts. Each needs an owner decision before the
+pricing branch is merged, and each either changes the document or confirms that
+the public position overrides it for new commissions.
+
+1. **Default rights (item 3 above).** `/licensing` (summary list, section 2, and
+   the options table row "Buyout (default)"), `/terms` clause 2 ("default grant is
+   buyout on full payment") and `/faq` answers conflict with the standard-licence
+   default. Decide: buyout as the default, or the standard project licence as the
+   default with buyout quoted separately. The public pages already say the latter.
+2. **Payment timing.** `/terms` clause 6 and item 4 above say the balance is due on
+   delivery of the final stems, invoices due in 14 days. The public copy says the
+   balance is due before release of the final approved deliverables.
+3. **Revision allowance.** `/terms` clause 7 says two rounds per cue plus one
+   consolidation pass. The public copy says one round (Scene and Focused) or two
+   (Extended) per commission, with additional rounds charged. Decide the wording
+   and whether "per cue" stays.
+4. **Standard delivery.** `/terms` clause 8 and item 5 above list stems by family,
+   alternate mixes and an MP3 reference set as standard. The public copy says
+   stems, alternate mixes and surround are not standard.
+5. **Extra-round and cue charges.** The legal documents do not state fixed charges,
+   but the old estimator had a 6% extra-round rate and a $35 extra-cue fee. Neither
+   appears in the public copy now. Confirm that no document refers to them.
+6. **Feature naming and scope.** The brief calls the feature tier "Feature Film &
+   Experimental Cinema" and the site now calls it "Feature & Experimental Film
+   Scoring". The legal documents do not name the tier. Confirm the public name.
+7. **Sound design.** `/sound-design` and its hub description say sound design is
+   "delivered as mix-ready stems". The brief keeps sound design outside the score
+   packages. Confirm whether the SFX service should keep "stems" wording.
+8. **"Full rights" wording.** Item 12 above describes a "full rights to the score"
+   claim. A search of the site source (HTML and TypeScript) finds no such phrase,
+   on the base commit or on this branch, so there is nothing to change on the
+   public pages. Item 12 should be updated to match, or the phrase restored only
+   if the owner wants it, which would conflict with the approved position.
+9. **Contact number.** The public pages show (864) 430-0606. This branch did not
+   change it. Confirm the number is current, including the area code.
+
+Nothing here has been changed in `/terms` or `/licensing` except the owner-review
+HTML comments added in this branch, which are not visible on the page.
+
 ## Suggested order of work
 
 1. Confirm the entity and its state (items 1, 2). Everything keys off them.
-2. Decide the default rights model (item 3) and the money defaults (item 4).
+2. Decide the default rights model (item 3), the money defaults (item 4) and the
+   pricing conflicts (item 14).
 3. Have a lawyer read `/terms` clauses 10, 19 and 23 (items 3, 11).
 4. Check the plug-in vault's redistribution position (item 10) before the next
    sale.

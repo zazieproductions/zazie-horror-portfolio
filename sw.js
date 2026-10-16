@@ -66,7 +66,11 @@
 // refetched once. Item routes are deliberately NOT in PRECACHE_ASSETS: 65 extra
 // documents at install time would cost a visitor far more than they gain, and
 // the static-asset path already caches the item bundle on first use.
-const CACHE_NAME = 'zazie-v31';
+// v32: commercial pricing overhaul. Rates, packages, revision policy and licence
+// wording changed on every hub and the homepage estimator, and the homepage bundle
+// moved to a new hash, so the cache name moves and returning visitors are not served
+// the previous prices.
+const CACHE_NAME = 'zazie-v32';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -75,13 +79,13 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-f509fde0.css',
-  '/index-afdbc613.js',
+  '/index-d067ab30.js',
   '/store-eed3eeee.css',
   '/store-3fc01be0.js',
-  '/legal-b5d07e1a.css',
-  '/legal-fe809822.js',
-  '/estimator-ec3a9981.css',
-  '/estimator-9f40aae3.js',
+  '/legal-6fa0add2.css',
+  '/legal-f7543dd9.js',
+  '/estimator-9b29c078.css',
+  '/estimator-387f2539.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',
   '/images/hero-portrait.avif',

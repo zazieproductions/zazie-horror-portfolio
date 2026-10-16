@@ -155,7 +155,7 @@ export const hubs: Hub[] = [
   {
     path: "/process",
     name: "Scoring process",
-    title: "Horror Film Scoring Process: Spotting to Stems | Zazie Productions",
+    title: "Horror Film Scoring Process: Spotting to Delivery | Zazie Productions",
     description: "Four-stage horror film scoring process by Zazie Kanwar-Torge: spotting session, palette and motif sketches, scoring to picture with revisions, and final WAV files.",
     lastmod: "2026-10-13",
     images: [
@@ -167,7 +167,7 @@ export const hubs: Hub[] = [
     path: "/services",
     name: "Rate card",
     title: "Horror Score Packages and Quotes | Zazie Productions",
-    description: "Original music for psychological horror and experimental cinema, priced by scored minutes: Scene from $200, Focused from $500, Extended from $900. Indicative and nonbinding; feature work is quoted individually.",
+    description: "Original music for psychological horror and experimental cinema, priced by scored minutes of music, not film length: three commissioning packages from a published starting fee. Indicative and nonbinding; feature work is quoted individually.",
     lastmod: "2026-10-13",
     images: [
       { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Productions horror film scoring suite Asheville, NC", title: "Horror Film Scoring Suite - Rates" },

@@ -11,35 +11,39 @@
  */
 
 import {
+  COMPLEXITY,
   CURRENCY,
   DEADLINES,
   DEFAULT_SCOPE,
-  EXTRA_CUE_FEE,
-  EXTRA_REVISION_RATE,
+  FEATURE_MINIMUM,
   FORMATS,
   LICENCES,
   LONG_FORM_THRESHOLD_MINUTES,
   MAX_CUES,
   MAX_EXTRA_REVISION_ROUNDS,
   MAX_MINUTES_INPUT,
+  MICRO_BUDGET_STATEMENT,
   MINIMUM_FEE,
   PACKAGES,
+  PAYMENT_TERMS,
+  PRELIMINARY_NOTICE,
   PRICING_NOTICE,
   PRICING_REVIEWED,
   PRICING_STATUS,
+  REVISION_FEE_MINIMUM,
+  REVISION_FEE_RATE,
+  REVISION_RULES,
   RUNTIME_NOTICE,
+  SEPARATE_QUOTES,
   SPECIALIST_DELIVERABLES,
   STANDARD_INCLUSIONS,
-  COMPLEXITY,
   budgetOptions,
   packageById,
   priceLabel,
-  publishedSpan,
   quote,
   usd,
   type ComplexityId,
   type DeadlineId,
-  type EstimateQuote,
   type LicenceId,
   type PackageId,
   type PricingPackage,
@@ -59,9 +63,12 @@ export function esc(value: string): string {
     .replace(/'/g, '&#39;');
 }
 
-/* -------------------------------------------------------------- text tokens */
-
 const DASH = '\u2013';
+const plural = (n: number, one: string, many: string) => (n === 1 ? one : many);
+const ROUNDS_WORD: Record<number, string> = { 0: 'no', 1: 'one', 2: 'two', 3: 'three', 4: 'four' };
+const roundsWord = (n: number) => `${ROUNDS_WORD[n] ?? String(n)} consolidated ${plural(n, 'round', 'rounds')}`;
+
+/* -------------------------------------------------------------- text tokens */
 
 /**
  * Static pages write prices as {{zp:scene.label}}, {{zp:focused.from}} and so
@@ -70,24 +77,36 @@ const DASH = '\u2013';
  */
 export function tokenValue(key: string): string | null {
   const [head, field] = key.split('.');
-  if (head === 'minimum' && !field) return usd(MINIMUM_FEE);
-  if (head === 'long-form' && !field) return String(LONG_FORM_THRESHOLD_MINUTES);
-  if (head === 'extra-cue' && !field) return usd(EXTRA_CUE_FEE);
-  if (head === 'notice' && !field) return PRICING_NOTICE;
-  if (head === 'runtime-notice' && !field) return RUNTIME_NOTICE;
-  if (head === 'reviewed' && !field) return PRICING_REVIEWED;
-  if (head === 'status' && !field) return PRICING_STATUS;
+  if (!field) {
+    switch (head) {
+      case 'minimum': return usd(MINIMUM_FEE);
+      case 'feature-minimum': return usd(FEATURE_MINIMUM);
+      case 'long-form': return String(LONG_FORM_THRESHOLD_MINUTES);
+      case 'revision-fee': return usd(REVISION_FEE_MINIMUM);
+      case 'revision-rate': return `${Math.round(REVISION_FEE_RATE * 100)}%`;
+      case 'max-cues': return String(MAX_CUES);
+      case 'notice': return PRICING_NOTICE;
+      case 'preliminary': return PRELIMINARY_NOTICE;
+      case 'runtime-notice': return RUNTIME_NOTICE;
+      case 'micro-budget': return MICRO_BUDGET_STATEMENT;
+      case 'reviewed': return PRICING_REVIEWED;
+      case 'status': return PRICING_STATUS;
+      default: break;
+    }
+  }
   const pkg = PACKAGES.find((p) => p.id === head);
   if (!pkg) return null;
-  const span = publishedSpan(pkg);
   switch (field) {
     case 'label': return priceLabel(pkg);
     case 'name': return pkg.name;
     case 'minutes': return pkg.minutesLabel;
+    case 'guarantee': return pkg.guarantee;
     case 'summary': return pkg.summary;
     case 'bestFor': return pkg.bestFor;
-    case 'from': return span ? usd(span.low) : 'a custom quotation';
-    case 'high': return span ? usd(span.high) : 'a custom quotation';
+    case 'from': return pkg.startingFee !== null ? usd(pkg.startingFee) : 'a custom quotation';
+    case 'minimum': return pkg.indicativeMinimum !== null ? usd(pkg.indicativeMinimum) : 'a custom quotation';
+    case 'cues': return pkg.cueAllowance !== null ? String(pkg.cueAllowance) : 'by agreement';
+    case 'rounds': return pkg.revisionRoundsIncluded !== null ? roundsWord(pkg.revisionRoundsIncluded) : 'agreed in writing';
     default: return null;
   }
 }
@@ -103,18 +122,32 @@ export function expandTokens(source: string, transform: (text: string) => string
 /* ---------------------------------------------------------------- packages */
 
 function packageCard(pkg: PricingPackage, index: number): string {
-  const label = priceLabel(pkg);
-  const contact = `/contact?package=${pkg.id}`;
-  const cta = pkg.display === 'custom' ? 'Discuss a feature or experimental score' : `Request a quote for ${esc(pkg.name)}`;
+  const isCustom = pkg.display === 'custom';
+  const cta = isCustom ? 'Discuss a feature or experimental score' : `Request a quote for ${esc(pkg.name)}`;
+  const terms = isCustom
+    ? [
+        `Indicative minimum ${usd(FEATURE_MINIMUM)} for substantial scoring projects`,
+        'Quoted after review of a cut and the agreed schedule',
+        'Single scenes or cues are commissioned through Individual Scene Scoring',
+      ]
+    : [
+        `Guaranteed maximum: ${pkg.guarantee.toLowerCase()}`,
+        `Cues included: up to ${pkg.cueAllowance}`,
+        `Revisions included: ${roundsWord(pkg.revisionRoundsIncluded ?? 0)}`,
+      ];
+  const price = isCustom
+    ? `<p class="zp-pkg-price">Custom quotation</p><p class="zp-pkg-min">Indicative minimum ${esc(usd(FEATURE_MINIMUM))}</p>`
+    : `<p class="zp-pkg-price">${esc(priceLabel(pkg))}</p><p class="zp-pkg-min">Starting fee, for the lowest scope in this package</p>`;
   return [
     `<article class="zp-pkg" id="package-${pkg.id}" data-package="${pkg.id}">`,
     `<p class="zp-pkg-no">${String(index + 1).padStart(2, '0')}</p>`,
     `<h3 class="zp-pkg-name">${esc(pkg.name)}</h3>`,
-    `<p class="zp-pkg-price">${esc(label)}</p>`,
-    `<p class="zp-pkg-minutes">${esc(pkg.minutesLabel)} of original music</p>`,
+    price,
+    `<p class="zp-pkg-minutes">${esc(pkg.minutesLabel)}</p>`,
+    `<ul class="zp-pkg-terms">${terms.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>`,
     `<p class="zp-pkg-copy">${esc(pkg.summary)}</p>`,
     `<p class="zp-pkg-best"><span>Best for</span> ${esc(pkg.bestFor)}</p>`,
-    `<a class="zp-cta zp-cta-ghost" href="${contact}">${cta}</a>`,
+    `<a class="zp-cta zp-cta-ghost" href="/contact?package=${pkg.id}">${cta}</a>`,
     `</article>`,
   ].join('');
 }
@@ -125,6 +158,7 @@ export function packagesHtml(): string {
     `<div class="zp-packages">`,
     PACKAGES.map(packageCard).join(''),
     `</div>`,
+    `<p class="zp-pkg-foot">The starting fee is the lowest price in each package. Within a package, each scored minute above the minimum adds to it, up to the guaranteed maximum. Complexity and schedule adjust the figure. A written quote confirms it.</p>`,
   ].join('');
 }
 
@@ -143,17 +177,30 @@ export function inclusionsHtml(): string {
   ].join('');
 }
 
+/** Revisions, separate quotes and payment, generated from the same rules as the estimator. */
+export function termsHtml(): string {
+  const list = (items: readonly string[]) => `<ul class="zp-terms-list">${items.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>`;
+  return [
+    `<div class="zp-inclusions">`,
+    `<div class="zp-list-block"><h3>Revisions</h3>${list(REVISION_RULES)}</div>`,
+    `<div class="zp-list-block"><h3>Quoted separately</h3>${list(SEPARATE_QUOTES)}</div>`,
+    `<div class="zp-list-block"><h3>Payment</h3>${list(PAYMENT_TERMS)}</div>`,
+    `</div>`,
+  ].join('');
+}
+
 /** What moves the quote, generated from the same constants the estimator uses. */
 export function factorsHtml(): string {
-  const pct = (m: number) => (m === 1 ? 'no change' : `+${Math.round((m - 1) * 100)}%`);
+  const pct = (m: number) => (m === 1 ? 'no change' : `adds ${Math.round((m - 1) * 100)}%`);
+  const packageLines = PACKAGES.filter((p) => p.display === 'from').map((p) => `${p.name} ${priceLabel(p).replace(/^From /, 'from ')} for up to ${p.guarantee.replace(/^Up to /, '')}`);
   const items: [string, string][] = [
-    ['Scored music', `Priced by minutes of finished music. Packages cover up to ${LONG_FORM_THRESHOLD_MINUTES} scored minutes; longer work is quoted individually.`],
-    ['Cues', `Two cues per scored minute are included. Each additional cue is ${usd(EXTRA_CUE_FEE)} before the adjustments below.`],
+    ['Scored music', `Priced by minutes of finished music, not film runtime. ${packageLines.join('; ')}. Scores over ${LONG_FORM_THRESHOLD_MINUTES} scored minutes are quoted individually.`],
+    ['Cues', PACKAGES.filter((p) => p.cueAllowance !== null).map((p) => `${p.name}: up to ${p.cueAllowance}`).join('; ') + '. Cues above the allowance are composed and quoted individually.'],
     ['Musical complexity', COMPLEXITY.map((c) => `${c.label} ${pct(c.multiplier)}`).join('; ') + '.'],
-    ['Schedule', DEADLINES.map((d) => `${d.label} ${pct(d.multiplier)}`).join('; ') + '.'],
-    ['Revisions', `Two rounds per cue are included. Each additional round adds ${Math.round(EXTRA_REVISION_RATE * 100)}%, up to ${MAX_EXTRA_REVISION_ROUNDS} rounds.`],
-    ['Licence', LICENCES.filter((l) => !l.quoted).map((l) => `${l.label} ${pct(l.multiplier)}`).join('; ') + '. A full buyout or soundtrack album is quoted individually.'],
-    ['Minimum fee', `${usd(MINIMUM_FEE)}.`],
+    ['Schedule', DEADLINES.map((d) => `${d.label}: ${d.multiplier === 1 ? 'no surcharge' : pct(d.multiplier)}`).join('; ') + '.'],
+    ['Revisions', `${PACKAGES.filter((p) => p.revisionRoundsIncluded !== null).map((p) => `${p.name}: ${roundsWord(p.revisionRoundsIncluded ?? 0)}`).join('; ')}. An additional round costs the greater of ${usd(REVISION_FEE_MINIMUM)} or ${Math.round(REVISION_FEE_RATE * 100)}% of the commission fee.`],
+    ['Rights', 'The standard project licence is included. Exclusivity, expanded uses, copyright assignment and soundtrack release are quoted separately in writing.'],
+    ['Minimum fee', `${usd(MINIMUM_FEE)} (Individual Scene starting fee). Feature and experimental scoring: indicative minimum ${usd(FEATURE_MINIMUM)}.`],
   ];
   return [
     `<dl class="zp-factors-list">`,
@@ -162,13 +209,13 @@ export function factorsHtml(): string {
   ].join('');
 }
 
-/** Licence options with their price effect. Buyouts and albums are never priced here. */
+/** Licence options with their effect on a published price. Non-standard rights are never priced here. */
 export function licencesHtml(): string {
   return [
     `<ul class="zp-licences">`,
     LICENCES.map((l) => {
-      const effect = l.quoted ? 'Quoted individually' : (l.multiplier === 1 ? 'Base licence' : `Adds ${Math.round((l.multiplier - 1) * 100)}% to the composition fee`);
-      return `<li><span class="zp-licence-name">${esc(l.label)}</span> <span class="zp-licence-effect">${esc(effect)}</span><span class="zp-licence-note">${esc(l.description)}</span></li>`;
+      const effect = l.included ? 'Included in every published price' : 'Quoted separately in writing';
+      return `<li${l.included ? '' : ' class="zp-licence-quoted"'}><span class="zp-licence-name">${esc(l.label)}</span> <span class="zp-licence-effect">${esc(effect)}</span><span class="zp-licence-note">${esc(l.description)}</span></li>`;
     }).join(''),
     `</ul>`,
   ].join('');
@@ -194,8 +241,8 @@ function deadlineOptions(selected: DeadlineId): string {
 
 function licenceOptions(selected: LicenceId): string {
   return LICENCES.map((l) => [
-    `<label class="zp-choice${l.quoted ? ' zp-choice-quoted' : ''}"><input type="radio" name="lic" value="${l.id}"${l.id === selected ? ' checked' : ''}>`,
-    `<span class="zp-choice-body"><span class="zp-choice-title">${esc(l.label)}</span>`,
+    `<label class="zp-choice${l.included ? '' : ' zp-choice-quoted'}"><input type="radio" name="lic" value="${l.id}"${l.id === selected ? ' checked' : ''}>`,
+    `<span class="zp-choice-body"><span class="zp-choice-title">${esc(l.label)}${l.included ? '' : ' <span class="zp-tag">Quoted separately</span>'}</span>`,
     `<span class="zp-choice-note">${esc(l.description)}</span></span></label>`,
   ].join('')).join('');
 }
@@ -203,7 +250,9 @@ function licenceOptions(selected: LicenceId): string {
 function revisionOptions(selected: number): string {
   const options: string[] = [];
   for (let n = 0; n <= MAX_EXTRA_REVISION_ROUNDS; n += 1) {
-    const label = n === 0 ? 'None: two rounds per cue, included' : `${n} additional ${n === 1 ? 'round' : 'rounds'}`;
+    const label = n === 0
+      ? 'None: the rounds included in my package'
+      : `${n} additional ${n === 1 ? 'round' : 'rounds'}`;
     options.push(`<option value="${n}"${n === selected ? ' selected' : ''}>${esc(label)}</option>`);
   }
   return options.join('');
@@ -217,18 +266,19 @@ export function estimatorFormHtml(scope: QuoteInput, cueText: string): string {
     `<div class="zp-grid2">`,
     `<label class="zp-field"><span class="zp-label">Scored music minutes</span>`,
     `<input class="zp-input" type="number" name="min" min="1" max="${MAX_MINUTES_INPUT}" step="1" inputmode="numeric" value="${Math.round(scope.scoredMinutes)}" aria-describedby="zp-min-help">`,
-    `<small id="zp-min-help" class="zp-help">Minutes of finished music, not the length of the film. Over ${LONG_FORM_THRESHOLD_MINUTES} minutes is quoted individually.</small></label>`,
+    `<small id="zp-min-help" class="zp-help">Minutes of finished music, not the length of the film. Over ${LONG_FORM_THRESHOLD_MINUTES} minutes is quoted individually. Music is rounded up to whole minutes.</small></label>`,
     `<label class="zp-field"><span class="zp-label">Number of cues <span class="zp-opt">(optional)</span></span>`,
     `<input class="zp-input" type="number" name="cues" min="0" max="${MAX_CUES}" step="1" inputmode="numeric" value="${esc(cueText)}" aria-describedby="zp-cue-help">`,
-    `<small id="zp-cue-help" class="zp-help">Leave blank if unsure. Two cues per scored minute are included.</small></label>`,
+    `<small id="zp-cue-help" class="zp-help">Leave blank if unsure. Included cues: up to ${PACKAGES.filter((p) => p.cueAllowance !== null).map((p) => `${p.cueAllowance} in ${p.name.replace(/ (Scoring|Short-Film Scoring)$/, '')}`).join(', ')}.</small></label>`,
     `</div></fieldset>`,
     `<fieldset class="zp-group"><legend>Musical complexity</legend><div class="zp-choices">${complexityOptions(scope.complexity)}</div></fieldset>`,
     `<fieldset class="zp-group"><legend>Schedule</legend><div class="zp-choices">${deadlineOptions(scope.deadline)}</div></fieldset>`,
     `<fieldset class="zp-group"><legend>Revisions</legend>`,
-    `<label class="zp-field"><span class="zp-label">Beyond the two included rounds per cue</span>`,
-    `<select class="zp-input" name="rev">${revisionOptions(scope.extraRevisionRounds)}</select></label></fieldset>`,
-    `<fieldset class="zp-group"><legend>Licence</legend><div class="zp-choices">${licenceOptions(scope.licence)}</div>`,
-    `<p class="zp-help">Composition is priced separately from the rights it is licensed under. A full buyout and a soundtrack album are quoted individually.</p></fieldset>`,
+    `<label class="zp-field"><span class="zp-label">Additional revision rounds</span>`,
+    `<select class="zp-input" name="rev" aria-describedby="zp-rev-help">${revisionOptions(scope.extraRevisionRounds)}</select>`,
+    `<small id="zp-rev-help" class="zp-help">Each package includes one consolidated round (Individual Scene and Focused Short-Film) or two (Extended Short-Film). An additional round costs the greater of ${usd(REVISION_FEE_MINIMUM)} or ${Math.round(REVISION_FEE_RATE * 100)}% of the commission fee.</small></label></fieldset>`,
+    `<fieldset class="zp-group"><legend>Rights</legend><div class="zp-choices">${licenceOptions(scope.licence)}</div>`,
+    `<p class="zp-help">The standard project licence is included in every published price. Other rights are quoted separately in a written agreement, and no amount for them appears in an estimate.</p></fieldset>`,
     `</form>`,
   ].join('');
 }
@@ -245,7 +295,7 @@ export function contactHref(scope: QuoteInput, q: Quote | null): string {
   if (q && q.kind === 'estimate') {
     params.set('package', q.packageId);
     params.set('range', `${usd(q.low)}${DASH}${usd(q.high)}`);
-  } else if (q && q.kind === 'custom' && q.reason === 'long-form') {
+  } else if (q && q.kind === 'custom') {
     params.set('package', 'feature');
   }
   return `/contact?${params.toString()}`;
@@ -257,27 +307,31 @@ export function estimateSummary(scope: QuoteInput, q: Quote): string {
     return `Estimator: custom quotation requested. ${q.message} Scored music ${Math.round(scope.scoredMinutes)} min.`;
   }
   const lines = [
-    `Estimator selections (indicative, nonbinding):`,
+    `Estimator selections (${PRELIMINARY_NOTICE}):`,
     ...q.factors.map((f) => `- ${f.label}: ${f.value}`),
-    `- Indicative range: ${usd(q.low)}${DASH}${usd(q.high)}`,
+    `- Preliminary range: ${usd(q.low)}${DASH}${usd(q.high)}`,
+    ...q.quotedSeparately.map((item) => `- Quoted separately: ${item}`),
   ];
   return lines.join('\n');
 }
 
 /** The live result panel. Identical markup is produced by the browser on each change. */
 export function resultHtml(scope: QuoteInput, q: Quote): string {
-  const cta = `<a class="zp-cta" href="${esc(contactHref(scope, q))}">Request a scoring quote</a>`;
+  const cta = `<a class="zp-cta" href="${esc(contactHref(scope, q))}">Request a Scoring Quote</a>`;
   if (q.kind === 'custom') {
-    const pkg = q.reason === 'long-form' ? packageById('feature') : null;
     return [
       `<p class="zp-eyebrow">Custom quotation · not an estimate</p>`,
-      `<p class="zp-result-pkg">${esc(pkg ? pkg.name : 'Custom scope')}</p>`,
+      `<p class="zp-result-pkg">${esc(packageById('feature').name)}</p>`,
       `<p class="zp-result-range zp-result-custom">Custom quotation</p>`,
+      `<p class="zp-result-msg">Indicative minimum ${esc(usd(q.indicativeMinimum))} for substantial scoring projects.</p>`,
       `<p class="zp-result-msg">${esc(q.message)}</p>`,
       cta,
-      `<p class="zp-fine">${esc(PRICING_NOTICE)}</p>`,
+      `<p class="zp-fine">${esc(PRELIMINARY_NOTICE)}</p>`,
     ].join('');
   }
+  const separate = q.quotedSeparately.length
+    ? `<div class="zp-separate"><p class="zp-label">Not included in this range</p><ul>${q.quotedSeparately.map((s) => `<li>${esc(s)}</li>`).join('')}</ul></div>`
+    : '';
   return [
     `<p class="zp-eyebrow">Indicative range · not a quote</p>`,
     `<p class="zp-result-pkg">${esc(q.packageName)}</p>`,
@@ -285,7 +339,8 @@ export function resultHtml(scope: QuoteInput, q: Quote): string {
     `<ul class="zp-factors">`,
     q.factors.map((f) => `<li><span>${esc(f.label)}</span>${esc(f.value)}</li>`).join(''),
     `</ul>`,
-    `<p class="zp-result-msg">Complex composition, unusual deadlines, extensive revisions and expanded licensing can increase a quotation.</p>`,
+    separate,
+    `<p class="zp-result-msg zp-prelim">${esc(PRELIMINARY_NOTICE)}</p>`,
     cta,
     `<p class="zp-fine">${esc(PRICING_NOTICE)}</p>`,
   ].join('');
@@ -333,12 +388,14 @@ export function inquiryFormHtml(): string {
     `<div class="zp-grid3">`,
     `<label class="zp-field"><span class="zp-label">Scored music (minutes)</span><input class="zp-input" type="number" name="min" min="1" max="${MAX_MINUTES_INPUT}" step="1" inputmode="numeric"><small class="zp-help">Music, not film runtime.</small></label>`,
     `<label class="zp-field"><span class="zp-label">Cues <span class="zp-opt">(optional)</span></span><input class="zp-input" type="number" name="cues" min="0" max="${MAX_CUES}" step="1" inputmode="numeric"></label>`,
-    `<label class="zp-field"><span class="zp-label">Delivery or picture lock</span><input class="zp-input" name="deadline" placeholder="Date, window or festival deadline"></label>`,
+    `<label class="zp-field"><span class="zp-label">Delivery date or festival deadline</span><input class="zp-input" name="deadline" placeholder="Date, window or festival deadline"></label>`,
     `</div>`,
-    `<div class="zp-grid2">`,
+    `<div class="zp-grid3">`,
+    `<label class="zp-field"><span class="zp-label">Schedule</span><select class="zp-input" name="dl">${DEADLINES.map((d) => `<option value="${d.id}">${esc(d.label)}</option>`).join('')}</select></label>`,
     `<label class="zp-field"><span class="zp-label">Musical complexity</span><select class="zp-input" name="cx">${COMPLEXITY.map((c) => `<option value="${c.id}">${esc(c.label)}</option>`).join('')}</select></label>`,
-    `<label class="zp-field"><span class="zp-label">Licence you expect</span><select class="zp-input" name="lic">${LICENCES.map((l) => `<option value="${l.id}">${esc(l.label)}</option>`).join('')}</select></label>`,
+    `<label class="zp-field"><span class="zp-label">Additional revision rounds</span><select class="zp-input" name="rev">${revisionOptions(0)}</select></label>`,
     `</div>`,
+    `<label class="zp-field"><span class="zp-label">Rights you expect</span><select class="zp-input" name="lic">${LICENCES.map((l) => `<option value="${l.id}">${esc(l.label)}${l.included ? '' : ' (quoted separately)'}</option>`).join('')}</select></label>`,
     `<label class="zp-field"><span class="zp-label">Budget <span class="zp-opt">(optional)</span></span><select class="zp-input" name="budget">${selectOptions(budgetOptions(), budgetOptions()[0])}</select></label>`,
     `<label class="zp-field"><span class="zp-label">Tone references</span><textarea class="zp-input" name="tone" rows="3" placeholder="Two or three films, scores or tracks, and the job each does for your scene."></textarea></label>`,
     `<label class="zp-field"><span class="zp-label">Rough cut or scene link <span class="zp-opt">(optional)</span></span><input class="zp-input" type="url" name="link" placeholder="A private link is preferred to attachments"></label>`,
@@ -364,32 +421,30 @@ export function budgetSelectOptions(): string {
 /* -------------------------------------------------------------- JSON-LD */
 
 /**
- * Offer nodes for the Service with the same figures the pages display.
- * Feature & experimental work is listed without a price (quoted individually).
+ * Offer nodes for the Service with the same figures the pages display. "From"
+ * packages publish a starting fee as minPrice. Feature & experimental work
+ * publishes its indicative minimum, which the page also shows; the price is
+ * custom, so no maximum is written.
  */
 export function offersGraph(serviceId: string, provider: string): object {
   const offers = PACKAGES.map((pkg) => {
-    const span = publishedSpan(pkg);
     const base: Record<string, unknown> = {
       '@type': 'Offer',
       '@id': `${SITE_ORIGIN}/services#offer-${pkg.id}`,
       name: pkg.name,
-      description: `${pkg.summary} Scope: ${pkg.minutesLabel} of original music, composed to picture. Price is indicative and nonbinding; a written quote follows review.`,
+      description: `${pkg.summary} Scope: ${pkg.minutesLabel}; ${pkg.guarantee.toLowerCase()}. Indicative and nonbinding; a written quote follows review.`,
       itemOffered: { '@id': serviceId },
       seller: { '@id': provider },
       availability: 'https://schema.org/LimitedAvailability',
       url: `${SITE_ORIGIN}/services#package-${pkg.id}`,
     };
-    if (span) {
-      // Range packages publish a floor and a ceiling; "from" packages publish
-      // only the floor, so no ceiling is written that the page does not show.
-      const spec: Record<string, unknown> = {
+    const floor = pkg.startingFee ?? pkg.indicativeMinimum;
+    if (floor !== null) {
+      base.priceSpecification = {
         '@type': 'PriceSpecification',
         priceCurrency: CURRENCY,
-        minPrice: span.low,
+        minPrice: floor,
       };
-      if (pkg.display === 'range') spec.maxPrice = span.high;
-      base.priceSpecification = spec;
     }
     return base;
   });
@@ -404,4 +459,4 @@ export function noticeHtml(): string {
 }
 
 export { PACKAGES, quote, DEFAULT_SCOPE, budgetOptions, FORMATS, MINIMUM_FEE, PRICING_STATUS };
-export type { EstimateQuote, PackageId, QuoteInput };
+export type { PackageId, QuoteInput, Quote };
