@@ -143,7 +143,7 @@ function prefillInquiry(form: HTMLFormElement): void {
       const q = quote(scope);
       intro.hidden = false;
       intro.textContent = q.kind === 'estimate'
-        ? `Your estimator selections are included in the notes: indicative ${q.packageName} range ${Math.round(q.low)}${DASH}${Math.round(q.high)} dollars. It is nonbinding.`
+        ? `Your estimator selections are included in the notes: preliminary ${q.packageName} estimate ${Math.round(q.low)}${DASH}${Math.round(q.high)} dollars. Final quotation subject to creative scope and written agreement.`
         : 'Your estimator selections are included in the notes. This scope needs a quotation, so it is priced after review.';
     }
   }
@@ -182,7 +182,7 @@ function inquiryBody(form: HTMLFormElement): string {
     get('notes') || '(none)',
     '',
     'Scope: an original score composed to picture. Not sound design or foley unless I have said so above.',
-    'Please reply with a written, nonbinding quote. Unreleased material is confidential; tell me if you need an NDA first.',
+    'Please reply with a written quote. I understand estimates are preliminary and the final quotation is subject to creative scope and written agreement. Unreleased material is confidential; tell me if you need an NDA first.',
   ].join('\n');
 }
 
