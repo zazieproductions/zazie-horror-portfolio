@@ -36,6 +36,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const here = path.join(root, 'home-src');
 const pricing = await import('../build/lib/pricing-markup.js');
 const { budgetOptions, budgetSelectOptions, estimatorHtml, packagesHtml, inclusionsHtml } = pricing;
+const { MICROBUDGET_STATEMENT } = await import('../build/data/pricing.js');
 
 const BOTH = 'both';
 const BUNDLE = 'bundle';
@@ -56,7 +57,8 @@ const PAIRS = [
   ['04 · Scope and budget', '04 · Scoring services', BOTH],
   ['Build a scope and estimate', 'Choose a package, then estimate', BOTH],
   ['Choose a project type, scored runtime, complexity, and delivery needs.', 'Packages are priced by scored music minutes, not film length.', BOTH],
-  ["Estimates scale with your project's funding.", 'Estimates are indicative and nonbinding.', BOTH],
+  ["Estimates scale with your project's funding.", 'Preliminary estimate — final quotation subject to creative scope and written agreement.', BUNDLE],
+  ['Estimates are indicative and nonbinding.', 'Preliminary estimate — final quotation subject to creative scope and written agreement.', HTML],
   // Contact
   ['Share your format, runtime, timeline, and budget.', 'Share your format, scored minutes, timeline, and budget.', BOTH],
   ['I’ll reply within 48 hours.', 'A written quote follows review.', BOTH],
@@ -82,12 +84,18 @@ const ISLAND_CLOSE = '</div></div>';
  */
 function islandHtml(staticMarkers = false) {
   const block = (name, render) => (staticMarkers ? `<!--zp:${name}--><!--/zp:${name}-->` : render());
+  // The static copy carries a pricing token so sync-pricing keeps it in step;
+  // the bundle inlines the same statement from pricing.ts at build time.
+  const microbudget = staticMarkers
+    ? '<p class="zp-microbudget">{{zp:microbudget}}</p>'
+    : `<p class="zp-microbudget">${MICROBUDGET_STATEMENT}</p>`;
   return [
     ISLAND_OPEN,
     '<p class="zp-kicker">Commission packages</p>',
     '<h3 class="zp-sub" style="margin-top:0">Choose by scored music minutes</h3>',
     block('packages', packagesHtml),
     block('inclusions', inclusionsHtml),
+    microbudget,
     '<h3 class="zp-sub">Estimate your scope</h3>',
     block('estimator', estimatorHtml),
     ISLAND_CLOSE,
