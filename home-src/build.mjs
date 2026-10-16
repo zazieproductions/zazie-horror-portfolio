@@ -44,11 +44,12 @@ const HTML = 'html';
 /** [old, new, targets]. Text is matched exactly; see the header note. */
 const PAIRS = [
   // Hero
-  ['Dark, atmospheric horror scores, ', 'Original music for psychological horror ', BOTH],
-  ['written to your picture.', '& experimental cinema.', BOTH],
+  ['Dark, atmospheric horror scores, ', 'Original Music for Psychological Horror ', BOTH],
+  ['written to your picture.', '& Experimental Cinema', BOTH],
   ['Original music for psychological horror, thrillers, and dark sci-fi,', 'Dissonance. Atmosphere. Emotional intensity.', BOTH],
   ['composed for film, TV, and games.', 'Scores composed directly to picture.', BOTH],
-  ['Start an inquiry', 'Request a scoring quote', BOTH],
+  ['Start an inquiry', 'Request a Scoring Quote', BOTH],
+  ['Play the showreel', 'Hear Selected Film Work', BOTH],
   // Biography: no unverified award claim; feature work is quoted individually
   ['is an award-winning composer,', 'is a composer,', BOTH],
   ['for projects from shorts to features.', 'for short films and experimental work. Feature-length scores are quoted individually.', BOTH],

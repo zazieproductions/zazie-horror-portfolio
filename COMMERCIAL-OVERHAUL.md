@@ -1,118 +1,163 @@
-# Commercial overhaul: positioning, packages, and quote estimator
+# Commercial pricing overhaul: final configuration, changes, and open approvals
 
-Status: **draft for owner review. Not deployed.** Public prices are PROVISIONAL and
-must be approved before this branch is merged to `main`.
+Status: **draft pull request. Not merged, not deployed.** Public rates follow the
+owner-approved brief. Legal documents are not changed (section 3). Merge only
+after the owner has reviewed the items in sections 2 and 3.
 
-## 1. What changed
+## 1. Final configuration
 
-**Positioning.** Homepage, hire, services, contact, and FAQ now lead with
-"Original music for psychological horror & experimental cinema" and
-"Dissonance. Atmosphere. Emotional intensity." Specialist scope is named:
-psychological horror, folk horror, supernatural, surrealism, and experimental
-film. The site no longer presents itself as generic audio or post-production.
+Single source of truth: `src/data/pricing.ts`. Every page, the homepage estimator,
+the inquiry form and the JSON-LD are generated from it.
 
-**Packages (one source of truth: `src/data/pricing.ts`).** Packages are chosen
-by **scored music minutes**, never by film runtime.
+### Approved public rates (USD)
 
-| Package | Scored music | Price (provisional) |
+| Package | Scored music | Published price | Included cues | Included revision rounds |
+| --- | --- | --- | --- | --- |
+| Individual Scene Scoring | 1–2 min | From $250 | 3 | 1 consolidated round |
+| Focused Short-Film Scoring | 3–5 min | From $650 | 6 | 1 consolidated round |
+| Extended Short-Film Scoring | 6–12 min | From $1,500 | 10 | 2 consolidated rounds |
+| Feature & Experimental Film Scoring | more than 12 min, or multi-part work | Custom quotation, indicative minimum $2,500 | quoted | quoted |
+
+A single scene or cue from a feature is commissioned as Individual Scene Scoring.
+The $2,500 minimum applies to substantial feature engagements only.
+
+### Estimator rules (deterministic, `quote()` in `src/data/pricing.ts`)
+
+- Input is **scored music minutes**, rounded up to whole minutes. Film runtime is never an input.
+- Commission fee (low) = `max($250, startingFee + perExtraMinute × (minutes − band minimum)) × complexity × deadline`, rounded to the nearest $25.
+- Commission fee (high) = the unrounded fee × 1.15, rounded to $25.
+- Per-minute steps within a band: Scene +$250, Focused +$300, Extended +$150.
+- Complexity: standard 1.0, layered hybrid 1.2, bespoke or experimental 1.4.
+- Deadline: standard 1.0 (no surcharge); expedited 1.15 (10–20 days); rush 1.3 (under 10 days, subject to availability).
+- Cues within the allowance are included. Cues above it are listed in `quotedSeparately` and are never priced by formula.
+- Additional revision round: the greater of $75 or 10% of the commission fee, charged at each end of the range. Maximum three additional rounds.
+- Licence: the standard project licence is included. Expanded distribution, exclusivity, copyright assignment (buyout) and soundtrack or commercial release are listed as "quoted separately in a written agreement". No amount is shown or added for them.
+- Every estimate is labelled: **Preliminary estimate — final quotation subject to creative scope and written agreement.**
+
+### Example outputs (standard complexity, standard deadline, no extra rounds)
+
+| Scope | Result |
+| --- | --- |
+| Default (Focused, 3 min) | $650–$750 |
+| Scene, 2 min | $500–$575 |
+| Focused, 5 min | $1,250–$1,450 |
+| Extended, 6 min | $1,500–$1,725 |
+| Extended, 12 min | $2,400–$2,750 |
+| 13 min or more | custom, indicative minimum $2,500 |
+| Focused, 3 min, layered, rush, 1 extra round, 9 cues | $1,125–$1,300 (3 cues quoted separately) |
+
+### Terms shown publicly (not contractual)
+
+- **Standard deliverables:** original music composed to picture for the agreed cues, agreed scope and cue list, the defined revision rounds, and professional stereo WAV files (24-bit, 48 kHz unless the project specifies otherwise), with a cue list and timings.
+- **Not standard:** stems, alternate or clean mixes, surround or immersive mixes, dialogue editing, final film mix, comprehensive post-production, bespoke sound design, live players. These are quoted on request after a feasibility check.
+- **Payment (public wording):** 50% deposit before work begins; the remaining 50% before release of the final approved deliverables, as set out in the written agreement.
+- **Micro-budget statement (exact):** "Independent and micro-budget productions are welcome to inquire. Where appropriate, a reduced musical scope or licensing of existing material may offer a more accessible alternative." It appears on services, hire, contact and FAQ. It never implies that a lower budget includes unlimited music, revisions or rights.
+
+## 2. Changes made in this branch
+
+**Single source and generated output**
+- `src/data/pricing.ts`: rewritten to the approved model. Constants, packages, multipliers, licence list, revision rules, payment terms, budget options, and the exact notice strings.
+- `src/lib/pricing-markup.ts`: renders packages, inclusions, terms, factors, licences, the estimator, the result panel and the inquiry form from `pricing.ts`. The result CTA is "Request a Scoring Quote".
+- `src/estimator/main.ts`: default licence is standard. Fields that fail validation now get `aria-invalid` (estimator minutes and cues). Inquiry body includes schedule, extra rounds, rights expected and delivery date.
+- `scripts/sync-pricing.mjs`: refreshes the `{{zp:…}}` tokens and the `<!--zp:NAME-->` blocks, including the new `terms` block. `--check` fails on drift.
+- `home-src/build.mjs`: homepage hero and CTA copy, the budget list, and the estimator island. It is now in the npm build chain, after `tsc` and before `sync-pricing`.
+- `package.json`: build chain runs `home-src/build.mjs` before `sync-pricing`.
+- `sw.js`: cache bumped to `zazie-v32` because precached pages and bundles changed.
+
+**Copy (all pages, root and directory twins identical)**
+- Homepage: headline "Original Music for Psychological Horror & Experimental Cinema", tagline "Dissonance. Atmosphere. Emotional intensity.", primary CTA "Request a Scoring Quote", secondary CTA "Hear Selected Film Work". The composer is not framed as a generic audio contractor.
+- Services: from-prices, packages, licence and revision text, factors, the micro-budget statement, and the payment paragraph.
+- Hire a composer: revisions, rights, micro-budget answer, and CTA.
+- Contact: review paragraph (rights, payment, micro-budget statement), and the package and licence options.
+- FAQ (`legal-src/pages/faq.html`, regenerated with its JSON-LD): cost, what moves the price, budgets, revisions, deliverables, rights, payment.
+- Process: title, meta and H1 "spotting to delivery"; revisions, deliverables, rights and payment clauses; HowTo JSON-LD.
+- Composer hub card, 404 card, sitemap blurb, and the hub metadata in `src/data/hubs.ts`.
+
+**Removed**
+- The $200–$350 Scene band, "From $500" Focused, "From $900" Extended, the "$200 minimum", the student floor of $75.99, "Lean / Standard / Signature / Orchestral+" tiers, "sliding scale tied to project funding", and "typically a few hundred dollars".
+- Two revision rounds per cue. The 6% extra-round rate. The $35 extra-cue charge. Licence uplifts of +25% and +40%.
+- The "two weeks +15%" wording (now "expedited, 10–20 days").
+- Stems, alternate mixes, MP3 reference sets and surround listed as standard deliverables on the public pages.
+- Buyout as the default grant on the public pages (the legal pages still say this; see section 3).
+
+**Preserved**
+- SFX store products and `store.html` / `store-src/store.html` prices (not modified).
+- Cinematic and analog-horror visual identity. No section redesign.
+
+**Legal-source comments only**
+- `legal-src/pages/terms.html` and `legal-src/pages/licensing.html` have a non-visible owner-review HTML comment listing the conflicts. No published term changed.
+
+### Before and after
+
+| Item | Before (branch base b75ea87) | After (this branch) |
 | --- | --- | --- |
-| Individual Scene Scoring | about 1–3 min | $200–$350 |
-| Focused Short-Film Scoring | about 3–6 min | from $500 |
-| Extended Short-Film Scoring | about 7–12 min | from $900 |
-| Feature & Experimental Film Scoring | above 12 min | custom quote |
+| Scene | $200–$350, about 1–3 min | From $250, 1–2 min, +$250 per minute |
+| Focused | From $500, about 3–6 min | From $650, 3–5 min, +$300 per minute |
+| Extended | From $900, about 7–12 min | From $1,500, 6–12 min, +$150 per minute |
+| Feature | Custom | Custom, indicative minimum $2,500 |
+| Default estimate | varied | $650–$750 |
+| Revision rounds | Two per cue; extra round +6% | Scene 1, Focused 1, Extended 2; extra round greater of $75 or 10% |
+| Cues | Flat | Scene 3, Focused 6, Extended 10; extra cues quoted separately ($35 each before) |
+| Licence | Multipliers +25% and +40%; buyout as default in legal copy | Standard included; expanded, exclusive, buyout and album quoted separately, no amounts |
+| Schedule | Two weeks +15%; under ten days +30% | Expedited 10–20 days +15%; rush under 10 days +30%, subject to availability |
+| Payment (public) | 50% deposit; 50% on delivery of final stems, 14 days | 50% deposit; 50% before release of final approved deliverables |
+| Standard deliverables | Stems, alternate mixes, MP3 reference set | Stereo WAV and cue list; other items quoted on request |
+| Student / low rates | $75.99 floor | Removed |
 
-**Quote estimator.** Responsive to scored minutes, cue count, musical complexity,
-deadline, revisions beyond two rounds per cue, and licence scope. Each estimate
-is labelled "indicative range, not a quote". Buyout and soundtrack album are
-never added to an estimate; they are quoted individually.
+## 3. Legal conflicts for owner review (NOT edited)
 
-**Standard commission.** Original music composed to picture, agreed scope,
-two revision rounds per cue, and professional stereo WAV delivery with a cue list.
-Stems, alternate mixes, surround or immersive mixes, dialogue editing, final film
-mixing, and advanced post are listed as specialist work, quoted after a
-feasibility check. They are not standard inclusions.
+No published legal term has been changed. The public pricing pages now describe the
+approved commercial position. The following documents still describe the previous
+position and must be reconciled before this branch is merged. Each item is also
+listed in the owner-review comment in its source file.
 
-**Separation of products.** The downloadable SFX catalogue and store products are
-unchanged and kept apart from custom scoring commissions.
+- **`terms.html` (source `legal-src/pages/terms.html`)**
+  - Clause 2, The default grant: "default grant is buyout on full payment". Conflicts with the standard project licence included in every published price.
+  - Clause 6, Payment: balance "on delivery of the final stems"; invoices due within 14 days. Public copy says the balance is due before release of the final approved deliverables.
+  - Clause 7, Revisions: "two rounds of notes per cue" plus one consolidation pass. Public copy says one round (Scene and Focused) or two (Extended), with the extra-round charge.
+  - Clause 8, Delivery: standard delivery includes stems by family, alternate mixes and an MP3 reference set. Public copy says these are not standard.
+- **`licensing.html` (source `legal-src/pages/licensing.html`)**
+  - Summary list: "Default grant: Buyout on full payment".
+  - Section 2, "The default grant for a commissioned score", and its table row "Buyout (default)".
+  - Section 3 text presenting buyout as the default position.
+- **`LEGAL.md`**: section 4 now points to the pricing conflicts. The FAQ count (35) is unchanged. Read it with `RATIFY.md`, which holds the drafted positions.
+- **`RATIFY.md`**: the drafted rights position ("Drafted as: buyout"), the payment position ("50 percent deposit and 50 percent on delivery of final stems; invoices due in 14 days"), and the standard delivery position ("stereo full mix, stems by instrumental family ... MP3 reference set") conflict with this branch. Owner decision needed on each.
+- **`faq.html` / `faq/index.html`** are regenerated from `legal-src/pages/faq.html`. Answers now match the approved position. The "who owns" answer (question 20) says the licensing and terms pages "are being reviewed against this position, and they will be updated before any rights position changes". That is a public commitment the owner has not approved. Keep it, reword it, or remove it.
+- **`sound-design.html`** (and hub metadata): describes sound design as "delivered as mix-ready stems". This is a separate SFX-adjacent service, not a score deliverable. Left unchanged for owner review.
+- **Historic SEO audit files** (`SEO-DOSSIER.md`, `SEO-COMPETITOR-AUDIT-WEARY-PINES.md`, `PERFORMANCE.md`) record the old $75.99 floor as history. Not public. Left as an audit trail.
 
-**Rights.** Composition is a service. The base price covers a non-exclusive
-project licence. Copyright transfer (full buyout), exclusivity, soundtrack album,
-and extra uses are quoted separately and are never bundled into low-priced
-packages.
+## 4. Owner approvals needed before merge
 
-**Pages updated.** `/` (homepage patch and estimator), `/services`,
-`/hire-a-composer`, `/contact`, `/composer`, `/process`, `/faq` (11 answers
-rewritten; the other 24 kept), `/reel` and `/work` hub cards, `/404`, `/sitemap`,
-`/purchases`, `/store` (commission copy only), and hub metadata in
-`src/data/hubs.ts`. Each page exists in both its root twin and its directory form.
-
-**Removed unsupported claims.** "Lean / Standard / Signature / Orchestral+" tiers,
-"sliding scale tied to project funding", "typically a few hundred dollars",
-"reply within 48 hours", "Boutique capacity", "award-winning" (outside the flagged
-items below), the "5.0 collaborator rating" in the footer, and the award
-property in composer JSON-LD. The footer, masthead, and hub text were updated
-across all pages.
-
-**Engineering.**
-- `scripts/sync-pricing.mjs` fills `{{zp:…}}` tokens and the `<!--zp:NAME-->` blocks from `pricing.ts`. Its `--check` mode fails on drift.
-- `scripts/build-estimator.mjs` bundles the estimator into hashed `estimator-<hash>.js/.css`, and wires the references into the pages and `sw.js`.
-- `src/lib/pricing-markup.ts` renders the estimator, cards, factors, licences, inquiry form (mailto action preserved), and Offer JSON-LD.
-- `npm run build` now runs pricing sync and estimator build before prerender and verify, and checks pricing sync.
-- `_headers`: immutable cache rule for `/estimator-*.js`.
-- `sw.js`: estimator assets added to `PRECACHE_ASSETS`; cache bumped to `zazie-v31`.
-- `tools/pricing.test.mjs`: 9 regression checks on routing, bands, monotonicity, rounding, surcharges, and custom-quote paths. `npm test` runs these with the existing film-player tests.
-- Broken section links fixed (`/contact#what-to-send`, `/services#rates`, `/services#tiers`).
-
-## 2. Owner approvals needed before merge
-
-1. **Public prices and bands** in `src/data/pricing.ts` (Scene $200–$350; Focused from $500; Extended from $900; feature custom).
-2. **Scene-to-Focused step.** Scene tops out at $350 at 3 min; Focused starts at $500 at 4 min (a 43% jump). Confirm or smooth the bands.
-3. **Licence default.** Legal documents still say the default grant is buyout (see §3). This draft says the base price is a non-exclusive project licence. One of these must change.
-4. **Surcharge multipliers** (complexity, deadline, licence) and the revision-round rate (6% per extra round, max 3).
-5. **Standard inclusions list** (stereo WAV, cue list, two rounds per cue).
-6. **Phone number** shown on `/contact` (verify before publishing).
-
-## 3. Legal contradictions (NOT edited. Owner approval required)
-
-These documents were not changed. The site copy now follows the owner brief, so
-these pages must be reconciled before this branch is deployed.
-
-- `terms.html` clause 2: default grant is buyout.
-- `terms.html` clause 6: 50% deposit, balance on delivery of "final stems", 14-day invoices.
-- `terms.html` clause 7: two rounds per cue plus one "consolidation pass". The FAQ no longer mentions a consolidation pass.
-- `terms.html` clause 8: standard delivery lists stems, alternate mixes, and an MP3 reference set. This conflicts with the brief.
-- `licensing.html` §2–§3: default buyout on full payment, buyout offered as default. Conflicts with the new base licence.
-- `process.html` (rights paragraph was rewritten; the legal JSON-LD still says "Default grant is buyout on payment in full"). Reconcile with `licensing.html`.
-- `faq.html` answers that now depart from the legal defaults: q-who-owns, q-deliverables, q-revisions, and q-deposit (kept as-is; it still mentions final stems).
-- `LEGAL.md` and `RATIFY.md` have not been reviewed against the new positions.
-
-## 4. Claims flagged for owner verification (kept, not removed)
-
-- "Winter 2024 Award Winners" press-release PDF card on the homepage and `/composer`, and the award line on `/404`. Confirm the award and the PDF before keeping it.
-- Press placements (Grammy Weekly, Limitless Magazine, Billboard Wire). Confirm each placement.
-- "Verified production collaborators" (homepage reviews heading) and "Verified role" credits on work pages. Confirm the basis for "verified".
-- "5.0 collaborator rating" in the README, hero, testimonials, and store (footer removed).
-- "Shorts to features" capability wording and the "stems" wording on sound-design (an SFX product, kept).
-- The reel and cue genre label "Psychological Orchestral" (kept).
+1. **Per-minute steps** (Scene +$250, Focused +$300, Extended +$150). The approved brief set the from-prices and the bands, not these steps. They are my design, chosen so that no package boundary jumps more than 30%. Focused was +$250 at first and was raised to +$300 during implementation to remove a 30.4% jump at 5 to 6 minutes.
+2. **Cue allowances** (3 / 6 / 10) and **included revision rounds** (1 / 1 / 2). Proposed, not yet confirmed.
+3. **Range spread** (+15%), **complexity multipliers** (1.2 / 1.4), **deadline multipliers** (1.15 / 1.3).
+4. **Feature naming.** The brief names the tier "Feature Film & Experimental Cinema". The site uses "Feature & Experimental Film Scoring". The code keeps the existing name pending confirmation.
+5. **Legal documents** (section 3).
+6. **FAQ question 20 commitment** (section 3): keep, reword or remove the sentence that says the licensing and terms pages will be updated.
+7. **Contact details.** The site shows the phone number (864) 430-0606 on the homepage and `/contact`. This branch did not change it. Confirm the number and the area code before the merge.
+8. **Pre-existing claims, not changed or verified in this branch.** The homepage still shows "Winter 2024 Award Winners. Press Release", a "5.0" collaborator rating, and the "Psychological Orchestral" genre label. Confirm each before the merge.
 
 ## 5. Known issues and limits
 
-- The homepage bundle still contains dead configuration for the old "it" branch (stems, themes) and a "Micro / name-your-price" branch. Neither is rendered. Removing them requires changing the bundle source and is left for a later pass.
-- No real browser (Chromium/Playwright) was available. Behaviour was tested in jsdom: estimator updates, validation, package switching, the contact mailto form, and JSON-LD parsing. jsdom reports a "Could not parse CSS stylesheet" warning on the homepage. This is a jsdom limitation with the site CSS, not a page error. Run a visual check on mobile and desktop before merge.
-- FAQ answers were rewritten, and the 24 untouched entries still reference the old legal defaults in places. Review the full FAQ with the owner.
+- **Homepage section eyebrows** ("01 · On screen", "04 · Scoring services", etc.) use the brand red `text-blood` at 10–11px. Axe reports them as below WCAG AA contrast (11 nodes). This is a brand decision, so it is not changed in this branch. A lighter tint for small text would fix it.
+- **Mobile revision select.** The "None" option label is truncated in the select at 390px wide. Cosmetic. A shorter label would fix it.
+- **Revision select and estimator options** have not been checked with a screen reader. Only axe and DOM checks were run.
+- Legal pages were not restyled. Their contrast fixes are limited to the hub index, numerals and footer colour tokens in `legal-src/legal.css`.
+- `hubs.ts` sound-design description still says "mix-ready stems" (sound design is not a score deliverable). Left for the owner (section 3).
+- `hubs.ts` licensing title and description still say "Buyout". This is the title of a legal page under owner review (section 3).
 
 ## 6. Verification (this branch)
 
 - `npx tsc -p .`: pass.
-- `npm run build`: pass. Store build, legal build, route aliases, typecheck, pricing sync and check, estimator build, sitemap, Vite, prerender, verify (84 URLs, 76 images, 12 videos), route aliases check, and sitemap check all succeed.
-- `npm test`: 20/20 pass (9 pricing, 11 film-player).
-- jsdom load: `/`, `/services`, `/contact`, `/hire-a-composer`, `/faq`. No page errors. All JSON-LD parses. Estimator at 2, 5, 10, 14, and 0 minutes gives the expected results.
-- Estimator outputs at the default scope: 2 min → $250–$300; 3 min → $300–$350; 5 min → Focused $550–$675; 10 min → Extended $1,125–$1,275; 14 min → custom quotation.
-- Pricing sync `--check`: PASS across 9 pricing pages.
-- Not run: visual browser review, Lighthouse, live route audit, IndexNow.
+- `npm run build`: pass. Store build, legal build, route aliases, typecheck, homepage bundle patch, pricing sync, estimator build, sync check, sitemap, Vite build, prerender, verify (84 URLs, 76 images, 12 videos), route-alias check and sitemap check all succeed.
+- `npm test`: **49 of 49 pass** (38 pricing regression tests, 11 film-player tests). The pricing tests cover routing by scored minutes, the published from-figures, the default $650–$750, no decrease as minutes rise, constant per-minute steps within each band, no boundary jump over 30%, rounding, the complexity and deadline multipliers, the revision policy and additional-round charge, cue allowances, licence exclusions, the feature path, the exact notice and micro-budget strings, the budget list, and a scan of 13 commercial pages for retired prices and terms and for unapproved dollar figures.
+- Browser checks (headless Chromium 131, outside the repository): the 9 pages tested (`/`, `/services`, `/hire-a-composer`, `/contact`, `/faq`, `/process`, `/composer`, `/terms`, `/licensing`) return 200 with no page errors. `/no-such-page` returns 404 as expected. Homepage estimator: default $650–$750; 2 minutes $500–$575; 12 minutes $2,400–$2,750; 0 minutes shows the "Check your entries" alert and sets `aria-invalid`; the preliminary notice is present; budget list is correct. The mobile viewport at 390px has no horizontal overflow.
+- Accessibility (axe, WCAG 2A/AA): the only remaining violations are the homepage red eyebrows noted in section 5.
+- `sync-pricing --check`: pass across 9 pricing pages.
+- Not run: full visual review at all breakpoints, Lighthouse, a live route audit, screen-reader testing, and IndexNow.
 
 ## 7. Deployment notes
 
-- Do not merge until §2 is approved and §3 is reconciled.
-- Cloudflare Pages deploys from `main` only. Nothing here is deployed by this branch.
-- After merge, submit the sitemap only after the owner has approved the public prices.
+- Do not merge until the owner has decided section 4 and reconciled section 3. The public pages state the approved position, so the legal pages should be updated before or with the merge.
+- Cloudflare Pages deploys from `main` only. This branch deploys nothing.
+- After merge, resubmit the sitemap only after the owner has approved the public rates.

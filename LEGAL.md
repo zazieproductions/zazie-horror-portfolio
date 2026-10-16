@@ -272,6 +272,12 @@ values, not measured from a rendered page.
   studio's standard position rather than counsel. A lawyer should read
   `/terms` clauses 10, 19 and 23 before the studio relies on them against a
   represented counterparty.
+* **Commercial pricing overhaul (2026-10-16).** The public pricing now states
+  the standard project licence as the included position and quotes buyout,
+  exclusivity and expanded uses separately. `/terms` clauses 2, 6, 7 and 8 and
+  `/licensing` sections 2 and 3 still describe the previous position. The legal
+  documents were not changed, because no existing contract may be altered by
+  publication. The exact conflicts are listed in `RATIFY.md` item 14.
 * **Pre-existing claims now carry documents.** The homepage asserts "full
   rights to the score", a 5.0 rating with four attributed reviews, a public
   phone number and an LLC name. The documents are consistent with those

@@ -21,6 +21,23 @@
 .zp-pkg-name { margin:.1rem 0 0; font-family:"Cormorant Garamond",Georgia,serif; font-weight:400; font-size:1.55rem; line-height:1.1; color:#f0ebe3; }
 .zp-pkg-price { margin:.35rem 0 0; font-family:"Cormorant Garamond",Georgia,serif; font-size:2rem; line-height:1; color:#f0ebe3; }
 .zp-pkg-minutes { margin:0; font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:#e65650; }
+.zp-pkg-min { margin:-.2rem 0 0; font-size:.8rem; line-height:1.5; color:#9a9590; }
+.zp-pkg-terms { margin:.2rem 0 0; padding:.7rem 0 0; list-style:none; display:grid; gap:.4rem; border-top:1px solid #1e1e1e; }
+.zp-pkg-terms li { position:relative; padding-left:1rem; font-size:.84rem; line-height:1.5; color:rgba(240,235,227,.88); }
+.zp-pkg-terms li::before { content:""; position:absolute; left:0; top:.55em; width:4px; height:4px; background:#c41e1e; transform:rotate(45deg); }
+.zp-pkg-foot { margin:-1rem 0 2rem; font-size:.84rem; line-height:1.65; color:#9a9590; max-width:72ch; }
+.zp-terms-list { margin:0; padding:0; list-style:none; display:grid; gap:.5rem; }
+.zp-terms-list li { position:relative; padding-left:1.1rem; font-size:.9rem; line-height:1.6; color:rgba(240,235,227,.82); }
+.zp-terms-list li::before { content:""; position:absolute; left:0; top:.62em; width:4px; height:4px; background:#c41e1e; transform:rotate(45deg); }
+.zp-tag { display:inline-block; margin-left:.4rem; padding:.1rem .45rem; border:1px dashed #9a9590; font-size:.6rem; letter-spacing:.16em; text-transform:uppercase; color:#9a9590; vertical-align:middle; }
+.zp-separate { display:grid; gap:.45rem; border-top:1px solid #1e1e1e; padding-top:.9rem; }
+.zp-separate ul { margin:0; padding-left:1.1rem; display:grid; gap:.35rem; font-size:.84rem; line-height:1.5; color:rgba(240,235,227,.82); }
+.zp-prelim { color:#f0ebe3; border-top:1px solid #1e1e1e; padding-top:.9rem; }
+.zp-licences { margin:1rem 0 0; padding:0; list-style:none; display:grid; gap:.6rem; }
+.zp-licences li { display:grid; gap:.2rem; border:1px solid #1e1e1e; background:#080808; padding:.8rem .95rem; font-size:.9rem; line-height:1.5; color:#f0ebe3; }
+.zp-licences li.zp-licence-quoted { border-style:dashed; }
+.zp-licence-effect { font-size:.7rem; letter-spacing:.14em; text-transform:uppercase; color:#e65650; }
+.zp-licence-note { font-size:.82rem; line-height:1.55; color:#9a9590; }
 .zp-pkg-copy { margin:.4rem 0 0; font-size:.92rem; line-height:1.6; color:rgba(240,235,227,.82); }
 .zp-pkg-best { margin:0; font-size:.84rem; line-height:1.55; color:#9a9590; }
 .zp-pkg-best span { display:block; font-size:.62rem; letter-spacing:.22em; text-transform:uppercase; color:#e65650; margin-bottom:.15rem; }
@@ -49,7 +66,7 @@
 @media (min-width:640px){ .zp-grid3 { grid-template-columns:repeat(3,1fr); } }
 .zp-field { display:grid; gap:.4rem; min-width:0; }
 .zp-label { font-size:.66rem; letter-spacing:.2em; text-transform:uppercase; color:#9a9590; }
-.zp-label em, .zp-opt { font-style:normal; letter-spacing:.12em; color:#9a9590; opacity:.85; text-transform:none; }
+.zp-label em, .zp-opt { font-style:normal; letter-spacing:.12em; color:#9a9590; opacity:1; text-transform:none; }
 .zp-label em { color:#e65650; }
 .zp-help { margin:0; font-size:.8rem; line-height:1.5; color:#9a9590; }
 .zp-input { width:100%; min-height:46px; border:1px solid #1e1e1e; background:#080808; color:#f0ebe3; padding:.7rem .85rem; font:400 .95rem/1.4 Inter,ui-sans-serif,system-ui,sans-serif; border-radius:0; }

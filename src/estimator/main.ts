@@ -24,6 +24,7 @@ import {
   MAX_EXTRA_REVISION_ROUNDS,
   MAX_MINUTES_INPUT,
   quote,
+  usd,
   type ComplexityId,
   type DeadlineId,
   type LicenceId,
@@ -65,7 +66,7 @@ function readScope(root: HTMLElement): Read<QuoteInput> {
 
   const complexity = String(data.get('cx') ?? 'standard') as ComplexityId;
   const deadline = String(data.get('dl') ?? 'standard') as DeadlineId;
-  const licence = String(data.get('lic') ?? 'nonexclusive') as LicenceId;
+  const licence = String(data.get('lic') ?? 'standard') as LicenceId;
   const rounds = whole(String(data.get('rev') ?? '0'), 0, MAX_EXTRA_REVISION_ROUNDS) ?? 0;
 
   if (!COMPLEXITY.some((c) => c.id === complexity)) return { ok: false, error: 'Choose a musical complexity.' };
@@ -78,14 +79,26 @@ function readScope(root: HTMLElement): Read<QuoteInput> {
   };
 }
 
+/** Marks the estimator field that caused the problem, so assistive tech announces it. */
+function markScopeFields(root: HTMLElement, error: string): void {
+  const form = root.querySelector<HTMLFormElement>('[data-zp-form]');
+  if (!form) return;
+  const minField = form.querySelector<HTMLInputElement>('input[name="min"]');
+  const cueField = form.querySelector<HTMLInputElement>('input[name="cues"]');
+  minField?.setAttribute('aria-invalid', String(/scored music/.test(error)));
+  cueField?.setAttribute('aria-invalid', String(/cues/.test(error)));
+}
+
 function renderEstimate(root: HTMLElement): void {
   const panel = root.querySelector<HTMLElement>('[data-zp-result]');
   if (!panel) return;
   const scope = readScope(root);
   if (!scope.ok) {
+    markScopeFields(root, scope.error);
     panel.innerHTML = `<p class="zp-eyebrow">Check your entries</p><p class="zp-error" role="alert">${esc(scope.error)}</p>`;
     return;
   }
+  markScopeFields(root, '');
   panel.innerHTML = resultHtml(scope.value, quote(scope.value));
 }
 
@@ -98,7 +111,7 @@ function scopeFromParams(params: URLSearchParams): QuoteInput | null {
   const cues = cueRaw ? whole(cueRaw, 0, MAX_CUES) : null;
   const cx = COMPLEXITY.find((c) => c.id === params.get('cx'))?.id ?? 'standard';
   const dl = DEADLINES.find((d) => d.id === params.get('dl'))?.id ?? 'standard';
-  const lic = LICENCES.find((l) => l.id === params.get('lic'))?.id ?? 'nonexclusive';
+  const lic = LICENCES.find((l) => l.id === params.get('lic'))?.id ?? 'standard';
   const rev = whole(params.get('rev') ?? '0', 0, MAX_EXTRA_REVISION_ROUNDS) ?? 0;
   return {
     scoredMinutes: minutes,
@@ -132,6 +145,8 @@ function prefillInquiry(form: HTMLFormElement): void {
     setField(form, 'min', String(scope.scoredMinutes));
     if (scope.cueCount !== undefined) setField(form, 'cues', String(scope.cueCount));
     setField(form, 'cx', scope.complexity);
+    setField(form, 'dl', scope.deadline);
+    setField(form, 'rev', String(scope.extraRevisionRounds));
     setField(form, 'lic', scope.licence);
 
     const notes = form.elements.namedItem('notes') as HTMLTextAreaElement | null;
@@ -143,7 +158,7 @@ function prefillInquiry(form: HTMLFormElement): void {
       const q = quote(scope);
       intro.hidden = false;
       intro.textContent = q.kind === 'estimate'
-        ? `Your estimator selections are included in the notes: indicative ${q.packageName} range ${Math.round(q.low)}${DASH}${Math.round(q.high)} dollars. It is nonbinding.`
+        ? `Your estimator selections are included in the notes: ${q.packageName}, preliminary range ${usd(q.low)}${DASH}${usd(q.high)}. Preliminary estimate, final quotation subject to creative scope and written agreement.`
         : 'Your estimator selections are included in the notes. This scope needs a quotation, so it is priced after review.';
     }
   }
@@ -168,9 +183,11 @@ function inquiryBody(form: HTMLFormElement): string {
     `Closest package: ${get('pkg') || 'Not sure yet'}`,
     `Scored music: ${minutes ? `${minutes} minutes (music, not film runtime)` : 'to advise'}`,
     `Cues: ${cues || 'not sure yet'}`,
-    `Delivery or picture lock: ${get('deadline') || 'not set'}`,
+    `Delivery date or festival deadline: ${get('deadline') || 'not set'}`,
+    `Schedule: ${get('dl')}`,
     `Musical complexity: ${get('cx')}`,
-    `Licence expected: ${get('lic')}`,
+    `Additional revision rounds: ${get('rev')}`,
+    `Rights expected: ${get('lic')}`,
     `Budget: ${get('budget')}`,
     '',
     'Tone references:',
@@ -189,7 +206,9 @@ function inquiryBody(form: HTMLFormElement): string {
 function validateInquiry(form: HTMLFormElement): string[] {
   const problems: string[] = [];
   const mark = (name: string, bad: boolean) => {
-    const field = form.elements.namedItem(name) as HTMLElement | null;
+    // Query by attribute rather than namedItem(): namedItem returns a RadioNodeList
+    // when several controls share a name, which has no setAttribute of its own.
+    const field = form.querySelector<HTMLElement>(`[name="${name}"]`);
     if (field) field.setAttribute('aria-invalid', bad ? 'true' : 'false');
     return bad;
   };

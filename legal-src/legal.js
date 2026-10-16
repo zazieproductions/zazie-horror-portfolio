@@ -70,7 +70,7 @@
       });
       indexLinks.forEach(function (a) { a.removeAttribute("aria-current"); });
       if (best && byId[best]) byId[best].setAttribute("aria-current", "true");
-    }, { rootMargin: "-6rem 0px -60% 0px", threshold: [0, 0.1, 0.25, 0.5, 1] });
+    }, { rootMargin: "-96px 0px -60% 0px", threshold: [0, 0.1, 0.25, 0.5, 1] });
     Object.keys(byId).forEach(function (id) {
       var el = document.getElementById(id);
       if (el) spy.observe(el);
