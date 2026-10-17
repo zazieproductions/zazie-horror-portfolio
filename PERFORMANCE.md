@@ -726,6 +726,8 @@ bullet "Local Fallback for Drive Assets".
 
 ### Merge with `main` (PR #68), and the hero link React was rebuilding
 
+> Historical implementation note: this section discusses a former `$75.99` student-price link during the 2026-09/10 build. That rate and funding-based pricing are superseded; current approved prices are in `COMMERCIAL-OVERHAUL.md` and `src/data/pricing.ts`.
+
 `main` moved while this branch was open: PR #68 removed the hero's
 `<a href="#services">Student films from $75.99</a>` link. It landed in
 `index.html` only — the bundle still emitted the node at

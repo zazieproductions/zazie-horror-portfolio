@@ -16,24 +16,29 @@
  *   - tools/pricing.test.mjs and tools/check-pricing.mjs fail the build when a
  *     published amount is not produced by these rules.
  *
- * STATUS: PROVISIONAL. Every amount, boundary, multiplier and licence tier here
- * is a recommendation awaiting the owner's written approval before public
- * deployment. See COMMERCIAL-OVERHAUL.md ("Owner approvals"). Change numbers in
- * this file only; the rest of the site follows.
+ * STATUS: APPROVED RATE CARD. The starting fees and non-overlapping scored-
+ * music scope bands below are the owner-approved structure, reviewed 2026-10-17.
+ * Public figures are starting fees, not fixed-price caps or a promise of a
+ * specific duration. The estimate varies with composition complexity and scope.
+ * Change prices and boundaries here; generated pages, the estimator and forms
+ * follow this module.
  *
  * Scope principle: price follows the amount and complexity of ORIGINAL
  * COMPOSITION (scored minutes, cue count, musical complexity, deadline,
- * revisions, licence), never the runtime of the film. A 90-minute film can need
- * 4 minutes of music; a 6-minute short can need 9. Inputs are therefore called
- * "scored music minutes" everywhere.
+ * revisions, licence), never the runtime of the film. A feature client may
+ * commission one individual scene/cue without engaging the substantial-score
+ * minimum; the $2,500 indicative minimum applies only to substantial feature-
+ * film or experimental-cinema scoring engagements.
  */
 
-export const PRICING_STATUS = 'provisional' as const;
-export const PRICING_REVIEWED = '2026-10-14' as const;
+export const PRICING_STATUS = 'approved' as const;
+export const PRICING_REVIEWED = '2026-10-17' as const;
 export const CURRENCY = 'USD' as const;
 
-/** Lowest fee the studio quotes for a commission (the Individual Scene floor). */
-export const MINIMUM_FEE = 200;
+/** Lowest starting fee for an individual scene/cue commission. */
+export const MINIMUM_FEE = 250;
+/** Indicative minimum engagement for substantial feature/experimental scores. */
+export const FEATURE_MINIMUM_ENGAGEMENT = 2500;
 /** Estimates are rounded to this increment, in dollars. */
 export const ROUND_TO = 25;
 /** Scored music above this many minutes is quoted individually. */
@@ -65,12 +70,13 @@ export interface PriceLine {
 export interface PricingPackage {
   readonly id: PackageId;
   readonly name: string;
-  /** Approximate scored music, as published on the site. */
-  readonly minutesLabel: string;
+  /** Published scope guide; for the first three packages it describes scored music. */
+  readonly scopeLabel: string;
   /** Whole scored minutes handled by the estimator, inclusive. null = custom quotation. */
   readonly minutes: { readonly min: number; readonly max: number } | null;
-  /** How the price is published: a closed range, a "from" floor, or a custom quotation. */
-  readonly display: 'range' | 'from' | 'custom';
+  /** Public price presentation: a starting fee or custom quotation. */
+  readonly display: 'from' | 'custom';
+  /** Indicative estimate lines; neither line is a guaranteed price or cap. */
   readonly low: PriceLine | null;
   readonly high: PriceLine | null;
   readonly summary: string;
@@ -78,55 +84,56 @@ export interface PricingPackage {
 }
 
 /**
- * The four commissioning packages. Bands are linear in whole scored minutes.
- * Scene: 1-3 min, $200-$350 overall. Focused: 4-6 min, from $500.
- * Extended: 7-12 min, from $900. Feature & experimental: custom quotation.
- * Bands join without overlap, so a larger scope never costs less than a smaller one.
+ * The short-form estimate bands are contiguous and non-overlapping in whole
+ * scored minutes: Scene 1–2, Focused 3–5, Extended 6–12. Their starting fees
+ * begin at $250, $650 and $1,500 respectively. Estimate lines rise smoothly
+ * across the boundaries; they are indicative only, not price caps or duration
+ * guarantees. Substantial feature/experimental scores are quoted individually.
  */
 export const PACKAGES: readonly PricingPackage[] = [
   {
     id: 'scene',
     name: 'Individual Scene Scoring',
-    minutesLabel: 'about 1–3 minutes',
-    minutes: { min: 1, max: 3 },
-    display: 'range',
-    low: { start: 200, step: 50 },
-    high: { start: 250, step: 50 },
-    summary: 'A single sequence or moment composed to picture: a dread bed, a tension cue, a reveal or a stinger-led transition.',
-    bestFor: 'Festival scenes, pitch sequences and a single pivotal moment in a longer edit.',
+    scopeLabel: 'Approximately 1–2 minutes of original music',
+    minutes: { min: 1, max: 2 },
+    display: 'from',
+    low: { start: 250, step: 250 },
+    high: { start: 350, step: 250 },
+    summary: 'One scene or moment composed to picture: a dread bed, tension cue, reveal or stinger-led transition.',
+    bestFor: 'A single pivotal scene or cue in a short, feature, trailer or longer edit.',
   },
   {
     id: 'focused',
-    name: 'Focused Short-Film Scoring',
-    minutesLabel: 'about 3–6 minutes',
-    minutes: { min: 4, max: 6 },
+    name: 'Focused Short-Film Score',
+    scopeLabel: 'More than 2 and up to 5 scored minutes',
+    minutes: { min: 3, max: 5 },
     display: 'from',
-    low: { start: 500, step: 50 },
-    high: { start: 600, step: 75 },
-    summary: 'A complete short film or a fully scored act, with its own motifs, a spotting session and a consistent sonic world.',
-    bestFor: 'Narrative and experimental shorts where the score carries the story from the first frame.',
+    low: { start: 650, step: 300 },
+    high: { start: 800, step: 300 },
+    summary: 'A cohesive short-film score for a restrained cue list, with motifs, spotting and a consistent sonic world.',
+    bestFor: 'Complete narrative or experimental short films with more than 2 and up to 5 scored minutes.',
   },
   {
     id: 'extended',
-    name: 'Extended Short-Film Scoring',
-    minutesLabel: 'about 7–12 minutes',
-    minutes: { min: 7, max: 12 },
+    name: 'Extended Short-Film Score',
+    scopeLabel: 'More than 5 and up to 12 scored minutes',
+    minutes: { min: 6, max: 12 },
     display: 'from',
-    low: { start: 900, step: 75 },
-    high: { start: 1050, step: 75 },
-    summary: 'Longer shorts, multi-part short work or a developed theme set with a larger cue list and more tonal range.',
-    bestFor: 'Longer shorts, series pilots and projects that need a developed thematic score.',
+    low: { start: 1500, step: 200 },
+    high: { start: 1700, step: 200 },
+    summary: 'A larger short-film score with a broader cue list, developed themes and greater tonal range.',
+    bestFor: 'Longer shorts and multi-part short-film scores with more than 5 and up to 12 scored minutes.',
   },
   {
     id: 'feature',
-    name: 'Feature & Experimental Film Scoring',
-    minutesLabel: 'more than 12 minutes, or multi-part work',
+    name: 'Feature Film & Experimental Cinema',
+    scopeLabel: 'Substantial full-project scoring; custom scope',
     minutes: null,
     display: 'custom',
     low: null,
     high: null,
-    summary: 'Features, series episodes at length, installation and experimental work with expanded scope, live players or complex delivery.',
-    bestFor: 'Features and longer experimental films. Quoted after the studio has watched a cut and agreed the schedule.',
+    summary: 'Feature-film and experimental-cinema scoring engagements are scoped and quoted individually after review of the cut and delivery needs.',
+    bestFor: 'Substantial full-project scores. A single scene or cue for a feature may use Individual Scene Scoring and is not subject to the feature minimum.',
   },
 ] as const;
 
@@ -250,6 +257,7 @@ export const SPECIALIST_DELIVERABLES: readonly string[] = [
 
 /** Formats offered in the inquiry form. */
 export const FORMATS: readonly string[] = [
+  'Not sure yet',
   'Short film',
   'Feature film',
   'Series episode',
@@ -261,8 +269,10 @@ export const FORMATS: readonly string[] = [
 /* ----------------------------------------------------------------- estimate */
 
 export interface QuoteInput {
-  /** Scored music in minutes. Not film runtime. Rounded up to whole minutes. */
+  /** Scored music in minutes. Not film runtime. The estimator accepts whole minutes. */
   scoredMinutes: number;
+  /** True only when asking for a substantial feature/experimental full-project score. */
+  substantialProject: boolean;
   /** Number of cues. Undefined or 0 means "not sure yet": the allowance applies. */
   cueCount?: number;
   complexity: ComplexityId;
@@ -289,7 +299,7 @@ export interface EstimateQuote {
 export interface CustomQuote {
   readonly kind: 'custom';
   readonly nonbinding: true;
-  readonly reason: 'long-form' | 'licence';
+  readonly reason: 'long-form' | 'licence' | 'feature-project';
   readonly packageId: 'feature' | LicenceId;
   readonly message: string;
 }
@@ -343,12 +353,22 @@ export function publishedSpan(pkg: PricingPackage): { low: number; high: number 
   };
 }
 
-/** The public price label, e.g. "$200–$350", "From $500", "Custom quotation". */
+/** Public price label, e.g. "From $250" or "Custom quotation". */
 export function priceLabel(pkg: PricingPackage): string {
   if (pkg.display === 'custom') return 'Custom quotation';
   const span = publishedSpan(pkg);
-  if (!span) return 'Custom quotation';
-  return pkg.display === 'from' ? `From ${usd(span.low)}` : `${usd(span.low)}–${usd(span.high)}`;
+  return span ? `From ${usd(span.low)}` : 'Custom quotation';
+}
+
+/** Short, dynamic rate-card summary for metadata and other concise surfaces. */
+export function pricingSummary(): string {
+  const scene = packageById('scene');
+  const focused = packageById('focused');
+  const extended = packageById('extended');
+  const sceneFee = priceLabel(scene).replace(/^From /, 'from ');
+  const focusedFee = priceLabel(focused).replace(/^From /, 'from ');
+  const extendedFee = priceLabel(extended).replace(/^From /, 'from ');
+  return `Horror scoring (USD): scene ${sceneFee}; focused short ${focusedFee}; extended short ${extendedFee}. Feature/experimental scores are custom quoted; indicative ${usd(FEATURE_MINIMUM_ENGAGEMENT)} minimum only for substantial projects.`;
 }
 
 /** Whole-dollar formatting used everywhere a price appears. */
@@ -373,6 +393,16 @@ export function roundEstimate(amount: number): number {
  */
 export function quote(input: QuoteInput): Quote {
   const licence = licenceById(input.licence);
+  if (input.substantialProject) {
+    const licenceNote = licence.quoted ? ` The requested ${licence.label.toLowerCase()} is also quoted individually.` : '';
+    return {
+      kind: 'custom',
+      nonbinding: true,
+      reason: 'feature-project',
+      packageId: 'feature',
+      message: `Substantial feature-film and experimental-cinema scores are custom quoted. The indicative minimum engagement is ${usd(FEATURE_MINIMUM_ENGAGEMENT)} for substantial full-project scoring.${licenceNote} A standalone scene/cue commission for a feature is not subject to this minimum; leave the substantial-project option unselected to estimate an individual cue.`,
+    };
+  }
   if (licence.quoted) {
     return {
       kind: 'custom',
@@ -390,7 +420,7 @@ export function quote(input: QuoteInput): Quote {
       nonbinding: true,
       reason: 'long-form',
       packageId: 'feature',
-      message: `Scores over ${LONG_FORM_THRESHOLD_MINUTES} scored minutes, and multi-part or experimental work, are quoted individually after a cut has been reviewed.`,
+      message: `Scores above ${LONG_FORM_THRESHOLD_MINUTES} scored minutes are quoted individually. The indicative minimum engagement of ${usd(FEATURE_MINIMUM_ENGAGEMENT)} applies only to substantial feature-film or experimental-cinema scoring projects, not to every project associated with a feature. A single scene/cue for a feature may still be commissioned under Individual Scene Scoring.`,
     };
   }
 
@@ -414,7 +444,7 @@ export function quote(input: QuoteInput): Quote {
   const high = roundEstimate(Math.max(MINIMUM_FEE, (band.high + cueFee) * factor));
 
   const factors: { label: string; value: string }[] = [
-    { label: 'Package', value: `${pkg.name} (${pkg.minutesLabel})` },
+    { label: 'Package', value: `${pkg.name} (${pkg.scopeLabel})` },
     { label: 'Scored music', value: `${minutes} ${minutes === 1 ? 'minute' : 'minutes'}` },
   ];
   factors.push({
@@ -459,6 +489,7 @@ export function quote(input: QuoteInput): Quote {
 /** The default scope every estimator starts from (also the server-rendered state). */
 export const DEFAULT_SCOPE: QuoteInput = {
   scoredMinutes: 3,
+  substantialProject: false,
   cueCount: undefined,
   complexity: 'standard',
   deadline: 'standard',
@@ -470,16 +501,19 @@ export const DEFAULT_SCOPE: QuoteInput = {
 export function budgetOptions(): string[] {
   const options = ['Not sure yet: please advise'];
   for (const pkg of PACKAGES) {
-    if (pkg.display === 'custom') options.push(`${pkg.name}: custom quotation`);
-    else options.push(`${pkg.name}: ${priceLabel(pkg).replace(/^From /, 'from ')}`);
+    if (pkg.display === 'custom') {
+      options.push(`${pkg.name}: custom quotation; indicative minimum ${usd(FEATURE_MINIMUM_ENGAGEMENT)} for substantial scores`);
+    } else {
+      options.push(`${pkg.name}: ${priceLabel(pkg).replace(/^From /, 'from ')} ${CURRENCY}`);
+    }
   }
   options.push('Flexible: discuss');
   return options;
 }
 
-/** Plain-language rules that every page repeats in the same words. */
+/** Plain-language rules that every pricing surface repeats in the same words. */
 export const PRICING_NOTICE =
-  'Indicative and nonbinding. Estimates come from the scope you enter. A written quote follows review of your cut or cue list, the schedule and the licence you need. Complex composition, unusual deadlines, extensive revisions and expanded licensing can increase a quotation. Fees are in US dollars and exclude taxes, live players and third-party clearances.';
+  `All fees are in ${CURRENCY}. Published fees are starting fees, not fixed-price caps or a guarantee of a specific amount of finished music; scope labels are guides. Estimates are indicative and nonbinding. A written quote follows review of your cut or cue list, musical complexity, cue count, schedule, revisions and licence. Substantial feature-film and experimental-cinema scoring engagements have an indicative minimum of ${usd(FEATURE_MINIMUM_ENGAGEMENT)}; this minimum does not apply to an individual scene/cue commission for a feature. Taxes, live players and third-party clearances are additional.`;
 
 export const RUNTIME_NOTICE =
-  'Your film’s runtime does not set the amount of music. A 90-minute feature may need 4 scored minutes; a 6-minute short may need 9. Quotes are built from the music you need composed.';
+  `Pricing follows the music being commissioned, not total film runtime. A feature client commissioning one scene/cue can use Individual Scene Scoring; the ${usd(FEATURE_MINIMUM_ENGAGEMENT)} indicative minimum applies only to substantial feature-film or experimental-cinema scoring engagements.`;

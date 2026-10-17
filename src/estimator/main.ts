@@ -66,6 +66,7 @@ function readScope(root: HTMLElement): Read<QuoteInput> {
   const complexity = String(data.get('cx') ?? 'standard') as ComplexityId;
   const deadline = String(data.get('dl') ?? 'standard') as DeadlineId;
   const licence = String(data.get('lic') ?? 'nonexclusive') as LicenceId;
+  const substantialProject = data.get('substantial') === 'yes';
   const rounds = whole(String(data.get('rev') ?? '0'), 0, MAX_EXTRA_REVISION_ROUNDS) ?? 0;
 
   if (!COMPLEXITY.some((c) => c.id === complexity)) return { ok: false, error: 'Choose a musical complexity.' };
@@ -74,7 +75,7 @@ function readScope(root: HTMLElement): Read<QuoteInput> {
 
   return {
     ok: true,
-    value: { scoredMinutes: minutes, cueCount, complexity, deadline, extraRevisionRounds: rounds, licence },
+    value: { scoredMinutes: minutes, substantialProject, cueCount, complexity, deadline, extraRevisionRounds: rounds, licence },
   };
 }
 
@@ -102,6 +103,7 @@ function scopeFromParams(params: URLSearchParams): QuoteInput | null {
   const rev = whole(params.get('rev') ?? '0', 0, MAX_EXTRA_REVISION_ROUNDS) ?? 0;
   return {
     scoredMinutes: minutes,
+    substantialProject: params.get('substantial') === '1',
     cueCount: cues ?? undefined,
     complexity: cx,
     deadline: dl,
@@ -129,8 +131,11 @@ function prefillInquiry(form: HTMLFormElement): void {
 
   const scope = scopeFromParams(params);
   if (scope) {
+    const moreDetails = form.querySelector<HTMLDetailsElement>('[data-zp-inquiry-details]');
+    if (moreDetails) moreDetails.open = true;
     setField(form, 'min', String(scope.scoredMinutes));
     if (scope.cueCount !== undefined) setField(form, 'cues', String(scope.cueCount));
+    if (scope.substantialProject) setField(form, 'pkg', 'feature');
     setField(form, 'cx', scope.complexity);
     setField(form, 'lic', scope.licence);
 
@@ -143,7 +148,7 @@ function prefillInquiry(form: HTMLFormElement): void {
       const q = quote(scope);
       intro.hidden = false;
       intro.textContent = q.kind === 'estimate'
-        ? `Your estimator selections are included in the notes: indicative ${q.packageName} range ${Math.round(q.low)}${DASH}${Math.round(q.high)} dollars. It is nonbinding.`
+        ? `Your estimator selections are included in the notes: indicative ${q.packageName} range ${Math.round(q.low)}${DASH}${Math.round(q.high)} USD. It is nonbinding.`
         : 'Your estimator selections are included in the notes. This scope needs a quotation, so it is priced after review.';
     }
   }
@@ -163,8 +168,8 @@ function inquiryBody(form: HTMLFormElement): string {
   return [
     `Name: ${get('name')}`,
     `Email: ${get('email')}`,
-    `Project: ${get('project')}`,
-    `Format: ${get('format')}`,
+    `Project: ${get('project') || 'Not named yet'}`,
+    `Format: ${get('format') || 'Not sure yet'}`,
     `Closest package: ${get('pkg') || 'Not sure yet'}`,
     `Scored music: ${minutes ? `${minutes} minutes (music, not film runtime)` : 'to advise'}`,
     `Cues: ${cues || 'not sure yet'}`,
@@ -195,7 +200,7 @@ function validateInquiry(form: HTMLFormElement): string[] {
   };
   if (mark('name', !textOf(form, 'name'))) problems.push('Please add your name.');
   if (mark('email', !EMAIL_PATTERN.test(textOf(form, 'email')))) problems.push('Please add a valid email address.');
-  if (mark('project', !textOf(form, 'project'))) problems.push('Please add a project title.');
+  mark('project', false);
   const min = textOf(form, 'min');
   if (mark('min', Boolean(min) && whole(min, 1, MAX_MINUTES_INPUT) === null)) {
     problems.push(`Scored music is whole minutes from 1 to ${MAX_MINUTES_INPUT}, or blank.`);
@@ -223,7 +228,10 @@ function handleInquirySubmit(event: Event, form: HTMLFormElement): void {
   if (error) error.hidden = true;
 
   const body = inquiryBody(form);
-  const subject = `Scoring inquiry: ${textOf(form, 'project')} (${textOf(form, 'format')})`;
+  const project = textOf(form, 'project');
+  const format = textOf(form, 'format');
+  const subjectLabel = project || (format && format !== 'Not sure yet' ? format : '');
+  const subject = subjectLabel ? `Scoring inquiry: ${subjectLabel}` : 'Scoring inquiry';
   const preview = form.querySelector<HTMLElement>('[data-zp-preview]');
   const text = form.querySelector<HTMLTextAreaElement>('[data-zp-text]');
   if (preview) preview.hidden = false;
