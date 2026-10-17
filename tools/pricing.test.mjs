@@ -230,6 +230,19 @@ test('contact inquiry is low-friction and defers optional scope details', () => 
   assert.equal(FORMATS[0], 'Not sure yet');
 });
 
+test('homepage contact keeps a single neutral format and tone default', () => {
+  const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+  for (const label of ['Theme / tone', 'Format']) {
+    const labelIndex = html.indexOf(`aria-label="${label}"`);
+    const start = html.lastIndexOf('<select', labelIndex);
+    const end = html.indexOf('</select>', labelIndex) + '</select>'.length;
+    const select = html.slice(start, end);
+    assert.ok(start >= 0 && end > start, `${label} selector exists`);
+    assert.equal((select.match(/<option value="Not sure yet"/g) ?? []).length, 1, `${label} has one neutral option`);
+    assert.match(select, /<option value="Not sure yet" selected>/);
+  }
+});
+
 test('estimator hand-off opens optional inquiry details when scope is prefilled', () => {
   const source = readFileSync(new URL('../src/estimator/main.ts', import.meta.url), 'utf8');
   const prefill = source.slice(source.indexOf('const scope = scopeFromParams(params);'), source.indexOf('function textOf'));

@@ -75,7 +75,7 @@ project associated with a feature.
 - Site verification: all 84 sitemap URLs resolve to prerendered files; route,
   metadata/schema, internal-link, section-link and media audits passed. Sitemap
   contains 84 unique HTTPS URLs.
-- `npm test`: 27/27 pass (16 pricing and 11 film-player checks).
+- `npm test`: 28/28 pass (17 pricing and 11 film-player checks).
 - No visual browser review, Lighthouse run, or live production-route audit was
   performed. This branch itself is not deployed.
 
