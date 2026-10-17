@@ -5,7 +5,7 @@
  * Writes the published prices into the static HTML from src/data/pricing.ts.
  *
  *   {{zp:scene.label}}          a raw token. The first run wraps its value as
- *                               <!--v:scene.label-->$200–$350<!--/v:scene.label-->
+ *                               <!--v:scene.label-->From $250<!--/v:scene.label-->
  *                               so later runs can refresh it in place.
  *   <!--zp:packages-->…<!--/zp:packages-->
  *                               marker blocks; the content between the markers
@@ -32,7 +32,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const check = process.argv.includes('--check');
 
 const markup = await import('../build/lib/pricing-markup.js');
-const { expandTokens, packagesHtml, inclusionsHtml, estimatorHtml, inquiryFormHtml, noticeHtml, offersGraph, tokenValue, factorsHtml, licencesHtml, SITE_ORIGIN } = markup;
+const { expandTokens, packagesHtml, pricingMetaHtml, inclusionsHtml, estimatorHtml, inquiryFormHtml, noticeHtml, offersGraph, tokenValue, factorsHtml, licencesHtml, SITE_ORIGIN } = markup;
 const { ORG_ID } = await import('../build/data/site.js');
 
 const SERVICE_ID = `${SITE_ORIGIN}/services#service`;
@@ -40,6 +40,7 @@ const PROVIDER_ID = ORG_ID;
 
 /** Generated markup for each marker block. */
 const BLOCKS = {
+  'pricing-meta': () => pricingMetaHtml(),
   packages: () => packagesHtml(),
   inclusions: () => inclusionsHtml(),
   estimator: () => estimatorHtml(),

@@ -4,6 +4,8 @@
 **Subject site:** https://horror.zazieproductions.com (Zazie Productions LLC — Zazie Kanwar-Torge)
 **Competitor page:** https://wearypines.com/hire-a-composer/ (Weary Pines — Jamie Chambers + Don McLennan Jr)
 
+> **Commercial/pricing supersession — 2026-10-17.** This historical audit includes former `$75.99` and funding-sliding-scale proposals. Do not reuse those as current public copy; the approved rate card is recorded in `COMMERCIAL-OVERHAUL.md` and `src/data/pricing.ts`. The competitor and technical observations remain dated audit snapshots.
+
 ## How this audit was produced (evidence discipline)
 
 | Method | Tool used in this session | What it can and cannot prove |

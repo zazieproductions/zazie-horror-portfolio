@@ -2,6 +2,8 @@
 ## horror.zazieproductions.com | 2026-09-18
 ## Grey-hat aggressive but defensible | Preserve atmospheric horror aesthetic
 
+> **Commercial/pricing supersession — 2026-10-17.** This historical dossier contains former `$75.99` and funding-based pricing recommendations. Do not reuse those proposals as current public copy. The approved rate card is in `COMMERCIAL-OVERHAUL.md` and `src/data/pricing.ts`; other observations below are dated snapshots and should be revalidated before use.
+
 > **Correction, 2026-09-25 (sitelinks pass).** Some claims below were no longer
 > true in the tree when this pass started. Each was checked against the files:
 >

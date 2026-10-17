@@ -44,10 +44,10 @@ const HTML = 'html';
 /** [old, new, targets]. Text is matched exactly; see the header note. */
 const PAIRS = [
   // Hero
-  ['Dark, atmospheric horror scores, ', 'Original music for psychological horror ', BOTH],
-  ['written to your picture.', '& experimental cinema.', BOTH],
-  ['Original music for psychological horror, thrillers, and dark sci-fi,', 'Dissonance. Atmosphere. Emotional intensity.', BOTH],
-  ['composed for film, TV, and games.', 'Scores composed directly to picture.', BOTH],
+  ['Original music for psychological horror ', 'Dark, atmospheric horror scores, ', HTML],
+  ['& experimental cinema.', 'written to your picture.', HTML],
+  ['Dissonance. Atmosphere. Emotional intensity.', 'Original music for psychological horror, thrillers, and dark sci-fi,', HTML],
+  ['Scores composed directly to picture.', 'composed for film, TV, and games.', HTML],
   ['Start an inquiry', 'Request a scoring quote', BOTH],
   // Biography: no unverified award claim; feature work is quoted individually
   ['is an award-winning composer,', 'is a composer,', BOTH],
@@ -58,7 +58,12 @@ const PAIRS = [
   ['Choose a project type, scored runtime, complexity, and delivery needs.', 'Packages are priced by scored music minutes, not film length.', BOTH],
   ["Estimates scale with your project's funding.", 'Estimates are indicative and nonbinding.', BOTH],
   // Contact
-  ['Share your format, runtime, timeline, and budget.', 'Share your format, scored minutes, timeline, and budget.', BOTH],
+  ['Share your format, runtime, timeline, and budget.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', BUNDLE],
+  ['Share your format, scored minutes, timeline, and budget.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', HTML],
+  ['gu=["Short film","Feature","Series episode","Game / interactive","Installation / art"]', 'gu=["Not sure yet","Short film","Feature","Series episode","Game / interactive","Installation / art"]', BUNDLE],
+  ['a1=["Psychological / atmospheric horror","Supernatural dread","Body horror (musical atmosphere)","Folk horror","Techno-thriller","Cosmic dread","Dark drama / thriller","Game adaptive score","Other / hybrid cinematic"]', 'a1=["Not sure yet","Psychological / atmospheric horror","Supernatural dread","Body horror (musical atmosphere)","Folk horror","Techno-thriller","Cosmic dread","Dark drama / thriller","Game adaptive score","Other / hybrid cinematic"]', BUNDLE],
+  ['<select class="w-full border border-ash bg-void px-4 py-3 text-sm text-bone outline-none focus:border-blood" aria-label="Theme / tone"><option value="Psychological / atmospheric horror">Psychological / atmospheric horror</option>', '<select class="w-full border border-ash bg-void px-4 py-3 text-sm text-bone outline-none focus:border-blood" aria-label="Theme / tone"><option value="Not sure yet" selected>Not sure yet</option><option value="Psychological / atmospheric horror">Psychological / atmospheric horror</option>', HTML],
+  ['<select class="w-full border border-ash bg-void px-4 py-3 text-sm text-bone outline-none focus:border-blood" aria-label="Format"><option value="Short film">Short film</option>', '<select class="w-full border border-ash bg-void px-4 py-3 text-sm text-bone outline-none focus:border-blood" aria-label="Format"><option value="Not sure yet" selected>Not sure yet</option><option value="Short film">Short film</option>', HTML],
   ['I’ll reply within 48 hours.', 'A written quote follows review.', BOTH],
   ['label:"Runtime"', 'label:"Scored minutes (music, not film length)"', BUNDLE],
   ['placeholder:"e.g. 12 min / 90 min"', 'placeholder:"e.g. 3 scored minutes"', BUNDLE],

@@ -66,7 +66,11 @@
 // refetched once. Item routes are deliberately NOT in PRECACHE_ASSETS: 65 extra
 // documents at install time would cost a visitor far more than they gain, and
 // the static-asset path already caches the item bundle on first use.
-const CACHE_NAME = 'zazie-v31';
+// v32: the approved USD starting-fee card, estimator and homepage bundle are rebuilt.
+// Current short-form scope: scene 1–2 min / $250 from; focused 3–5 min / $650 from;
+// extended 6–12 min / $1,500 from. Substantial feature/experimental scores are
+// custom quoted with an indicative $2,500 minimum; individual feature cues remain scene-priced.
+const CACHE_NAME = 'zazie-v32';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -75,13 +79,13 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-f509fde0.css',
-  '/index-afdbc613.js',
+  '/index-2549fce9.js',
   '/store-eed3eeee.css',
   '/store-3fc01be0.js',
   '/legal-b5d07e1a.css',
   '/legal-fe809822.js',
-  '/estimator-ec3a9981.css',
-  '/estimator-9f40aae3.js',
+  '/estimator-308a5ff1.css',
+  '/estimator-9052be1a.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',
   '/images/hero-portrait.avif',

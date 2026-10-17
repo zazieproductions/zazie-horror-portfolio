@@ -20,7 +20,9 @@
 .zp-pkg-no { margin:0; font-size:.68rem; letter-spacing:.24em; color:#9a9590; font-variant-numeric:tabular-nums; }
 .zp-pkg-name { margin:.1rem 0 0; font-family:"Cormorant Garamond",Georgia,serif; font-weight:400; font-size:1.55rem; line-height:1.1; color:#f0ebe3; }
 .zp-pkg-price { margin:.35rem 0 0; font-family:"Cormorant Garamond",Georgia,serif; font-size:2rem; line-height:1; color:#f0ebe3; }
-.zp-pkg-minutes { margin:0; font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; color:#e65650; }
+.zp-pkg-price-note { margin:-.25rem 0 .15rem; font-size:.68rem; line-height:1.45; color:#9a9590; }
+.zp-pkg-minutes { margin:0; font-size:.72rem; letter-spacing:.12em; line-height:1.5; text-transform:uppercase; color:#e65650; }
+.zp-pricing-intro { margin:1.25rem 0 0; max-width:88ch; font-size:.84rem; line-height:1.65; color:#9a9590; }
 .zp-pkg-copy { margin:.4rem 0 0; font-size:.92rem; line-height:1.6; color:rgba(240,235,227,.82); }
 .zp-pkg-best { margin:0; font-size:.84rem; line-height:1.55; color:#9a9590; }
 .zp-pkg-best span { display:block; font-size:.62rem; letter-spacing:.22em; text-transform:uppercase; color:#e65650; margin-bottom:.15rem; }
@@ -83,6 +85,13 @@ textarea.zp-input { resize:vertical; }
 .zp-inq { display:grid; gap:1.1rem; border:1px solid #1e1e1e; background:#080808; padding:1.25rem; margin-top:1.5rem; }
 @media (min-width:640px){ .zp-inq { padding:1.75rem; } }
 .zp-inq-intro { font-size:.86rem; }
+.zp-inq-details { border:1px solid #1e1e1e; background:#030303; padding:1rem; }
+.zp-inq-details > summary { display:flex; flex-wrap:wrap; justify-content:space-between; gap:.4rem 1rem; cursor:pointer; font-size:.9rem; font-weight:600; color:#f0ebe3; list-style:none; }
+.zp-inq-details > summary::-webkit-details-marker { display:none; }
+.zp-inq-details > summary::after { content:"+"; margin-left:auto; color:#e65650; font-size:1.1rem; }
+.zp-inq-details[open] > summary::after { content:"−"; }
+.zp-inq-details > summary span { color:#9a9590; font-size:.78rem; font-weight:400; }
+.zp-inq-more { display:grid; gap:1.1rem; margin-top:1rem; }
 .zp-inq-actions { display:flex; flex-wrap:wrap; gap:.75rem; align-items:center; }
 .zp-inq-preview { border-top:1px solid #1e1e1e; padding-top:1rem; display:grid; gap:.6rem; }
 .zp-preview-text { font-size:.8rem; line-height:1.5; }
