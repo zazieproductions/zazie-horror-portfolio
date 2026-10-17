@@ -141,6 +141,23 @@
     if (targetId) openHash();
   }
 
+  /* --- Disclosures: open any <details> a URL hash points into --------------
+     Section deep links (/services#factors, /reel#track-…) must land on open
+     content even when the detail sits inside a collapsed read-more block. */
+  var openHashTarget = function () {
+    var id = (window.location.hash || "").replace("#", "");
+    if (!id) return;
+    var el = document.getElementById(id);
+    if (!el || !el.closest) return;
+    var d = el.closest("details");
+    while (d) {
+      d.open = true;
+      d = d.parentElement && d.parentElement.closest ? d.parentElement.closest("details") : null;
+    }
+  };
+  window.addEventListener("hashchange", openHashTarget);
+  openHashTarget();
+
   /* --- Copy plates -------------------------------------------------------- */
   $$("[data-copy]").forEach(function (btn) {
     btn.addEventListener("click", function () {
