@@ -426,6 +426,102 @@ td code,th code{white-space:nowrap}
   font-size:.625rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(154,149,144,.6);
 }
 
+/* --- Editorial layer -------------------------------------------------------
+   Magazine components for the portfolio hub pages: a standfirst opening,
+   drop caps, pull quotes, labelled sidenotes and "read more" disclosures.
+   The disclosures keep long-form copy in the DOM (crawlable, no JavaScript
+   required to open) while the visible page stays scannable. Nothing here
+   changes the documents' existing components; pages opt in per element.
+   ------------------------------------------------------------------------ */
+
+/* Standfirst: the serif opening line of an article section.
+   Selectors carry .doc-body so they outrank the generic .doc-body p rule. */
+.doc-body .standfirst{
+  margin:0 0 1.35rem;max-width:46ch;
+  font-family:var(--display);font-weight:400;
+  font-size:clamp(1.3rem,2.8vw,1.65rem);line-height:1.42;color:var(--bone);
+}
+.doc-body .standfirst em{font-style:italic;color:var(--blood)}
+.doc-body .standfirst strong{font-weight:400;color:var(--bone);box-shadow:inset 0 -.42em 0 rgba(196,30,30,.16)}
+
+/* Drop cap for the opening paragraph of an article */
+.doc-body p.dropcap::first-letter{
+  float:left;margin:.05em .14em 0 0;
+  font-family:var(--display);font-weight:400;font-size:3.7em;line-height:.8;color:var(--blood);
+}
+
+/* Pull quote: one strong line set apart in the display face */
+.pullquote{margin:2.1rem 0;padding:.15rem 0 .15rem 1.5rem;border-left:2px solid var(--blood)}
+.pullquote p{
+  margin:0;font-family:var(--display);font-style:italic;font-weight:400;
+  font-size:clamp(1.35rem,3.1vw,1.85rem);line-height:1.36;color:var(--bone);
+}
+.pullquote cite{
+  display:block;margin-top:.7rem;font-family:var(--sans);font-style:normal;
+  font-size:.5625rem;font-weight:500;letter-spacing:.3em;text-transform:uppercase;color:var(--mist);
+}
+
+/* Sidenote: a labelled margin note inside the reading column */
+.sidenote{
+  margin:1.6rem 0;padding:.95rem 1.15rem 1.05rem;
+  border:1px solid var(--edge);border-left:1px solid var(--blood);background:rgba(255,255,255,.015);
+}
+.sidenote .lbl{
+  margin:0 0 .45rem;font-size:.5625rem;font-weight:500;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--blood-text);
+}
+.sidenote p{margin:0;font-size:.8125rem;line-height:1.75;color:var(--body-dim)}
+.sidenote p + p{margin-top:.55rem}
+.sidenote a{color:var(--bone);text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(196,30,30,.6)}
+.sidenote a:hover{color:var(--ember)}
+
+/* Fine print: the fee/rate disclaimers, visually demoted but never hidden */
+.doc-body .doc-note{
+  margin:1.6rem 0 0;padding:.9rem 1.15rem;
+  border-left:1px solid var(--ash);background:rgba(255,255,255,.012);
+  font-size:.75rem;line-height:1.75;color:var(--body-dim);
+}
+
+/* Read-more disclosure: long-form detail stays in the document, collapsed */
+.doc-more{margin:1.5rem 0;border:1px solid var(--edge);background:rgba(255,255,255,.012)}
+.doc-more > summary{
+  display:flex;align-items:center;gap:.75rem;padding:.85rem 1.1rem;cursor:pointer;
+  list-style:none;font-size:.625rem;font-weight:500;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--mist);transition:color .2s;
+}
+.doc-more > summary::-webkit-details-marker{display:none}
+.doc-more > summary::before{
+  content:"+";flex:none;display:grid;place-items:center;width:1.05rem;height:1.05rem;
+  border:1px solid var(--ash);color:var(--blood-text);
+  font-size:.75rem;line-height:1;letter-spacing:0;transition:border-color .2s;
+}
+.doc-more[open] > summary::before{content:"−";border-color:rgba(196,30,30,.55)}
+.doc-more > summary:hover{color:var(--bone)}
+.doc-more > summary span{
+  margin-left:.15rem;font-size:.6875rem;font-weight:400;letter-spacing:.06em;
+  text-transform:none;color:rgba(154,149,144,.75);
+}
+.doc-more[open] > summary{border-bottom:1px solid var(--edge)}
+.doc-more .more-body{padding:1.05rem 1.15rem 1.2rem}
+.doc-more .more-body > * + *{margin-top:.85rem}
+.doc-more .more-body p{font-size:.875rem;line-height:1.8;color:var(--body-dim)}
+.doc-more .more-body strong{color:var(--bone)}
+.doc-more .more-body ul{font-size:.875rem;color:var(--body-dim)}
+
+/* Steps: numbered process lists inside the reading column */
+.doc-body ol.steps{list-style:none;counter-reset:docstep;margin:1.5rem 0 0;padding:0;border-top:1px solid var(--edge)}
+.doc-body ol.steps > li{
+  counter-increment:docstep;display:grid;grid-template-columns:2.75rem minmax(0,1fr);
+  gap:.15rem 1rem;align-items:start;padding:1.05rem .25rem 1.05rem 0;border-bottom:1px solid var(--edge);
+  font-size:.9375rem;line-height:1.75;color:var(--body);
+}
+.doc-body ol.steps > li + li{margin-top:0}
+.doc-body ol.steps > li::before{content:counter(docstep,decimal-leading-zero);font-family:var(--display);font-size:1.65rem;line-height:1.15;color:var(--blood)}
+.doc-body ol.steps strong{color:var(--bone);font-weight:600}
+
+/* Cue/track list container on the showreel hub */
+.faq-list{margin:1.5rem 0 0;border-top:1px solid var(--edge)}
+
 /* --- Motion / print ------------------------------------------------------ */
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -446,6 +542,12 @@ td code,th code{white-space:nowrap}
   .faq-item summary{color:#000}
   .faq-item .answer{padding-left:0;padding-right:0}
   .note,.flag,.fact,.warn{border:1px solid #999;background:#fff}
+  .pullquote{border-left-color:#000}
+  .pullquote p{color:#000}
+  .sidenote,.doc-more{border:1px solid #999;background:#fff}
+  .doc-more > summary{color:#000}
+  .doc-more .more-body p,.sidenote p,.doc-body .doc-note{color:#333}
+  .doc-body p.dropcap::first-letter{color:#7a0f0f}
   .table-wrap{border-color:#999}
   thead th{background:#eee;color:#000}
   a{color:#000;text-decoration:underline}

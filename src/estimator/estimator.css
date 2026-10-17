@@ -121,4 +121,30 @@ textarea.zp-input { resize:vertical; }
 .zp-home-section .zp-lead { margin:0 0 1.5rem; max-width:44rem; font-size:.95rem; line-height:1.7; color:#9a9590; }
 .zp-home-section .zp-sub { margin:2.5rem 0 .25rem; font-size:.66rem; letter-spacing:.3em; text-transform:uppercase; color:#9a9590; }
 
+/* ----- CTA rows (paired call-to-action buttons on the hub pages) */
+.zp-cta-row { display:flex; flex-wrap:wrap; gap:.75rem; margin:1.75rem 0 0; }
+
+/* ----- Commission steps (editorial numbered list) */
+.zp-steps { list-style:none; counter-reset:zpstep; margin:1.5rem 0 0; padding:0; border-top:1px solid #1e1e1e; }
+.zp-steps li { counter-increment:zpstep; display:grid; grid-template-columns:2.75rem minmax(0,1fr); gap:.15rem 1rem; align-items:start; padding:1.05rem .25rem 1.05rem 0; border-bottom:1px solid #1e1e1e; font-size:.92rem; line-height:1.7; color:rgba(240,235,227,.82); }
+.zp-steps li::before { content:counter(zpstep,decimal-leading-zero); font-family:"Cormorant Garamond",Georgia,serif; font-size:1.65rem; line-height:1.15; color:#c41e1e; }
+.zp-steps li strong { color:#f0ebe3; font-weight:600; }
+.zp-steps a { color:#f0ebe3; text-decoration:underline; text-underline-offset:3px; text-decoration-color:rgba(196,30,30,.6); }
+.zp-steps a:hover { color:#ff2a2a; text-decoration-color:#ff2a2a; }
+
+/* ----- Quote factors (definition list, label column + detail column) */
+.zp-factors-list { margin:1.5rem 0 0; border-top:1px solid #1e1e1e; }
+.zp-factors-list > div { display:grid; grid-template-columns:1fr; gap:.25rem; padding:.9rem 0; border-bottom:1px solid #1e1e1e; }
+@media (min-width:760px){ .zp-factors-list > div { grid-template-columns:minmax(0,13rem) minmax(0,1fr); gap:.25rem 1.5rem; } }
+.zp-factors-list dt { font-size:.62rem; font-weight:500; letter-spacing:.24em; text-transform:uppercase; color:#e65650; padding-top:.22rem; }
+.zp-factors-list dd { margin:0; font-size:.88rem; line-height:1.7; color:rgba(240,235,227,.82); }
+
+/* ----- Licence options (name / effect badge / note rows) */
+.zp-licences { list-style:none; margin:1.5rem 0 0; padding:0; border-top:1px solid #1e1e1e; }
+.zp-licences li { display:grid; grid-template-columns:1fr; gap:.5rem; align-items:start; padding:1.1rem 0; border-bottom:1px solid #1e1e1e; }
+@media (min-width:900px){ .zp-licences li { grid-template-columns:minmax(0,15rem) minmax(0,13.5rem) minmax(0,1fr); gap:1.25rem; align-items:baseline; } }
+.zp-licence-name { font-family:"Cormorant Garamond",Georgia,serif; font-size:1.25rem; line-height:1.25; color:#f0ebe3; }
+.zp-licence-effect { justify-self:start; display:inline-block; border:1px solid rgba(196,30,30,.45); background:rgba(196,30,30,.08); padding:.32rem .6rem; font-size:.6rem; line-height:1.4; letter-spacing:.14em; text-transform:uppercase; color:#e65650; }
+.zp-licence-note { font-size:.85rem; line-height:1.65; color:#9a9590; }
+
 @media (prefers-reduced-motion:reduce) { .zp-cta, .zp-choice { transition:none; } }
