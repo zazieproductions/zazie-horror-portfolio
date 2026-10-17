@@ -79,7 +79,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-f509fde0.css',
-  '/index-2549fce9.js',
+  '/index-0f649b5c.js',
   '/store-eed3eeee.css',
   '/store-3fc01be0.js',
   '/legal-b5d07e1a.css',
