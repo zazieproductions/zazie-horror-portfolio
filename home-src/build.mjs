@@ -36,6 +36,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const here = path.join(root, 'home-src');
 const pricing = await import('../build/lib/pricing-markup.js');
 const { budgetOptions, budgetSelectOptions, estimatorHtml, packagesHtml, inclusionsHtml } = pricing;
+const { MICROBUDGET_STATEMENT } = await import('../build/data/pricing.js');
 
 const BOTH = 'both';
 const BUNDLE = 'bundle';
@@ -58,10 +59,14 @@ const PAIRS = [
   ['04 · Scope and budget', '04 · Scoring services', BOTH],
   ['Build a scope and estimate', 'Choose a package, then estimate', BOTH],
   ['Choose a project type, scored runtime, complexity, and delivery needs.', 'Packages are priced by scored music minutes, not film length.', BOTH],
-  ["Estimates scale with your project's funding.", 'Estimates are indicative and nonbinding.', BOTH],
+  ["Estimates scale with your project's funding.", 'Preliminary estimate — final quotation subject to creative scope and written agreement.', BUNDLE],
+  ['Packages are priced by scored music minutes, not film length. Estimates are indicative and nonbinding.', 'Packages are priced by scored music minutes, not film length. Preliminary estimate — final quotation subject to creative scope and written agreement.', HTML],
   // Contact
   ['Share your format, runtime, timeline, and budget.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', BUNDLE],
   ['Share your format, scored minutes, timeline, and budget.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', HTML],
+  // Repair the duplicate sentence present in the latest static homepage snapshot.
+  ['Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send. The form prepares an email for you to review and send.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', HTML],
+  ['"dateModified": "2026-10-17"', '"dateModified": "2026-10-18"', HTML],
   ['gu=["Short film","Feature","Series episode","Game / interactive","Installation / art"]', 'gu=["Not sure yet","Short film","Feature","Series episode","Game / interactive","Installation / art"]', BUNDLE],
   ['a1=["Psychological / atmospheric horror","Supernatural dread","Body horror (musical atmosphere)","Folk horror","Techno-thriller","Cosmic dread","Dark drama / thriller","Game adaptive score","Other / hybrid cinematic"]', 'a1=["Not sure yet","Psychological / atmospheric horror","Supernatural dread","Body horror (musical atmosphere)","Folk horror","Techno-thriller","Cosmic dread","Dark drama / thriller","Game adaptive score","Other / hybrid cinematic"]', BUNDLE],
   ['<select class="w-full border border-ash bg-void px-4 py-3 text-sm text-bone outline-none focus:border-blood" aria-label="Theme / tone"><option value="Psychological / atmospheric horror">Psychological / atmospheric horror</option>', '<select class="w-full border border-ash bg-void px-4 py-3 text-sm text-bone outline-none focus:border-blood" aria-label="Theme / tone"><option value="Not sure yet" selected>Not sure yet</option><option value="Psychological / atmospheric horror">Psychological / atmospheric horror</option>', HTML],
@@ -89,12 +94,18 @@ const ISLAND_CLOSE = '</div></div>';
  */
 function islandHtml(staticMarkers = false) {
   const block = (name, render) => (staticMarkers ? `<!--zp:${name}--><!--/zp:${name}-->` : render());
+  // The static copy carries a pricing token so sync-pricing keeps it in step;
+  // the bundle inlines the same statement from pricing.ts at build time.
+  const microbudget = staticMarkers
+    ? '<p class="zp-microbudget">{{zp:microbudget}}</p>'
+    : `<p class="zp-microbudget">${MICROBUDGET_STATEMENT}</p>`;
   return [
     ISLAND_OPEN,
     '<p class="zp-kicker">Commission packages</p>',
     '<h3 class="zp-sub" style="margin-top:0">Choose by scored music minutes</h3>',
     block('packages', packagesHtml),
     block('inclusions', inclusionsHtml),
+    microbudget,
     '<h3 class="zp-sub">Estimate your scope</h3>',
     block('estimator', estimatorHtml),
     ISLAND_CLOSE,
@@ -158,7 +169,7 @@ function patchStatic(html) {
   const sectionEnd = out.indexOf('</section>', sectionStart);
   if (sectionStart < 0 || sectionEnd < 0) throw new Error('index.html: no #services section');
   if (!out.slice(sectionStart, sectionEnd).includes('zp-home-section')) {
-    const header = out.indexOf('Estimates are indicative and nonbinding.', sectionStart);
+    const header = out.indexOf('Packages are priced by scored music minutes, not film length.', sectionStart);
     if (header < 0) throw new Error('index.html: services header paragraph not found');
     const gridOpen = '<div class="grid gap-5 lg:grid-cols-12 lg:gap-6">';
     const gridStart = out.indexOf(gridOpen, header);

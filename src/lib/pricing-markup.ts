@@ -16,6 +16,7 @@ import {
   DEFAULT_SCOPE,
   FEATURE_MINIMUM_ENGAGEMENT,
   EXTRA_CUE_FEE,
+  EXTRA_REVISION_MINIMUM,
   EXTRA_REVISION_RATE,
   FORMATS,
   LICENCES,
@@ -24,13 +25,17 @@ import {
   MAX_EXTRA_REVISION_ROUNDS,
   MAX_MINUTES_INPUT,
   MINIMUM_FEE,
+  MICROBUDGET_STATEMENT,
   PACKAGES,
+  PAYMENT_TERMS,
   PRICING_NOTICE,
   PRICING_REVIEWED,
   PRICING_STATUS,
+  REVISION_DEFINITION,
   RUNTIME_NOTICE,
   SPECIALIST_DELIVERABLES,
   STANDARD_INCLUSIONS,
+  STARTING_FEE_NOTE,
   COMPLEXITY,
   budgetOptions,
   packageById,
@@ -81,6 +86,13 @@ export function tokenValue(key: string): string | null {
   if (head === 'status' && !field) return PRICING_STATUS;
   if (head === 'pricing' && field === 'summary') return pricingSummary();
   if (head === 'feature' && field === 'minimum') return usd(FEATURE_MINIMUM_ENGAGEMENT);
+  if (head === 'feature-minimum' && !field) return usd(FEATURE_MINIMUM_ENGAGEMENT);
+  if (head === 'revision-minimum' && !field) return usd(EXTRA_REVISION_MINIMUM);
+  if (head === 'revision-rate' && !field) return `${Math.round(EXTRA_REVISION_RATE * 100)}%`;
+  if (head === 'revision-definition' && !field) return REVISION_DEFINITION;
+  if (head === 'starting-fee-note' && !field) return STARTING_FEE_NOTE;
+  if (head === 'microbudget' && !field) return MICROBUDGET_STATEMENT;
+  if (head === 'payment' && !field) return PAYMENT_TERMS;
   const pkg = PACKAGES.find((p) => p.id === head);
   if (!pkg) return null;
   const span = publishedSpan(pkg);
@@ -91,6 +103,8 @@ export function tokenValue(key: string): string | null {
     case 'summary': return pkg.summary;
     case 'bestFor': return pkg.bestFor;
     case 'from': return span ? usd(span.low) : 'a custom quotation';
+    case 'high': return span ? usd(span.high) : 'a custom quotation';
+    case 'minimum': return pkg.indicativeMinimum ? usd(pkg.indicativeMinimum) : (span ? usd(span.low) : 'a custom quotation');
     default: return null;
   }
 }
@@ -110,7 +124,7 @@ function packageCard(pkg: PricingPackage, index: number): string {
   const contact = `/contact?package=${pkg.id}`;
   const cta = pkg.display === 'custom' ? 'Discuss a feature or experimental score' : `Request a quote for ${esc(pkg.name)}`;
   const priceNote = pkg.display === 'custom'
-    ? `Indicative minimum ${usd(FEATURE_MINIMUM_ENGAGEMENT)} USD for substantial scoring engagements only`
+    ? `Indicative minimum ${usd(pkg.indicativeMinimum ?? FEATURE_MINIMUM_ENGAGEMENT)} USD for substantial scoring engagements only`
     : `Starting fee · ${CURRENCY} · not a fixed-price cap`;
   return [
     `<article class="zp-pkg" id="package-${pkg.id}" data-package="${pkg.id}">`,
@@ -167,15 +181,16 @@ export function factorsHtml(): string {
   const minutePackages = PACKAGES.filter((pkg) => pkg.minutes !== null);
   const bands = minutePackages.map((pkg) => `${pkg.minutes!.min}–${pkg.minutes!.max} minutes (${pkg.name})`).join('; ');
   const items: [string, string][] = [
-    ['Scored music', `Non-overlapping whole-minute bands: ${bands}. More than ${LONG_FORM_THRESHOLD_MINUTES} scored minutes is quoted individually; scope labels are guides, not duration guarantees.`],
-    ['Starting fees', 'Published fees are starting points, not fixed-price caps. The written quote sets the agreed music scope and fee.'],
+    ['Starting fee, not a ceiling', STARTING_FEE_NOTE],
+    ['Scored music', `Non-overlapping whole-minute bands: ${bands}. More than ${LONG_FORM_THRESHOLD_MINUTES} scored minutes, multi-part or expanded-scope work is quoted individually; scope labels are guides, not duration guarantees.`],
     ['Cues', `Two cues per scored minute are included. Each additional cue is ${usd(EXTRA_CUE_FEE)} before the adjustments below.`],
     ['Musical complexity', COMPLEXITY.map((c) => `${c.label} ${pct(c.multiplier)}`).join('; ') + '.'],
-    ['Schedule', DEADLINES.map((d) => `${d.label} ${pct(d.multiplier)}`).join('; ') + '.'],
-    ['Revisions', `Two rounds per cue are included. Each additional round adds ${Math.round(EXTRA_REVISION_RATE * 100)}%, up to ${MAX_EXTRA_REVISION_ROUNDS} rounds.`],
-    ['Licence', LICENCES.filter((l) => !l.quoted).map((l) => `${l.label} ${pct(l.multiplier)}`).join('; ') + '. A full buyout or soundtrack album is quoted individually.'],
-    ['Feature & experimental', `Custom quotation. The indicative minimum of ${usd(FEATURE_MINIMUM_ENGAGEMENT)} applies only to substantial full-project scoring; a single scene/cue for a feature is not subject to it.`],
+    ['Schedule', DEADLINES.map((d) => `${d.label} ${pct(d.multiplier)}`).join('; ') + '. Rush is subject to availability.'],
+    ['Revisions', `One consolidated round is included for Individual Scene and Focused scores; two rounds for Extended and Feature/Experimental scores, as confirmed in the written scope. Each additional round is ${usd(EXTRA_REVISION_MINIMUM)} minimum or ${Math.round(EXTRA_REVISION_RATE * 100)}% of the commission fee, whichever is greater, up to ${MAX_EXTRA_REVISION_ROUNDS} rounds. ${REVISION_DEFINITION}`],
+    ['Licence', LICENCES.filter((l) => !l.quoted).map((l) => `${l.label} ${pct(l.multiplier)}`).join('; ') + '. Exclusivity, copyright assignment, soundtrack exploitation and expanded uses require a separate written agreement. A copyright buyout or soundtrack album is quoted individually.'],
+    ['Feature & experimental', `Custom quotation. The indicative minimum of ${usd(FEATURE_MINIMUM_ENGAGEMENT)} applies only to substantial feature-film or experimental-cinema scoring engagements; a single scene/cue for a feature may use Individual Scene Scoring.`],
     ['Individual scene minimum', `${usd(MINIMUM_FEE)} starting fee.`],
+    ['Payment', PAYMENT_TERMS],
   ];
   return [
     `<dl class="zp-factors-list">`,
@@ -189,7 +204,9 @@ export function licencesHtml(): string {
   return [
     `<ul class="zp-licences">`,
     LICENCES.map((l) => {
-      const effect = l.quoted ? 'Quoted individually' : (l.multiplier === 1 ? 'Base licence' : `Adds ${Math.round((l.multiplier - 1) * 100)}% to the composition fee`);
+      const effect = l.quoted
+        ? 'Quoted individually under a separate written agreement'
+        : (l.multiplier === 1 ? 'Base licence' : `Adds ${Math.round((l.multiplier - 1) * 100)}% to the composition fee under a separate written agreement`);
       return `<li><span class="zp-licence-name">${esc(l.label)}</span> <span class="zp-licence-effect">${esc(effect)}</span><span class="zp-licence-note">${esc(l.description)}</span></li>`;
     }).join(''),
     `</ul>`,
@@ -225,7 +242,7 @@ function licenceOptions(selected: LicenceId): string {
 function revisionOptions(selected: number): string {
   const options: string[] = [];
   for (let n = 0; n <= MAX_EXTRA_REVISION_ROUNDS; n += 1) {
-    const label = n === 0 ? 'None: two rounds per cue, included' : `${n} additional ${n === 1 ? 'round' : 'rounds'}`;
+    const label = n === 0 ? 'None: included package allowance only' : `${n} additional ${n === 1 ? 'round' : 'rounds'}`;
     options.push(`<option value="${n}"${n === selected ? ' selected' : ''}>${esc(label)}</option>`);
   }
   return options.join('');
@@ -239,7 +256,7 @@ export function estimatorFormHtml(scope: QuoteInput, cueText: string): string {
     `<div class="zp-grid2">`,
     `<label class="zp-field"><span class="zp-label">Scored music minutes</span>`,
     `<input class="zp-input" type="number" name="min" min="1" max="${MAX_MINUTES_INPUT}" step="1" inputmode="numeric" value="${Math.round(scope.scoredMinutes)}" aria-describedby="zp-min-help">`,
-    `<small id="zp-min-help" class="zp-help">Minutes of finished music, not film runtime. Whole-minute bands do not overlap; above ${LONG_FORM_THRESHOLD_MINUTES} minutes is quoted individually.</small></label>`,
+    `<small id="zp-min-help" class="zp-help">Minutes of finished music, not film runtime. Whole-minute bands do not overlap; over ${LONG_FORM_THRESHOLD_MINUTES} minutes or expanded scope is quoted individually. Starting fees are floors, not ceilings.</small></label>`,
     `<label class="zp-field"><span class="zp-label">Number of cues <span class="zp-opt">(optional)</span></span>`,
     `<input class="zp-input" type="number" name="cues" min="0" max="${MAX_CUES}" step="1" inputmode="numeric" value="${esc(cueText)}" aria-describedby="zp-cue-help">`,
     `<small id="zp-cue-help" class="zp-help">Leave blank if unsure. Two cues per scored minute are included.</small></label>`,
@@ -251,10 +268,10 @@ export function estimatorFormHtml(scope: QuoteInput, cueText: string): string {
     `<fieldset class="zp-group"><legend>Musical complexity</legend><div class="zp-choices">${complexityOptions(scope.complexity)}</div></fieldset>`,
     `<fieldset class="zp-group"><legend>Schedule</legend><div class="zp-choices">${deadlineOptions(scope.deadline)}</div></fieldset>`,
     `<fieldset class="zp-group"><legend>Revisions</legend>`,
-    `<label class="zp-field"><span class="zp-label">Beyond the two included rounds per cue</span>`,
+    `<label class="zp-field"><span class="zp-label">Additional consolidated revision rounds beyond the package allowance</span>`,
     `<select class="zp-input" name="rev">${revisionOptions(scope.extraRevisionRounds)}</select></label></fieldset>`,
     `<fieldset class="zp-group"><legend>Licence</legend><div class="zp-choices">${licenceOptions(scope.licence)}</div>`,
-    `<p class="zp-help">Composition is priced separately from the rights it is licensed under. A full buyout and a soundtrack album are quoted individually.</p></fieldset>`,
+    `<p class="zp-help">Composition is priced separately from the rights it is licensed under. Exclusivity, expanded use, a copyright buyout and a soundtrack album require a separate written agreement; buyouts and albums are quoted individually.</p></fieldset>`,
     `</form>`,
   ].join('');
 }
@@ -284,9 +301,9 @@ export function estimateSummary(scope: QuoteInput, q: Quote): string {
     return `Estimator: custom quotation requested. ${q.message} Scored music ${Math.round(scope.scoredMinutes)} min.`;
   }
   const lines = [
-    `Estimator selections (indicative, nonbinding):`,
+    `Estimator selections (preliminary estimate — final quotation subject to creative scope and written agreement):`,
     ...q.factors.map((f) => `- ${f.label}: ${f.value}`),
-    `- Indicative range: ${usd(q.low)}${DASH}${usd(q.high)}`,
+    `- Preliminary range: ${usd(q.low)}${DASH}${usd(q.high)}`,
   ];
   return lines.join('\n');
 }
@@ -297,7 +314,7 @@ export function resultHtml(scope: QuoteInput, q: Quote): string {
   if (q.kind === 'custom') {
     const pkg = q.reason === 'long-form' || q.reason === 'feature-project' ? packageById('feature') : null;
     return [
-      `<p class="zp-eyebrow">Custom quotation · not an estimate</p>`,
+      `<p class="zp-eyebrow">Custom quotation · final quotation subject to creative scope and written agreement</p>`,
       `<p class="zp-result-pkg">${esc(pkg ? pkg.name : 'Custom scope')}</p>`,
       `<p class="zp-result-range zp-result-custom">Custom quotation</p>`,
       `<p class="zp-result-msg">${esc(q.message)}</p>`,
@@ -306,13 +323,13 @@ export function resultHtml(scope: QuoteInput, q: Quote): string {
     ].join('');
   }
   return [
-    `<p class="zp-eyebrow">Indicative range · not a quote</p>`,
+    `<p class="zp-eyebrow">Preliminary estimate — final quotation subject to creative scope and written agreement</p>`,
     `<p class="zp-result-pkg">${esc(q.packageName)}</p>`,
     `<p class="zp-result-range" aria-label="${esc(usd(q.low))} to ${esc(usd(q.high))}">${esc(usd(q.low))}<span class="zp-dash" aria-hidden="true"> ${DASH} </span>${esc(usd(q.high))}</p>`,
     `<ul class="zp-factors">`,
     q.factors.map((f) => `<li><span>${esc(f.label)}</span>${esc(f.value)}</li>`).join(''),
     `</ul>`,
-    `<p class="zp-result-msg">Complex composition, unusual deadlines, extensive revisions and expanded licensing can increase a quotation.</p>`,
+    `<p class="zp-result-msg">Starting fees are floors, not ceilings. Complex composition, unusual deadlines, extensive revisions and expanded licensing can increase a quotation.</p>`,
     cta,
     `<p class="zp-fine">${esc(PRICING_NOTICE)}</p>`,
   ].join('');
@@ -325,7 +342,7 @@ export function estimatorHtml(scope: QuoteInput = DEFAULT_SCOPE): string {
   return [
     `<div class="zp-est" data-zp-est>`,
     estimatorFormHtml(scope, cueText),
-    `<aside class="zp-est-result" data-zp-result aria-live="polite" aria-label="Indicative estimate">`,
+    `<aside class="zp-est-result" data-zp-result aria-live="polite" aria-label="Preliminary estimate">`,
     resultHtml(scope, q),
     `</aside>`,
     `</div>`,
@@ -344,7 +361,7 @@ export function inquiryFormHtml(): string {
     `<option value="">Not sure yet</option>`,
     PACKAGES.map((pkg) => {
       const detail = pkg.display === 'custom'
-        ? `Custom quotation; indicative minimum ${usd(FEATURE_MINIMUM_ENGAGEMENT)} USD for substantial scores`
+        ? `Custom quotation; indicative minimum ${usd(pkg.indicativeMinimum ?? FEATURE_MINIMUM_ENGAGEMENT)} USD for substantial scores`
         : `${priceLabel(pkg)} USD starting fee`;
       return `<option value="${pkg.id}">${esc(pkg.name)} (${esc(detail)})</option>`;
     }).join(''),
@@ -382,6 +399,8 @@ export function inquiryFormHtml(): string {
     `<label class="zp-field"><span class="zp-label">Anything else <span class="zp-opt">(optional)</span></span><textarea class="zp-input" name="notes" rows="3" placeholder="Questions, constraints or anything you would like me to know."></textarea></label>`,
     `<p class="zp-help">Unreleased material is treated as confidential. A mutual NDA is available before anything is shared.</p>`,
     `</div></details>`,
+    `<p class="zp-help">${esc(MICROBUDGET_STATEMENT)}</p>`,
+    `<p class="zp-help">Payment terms: ${esc(PAYMENT_TERMS)}</p>`,
     `<p class="zp-error" data-zp-error role="alert" hidden></p>`,
     `<div class="zp-inq-actions"><button class="zp-cta" type="submit">Prepare my scoring inquiry</button></div>`,
     `<div class="zp-inq-preview" data-zp-preview hidden>`,
@@ -410,11 +429,14 @@ export function budgetSelectOptions(): string {
 export function offersGraph(serviceId: string, provider: string): object {
   const offers = PACKAGES.map((pkg) => {
     const span = publishedSpan(pkg);
+    const minimum = pkg.indicativeMinimum
+      ? ` Indicative minimum ${usd(pkg.indicativeMinimum)} for substantial feature-film or experimental-cinema scoring; a single scene/cue for a feature may use Individual Scene Scoring.`
+      : '';
     const base: Record<string, unknown> = {
       '@type': 'Offer',
       '@id': `${SITE_ORIGIN}/services#offer-${pkg.id}`,
       name: pkg.name,
-      description: `${pkg.summary} Scope guide: ${pkg.scopeLabel}. ${pkg.id === 'feature' ? `Indicative minimum ${usd(FEATURE_MINIMUM_ENGAGEMENT)} USD applies only to substantial full-project scoring; individual scene/cue commissions for a feature may use Individual Scene Scoring.` : `Starting fee in ${CURRENCY}; the scope guide is not a fixed-price cap or duration guarantee.`} Price is indicative and nonbinding; a written quote follows review.`,
+      description: `${pkg.summary} Scope guide: ${pkg.scopeLabel}.${minimum} Published figures are starting fees, not ceilings. Preliminary estimate — final quotation subject to creative scope and written agreement.`,
       itemOffered: { '@id': serviceId },
       seller: { '@id': provider },
       availability: 'https://schema.org/LimitedAvailability',

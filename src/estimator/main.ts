@@ -148,7 +148,7 @@ function prefillInquiry(form: HTMLFormElement): void {
       const q = quote(scope);
       intro.hidden = false;
       intro.textContent = q.kind === 'estimate'
-        ? `Your estimator selections are included in the notes: indicative ${q.packageName} range ${Math.round(q.low)}${DASH}${Math.round(q.high)} USD. It is nonbinding.`
+        ? `Your estimator selections are included in the notes: preliminary ${q.packageName} estimate ${Math.round(q.low)}${DASH}${Math.round(q.high)} dollars. Final quotation subject to creative scope and written agreement.`
         : 'Your estimator selections are included in the notes. This scope needs a quotation, so it is priced after review.';
     }
   }
