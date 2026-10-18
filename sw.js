@@ -66,11 +66,13 @@
 // refetched once. Item routes are deliberately NOT in PRECACHE_ASSETS: 65 extra
 // documents at install time would cost a visitor far more than they gain, and
 // the static-asset path already caches the item bundle on first use.
-// v32: the approved USD starting-fee card, estimator and homepage bundle are rebuilt.
-// Current short-form scope: scene 1–2 min / $250 from; focused 3–5 min / $650 from;
-// extended 6–12 min / $1,500 from. Substantial feature/experimental scores are
-// custom quoted with an indicative $2,500 minimum; individual feature cues remain scene-priced.
-const CACHE_NAME = 'zazie-v32';
+// v33: editorial pass on the nine hub pages — services layout shell restored,
+// licence/factor/step/note blocks styled, long-form detail moved into read-more
+// disclosures; legal + estimator stylesheets rebuilt with the editorial layer.
+// Pricing unchanged: scene 1–2 min / $250 from; focused 3–5 min / $650 from;
+// extended 6–12 min / $1,500 from; substantial feature/experimental scores
+// custom quoted with an indicative $2,500 minimum.
+const CACHE_NAME = 'zazie-v33';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -82,9 +84,9 @@ const PRECACHE_ASSETS = [
   '/index-0f649b5c.js',
   '/store-eed3eeee.css',
   '/store-3fc01be0.js',
-  '/legal-b5d07e1a.css',
-  '/legal-fe809822.js',
-  '/estimator-308a5ff1.css',
+  '/legal-886033c7.css',
+  '/legal-ab598df8.js',
+  '/estimator-b63bdccc.css',
   '/estimator-9052be1a.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',

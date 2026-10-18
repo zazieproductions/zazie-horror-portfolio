@@ -111,7 +111,7 @@ export const hubs: Hub[] = [
     name: "Selected productions",
     title: "Selected Production Records: Film, Television and Experimental Work | Zazie Productions",
     description: "Nine selected production records across films, television, and experimental work. Project notes distinguish verified composing, co-composing, sound-design, and production credits.",
-    lastmod: "2026-10-13",
+    lastmod: "2026-10-17",
     images: [
       { loc: "https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg", caption: "EXPIRE (2025) - IMDb credits Zazie Kanwar-Torge for sound design; other composers are listed separately.", title: "EXPIRE - Production Record and Sound-Design Credit" },
       { loc: "https://horror.zazieproductions.com/images/posters/unseen-640.jpg", caption: "UNSEEN feature; IMDb lists Steve Merlo as composer.", title: "UNSEEN - Feature Film Record" },
@@ -138,7 +138,7 @@ export const hubs: Hub[] = [
     name: "Showreel",
     title: "Horror Composer Showreel: 32 Original Dark Cinematic Cues | Zazie Productions",
     description: "Stream 32 original horror showreel cues by Zazie Kanwar-Torge: psychological dread beds, tension stingers, dark ambient textures, body horror, and thriller themes.",
-    lastmod: "2026-10-13",
+    lastmod: "2026-10-17",
     images: [],
     videos: [],
   },
@@ -147,7 +147,7 @@ export const hubs: Hub[] = [
     name: "Composer biography",
     title: "Zazie Kanwar-Torge: Psychological Horror Composer Biography | Zazie Productions",
     description: "Biography of psychological horror composer Zazie Kanwar-Torge, founder of Zazie Productions LLC in Asheville, NC, scoring dark atmospheric films, series, and games.",
-    lastmod: "2026-10-13",
+    lastmod: "2026-10-17",
     images: [
       { loc: "https://horror.zazieproductions.com/images/headshot.jpg", caption: "Zazie Kanwar-Torge, psychological horror composer and founder of Zazie Productions LLC, Asheville NC.", title: "Zazie Kanwar-Torge - Psychological Horror Composer Biography" },
     ],
@@ -158,7 +158,7 @@ export const hubs: Hub[] = [
     name: "Scoring process",
     title: "Horror Film Scoring Process: Spotting to Stems | Zazie Productions",
     description: "Four-stage horror film scoring process by Zazie Kanwar-Torge: spotting session, palette and motif sketches, scoring to picture with revisions, and final WAV files.",
-    lastmod: "2026-10-13",
+    lastmod: "2026-10-17",
     images: [
       { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Kanwar-Torge at the scoring desk, Asheville, NC studio", title: "Horror Film Scoring Suite - Process" },
     ],
@@ -303,7 +303,7 @@ export const hubs: Hub[] = [
     name: "Game scoring",
     title: "Adaptive Horror Game Scoring & Music | Zazie Productions",
     description: "Adaptive horror scoring for games: states, seamless loops, layered cues, stingers and implementation notes for Wwise, FMOD, Unity and Unreal pipelines.",
-    lastmod: "2026-10-13",
+    lastmod: "2026-10-17",
     images: [
       { loc: "https://horror.zazieproductions.com/images/posters/the-dark-awaits-640.jpg", caption: "THE DARK AWAITS - the tonal register behind adaptive horror scoring for games, by Zazie Kanwar-Torge.", title: "Adaptive Horror Game Scoring - Zazie Productions" },
     ],
