@@ -110,10 +110,33 @@ function syncFile(file) {
     if (tokenValue(m[1]) === null) errors.push(`${where}:${lineOf(source, m.index)} unknown pricing value <!--v:${m[1]}-->`);
   }
 
+  const jsonEscape = (value) => JSON.stringify(String(value)).slice(1, -1);
+
   let text = syncBlocks(source, where);
-  // Refresh wrapped values, then wrap any raw token that has not been wrapped yet.
-  text = text.replace(/<!--v:([a-z0-9.\-]+)-->[\s\S]*?<!--\/v:\1-->/g, (_m, key) => `<!--v:${key}-->${tokenValue(key) ?? ''}<!--/v:${key}-->`);
-  text = text.replace(/\{\{zp:([a-z0-9.\-]+)\}\}/g, (_m, key) => `<!--v:${key}-->${tokenValue(key) ?? ''}<!--/v:${key}-->`);
+  const parts = [];
+  let cursor = 0;
+  for (const scriptMatch of text.matchAll(/<script\b[^>]*\btype=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi)) {
+    const start = scriptMatch.index;
+    const rawHtml = text.slice(cursor, start);
+    parts.push(
+      rawHtml
+        .replace(/<!--v:([a-z0-9.\-]+)-->[\s\S]*?<!--\/v:\1-->/g, (_m, key) => `<!--v:${key}-->${tokenValue(key) ?? ''}<!--/v:${key}-->`)
+        .replace(/\{\{zp:([a-z0-9.\-]+)\}\}/g, (_m, key) => `<!--v:${key}-->${tokenValue(key) ?? ''}<!--/v:${key}-->`),
+    );
+    parts.push(
+      scriptMatch[0]
+        .replace(/<!--v:([a-z0-9.\-]+)-->[\s\S]*?<!--\/v:\1-->/g, (_m, key) => jsonEscape(tokenValue(key) ?? ''))
+        .replace(/\{\{zp:([a-z0-9.\-]+)\}\}/g, (_m, key) => jsonEscape(tokenValue(key) ?? '')),
+    );
+    cursor = start + scriptMatch[0].length;
+  }
+  parts.push(
+    text
+      .slice(cursor)
+      .replace(/<!--v:([a-z0-9.\-]+)-->[\s\S]*?<!--\/v:\1-->/g, (_m, key) => `<!--v:${key}-->${tokenValue(key) ?? ''}<!--/v:${key}-->`)
+      .replace(/\{\{zp:([a-z0-9.\-]+)\}\}/g, (_m, key) => `<!--v:${key}-->${tokenValue(key) ?? ''}<!--/v:${key}-->`),
+  );
+  text = parts.join('');
   return { file, where, before: source, after: text };
 }
 
