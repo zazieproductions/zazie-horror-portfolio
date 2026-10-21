@@ -122,6 +122,10 @@ for (const required of ['Person', 'Organization', 'WebSite', 'WebPage']) {
   if (homeTypes.filter((type) => type === required).length !== 1) fail(`homepage JSON-LD must contain exactly one ${required} node`);
 }
 if (homeNodes.length !== 4) fail(`homepage JSON-LD should contain only Person, Organization, WebSite and WebPage; found ${homeNodes.length} nodes`);
+// This is a portfolio page with multiple supplementary samples, not a video
+// watch page. Keep VideoObject markup off the homepage; Google otherwise
+// selects one sample from the portfolio and rejects it as non-primary content.
+if (homeTypes.includes('VideoObject')) fail('homepage must not declare VideoObject schema; publish video schema only on a dedicated watch page');
 
 for (const item of items) {
   const route = routeByPath.get(item.path);
