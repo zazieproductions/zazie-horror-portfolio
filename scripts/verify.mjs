@@ -51,11 +51,11 @@ function linksOf(html) {
 }
 
 /* ---------------------------------------------------------- expected coverage */
-if (hubs.length !== 19) fail(`expected 19 original hubs, found ${hubs.length}`);
+if (hubs.length !== 20) fail(`expected 20 hub routes, found ${hubs.length}`);
 if (productions.length !== 9) fail(`expected 9 production pages, found ${productions.length}`);
 if (cues.length !== 32) fail(`expected 32 cue pages, found ${cues.length}`);
 if (releases.length !== 24) fail(`expected 24 catalogue pages, found ${releases.length}`);
-if (allRoutes.length !== 84) fail(`expected 84 sitemap routes, found ${allRoutes.length}`);
+if (allRoutes.length !== 85) fail(`expected 85 sitemap routes, found ${allRoutes.length}`);
 
 const sitemapFile = path.join(root, 'sitemap.xml');
 if (!fs.existsSync(sitemapFile)) fail('sitemap.xml is missing');
@@ -241,6 +241,37 @@ for (const hub of hubs) {
 }
 const unknownWorkFile = path.join(root, 'work', 'does-not-exist.html');
 if (fs.existsSync(unknownWorkFile) || routeByPath.has('/work/does-not-exist')) fail('unknown production route unexpectedly has a page');
+
+/* ----------------------------------------------------- GEO extractability */
+for (const route of allRoutes) {
+  const file = fileFor(route);
+  if (!file) continue;
+  const html = fs.readFileSync(file, 'utf8');
+  const mainMatch = /<main\b[^>]*>([\s\S]*?)<\/main>/i.exec(html);
+  if (!mainMatch) {
+    fail(`${route.path}: missing <main> landmark`);
+    continue;
+  }
+  if (!/<h1\b[^>]*>[\s\S]*?<\/h1>/i.test(mainMatch[1])) {
+    fail(`${route.path}: <h1> sits outside <main> and will be stripped by RAG / AI Overview extractors`);
+  }
+  if (/<span class="no">[^<]+<\/span>\S/.test(html)) {
+    fail(`${route.path}: unspaced <span class="no"> corrupts extracted section heading tokens`);
+  }
+  if (html.includes('1575933731')) {
+    fail(`${route.path}: contains dead 1575933731 Apple Music artist ID`);
+  }
+  for (const scriptMatch of html.matchAll(/<script\b[^>]*\btype=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
+    if (/<!--v:|\{\{zp:/.test(scriptMatch[1])) {
+      fail(`${route.path}: contains uncleaned pricing comment/token inside JSON-LD`);
+    }
+  }
+}
+
+for (const llmFile of ['llms.txt', 'llms-full.txt']) {
+  const fullPath = path.join(root, llmFile);
+  if (!fs.existsSync(fullPath)) fail(`missing ${llmFile} at repository root`);
+}
 
 if (errors.length) {
   console.error(`verify: ${errors.length} problem(s)`);

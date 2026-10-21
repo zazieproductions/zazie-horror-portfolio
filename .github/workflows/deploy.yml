@@ -48,6 +48,8 @@ on:
       - server.mjs
       - sitemap.xml
       - robots.txt
+      - llms.txt
+      - llms-full.txt
       - _headers
       - _redirects
       - vite.config.ts
@@ -125,12 +127,12 @@ jobs:
         run: |
           npm run build
           npm run typecheck
-          node --test tools/film-player.test.mjs
+          npm test
           node tools/check-sitemap.mjs
           node tools/route-aliases.mjs --check
-          git diff --exit-code -- '*.html' '*.xml' robots.txt '*.js' '*.css' \
+          git diff --exit-code -- '*.html' '*.xml' robots.txt llms.txt llms-full.txt '*.js' '*.css' \
             || { echo "Generated site output is stale; run npm run build and commit the result"; exit 1; }
-          untracked=$(git ls-files --others --exclude-standard -- '*.html' '*.xml' robots.txt '*.js' '*.css')
+          untracked=$(git ls-files --others --exclude-standard -- '*.html' '*.xml' robots.txt llms.txt llms-full.txt '*.js' '*.css')
           if [ -n "$untracked" ]; then
             echo "Untracked generated site output:" >&2
             printf '%s\n' "$untracked" >&2

@@ -50,6 +50,7 @@ export function seoBlock(head: PageHead): string {
     `<title>${title}</title>`,
     `<meta name="description" content="${description}"/>`,
     `<link rel="canonical" href="${canonical}"/>`,
+    `<link rel="alternate" type="text/plain" href="${SITE_ORIGIN}/llms.txt" title="LLMs.txt summary"/>`,
     `<meta name="robots" content="${escapeHtml(head.robots)}"/>`,
     `<meta name="author" content="${escapeHtml(AUTHOR_NAME)}"/>`,
     `<meta property="og:type" content="${head.ogType}"/>`,

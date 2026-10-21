@@ -2,7 +2,7 @@
 <!--
   Generated https://horror.zazieproductions.com/sitemap.xml from src/data/{hubs,productions,cues,releases,routes}.ts.
   Do not edit by hand. Each URL is a canonical, extensionless route.
-  Route count: 84 (19 original hubs + 9 productions + 32 cues + 24 catalogue items).
+  Route count: 85 (20 original hubs + 9 productions + 32 cues + 24 catalogue items).
   Sitemap priority and changefreq are intentionally omitted.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -370,11 +370,21 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/hire-a-composer</loc>
-    <lastmod>2026-10-18</lastmod>
+    <lastmod>2026-10-21</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
-      <image:caption>Zazie Kanwar-Torge, composer and sound designer for hire: original scores and cinematic sound design for film, games and experimental projects.</image:caption>
-      <image:title>Hire a Composer: Original Scores and Cinematic Sound Design</image:title>
+      <image:caption>Zazie Kanwar-Torge, IMDb-credited horror composer and sound designer for hire at Zazie Productions LLC.</image:caption>
+      <image:title>Hire a Horror Composer — Zazie Kanwar-Torge | Zazie Productions</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://horror.zazieproductions.com/how-to-hire-a-horror-composer</loc>
+    <lastmod>2026-10-21</lastmod>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
+      <image:caption>Guide to hiring a horror composer for independent films, series, and video games by Zazie Kanwar-Torge.</image:caption>
+      <image:title>How to Hire a Horror Composer: Rates, Subgenres &amp; Vetting Checklist</image:title>
     </image:image>
   </url>
 

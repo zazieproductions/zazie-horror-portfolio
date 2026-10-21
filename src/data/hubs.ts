@@ -17,15 +17,15 @@
  * src/data/routes.ts.
  */
 
-import { pricingSummary } from './pricing.js';
+import { MINIMUM_FEE, pricingSummary } from './pricing.js';
 import type { Hub } from './types.js';
 
 export const hubs: Hub[] = [
   {
     path: "/",
     name: "Portfolio",
-    title: "Horror Composer for Film, TV & Games | Zazie Productions",
-    description: "A portfolio of selected production records, a 32-cue showreel, and a 24-item catalogue spanning music, sound assets, and objects.",
+    title: "Horror Composer for Hire — Film, TV & Game Scores | Zazie Productions",
+    description: `Hire IMDb-credited horror composer Zazie Kanwar-Torge (Zazie Productions) for psychological, folk, body, and experimental scores across film, TV, and games. 32 playable cues, 9 screen productions, packages from $${MINIMUM_FEE} USD.`,
     lastmod: "2026-10-18",
     images: [
       { loc: "https://horror.zazieproductions.com/images/hero-portrait.jpg", caption: "Portfolio portrait for Zazie Productions, a composer and sound-design studio working across screen and experimental media.", title: "Zazie Kanwar-Torge: Psychological Horror Composer - Dark Atmospheric Scores" },
@@ -278,12 +278,23 @@ export const hubs: Hub[] = [
   },
   {
     path: "/hire-a-composer",
-    name: "Hire a composer",
-    title: "Hire a Composer: Original Scores & Sound Design | Zazie",
-    description: "Hire composer Zazie Kanwar-Torge for original film, game and experimental scores and cinematic sound design. Written to picture.",
-    lastmod: "2026-10-18",
+    name: "Hire a horror composer",
+    title: "Hire a Horror Composer — Original Film, TV & Game Scores | Zazie Productions",
+    description: `Hire horror composer Zazie Kanwar-Torge (Zazie Productions): IMDb-credited custom psychological, folk, body, and experimental scores for film, TV, and games. ${pricingSummary()}`,
+    lastmod: "2026-10-21",
     images: [
-      { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Kanwar-Torge, composer and sound designer for hire: original scores and cinematic sound design for film, games and experimental projects.", title: "Hire a Composer: Original Scores and Cinematic Sound Design" },
+      { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Kanwar-Torge, IMDb-credited horror composer and sound designer for hire at Zazie Productions LLC.", title: "Hire a Horror Composer — Zazie Kanwar-Torge | Zazie Productions" },
+    ],
+    videos: [],
+  },
+  {
+    path: "/how-to-hire-a-horror-composer",
+    name: "How to hire a horror composer",
+    title: "How to Hire a Horror Composer: Rates, Subgenres & Vetting Guide | Zazie Productions",
+    description: `Filmmaker and game developer guide to hiring the right horror composer: custom score vs. stock libraries, subgenre matching, cue budgets from $${MINIMUM_FEE} USD, spotting, stems, and licensing.`,
+    lastmod: "2026-10-21",
+    images: [
+      { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Guide to hiring a horror composer for independent films, series, and video games by Zazie Kanwar-Torge.", title: "How to Hire a Horror Composer: Rates, Subgenres & Vetting Checklist" },
     ],
     videos: [],
   },

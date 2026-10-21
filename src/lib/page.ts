@@ -219,7 +219,7 @@ const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI'];
 
 function indexList(entries: Array<[string, string]>): string {
   return entries
-    .map(([anchor, label], index) => `        <li><a href="#${anchor}"><span class="idx">${ROMAN[index] ?? index + 1}</span>${esc(label)}</a></li>`)
+    .map(([anchor, label], index) => `        <li><a href="#${anchor}"><span class="idx">${ROMAN[index] ?? index + 1}</span> ${esc(label)}</a></li>`)
     .join('\n');
 }
 
@@ -260,13 +260,13 @@ function productionMeta(production: Production, item: ItemRoute): MetaSections {
 
   const sampleSection = sample
     ? `      <section class="clause" id="sample">
-        <h2><span class="no">III</span>Project video</h2>
+        <h2><span class="no">III</span> Project video</h2>
         <p>${esc(sample.description)}${sample.durationSeconds ? ` Runtime ${esc(displayDuration(sample.durationSeconds))}.` : ''}</p>
 ${embedMarkup(sample)}
 ${sample.watchUrl ? `        <p style="margin-top:1rem">If the embed is unavailable, <a href="${esc(sample.watchUrl)}" target="_blank" rel="noopener noreferrer">open the video on its original host</a>.</p>` : ''}
       </section>`
     : `      <section class="clause" id="sample">
-        <h2><span class="no">III</span>Adjacent showreel listening</h2>
+        <h2><span class="no">III</span> Adjacent showreel listening</h2>
         <p>The recordings below are separate showreel cues offered as adjacent listening. They are not presented as placements in this production; read the cue notes or play an MP3 if useful.</p>
 ${relatedCues.slice(0, 3).map((cue) => `        <p style="margin-top:1.25rem"><strong><a href="/reel/${esc(cue.slug)}">${esc(cue.title)}</a></strong> · ${esc(cue.category)} · ${esc(cue.duration)}</p>
 ${audioPlayer(cue.audioPath, cue.title)}
@@ -283,18 +283,18 @@ ${audioPlayer(cue.audioPath, cue.title)}
     ]),
     relatedNo: 'IV',
     sections: `      <section class="clause" id="entry">
-        <h2><span class="no">I</span>The production</h2>
+        <h2><span class="no">I</span> The production</h2>
 ${figure(production.poster, 'poster')}
 ${production.paragraphs.map((paragraph) => `        <p>${esc(paragraph)}</p>`).join('\n')}
       </section>
 
       <section class="clause" id="detail">
-        <h2><span class="no">II</span>Credits and project facts</h2>
+        <h2><span class="no">II</span> Credits and project facts</h2>
 ${tableRows(rows)}
       </section>
 
 ${sampleSection}`,
-    crossLinks: `The <a href="/work">selected productions archive</a> · adjacent cues: ${cueLinkList(production.relatedCueSlugs)} · <a href="/process">scoring process</a> · <a href="/contact">contact</a>.`,
+    crossLinks: `The <a href="/work">selected productions archive</a> · <a href="/hire-a-composer">hire a horror composer</a> · adjacent cues: ${cueLinkList(production.relatedCueSlugs)} · <a href="/process">scoring process</a> · <a href="/contact">contact</a>.`,
   };
 }
 
@@ -327,22 +327,22 @@ function cueMeta(cue: Cue, item: ItemRoute): MetaSections {
     ]),
     relatedNo: 'IV',
     sections: `      <section class="clause" id="entry">
-        <h2><span class="no">I</span>Cue description</h2>
+        <h2><span class="no">I</span> Cue description</h2>
         <p>${esc(cue.description)}</p>
 ${cue.paragraphs.map((paragraph) => `        <p>${esc(paragraph)}</p>`).join('\n')}
       </section>
 
       <section class="clause" id="listen">
-        <h2><span class="no">II</span>Listen to the MP3</h2>
+        <h2><span class="no">II</span> Listen to the MP3</h2>
         <p>The showreel recording is available here and as a direct MP3 file. Playback is optional; the description and contextual notes remain readable without sound or JavaScript.</p>
 ${cuePlayerList(cue)}
       </section>
 
       <section class="clause" id="detail">
-        <h2><span class="no">III</span>Cue facts</h2>
+        <h2><span class="no">III</span> Cue facts</h2>
 ${tableRows(rows)}
       </section>`,
-    crossLinks: `Browse <a href="/reel">all ${cues.length} showreel cues</a> · related releases: ${releaseLinkList(cue.releaseSlugs)} · <a href="/contact">scoring inquiry</a>.`,
+    crossLinks: `Browse <a href="/reel">all ${cues.length} showreel cues</a> · <a href="/hire-a-composer">hire a horror composer</a> · related releases: ${releaseLinkList(cue.releaseSlugs)} · <a href="/contact">scoring inquiry</a>.`,
   };
 }
 
@@ -373,7 +373,7 @@ function releaseMeta(release: Release, item: ItemRoute): MetaSections {
   const releaseImage = release.image ? figure(release.image, 'square') : '';
   const listening = related.length
     ? `      <section class="clause" id="listen">
-        <h2><span class="no">III</span>Related showreel listening</h2>
+        <h2><span class="no">III</span> Related showreel listening</h2>
         <p>The linked cues are separate showreel records. They are connected by verified title or catalogue references, but are not described here as checkout previews.</p>
 ${related.map((cue) => `        <p style="margin-top:1.25rem"><strong><a href="/reel/${esc(cue.slug)}">${esc(cue.title)}</a></strong> · ${esc(cue.category)} · ${esc(cue.duration)}</p>
 ${audioPlayer(cue.audioPath, cue.title)}
@@ -383,7 +383,7 @@ ${audioPlayer(cue.audioPath, cue.title)}
   const offerSectionNo = related.length ? 'IV' : 'III';
   const relatedNo = related.length ? 'V' : 'IV';
   const offerSection = `      <section class="clause" id="listing">
-        <h2><span class="no">${offerSectionNo}</span>Source and availability</h2>
+        <h2><span class="no">${offerSectionNo}</span> Source and availability</h2>
 ${release.listingUrl
   ? `        <p>The external listing is the source for current terms, formats, variants, and availability. This archive page deliberately does not repeat time-sensitive prices or stock claims.</p>
         <p style="margin-top:1rem"><a class="btn" href="${esc(release.listingUrl)}" target="_blank" rel="noopener noreferrer">View on ${esc(release.platform)}</a></p>`
@@ -401,19 +401,19 @@ ${release.listingUrl
     ]),
     relatedNo,
     sections: `      <section class="clause" id="entry">
-        <h2><span class="no">I</span>The catalogue item</h2>
+        <h2><span class="no">I</span> The catalogue item</h2>
 ${releaseImage}
         <p>${esc(stripMarkup(release.summary))}</p>
 ${release.paragraphs.map((paragraph) => `        <p>${esc(paragraph)}</p>`).join('\n')}
       </section>
 
       <section class="clause" id="detail">
-        <h2><span class="no">II</span>Verified item facts</h2>
+        <h2><span class="no">II</span> Verified item facts</h2>
 ${tableRows(rows)}
       </section>
 
 ${listening ? `${listening}\n\n` : ''}${offerSection}`,
-    crossLinks: `The <a href="/store">full catalogue</a> · related cues: ${cueLinkList(release.relatedCueSlugs)} · <a href="/purchases">purchase information</a> · <a href="/contact">contact</a>.`,
+    crossLinks: `The <a href="/store">full catalogue</a> · <a href="/hire-a-composer">hire a horror composer</a> · related cues: ${cueLinkList(release.relatedCueSlugs)} · <a href="/purchases">purchase information</a> · <a href="/contact">contact</a>.`,
   };
 }
 
@@ -507,6 +507,7 @@ ${head}
 <body>
 ${chrome.masthead.trim()}
 
+<main id="doc">
 <header class="doc-head">
   <div class="shell doc-head-inner">
     ${breadcrumbs(trail)}
@@ -519,7 +520,7 @@ ${chrome.masthead.trim()}
   </div>
 </header>
 
-<main id="doc" class="doc">
+<div class="doc">
   <div class="shell doc-layout">
     <nav class="doc-index" aria-label="On this page">
       <p>Contents</p>
@@ -532,7 +533,7 @@ ${meta.index}
 ${meta.sections}
 
       <section class="clause" id="related">
-        <h2><span class="no">${meta.relatedNo}</span>Related entries</h2>
+        <h2><span class="no">${meta.relatedNo}</span> Related entries</h2>
         <p>This archive gives the entry a direct page, keeps it connected to its original hub, and provides text links to other records in the same collection.</p>
         <p><a class="btn btn-ghost" href="${esc(item.hub)}">All ${esc((hub?.name ?? heading.label).toLowerCase())}</a></p>
 ${siblingCards(siblingsOf(item, 4), item.hub)}
@@ -541,6 +542,7 @@ ${siblingCards(siblingsOf(item, 4), item.hub)}
       </section>
     </div>
   </div>
+</div>
 </main>
 
 ${chrome.footer.trim()}

@@ -166,7 +166,9 @@ function buildHomeDocument() {
     if (property.startsWith('og:')) return '';
     return tag;
   });
-  templateHead = templateHead.replace(/<link\b[^>]*>/gi, (tag) => /\brel\s*=\s*(["'])canonical\1/i.test(tag) ? '' : tag);
+  templateHead = templateHead.replace(/<link\b[^>]*>/gi, (tag) =>
+    /\brel\s*=\s*(["'])canonical\1/i.test(tag) || /\/llms\.txt\b/i.test(tag) ? '' : tag,
+  );
   templateHead = templateHead.replace(/<!--[\s\S]*?-->/g, (comment) =>
     /JSON-LD|STRUCTURED DATA/i.test(comment) ? '' : comment,
   );

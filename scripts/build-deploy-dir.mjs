@@ -45,7 +45,7 @@ const OUT = path.resolve(process.argv[2] || path.join(ROOT, 'dist'));
 const EXCLUDE_NAMES = new Set([
   '.git', '.github', '.gitignore', '.audit',
   'node_modules', 'build', 'dist',
-  'scripts', 'src', 'tools', 'store-src', 'legal-src', 'public',
+  'scripts', 'src', 'tools', 'store-src', 'legal-src', 'home-src', 'public',
   'server.mjs',
 ]);
 const EXCLUDE_EXT = new Set(['.md', '.json']);
@@ -96,7 +96,7 @@ const files = [];
 })(OUT);
 
 /* 1. the files a static deploy cannot work without */
-for (const required of ['index.html', '404.html', 'sw.js', 'sitemap.xml', 'robots.txt']) {
+for (const required of ['index.html', '404.html', 'sw.js', 'sitemap.xml', 'robots.txt', 'llms.txt', 'llms-full.txt']) {
   if (!files.some((f) => f.relPath === required)) fail(`missing ${required}`);
 }
 const keys = files.filter((f) => /^[a-f0-9]{32}\.txt$/.test(f.relPath));
