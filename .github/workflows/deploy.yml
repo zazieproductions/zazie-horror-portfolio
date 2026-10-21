@@ -69,7 +69,7 @@ on:
       project:
         description: Cloudflare Pages project name
         required: true
-        default: zazie-horror-portfolio
+        default: zazie-horror-site
         type: string
       verify_live:
         description: Run the live route audit after deploying
@@ -89,7 +89,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      PROJECT: ${{ inputs.project || 'zazie-horror-portfolio' }}
+      PROJECT: ${{ inputs.project || 'zazie-horror-site' }}
       ENVIRONMENT: ${{ inputs.environment || 'production' }}
       BASE_URL: https://horror.zazieproductions.com
     steps:
