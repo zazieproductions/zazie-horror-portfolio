@@ -83,6 +83,11 @@ ${packageLines.split('\n').map((l) => `  ${l}`).join('\n')}
 
 ${[
   '/hire-a-composer',
+  '/folk-horror-composer',
+  '/body-horror-composer',
+  '/psychological-thriller-composer',
+  '/dark-sci-fi-composer',
+  '/short-film-composer-rates',
   '/how-to-hire-a-horror-composer',
   '/services',
   '/process',

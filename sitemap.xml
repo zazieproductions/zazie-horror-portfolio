@@ -2,7 +2,7 @@
 <!--
   Generated https://horror.zazieproductions.com/sitemap.xml from src/data/{hubs,productions,cues,releases,routes}.ts.
   Do not edit by hand. Each URL is a canonical, extensionless route.
-  Route count: 85 (20 original hubs + 9 productions + 32 cues + 24 catalogue items).
+  Route count: 90 (25 original hubs + 9 productions + 32 cues + 24 catalogue items).
   Sitemap priority and changefreq are intentionally omitted.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -245,7 +245,7 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/composer</loc>
-    <lastmod>2026-10-18</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/headshot.jpg</image:loc>
       <image:caption>Zazie Kanwar-Torge, psychological horror composer and founder of Zazie Productions LLC, Asheville NC.</image:caption>
@@ -255,7 +255,7 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/process</loc>
-    <lastmod>2026-10-18</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
       <image:caption>Zazie Kanwar-Torge at the scoring desk, Asheville, NC studio</image:caption>
@@ -265,7 +265,7 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/services</loc>
-    <lastmod>2026-10-18</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
       <image:caption>Zazie Productions horror film scoring suite Asheville, NC</image:caption>
@@ -365,22 +365,22 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/sitemap</loc>
-    <lastmod>2026-10-18</lastmod>
+    <lastmod>2026-10-22</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/hire-a-composer</loc>
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
-      <image:caption>Zazie Kanwar-Torge, IMDb-credited horror composer and sound designer for hire at Zazie Productions LLC.</image:caption>
-      <image:title>Hire a Horror Composer — Zazie Kanwar-Torge | Zazie Productions</image:title>
+      <image:caption>Zazie Kanwar-Torge, IMDb-credited experimental horror composer and sound designer for hire at Zazie Productions LLC.</image:caption>
+      <image:title>Hire an Experimental Horror Composer — Zazie Kanwar-Torge | Zazie Productions</image:title>
     </image:image>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/how-to-hire-a-horror-composer</loc>
-    <lastmod>2026-10-21</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
       <image:caption>Guide to hiring a horror composer for independent films, series, and video games by Zazie Kanwar-Torge.</image:caption>
@@ -390,21 +390,71 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/sound-design</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg</image:loc>
-      <image:caption>EXPIRE horror short - sound design and score by Zazie Kanwar-Torge, from the cinematic sound design page.</image:caption>
-      <image:title>Cinematic Sound Design for Horror Film - Zazie Productions</image:title>
+      <image:caption>EXPIRE science-fiction short - IMDb-credited sound design by Zazie Kanwar-Torge, from the experimental sound design page.</image:caption>
+      <image:title>Experimental Sound Design for Horror Film - Zazie Productions</image:title>
     </image:image>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/game-scoring</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-22</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/the-dark-awaits-640.jpg</image:loc>
       <image:caption>THE DARK AWAITS - the tonal register behind adaptive horror scoring for games, by Zazie Kanwar-Torge.</image:caption>
-      <image:title>Adaptive Horror Game Scoring - Zazie Productions</image:title>
+      <image:title>Horror Video Game Adaptive Score Packages - Zazie Productions</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://horror.zazieproductions.com/folk-horror-composer</loc>
+    <lastmod>2026-10-22</lastmod>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
+      <image:caption>Zazie Kanwar-Torge, folk horror composer for hire at Zazie Productions LLC: ritual, rural dread, and custom instrumentation.</image:caption>
+      <image:title>Hire a Folk Horror Composer — Zazie Kanwar-Torge | Zazie Productions</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://horror.zazieproductions.com/body-horror-composer</loc>
+    <lastmod>2026-10-22</lastmod>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
+      <image:caption>Zazie Kanwar-Torge, bespoke body horror film composer at Zazie Productions LLC: visceral acoustic textures composed to picture.</image:caption>
+      <image:title>Bespoke Body Horror Film Composer — Zazie Kanwar-Torge | Zazie Productions</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://horror.zazieproductions.com/psychological-thriller-composer</loc>
+    <lastmod>2026-10-22</lastmod>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
+      <image:caption>Zazie Kanwar-Torge, psychological thriller film music composer at Zazie Productions LLC: slow-burn dread scores for shorts and features.</image:caption>
+      <image:title>Psychological Thriller Film Music — Zazie Kanwar-Torge | Zazie Productions</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://horror.zazieproductions.com/dark-sci-fi-composer</loc>
+    <lastmod>2026-10-22</lastmod>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
+      <image:caption>Zazie Kanwar-Torge, dark sci-fi and avant-garde festival film composer at Zazie Productions LLC, featured at Ars Electronica 2026.</image:caption>
+      <image:title>Dark Sci-Fi &amp; Avant-Garde Film Composer — Zazie Kanwar-Torge | Zazie Productions</image:title>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://horror.zazieproductions.com/short-film-composer-rates</loc>
+    <lastmod>2026-10-22</lastmod>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
+      <image:caption>Indie short film composer rates and scoring cost guide by Zazie Kanwar-Torge, Zazie Productions LLC.</image:caption>
+      <image:title>Indie Short Film Composer Rates &amp; Cost Guide — Zazie Productions</image:title>
     </image:image>
   </url>
 

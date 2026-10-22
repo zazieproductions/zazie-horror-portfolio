@@ -32,7 +32,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const check = process.argv.includes('--check');
 
 const markup = await import('../build/lib/pricing-markup.js');
-const { expandTokens, packagesHtml, pricingMetaHtml, inclusionsHtml, estimatorHtml, inquiryFormHtml, noticeHtml, offersGraph, tokenValue, factorsHtml, licencesHtml, SITE_ORIGIN } = markup;
+const { expandTokens, packagesHtml, pricingMetaHtml, hireMetaHtml, folkMetaHtml, bodyMetaHtml, psychologicalThrillerMetaHtml, darkSciFiMetaHtml, ratesMetaHtml, inclusionsHtml, estimatorHtml, inquiryFormHtml, noticeHtml, offersGraph, tokenValue, factorsHtml, licencesHtml, SITE_ORIGIN } = markup;
 const { ORG_ID } = await import('../build/data/site.js');
 
 const SERVICE_ID = `${SITE_ORIGIN}/services#service`;
@@ -41,6 +41,12 @@ const PROVIDER_ID = ORG_ID;
 /** Generated markup for each marker block. */
 const BLOCKS = {
   'pricing-meta': () => pricingMetaHtml(),
+  'hire-meta': () => hireMetaHtml(),
+  'folk-meta': () => folkMetaHtml(),
+  'body-meta': () => bodyMetaHtml(),
+  'psychological-thriller-meta': () => psychologicalThrillerMetaHtml(),
+  'dark-sci-fi-meta': () => darkSciFiMetaHtml(),
+  'rates-meta': () => ratesMetaHtml(),
   packages: () => packagesHtml(),
   inclusions: () => inclusionsHtml(),
   estimator: () => estimatorHtml(),

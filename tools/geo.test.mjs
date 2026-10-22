@@ -50,9 +50,9 @@ test('every indexable route places <h1> inside <main> and separates numeral span
 
 test('/hire-a-composer commercial pillar has exact head intent, comparison matrix, Service + Offer + FAQPage schema', () => {
   const html = fs.readFileSync(path.join(ROOT, 'hire-a-composer/index.html'), 'utf8');
-  assert.match(html, /<title>Hire a Horror Composer — Original Film, TV &amp; Game Scores \| Zazie Productions<\/title>/);
+  assert.match(html, /<title>Hire an Experimental Horror Composer \| Zazie Productions<\/title>/);
   const main = /<main\b[^>]*>([\s\S]*?)<\/main>/i.exec(html)?.[1] ?? '';
-  assert.match(main, /<h1>Hire a <em>Horror Composer<\/em> for Film, TV, and Games<\/h1>/);
+  assert.match(main, /<h1>Hire an <em>Experimental Horror Composer<\/em> for Psychological, Folk, Body &amp; Dark Sci-Fi Film<\/h1>/);
   assert.match(main, /Zazie Kanwar-Torge/);
   assert.match(main, /Zazie Productions LLC/);
   assert.match(main, /Comparing Horror Music Options by Subgenre, Workflow &amp; Budget/);
@@ -64,7 +64,7 @@ test('/hire-a-composer commercial pillar has exact head intent, comparison matri
     assert.ok(types.has(expected), `/hire-a-composer missing ${expected} JSON-LD`);
   }
   const faq = nodes.find((n) => n['@type'] === 'FAQPage');
-  assert.ok(faq.mainEntity.length >= 8, 'at least 8 structured buyer Q&As on /hire-a-composer');
+  assert.ok(faq.mainEntity.length >= 9, 'at least 9 structured buyer Q&As on /hire-a-composer');
 });
 
 test('/how-to-hire-a-horror-composer guide answers fan-out queries with Article + FAQPage schema', () => {
@@ -85,10 +85,10 @@ test('/how-to-hire-a-horror-composer guide answers fan-out queries with Article 
 
 test('homepage links directly to /hire-a-composer and /how-to-hire-a-horror-composer in both SSR HTML and client bundle', () => {
   const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-  assert.match(html, /<title>Horror Composer for Hire — Film, TV &amp; Game Scores<\/title>/);
+  assert.match(html, /<title>Folk, Body &amp; Psychological Horror Composer for Hire<\/title>/);
   const title = /<title>([^<]*)<\/title>/.exec(html)[1].replace(/&amp;/g, '&');
   assert.ok(title.length >= 30 && title.length <= 60, `homepage title is ${title.length} characters; keep it between 30 and 60`);
-  assert.match(html, new RegExp(`from \\$${MINIMUM_FEE} USD`));
+  assert.match(html, new RegExp(`[Ff]rom \\$${MINIMUM_FEE} USD`));
   assert.match(html, /href="\/hire-a-composer"/);
   assert.match(html, /href="\/how-to-hire-a-horror-composer"/);
 
@@ -97,6 +97,39 @@ test('homepage links directly to /hire-a-composer and /how-to-hire-a-horror-comp
   const bundle = fs.readFileSync(path.join(ROOT, bundleName), 'utf8');
   assert.match(bundle, /\/hire-a-composer/);
   assert.match(bundle, /\/how-to-hire-a-horror-composer/);
+  for (const spoke of ['/folk-horror-composer', '/body-horror-composer', '/psychological-thriller-composer', '/dark-sci-fi-composer', '/short-film-composer-rates']) {
+    assert.match(html, new RegExp(`href="${spoke}"`), `homepage SSR links directly to ${spoke}`);
+    assert.match(bundle, new RegExp(spoke), `homepage bundle links directly to ${spoke}`);
+  }
+});
+
+test('subgenre spokes own one search intent each, with Service + FAQPage schema and pillar links', () => {
+  const spokes = [
+    ['/folk-horror-composer', /<title>Hire a Folk Horror Composer \| Zazie Productions<\/title>/, /folk horror custom instrumentation/i],
+    ['/body-horror-composer', /<title>Bespoke Body Horror Film Composer \| Zazie Productions<\/title>/, /bespoke body horror/i],
+    ['/psychological-thriller-composer', /<title>Psychological Thriller Film Music &amp; Scores \| Zazie Productions<\/title>/, /psychological thriller short film music/i],
+    ['/dark-sci-fi-composer', /<title>Dark Sci-Fi &amp; Avant-Garde Film Composer \| Zazie Productions<\/title>/, /dark atmospheric cinematic drone music/i],
+  ];
+  for (const [routePath, titleRe, intentRe] of spokes) {
+    assert.ok(hubs.some((h) => h.path === routePath), `${routePath} registered in src/data/hubs.ts`);
+    const html = fs.readFileSync(fileForRoute(routePath), 'utf8');
+    assert.match(html, titleRe, `${routePath} keeps its exact-match title intent`);
+    const main = /<main\b[^>]*>([\s\S]*?)<\/main>/i.exec(html)?.[1] ?? '';
+    assert.match(main, intentRe, `${routePath} answers its long-tail query in crawlable copy`);
+    assert.match(main, /href="\/hire-a-composer"/, `${routePath} links back to the commercial pillar`);
+    assert.match(main, /href="\/reel#track-track-\d+"/, `${routePath} deep-links a proof cue on the showreel hub`);
+    const nodes = parseJsonLd(html, routePath);
+    const types = new Set(nodes.flatMap((n) => (Array.isArray(n['@type']) ? n['@type'] : [n['@type']])));
+    for (const expected of ['WebPage', 'BreadcrumbList', 'Service', 'FAQPage']) {
+      assert.ok(types.has(expected), `${routePath} missing ${expected} JSON-LD`);
+    }
+  }
+
+  const rates = fs.readFileSync(fileForRoute('/short-film-composer-rates'), 'utf8');
+  assert.match(rates, /<title>Indie Short Film Composer Rates &amp; Cost Guide \| Zazie Productions<\/title>/);
+  assert.match(rates, /How much does it cost to score a 10-minute short film\?/);
+  assert.match(rates, /data-zp-est/, 'rates guide carries the crawlable estimator');
+  assert.match(rates, new RegExp(priceLabel(PACKAGES[1]).replace('$', '\\$')), 'rates guide renders the Focused starting fee from pricing.ts');
 });
 
 test('robots.txt welcomes AI search crawlers and llms.txt + llms-full.txt stay synced with pricing.ts', () => {
@@ -121,6 +154,8 @@ test('robots.txt welcomes AI search crawlers and llms.txt + llms-full.txt stay s
     assert.match(content, /Zazie Kanwar-Torge/);
     assert.match(content, /https:\/\/horror\.zazieproductions\.com\/hire-a-composer/);
     assert.match(content, /https:\/\/horror\.zazieproductions\.com\/how-to-hire-a-horror-composer/);
+    assert.match(content, /https:\/\/horror\.zazieproductions\.com\/folk-horror-composer/);
+    assert.match(content, /https:\/\/horror\.zazieproductions\.com\/short-film-composer-rates/);
     assert.match(content, new RegExp(`\\$${MINIMUM_FEE}`));
     assert.doesNotMatch(content, /\bundefined\b|\bNaN\b|\bnull\b/);
   }

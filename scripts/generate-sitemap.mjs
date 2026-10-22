@@ -54,7 +54,7 @@ for (const route of allRoutes) {
   }
 }
 
-if (hubs.length !== 20) fail(`expected 20 hub routes, received ${hubs.length}`);
+if (hubs.length !== 25) fail(`expected 25 hub routes, received ${hubs.length}`);
 if (productions.length !== 9 || cues.length !== 32 || releases.length !== 24) {
   fail(`expected 9 productions, 32 cues and 24 catalogue items; received ${productions.length}, ${cues.length}, ${releases.length}`);
 }

@@ -51,11 +51,11 @@ function linksOf(html) {
 }
 
 /* ---------------------------------------------------------- expected coverage */
-if (hubs.length !== 20) fail(`expected 20 hub routes, found ${hubs.length}`);
+if (hubs.length !== 25) fail(`expected 25 hub routes, found ${hubs.length}`);
 if (productions.length !== 9) fail(`expected 9 production pages, found ${productions.length}`);
 if (cues.length !== 32) fail(`expected 32 cue pages, found ${cues.length}`);
 if (releases.length !== 24) fail(`expected 24 catalogue pages, found ${releases.length}`);
-if (allRoutes.length !== 85) fail(`expected 85 sitemap routes, found ${allRoutes.length}`);
+if (allRoutes.length !== 90) fail(`expected 90 sitemap routes, found ${allRoutes.length}`);
 
 const sitemapFile = path.join(root, 'sitemap.xml');
 if (!fs.existsSync(sitemapFile)) fail('sitemap.xml is missing');

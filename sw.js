@@ -83,7 +83,12 @@
 // been dropped in the prerender pass is restored, so the overlay actually
 // plays again). The document is precached as '/', so the cache name moves with
 // it: without the bump a returning visitor could keep the boot-less document.
-const CACHE_NAME = 'zazie-v37';
+// v38: subgenre pass (2026-10-22) — five new hubs (/folk-horror-composer,
+// /body-horror-composer, /psychological-thriller-composer,
+// /dark-sci-fi-composer, /short-film-composer-rates), retitled money pages,
+// and spoken-for footer/home Archive links in both render paths. The home
+// document is precached as '/', so the cache name moves with it again.
+const CACHE_NAME = 'zazie-v38';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -92,13 +97,13 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-40232616.css',
-  '/index-a7313e86.js',
+  '/index-3689ea86.js',
   '/store-eed3eeee.css',
   '/store-3fc01be0.js',
   '/legal-886033c7.css',
   '/legal-ab598df8.js',
   '/estimator-85629c1e.css',
-  '/estimator-e20a6c5d.js',
+  '/estimator-c02d7510.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',
   '/images/hero-portrait.avif',
