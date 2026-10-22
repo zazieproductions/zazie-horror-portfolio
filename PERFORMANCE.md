@@ -23,6 +23,11 @@ section records what changed and what was measured in the sandbox browser.
 | DOM elements | 1,386 | **1,213** |
 | `uses-responsive-images` estimate | 374 KiB | **114 KiB** |
 
+Merging `main`'s Brotli/Gzip negotiation (`server.mjs`) and the edge cache-header
+fix on top of this pass moves the same local run to **87** performance:
+FCP 1.4 s, LCP 3.9 s, TBT 30 ms, CLS 0.034 — accessibility, best practices and
+SEO stay at 100.
+
 LCP is left at 5.0 s *simulated*: Lantern charges the hero plate a multi-second
 "render delay" that does not reproduce in the browser (observed LCP 274 ms,
 puppeteer 301–306 ms, with the bundle allowed or blocked). Chasing that number
@@ -808,3 +813,95 @@ bundle-only one.
 - `tools/film-player.test.mjs` re-derives the bundle name from `index.html`
   and checks precache membership, so the three-way rename cannot drift
   silently; it passes with the merged tree.
+
+## Response headers: the comma that switched caching off (2026-10-22)
+
+A header audit reported "add `Cache-Control` to leverage browser caching" against
+a site that had been shipping `Cache-Control` for a year. The rules were fine;
+the host's semantics were not being honoured.
+
+**What the edge actually served.** Cloudflare Pages does not merge rules with
+"most specific wins". Every rule whose pattern matches a request contributes its
+headers, and a header set twice is joined with a comma. So:
+
+```
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+```
+
+answered `/fonts/inter-latin-wght-normal.woff2` with
+
+```
+Cache-Control: public, max-age=0, must-revalidate, public, max-age=31536000, immutable
+```
+
+and RFC 9111 says a repeated directive is read from its **first** instance. The
+effective lifetime of every font, every image and every content-hashed CSS/JS
+bundle was `max-age=0, must-revalidate`. The same join applied to
+`/index-*.js`, `/store-*.js`, `/legal-*.js`, `/estimator-*.js`, `/item-*.js`,
+`/*.css`, `/images/*` and `/audio/*` — i.e. to all of the caching, none of the
+pages.
+
+**Fix.** `/*` is now the only rule that sets `Cache-Control` as a default, and
+every narrower rule detaches it before setting its own value, which is the
+documented way to express an override in `_headers`:
+
+```
+/fonts/*
+  ! Cache-Control
+  Cache-Control: public, max-age=31536000, immutable
+```
+
+Detach is order-sensitive — it only removes what earlier rules added — so `/*`
+stays first in the file. Measured effect on a repeat visit: 3 woff2 (95 KB),
+8 hashed bundles (~600 KB raw) and every poster/hero image stop revalidating and
+are served from the browser cache for 1 year (fonts, bundles) or 30 days with
+`stale-while-revalidate=86400` (images, audio). Only HTML still revalidates.
+
+**Compression.** Cloudflare Pages Brotli-compresses static text at the edge; the
+local mirror never did, so the claim was untestable. `server.mjs` now negotiates
+per request — Brotli q11 when offered, Gzip otherwise, `Vary: Accept-Encoding`
+always, nothing under 1 KB compressed — and adds strong `ETag`s with `304`
+handling. Measured locally (`curl -H 'accept-encoding: br, gzip'`):
+
+| Asset | identity | gzip | brotli |
+| --- | ---: | ---: | ---: |
+| `/` (HTML) | 190.5 KB | 32.4 KB | 25.9 KB |
+| `/index-f509fde0.css` | 76.8 KB | 13.9 KB | 11.4 KB |
+
+Brotli is ~15 % smaller than gzip on the two files that gate first paint.
+
+**Security headers** were already present (`Strict-Transport-Security`,
+`Content-Security-Policy`, `X-Frame-Options: SAMEORIGIN`, `nosniff`,
+`Referrer-Policy`, `Permissions-Policy`). They are now enforced rather than
+merely asserted: the policy lives in `tools/headers.mjs`, `_headers` is checked
+against it, and the CSP also carries `frame-ancestors 'self'` (the modern
+clickjacking control, alongside the legacy `X-Frame-Options`).
+
+**Guards added, all in `npm run build`:**
+
+- `tools/check-headers.mjs` — parses `_headers`, simulates the host's comma-join,
+  and fails if any path would receive two `max-age` values, if a narrower rule
+  forgets `! Cache-Control`, if the `/*` policy drifts from `tools/headers.mjs`,
+  or if a sitemap route is not HTML-revalidated and indexable. 220 path
+  expectations, including every sitemap route and its `.html` and `/` forms.
+- `tools/check-links.mjs` — resolves every internal `href`/`src`/`srcset` in the
+  published tree the way the host does, plus every `#fragment` against the
+  destination's `id`s. 9,564 links / 105 documents (including `srcset` and
+  stylesheet `url()` references), 0 broken.
+- `tools/live-route-audit.mjs` — now also probes delivery on the live host: HSTS,
+  CSP `frame-ancestors`, `X-Frame-Options: SAMEORIGIN`, `nosniff`, referrer
+  policy, one `max-age` per path, `immutable` on hashed bundles and fonts, and a
+  Brotli/Gzip `content-encoding` on the document and the CSS.
+
+**Home title.** `Horror Composer for Hire — Film, TV & Game Scores | Zazie
+Productions` was 69 characters (73 as rendered by the auditor, counting the
+entity); Google truncates around 65, which cut the brand. It is now
+`Horror Composer for Hire — Film, TV & Game Scores` (49 characters), with
+`og:site_name: Zazie Productions` carrying the brand into the card and SERP
+sitename. `scripts/verify.mjs` holds `/` to 65 characters and reports the 54
+other routes that still run long, so the remaining editorial pass has a queue
+without blocking the build.
