@@ -76,7 +76,9 @@
 // added /how-to-hire-a-horror-composer hub, /llms.txt + /llms-full.txt,
 // <main>-wrapped document headers and spaced numeral headings across all 85 routes,
 // clean JSON-LD schema graphs, and re-hashed home bundle index-4d715571.js.
-const CACHE_NAME = 'zazie-v34';
+// v35: below-fold home content moves out of the active DOM until scroll/intent;
+// the minified cinema stylesheet gets a fresh immutable hash.
+const CACHE_NAME = 'zazie-v35';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -84,7 +86,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-normal.woff2',
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
-  '/index-f509fde0.css',
+  '/index-e4ef3fe9.css',
   '/index-4d715571.js',
   '/store-eed3eeee.css',
   '/store-3fc01be0.js',

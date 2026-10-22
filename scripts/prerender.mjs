@@ -124,6 +124,9 @@ const SEO_START = '<!--SEO:START-->';
 const SEO_END = '<!--SEO:END-->';
 const HOME_POSTERS_START = '<!--HOME-POSTERS:START-->';
 const HOME_POSTERS_END = '<!--HOME-POSTERS:END-->';
+const DEFERRED_HOME_MAIN_ID = 'zp-deferred-content';
+const DEFERRED_HOME_FOOTER_ID = 'zp-deferred-footer';
+const DEFERRED_HOME_SENTINEL_ID = 'zp-deferred-sentinel';
 
 function replaceMarkedContents(html, startMarker, endMarker, replacement, label) {
   const start = html.indexOf(startMarker);
@@ -133,6 +136,78 @@ function replaceMarkedContents(html, startMarker, endMarker, replacement, label)
   }
   const contentStart = start + startMarker.length;
   return html.slice(0, contentStart) + '\n' + replacement + '\n' + html.slice(end);
+}
+
+/**
+ * Keep the full homepage in the source HTML for crawlers and no-JS visitors,
+ * but do not make the browser construct every below-fold node on first paint.
+ * With scripting enabled, <noscript> contents are raw text; home-defer.js
+ * parses and inserts them when the visitor reaches the end of the hero. With
+ * scripting disabled, the same contents render normally as the fallback.
+ */
+function deferHomeContent(html, appAsset) {
+  let out = html;
+  if (!out.includes(`<noscript id="${DEFERRED_HOME_MAIN_ID}"`)) {
+    const rootStart = out.indexOf('<div id="root"');
+    const mainStart = out.indexOf('<main', rootStart);
+    const topStart = out.indexOf('<section id="top"', mainStart);
+    const topEnd = out.indexOf('</section>', topStart);
+    const mainEnd = out.indexOf('</main>', topEnd);
+    if (rootStart < 0 || mainStart < 0 || topStart < 0 || topEnd < 0 || mainEnd < 0) {
+      throw new Error('index.html: homepage hero/main landmarks are missing; cannot defer below-fold content');
+    }
+    const deferredMain = out.slice(topEnd + '</section>'.length, mainEnd);
+    const mainFallback = `<noscript id="${DEFERRED_HOME_MAIN_ID}"><!--ZP-DEFERRED-MAIN:START-->${deferredMain}<!--ZP-DEFERRED-MAIN:END--></noscript><div id="${DEFERRED_HOME_SENTINEL_ID}" data-zp-app="/${appAsset}" aria-hidden="true"></div>`;
+    out = out.slice(0, topEnd + '</section>'.length) + mainFallback + out.slice(mainEnd);
+
+    const footerSearchStart = out.indexOf('</main>');
+    const footerStart = out.indexOf('<footer', footerSearchStart);
+    const footerEnd = out.indexOf('</footer>', footerStart);
+    if (footerSearchStart < 0 || footerStart < 0 || footerEnd < 0) {
+      throw new Error('index.html: homepage footer landmark is missing; cannot defer below-fold footer');
+    }
+    const deferredFooter = out.slice(footerStart, footerEnd + '</footer>'.length);
+    const footerFallback = `<noscript id="${DEFERRED_HOME_FOOTER_ID}"><!--ZP-DEFERRED-FOOTER:START-->${deferredFooter}<!--ZP-DEFERRED-FOOTER:END--></noscript>`;
+    out = out.slice(0, footerStart) + footerFallback + out.slice(footerEnd + '</footer>'.length);
+  }
+
+  const sentinel = new RegExp(`(<div\\b[^>]*\\bid=["']${DEFERRED_HOME_SENTINEL_ID}["'][^>]*)(>)`, 'i');
+  if (!sentinel.test(out)) throw new Error('index.html: deferred homepage sentinel is missing');
+  out = out.replace(sentinel, (_match, attributes, close) => `${attributes.replace(/\sdata-zp-app=["'][^"']*["']/i, '')} data-zp-app="/${appAsset}"${close}`);
+
+  // The public static hero button remains useful before React is requested.
+  if (!out.includes('data-zp-showreel')) {
+    const textAt = out.indexOf('Play the showreel');
+    const buttonAt = out.lastIndexOf('<button', textAt);
+    const tagEnd = out.indexOf('>', buttonAt);
+    if (textAt < 0 || buttonAt < 0 || tagEnd < 0) throw new Error('index.html: static showreel button is missing');
+    out = out.slice(0, tagEnd) + ' data-zp-showreel=""' + out.slice(tagEnd);
+  }
+
+  const moduleStart = out.indexOf('<script type="module">');
+  const moduleEnd = out.indexOf('</script>', moduleStart);
+  if (moduleStart < 0 || moduleEnd < 0) {
+    throw new Error('index.html: the homepage module is missing');
+  }
+  const moduleBody = out.slice(moduleStart, moduleEnd);
+  if (/__zpLoadReactHome\s*=/.test(moduleBody)) {
+    const nextModule = moduleBody
+      .replace(/import\(["']\/index-[a-f0-9]{8}\.js["']\)/i, `import("/${appAsset}")`)
+      .replace(/(?:window\.dispatchEvent\s*&&\s*)+window\.dispatchEvent\(new Event\(["']zp:home-loader-ready["']\)\)/g, 'window.dispatchEvent&&window.dispatchEvent(new Event("zp:home-loader-ready"))');
+    out = out.slice(0, moduleStart) + nextModule + out.slice(moduleEnd);
+  } else {
+    const mountMarker = out.indexOf('// 4. React Bundle Mount', moduleStart);
+    if (mountMarker < 0 || mountMarker > moduleEnd) {
+      throw new Error('index.html: the homepage module mount block is missing');
+    }
+    const onDemandMount = `// 4. React Bundle Mount (on demand)\nwindow.__zpLoadReactHome = () => import("/${appAsset}");\nif (window.dispatchEvent) window.dispatchEvent(new Event("zp:home-loader-ready"));`;
+    out = out.slice(0, mountMarker) + onDemandMount + out.slice(moduleEnd);
+  }
+
+  if (!out.includes('src="/home-defer.js"')) {
+    out = out.replace('</body>', '<script src="/home-defer.js" defer></script>\n</body>');
+  }
+  return out;
 }
 
 /**
@@ -177,9 +252,13 @@ function buildHomeDocument() {
   const fullHead = `${templateHead.slice(0, close).trimEnd()}\n${renderHomeSeo()}\n</head>`;
   html = replaceMarkedContents(html, SEO_START, SEO_END, fullHead, 'SEO');
   html = replaceMarkedContents(html, HOME_POSTERS_START, HOME_POSTERS_END, renderHomePosterCards(), 'home-poster');
+  const appAsset = /import\(["']\/(index-[a-f0-9]{8}\.js)["']\)/i.exec(html)?.[1];
+  if (!appAsset) throw new Error('index.html: cannot find the content-hashed homepage bundle import');
+  html = deferHomeContent(html, appAsset);
   fs.writeFileSync(indexFile, html, 'utf8');
   console.log('prerender: replaced the complete homepage <head> from src/lib/home.ts + home entities');
   console.log('prerender: rendered 9 curated poster-wall cards from src/data/home.ts + productions.ts');
+  console.log('prerender: deferred below-fold homepage sections until scroll/intent (no-JS fallback retained)');
 }
 const chrome = readChrome();
 const only = process.argv

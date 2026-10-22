@@ -1,6 +1,8 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import { pipeline } from 'node:stream';
+import { createBrotliCompress, createGzip } from 'node:zlib';
 import { fileURLToPath } from 'node:url';
 
 /**
@@ -46,6 +48,9 @@ const MIME = {
   '.webmanifest': 'application/manifest+json',
 };
 
+const COMPRESSIBLE = /^(?:text\/|application\/(?:javascript|json|xml|wasm|xhtml\+xml))/i;
+const H3_ALT_SVC = 'h3=":443"; ma=86400';
+
 const file = (rel) => path.join(__dirname, rel);
 const isFile = (rel) => {
   try {
@@ -54,6 +59,48 @@ const isFile = (rel) => {
     return false;
   }
 };
+
+/** Prefer Brotli, then gzip, while leaving already-compressed media alone. */
+function negotiatedEncoding(req, contentType, size) {
+  if (size < 1024 || !COMPRESSIBLE.test(contentType || '')) return null;
+  const header = String(req.headers['accept-encoding'] || '').toLowerCase();
+  const quality = (name) => {
+    const match = header.match(new RegExp(`(?:^|,)\\s*${name}(?:\\s*;\\s*q=([0-9.]+))?`));
+    return match ? Number(match[1] ?? 1) : 0;
+  };
+  if (quality('br') > 0) return 'br';
+  if (quality('gzip') > 0) return 'gzip';
+  return null;
+}
+
+function sendFile(req, res, rel, status = 200, extraHeaders = {}) {
+  const absolute = file(rel);
+  const stat = fs.statSync(absolute);
+  const contentType = MIME[path.extname(rel).toLowerCase()] || 'application/octet-stream';
+  const encoding = negotiatedEncoding(req, contentType, stat.size);
+  const headers = {
+    'Content-Type': contentType,
+    'Cache-Control': path.extname(rel).toLowerCase() === '.html' || rel === 'home-defer.js'
+      ? 'public, max-age=0, must-revalidate'
+      : 'public, max-age=31536000',
+    'Alt-Svc': H3_ALT_SVC,
+    ...extraHeaders,
+  };
+  if (encoding) {
+    headers['Content-Encoding'] = encoding;
+    headers.Vary = 'Accept-Encoding';
+  } else {
+    headers['Content-Length'] = stat.size;
+  }
+  res.writeHead(status, headers);
+  const source = fs.createReadStream(absolute);
+  if (!encoding) {
+    source.pipe(res);
+    return;
+  }
+  const compressor = encoding === 'br' ? createBrotliCompress() : createGzip();
+  pipeline(source, compressor, res, () => {});
+}
 
 /** Exact legacy redirects from _redirects; wildcard routes are handled by the 404 fallback. */
 const explicitRedirects = new Map();
@@ -104,27 +151,18 @@ const server = http.createServer((req, res) => {
   if (!rel) {
     const notFound = '404.html';
     if (isFile(notFound)) {
-      const body = fs.readFileSync(file(notFound));
-      res.writeHead(404, {
-        'Content-Type': 'text/html; charset=utf-8',
+      sendFile(req, res, notFound, 404, {
         'Access-Control-Allow-Origin': '*',
         'X-Robots-Tag': 'noindex, follow',
       });
-      res.end(body);
       return;
     }
-    res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
+    res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8', 'Alt-Svc': H3_ALT_SVC });
     res.end('404 Not Found');
     return;
   }
 
-  const ext = path.extname(rel).toLowerCase();
-  res.writeHead(200, {
-    'Content-Type': MIME[ext] || 'application/octet-stream',
-    'Access-Control-Allow-Origin': '*',
-    'Cache-Control': ext === '.html' ? 'public, max-age=0, must-revalidate' : 'public, max-age=31536000',
-  });
-  fs.createReadStream(file(rel)).pipe(res);
+  sendFile(req, res, rel, 200, { 'Access-Control-Allow-Origin': '*' });
 });
 
 server.listen(PORT, '0.0.0.0', () => {

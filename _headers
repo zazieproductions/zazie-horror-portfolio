@@ -4,6 +4,7 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
+  Alt-Svc: h3=":443"; ma=86400
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self'; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://drive.google.com https://docs.google.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; upgrade-insecure-requests
   Cache-Control: public, max-age=0, must-revalidate
 
@@ -56,6 +57,9 @@
 
 /estimator-*.js
   Cache-Control: public, max-age=31536000, immutable
+
+/home-defer.js
+  Cache-Control: public, max-age=0, must-revalidate
 
 /item-*.js
   Cache-Control: public, max-age=31536000, immutable

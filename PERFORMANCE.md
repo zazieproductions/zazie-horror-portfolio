@@ -4,6 +4,64 @@ Date: 2026-09-25 · Branch: `arena/01a0d613-zazie-horror-portfolio`
 Scope: horror.zazieproductions.com (static prerendered React build on an edge host with `_headers`/`_redirects` semantics, i.e. Netlify/Cloudflare-Pages style).
 
 
+## 0.1 Audit follow-up: 2026-10-22
+
+This pass addresses the DOM, compression, inline-asset, and protocol findings
+from the latest page audit. It is still repository evidence, not field
+telemetry: deploy and rerun Lighthouse/PSI before treating the values below as
+production measurements.
+
+### Implemented changes
+
+- **First-paint DOM**: the full below-fold homepage remains in the source HTML
+  inside `<noscript>` fallbacks, so crawlers and visitors with JavaScript off
+  still receive the poster wall, showreel, services, reviews, contact copy, and
+  footer. With JavaScript on, `home-defer.js` materializes that content only
+  when the hero's sentinel is reached or a visitor follows an in-page link.
+  The React bundle follows the same intent boundary instead of rebuilding the
+  full 1,400-node tree during the initial visit. This keeps the active first
+  paint around the header/hero instead of the complete archive while retaining
+  the existing video/lightbox/audio behavior after scroll or interaction.
+- **Above-fold media**: only the atmosphere plate and decorative hero portrait
+  are active before the deferred content is materialized. Poster, project,
+  press, and headshot images remain `loading="lazy"` with intrinsic dimensions;
+  the first below-fold poster is no longer an active first-three image in the
+  browser DOM.
+- **Inline assets**: `scripts/minify-home.mjs` minifies the inline boot/player
+  CSS and JavaScript, minifies the generated homepage CSS, and keeps the
+  prerendered and React cinema-player rules byte-identical. The current output
+  is `index-e4ef3fe9.css`; the script re-derives the name and updates the
+  service-worker precache whenever the bytes change.
+- **Compression and protocol**: the local static server negotiates Brotli
+  first and gzip second for text responses, sets `Vary: Accept-Encoding`, and
+  exposes `Alt-Svc: h3=":443"; ma=86400`. The edge `_headers` file carries the
+  same HTTP/3 hint; Cloudflare Pages can then apply its normal negotiated text
+  compression without a false `Content-Encoding` declaration in a static file.
+
+### Current repository measurements
+
+| Surface | Raw | gzip | Brotli |
+| --- | ---: | ---: | ---: |
+| Homepage HTML | 188,953 B | 31,208 B | 24,676 B |
+| Homepage JS | 428,129 B | 128,409 B | 110,051 B |
+| Homepage CSS | 77,778 B | 13,850 B | 11,337 B |
+| Deferred controller | 3,439 B | 1,326 B | 1,096 B |
+
+The HTML remains larger than a raw 100 KB heuristic because the complete
+no-JavaScript/crawler fallback is intentionally kept in the response. Its
+negotiated Brotli transfer is approximately 25 KB, and the active DOM is the
+small first-paint subset; a production audit should report transfer and DOM
+separately.
+
+### Verification
+
+- `npm run build` passes, including prerender, generated hash synchronization,
+  route/schema verification, route aliases, and sitemap checks.
+- `npm test` passes all 37 pricing, cinema-player, and GEO regression tests.
+- `curl -H 'Accept-Encoding: br' /` against `npm run serve` returns
+  `Content-Encoding: br`, `Vary: Accept-Encoding`, and the `Alt-Svc` header.
+
+
 ## 0. Mobile loading follow-up: 2026-09-25
 
 This section supersedes the older entries below for the current `main`-derived
