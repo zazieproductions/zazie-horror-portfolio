@@ -20,6 +20,8 @@
 
 **No claim below is made about backlink counts, domain authority scores, or traffic volumes**, because no tool in this session could measure them. Where a number is inferred, it is labelled *inferred*.
 
+> **Backlink gap filled 2026-10-22.** The off-page link/entity inventory this audit could not produce now exists in `SEO-BACKLINK-ANALYSIS-WEARY-PINES.md` (verified linking domains, unlinked entity mesh, credit-link gaps, counter-plan). Read the two together; this document's on-page and architecture findings are unchanged.
+
 ---
 
 # 1. Executive summary
