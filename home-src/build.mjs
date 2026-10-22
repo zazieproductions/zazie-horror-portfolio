@@ -130,7 +130,8 @@ function countOf(text, needle) {
 }
 
 function patchBundle(orig) {
-  let out = orig;
+  // Keep explicit opener protection when React replaces the static homepage.
+  let out = orig.replaceAll('rel:"noreferrer"', 'rel:"noopener noreferrer"');
   for (const [oldText, newText, target] of PAIRS) {
     if (target === HTML) continue;
     const n = countOf(out, oldText);
@@ -151,7 +152,7 @@ function patchBundle(orig) {
 /* ------------------------------------------------------ static copy patch */
 
 function patchStatic(html) {
-  let out = html;
+  let out = html.replaceAll('rel="noreferrer"', 'rel="noopener noreferrer"');
   const applied = [];
   for (const [oldText, newText, target] of PAIRS) {
     if (target === BUNDLE) continue;
