@@ -93,5 +93,10 @@ export const homePageHead: PageHead = {
 };
 
 export function renderHomeSeo(): string {
-  return seoBlock(homePageHead);
+  // Compact JSON-LD only on the markup-heavy home page. Item and hub pages
+  // keep the shared readable serializer; the parsed schema is identical.
+  return seoBlock(homePageHead).replace(
+    /<script type="application\/ld\+json">\s*([\s\S]*?)\s*<\/script>/g,
+    (_match, body: string) => `<script type="application/ld+json">${JSON.stringify(JSON.parse(body))}</script>`,
+  );
 }

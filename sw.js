@@ -72,11 +72,12 @@
 // Pricing unchanged: scene 1–2 min / $250 from; focused 3–5 min / $650 from;
 // extended 6–12 min / $1,500 from; substantial feature/experimental scores
 // custom quoted with an indicative $2,500 minimum.
+// v35: leaner homepage HTML with external hashed support assets and clearer copy.
 // v34: GEO overhaul — rebuilt /hire-a-composer pillar + interactive estimator,
 // added /how-to-hire-a-horror-composer hub, /llms.txt + /llms-full.txt,
 // <main>-wrapped document headers and spaced numeral headings across all 85 routes,
 // clean JSON-LD schema graphs, and re-hashed home bundle index-4d715571.js.
-const CACHE_NAME = 'zazie-v34';
+const CACHE_NAME = 'zazie-v35';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -85,13 +86,16 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-f509fde0.css',
-  '/index-4d715571.js',
+  '/index-2ea385f8.js',
+  '/home-45ca31d2.css',
+  '/home-758a2b87.js',
+  '/home-icons-0d24fbfd.svg',
   '/store-eed3eeee.css',
   '/store-3fc01be0.js',
   '/legal-886033c7.css',
   '/legal-ab598df8.js',
   '/estimator-c0d6291c.css',
-  '/estimator-e20a6c5d.js',
+  '/estimator-934efabc.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',
   '/images/hero-portrait.avif',

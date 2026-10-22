@@ -120,7 +120,7 @@ if (missing.length) fail(`${missing.length} sitemap URL(s) resolve to no file: $
 /* 3. sw.js must not precache a store asset this tree does not carry
       (store-src/build.sh only warns about this) */
 const sw = fs.readFileSync(path.join(OUT, 'sw.js'), 'utf8');
-for (const asset of [...sw.matchAll(/['"]\/((?:store|index|legal)-[0-9a-f]{8}\.(?:css|js))['"]/g)].map((m) => m[1])) {
+for (const asset of [...sw.matchAll(/['"]\/((?:store|index|home|home-icons|legal)-[0-9a-f]{8}\.(?:css|js|svg))['"]/g)].map((m) => m[1])) {
   if (!has.has(asset)) fail(`sw.js precaches /${asset}, which is not in the deploy`);
 }
 

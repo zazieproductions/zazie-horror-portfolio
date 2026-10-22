@@ -272,14 +272,14 @@ test('pricing cards, estimator and inquiry explain starting fees and feature sco
   assert.match(cards, /From \$250/);
   assert.match(cards, /From \$650/);
   assert.match(cards, /From \$1,500/);
-  assert.match(cards, /not fixed-price caps/);
-  assert.match(cards, /not a guarantee of a specific amount of finished music/);
-  assert.match(cards, /\$2,500 USD for substantial scoring engagements only/);
-  assert.match(cards, /Single-scene needs use Individual Scene Scoring/);
+  assert.match(cards, /Each listed fee is a starting price/);
+  assert.match(cards, /Minute ranges are guides, not a promise of finished music length/);
+  assert.match(cards, /Guide minimum for large scores: \$2,500 USD/);
+  assert.match(cards, /For one scene, choose Individual Scene Scoring/);
 
   const estimator = estimatorHtml();
   assert.match(estimator, /name="substantial"/);
-  assert.match(estimator, /leave unchecked for one scene\/cue/i);
+  assert.match(estimator, /leave this unchecked for one scene or cue/i);
   assert.match(estimator, /From \$650|\$650/);
 
   const inquiry = inquiryFormHtml();
@@ -304,9 +304,9 @@ test('contact inquiry is low-friction and defers optional scope details', () => 
 
 test('homepage contact keeps a single neutral format and tone default', () => {
   const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
-  const contactIntro = 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.';
+  const contactIntro = 'Start with your name and email. Add project details if you know them. The form prepares an email for you to review and send.';
   assert.equal(html.split(contactIntro).length - 1, 1, 'homepage contact copy is not duplicated');
-  assert.match(html, /"dateModified": "2026-10-18"/);
+  assert.match(html, /"dateModified":\s*"2026-10-22"/);
   for (const label of ['Theme / tone', 'Format']) {
     const labelIndex = html.indexOf(`aria-label="${label}"`);
     const start = html.lastIndexOf('<select', labelIndex);

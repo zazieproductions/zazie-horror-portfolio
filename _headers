@@ -48,6 +48,12 @@
 /index-*.js
   Cache-Control: public, max-age=31536000, immutable
 
+/home-*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/home-icons-*.svg
+  Cache-Control: public, max-age=31536000, immutable
+
 /store-*.js
   Cache-Control: public, max-age=31536000, immutable
 

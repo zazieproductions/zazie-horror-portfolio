@@ -9,8 +9,12 @@
  *   home-src/bundle.orig.js   pristine copy of the bundle as shipped (sha256
  *                             2afd4ec8…414b). Never edited; always the input.
  *   root index-<hash8>.js     patched bundle, content-hashed. Old copies removed.
- *   root index.html           static copy updated in place (idempotent).
- *   root sw.js                points at the new bundle name.
+ *   home-src/home.css/.js    maintained early-player and shared-style sources
+ *   home-src/icons.svg       maintained SVG symbol sprite
+ *   root index.html           static copy updated in place (idempotent)
+ *   root home-<hash8>.*       minified support assets, content-hashed
+ *   root home-icons-<hash8>.svg  shared external sprite, content-hashed
+ *   root sw.js                points at the current hashed asset names
  *
  * Changes made to the bundle:
  *   1. Copy pairs (hero, bio, services heading, contact copy, budget list).
@@ -31,6 +35,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
+import { transform } from 'esbuild';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const here = path.join(root, 'home-src');
@@ -42,18 +47,22 @@ const BOTH = 'both';
 const BUNDLE = 'bundle';
 const HTML = 'html';
 
+const BIO2 = `His palette mixes bowed metal, struck strings, synths, and orchestral sounds. His work appeared at <strong>Ars Electronica 2026</strong>. It was also presented in 20.4-channel spatial audio. <strong>MUSLAB/Cero Records</strong> and <strong>EXiS in Seoul</strong> have selected his work. The <strong>Black Mountain College Museum + Arts Center</strong> has commissioned him. He also builds audio instruments and sound libraries.</p><p>Zazie has a background in experimental film and sound art. He shapes each score around its story and emotional world. He writes for shorts, features, series, and horror games. Ready to <a href="/hire-a-composer" class="text-bone underline underline-offset-4 hover:text-blood">hire a horror composer</a>? View his packages and verified credits. You can also read the <a href="/how-to-hire-a-horror-composer" class="text-bone underline underline-offset-4 hover:text-blood">guide for filmmakers and game developers</a>.`;
+
 /** [old, new, targets]. Text is matched exactly; see the header note. */
 const PAIRS = [
   // Hero
   ['Original music for psychological horror ', 'Dark, atmospheric horror scores, ', HTML],
   ['& experimental cinema.', 'written to your picture.', HTML],
-  ['Dissonance. Atmosphere. Emotional intensity.', 'Original music for psychological horror, thrillers, and dark sci-fi,', HTML],
-  ['Scores composed directly to picture.', 'composed for film, TV, and games.', HTML],
+  ['Dissonance. Atmosphere. Emotional intensity.', 'Original music for psychological horror, thrillers, and dark sci-fi.', HTML],
+  ['Scores composed directly to picture.', 'Composed for film, TV, and games.', HTML],
+  ['Original music for psychological horror, thrillers, and dark sci-fi,', 'Original music for psychological horror, thrillers, and dark sci-fi.', BUNDLE],
+  ['composed for film, TV, and games.', 'Composed for film, TV, and games.', BUNDLE],
   ['Start an inquiry', 'Request a scoring quote', BOTH],
   // User-provided biography; HTML emphasis is shared with the static snapshot.
-  ["Zazie Kanwar-Torge is an award-winning composer, experimental producer, and multi-instrumentalist. Under Zazie Productions, he writes and performs original scores for psychological, folk, and body horror, supernatural thrillers, and dark sci-fi.", "<strong>Zazie Kanwar-Torge</strong> is an award-winning film composer, experimental producer, and multi-instrumentalist specializing in <strong>psychological horror, folk horror, body horror, supernatural thrillers, and dark science fiction</strong>. Through Zazie Productions, he creates original film scores and immersive sonic atmospheres that explore dread, dissonance, isolation, and the uncanny.", "bundle"],
-  ["His palette combines struck strings, bowed metal, hybrid orchestration, and custom synths, shaped to picture for projects from shorts to features.", "Working at the intersection of cinematic scoring, musique concrète, and electroacoustic composition, his distinctive palette combines bowed metal, struck strings, experimental synthesis, and hybrid orchestration. His work has been featured at <strong>Ars Electronica 2026</strong>, performed in 20.4-channel spatial audio, and selected for international experimental music and film programs, including <strong>MUSLAB/Cero Records</strong> and <strong>EXiS in Seoul</strong>. Previously commissioned by the <strong>Black Mountain College Museum + Arts Center</strong>, he also develops original audio instruments and experimental sound libraries.</p><p>Drawing on a background in experimental film, sound art, and audiovisual composition, Zazie approaches each score as an extension of the film's psychological and emotional world, creating visceral, atmospheric music tailored to independent shorts, feature films, series, and horror video games. Directors, producers, and game developers ready to <a href=\"/hire-a-composer\" class=\"text-bone underline underline-offset-4 hover:text-blood\">hire a horror composer</a> can review published packages, verified credits, and the <a href=\"/how-to-hire-a-horror-composer\" class=\"text-bone underline underline-offset-4 hover:text-blood\">filmmaker &amp; game-developer hiring guide</a>.", "bundle"],
-  ['Drawing on a background in experimental film, sound art, and audiovisual composition, Zazie approaches each score as an extension of the film\'s psychological and emotional world, creating visceral, atmospheric music tailored to independent shorts, feature films, and unconventional genre cinema.', 'Drawing on a background in experimental film, sound art, and audiovisual composition, Zazie approaches each score as an extension of the film\'s psychological and emotional world, creating visceral, atmospheric music tailored to independent shorts, feature films, series, and horror video games. Directors, producers, and game developers ready to <a href="/hire-a-composer" class="text-bone underline underline-offset-4 hover:text-blood">hire a horror composer</a> can review published packages, verified credits, and the <a href="/how-to-hire-a-horror-composer" class="text-bone underline underline-offset-4 hover:text-blood">filmmaker &amp; game-developer hiring guide</a>.', HTML],
+  ["Zazie Kanwar-Torge is an award-winning composer, experimental producer, and multi-instrumentalist. Under Zazie Productions, he writes and performs original scores for psychological, folk, and body horror, supernatural thrillers, and dark sci-fi.", "<strong>Zazie Kanwar-Torge</strong> is an award-winning film composer and producer. He also plays several instruments. At Zazie Productions, he scores <strong>psychological horror, folk horror, body horror, supernatural thrillers, and dark sci-fi</strong>. His music builds dread, tension, and isolation.", "bundle"],
+  [`bio2:"His palette combines struck strings, bowed metal, hybrid orchestration, and custom synths, shaped to picture for projects from shorts to features."`, `bio2:${JSON.stringify(BIO2)}`, BUNDLE],
+  ['Drawing on a background in experimental film, sound art, and audiovisual composition, Zazie approaches each score as an extension of the film\'s psychological and emotional world, creating visceral, atmospheric music tailored to independent shorts, feature films, and unconventional genre cinema.', 'Zazie has a background in experimental film and sound art. He shapes each score around its story and emotional world. He writes for shorts, features, series, and horror games. Ready to <a href="/hire-a-composer" class="text-bone underline underline-offset-4 hover:text-blood">hire a horror composer</a>? View his packages and verified credits. You can also read the <a href="/how-to-hire-a-horror-composer" class="text-bone underline underline-offset-4 hover:text-blood">guide for filmmakers and game developers</a>.', HTML],
   ['<a href="#services" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Rates</a><a href="/store"', '<a href="#services" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Rates</a><a href="/hire-a-composer" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Hire</a><a href="/store"', HTML],
   ['[["/hire-a-composer","Hire a composer"],["/sound-design","Sound design"]', '[["/hire-a-composer","Hire a horror composer"],["/how-to-hire-a-horror-composer","Hiring guide"],["/sound-design","Sound design"]', BUNDLE],
   ['<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a composer</a><a href="/sound-design"', '<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a horror composer</a><a href="/how-to-hire-a-horror-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hiring guide</a><a href="/sound-design"', HTML],
@@ -62,15 +71,21 @@ const PAIRS = [
   // Services heading
   ['04 · Scope and budget', '04 · Scoring services', BOTH],
   ['Build a scope and estimate', 'Choose a package, then estimate', BOTH],
-  ['Choose a project type, scored runtime, complexity, and delivery needs.', 'Packages are priced by scored music minutes, not film length.', BOTH],
-  ["Estimates scale with your project's funding.", 'Preliminary estimate — final quotation subject to creative scope and written agreement.', BUNDLE],
-  ['Packages are priced by scored music minutes, not film length. Estimates are indicative and nonbinding.', 'Packages are priced by scored music minutes, not film length. Preliminary estimate — final quotation subject to creative scope and written agreement.', HTML],
+  ['Choose a project type, scored runtime, complexity, and delivery needs.', 'Prices follow minutes of music, not film length.', BOTH],
+  ["Estimates scale with your project's funding.", 'Your estimate is a guide. I confirm the scope and fee in a written quote.', BUNDLE],
+  ['Packages are priced by scored music minutes, not film length. Estimates are indicative and nonbinding.', 'Prices follow minutes of music, not film length. Your estimate is a guide. I confirm the scope and fee in a written quote.', HTML],
   // Contact
-  ['Share your format, runtime, timeline, and budget.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', BUNDLE],
-  ['Share your format, scored minutes, timeline, and budget.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', HTML],
-  // Repair the duplicate sentence present in the latest static homepage snapshot.
-  ['Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send. The form prepares an email for you to review and send.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', HTML],
-  ['"dateModified": "2026-10-17"', '"dateModified": "2026-10-18"', HTML],
+  ['Share your format, runtime, timeline, and budget.', 'Start with your name and email. Add project details if you know them. The form prepares an email for you to review and send.', BUNDLE],
+  ['Share your format, scored minutes, timeline, and budget.', 'Start with your name and email. Add project details if you know them. The form prepares an email for you to review and send.', HTML],
+  // Plain-language approach, review, and contact guidance.
+  ['Themes, harmony, texture, and tension are shaped to picture, with clear spotting, revisions, and delivery.', 'Every cue serves the picture. I plan the music with you. You get clear revision steps and delivery dates.', BOTH],
+  ['Cues built around how dread lands: slow-burn beds, dissociative harmony, and tension that hits the cut, not the cliché.', 'I shape each cue around the story. Slow beds build dread. Sharp sounds mark a turn or reveal. The music fits the cut, not a stock horror formula.', BOTH],
+  ['Hybrid orchestral haze, sub-frequency gravity, frozen ambient space. Every color chosen for story. Never stock "scary pack" mood.', 'I blend strings, synths, and low sound to create a dark mood. Each sound has a story purpose. No stock "scary pack" cues.', BOTH],
+  ['Motifs that survive the festival loop and the trailer cut. Music you remember in the parking lot.', 'A clear theme can carry a scene. It can also work in a trailer. The best themes stay with you after the film ends.', BOTH],
+  ['Feedback from directors, producers, supervisors, and filmmakers across feature, festival, and micro-budget work.', 'Hear from directors, producers, and music supervisors. Their projects include features, festival films, and low-budget work.', BOTH],
+  ['Opens your email → ', 'This form opens your email app: ', BOTH],
+  [' · subject', '. Subject: ', BOTH],
+  [' · atmospheric score focus only. Fees, revisions, rights and delivery: ', '. For original score requests only. Read about fees, revisions, rights, and delivery: ', BOTH],
   ['gu=["Short film","Feature","Series episode","Game / interactive","Installation / art"]', 'gu=["Not sure yet","Short film","Feature","Series episode","Game / interactive","Installation / art"]', BUNDLE],
   ['a1=["Psychological / atmospheric horror","Supernatural dread","Body horror (musical atmosphere)","Folk horror","Techno-thriller","Cosmic dread","Dark drama / thriller","Game adaptive score","Other / hybrid cinematic"]', 'a1=["Not sure yet","Psychological / atmospheric horror","Supernatural dread","Body horror (musical atmosphere)","Folk horror","Techno-thriller","Cosmic dread","Dark drama / thriller","Game adaptive score","Other / hybrid cinematic"]', BUNDLE],
   ['<select class="w-full border border-ash bg-void px-4 py-3 text-sm text-bone outline-none focus:border-blood" aria-label="Theme / tone"><option value="Psychological / atmospheric horror">Psychological / atmospheric horror</option>', '<select class="w-full border border-ash bg-void px-4 py-3 text-sm text-bone outline-none focus:border-blood" aria-label="Theme / tone"><option value="Not sure yet" selected>Not sure yet</option><option value="Psychological / atmospheric horror">Psychological / atmospheric horror</option>', HTML],
@@ -196,6 +211,12 @@ function patchStatic(html) {
   if (!budgetRe.test(out)) throw new Error('index.html: budget select not found');
   out = out.replace(budgetRe, (_m, open, close) => `${open}${budgetSelectOptions()}${close}`);
 
+  // Historical implementation comments add markup bytes but no visible copy.
+  // Preserve every marker needed by later build and pricing-sync steps.
+  out = out.replace(/<!--[\s\S]*?-->/g, (comment) =>
+    /SEO:|HOME-POSTERS:|(?:\/?zp:)|(?:\/?v:)/.test(comment) ? comment : '',
+  );
+
   return { html: out, applied };
 }
 
@@ -214,6 +235,51 @@ function ensureEstimatorAssets(html) {
   return out;
 }
 
+/**
+ * Build the homepage's active support CSS/JS outside the HTML document.
+ * Keeping these assets external leaves more visible text per byte of HTML;
+ * minification and content hashes keep them cache-safe. The module's dynamic
+ * React import follows the bundle hash generated by this same build.
+ */
+async function buildHomeAssets(bundleName) {
+  const jsSource = fs.readFileSync(path.join(here, 'home.js'), 'utf8')
+    .replace(/\/index-[0-9a-f]{8}\.js/g, `/${bundleName}`);
+  const cssSource = fs.readFileSync(path.join(here, 'home.css'), 'utf8');
+  const icons = fs.readFileSync(path.join(here, 'icons.svg'), 'utf8');
+  const js = (await transform(jsSource, { loader: 'js', minify: true, legalComments: 'none', target: 'es2019' })).code;
+  const css = (await transform(cssSource, { loader: 'css', minify: true, legalComments: 'none' })).code;
+  const hash = (text) => crypto.createHash('sha256').update(text).digest('hex').slice(0, 8);
+  const assets = {
+    jsName: `home-${hash(js)}.js`,
+    cssName: `home-${hash(css)}.css`,
+    iconsName: `home-icons-${hash(icons)}.svg`,
+  };
+
+  for (const file of fs.readdirSync(root)) {
+    const staleSupport = /^home-[0-9a-f]{8}\.(?:js|css)$/.test(file) && file !== assets.jsName && file !== assets.cssName;
+    const staleIcons = /^home-icons-[0-9a-f]{8}\.svg$/.test(file) && file !== assets.iconsName;
+    if (staleSupport || staleIcons) fs.rmSync(path.join(root, file));
+  }
+  fs.writeFileSync(path.join(root, assets.jsName), js, 'utf8');
+  fs.writeFileSync(path.join(root, assets.cssName), css, 'utf8');
+  fs.writeFileSync(path.join(root, assets.iconsName), icons, 'utf8');
+  console.log(`home-src: wrote ${assets.jsName}, ${assets.cssName}, and ${assets.iconsName}`);
+  return assets;
+}
+
+function ensureHomeAssets(html, assets) {
+  if (!/\/home-[0-9a-f]{8}\.js/.test(html) || !/\/home-[0-9a-f]{8}\.css/.test(html) || !/\/home-icons-[0-9a-f]{8}\.svg/.test(html)) {
+    throw new Error('index.html must reference the external home CSS, module, and icon assets');
+  }
+  if (/<path\b/.test(html)) {
+    throw new Error('index.html contains a new inline SVG path; add it to home-src/icons.svg and use the shared sprite');
+  }
+  return html
+    .replace(/\/home-[0-9a-f]{8}\.js/g, `/${assets.jsName}`)
+    .replace(/\/home-[0-9a-f]{8}\.css/g, `/${assets.cssName}`)
+    .replace(/\/home-icons-[0-9a-f]{8}\.svg/g, `/${assets.iconsName}`);
+}
+
 /* ----------------------------------------------------------------- main */
 
 const orig = fs.readFileSync(path.join(here, 'bundle.orig.js'), 'utf8');
@@ -221,8 +287,17 @@ const origHash = crypto.createHash('sha256').update(orig).digest('hex');
 if (!origHash.startsWith('2afd4ec8')) throw new Error(`bundle.orig.js is not the shipped bundle (sha256 ${origHash})`);
 
 const patched = patchBundle(orig);
+const syntaxTree = ts.createSourceFile('patched-home.js', patched, ts.ScriptTarget.ES2020, true, ts.ScriptKind.JS);
+if (syntaxTree.parseDiagnostics.length) {
+  const diagnostic = syntaxTree.parseDiagnostics[0];
+  const offset = diagnostic.start ?? 0;
+  const position = syntaxTree.getLineAndCharacterOfPosition(offset);
+  const excerpt = patched.slice(Math.max(0, offset - 500), offset + 120);
+  throw new Error(`patched home bundle is invalid JavaScript at ${position.line + 1}:${position.character + 1}: ${ts.flattenDiagnosticMessageText(diagnostic.messageText, ' ')}; near ${JSON.stringify(excerpt)}`);
+}
 const hash = crypto.createHash('sha256').update(patched).digest('hex').slice(0, 8);
 const name = `index-${hash}.js`;
+const homeAssets = await buildHomeAssets(name);
 
 for (const f of fs.readdirSync(root)) {
   if (/^index-[0-9a-f]{8}\.js$/.test(f) && f !== name) fs.rmSync(path.join(root, f));
@@ -232,13 +307,18 @@ fs.writeFileSync(path.join(root, name), patched, 'utf8');
 const indexFile = path.join(root, 'index.html');
 const { html, applied } = patchStatic(fs.readFileSync(indexFile, 'utf8'));
 let nextHtml = html.replace(/\/?index-[0-9a-f]{8}\.js/g, (m) => (m.startsWith('/') ? `/${name}` : name));
+nextHtml = ensureHomeAssets(nextHtml, homeAssets);
 nextHtml = ensureEstimatorAssets(nextHtml);
 fs.writeFileSync(indexFile, nextHtml, 'utf8');
 
 const swFile = path.join(root, 'sw.js');
 if (fs.existsSync(swFile)) {
   const sw = fs.readFileSync(swFile, 'utf8');
-  const nextSw = sw.replace(/\/index-[0-9a-f]{8}\.js/g, `/${name}`);
+  const nextSw = sw
+    .replace(/\/index-[0-9a-f]{8}\.js/g, `/${name}`)
+    .replace(/\/home-[0-9a-f]{8}\.js/g, `/${homeAssets.jsName}`)
+    .replace(/\/home-[0-9a-f]{8}\.css/g, `/${homeAssets.cssName}`)
+    .replace(/\/home-icons-[0-9a-f]{8}\.svg/g, `/${homeAssets.iconsName}`);
   if (nextSw !== sw) fs.writeFileSync(swFile, nextSw, 'utf8');
 }
 

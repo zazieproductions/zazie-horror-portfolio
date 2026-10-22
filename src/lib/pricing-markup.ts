@@ -124,8 +124,8 @@ function packageCard(pkg: PricingPackage, index: number): string {
   const contact = `/contact?package=${pkg.id}`;
   const cta = pkg.display === 'custom' ? 'Discuss a feature or experimental score' : `Request a quote for ${esc(pkg.name)}`;
   const priceNote = pkg.display === 'custom'
-    ? `Indicative minimum ${usd(pkg.indicativeMinimum ?? FEATURE_MINIMUM_ENGAGEMENT)} USD for substantial scoring engagements only`
-    : `Starting fee · ${CURRENCY} · not a fixed-price cap`;
+    ? `Guide minimum for large scores: ${usd(pkg.indicativeMinimum ?? FEATURE_MINIMUM_ENGAGEMENT)} USD. Single scenes may cost less`
+    : `Starting fee in ${CURRENCY}. Final fee may vary`;
   return [
     `<article class="zp-pkg" id="package-${pkg.id}" data-package="${pkg.id}">`,
     `<p class="zp-pkg-no">${String(index + 1).padStart(2, '0')}</p>`,
@@ -143,7 +143,7 @@ function packageCard(pkg: PricingPackage, index: number): string {
 /** The four commissioning packages as cards, in order. */
 export function packagesHtml(): string {
   return [
-    `<p class="zp-pricing-intro">Starting fees are in USD, not fixed-price caps. Scored-minute scopes are guides, not a guarantee of a specific amount of finished music; the written quote confirms the composition scope and final fee.</p>`,
+    `<p class="zp-pricing-intro">Fees are in USD. Each listed fee is a starting price. Minute ranges are guides, not a promise of finished music length. Your written quote confirms the scope and final fee.</p>`,
     `<div class="zp-packages">`,
     PACKAGES.map(packageCard).join(''),
     `</div>`,
@@ -168,7 +168,7 @@ export function inclusionsHtml(): string {
     STANDARD_INCLUSIONS.map((item) => `<li>${esc(item)}</li>`).join(''),
     `</ul></div>`,
     `<div class="zp-list-block zp-list-specialist"><h3>Specialist work, quoted on request</h3>`,
-    `<p>Discussed individually after a feasibility check. Not standard inclusions, and not part of a published estimate.</p><ul>`,
+    `<p>Ask me about these services. They are not standard inclusions. They are not part of a published estimate.</p><ul>`,
     SPECIALIST_DELIVERABLES.map((item) => `<li>${esc(item)}</li>`).join(''),
     `</ul></div>`,
     `</div>`,
@@ -256,22 +256,22 @@ export function estimatorFormHtml(scope: QuoteInput, cueText: string): string {
     `<div class="zp-grid2">`,
     `<label class="zp-field"><span class="zp-label">Scored music minutes</span>`,
     `<input class="zp-input" type="number" name="min" min="1" max="${MAX_MINUTES_INPUT}" step="1" inputmode="numeric" value="${Math.round(scope.scoredMinutes)}" aria-describedby="zp-min-help">`,
-    `<small id="zp-min-help" class="zp-help">Minutes of finished music, not film runtime. Whole-minute bands do not overlap; over ${LONG_FORM_THRESHOLD_MINUTES} minutes or expanded scope is quoted individually. Starting fees are floors, not ceilings.</small></label>`,
+    `<small id="zp-min-help" class="zp-help">Enter minutes of finished music, not film length. Each minute band is separate. Over ${LONG_FORM_THRESHOLD_MINUTES} minutes? Ask for a custom quote. Listed fees are starting prices.</small></label>`,
     `<label class="zp-field"><span class="zp-label">Number of cues <span class="zp-opt">(optional)</span></span>`,
     `<input class="zp-input" type="number" name="cues" min="0" max="${MAX_CUES}" step="1" inputmode="numeric" value="${esc(cueText)}" aria-describedby="zp-cue-help">`,
     `<small id="zp-cue-help" class="zp-help">Leave blank if unsure. Two cues per scored minute are included.</small></label>`,
     `</div></fieldset>`,
-    `<fieldset class="zp-group"><legend>Substantial project scope</legend>`,
+    `<fieldset class="zp-group"><legend>Full-project scope</legend>`,
     `<label class="zp-choice zp-choice-quoted"><input type="checkbox" name="substantial" value="yes"${scope.substantialProject ? ' checked' : ''} aria-describedby="zp-feature-help">`,
-    `<span class="zp-choice-body"><span class="zp-choice-title">Substantial feature-film or experimental-cinema score</span>`,
-    `<span class="zp-choice-note" id="zp-feature-help">Custom quotation; indicative minimum ${usd(FEATURE_MINIMUM_ENGAGEMENT)} USD for substantial full-project scoring. Leave unchecked for one scene/cue, including a cue within a feature.</span></span></label></fieldset>`,
+    `<span class="zp-choice-body"><span class="zp-choice-title">Full feature or experimental score</span>`,
+    `<span class="zp-choice-note" id="zp-feature-help">Custom quote. The guide minimum for a full score is ${usd(FEATURE_MINIMUM_ENGAGEMENT)} USD. Leave this unchecked for one scene or cue, even in a feature.</span></span></label></fieldset>`,
     `<fieldset class="zp-group"><legend>Musical complexity</legend><div class="zp-choices">${complexityOptions(scope.complexity)}</div></fieldset>`,
     `<fieldset class="zp-group"><legend>Schedule</legend><div class="zp-choices">${deadlineOptions(scope.deadline)}</div></fieldset>`,
     `<fieldset class="zp-group"><legend>Revisions</legend>`,
-    `<label class="zp-field"><span class="zp-label">Additional consolidated revision rounds beyond the package allowance</span>`,
+    `<label class="zp-field"><span class="zp-label">Extra revision rounds beyond your package</span>`,
     `<select class="zp-input" name="rev">${revisionOptions(scope.extraRevisionRounds)}</select></label></fieldset>`,
     `<fieldset class="zp-group"><legend>Licence</legend><div class="zp-choices">${licenceOptions(scope.licence)}</div>`,
-    `<p class="zp-help">Composition is priced separately from the rights it is licensed under. Exclusivity, expanded use, a copyright buyout and a soundtrack album require a separate written agreement; buyouts and albums are quoted individually.</p></fieldset>`,
+    `<p class="zp-help">The music fee and license fee are separate. Exclusive use, wider release, copyright buyouts, and albums need a written agreement. Buyouts and albums also need their own quotes.</p></fieldset>`,
     `</form>`,
   ].join('');
 }
@@ -314,7 +314,7 @@ export function resultHtml(scope: QuoteInput, q: Quote): string {
   if (q.kind === 'custom') {
     const pkg = q.reason === 'long-form' || q.reason === 'feature-project' ? packageById('feature') : null;
     return [
-      `<p class="zp-eyebrow">Custom quotation · final quotation subject to creative scope and written agreement</p>`,
+      `<p class="zp-eyebrow">Custom quote · I confirm the scope and fee in writing</p>`,
       `<p class="zp-result-pkg">${esc(pkg ? pkg.name : 'Custom scope')}</p>`,
       `<p class="zp-result-range zp-result-custom">Custom quotation</p>`,
       `<p class="zp-result-msg">${esc(q.message)}</p>`,
@@ -323,13 +323,13 @@ export function resultHtml(scope: QuoteInput, q: Quote): string {
     ].join('');
   }
   return [
-    `<p class="zp-eyebrow">Preliminary estimate — final quotation subject to creative scope and written agreement</p>`,
+    `<p class="zp-eyebrow">Estimate only · I confirm the scope and fee in writing</p>`,
     `<p class="zp-result-pkg">${esc(q.packageName)}</p>`,
     `<p class="zp-result-range" aria-label="${esc(usd(q.low))} to ${esc(usd(q.high))}">${esc(usd(q.low))}<span class="zp-dash" aria-hidden="true"> ${DASH} </span>${esc(usd(q.high))}</p>`,
     `<ul class="zp-factors">`,
     q.factors.map((f) => `<li><span>${esc(f.label)}</span>${esc(f.value)}</li>`).join(''),
     `</ul>`,
-    `<p class="zp-result-msg">Starting fees are floors, not ceilings. Complex composition, unusual deadlines, extensive revisions and expanded licensing can increase a quotation.</p>`,
+    `<p class="zp-result-msg">Listed fees are starting prices. Complex music, tight deadlines, extra revisions, and wider rights can raise your quote.</p>`,
     cta,
     `<p class="zp-fine">${esc(PRICING_NOTICE)}</p>`,
   ].join('');
