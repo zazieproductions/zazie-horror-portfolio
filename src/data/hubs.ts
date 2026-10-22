@@ -25,7 +25,9 @@ export const hubs: Hub[] = [
     path: "/",
     name: "Portfolio",
     title: "Horror Composer for Hire — Film, TV & Game Scores | Zazie Productions",
-    description: `Hire IMDb-credited horror composer Zazie Kanwar-Torge (Zazie Productions) for psychological, folk, body, and experimental scores across film, TV, and games. 32 playable cues, 9 screen productions, packages from $${MINIMUM_FEE} USD.`,
+    // 129 characters: within the 100-130 range the PageSpeed/SEO audit asks for,
+    // and the same sentence the WebPage JSON-LD and sitemap entry reuse.
+    description: `IMDb-credited horror composer Zazie Kanwar-Torge scores psychological and folk films, TV, and games. Custom scores from $${MINIMUM_FEE} USD.`,
     lastmod: "2026-10-18",
     images: [
       { loc: "https://horror.zazieproductions.com/images/hero-portrait.jpg", caption: "Portfolio portrait for Zazie Productions, a composer and sound-design studio working across screen and experimental media.", title: "Zazie Kanwar-Torge: Psychological Horror Composer - Dark Atmospheric Scores" },

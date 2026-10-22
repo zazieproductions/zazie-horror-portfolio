@@ -38,6 +38,7 @@ export const productions: Production[] = [
     poster: {
       src: '/images/posters/expire-red-check-640.jpg',
       avif: '/images/posters/expire-red-check-640.avif',
+      avifSet: '/images/posters/expire-red-check-400.avif 400w, /images/posters/expire-red-check-480.avif 480w, /images/posters/expire-red-check-640.avif 640w',
       srcset: '/images/posters/expire-red-check-640.jpg 640w, /images/posters/expire-red-check-1200.jpg 1200w',
       alt: 'Poster artwork for EXPIRE',
       width: 640,
@@ -88,6 +89,7 @@ export const productions: Production[] = [
     poster: {
       src: '/images/posters/unseen-640.jpg',
       avif: '/images/posters/unseen-640.avif',
+      avifSet: '/images/posters/unseen-400.avif 400w, /images/posters/unseen-480.avif 480w, /images/posters/unseen-640.avif 640w',
       srcset: '/images/posters/unseen-640.jpg 640w, /images/posters/unseen-1200.jpg 1200w',
       alt: 'Poster artwork for UNSEEN',
       width: 640,
@@ -120,6 +122,7 @@ export const productions: Production[] = [
     poster: {
       src: '/images/posters/peregrinus-640.jpg',
       avif: '/images/posters/peregrinus-640.avif',
+      avifSet: '/images/posters/peregrinus-400.avif 400w, /images/posters/peregrinus-480.avif 480w, /images/posters/peregrinus-640.avif 640w',
       srcset: '/images/posters/peregrinus-640.jpg 640w, /images/posters/peregrinus-1200.jpg 1200w',
       alt: 'Poster artwork for PEREGRINUS',
       width: 640,
@@ -151,6 +154,7 @@ export const productions: Production[] = [
     poster: {
       src: '/images/posters/phantom-requiem-640.jpg',
       avif: '/images/posters/phantom-requiem-640.avif',
+      avifSet: '/images/posters/phantom-requiem-400.avif 400w, /images/posters/phantom-requiem-480.avif 480w, /images/posters/phantom-requiem-640.avif 640w',
       srcset: '/images/posters/phantom-requiem-640.jpg 640w, /images/posters/phantom-requiem-1200.jpg 1200w',
       alt: 'Poster artwork for Phantom Requiem',
       width: 640,
@@ -201,6 +205,7 @@ export const productions: Production[] = [
     poster: {
       src: '/images/posters/eclipsed-640.jpg',
       avif: '/images/posters/eclipsed-640.avif',
+      avifSet: '/images/posters/eclipsed-400.avif 400w, /images/posters/eclipsed-480.avif 480w, /images/posters/eclipsed-640.avif 640w',
       srcset: '/images/posters/eclipsed-640.jpg 640w, /images/posters/eclipsed-1200.jpg 1200w',
       alt: 'Poster artwork for ECLIPSED',
       width: 640,
@@ -247,6 +252,7 @@ export const productions: Production[] = [
     poster: {
       src: '/images/posters/the-haunted-640.jpg',
       avif: '/images/posters/the-haunted-640.avif',
+      avifSet: '/images/posters/the-haunted-400.avif 400w, /images/posters/the-haunted-480.avif 480w, /images/posters/the-haunted-640.avif 640w',
       srcset: '/images/posters/the-haunted-640.jpg 640w, /images/posters/the-haunted-1200.jpg 1200w',
       alt: 'Poster artwork for THE HAUNTED',
       width: 640,
@@ -298,6 +304,7 @@ export const productions: Production[] = [
     poster: {
       src: '/images/posters/choleric-640.jpg',
       avif: '/images/posters/choleric-640.avif',
+      avifSet: '/images/posters/choleric-400.avif 400w, /images/posters/choleric-480.avif 480w, /images/posters/choleric-640.avif 640w',
       srcset: '/images/posters/choleric-640.jpg 640w, /images/posters/choleric-1200.jpg 1200w',
       alt: 'Poster artwork for CHOLERIC',
       width: 640,
@@ -328,6 +335,7 @@ export const productions: Production[] = [
     poster: {
       src: '/images/posters/mike-has-a-visitor-640.jpg',
       avif: '/images/posters/mike-has-a-visitor-640.avif',
+      avifSet: '/images/posters/mike-has-a-visitor-400.avif 400w, /images/posters/mike-has-a-visitor-480.avif 480w, /images/posters/mike-has-a-visitor-640.avif 640w',
       srcset: '/images/posters/mike-has-a-visitor-640.jpg 640w, /images/posters/mike-has-a-visitor-1200.jpg 1200w',
       alt: 'Poster artwork for MIKE HAS A VISITOR',
       width: 640,
@@ -375,6 +383,7 @@ export const productions: Production[] = [
     poster: {
       src: '/images/posters/the-dark-awaits-640.jpg',
       avif: '/images/posters/the-dark-awaits-640.avif',
+      avifSet: '/images/posters/the-dark-awaits-400.avif 400w, /images/posters/the-dark-awaits-480.avif 480w, /images/posters/the-dark-awaits-640.avif 640w',
       srcset: '/images/posters/the-dark-awaits-640.jpg 640w, /images/posters/the-dark-awaits-1200.jpg 1200w',
       alt: 'Poster artwork for THE DARK AWAITS',
       width: 640,
