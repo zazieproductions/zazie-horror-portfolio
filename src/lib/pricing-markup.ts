@@ -151,8 +151,7 @@ export function packagesHtml(): string {
 }
 
 /** Metadata summary generated from pricing.ts without comment markers in attributes. */
-export function pricingMetaHtml(): string {
-  const description = pricingSummary();
+export function pricingMetaHtml(description: string = pricingSummary()): string {
   return [
     `<meta name="description" content="${esc(description)}" />`,
     `<meta property="og:description" content="${esc(description)}" />`,
@@ -426,8 +425,8 @@ export function budgetSelectOptions(): string {
  * is conditional on substantial full-project scope, so it is explained in text
  * rather than applied to every feature-film offer.
  */
-export function offersGraph(serviceId: string, provider: string): object {
-  const offers = PACKAGES.map((pkg) => {
+export function offersNodes(serviceId: string, provider: string): object[] {
+  return PACKAGES.map((pkg) => {
     const span = publishedSpan(pkg);
     const minimum = pkg.indicativeMinimum
       ? ` Indicative minimum ${usd(pkg.indicativeMinimum)} for substantial feature-film or experimental-cinema scoring; a single scene/cue for a feature may use Individual Scene Scoring.`
@@ -454,7 +453,15 @@ export function offersGraph(serviceId: string, provider: string): object {
     }
     return base;
   });
-  return { '@context': 'https://schema.org', '@graph': offers };
+}
+
+/**
+ * The same offers as a single @graph wrapper. Pages publish one typed script
+ * per offer (offersNodes) so every JSON-LD block carries its own @type; this
+ * shape remains for programmatic consumers and tests.
+ */
+export function offersGraph(serviceId: string, provider: string): object {
+  return { '@context': 'https://schema.org', '@graph': offersNodes(serviceId, provider) };
 }
 
 /* ------------------------------------------------------------ misc helpers */

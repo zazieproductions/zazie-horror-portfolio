@@ -391,7 +391,7 @@ export const cues: Cue[] = [
     category: 'Dark Ambient',
     duration: '58s',
     durationSeconds: 58,
-    description: 'Dark ambient soundscape No. 2: atmospheric horror bed for psychological suspense and supernatural haunting.',
+    description: 'Atmospheric dark-ambient horror bed for psychological suspense and supernatural haunting.',
     paragraphs: [
       'The second numbered soundscape is described as an atmospheric horror bed for psychological suspense and supernatural haunting. Its short title distinguishes it from the broader, more nocturnal framing of No. 1.',
       'The published duration is 58 seconds. Both this entry and its sibling soundscape link to their own direct MP3s, while the description remains available in the page source before any audio is played.',

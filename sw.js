@@ -72,11 +72,9 @@
 // Pricing unchanged: scene 1–2 min / $250 from; focused 3–5 min / $650 from;
 // extended 6–12 min / $1,500 from; substantial feature/experimental scores
 // custom quoted with an indicative $2,500 minimum.
-// v34: GEO overhaul — rebuilt /hire-a-composer pillar + interactive estimator,
-// added /how-to-hire-a-horror-composer hub, /llms.txt + /llms-full.txt,
-// <main>-wrapped document headers and spaced numeral headings across all 85 routes,
-// clean JSON-LD schema graphs, and re-hashed home bundle index-4d715571.js.
-const CACHE_NAME = 'zazie-v34';
+// v35: SEO audit pass — AVIF hero plate + video-card stills, accessible
+// contrast tokens, 12px minimum text, re-hashed home CSS index-3e5f6910.css.
+const CACHE_NAME = 'zazie-v35';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -84,15 +82,16 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-normal.woff2',
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
-  '/index-f509fde0.css',
-  '/index-4d715571.js',
-  '/store-eed3eeee.css',
+  '/index-3e5f6910.css',
+  '/index-c4d6ec9c.js',
+  '/store-d3cc270a.css',
   '/store-3fc01be0.js',
-  '/legal-886033c7.css',
+  '/legal-8cfdaf96.css',
   '/legal-ab598df8.js',
-  '/estimator-c0d6291c.css',
+  '/estimator-47af32a1.css',
   '/estimator-e20a6c5d.js',
   // Hero & Atmosphere
+  '/images/atmosphere-bg.avif',
   '/images/atmosphere-bg.jpg',
   '/images/hero-portrait.avif',
   '/images/hero-portrait.jpg'

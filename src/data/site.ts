@@ -94,10 +94,14 @@ export function escapeXml(value: string): string {
   return escapeHtml(value).replace(/'/g, '&apos;');
 }
 
-/** Render a `<script type="application/ld+json">` block. */
+/**
+ * Render a `<script type="application/ld+json">` block. Serialized compact:
+ * the payload is machine-read markup, and pretty-printing it inflates every
+ * prerendered page (the 2026-10-22 SEO audit flagged the indented blocks as
+ * unminified inline JavaScript on all 26 sampled pages).
+ */
 export function jsonLdScript(payload: unknown): string {
-  const body = JSON.stringify(payload, null, 2);
-  return `<script type="application/ld+json">\n${body}\n</script>`;
+  return `<script type="application/ld+json">${JSON.stringify(payload)}</script>`;
 }
 
 /** Collapse whitespace so a description is one clean line in the head. */

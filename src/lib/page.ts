@@ -17,7 +17,7 @@ import {
   seoBlock,
   webPageNode,
 } from './head.js';
-import type { Cue, Image, ItemRoute, Json, Production, Release } from '../data/types.js';
+import type { Cue, Image, ItemRoute, Json, Production, Release, VideoSample } from '../data/types.js';
 
 export interface PageChrome {
   masthead: string;
@@ -166,23 +166,58 @@ function figure(image: Image, shape: 'poster' | 'still' | 'square', loading: 'ea
     : '';
   const srcset = image.srcset ? ` srcset="${esc(image.srcset)}" sizes="(min-width: 1024px) 32vw, 92vw"` : '';
   const remote = /^https?:\/\//.test(image.src) ? ' referrerpolicy="no-referrer"' : '';
+  // The entry figure is the LCP candidate on every item page; the browser hint
+  // has to sit on the <img> too, or the preload and the element race apart.
+  const priority = loading === 'eager' ? ' fetchpriority="high"' : '';
   return `          <figure class="poster-figure entry-figure ${shape}">
             <picture>${sources}
-              <img src="${esc(image.src)}" alt="${esc(image.alt)}" width="${image.width}" height="${image.height}" loading="${loading}" decoding="async"${srcset}${remote}/>
+              <img src="${esc(image.src)}" alt="${esc(image.alt)}" width="${image.width}" height="${image.height}" loading="${loading}" decoding="async"${srcset}${priority}${remote}/>
             </picture>
           </figure>`;
 }
 
-function embedMarkup(sample: { kind: 'youtube' | 'drive'; embedUrl: string; title: string }): string {
-  // Keep Drive's standard preview UI; its controls are owned by the provider.
-  // Include fullscreen + picture-in-picture + encrypted-media so mobile
-  // browsers don't fall back to a cramped audio-only UI with an inverted bar.
-  const allow = sample.kind === 'youtube'
-    ? 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen'
-    : 'autoplay; clipboard-write; encrypted-media; picture-in-picture; fullscreen';
+const YT_ALLOW = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen';
+const DRIVE_ALLOW = 'autoplay; clipboard-write; encrypted-media; picture-in-picture; fullscreen';
+
+/** The page a visitor lands on when they leave the archive for the host. */
+export function watchUrlFor(sample: VideoSample): string | undefined {
+  if (sample.watchUrl) return sample.watchUrl;
+  if (sample.kind === 'drive') {
+    const view = sample.embedUrl.replace(/\/preview\/?(\?.*)?$/, '/view');
+    return view !== sample.embedUrl ? view : undefined;
+  }
+  const match = /youtube(?:-nocookie)?\.com\/embed\/([\w-]+)/.exec(sample.embedUrl);
+  return match ? `https://www.youtube.com/watch?v=${match[1]}` : undefined;
+}
+
+/**
+ * Click-to-load facade for the film samples.
+ *
+ * The 2026-10-22 SEO audit measured the embedded players as the worst cost on
+ * the archive: /work/expire reached LCP at 9.3s and TBT at 360ms, and every
+ * sampled page shipped 300KB+ of unused YouTube player JavaScript. The iframe
+ * (and the provider's whole player stack) now loads only on an explicit play,
+ * exactly like the homepage film cards have always done. The thumbnail is a
+ * plain image; the button is real markup, keyboard-focusable, and the original
+ * iframe is kept inside <noscript> so a scripted crawler and a no-JS visitor
+ * both still reach the video.
+ */
+function embedMarkup(sample: VideoSample): string {
+  const allow = sample.kind === 'youtube' ? YT_ALLOW : DRIVE_ALLOW;
+  const provider = sample.kind === 'youtube' ? 'YouTube' : 'Google Drive';
+  const thumb = sample.thumbnail;
+  const remote = /^https?:\/\//.test(thumb.src) ? ' referrerpolicy="no-referrer"' : '';
+  const watch = watchUrlFor(sample);
+  const fallback = watch
+    ? `\n        <p class="small embed-fallback">The ${provider} player loads only when you press play — nothing is fetched before that. Prefer to skip the embed? <a href="${esc(watch)}" target="_blank" rel="noopener noreferrer">Open “${esc(sample.title)}” on ${provider}</a>.</p>`
+    : '';
   return `        <div class="entry-embed">
-          <iframe src="${esc(sample.embedUrl)}" title="${esc(sample.title)}" loading="lazy" allow="${allow}" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
-        </div>`;
+          <button type="button" class="embed-facade" data-embed-src="${esc(sample.embedUrl)}" data-embed-kind="${sample.kind}" data-embed-title="${esc(sample.title)}" aria-label="Play ${esc(sample.title)} — loads the ${provider} player">
+            <img src="${esc(thumb.src)}" alt="" width="${thumb.width}" height="${thumb.height}" loading="lazy" decoding="async"${remote}/>
+            <span class="embed-facade-play" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"/></svg></span>
+          </button>
+          <noscript><iframe src="${esc(sample.embedUrl)}" title="${esc(sample.title)}" loading="lazy" allow="${allow}" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></noscript>
+        </div>${fallback}`;
 }
 
 function audioPlayer(src: string, title: string): string {
@@ -263,7 +298,6 @@ function productionMeta(production: Production, item: ItemRoute): MetaSections {
         <h2><span class="no">III</span> Project video</h2>
         <p>${esc(sample.description)}${sample.durationSeconds ? ` Runtime ${esc(displayDuration(sample.durationSeconds))}.` : ''}</p>
 ${embedMarkup(sample)}
-${sample.watchUrl ? `        <p style="margin-top:1rem">If the embed is unavailable, <a href="${esc(sample.watchUrl)}" target="_blank" rel="noopener noreferrer">open the video on its original host</a>.</p>` : ''}
       </section>`
     : `      <section class="clause" id="sample">
         <h2><span class="no">III</span> Adjacent showreel listening</h2>
@@ -419,17 +453,23 @@ ${listening ? `${listening}\n\n` : ''}${offerSection}`,
 
 /* -------------------------------------------------------------- document */
 
+/**
+ * The one-line lead under the H1. It closes with the studio byline so the
+ * brand the <title> promises is also in the first visible lines of the main
+ * content - the 2026-10-22 audit found "Zazie Productions" in item titles but
+ * not in the extracted body copy of the showreel and catalogue pages.
+ */
 function leadFor(item: ItemRoute): string {
   if (item.kind === 'production') {
     const production = productionBySlug.get(item.slug)!;
-    return `${production.workType}${production.releaseYear ? ` · ${production.releaseYear}` : ''} · ${production.genres.join(', ')}`;
+    return `${production.workType}${production.releaseYear ? ` · ${production.releaseYear}` : ''} · ${production.genres.join(', ')} · Zazie Productions`;
   }
   if (item.kind === 'cue') {
     const cue = cueBySlug.get(item.slug)!;
-    return `Track ${String(cue.track + 1).padStart(2, '0')} · ${cue.category} · ${cue.duration}`;
+    return `Track ${String(cue.track + 1).padStart(2, '0')} · ${cue.category} · ${cue.duration} · Zazie Productions`;
   }
   const release = releaseBySlug.get(item.slug)!;
-  return `${release.section} · ${release.kicker}${release.platform ? ` · ${release.platform}` : ''}`;
+  return `${release.section} · ${release.kicker}${release.platform ? ` · ${release.platform}` : ''} · Zazie Productions`;
 }
 
 function imageFor(item: ItemRoute): Image | undefined {
@@ -438,9 +478,65 @@ function imageFor(item: ItemRoute): Image | undefined {
   return releaseBySlug.get(item.slug)?.image;
 }
 
+/**
+ * LCP preload for the entry artwork.
+ *
+ * Two audit findings shaped this: work pages lost seconds of LCP because the
+ * preload pointed at the JPEG while the <picture> rendered the AVIF (the
+ * preloaded bytes were never painted, and both formats downloaded), and
+ * catalogue pages with hosted artwork (Gumroad, itch.io, Bandcamp, eBay) got
+ * no preload at all. The preload now targets the same file the <picture> will
+ * actually paint - AVIF when it exists - and remote artwork is preloaded and
+ * preconnected instead of skipped.
+ */
 function preloadImage(image: Image | undefined): string {
-  if (!image || /^https?:\/\//.test(image.src)) return '';
-  return `<link rel="preload" as="image" href="${esc(image.src)}" fetchpriority="high"/>`;
+  if (!image) return '';
+  const target = image.avif ?? image.src;
+  return `<link rel="preload" as="image" href="${esc(target)}" fetchpriority="high"/>`;
+}
+
+/**
+ * preconnect/dns-prefetch for the third-party origins a page really touches:
+ * the host of remote catalogue artwork (LCP-critical), the thumbnail host and
+ * the watch-page host of a film sample (only needed once a visitor presses
+ * play, so dns-prefetch is enough there).
+ */
+function thirdPartyHints(item: ItemRoute): string {
+  const hints: string[] = [];
+  const seen = new Set<string>();
+  const add = (origin: string, rel: 'preconnect' | 'dns-prefetch'): void => {
+    const key = `${rel} ${origin}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    hints.push(`<link rel="${rel}" href="${esc(origin)}"/>`);
+  };
+  const originOf = (href: string): string | undefined => {
+    try {
+      const parsed = new URL(href);
+      return parsed.protocol === 'https:' ? parsed.origin : undefined;
+    } catch {
+      return undefined;
+    }
+  };
+  const image = imageFor(item);
+  if (image) {
+    const origin = /^https?:\/\//.test(image.src) ? originOf(image.src) : undefined;
+    if (origin) {
+      add(origin, 'preconnect');
+      add(origin, 'dns-prefetch');
+    }
+  }
+  if (item.kind === 'production') {
+    const sample = productionBySlug.get(item.slug)?.sample;
+    if (sample) {
+      const thumbOrigin = /^https?:\/\//.test(sample.thumbnail.src) ? originOf(sample.thumbnail.src) : undefined;
+      if (thumbOrigin) add(thumbOrigin, 'dns-prefetch');
+      const watch = watchUrlFor(sample);
+      const watchOrigin = watch ? originOf(watch) : undefined;
+      if (watchOrigin) add(watchOrigin, 'dns-prefetch');
+    }
+  }
+  return hints.join('\n');
 }
 
 export function renderItemPage(item: ItemRoute, chrome: PageChrome): RenderedItemPage {
@@ -500,6 +596,7 @@ export function renderItemPage(item: ItemRoute, chrome: PageChrome): RenderedIte
 <link rel="preload" as="font" type="font/woff2" href="/fonts/cormorant-garamond-latin-400-normal.woff2" crossorigin/>
 <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-latin-wght-normal.woff2" crossorigin/>
 ${preloadImage(image)}
+${thirdPartyHints(item)}
 <link href="/${chrome.legalCss}" rel="stylesheet"/>
 <link href="/${chrome.itemCss}" rel="stylesheet"/>
 ${head}

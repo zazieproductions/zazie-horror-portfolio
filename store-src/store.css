@@ -16,6 +16,8 @@
 :root{
   --void:#030303; --ink:#080808; --smoke:#121212; --ash:#1e1e1e;
   --mist:#9a9590; --bone:#f0ebe3; --blood:#c41e1e; --ember:#ff2a2a;
+  /* Accessible red for small text: --blood (#c41e1e) only clears 3:1 as large text. */
+  --blood-text:#e65650;
   --sans:"Inter","Inter Fallback",ui-sans-serif,system-ui,sans-serif;
   --display:"Cormorant Garamond","Cormorant Garamond Fallback",Georgia,"Times New Roman",serif;
   --edge:rgba(255,255,255,.06);
@@ -97,7 +99,7 @@ i{font-style:italic}
 /* --- Layout helpers ------------------------------------------------------ */
 .shell{width:var(--shell);margin-inline:auto;padding-inline:var(--gutter)}
 .eyebrow{
-  margin:0 0 .75rem;color:var(--blood);
+  margin:0 0 .75rem;color:var(--blood-text);
   font-size:.625rem;font-weight:500;letter-spacing:.35em;text-transform:uppercase;
 }
 .small{font-size:.625rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mist)}
@@ -248,7 +250,7 @@ i{font-style:italic}
 .filter-group{display:none;align-items:center;gap:.4rem;flex:none}
 .has-js .filter-group{display:flex}
 .filter-group + .filter-group{margin-left:.5rem;padding-left:1.25rem;border-left:1px solid var(--edge)}
-.filter-label{flex:none;margin-right:.25rem;font-size:.5625rem;letter-spacing:.26em;text-transform:uppercase;color:rgba(154,149,144,.75)}
+.filter-label{flex:none;margin-right:.25rem;font-size:.5625rem;letter-spacing:.26em;text-transform:uppercase;color:rgba(154,149,144,.85)}
 .chip{flex:none;cursor:pointer;background:transparent;border:1px solid var(--ash);padding:.5rem .85rem;font-size:.625rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mist);transition:border-color .2s,color .2s,background .2s,box-shadow .2s}
 .chip:hover{border-color:rgba(196,30,30,.55);color:var(--bone)}
 .chip[aria-pressed="true"]{background:var(--blood);border-color:var(--blood);color:var(--bone);box-shadow:0 0 18px rgba(196,30,30,.3)}
@@ -269,7 +271,7 @@ i{font-style:italic}
 .group[hidden]{display:none}
 .group-head{position:relative}
 @media (min-width:1000px){.group-head{position:sticky;top:8.5rem;align-self:start}}
-.group-head .numeral{display:block;margin:0 0 .75rem;font-family:var(--display);font-size:2.25rem;line-height:1;color:var(--blood)}
+.group-head .numeral{display:block;margin:0 0 .75rem;font-family:var(--display);font-size:2.25rem;line-height:1;color:var(--blood-text)}
 .group-head h2{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(1.6rem,3vw,2.2rem);line-height:1.05}
 .group-head .count{display:block;margin:.6rem 0 0;font-size:.5625rem;letter-spacing:.28em;text-transform:uppercase;color:var(--mist)}
 .group-head p{margin:1rem 0 0;max-width:30ch;font-size:.8125rem;line-height:1.7;color:rgba(240,235,227,.62)}
@@ -340,7 +342,7 @@ i{font-style:italic}
 .preview[aria-pressed="true"] .preview-label::before{content:"Playing"}
 
 .card-body{display:flex;flex-direction:column;flex:1;gap:.6rem;padding:1.1rem 1.1rem 1.2rem}
-.card-kicker{margin:0;font-size:.5625rem;letter-spacing:.26em;text-transform:uppercase;color:var(--blood)}
+.card-kicker{margin:0;font-size:.5625rem;letter-spacing:.26em;text-transform:uppercase;color:var(--blood-text)}
 .card-title{margin:0;font-family:var(--display);font-weight:400;font-size:1.45rem;line-height:1.12}
 .card-title .gl{position:relative;display:inline-block}
 .card-title .gl::before{content:attr(data-text);position:absolute;inset:0;opacity:0;pointer-events:none;color:#ff003c;clip-path:inset(0 0 55%)}
@@ -354,7 +356,7 @@ i{font-style:italic}
 .price{display:block;font-family:var(--display);font-size:1.5rem;line-height:1;color:var(--bone)}
 .price small{display:block;margin-top:.35rem;font-family:var(--sans);font-size:.5625rem;letter-spacing:.16em;text-transform:uppercase;color:var(--mist)}
 .cta{display:inline-flex;align-items:center;gap:.4rem;flex:none;font-size:.5625rem;letter-spacing:.22em;text-transform:uppercase;color:var(--bone)}
-.cta::after{content:"↗";color:var(--blood);transition:transform .25s}
+.cta::after{content:"↗";color:var(--blood-text);transition:transform .25s}
 .card:hover .cta::after,.card:focus-within .cta::after{transform:translate(2px,-2px)}
 
 .empty{display:none;padding:3rem 1rem;text-align:center;font-family:var(--display);font-size:1.5rem;color:var(--mist)}
@@ -392,7 +394,7 @@ i{font-style:italic}
 .how li::after{content:"";position:absolute;inset:0;opacity:0;pointer-events:none;background:linear-gradient(transparent 40%,rgba(80,0,0,.4));transition:opacity .4s}
 .how li:hover::after{opacity:1}
 @media (min-width:640px){.how li{padding:1.85rem 1.6rem}}
-.how i{font-style:normal;display:block;margin-bottom:.9rem;font-size:.625rem;letter-spacing:.28em;text-transform:uppercase;color:var(--blood)}
+.how i{font-style:normal;display:block;margin-bottom:.9rem;font-size:.625rem;letter-spacing:.28em;text-transform:uppercase;color:var(--blood-text)}
 .how h3{margin:0 0 .6rem;font-family:var(--display);font-weight:400;font-size:1.375rem;line-height:1.2}
 .how p{margin:0;font-size:.8125rem;line-height:1.7;color:rgba(240,235,227,.7)}
 .how code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.75rem;color:rgba(240,235,227,.85)}
@@ -416,10 +418,10 @@ i{font-style:italic}
 .foot-links a{font-size:.625rem;letter-spacing:.24em;text-transform:uppercase;color:var(--mist);transition:color .2s}
 .foot-links a:hover{color:var(--blood)}
 .foot-law{margin:1.75rem 0 0;padding-top:1.25rem;border-top:1px solid var(--edge);display:flex;flex-wrap:wrap;gap:.6rem 1.15rem}
-.foot-law .lbl{font-size:.5625rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(154,149,144,.6)}
+.foot-law .lbl{font-size:.5625rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(154,149,144,.85)}
 .foot-law a{font-size:.625rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mist);transition:color .2s}
 .foot-law a:hover{color:var(--blood)}
-.foot-legal{margin:1.25rem 0 0;padding-top:1.5rem;border-top:1px solid var(--edge);display:flex;flex-wrap:wrap;gap:.5rem 1rem;justify-content:space-between;font-size:.625rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(154,149,144,.6)}
+.foot-legal{margin:1.25rem 0 0;padding-top:1.5rem;border-top:1px solid var(--edge);display:flex;flex-wrap:wrap;gap:.5rem 1rem;justify-content:space-between;font-size:.625rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(154,149,144,.85)}
 
 /* --- Motion / print ------------------------------------------------------ */
 @media (prefers-reduced-motion:reduce){

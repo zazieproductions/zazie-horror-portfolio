@@ -32,15 +32,29 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const check = process.argv.includes('--check');
 
 const markup = await import('../build/lib/pricing-markup.js');
-const { expandTokens, packagesHtml, pricingMetaHtml, inclusionsHtml, estimatorHtml, inquiryFormHtml, noticeHtml, offersGraph, tokenValue, factorsHtml, licencesHtml, SITE_ORIGIN } = markup;
+const { expandTokens, packagesHtml, pricingMetaHtml, inclusionsHtml, estimatorHtml, inquiryFormHtml, noticeHtml, offersNodes, tokenValue, factorsHtml, licencesHtml, SITE_ORIGIN } = markup;
 const { ORG_ID } = await import('../build/data/site.js');
+const { allRoutes } = await import('../build/data/routes.js');
 
 const SERVICE_ID = `${SITE_ORIGIN}/services#service`;
 const PROVIDER_ID = ORG_ID;
 
-/** Generated markup for each marker block. */
+/** Route lookup so generated metadata carries each page's own SERP description. */
+const ROUTE_BY_PATH = new Map(allRoutes.map((route) => [route.path, route]));
+
+/** 'services/index.html' | 'hire-a-composer.html' -> '/services' | '/hire-a-composer' */
+function routeOfPage(where) {
+  const path = `/${where.replace(/^\.?\//, '').replace(/\/index\.html$/, '').replace(/\.html$/, '')}`;
+  return ROUTE_BY_PATH.get(path === '/' ? '/' : path) ?? null;
+}
+
+/** Generated markup for each marker block. `where` is the repo-relative file. */
 const BLOCKS = {
-  'pricing-meta': () => pricingMetaHtml(),
+  'pricing-meta': (where) => {
+    const route = routeOfPage(where);
+    if (!route) errors.push(`${where}: <!--zp:pricing-meta--> on a page with no route entry - cannot source its description`);
+    return pricingMetaHtml(route?.description);
+  },
   packages: () => packagesHtml(),
   inclusions: () => inclusionsHtml(),
   estimator: () => estimatorHtml(),
@@ -48,7 +62,12 @@ const BLOCKS = {
   notice: () => noticeHtml(),
   factors: () => factorsHtml(),
   licences: () => licencesHtml(),
-  offers: () => `<script type="application/ld+json">${JSON.stringify(offersGraph(SERVICE_ID, PROVIDER_ID))}</script>`,
+  // One typed script per Offer: a top-level @graph without its own @type is
+  // the "unstructured data" shape the 2026-10 audit flagged across the site.
+  offers: () =>
+    offersNodes(SERVICE_ID, PROVIDER_ID)
+      .map((node) => `<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', ...node })}</script>`)
+      .join('\n'),
 };
 
 // legal-src/ keeps its raw {{zp:…}} tokens: build.sh copies those sources into
@@ -86,7 +105,7 @@ function syncBlocks(source, where) {
   const paired = new Set();
   const out = source.replace(pattern, (_match, name) => {
     paired.add(name);
-    return `<!--zp:${name}-->${BLOCKS[name]()}<!--/zp:${name}-->`;
+    return `<!--zp:${name}-->${BLOCKS[name](where)}<!--/zp:${name}-->`;
   });
   for (const m of openers) {
     if (!paired.has(m[1]) && BLOCKS[m[1]]) {

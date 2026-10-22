@@ -43,8 +43,10 @@ JS_OUT="legal-${JS_HASH}.js"
 rm -f legal-[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f].css \
       legal-[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f].js
 
-cp legal-src/legal.css "$CSS_OUT"
-cp legal-src/legal.js "$JS_OUT"
+# Minify for the wire; the hashes above stay source-derived so filenames only
+# change when the committed sources do.
+node_modules/.bin/esbuild legal-src/legal.css --minify --log-level=warning --outfile="$CSS_OUT"
+node_modules/.bin/esbuild legal-src/legal.js --minify --log-level=warning --outfile="$JS_OUT"
 
 LEGAL_CSS="$CSS_OUT" LEGAL_JS="$JS_OUT" python3 - <<'PY'
 import html
@@ -142,9 +144,9 @@ def faq_schema(markup, url):
         "mainEntity": entities,
         "inLanguage": "en",
     }
-    script = '<script type="application/ld+json">\n'
-    script += json.dumps(block, indent=2, ensure_ascii=False)
-    script += "\n</script>"
+    script = '<script type="application/ld+json">'
+    script += json.dumps(block, ensure_ascii=False, separators=(",", ":"))
+    script += "</script>"
     return script, len(entities)
 
 

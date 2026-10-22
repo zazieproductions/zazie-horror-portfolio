@@ -4,6 +4,110 @@ Date: 2026-09-25 · Branch: `arena/01a0d613-zazie-horror-portfolio`
 Scope: horror.zazieproductions.com (static prerendered React build on an edge host with `_headers`/`_redirects` semantics, i.e. Netlify/Cloudflare-Pages style).
 
 
+## 00. SEO audit remediation: 2026-10-22
+
+Source: an SEOJuice full-crawl report of horror.zazieproductions.com (SEO 100 /
+Performance 96 / Best Practices 96 / Accessibility 96, content depth flagged at
+85%). Every code-fixable finding was applied; the deltas below are repository
+measurements, not field telemetry — the crawl carries the live lab numbers
+(TBT/LCP/SI per flagged page).
+
+### Search presentation
+
+- Every meta description now fits the 160 characters a SERP renders. The 41
+  over-long item descriptions clamp at a word boundary with an ellipsis
+  (`clamp()` + `DESCRIPTION_LIMIT` in `src/data/routes.ts`); all 19 hub
+  descriptions were rewritten in `src/data/hubs.ts` and synced into the static
+  heads (`meta`, `og:description`, `twitter:description`). `scripts/verify.mjs`
+  fails the build on any route over 160.
+- `/services` and `/hire-a-composer` draw their `pricing-meta` block from each
+  page's own route description (sync-pricing.mjs) instead of publishing the
+  full fee schedule as the snippet.
+- Cue titles dropped the `(58s)`-style duration suffix that created
+  title/H1 keyword mismatch.
+- H1 keyword gaps closed: home (composer/film/Zazie/Productions — as
+  home-src pairs so the React bundle and the static snapshot move together),
+  `/work` (television), `/game-scoring` (music + studio), `/sound-design` and
+  `/contact` (studio in the lead), `/privacy`, `/purchases` (horror),
+  `/sitemap` (brand + archive).
+- The duplicate `Phantom Requiem` heading on the homepage disambiguated on the
+  video card (“Phantom Requiem (experimental short)”).
+- Fixed a latent bundle break shipped since the v34 GEO overhaul: the bio pair
+  wrote HTML-attribute quotes into a bundle string literal without double
+  escaping, so `index-4d715571.js` was unparseable and the homepage React
+  island never mounted — the static snapshot masked it and the test suite only
+  evaluates bundle slices. The pair now escapes properly and
+  `home-src/build.mjs` runs `node --input-type=module --check` over the full
+  patched bundle, failing the build on any invalid JavaScript.
+
+### Structured data
+
+- Top-level `@graph` wrappers are gone: every one of the 106 HTML files now
+  carries one compact, typed `<script type="application/ld+json">` per node
+  (WebPage, Person, BreadcrumbList, Offer, FAQPage, …). `jsonLdScript()` emits
+  compact JSON, the legal FAQ schema and the pricing Offer block emit per node,
+  and `verify.mjs` fails any block without a top-level `@type`.
+
+### Performance / Core Web Vitals
+
+- The five embedded film samples (4× YouTube, 1× Google Drive) render a
+  click-to-load facade (local poster + play badge); the iframe is created on
+  click (`src/lib/page.ts`, `src/item/main.ts`). `prerender.mjs` fails on any
+  `<iframe>` outside `<noscript>`, and every page keeps a no-JS fallback plus a
+  text “open on the host” link — the fix for the flagged TBT/LCP on
+  `/work/expire`, `/work/mike-has-a-visitor`, `/work/eclipsed` and siblings.
+- AVIF generated and wired: `atmosphere-bg` (33.8 → 4.1 KB hero plate; the
+  preload is now `type="image/avif"`), `press-photo`, `eclipsed-cover-1280`,
+  and the seven `project-*` stills. The homepage hero and all eight video-card
+  stills are wrapped in `<picture>` through bundle pairs plus matching static
+  HTML, and the remaining static hub figures likewise.
+  `the-dark-awaits-640/1200.jpg` re-encoded (−8.5 KB / −12.1 KB).
+- Remote entry images (gumroad/itch/ebay/bcbits) get a preload plus origin
+  `preconnect`/`dns-prefetch` from `thirdPartyHints()`; sample-thumbnail and
+  watch origins get `dns-prefetch`; YouTube gets `preconnect` on first intent
+  (pointerenter/focusin) instead of at page load.
+- legal/store CSS+JS are esbuild-minified in their build.sh (names stay
+  source-hashed): legal css 34.3 → 28.6 KB, legal js 13.6 → 7.5 KB, store css
+  35.1 → 31.4 KB, store js 11.5 → 6.6 KB. All JSON-LD compacted.
+- Homepage Tailwind sheet: seven sub-12px font-size utilities raised to 12px
+  and the small-text/mist contrast fixes below; rehashed
+  `index-f509fde0.css` → `index-3e5f6910.css` (refs updated in `index.html`,
+  `sw.js`, and the asset table in this file).
+- `sw.js` bumped to `zazie-v35`; `atmosphere-bg.avif` added to the precache.
+
+### Accessibility (contrast flagged on 26 pages)
+
+- legal.css / store.css / item.css: every `rgba(154,149,144,α≤.75)` text color
+  → α .85 (5.24:1 on the page background); small-text reds moved to
+  `--blood-text` / `#e65650` (5.71:1); store.css gained the token.
+- estimator.css: `.zp-kicker`, `.zp-steps li::before`, `.zp-dash` → `#e65650`.
+- Homepage sheet: `.text-blood` → `#e65650`; `.text-mist/50` and
+  `.text-mist/60` → 85% opacity. Decorative alphas (`text-blood/50|70|80`,
+  card glyph, hover states, large display italics, print rules) deliberately
+  kept.
+- `/accessibility` updated: the “small label contrast open on / and /store”
+  known gap is closed and delisted; the measured table gained the micro-label
+  row and restates the dark red as large-text/decorative only.
+- The hiring guide's unused press-photo preload was dropped (it fetched a
+  63 KB JPEG the page never renders).
+
+### Verification
+
+- `npm run build` green end to end (85 URLs; verify + check-headers +
+  check-links + route-aliases + check-sitemap), including the new
+  description-length and typed-JSON-LD guards in verify.mjs and the
+  facade/iframe gate in prerender.mjs.
+- `npm test`: 44/44.
+- Contrast scan of every edited stylesheet: no failing non-decorative text
+  rule remains below 4.5:1.
+
+### Noted only (not fixable in this repository)
+
+- HTTP/3 enablement (host/edge configuration), the backlink profile
+  (off-page), live-server crawl/response time, readability scores (composer
+  13.8, tea5767 19.0 — editorial voice), and the 98 MB MP3 archive (no audio
+  encoders available here; the players stay `preload="none"`).
+
 ## 0. Mobile loading follow-up: 2026-09-25
 
 This section supersedes the older entries below for the current `main`-derived
@@ -808,7 +912,7 @@ handling. Measured locally (`curl -H 'accept-encoding: br, gzip'`):
 | Asset | identity | gzip | brotli |
 | --- | ---: | ---: | ---: |
 | `/` (HTML) | 190.5 KB | 32.4 KB | 25.9 KB |
-| `/index-f509fde0.css` | 76.8 KB | 13.9 KB | 11.4 KB |
+| `/index-3e5f6910.css` | 76.8 KB | 13.9 KB | 11.4 KB |
 
 Brotli is ~15 % smaller than gzip on the two files that gate first paint.
 

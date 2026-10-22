@@ -7,7 +7,7 @@ import { hubs } from './hubs.js';
 import { productions } from './productions.js';
 import { cues } from './cues.js';
 import { releases } from './releases.js';
-import { oneLine, slugify } from './site.js';
+import { clamp, oneLine, slugify } from './site.js';
 import type { Cue, ItemKind, ItemRoute, Production, Release, Route } from './types.js';
 
 /** Turn the small amount of allowed inline emphasis in summaries into plain text. */
@@ -48,9 +48,17 @@ function productionTitle(production: Production): string {
   return `${production.title} — ${production.workType} | Zazie Productions`;
 }
 
+/**
+ * The runtime stays out of the <title>: Google truncates around 65 characters
+ * and the duration pushed the "| Zazie Productions" brand past the fold. The
+ * runtime lives on in the meta description, the page lead and the schema.
+ */
 function cueTitle(cue: Cue): string {
-  return `${cue.title} — ${cue.category} cue (${cue.duration}) | Zazie Productions`;
+  return `${cue.title} — ${cue.category} cue | Zazie Productions`;
 }
+
+/** SERP-visible description length: every meta description clamps to this. */
+export const DESCRIPTION_LIMIT = 160;
 
 function releaseTitle(release: Release): string {
   return `${release.title} — ${release.kicker} | Zazie Productions`;
@@ -66,7 +74,7 @@ function itemRoutes(): ItemRoute[] {
       hub: HUB_PATHS.production,
       slug: production.slug,
       title: productionTitle(production),
-      description: oneLine(production.summary),
+      description: clamp(production.summary, DESCRIPTION_LIMIT),
       lastmod: production.updatedAt,
       image: production.poster.src,
     });
@@ -79,7 +87,7 @@ function itemRoutes(): ItemRoute[] {
       hub: HUB_PATHS.cue,
       slug: cue.slug,
       title: cueTitle(cue),
-      description: oneLine(`${cue.title}: ${cue.description} Full MP3, ${cue.duration}.`),
+      description: clamp(`${cue.title}: ${cue.description} Full MP3, ${cue.duration}.`, DESCRIPTION_LIMIT),
       lastmod: cue.updatedAt,
     });
   }
@@ -91,7 +99,7 @@ function itemRoutes(): ItemRoute[] {
       hub: HUB_PATHS.release,
       slug: release.slug,
       title: releaseTitle(release),
-      description: oneLine(stripMarkup(release.summary)),
+      description: clamp(stripMarkup(release.summary), DESCRIPTION_LIMIT),
       lastmod: release.updatedAt,
     };
     if (release.image) route.image = release.image.src;
@@ -304,6 +312,7 @@ export function validateRoutes(): ValidationIssue[] {
     if (!hubByPath.has(item.hub)) issues.push({ where, message: `unknown hub ${item.hub}` });
     if (!oneLine(item.title) || !oneLine(item.description)) issues.push({ where, message: 'missing title or description' });
     if (item.description.length < 80) issues.push({ where, message: 'SEO description is too short to identify the item usefully' });
+    if (item.description.length > DESCRIPTION_LIMIT) issues.push({ where, message: `SEO description is ${item.description.length} characters, over the ${DESCRIPTION_LIMIT} a SERP renders` });
   }
 
   for (const route of allRoutes) {

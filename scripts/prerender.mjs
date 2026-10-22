@@ -293,10 +293,15 @@ for (const { item, file, page } of written) {
   if (!head.includes(`<title>${site.escapeHtml(site.oneLine(item.title))}</title>`)) problems.push(`${relative}: title does not match the route data`);
   if (!head.includes(`<link rel="canonical" href="${url(item.path)}"/>`)) problems.push(`${relative}: canonical is not self-referential`);
   if ((html.match(/<h1(?:\s|>)/gi) ?? []).length !== 1) problems.push(`${relative}: expected exactly one H1`);
-  if (!html.includes('<noscript>')) problems.push(`${relative}: no <noscript> fallback`);
-  const noscript = /<noscript>([\s\S]*?)<\/noscript>/i.exec(html)?.[1] ?? '';
-  if (!noscript.includes(item.description)) problems.push(`${relative}: noscript description is missing`);
-  if (/<h1\b/i.test(noscript)) problems.push(`${relative}: noscript block adds a second H1`);
+  const noscripts = [...html.matchAll(/<noscript>([\s\S]*?)<\/noscript>/gi)].map((match) => match[1]);
+  if (!noscripts.length) problems.push(`${relative}: no <noscript> fallback`);
+  if (!noscripts.some((block) => block.includes(item.description))) problems.push(`${relative}: noscript description is missing`);
+  if (noscripts.some((block) => /<h1\b/i.test(block))) problems.push(`${relative}: noscript block adds a second H1`);
+  // Film samples are click-to-load: the only iframe an item page may ship is
+  // the <noscript> fallback inside the facade, never an eager embed.
+  if (/<iframe\b/i.test(html.replace(/<noscript>[\s\S]*?<\/noscript>/gi, ''))) {
+    problems.push(`${relative}: iframe outside <noscript> - the embedded player must stay click-to-load`);
+  }
   if (!/<\/html>\s*$/.test(html)) problems.push(`${relative}: document is not terminated`);
   if (/\/tmp\/|arena|e2b|localhost/i.test(html)) problems.push(`${relative}: contains a sandbox-only path`);
   if (/<div[^>]+id="zp-boot"/i.test(html)) problems.push(`${relative}: boot overlay must not cover item-page copy`);

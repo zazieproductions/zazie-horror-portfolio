@@ -21,8 +21,10 @@ JS_OUT="store-${JS_HASH}.js"
 rm -f store-[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f].css \
       store-[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f].js
 
-cp store-src/store.css "$CSS_OUT"
-cp store-src/store.js "$JS_OUT"
+# Minify for the wire; the hashes above stay source-derived so filenames only
+# change when the committed sources do.
+node_modules/.bin/esbuild store-src/store.css --minify --log-level=warning --outfile="$CSS_OUT"
+node_modules/.bin/esbuild store-src/store.js --minify --log-level=warning --outfile="$JS_OUT"
 sed -e "s|__CSS__|${CSS_OUT}|g" -e "s|__JS__|${JS_OUT}|g" store-src/store.html > store.html
 
 # /store must be a REAL static path, not a redirect/rewrite target. Cloudflare

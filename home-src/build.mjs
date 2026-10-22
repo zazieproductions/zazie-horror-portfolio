@@ -26,6 +26,7 @@
  *   node home-src/build.mjs        (run after `tsc -p .`, before sync-pricing)
  */
 
+import { execFileSync } from 'node:child_process';
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -44,15 +45,30 @@ const HTML = 'html';
 
 /** [old, new, targets]. Text is matched exactly; see the header note. */
 const PAIRS = [
-  // Hero
-  ['Original music for psychological horror ', 'Dark, atmospheric horror scores, ', HTML],
+  // Hero. 2026-10-22 audit: the home title keywords (composer, film, zazie,
+  // productions) must appear in the H1, not only in the metadata. The static
+  // snapshot maps the original hero line straight to the final H1 (its
+  // intermediate rewrite is already applied and would strand the rerun check);
+  // the pristine bundle carries the intermediate line, so its pair starts there.
+  ['Original music for psychological horror ', 'Horror film, TV and game scores by composer Zazie Kanwar-Torge of Zazie Productions, ', HTML],
+  ['Dark, atmospheric horror scores, ', 'Horror film, TV and game scores by composer Zazie Kanwar-Torge of Zazie Productions, ', BUNDLE],
   ['& experimental cinema.', 'written to your picture.', HTML],
   ['Dissonance. Atmosphere. Emotional intensity.', 'Original music for psychological horror, thrillers, and dark sci-fi,', HTML],
   ['Scores composed directly to picture.', 'composed for film, TV, and games.', HTML],
+  // 2026-10-22 audit: the homepage used the heading "Phantom Requiem" twice
+  // (poster wall + video card). The video card disambiguates; the poster keeps
+  // the bare title. One bundle pair (the video-card data object) plus the
+  // literal strings it renders into the static snapshot.
+  ['{title:"Phantom Requiem",role:"Original Score",yt:"UX2kv3G89Jw"', '{title:"Phantom Requiem (experimental short)",role:"Original Score",yt:"UX2kv3G89Jw"', BUNDLE],
+  ['<h3 class="font-display text-xl leading-tight text-bone sm:text-2xl">Phantom Requiem</h3>', '<h3 class="font-display text-xl leading-tight text-bone sm:text-2xl">Phantom Requiem (experimental short)</h3>', HTML],
+  ['aria-label="Play Phantom Requiem film sample"', 'aria-label="Play Phantom Requiem (experimental short) film sample"', HTML],
+  ['data-title="Phantom Requiem"', 'data-title="Phantom Requiem (experimental short)"', HTML],
+  ['alt="Phantom Requiem: still from the film"', 'alt="Phantom Requiem (experimental short): still from the film"', HTML],
+  ['aria-label="Open Phantom Requiem on YouTube" title="Open Phantom Requiem on YouTube"', 'aria-label="Open Phantom Requiem (experimental short) on YouTube" title="Open Phantom Requiem (experimental short) on YouTube"', HTML],
   ['Start an inquiry', 'Request a scoring quote', BOTH],
   // User-provided biography; HTML emphasis is shared with the static snapshot.
   ["Zazie Kanwar-Torge is an award-winning composer, experimental producer, and multi-instrumentalist. Under Zazie Productions, he writes and performs original scores for psychological, folk, and body horror, supernatural thrillers, and dark sci-fi.", "<strong>Zazie Kanwar-Torge</strong> is an award-winning film composer, experimental producer, and multi-instrumentalist specializing in <strong>psychological horror, folk horror, body horror, supernatural thrillers, and dark science fiction</strong>. Through Zazie Productions, he creates original film scores and immersive sonic atmospheres that explore dread, dissonance, isolation, and the uncanny.", "bundle"],
-  ["His palette combines struck strings, bowed metal, hybrid orchestration, and custom synths, shaped to picture for projects from shorts to features.", "Working at the intersection of cinematic scoring, musique concrète, and electroacoustic composition, his distinctive palette combines bowed metal, struck strings, experimental synthesis, and hybrid orchestration. His work has been featured at <strong>Ars Electronica 2026</strong>, performed in 20.4-channel spatial audio, and selected for international experimental music and film programs, including <strong>MUSLAB/Cero Records</strong> and <strong>EXiS in Seoul</strong>. Previously commissioned by the <strong>Black Mountain College Museum + Arts Center</strong>, he also develops original audio instruments and experimental sound libraries.</p><p>Drawing on a background in experimental film, sound art, and audiovisual composition, Zazie approaches each score as an extension of the film's psychological and emotional world, creating visceral, atmospheric music tailored to independent shorts, feature films, series, and horror video games. Directors, producers, and game developers ready to <a href=\"/hire-a-composer\" class=\"text-bone underline underline-offset-4 hover:text-blood\">hire a horror composer</a> can review published packages, verified credits, and the <a href=\"/how-to-hire-a-horror-composer\" class=\"text-bone underline underline-offset-4 hover:text-blood\">filmmaker &amp; game-developer hiring guide</a>.", "bundle"],
+  ["His palette combines struck strings, bowed metal, hybrid orchestration, and custom synths, shaped to picture for projects from shorts to features.", "Working at the intersection of cinematic scoring, musique concrète, and electroacoustic composition, his distinctive palette combines bowed metal, struck strings, experimental synthesis, and hybrid orchestration. His work has been featured at <strong>Ars Electronica 2026</strong>, performed in 20.4-channel spatial audio, and selected for international experimental music and film programs, including <strong>MUSLAB/Cero Records</strong> and <strong>EXiS in Seoul</strong>. Previously commissioned by the <strong>Black Mountain College Museum + Arts Center</strong>, he also develops original audio instruments and experimental sound libraries.</p><p>Drawing on a background in experimental film, sound art, and audiovisual composition, Zazie approaches each score as an extension of the film's psychological and emotional world, creating visceral, atmospheric music tailored to independent shorts, feature films, series, and horror video games. Directors, producers, and game developers ready to <a href=\\\"/hire-a-composer\\\" class=\\\"text-bone underline underline-offset-4 hover:text-blood\\\">hire a horror composer</a> can review published packages, verified credits, and the <a href=\\\"/how-to-hire-a-horror-composer\\\" class=\\\"text-bone underline underline-offset-4 hover:text-blood\\\">filmmaker &amp; game-developer hiring guide</a>.", "bundle"],
   ['Drawing on a background in experimental film, sound art, and audiovisual composition, Zazie approaches each score as an extension of the film\'s psychological and emotional world, creating visceral, atmospheric music tailored to independent shorts, feature films, and unconventional genre cinema.', 'Drawing on a background in experimental film, sound art, and audiovisual composition, Zazie approaches each score as an extension of the film\'s psychological and emotional world, creating visceral, atmospheric music tailored to independent shorts, feature films, series, and horror video games. Directors, producers, and game developers ready to <a href="/hire-a-composer" class="text-bone underline underline-offset-4 hover:text-blood">hire a horror composer</a> can review published packages, verified credits, and the <a href="/how-to-hire-a-horror-composer" class="text-bone underline underline-offset-4 hover:text-blood">filmmaker &amp; game-developer hiring guide</a>.', HTML],
   ['<a href="#services" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Rates</a><a href="/store"', '<a href="#services" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Rates</a><a href="/hire-a-composer" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Hire</a><a href="/store"', HTML],
   ['[["/hire-a-composer","Hire a composer"],["/sound-design","Sound design"]', '[["/hire-a-composer","Hire a horror composer"],["/how-to-hire-a-horror-composer","Hiring guide"],["/sound-design","Sound design"]', BUNDLE],
@@ -70,7 +86,6 @@ const PAIRS = [
   ['Share your format, scored minutes, timeline, and budget.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', HTML],
   // Repair the duplicate sentence present in the latest static homepage snapshot.
   ['Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send. The form prepares an email for you to review and send.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', HTML],
-  ['"dateModified": "2026-10-17"', '"dateModified": "2026-10-18"', HTML],
   ['gu=["Short film","Feature","Series episode","Game / interactive","Installation / art"]', 'gu=["Not sure yet","Short film","Feature","Series episode","Game / interactive","Installation / art"]', BUNDLE],
   ['a1=["Psychological / atmospheric horror","Supernatural dread","Body horror (musical atmosphere)","Folk horror","Techno-thriller","Cosmic dread","Dark drama / thriller","Game adaptive score","Other / hybrid cinematic"]', 'a1=["Not sure yet","Psychological / atmospheric horror","Supernatural dread","Body horror (musical atmosphere)","Folk horror","Techno-thriller","Cosmic dread","Dark drama / thriller","Game adaptive score","Other / hybrid cinematic"]', BUNDLE],
   ['<select class="w-full border border-ash bg-void px-4 py-3 text-sm text-bone outline-none focus:border-blood" aria-label="Theme / tone"><option value="Psychological / atmospheric horror">Psychological / atmospheric horror</option>', '<select class="w-full border border-ash bg-void px-4 py-3 text-sm text-bone outline-none focus:border-blood" aria-label="Theme / tone"><option value="Not sure yet" selected>Not sure yet</option><option value="Psychological / atmospheric horror">Psychological / atmospheric horror</option>', HTML],
@@ -82,7 +97,38 @@ const PAIRS = [
   ['>Runtime<', '>Scored minutes (music, not film length)<', HTML],
   ['placeholder="e.g. 12 min / 90 min"', 'placeholder="e.g. 3 scored minutes"', HTML],
   ['aria-label="Runtime"', 'aria-label="Scored minutes (music, not film length)"', HTML],
+  // Modern image formats (2026-10-22 audit): the hero plate and the eight
+  // video-card stills ship AVIF through a <picture>; the JPEG stays as the
+  // fallback and keeps every existing attribute, including the onError poster.
+  ['u.jsx("img",{src:n.thumb,alt:`${n.title}: still from the film`,width:1280,height:720,className:"absolute inset-0 h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover/vid:scale-105",loading:"lazy",decoding:"async",onError:function(e){var t=e.currentTarget;if(!t||t.dataset.fb)return;t.dataset.fb="1",t.src="/images/eclipsed-cover-1280.jpg",t.onerror=null}})',
+   'u.jsx("picture",{children:[u.jsx("source",{srcSet:n.thumb.replace(/\\.jpg$/,".avif"),type:"image/avif"}),u.jsx("img",{src:n.thumb,alt:`${n.title}: still from the film`,width:1280,height:720,className:"absolute inset-0 h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover/vid:scale-105",loading:"lazy",decoding:"async",onError:function(e){var t=e.currentTarget;if(!t||t.dataset.fb)return;t.dataset.fb="1",t.src="/images/eclipsed-cover-1280.jpg",t.onerror=null}})]})', BUNDLE],
+  ['u.jsx("img",{src:"/images/atmosphere-bg.jpg",alt:"",width:940,height:625,fetchPriority:"high",decoding:"async",className:"absolute inset-0 h-full w-full scale-110 object-cover opacity-40 hero-kenburns","data-source-loc":"src/components/Hero.tsx:35:8"})',
+   'u.jsx("picture",{"data-source-loc":"src/components/Hero.tsx:35:8",children:[u.jsx("source",{srcSet:"/images/atmosphere-bg.avif",type:"image/avif"}),u.jsx("img",{src:"/images/atmosphere-bg.jpg",alt:"",width:940,height:625,fetchPriority:"high",decoding:"async",className:"absolute inset-0 h-full w-full scale-110 object-cover opacity-40 hero-kenburns"})]})', BUNDLE],
+  // NEW reorders the static <img> attributes so an applied pair cannot match
+  // again on a rerun; React normalizes the live DOM either way.
+  ['<img alt="" class="absolute inset-0 h-full w-full scale-110 object-cover opacity-40 hero-kenburns" src="/images/atmosphere-bg.jpg" width="940" height="625" fetchpriority="high" decoding="async">',
+   '<picture><source srcset="/images/atmosphere-bg.avif" type="image/avif"><img src="/images/atmosphere-bg.jpg" alt="" width="940" height="625" fetchpriority="high" decoding="async" class="absolute inset-0 h-full w-full scale-110 object-cover opacity-40 hero-kenburns"></picture>', HTML],
 ];
+
+/** The eight video-card stills, wrapped into <picture> in the static snapshot. */
+const VIDEO_CLS = 'absolute inset-0 h-full w-full object-cover object-top transition-transform duration-700 ease-out group-hover/vid:scale-105';
+for (const [title, w, h, base] of [
+  ['Mike Has A Visitor', 320, 180, '/images/project-HaVJP08j77U'],
+  ['Eclipsed', 1280, 720, '/images/eclipsed-cover-1280'],
+  ['GOODBYE, BROTHER', 1280, 720, '/images/project-ItrrcilS0ro'],
+  ['Home Intruder', 1280, 720, '/images/project-riCvy2abhlc'],
+  ['The Haunted', 1280, 720, '/images/project-Ty8tPp59mDc'],
+  ['AQUAPHOBIA', 1280, 720, '/images/project-rvCGO0BJ_2E'],
+  ['Whispers In The Dark', 1280, 720, '/images/project-6qa3Uwj47fc'],
+  // The Phantom card alt is rewritten by an earlier pair in PAIRS.
+  ['Phantom Requiem (experimental short)', 640, 480, '/images/project-UX2kv3G89Jw'],
+]) {
+  PAIRS.push([
+    `<img alt="${title}: still from the film" width="${w}" height="${h}" class="${VIDEO_CLS}" loading="lazy" decoding="async" src="${base}.jpg">`,
+    `<picture><source srcset="${base}.avif" type="image/avif"><img src="${base}.jpg" alt="${title}: still from the film" width="${w}" height="${h}" loading="lazy" decoding="async" class="${VIDEO_CLS}"></picture>`,
+    HTML,
+  ]);
+}
 
 /** Budget options come from the package list; the bundle reads xu[]. */
 const BUNDLE_BUDGET_OLD = 'xu=["Under $300","$300 - $500","$500 - $700","$700 - $900","$900+","Flexible / discuss"]';
@@ -221,6 +267,24 @@ const origHash = crypto.createHash('sha256').update(orig).digest('hex');
 if (!origHash.startsWith('2afd4ec8')) throw new Error(`bundle.orig.js is not the shipped bundle (sha256 ${origHash})`);
 
 const patched = patchBundle(orig);
+
+// Regression guard: an under-escaped pair once shipped a bundle no browser
+// could parse (HTML attribute quotes inside a bundle string literal need the
+// \\\" form in PAIRS). The test suite only evaluates slices of the bundle, so
+// the build itself has to parse the whole thing.
+try {
+  execFileSync(process.execPath, ['--input-type=module', '--check'], {
+    input: patched,
+    stdio: ['pipe', 'ignore', 'pipe'],
+  });
+} catch (err) {
+  const detail = String(err.stderr ?? '')
+    .split('\n')
+    .filter((line) => /SyntaxError|Unexpected|Expected/.test(line))
+    .join(' | ');
+  throw new Error(`patched bundle is not valid JavaScript: ${detail || 'node --check failed'}`);
+}
+
 const hash = crypto.createHash('sha256').update(patched).digest('hex').slice(0, 8);
 const name = `index-${hash}.js`;
 

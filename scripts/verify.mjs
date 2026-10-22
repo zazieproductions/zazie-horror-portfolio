@@ -95,6 +95,19 @@ for (const route of allRoutes) {
   const expected = url(route.path);
   if (titles.length !== 1) fail(`${route.path}: expected one title, found ${titles.length}`);
   if (descriptions.length !== 1) fail(`${route.path}: expected one description, found ${descriptions.length}`);
+  if (descriptions.length === 1) {
+    // The 2026-10-22 audit flagged 8 sampled pages (41 site-wide) with
+    // descriptions Google truncates; every SERP-facing description clamps to
+    // 160 characters at the source, and this keeps it that way.
+    const descriptionText = decodeXml(/\bcontent=["']([^"']*)["']/i.exec(descriptions[0][0])?.[1] ?? '');
+    if (descriptionText.length > 160) fail(`${route.path}: meta description is ${descriptionText.length} characters, over the 160 a SERP renders`);
+  }
+  for (const node of jsonLdBlocks(html, route.path)) {
+    for (const entry of Array.isArray(node) ? node : [node]) {
+      if (entry && entry['@graph']) fail(`${route.path}: JSON-LD wraps nodes in a top-level @graph - split it into one typed block per node so every script carries its own @type`);
+      else if (!entry || !entry['@type']) fail(`${route.path}: JSON-LD block has no top-level @type`);
+    }
+  }
   if (canonical.length !== 1 || canonical[0][1] !== expected) fail(`${route.path}: canonical is not uniquely self-referential`);
   if (!robots || /\bnoindex\b/i.test(robots) || !/\bindex\b/i.test(robots)) fail(`${route.path}: missing indexable robots metadata`);
   if (!html.includes(`property="og:url" content="${expected}"`)) fail(`${route.path}: missing route-specific og:url`);
