@@ -194,13 +194,33 @@ for (const hub of hubs) {
   const route = routeByPath.get(hub.path);
   const file = route ? fileFor(route) : null;
   if (!file) continue;
-  const html = fs.readFileSync(file, 'utf8');
-  hubHtmlByPath.set(hub.path, html);
-  for (const href of linksOf(html)) {
-    let pathName;
-    try { pathName = new URL(href, SITE_ORIGIN).pathname; } catch { continue; }
-    if (/^\/(?:work|reel|store)\/[^/]+$/.test(pathName)) fail(`${hub.path}: hub contains a direct item link to ${pathName}`);
+  hubHtmlByPath.set(hub.path, fs.readFileSync(file, 'utf8'));
+}
+
+const linkPaths = (html) => linksOf(html).map((href) => {
+  try { return new URL(href, SITE_ORIGIN).pathname.replace(/\/$/, '') || '/'; } catch { return null; }
+}).filter(Boolean);
+
+// Every generated item route must be linked from the hub that owns it. Items
+// used to be excluded from hub navigation entirely, which left 65 of 85 sitemap
+// URLs with no internal link anywhere - the exact profile Search Console reports
+// as "Discovered - currently not indexed". Discovery now runs / -> hub -> item.
+const isItemRoute = (pathName) => /^\/(?:work|reel|store)\/[^/]+$/.test(pathName);
+for (const route of allRoutes) {
+  if (!isItemRoute(route.path)) continue;
+  const hubPath = `/${route.path.split('/')[1]}`;
+  const hubHtml = hubHtmlByPath.get(hubPath);
+  if (!hubHtml) {
+    fail(`${route.path}: no hub page ${hubPath} exists to link it`);
+    continue;
   }
+  if (!linkPaths(hubHtml).includes(route.path)) fail(`${route.path}: not linked from its hub ${hubPath} (sitemap-only URL)`);
+}
+
+// The home page stays a hub index. Item discovery belongs to the hub that owns
+// the item; a 65-link homepage would bury the 19 pages that matter.
+for (const pathName of linkPaths(hubHtmlByPath.get('/') ?? '')) {
+  if (isItemRoute(pathName)) fail(`/: home page links item route ${pathName}; item discovery belongs to the owning hub`);
 }
 
 const hubLinks = new Map();

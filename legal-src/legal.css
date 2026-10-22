@@ -564,3 +564,9 @@ td code,th code{white-space:nowrap}
     background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 3px);
   }
 }
+
+/* Inline reference links inside cards and cue rows. The card's .stretch::after
+   overlay sits above everything, so a second link in the same card needs its own
+   stacking order to stay clickable. */
+.inline-link{position:relative;z-index:1;color:var(--mist);text-decoration:underline;text-decoration-color:rgba(196,30,30,.55);text-underline-offset:3px;transition:color .2s}
+.inline-link:hover,.inline-link:focus-visible{color:var(--bone);text-decoration-color:var(--ember)}

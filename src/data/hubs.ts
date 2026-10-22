@@ -111,7 +111,7 @@ export const hubs: Hub[] = [
     name: "Selected productions",
     title: "Selected Production Records: Film, Television and Experimental Work | Zazie Productions",
     description: "Nine selected production records across films, television, and experimental work. Project notes distinguish verified composing, co-composing, sound-design, and production credits.",
-    lastmod: "2026-10-18",
+    lastmod: "2026-10-21",
     images: [
       { loc: "https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg", caption: "EXPIRE (2025) - IMDb credits Zazie Kanwar-Torge for sound design; other composers are listed separately.", title: "EXPIRE - Production Record and Sound-Design Credit" },
       { loc: "https://horror.zazieproductions.com/images/posters/unseen-640.jpg", caption: "UNSEEN feature; IMDb lists Steve Merlo as composer.", title: "UNSEEN - Feature Film Record" },
@@ -138,7 +138,7 @@ export const hubs: Hub[] = [
     name: "Showreel",
     title: "Horror Composer Showreel: 32 Original Dark Cinematic Cues | Zazie Productions",
     description: "Stream 32 original horror showreel cues by Zazie Kanwar-Torge: psychological dread beds, tension stingers, dark ambient textures, body horror, and thriller themes.",
-    lastmod: "2026-10-17",
+    lastmod: "2026-10-21",
     images: [],
     videos: [],
   },
@@ -147,7 +147,7 @@ export const hubs: Hub[] = [
     name: "Composer biography",
     title: "Zazie Kanwar-Torge: Psychological Horror Composer Biography | Zazie Productions",
     description: "Biography of psychological horror composer Zazie Kanwar-Torge, founder of Zazie Productions LLC in Asheville, NC, scoring dark atmospheric films, series, and games.",
-    lastmod: "2026-10-18",
+    lastmod: "2026-10-21",
     images: [
       { loc: "https://horror.zazieproductions.com/images/headshot.jpg", caption: "Zazie Kanwar-Torge, psychological horror composer and founder of Zazie Productions LLC, Asheville NC.", title: "Zazie Kanwar-Torge - Psychological Horror Composer Biography" },
     ],
@@ -169,7 +169,7 @@ export const hubs: Hub[] = [
     name: "Rate card",
     title: "Horror Score Packages and Quotes | Zazie Productions",
     description: `Original music for psychological horror and experimental cinema. ${pricingSummary()}`,
-    lastmod: "2026-10-18",
+    lastmod: "2026-10-21",
     images: [
       { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Productions horror film scoring suite Asheville, NC", title: "Horror Film Scoring Suite - Rates" },
     ],
@@ -180,7 +180,7 @@ export const hubs: Hub[] = [
     name: "Catalogue",
     title: "Catalogue: Experimental Music, Sound Libraries, Tools and Objects | Zazie Productions",
     description: "Twenty-four catalogue entries across Bandcamp, itch.io, Gumroad, and eBay, including experimental music, sound libraries, software and visual assets, and physical objects. Current terms and availability remain with each source platform.",
-    lastmod: "2026-10-18",
+    lastmod: "2026-10-21",
     images: [
       { loc: "https://f4.bcbits.com/img/a4087485987_16.jpg", caption: "Anesthesia for the Signal Age - ten-track experimental electronic album, released May 7, 2026.", title: "Anesthesia for the Signal Age - Zazie Productions" },
       { loc: "https://f4.bcbits.com/img/a4110701137_16.jpg", caption: "Opaline Lament (Life From The Beyond) - a haunting, string-driven meditation between chamber music and spectral cinema.", title: "Opaline Lament (Life From The Beyond) - Zazie Productions" },
@@ -198,7 +198,7 @@ export const hubs: Hub[] = [
     name: "Contact",
     title: "Scoring Inquiry: Request a Score Quote | Zazie Productions",
     description: "Request a scoring quote for psychological horror, folk horror, supernatural or experimental film. Share what you know; scored minutes, format, timing and references can be added when available.",
-    lastmod: "2026-10-18",
+    lastmod: "2026-10-21",
     images: [
       { loc: "https://horror.zazieproductions.com/images/hero-portrait.jpg", caption: "Zazie Kanwar-Torge, psychological horror composer available for commission", title: "Scoring Inquiry - Request a Score Quote" },
     ],
