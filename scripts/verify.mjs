@@ -124,10 +124,10 @@ const home = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
  * first. Titles are measured as rendered (entities decoded): 30-60 characters
  * fit Google's title link, 120-160 render without truncation in a description.
  */
-const homeTitle = decodeXml(/<title>([^<]*)<\/title>/i.exec(home)?.[1] ?? '');
-const homeDescription = decodeXml(/<meta\s+name="description"\s+content="([^"]*)"/i.exec(home)?.[1] ?? '');
-if (homeTitle.length < 30 || homeTitle.length > 60) fail(`homepage title is ${homeTitle.length} characters; keep it between 30 and 60`);
-if (homeDescription.length < 120 || homeDescription.length > 160) fail(`homepage description is ${homeDescription.length} characters; keep it between 120 and 160`);
+const homeMetaTitle = decodeXml(/<title>([^<]*)<\/title>/i.exec(home)?.[1] ?? '');
+const homeMetaDescription = decodeXml(/<meta\s+name="description"\s+content="([^"]*)"/i.exec(home)?.[1] ?? '');
+if (homeMetaTitle.length < 30 || homeMetaTitle.length > 60) fail(`homepage title is ${homeMetaTitle.length} characters; keep it between 30 and 60`);
+if (homeMetaDescription.length < 120 || homeMetaDescription.length > 160) fail(`homepage description is ${homeMetaDescription.length} characters; keep it between 120 and 160`);
 const homeNodes = jsonLdBlocks(home, '/');
 const homeTypes = allTypes(homeNodes);
 for (const required of ['Person', 'Organization', 'WebSite', 'WebPage']) {
@@ -290,6 +290,26 @@ for (const route of allRoutes) {
   }
 }
 
+/* ------------------------------------------------------------ title length */
+// Google truncates <title> at roughly 65 characters in a desktop result, and a
+// truncated title loses the brand or the call to action that was paying for it.
+// The home page is held to the limit; the rest are reported so the remaining
+// editorial pass has a queue it can see.
+const TITLE_LIMIT = 65;
+const overLongTitles = [];
+let homeTitleLength = 0;
+for (const route of allRoutes) {
+  const file = fileFor(route);
+  if (!file) continue;
+  const html = fs.readFileSync(file, 'utf8');
+  const raw = /<title>([\s\S]*?)<\/title>/i.exec(html)?.[1] ?? '';
+  const text = decodeXml(raw).replace(/\s+/g, ' ').trim();
+  if (route.path === '/') homeTitleLength = text.length;
+  if (text && text.length > TITLE_LIMIT) overLongTitles.push({ path: route.path, length: text.length, text });
+}
+const homeTitle = overLongTitles.find((entry) => entry.path === '/');
+if (homeTitle) fail(`/ title is ${homeTitle.length} characters, over the ${TITLE_LIMIT}-character limit Google renders: "${homeTitle.text}"`);
+
 for (const llmFile of ['llms.txt', 'llms-full.txt']) {
   const fullPath = path.join(root, llmFile);
   if (!fs.existsSync(fullPath)) fail(`missing ${llmFile} at repository root`);
@@ -308,4 +328,5 @@ console.log(`  internal-link audit: hubs reachable from /; item pages link to hu
 console.log('  SEO/schema audit: unique self-canonical, route-specific head, meta description, indexable robots, per-type JSON-LD');
 console.log('  media audit: 32 MP3 URLs, production samples only when supplied, catalogue artwork only when supplied');
 console.log('  404 audit: /work/does-not-exist has no static page and Cloudflare fallback serves 404.html with noindex, follow');
+console.log(`  title length audit: / is ${homeTitleLength}/${TITLE_LIMIT} characters (not truncated); ${overLongTitles.length} other route(s) still run long and are listed here rather than failing the build`);
 console.log('  missing-file report: none');

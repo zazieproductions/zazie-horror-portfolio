@@ -1,63 +1,125 @@
+# Cloudflare Pages response headers
+# -----------------------------------------------------------------------------
+# HOW RULES COMBINE (read before editing)
+#
+#   Every rule whose pattern matches a request contributes its headers, and a
+#   header set by more than one matching rule is JOINED WITH A COMMA -- the more
+#   specific rule does not win. That made the previous cache policy a no-op:
+#
+#     /*
+#       Cache-Control: public, max-age=0, must-revalidate
+#     /fonts/*
+#       Cache-Control: public, max-age=31536000, immutable
+#
+#   served `public, max-age=0, must-revalidate, public, max-age=31536000,
+#   immutable`, and RFC 9111 reads the first max-age -- so fonts, images and
+#   content-hashed CSS/JS were revalidated on every request.
+#
+#   So: `/*` is the only rule allowed to set Cache-Control as a default, and
+#   every rule that needs a different lifetime first DETACHES it with
+#   `! Cache-Control` and then sets its own. Detach is order-sensitive: the
+#   broad rule must already have applied, which is why `/*` is first in the file
+#   and every detach sits below it.
+#
+#   tools/check-headers.mjs simulates these joins and fails the build if any
+#   path would come out with two Cache-Control lifetimes again.
+#
+# The security policy lives in tools/headers.mjs; that module and this block are
+# checked against each other on every build.
+#
+# Cloudflare Pages limit: 100 header rules, 2,000 characters per line.
+
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self'; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://drive.google.com https://docs.google.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self'; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://drive.google.com https://docs.google.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; frame-ancestors 'self'; upgrade-insecure-requests
+  X-DNS-Prefetch-Control: on
   Cache-Control: public, max-age=0, must-revalidate
 
+# The error page is never worth keeping, and a cached 404 poisons the route.
 /404.html
   X-Robots-Tag: noindex, follow
+  ! Cache-Control
   Cache-Control: no-store
 
+# The service worker must be re-fetched every time, or a stale worker pins the
+# previous asset graph in front of the new one for up to 24 hours.
 /sw.js
+  ! Cache-Control
   Cache-Control: no-cache, no-store, must-revalidate
 
 /sitemap.xml
   Content-Type: application/xml; charset=utf-8
   X-Robots-Tag: noindex, follow
+  ! Cache-Control
   Cache-Control: public, max-age=3600
 
 /robots.txt
   Content-Type: text/plain; charset=utf-8
+  ! Cache-Control
   Cache-Control: public, max-age=3600
 
 /llms.txt
   Content-Type: text/plain; charset=utf-8
   X-Robots-Tag: index, follow
+  ! Cache-Control
   Cache-Control: public, max-age=3600
 
 /llms-full.txt
   Content-Type: text/plain; charset=utf-8
   X-Robots-Tag: index, follow
+  ! Cache-Control
   Cache-Control: public, max-age=3600
 
+# -----------------------------------------------------------------------------
+# Static assets
+#
+# Every URL below is either fingerprinted by the build (name-<hash8>.css/js) or
+# a font/image/audio path whose contents are replaced only together with a
+# rebuild that also rewrites every reference, so a year is safe. HTML is the
+# only thing that must revalidate.
+
 /fonts/*
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
 /images/*
+  ! Cache-Control
   Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
 
 /audio/*
+  ! Cache-Control
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/favicon.svg
+  ! Cache-Control
   Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
 
 /*.css
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
 /index-*.js
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
 /store-*.js
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
 /legal-*.js
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
 /estimator-*.js
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
 /item-*.js
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
 # Canonical Link + explicit X-Robots-Tag headers on all indexable routes
