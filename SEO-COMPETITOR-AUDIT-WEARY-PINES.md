@@ -20,6 +20,12 @@
 
 **No claim below is made about backlink counts, domain authority scores, or traffic volumes**, because no tool in this session could measure them. Where a number is inferred, it is labelled *inferred*.
 
+> **Follow-up (2026-10-22):** backlink and citation research completed after this audit — see
+> [SEO-BACKLINKS-WEARY-PINES.md](SEO-BACKLINKS-WEARY-PINES.md) for the verified linking-domain inventory
+> (~7 domains, 1 editorial, **0 links to `/hire-a-composer/` itself**), the unlinked-mention/entity layer
+> that powers their GEO citations, and the link-gap plan. Counts there are a verified *floor* (still no
+> Ahrefs/Semrush/Majestic access), not a full link graph.
+
 ---
 
 # 1. Executive summary
