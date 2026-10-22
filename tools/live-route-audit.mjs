@@ -26,6 +26,12 @@
  *                                             hubs, 404 for flat item routes
  *                                             (there is no item slash twin)
  *   4. unknown paths and slash twins        -> HTML 404 with noindex
+ *   5. delivery: on one HTML page, one content-hashed bundle, one font and
+ *      one image -- Strict-Transport-Security, a CSP with frame-ancestors,
+ *      X-Frame-Options: SAMEORIGIN, nosniff, a Cache-Control with exactly one
+ *      max-age (Cloudflare Pages joins matching rules with a comma, which is
+ *      how an earlier "/* plus /fonts/*" pair silently disabled caching), and
+ *      a Brotli or Gzip content-encoding when the client offers both
  *
  * Run it from anywhere with internet access. From the build sandbox it dies on
  * the first fetch, by design -- see .github/workflows/live-route-audit.yml for
@@ -299,7 +305,86 @@ async function run() {
     ...unknownPaths,
   ];
   const rows = (await mapLimit(tablePaths, (p) => probe(p))).map(row);
-  const failures = [...canonFail, ...aliasFail, ...unknownFail];
+
+  /* ------------------------------------------------------- 5. delivery */
+  /**
+   * Headers and compression are part of the contract, and they are invisible
+   * to the route table above. These four requests are the ones a real visitor
+   * makes on a cold load: the document, the fingerprinted CSS, the font it
+   * references, and a decoded image.
+   */
+  const hashedBundle = (() => {
+    const sw = path.join(ROOT, 'sw.js');
+    if (!fs.existsSync(sw)) return null;
+    const match = /['"]\/((?:index|store|legal|estimator|item)-[0-9a-f]{8}\.css)['"]/.exec(fs.readFileSync(sw, 'utf8'));
+    return match ? `/${match[1]}` : null;
+  })();
+  const fontFile = (() => {
+    const dir = path.join(ROOT, 'fonts');
+    if (!fs.existsSync(dir)) return null;
+    const font = fs.readdirSync(dir).find((name) => name.endsWith('.woff2'));
+    return font ? `/fonts/${font}` : null;
+  })();
+
+  async function fetchHeaders(urlPath, accept) {
+    try {
+      const res = await fetch(BASE + urlPath, {
+        redirect: 'manual',
+        headers: { 'user-agent': UA, accept, 'accept-encoding': 'br, gzip' },
+        signal: AbortSignal.timeout(TIMEOUT_MS),
+      });
+      await res.arrayBuffer().catch(() => {});
+      return { url: urlPath, status: res.status, headers: res.headers, error: null };
+    } catch (error) {
+      return { url: urlPath, status: 0, headers: new Headers(), error: error.message };
+    }
+  }
+
+  const DOC = await fetchHeaders('/', 'text/html');
+  const CSS = hashedBundle ? await fetchHeaders(hashedBundle, 'text/css,*/*;q=0.1') : null;
+  const FONT = fontFile ? await fetchHeaders(fontFile, 'font/woff2,*/*;q=0.1') : null;
+  const IMG = await fetchHeaders('/images/hero-portrait.jpg', 'image/avif,image/webp,image/*,*/*;q=0.8');
+  const XML = await fetchHeaders('/sitemap.xml', 'application/xml,*/*;q=0.1');
+
+  const delivery = [];
+  const expect = (label, response, name, test, wanted) => {
+    const value = response?.headers.get(name);
+    delivery.push({
+      label,
+      url: response?.url || '-',
+      header: name,
+      value: value ?? '(absent)',
+      ok: Boolean(response) && response.status === 200 && test(value),
+      wanted,
+    });
+  };
+  const has = (needle) => (value) => Boolean(value) && value.toLowerCase().includes(needle.toLowerCase());
+  const oneMaxAge = (value) => Boolean(value) && (value.match(/max-age=/g) || []).length === 1;
+  const maxAgeAtLeast = (seconds) => (value) => {
+    const match = /max-age=(\d+)/.exec(value || '');
+    return Boolean(match) && Number(match[1]) >= seconds && oneMaxAge(value);
+  };
+  const compressed = (value) => ['br', 'gzip'].includes((value || '').toLowerCase());
+  const revalidates = (value) => Boolean(value) && /must-revalidate|no-cache|no-store/.test(value) && oneMaxAge(value);
+
+  /** Security headers are contract, not a suggestion: they must be on the document. */
+  expect('Strict-Transport-Security', DOC, 'strict-transport-security', has('max-age='), 'HSTS with a max-age');
+  expect('CSP frame-ancestors', DOC, 'content-security-policy', has("frame-ancestors 'self'"), "frame-ancestors 'self'");
+  expect('CSP object-src', DOC, 'content-security-policy', has("object-src 'none'"), "object-src 'none'");
+  expect('X-Frame-Options', DOC, 'x-frame-options', (v) => (v || '').toUpperCase() === 'SAMEORIGIN', 'SAMEORIGIN');
+  expect('X-Content-Type-Options', DOC, 'x-content-type-options', has('nosniff'), 'nosniff');
+  expect('Referrer-Policy', DOC, 'referrer-policy', has('strict-origin'), 'strict-origin-when-cross-origin');
+  expect('HTML revalidates', DOC, 'cache-control', revalidates, 'max-age=0 + must-revalidate');
+  expect('HTML compressed', DOC, 'content-encoding', compressed, 'br or gzip');
+  expect('hashed CSS cached a year', CSS, 'cache-control', maxAgeAtLeast(31536000), 'max-age=31536000, immutable');
+  expect('hashed CSS compressed', CSS, 'content-encoding', compressed, 'br or gzip');
+  expect('font cached a year', FONT, 'cache-control', maxAgeAtLeast(31536000), 'max-age=31536000, immutable');
+  expect('image cached', IMG, 'cache-control', maxAgeAtLeast(86400), 'a max-age of at least a day');
+  expect('sitemap short cache', XML, 'cache-control', (v) => oneMaxAge(v) && /max-age=\d+/.test(v || ''), 'one max-age');
+
+  const deliveryFail = delivery.filter((row) => !row.ok);
+
+  const failures = [...canonFail, ...aliasFail, ...unknownFail, ...deliveryFail];
 
   /* ------------------------------------------------------------- output */
 
@@ -329,6 +414,17 @@ async function run() {
     }
     line('');
     line('```');
+    line('');
+    line('## Delivery: headers and compression');
+    line('');
+    line('| Check | Request | Value | Result |');
+    line('|---|---|---|---|');
+    for (const d of delivery) {
+      line(`| ${d.label} | \`${d.url}\` | \`${String(d.value).replace(/\|/g, '\\|')}\` | ${d.ok ? 'PASS' : `**FAIL** (wanted ${d.wanted})`} |`);
+    }
+    line('');
+    line('```');
+    line(`delivery: ${delivery.length - deliveryFail.length}/${delivery.length} header and compression checks passed`);
     line(`sitemap URLs: ${canonical.filter((r) => (r.status === 308 ? rowOk(r) : (rowOk(r) && r.title && !r.noindex))).length}/${SITEMAP_URLS.length} passed; failing: ${canonFail.length}`);
     line(`alias forms: ${alias.length} checked (.html / trailing slash); failing: ${aliasFail.length}`);
     line(`unknown paths: ${unknown.length} checked (404 + noindex); failing: ${unknownFail.length}`);
@@ -343,6 +439,7 @@ async function run() {
         ['.html alias (expected 308 to the canonical, or the 301 _redirects wrote)', aliasFail.filter((f) => f.kind === '.html')],
         ['trailing-slash alias (expected 200 for a hub directory index, 404 for an item)', aliasFail.filter((f) => f.kind !== '.html')],
         ['unknown path (expected 404 with noindex)', unknownFail],
+        ['delivery (security headers, caching, compression)', deliveryFail.map((d) => ({ url: `${d.url} [${d.header}]`, status: d.ok ? 200 : 'FAIL', location: '', note: '' }))],
       ];
       const rank = (f) => (/^\/(work|reel|store)\/.+/.test(f.url) ? 1 : 0);
       for (const [label, list] of groups) {
@@ -389,6 +486,12 @@ async function run() {
   line('### unknown paths');
   for (const r of unknown) line(`  ${String(r.status || 'ERR').padEnd(7)} ${r.url}`);
   line('');
+  line('### delivery (security headers, cache lifetimes, compression)');
+  for (const d of delivery) {
+    line(`  ${(d.ok ? 'PASS' : 'FAIL').padEnd(5)} ${d.header.padEnd(24)} ${String(d.value).slice(0, 70)}  <- ${d.url}`);
+  }
+  line(`  ${delivery.length - deliveryFail.length}/${delivery.length} passed`);
+  line('');
   if (failures.length) {
     line(`### FAIL — ${failures.length} request(s) did not answer as expected`);
     const rank = (f) => (/^\/(work|reel|store)\/.+/.test(f.url) ? 1 : 0);
@@ -397,7 +500,7 @@ async function run() {
     }
     if (failures.length > 25) line(`  ... and ${failures.length - 25} more`);
   } else {
-    line(`### PASS — ${SITEMAP_URLS.length} sitemap URLs, ${alias.length} alias forms, ${unknown.length} unknown paths, all as expected`);
+    line(`### PASS — ${SITEMAP_URLS.length} sitemap URLs, ${alias.length} alias forms, ${unknown.length} unknown paths, ${delivery.length} delivery checks, all as expected`);
   }
   line('');
   line(`(${((Date.now() - started) / 1000).toFixed(1)}s, ${BASE})`);
