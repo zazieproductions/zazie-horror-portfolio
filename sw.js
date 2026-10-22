@@ -72,14 +72,14 @@
 // Pricing unchanged: scene 1–2 min / $250 from; focused 3–5 min / $650 from;
 // extended 6–12 min / $1,500 from; substantial feature/experimental scores
 // custom quoted with an indicative $2,500 minimum.
+// v35: leaner homepage HTML with external hashed support assets and clearer copy.
 // v34: GEO overhaul — rebuilt /hire-a-composer pillar + interactive estimator,
 // added /how-to-hire-a-horror-composer hub, /llms.txt + /llms-full.txt,
 // <main>-wrapped document headers and spaced numeral headings across all 85 routes,
 // clean JSON-LD schema graphs, and re-hashed home bundle index-4d715571.js.
-// v36: 2026-10-22 mobile-audit pass — 12px type floor and 44px targets in the
-// home/estimator CSS, WCAG AA label colours, styled skip link, poster AVIF
-// 400/480/640 ladder, and re-hashed home bundle index-9e03d452.js.
-const CACHE_NAME = 'zazie-v36';
+// v36: mobile type/targets, accessible labels, poster image ladder, and metadata.
+// v37: merge the mobile audit with lean external home assets and clearer copy.
+const CACHE_NAME = 'zazie-v37';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -88,13 +88,16 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-40232616.css',
-  '/index-9e03d452.js',
+  '/index-cb9ac973.js',
+  '/home-45ca31d2.css',
+  '/home-c9b3fec2.js',
+  '/home-icons-0d24fbfd.svg',
   '/store-eed3eeee.css',
   '/store-3fc01be0.js',
   '/legal-886033c7.css',
   '/legal-ab598df8.js',
   '/estimator-85629c1e.css',
-  '/estimator-e20a6c5d.js',
+  '/estimator-934efabc.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',
   '/images/hero-portrait.avif',

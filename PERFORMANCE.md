@@ -290,9 +290,11 @@ content-hashed. jsdom suite: 65 assertions, including "no em dashes" and "no
 
 ---
 
-# ZP Archive Boot, minimal terminal intro
+# ZP Archive Boot, minimal terminal intro (historical; removed 2026-10-22)
 
-Date: 2026-09-17 · Branch: `arena/01a0b074-zazie-horror-portfolio`
+The inactive overlay and its CSS/JS were removed during the homepage SEO cleanup. The notes below are retained only as historical design context.
+
+Original date: 2026-09-17 · Branch: `arena/01a0b074-zazie-horror-portfolio`
 
 ## What it is
 

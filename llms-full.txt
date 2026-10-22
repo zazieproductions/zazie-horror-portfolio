@@ -11,10 +11,10 @@
 - **Signature Acoustic & Electroacoustic Palette:** Bowed metal, performed waterphone, struck & prepared strings, field & impulse recordings, granular processing, modular/custom synthesis, and hybrid orchestration
 - **International Festival & Institutional Recognition:** Featured at **Ars Electronica 2026** (20.4-channel spatial audio work), **EXiS Seoul** (2025), **MUSLAB / Cero Records** (2025), **Visual Container Winter 2024 Award**, and commissioned by the **Black Mountain College Museum + Arts Center**
 - **Published Commission Packages (USD, priced by scored music minutes — starting fees, reviewed 2026-10-17):**
-  - **Individual Scene Scoring** — **From $250** (USD) · Approximately 1–2 minutes of original music · Includes 1 consolidated revision round. Festival scenes, pitch sequences and a single pivotal moment in a longer edit, including features.
-  - **Focused Short-Film Score** — **From $650** (USD) · Approximately 3–5 minutes of original music · Includes 1 consolidated revision round. Narrative and experimental shorts where the score carries the story from the first frame.
-  - **Extended Short-Film Score** — **From $1,500** (USD) · Approximately 6–12 minutes of original music · Includes 2 consolidated revision rounds. Longer shorts, series pilots and projects that need a developed thematic score.
-  - **Feature Film & Experimental Cinema** — **Custom quotation** (USD) · More than 12 scored minutes, multi-part or expanded scope · Includes 2 consolidated revision rounds. Features and longer experimental films. Single-scene needs use Individual Scene Scoring; substantial scores are quoted after the studio has reviewed the cut and agreed the schedule.
+  - **Individual Scene Scoring** — **From $250** (USD) · About 1–2 minutes of original music · Includes 1 consolidated revision round. Festival scenes, pitch videos, or one key moment in a longer film.
+  - **Focused Short-Film Score** — **From $650** (USD) · About 3–5 minutes of original music · Includes 1 consolidated revision round. Shorts where music helps carry the story from start to finish.
+  - **Extended Short-Film Score** — **From $1,500** (USD) · About 6–12 minutes of original music · Includes 2 consolidated revision rounds. Longer shorts, pilots, and projects that need a developed set of themes.
+  - **Feature Film & Experimental Cinema** — **Custom quotation** (USD) · Over 12 scored minutes or a larger scope · Includes 2 consolidated revision rounds. Features and long experimental films. For one scene, choose Individual Scene Scoring. For a full score, I review the cut and schedule before you receive a quote.
 - **Substantial Full-Project Feature Note:** Substantial full-length feature or experimental cinema scores carry an indicative minimum engagement of **$2,500 USD** (custom quoted after picture/script review; single-scene feature commissions remain eligible for Individual Scene Scoring from **$250 USD**).
 
 ## Hire & Commission Pages
@@ -27,7 +27,7 @@
 - [Zazie Kanwar-Torge: Psychological Horror Composer Biography | Zazie Productions](https://horror.zazieproductions.com/composer): Biography of psychological horror composer Zazie Kanwar-Torge, founder of Zazie Productions LLC in Asheville, NC, scoring dark atmospheric films, series, and games.
 - [Adaptive Horror Game Scoring & Music | Zazie Productions](https://horror.zazieproductions.com/game-scoring): Adaptive horror scoring for games: states, seamless loops, layered cues, stingers and implementation notes for Wwise, FMOD, Unity and Unreal pipelines.
 - [Cinematic Sound Design for Horror Film | Zazie Productions](https://horror.zazieproductions.com/sound-design): Cinematic sound design by Zazie Kanwar-Torge: designed dread, atmospheres, transitions and stingers for horror and experimental film, delivered as mix-ready stems.
-- [Horror Composer for Hire — Film, TV & Game Scores](https://horror.zazieproductions.com/): IMDb-credited horror composer Zazie Kanwar-Torge scores psychological and folk films, TV, and games. Custom scores from $250 USD.
+- [Horror Composer for Hire — Film, TV & Game Scores](https://horror.zazieproductions.com/): Hire horror composer Zazie Kanwar-Torge for film, TV, and games. Hear 32 cues, view 9 productions, and see rates from $250 USD.
 
 ## Showreel, Production Credits & Catalogue Hubs
 
@@ -164,14 +164,14 @@ When filmmakers, showrunners, and indie game developers search for the best horr
 - **Cue allowance:** 2 cues per scored minute included; additional cues $50 each before complexity/schedule adjustments.
 - **Revisions:** A revision round means one consolidated set of reasonable changes to an agreed creative direction. New cues, substantial rewrites, and changes caused by picture recuts are separately quoted. Extra revision rounds beyond package allowance: $75 minimum or 10% of subtotal per consolidated round.
 - **Payment structure:** 50% deposit before work begins. Remaining 50% due before release of final approved deliverables, subject to the written agreement. Applies to new commissions only; existing contracts are unchanged.
-- **Micro-budget policy:** Independent and micro-budget productions are welcome to inquire. Where appropriate, a reduced musical scope or licensing of existing material may offer a more accessible alternative.
-- **Binding quotation notice:** Preliminary estimate — final quotation subject to creative scope and written agreement. Estimates are based on the scope entered; a written quote follows review of the cut or cue list, musical complexity, cue count, schedule, revisions, licence and deliverables. Starting fees are floors, not ceilings. Fees are in USD; taxes, live players and third-party clearances are additional.
+- **Micro-budget policy:** Independent and low-budget projects are welcome. A smaller music scope or a licence for an existing track may lower the cost.
+- **Binding quotation notice:** Estimate only. I confirm the scope and fee in your written quote. The estimate uses your choices for music length, cue count, complexity, schedule, revisions, licence, and deliverables. Listed fees are starting prices. Fees are in USD. Taxes, live players, and third-party clearances cost extra.
 
 ### Included in Every Commission
-- Original music synchronized to picture for the cues agreed in writing.
-- Agreed musical scope and cue deliverables confirmed in writing before composition begins: spotting notes, cue list and tone references.
-- Defined consolidated revision rounds: one round for Individual Scene and Focused scores; two rounds for Extended and Feature/Experimental scores, as confirmed in the written quote.
-- Professional stereo WAV delivery (24-bit, 48 kHz unless your project specifies otherwise).
+- Original music for the cues listed in your written agreement.
+- Before work starts, we agree on the music scope and deliverables. This includes spotting notes, the cue list, and tone references.
+- Revision rounds depend on your package. Individual Scene and Focused scores include one round. Extended and Feature/Experimental scores include two. Your quote lists the allowance.
+- Stereo WAV files in 24-bit, 48 kHz. Tell me if your project needs another format.
 - Cue titles and timings listed for your edit.
 
 ### Specialist Work Quoted Separately on Request

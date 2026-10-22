@@ -1,0 +1,100 @@
+@font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/cormorant-garamond-latin-400-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Cormorant Garamond";font-style:italic;font-weight:400;font-display:swap;src:url(/fonts/cormorant-garamond-latin-400-italic.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Inter";font-style:normal;font-weight:100 900;font-display:swap;src:url(/fonts/inter-latin-wght-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:"Cormorant Garamond Fallback";src:local("Georgia"),local("Times New Roman");ascent-override:92.4%;descent-override:28.7%;line-gap-override:0%}
+@font-face{font-family:"Inter Fallback";src:local("Arial"),local("Helvetica Neue"),local("Helvetica");ascent-override:96.9%;descent-override:24.2%;line-gap-override:0%}
+
+.border-bone\/70{border-color:#f0ebe3b3}
+.bg-black\/60{background-color:#00000099}
+
+/* Disable poster-wall entrance flicker */
+  img[data-source-loc="src/components/PosterWall.tsx:178:1"] {
+    opacity: 0.95 !important;
+    animation: none !important;
+  }
+
+  div:has(> img[data-source-loc="src/components/PosterWall.tsx:178:1"]),
+  a:has(> img[data-source-loc="src/components/PosterWall.tsx:178:1"]) {
+    opacity: 1 !important;
+    transform: none !important;
+    translate: none !important;
+    scale: 1 !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+/* ══════════════════════════════════════════════════════════════════
+     CINEMA PLAYER - YouTube (privacy-enhanced host) + Google Drive
+     Both players stay real embedded iframes inside the page: nothing
+     here hands the visitor off to YouTube or Drive.
+     Root cause of the soft picture: the player used to live in one
+     half-width grid cell (~596px wide at 1280px), and YouTube picks its
+     rendition from the player's pixel size, so a ~600px player was fed
+     a small stream. The active card now spans the full grid row and
+     breaks out to a cinematic width, which is the lever that moves the
+     provider up its ladder. Nothing is scaled up in CSS: the iframe is
+     rendered at the frame's real pixel size.
+     Plain CSS on purpose - these class names are emitted by BOTH the
+     prerendered markup and the React render, so both copies behave
+     identically before and after the bundle mounts.
+     ══════════════════════════════════════════════════════════════════ */
+  /* Cinema players stay upright at their real size. The provider owns the
+     playback bar; site actions live in the caption BELOW the iframe. */
+  .zp-vcard{--zp-frame-w:100%}
+  .zp-vframe{position:relative;background:#000;overflow:hidden}
+  .zp-vframe iframe{
+    position:absolute;inset:0;display:block;
+    width:100%!important;height:100%!important;
+    max-width:none!important;max-height:none!important;
+    border:0;background:#000;
+  }
+  .zp-vcard.is-playing{border-color:#c41e1e73}
+  .zp-vcard.is-drive{scroll-margin-top:5rem;scroll-margin-bottom:.5rem}
+  .zp-vcard.is-playing .zp-vframe{
+    box-shadow:inset 0 0 0 1px #c41e1e38,0 24px 70px #000000bf,0 0 90px #c41e1e1a;
+  }
+  /* Both early playback and React use a single iframe, not a hidden wrapper. */
+  .zp-poster.is-live{cursor:default}
+  .zp-poster.is-live>*:not(iframe){display:none!important}
+  .zp-vactions{display:flex;align-items:center;gap:4px;flex-shrink:0}
+  .zp-drive-fs{
+    display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;
+    width:44px;height:44px;border:1px solid rgba(240,235,227,.25);
+    background:#050505;color:#f0ebe3;cursor:pointer;
+    transition:background-color .2s ease,border-color .2s ease,color .2s ease;
+  }
+  .zp-drive-fs:hover{border-color:#c41e1e;background:#c41e1e;color:#fff}
+  .zp-drive-fs:focus-visible{outline:2px solid #c41e1e;outline-offset:2px}
+  /* A 160–200px-tall phone embed crowds Drive's own toolbar. Give it room
+     without cropping, scaling or rotating the film or its native controls. */
+  @media (max-width:767px){
+    .zp-vcard.is-drive .zp-vframe{min-height:240px}
+  }
+  .zp-vframe:fullscreen{width:100vw!important;height:100vh!important;min-height:0;aspect-ratio:auto}
+  .zp-vframe:fullscreen iframe{width:100%!important;height:100%!important}
+  .zp-vframe:-webkit-full-screen{width:100vw!important;height:100vh!important;min-height:0;aspect-ratio:auto}
+  .zp-vframe:-webkit-full-screen iframe{width:100%!important;height:100%!important}
+  @supports (height:100dvh){
+    .zp-vframe:fullscreen{height:100dvh!important}
+    .zp-vframe:-webkit-full-screen{height:100dvh!important}
+  }
+  @media (min-width:768px){
+    .zp-vcard{--zp-frame-w:min(94vw,1600px,calc((100vh - 7rem) * 16 / 9))}
+    /* Reserve the fixed mobile header and the caption when a phone turns sideways. */
+    .zp-vcard.is-drive{--zp-frame-w:min(94vw,1600px,calc((100vh - 11rem) * 16 / 9))}
+    .zp-vcard.is-playing{
+      grid-column:1/-1;
+      width:var(--zp-frame-w);
+      margin-left:calc(50% - var(--zp-frame-w) / 2);
+    }
+  }
+  @supports (height:100svh){
+    @media (min-width:768px){
+      .zp-vcard{--zp-frame-w:min(94vw,1600px,calc((100svh - 7rem) * 16 / 9))}
+      .zp-vcard.is-drive{--zp-frame-w:min(94vw,1600px,calc((100svh - 11rem) * 16 / 9))}
+    }
+  }
+  /* Decorative overlays must never dim or sit on top of player chrome. */
+  body.zp-player-open .vignette,
+  body.zp-player-open .blood-vignette,
+  body.zp-player-open .grain{opacity:0!important;transition:opacity .3s ease}

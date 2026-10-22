@@ -106,6 +106,14 @@
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
+/home-*.js
+  ! Cache-Control
+  Cache-Control: public, max-age=31536000, immutable
+
+/home-icons-*.svg
+  ! Cache-Control
+  Cache-Control: public, max-age=31536000, immutable
+
 /store-*.js
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable

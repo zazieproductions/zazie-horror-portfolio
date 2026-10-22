@@ -15,7 +15,7 @@
     "check:links": "node tools/check-links.mjs",
     "check:headers": "node tools/check-headers.mjs",
     "typecheck": "tsc --noEmit",
-    "test": "node --test tools/pricing.test.mjs tools/film-player.test.mjs tools/geo.test.mjs tools/headers.test.mjs",
+    "test": "node --test tools/pricing.test.mjs tools/film-player.test.mjs tools/geo.test.mjs tools/headers.test.mjs tools/seo-quality.test.mjs",
     "serve": "node server.mjs"
   },
   "devDependencies": {

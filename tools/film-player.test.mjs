@@ -4,7 +4,7 @@
  * Run: node --test tools/film-player.test.mjs
  *
  * The original React source is not in this checkout. Evaluate its Projects
- * component with a tiny JSX/hooks fixture, and the early inline player with a
+ * component with a tiny JSX/hooks fixture, and the early external player with a
  * tiny DOM fixture. These check our markup/behavior, not Google's playback UI.
  */
 import assert from 'node:assert/strict';
@@ -16,11 +16,15 @@ import vm from 'node:vm';
 const root = new URL('../', import.meta.url);
 const read = (file) => fs.readFileSync(new URL(file, root), 'utf8');
 const html = read('index.html');
-const jsFile = /import\("\/(index-[a-f\d]+\.js)"\)/.exec(html)[1];
+const homeJsFile = /src="\/(home-[a-f\d]+\.js)"/.exec(html)[1];
+const homeCssFile = /href="\/(home-[a-f\d]+\.css)"/.exec(html)[1];
+const homeIconsFile = /\/(home-icons-[a-f\d]+\.svg)#/.exec(html)[1];
+const homeModule = read(homeJsFile);
+const jsFile = /import\(\"\/(index-[a-f\d]+\.js)"\)/.exec(homeModule)[1];
 const cssFile = /href="(index-[a-f\d]+\.css)"/.exec(html)[1];
 const bundle = read(jsFile);
 const css = read(cssFile);
-const inline = html.slice(html.indexOf('var ZP_ALLOW_YT'), html.indexOf('// 4. React Bundle Mount'));
+const early = homeModule.slice(homeModule.indexOf('var ZP_ALLOW_YT'), homeModule.indexOf('const boot='));
 const projectsOffset = bundle.indexOf('className:"zp-vcard');
 const component = bundle.slice(bundle.lastIndexOf('function ', projectsOffset), bundle.indexOf('const n1=', projectsOffset));
 const projects = vm.runInNewContext(`(${/projects:(\[.*?\]),images:/.exec(bundle)[1]})`);
@@ -106,7 +110,7 @@ function earlyPlayer(fullscreenEnabled = true, webkitFullscreenEnabled = false) 
     addEventListener: (name, listener) => { listeners[name] = listener; },
   };
   const context = vm.createContext({ document, window: { matchMedia: () => ({ matches: true }) } });
-  vm.runInContext(inline, context);
+  vm.runInContext(early, context);
   return { ...context, drive, yt, listeners };
 }
 
@@ -271,9 +275,10 @@ test('all prerendered film captions provide an action slot and the duplicate Dri
   assert.equal(read('work/index.html'), read('work.html'));
 });
 
-test('inline and bundled cinema CSS match: no overlaid actions, mobile room and upright fullscreen', () => {
+test('external and bundled cinema CSS match: no overlaid actions, mobile room and upright fullscreen', () => {
   const start = '/* Cinema players stay upright';
-  const inlineCss = html.slice(html.indexOf(start), html.indexOf('</style>', html.indexOf(start))).trim();
+  const homeCss = read('home-src/home.css');
+  const inlineCss = homeCss.slice(homeCss.indexOf(start)).trim();
   const bundledCss = css.slice(css.indexOf(start)).trim();
   assert.equal(inlineCss, bundledCss);
   const buttonCss = /\.zp-drive-fs\{([^}]+)\}/.exec(bundledCss)[1];
@@ -286,11 +291,21 @@ test('inline and bundled cinema CSS match: no overlaid actions, mobile room and 
   assert.match(bundledCss, /\.zp-vcard\.is-drive\{--zp-frame-w:min\(94vw,1600px,calc\(\(100svh - 11rem\)/);
 });
 
+test('generated home scripts parse as complete programs, not only as player excerpts', () => {
+  assert.doesNotThrow(() => new vm.Script(homeModule, { filename: homeJsFile }));
+  assert.doesNotThrow(() => new vm.Script(bundle, { filename: jsFile }));
+});
+
 test('immutable player assets have fresh content hashes and service-worker precache references', () => {
-  for (const file of [jsFile, cssFile]) {
+  for (const file of [jsFile, cssFile, homeJsFile, homeCssFile]) {
     const hash = createHash('sha256').update(read(file)).digest('hex').slice(0, 8);
     assert.equal(file.split('-')[1].split('.')[0], hash);
     assert.ok(read('sw.js').includes(`'/${file}'`));
   }
+  const iconsHash = createHash('sha256').update(read(homeIconsFile)).digest('hex').slice(0, 8);
+  assert.equal(homeIconsFile, `home-icons-${iconsHash}.svg`);
+  assert.ok(read('sw.js').includes(`'/${homeIconsFile}'`));
+  assert.doesNotMatch(html, /<path\b/, 'prerendered HTML uses the shared sprite, not repeated inline paths');
+  assert.match(read(homeIconsFile), /<symbol\b[^>]*id="zp-icon-1"/);
   assert.equal(read('sw.js').includes("const CACHE_NAME = 'zazie-v20'"), false);
 });
