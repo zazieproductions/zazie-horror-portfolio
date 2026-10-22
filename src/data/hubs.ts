@@ -1,8 +1,8 @@
 /**
  * src/data/hubs.ts
  * ----------------------------------------------------------------------------
- * The 19 routes that already existed before the per-item archive (the home page
- * plus the 18 silo / commission / document pages). Each entry carries the values
+ * The hub routes that are not per-item archive pages (the home page plus
+ * the silo / commission / subgenre / document pages; 25 since 2026-10-22). Each entry carries the values
  * its own static <head> already ships - title, meta description, lastmod and the
  * image / video metadata sitemap.xml has always attached to the URL - so
  * scripts/generate-sitemap.mjs can rebuild sitemap.xml without a single
@@ -17,19 +17,21 @@
  * src/data/routes.ts.
  */
 
-import { MINIMUM_FEE, pricingSummary } from './pricing.js';
+import { MINIMUM_FEE, packageById, priceLabel, pricingSummary } from './pricing.js';
 import type { Hub } from './types.js';
 
 export const hubs: Hub[] = [
   {
     path: "/",
     name: "Portfolio",
-    // Main's shorter title (no "| Zazie Productions" suffix) keeps the SERP
-    // title well inside the pixel budget; the description is the 129-character
-    // one the PageSpeed/SEO audit asked for (100-130), not the earlier 220-char
-    // sentence. Both are what the WebPage JSON-LD and sitemap reuse.
-    title: "Horror Composer for Hire — Film, TV & Game Scores",
-    description: `IMDb-credited horror composer Zazie Kanwar-Torge scores psychological and folk films, TV, and games. Custom scores from $${MINIMUM_FEE} USD.`,
+    // Subgenre pass (2026-10-22): the home page no longer competes on the
+    // bare generic term alone. The title keeps the exact substring
+    // "Horror Composer for Hire" (existing equity) but leads with the three
+    // owned subgenres; the description leads with the Ars Electronica 2026
+    // prestige proof. Still no "| Zazie Productions" suffix (pixel budget),
+    // still inside verify.mjs limits: title 51 chars, description 146.
+    title: "Folk, Body & Psychological Horror Composer for Hire",
+    description: `Ars Electronica 2026–featured composer Zazie Kanwar-Torge writes bespoke folk, body & psychological horror scores for film & games. From $${MINIMUM_FEE} USD.`,
     lastmod: "2026-10-22",
     images: [
       { loc: "https://horror.zazieproductions.com/images/hero-portrait.jpg", caption: "Portfolio portrait for Zazie Productions, a composer and sound-design studio working across screen and experimental media.", title: "Zazie Kanwar-Torge: Psychological Horror Composer - Dark Atmospheric Scores" },
@@ -150,8 +152,8 @@ export const hubs: Hub[] = [
     path: "/composer",
     name: "Composer biography",
     title: "Zazie Kanwar-Torge: Psychological Horror Composer Biography | Zazie Productions",
-    description: "Biography of psychological horror composer Zazie Kanwar-Torge, founder of Zazie Productions LLC in Asheville, NC, scoring dark atmospheric films, series, and games.",
-    lastmod: "2026-10-18",
+    description: "Ars Electronica 2026 featured psychological horror composer Zazie Kanwar-Torge — Black Mountain College Museum + Arts Center commissioned sound artist for hire.",
+    lastmod: "2026-10-22",
     images: [
       { loc: "https://horror.zazieproductions.com/images/headshot.jpg", caption: "Zazie Kanwar-Torge, psychological horror composer and founder of Zazie Productions LLC, Asheville NC.", title: "Zazie Kanwar-Torge - Psychological Horror Composer Biography" },
     ],
@@ -162,7 +164,7 @@ export const hubs: Hub[] = [
     name: "Scoring process",
     title: "Horror Film Scoring Process: Spotting to Delivery | Zazie Productions",
     description: "A clear horror film scoring process by Zazie Kanwar-Torge: spotting, original themes and motifs, package-specific revisions, and professional stereo WAV delivery.",
-    lastmod: "2026-10-18",
+    lastmod: "2026-10-22",
     images: [
       { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Kanwar-Torge at the scoring desk, Asheville, NC studio", title: "Horror Film Scoring Suite - Process" },
     ],
@@ -171,9 +173,9 @@ export const hubs: Hub[] = [
   {
     path: "/services",
     name: "Rate card",
-    title: "Horror Score Packages and Quotes | Zazie Productions",
+    title: "Horror Film Scoring Packages & Rates | Zazie Productions",
     description: `Original music for psychological horror and experimental cinema. ${pricingSummary()}`,
-    lastmod: "2026-10-18",
+    lastmod: "2026-10-22",
     images: [
       { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Productions horror film scoring suite Asheville, NC", title: "Horror Film Scoring Suite - Rates" },
     ],
@@ -276,18 +278,18 @@ export const hubs: Hub[] = [
     name: "Site map",
     title: "Site Map: Portfolio Hubs and Item Archive | Zazie Productions",
     description: "A human-readable overview of the portfolio hubs and operating documents. The XML sitemap separately lists all indexable production, cue, and catalogue item URLs.",
-    lastmod: "2026-10-18",
+    lastmod: "2026-10-22",
     images: [],
     videos: [],
   },
   {
     path: "/hire-a-composer",
     name: "Hire a horror composer",
-    title: "Hire a Horror Composer — Original Film, TV & Game Scores | Zazie Productions",
-    description: `Hire horror composer Zazie Kanwar-Torge (Zazie Productions): IMDb-credited custom psychological, folk, body, and experimental scores for film, TV, and games. ${pricingSummary()}`,
-    lastmod: "2026-10-21",
+    title: "Hire an Experimental Horror Composer | Zazie Productions",
+    description: `Hire experimental horror composer Zazie Kanwar-Torge (Zazie Productions): IMDb-credited bespoke psychological, folk, body, and dark sci-fi scores for film, TV, and games. ${pricingSummary()}`,
+    lastmod: "2026-10-22",
     images: [
-      { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Kanwar-Torge, IMDb-credited horror composer and sound designer for hire at Zazie Productions LLC.", title: "Hire a Horror Composer — Zazie Kanwar-Torge | Zazie Productions" },
+      { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Kanwar-Torge, IMDb-credited experimental horror composer and sound designer for hire at Zazie Productions LLC.", title: "Hire an Experimental Horror Composer — Zazie Kanwar-Torge | Zazie Productions" },
     ],
     videos: [],
   },
@@ -296,7 +298,7 @@ export const hubs: Hub[] = [
     name: "How to hire a horror composer",
     title: "How to Hire a Horror Composer: Rates, Subgenres & Vetting Guide | Zazie Productions",
     description: `Filmmaker and game developer guide to hiring the right horror composer: custom score vs. stock libraries, subgenre matching, cue budgets from $${MINIMUM_FEE} USD, spotting, stems, and licensing.`,
-    lastmod: "2026-10-21",
+    lastmod: "2026-10-22",
     images: [
       { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Guide to hiring a horror composer for independent films, series, and video games by Zazie Kanwar-Torge.", title: "How to Hire a Horror Composer: Rates, Subgenres & Vetting Checklist" },
     ],
@@ -305,25 +307,84 @@ export const hubs: Hub[] = [
   {
     path: "/sound-design",
     name: "Sound design",
-    title: "Cinematic Sound Design for Horror Film | Zazie Productions",
-    description: "Cinematic sound design by Zazie Kanwar-Torge: designed dread, atmospheres, transitions and stingers for horror and experimental film, delivered as mix-ready stems.",
-    lastmod: "2026-10-17",
+    title: "Experimental Sound Design for Horror Film | Zazie Productions",
+    description: "Award-winning experimental sound design for horror film by Zazie Kanwar-Torge: designed dread, spatial atmospheres & stingers delivered as mix-ready stems.",
+    lastmod: "2026-10-22",
     images: [
-      { loc: "https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg", caption: "EXPIRE horror short - sound design and score by Zazie Kanwar-Torge, from the cinematic sound design page.", title: "Cinematic Sound Design for Horror Film - Zazie Productions" },
+      { loc: "https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg", caption: "EXPIRE science-fiction short - IMDb-credited sound design by Zazie Kanwar-Torge, from the experimental sound design page.", title: "Experimental Sound Design for Horror Film - Zazie Productions" },
     ],
     videos: [],
   },
   {
     path: "/game-scoring",
     name: "Game scoring",
-    title: "Adaptive Horror Game Scoring & Music | Zazie Productions",
-    description: "Adaptive horror scoring for games: states, seamless loops, layered cues, stingers and implementation notes for Wwise, FMOD, Unity and Unreal pipelines.",
-    lastmod: "2026-10-17",
+    title: "Horror Video Game Adaptive Score Packages | Zazie Productions",
+    description: "Adaptive horror game scoring for indie studios: seamless loops, tension states & stingers for Wwise, FMOD, Unity & Unreal — Ars Electronica 2026 spatial craft.",
+    lastmod: "2026-10-22",
     images: [
-      { loc: "https://horror.zazieproductions.com/images/posters/the-dark-awaits-640.jpg", caption: "THE DARK AWAITS - the tonal register behind adaptive horror scoring for games, by Zazie Kanwar-Torge.", title: "Adaptive Horror Game Scoring - Zazie Productions" },
+      { loc: "https://horror.zazieproductions.com/images/posters/the-dark-awaits-640.jpg", caption: "THE DARK AWAITS - the tonal register behind adaptive horror scoring for games, by Zazie Kanwar-Torge.", title: "Horror Video Game Adaptive Score Packages - Zazie Productions" },
     ],
     videos: [],
   },
+  // Subgenre spokes (2026-10-22): one high-intent search cluster per URL,
+  // hanging off the /hire-a-composer pillar. Cannibalization rules are in
+  // SUBGENRE-SEO-PASS.md — do not retitle a spoke onto another spoke's query.
+  {
+    path: "/folk-horror-composer",
+    name: "Folk horror composer",
+    title: "Hire a Folk Horror Composer | Zazie Productions",
+    description: `Hire a folk horror composer: bespoke ritual scores with bowed metal, struck strings & custom folk instrumentation. Festival short scores ${priceLabel(packageById('focused')).toLowerCase()} USD.`,
+    lastmod: "2026-10-22",
+    images: [
+      { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Kanwar-Torge, folk horror composer for hire at Zazie Productions LLC: ritual, rural dread, and custom instrumentation.", title: "Hire a Folk Horror Composer — Zazie Kanwar-Torge | Zazie Productions" },
+    ],
+    videos: [],
+  },
+  {
+    path: "/body-horror-composer",
+    name: "Body horror composer",
+    title: "Bespoke Body Horror Film Composer | Zazie Productions",
+    description: `Bespoke body horror scores from bowed metal, waterphone & visceral acoustic textures. Custom cues for shorts & features by Zazie Kanwar-Torge, from $${MINIMUM_FEE}.`,
+    lastmod: "2026-10-22",
+    images: [
+      { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Kanwar-Torge, bespoke body horror film composer at Zazie Productions LLC: visceral acoustic textures composed to picture.", title: "Bespoke Body Horror Film Composer — Zazie Kanwar-Torge | Zazie Productions" },
+    ],
+    videos: [],
+  },
+  {
+    path: "/psychological-thriller-composer",
+    name: "Psychological thriller composer",
+    title: "Psychological Thriller Film Music & Scores | Zazie Productions",
+    description: `Psychological thriller short film music & slow-burn dread scores by Zazie Kanwar-Torge. Bespoke cues for festival shorts & features, from $${MINIMUM_FEE} USD.`,
+    lastmod: "2026-10-22",
+    images: [
+      { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Kanwar-Torge, psychological thriller film music composer at Zazie Productions LLC: slow-burn dread scores for shorts and features.", title: "Psychological Thriller Film Music — Zazie Kanwar-Torge | Zazie Productions" },
+    ],
+    videos: [],
+  },
+  {
+    path: "/dark-sci-fi-composer",
+    name: "Dark sci-fi composer",
+    title: "Dark Sci-Fi & Avant-Garde Film Composer | Zazie Productions",
+    description: "Avant-garde sci-fi film scorer Zazie Kanwar-Torge: dark atmospheric cinematic drone music & spatial scores, featured at Ars Electronica 2026.",
+    lastmod: "2026-10-22",
+    images: [
+      { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Kanwar-Torge, dark sci-fi and avant-garde festival film composer at Zazie Productions LLC, featured at Ars Electronica 2026.", title: "Dark Sci-Fi & Avant-Garde Film Composer — Zazie Kanwar-Torge | Zazie Productions" },
+    ],
+    videos: [],
+  },
+  {
+    path: "/short-film-composer-rates",
+    name: "Short film composer rates",
+    title: "Indie Short Film Composer Rates & Cost Guide | Zazie Productions",
+    description: `Indie film scoring cost guide: what scoring a 10-minute short film costs, scored-minute rates from $${MINIMUM_FEE}, and exactly what each score package includes.`,
+    lastmod: "2026-10-22",
+    images: [
+      { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Indie short film composer rates and scoring cost guide by Zazie Kanwar-Torge, Zazie Productions LLC.", title: "Indie Short Film Composer Rates & Cost Guide — Zazie Productions" },
+    ],
+    videos: [],
+  },
+
 ];
 
 /** The home route. Not a silo: it is the entity page the item pages reference. */

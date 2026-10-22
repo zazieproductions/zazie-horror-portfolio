@@ -3,13 +3,13 @@
 **Sitemap:** [`sitemap.xml`](https://horror.zazieproductions.com/sitemap.xml)
 **Generator:** `scripts/generate-sitemap.mjs`, backed by the typed records in `src/data/`
 **Validator:** `node tools/check-sitemap.mjs`
-**Scope:** 84 canonical URLs — 19 original hub URLs + 65 item URLs (9 productions, 32 cues, 24 catalogue entries). The current XML contains 79 image entries and 12 video entries.
+**Scope:** 90 canonical URLs — 25 hub URLs (the 20 original hubs plus the five 2026-10-22 subgenre spokes: `/folk-horror-composer`, `/body-horror-composer`, `/psychological-thriller-composer`, `/dark-sci-fi-composer`, `/short-film-composer-rates`) + 65 item URLs (9 productions, 32 cues, 24 catalogue entries). The current XML contains 82 image entries and 12 video entries.
 
 The sitemap describes the intended committed static tree. A successful local build is not evidence that the production host has deployed it; the live URL audit is run separately by GitHub Actions after a production deploy.
 
 ## URL set and navigation policy
 
-The 19 original routes (home and the existing portfolio/document hubs) are retained at their existing canonical paths. They remain the only routes linked directly from the homepage; the original hub/navigation pages do not link directly to item pages. The human-readable `/sitemap` remains a directory to the original hubs and their sections, not a second item catalogue.
+The 25 hub routes (home, the original portfolio/document hubs, and the five subgenre spokes hanging off `/hire-a-composer`) are retained at their canonical paths. They remain the only routes linked directly from the homepage; the original hub/navigation pages do not link directly to item pages. The human-readable `/sitemap` remains a directory to the original hubs and their sections, not a second item catalogue.
 
 The XML sitemap includes all content item URLs:
 

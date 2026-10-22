@@ -24,7 +24,7 @@
  *
  *   - a tree missing any of index.html, 404.html, sw.js, sitemap.xml,
  *     robots.txt, or the IndexNow key file
- *   - a tree where any of the 84 sitemap URLs does not resolve to a file
+ *   - a tree where any of the sitemap URLs does not resolve to a file
  *   - a tree whose sw.js precaches a store-<hash>.css/js that is not there
  *     (the hash-drift warning store-src/build.sh only prints)
  *   - more than 20,000 files, or any single file over 25 MB -- Cloudflare's

@@ -10,8 +10,8 @@
  *
  * Flat files, not directories: the host answers the extensionless path from
  * `<route>.html` directly, so /work/expire is a 200 with no redirect hop and
- * there is no /work/expire/ twin for a crawler to find. The 19 routes that
- * already existed keep their existing shape (`<route>/index.html` plus the root
+ * there is no /work/expire/ twin for a crawler to find. The hub routes
+ * keep their existing shape (`<route>/index.html` plus the root
  * `<route>.html` twin) and are not touched by this script.
  *
  * The document is built by src/lib/page.ts (compiled to build/lib/page.js) from

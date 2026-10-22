@@ -24,7 +24,7 @@ export const person = {
   name: AUTHOR_NAME,
   alternateName: SITE_NAME,
   description:
-    'IMDb-credited horror film composer, experimental producer, sound designer, and multi-instrumentalist based in Asheville, North Carolina. Founder of Zazie Productions LLC, composing custom psychological, folk, body, supernatural, and experimental scores for film, television, and games worldwide.',
+    'IMDb-credited horror film composer, experimental producer, sound designer, and multi-instrumentalist based in Asheville, North Carolina. Founder of Zazie Productions LLC, composing bespoke psychological thriller, folk horror, body horror, and dark sci-fi scores for film, television, and games worldwide. Work featured at Ars Electronica 2026 in 20.4-channel spatial audio; previously commissioned by the Black Mountain College Museum + Arts Center.',
   url: `${SITE_ORIGIN}/composer`,
   image: `${SITE_ORIGIN}/images/headshot.jpg`,
   jobTitle: [
@@ -46,8 +46,14 @@ export const person = {
   },
   knowsAbout: [
     'Psychological horror film scoring',
+    'Psychological thriller film music',
     'Folk horror original music',
+    'Folk horror custom instrumentation',
     'Body horror sound worlds',
+    'Dark sci-fi and avant-garde film scoring',
+    'Dark atmospheric cinematic drone music',
+    'Dissonant acoustic textures for film scores',
+    'Bespoke instrument builds for horror scoring',
     'Experimental cinema composition',
     'Adaptive horror video game music',
     'Electroacoustic and musique concrète scoring',
@@ -55,6 +61,7 @@ export const person = {
     'Hybrid orchestral synthesis',
     'Multichannel spatial audio composition',
   ],
+  award: ['Visual Container Winter 2024 Award'],
   subjectOf: [
     {
       '@type': 'Article',
@@ -92,7 +99,7 @@ export const organization = {
   legalName: 'Zazie Productions LLC',
   alternateName: SITE_NAME,
   description:
-    'Independent horror scoring and cinematic sound-design studio led by composer Zazie Kanwar-Torge, writing original scores to picture for independent feature films, short films, series, and horror video games.',
+    'Independent horror scoring and cinematic sound-design studio led by composer Zazie Kanwar-Torge, writing bespoke original scores to picture for psychological thrillers, folk horror, body horror, dark sci-fi, independent features, festival short films, series, and horror video games.',
   url: SITE_ORIGIN,
   logo: `${SITE_ORIGIN}/images/hero-portrait.jpg`,
   founder: { '@id': PERSON_ID },

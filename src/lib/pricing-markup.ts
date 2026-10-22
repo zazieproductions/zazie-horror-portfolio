@@ -160,6 +160,61 @@ export function pricingMetaHtml(): string {
   ].join("\n");
 }
 
+/**
+ * Bespoke per-route meta descriptions (subgenre pass, 2026-10-22).
+ *
+ * Each money page owns one search intent, so each needs its own description
+ * instead of the shared price-list summary above. The copy lives here — not
+ * in the HTML — for the same reason pricingMetaHtml exists: attribute values
+ * cannot carry {{zp:...}} tokens or <!--v:--> markers, and every dollar
+ * figure must still be rendered from pricing.ts. /services keeps
+ * pricingMetaHtml (the transactional price snippet); the pillar, the four
+ * subgenre spokes and the rates guide use these.
+ */
+function pageMetaHtml(description: string): string {
+  return [
+    `<meta name="description" content="${esc(description)}" />`,
+    `<meta property="og:description" content="${esc(description)}" />`,
+    `<meta name="twitter:description" content="${esc(description)}" />`,
+  ].join("\n");
+}
+
+export function hireMetaHtml(): string {
+  return pageMetaHtml(
+    `Hire experimental horror composer Zazie Kanwar-Torge: bespoke psychological, folk & body horror scores. Ars Electronica 2026 featured. Scenes from ${usd(MINIMUM_FEE)}.`,
+  );
+}
+
+export function folkMetaHtml(): string {
+  return pageMetaHtml(
+    `Hire a folk horror composer: bespoke ritual scores with bowed metal, struck strings & custom folk instrumentation. Festival short scores ${priceLabel(packageById('focused')).toLowerCase()} USD.`,
+  );
+}
+
+export function bodyMetaHtml(): string {
+  return pageMetaHtml(
+    `Bespoke body horror scores from bowed metal, waterphone & visceral acoustic textures. Custom cues for shorts & features by Zazie Kanwar-Torge, from ${usd(MINIMUM_FEE)}.`,
+  );
+}
+
+export function psychologicalThrillerMetaHtml(): string {
+  return pageMetaHtml(
+    `Psychological thriller short film music & slow-burn dread scores by Zazie Kanwar-Torge. Bespoke cues for festival shorts & features, from ${usd(MINIMUM_FEE)} USD.`,
+  );
+}
+
+export function darkSciFiMetaHtml(): string {
+  return pageMetaHtml(
+    'Avant-garde sci-fi film scorer Zazie Kanwar-Torge: dark atmospheric cinematic drone music & spatial scores, featured at Ars Electronica 2026.',
+  );
+}
+
+export function ratesMetaHtml(): string {
+  return pageMetaHtml(
+    `Indie film scoring cost guide: what scoring a 10-minute short film costs, scored-minute rates from ${usd(MINIMUM_FEE)}, and exactly what each score package includes.`,
+  );
+}
+
 /** Included in every standard commission. */
 export function inclusionsHtml(): string {
   return [
