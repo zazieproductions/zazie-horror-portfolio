@@ -27,8 +27,9 @@ export function renderHomePosterCards(): string {
   return homePosters
     .map((production) => {
       const poster = production.poster;
-      const source = poster.avif
-        ? `<source srcset="${escapeHtml(poster.avif)} 640w" sizes="(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 46vw" type="image/avif">`
+      const avifSet = poster.avifSet ?? (poster.avif ? `${poster.avif} 640w` : '');
+      const source = avifSet
+        ? `<source srcset="${escapeHtml(avifSet)}" sizes="(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 46vw" type="image/avif">`
         : '';
       const srcset = poster.srcset
         ? ` srcset="${escapeHtml(poster.srcset)}" sizes="(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 46vw"`
@@ -37,7 +38,7 @@ export function renderHomePosterCards(): string {
 <div class="relative aspect-[2/3] overflow-hidden bg-void">
 <picture>
 ${source}
-<img alt="" class="h-full w-full object-cover object-top opacity-95 transition-transform duration-700 ease-out group-hover:scale-105 group-hover:opacity-100" loading="lazy" decoding="async" src="${escapeHtml(poster.src)}" width="${poster.width}" height="${poster.height}"${srcset}>
+<img alt="${escapeHtml(production.title)} poster artwork" class="h-full w-full object-cover object-top opacity-95 transition-transform duration-700 ease-out group-hover:scale-105 group-hover:opacity-100" loading="lazy" decoding="async" src="${escapeHtml(poster.src)}" width="${poster.width}" height="${poster.height}"${srcset}>
 </picture>
 <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-void via-void/5 to-transparent opacity-80"></div>
 <div class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"><div class="absolute inset-0 bg-blood/10 mix-blend-multiply"></div></div>

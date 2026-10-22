@@ -4,6 +4,68 @@ Date: 2026-09-25 · Branch: `arena/01a0d613-zazie-horror-portfolio`
 Scope: horror.zazieproductions.com (static prerendered React build on an edge host with `_headers`/`_redirects` semantics, i.e. Netlify/Cloudflare-Pages style).
 
 
+## Mobile audit remediation: 2026-10-22
+
+An external PageSpeed/SEO audit of the live site raised five items: input delay
+(INP), mobile friendliness (tiny text, hard-to-tap controls), missing image alt
+text, an over-long meta description, and an unobtainable DOM-size reading. This
+section records what changed and what was measured in the sandbox browser.
+
+### Measured, before → after (Lighthouse 12, mobile, local server)
+
+| Signal | Before | After |
+| --- | --- | --- |
+| Performance | 77 | **79** |
+| Accessibility | 97 | **100** |
+| Best practices | 96 | **100** |
+| SEO | 100 | **100** |
+| Total blocking time | 130 ms | **20 ms** |
+| DOM elements | 1,386 | **1,213** |
+| `uses-responsive-images` estimate | 374 KiB | **114 KiB** |
+
+Merging `main`'s Brotli/Gzip negotiation (`server.mjs`) and the edge cache-header
+fix on top of this pass moves the same local run to **87** performance:
+FCP 1.4 s, LCP 3.9 s, TBT 30 ms, CLS 0.034 — accessibility, best practices and
+SEO stay at 100.
+
+LCP is left at 5.0 s *simulated*: Lantern charges the hero plate a multi-second
+"render delay" that does not reproduce in the browser (observed LCP 274 ms,
+puppeteer 301–306 ms, with the bundle allowed or blocked). Chasing that number
+by re-ordering the bundle load made the score worse, so it was not done.
+
+### Changes
+
+1. **Meta description** — `src/data/hubs.ts` home description 220 → 129
+   characters; the hub descriptions for the other pages were already in range.
+2. **Alt text** — the poster wall and the hero portrait now carry
+   `${title} poster artwork` / a named portrait alt in both renders: the
+   prerendered HTML (`src/lib/home.ts`, `src/lib/page.ts`) and the React bundle
+   (`home-src/build.mjs` pairs). The atmosphere plate and the press photo stay
+   `alt=""` (decorative).
+3. **DOM size** — the `zp-boot` archive-intro overlay was inert (nothing ever
+   added `html.zp-boot-on`), so its 14 KB stylesheet, 4 KB script and 45 nodes
+   were deleted: 1,429 → 1,256 nodes in the browser, 1,213 per Lighthouse.
+4. **Mobile readability** — a 12 px floor for small type: `11px/10px/9px`
+   Tailwind labels and the estimator island's `zp-*` micro-labels (`kicker`,
+   package metadata, factor list, legends, help text, CTAs) now set 12 px with
+   relaxed tracking below 640 px. Small red labels moved to `#e34b4b`
+   (5.1:1) and `mist/60` to `#8b8681` (5.2:1) so AA contrast passes; display
+   type keeps the brand `#c41e1e`.
+5. **Tap targets** — prose links get invisible vertical padding (≈28 px), the
+   header wordmark and the contact rows are 44 px, and `.zp-skip` — which
+   shipped with **no styles at all**, rendering a raw "Skip to content" link
+   over the header on every page — is now off-screen until focused.
+6. **Responsive images** — the poster wall serves a 400/480/640 AVIF ladder
+   from `src/data/productions.ts` (`avifSet`) instead of a single 640 w
+   candidate, so DPR 2 devices fetch 400 w and DPR 2.6 devices 480 w.
+
+### Verification
+
+`npm run build` green (`sync-pricing --check` PASS, `verify` PASS — 85 URLs,
+77 images, 12 videos), `npm test` 37/37, and a 412×915 browser pass: zero text
+nodes under 12 px, zero tap targets under 24 px, poster dialog opens, showreel
+row plays, no page errors.
+
 ## 0. Mobile loading follow-up: 2026-09-25
 
 This section supersedes the older entries below for the current `main`-derived
@@ -753,3 +815,95 @@ bundle-only one.
 - `tools/film-player.test.mjs` re-derives the bundle name from `index.html`
   and checks precache membership, so the three-way rename cannot drift
   silently; it passes with the merged tree.
+
+## Response headers: the comma that switched caching off (2026-10-22)
+
+A header audit reported "add `Cache-Control` to leverage browser caching" against
+a site that had been shipping `Cache-Control` for a year. The rules were fine;
+the host's semantics were not being honoured.
+
+**What the edge actually served.** Cloudflare Pages does not merge rules with
+"most specific wins". Every rule whose pattern matches a request contributes its
+headers, and a header set twice is joined with a comma. So:
+
+```
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+```
+
+answered `/fonts/inter-latin-wght-normal.woff2` with
+
+```
+Cache-Control: public, max-age=0, must-revalidate, public, max-age=31536000, immutable
+```
+
+and RFC 9111 says a repeated directive is read from its **first** instance. The
+effective lifetime of every font, every image and every content-hashed CSS/JS
+bundle was `max-age=0, must-revalidate`. The same join applied to
+`/index-*.js`, `/store-*.js`, `/legal-*.js`, `/estimator-*.js`, `/item-*.js`,
+`/*.css`, `/images/*` and `/audio/*` — i.e. to all of the caching, none of the
+pages.
+
+**Fix.** `/*` is now the only rule that sets `Cache-Control` as a default, and
+every narrower rule detaches it before setting its own value, which is the
+documented way to express an override in `_headers`:
+
+```
+/fonts/*
+  ! Cache-Control
+  Cache-Control: public, max-age=31536000, immutable
+```
+
+Detach is order-sensitive — it only removes what earlier rules added — so `/*`
+stays first in the file. Measured effect on a repeat visit: 3 woff2 (95 KB),
+8 hashed bundles (~600 KB raw) and every poster/hero image stop revalidating and
+are served from the browser cache for 1 year (fonts, bundles) or 30 days with
+`stale-while-revalidate=86400` (images, audio). Only HTML still revalidates.
+
+**Compression.** Cloudflare Pages Brotli-compresses static text at the edge; the
+local mirror never did, so the claim was untestable. `server.mjs` now negotiates
+per request — Brotli q11 when offered, Gzip otherwise, `Vary: Accept-Encoding`
+always, nothing under 1 KB compressed — and adds strong `ETag`s with `304`
+handling. Measured locally (`curl -H 'accept-encoding: br, gzip'`):
+
+| Asset | identity | gzip | brotli |
+| --- | ---: | ---: | ---: |
+| `/` (HTML) | 190.5 KB | 32.4 KB | 25.9 KB |
+| `/index-f509fde0.css` | 76.8 KB | 13.9 KB | 11.4 KB |
+
+Brotli is ~15 % smaller than gzip on the two files that gate first paint.
+
+**Security headers** were already present (`Strict-Transport-Security`,
+`Content-Security-Policy`, `X-Frame-Options: SAMEORIGIN`, `nosniff`,
+`Referrer-Policy`, `Permissions-Policy`). They are now enforced rather than
+merely asserted: the policy lives in `tools/headers.mjs`, `_headers` is checked
+against it, and the CSP also carries `frame-ancestors 'self'` (the modern
+clickjacking control, alongside the legacy `X-Frame-Options`).
+
+**Guards added, all in `npm run build`:**
+
+- `tools/check-headers.mjs` — parses `_headers`, simulates the host's comma-join,
+  and fails if any path would receive two `max-age` values, if a narrower rule
+  forgets `! Cache-Control`, if the `/*` policy drifts from `tools/headers.mjs`,
+  or if a sitemap route is not HTML-revalidated and indexable. 220 path
+  expectations, including every sitemap route and its `.html` and `/` forms.
+- `tools/check-links.mjs` — resolves every internal `href`/`src`/`srcset` in the
+  published tree the way the host does, plus every `#fragment` against the
+  destination's `id`s. 9,564 links / 105 documents (including `srcset` and
+  stylesheet `url()` references), 0 broken.
+- `tools/live-route-audit.mjs` — now also probes delivery on the live host: HSTS,
+  CSP `frame-ancestors`, `X-Frame-Options: SAMEORIGIN`, `nosniff`, referrer
+  policy, one `max-age` per path, `immutable` on hashed bundles and fonts, and a
+  Brotli/Gzip `content-encoding` on the document and the CSS.
+
+**Home title.** `Horror Composer for Hire — Film, TV & Game Scores | Zazie
+Productions` was 69 characters (73 as rendered by the auditor, counting the
+entity); Google truncates around 65, which cut the brand. It is now
+`Horror Composer for Hire — Film, TV & Game Scores` (49 characters), with
+`og:site_name: Zazie Productions` carrying the brand into the card and SERP
+sitename. `scripts/verify.mjs` holds `/` to 65 characters and reports the 54
+other routes that still run long, so the remaining editorial pass has a queue
+without blocking the build.

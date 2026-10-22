@@ -140,7 +140,7 @@ function siblingCards(routes: ItemRoute[], hubPath: string): string {
             const poster = productionBySlug.get(route.slug)?.poster;
             if (!poster) return '';
             return `            <figure class="poster-figure sibling-figure">
-              <picture>${poster.avif ? `\n                <source srcset="${esc(poster.avif)} 640w" sizes="(min-width: 1024px) 18vw, (min-width: 640px) 35vw, 90vw" type="image/avif"/>` : ''}
+              <picture>${(poster.avifSet ?? (poster.avif ? `${poster.avif} 640w` : '')) ? `\n                <source srcset="${esc(poster.avifSet ?? `${poster.avif} 640w`)}" sizes="(min-width: 1024px) 18vw, (min-width: 640px) 35vw, 90vw" type="image/avif"/>` : ''}
                 <img src="${esc(poster.src)}" alt="${esc(poster.alt)}" width="${poster.width}" height="${poster.height}" loading="lazy" decoding="async"${poster.srcset ? ` srcset="${esc(poster.srcset)}" sizes="(min-width: 1024px) 18vw, (min-width: 640px) 35vw, 90vw"` : ''}/>
               </picture>
             </figure>`;
@@ -162,7 +162,7 @@ ${cards}
 
 function figure(image: Image, shape: 'poster' | 'still' | 'square', loading: 'eager' | 'lazy' = 'eager'): string {
   const sources = image.avif
-    ? `\n              <source srcset="${esc(image.avif)} 640w" sizes="(min-width: 1024px) 32vw, 92vw" type="image/avif"/>`
+    ? `\n              <source srcset="${esc(image.avifSet ?? `${image.avif} 640w`)}" sizes="(min-width: 1024px) 32vw, 92vw" type="image/avif"/>`
     : '';
   const srcset = image.srcset ? ` srcset="${esc(image.srcset)}" sizes="(min-width: 1024px) 32vw, 92vw"` : '';
   const remote = /^https?:\/\//.test(image.src) ? ' referrerpolicy="no-referrer"' : '';
@@ -478,7 +478,7 @@ export function renderItemPage(item: ItemRoute, chrome: PageChrome): RenderedIte
     title: item.title,
     description: item.description,
     canonical: url(item.path),
-    robots: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+    robots: 'index, follow, max-image-preview:large',
     ogType: item.kind === 'production'
       ? (productionBySlug.get(item.slug)?.sample ? OG_TYPES.video : OG_TYPES.website)
       : item.kind === 'cue'

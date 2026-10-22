@@ -78,6 +78,8 @@ for (const loc of sitemapLocs) {
 }
 
 /* --------------------------------------------------------------- page files */
+/** Snippet blocking makes the page ineligible for normal SERP descriptions. */
+const SNIPPET_BLOCK = /\bnosnippet\b|\bmax-snippet\s*:\s*0\b/i;
 let resolved = 0;
 const missing = [];
 for (const route of allRoutes) {
@@ -97,6 +99,7 @@ for (const route of allRoutes) {
   if (descriptions.length !== 1) fail(`${route.path}: expected one description, found ${descriptions.length}`);
   if (canonical.length !== 1 || canonical[0][1] !== expected) fail(`${route.path}: canonical is not uniquely self-referential`);
   if (!robots || /\bnoindex\b/i.test(robots) || !/\bindex\b/i.test(robots)) fail(`${route.path}: missing indexable robots metadata`);
+  if (SNIPPET_BLOCK.test(robots)) fail(`${route.path}: robots metadata blocks search snippets (nosnippet / max-snippet:0)`);
   if (!html.includes(`property="og:url" content="${expected}"`)) fail(`${route.path}: missing route-specific og:url`);
   if (!/<meta\s+name="twitter:card"/i.test(html)) fail(`${route.path}: missing Twitter card metadata`);
   if (/(?:href|src)="#"/.test(html)) fail(`${route.path}: contains a placeholder # link`);
@@ -116,6 +119,15 @@ if (resolved !== sitemapLocs.length) fail(`${sitemapLocs.length} sitemap URLs bu
 
 /* ---------------------------------------------------------- JSON-LD & media */
 const home = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+/**
+ * SERP display limits for the homepage, the one route an external audit reads
+ * first. Titles are measured as rendered (entities decoded): 30-60 characters
+ * fit Google's title link, 120-160 render without truncation in a description.
+ */
+const homeMetaTitle = decodeXml(/<title>([^<]*)<\/title>/i.exec(home)?.[1] ?? '');
+const homeMetaDescription = decodeXml(/<meta\s+name="description"\s+content="([^"]*)"/i.exec(home)?.[1] ?? '');
+if (homeMetaTitle.length < 30 || homeMetaTitle.length > 60) fail(`homepage title is ${homeMetaTitle.length} characters; keep it between 30 and 60`);
+if (homeMetaDescription.length < 120 || homeMetaDescription.length > 160) fail(`homepage description is ${homeMetaDescription.length} characters; keep it between 120 and 160`);
 const homeNodes = jsonLdBlocks(home, '/');
 const homeTypes = allTypes(homeNodes);
 for (const required of ['Person', 'Organization', 'WebSite', 'WebPage']) {
@@ -230,6 +242,12 @@ if (unreachableHubs.length) fail(`original hub routes not reachable from /: ${un
 /* --------------------------------------------------------------- real 404 */
 const notFound = fs.readFileSync(path.join(root, '404.html'), 'utf8');
 if (!/<meta[^>]+name="robots"[^>]+content="[^"]*noindex/i.test(notFound)) fail('404.html must carry noindex, follow');
+const headerRules = fs.readFileSync(path.join(root, '_headers'), 'utf8');
+for (const line of headerRules.split(/\r?\n/)) {
+  if (/^\s*X-Robots-Tag\s*:/i.test(line) && SNIPPET_BLOCK.test(line)) {
+    fail(`_headers blocks search snippets: ${line.trim()}`);
+  }
+}
 const redirectLines = fs.readFileSync(path.join(root, '_redirects'), 'utf8')
   .split(/\r?\n/)
   .map((line) => line.replace(/#.*$/, '').trim())
@@ -272,6 +290,26 @@ for (const route of allRoutes) {
   }
 }
 
+/* ------------------------------------------------------------ title length */
+// Google truncates <title> at roughly 65 characters in a desktop result, and a
+// truncated title loses the brand or the call to action that was paying for it.
+// The home page is held to the limit; the rest are reported so the remaining
+// editorial pass has a queue it can see.
+const TITLE_LIMIT = 65;
+const overLongTitles = [];
+let homeTitleLength = 0;
+for (const route of allRoutes) {
+  const file = fileFor(route);
+  if (!file) continue;
+  const html = fs.readFileSync(file, 'utf8');
+  const raw = /<title>([\s\S]*?)<\/title>/i.exec(html)?.[1] ?? '';
+  const text = decodeXml(raw).replace(/\s+/g, ' ').trim();
+  if (route.path === '/') homeTitleLength = text.length;
+  if (text && text.length > TITLE_LIMIT) overLongTitles.push({ path: route.path, length: text.length, text });
+}
+const homeTitle = overLongTitles.find((entry) => entry.path === '/');
+if (homeTitle) fail(`/ title is ${homeTitle.length} characters, over the ${TITLE_LIMIT}-character limit Google renders: "${homeTitle.text}"`);
+
 for (const llmFile of ['llms.txt', 'llms-full.txt']) {
   const fullPath = path.join(root, llmFile);
   if (!fs.existsSync(fullPath)) fail(`missing ${llmFile} at repository root`);
@@ -290,4 +328,5 @@ console.log(`  internal-link audit: hubs reachable from /; item pages link to hu
 console.log('  SEO/schema audit: unique self-canonical, route-specific head, meta description, indexable robots, per-type JSON-LD');
 console.log('  media audit: 32 MP3 URLs, production samples only when supplied, catalogue artwork only when supplied');
 console.log('  404 audit: /work/does-not-exist has no static page and Cloudflare fallback serves 404.html with noindex, follow');
+console.log(`  title length audit: / is ${homeTitleLength}/${TITLE_LIMIT} characters (not truncated); ${overLongTitles.length} other route(s) still run long and are listed here rather than failing the build`);
 console.log('  missing-file report: none');

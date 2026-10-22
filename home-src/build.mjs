@@ -68,6 +68,36 @@ const PAIRS = [
   ['<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a composer</a><a href="/sound-design"', '<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a horror composer</a><a href="/how-to-hire-a-horror-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hiring guide</a><a href="/sound-design"', HTML],
   ["children:It.bio}", "dangerouslySetInnerHTML:{__html:It.bio}}", "bundle"],
   ["u.jsx(\"p\",{className:\"text-mist leading-relaxed mb-8 text-sm sm:text-base\",\"data-source-loc\":\"src/components/About.tsx:43:1\",children:It.bio2})", "u.jsx(\"div\",{className:\"text-mist leading-relaxed mb-8 text-sm sm:text-base space-y-5\",\"data-source-loc\":\"src/components/About.tsx:43:1\",dangerouslySetInnerHTML:{__html:\"<p>\"+It.bio2+\"</p>\"}})", "bundle"],
+  // Mobile poster wall: a 400w AVIF keeps the 640w file for retina desktop.
+  // Phones render the 46vw cells at ~190 CSS px (~380 device px at DPR 2), so
+  // the 640w poster was ~2.6x the pixels the slot needed.
+  ['srcSet:e.thumbA+" 640w"', 'srcSet:e.thumbA.replace("-640.avif","-400.avif")+" 400w, "+e.thumbA.replace("-640.avif","-480.avif")+" 480w, "+e.thumbA+" 640w"', BUNDLE],
+  // Alt text: the poster wall and the hero portrait are content images, not
+  // decoration, so they carry the artwork's own name. (The atmosphere plate and
+  // the press photo stay alt="" - they are backgrounds behind live copy.)
+  ['width:640,height:960,alt:"",className:"h-full w-full object-cover object-top opacity-95', 'width:640,height:960,alt:e.title+" poster artwork",className:"h-full w-full object-cover object-top opacity-95', BUNDLE],
+  ['u.jsx("img",{src:It.images.hero,alt:"",width:896,height:1152,decoding:"async"', 'u.jsx("img",{src:It.images.hero,alt:"Zazie Kanwar-Torge, horror composer and founder of Zazie Productions",width:896,height:1152,decoding:"async"', BUNDLE],
+  ['<img alt="" class="absolute bottom-0 right-0 h-full w-auto max-w-none object-cover object-top opacity-80" src="/images/hero-portrait.jpg"', '<img alt="Zazie Kanwar-Torge, horror composer and founder of Zazie Productions" class="absolute bottom-0 right-0 h-full w-auto max-w-none object-cover object-top opacity-80" src="/images/hero-portrait.jpg"', HTML],
+  // Showreel rows: 32 rows x 3 decorative nodes became 32 x 1. The duration moves
+  // into the mood line (it was hidden below 640px, so phones lost it entirely) and
+  // the play/pause glyph becomes a pseudo-element keyed off data-row-playing.
+  [
+    'md:px-6 "+(o?"bg-blood/10":"hover:bg-smoke"),\"data-source-loc\":\"src/components/Showreel.tsx:194:1\"',
+    'md:px-6 zp-track "+(o?"bg-blood/10":"hover:bg-smoke"),\"data-row-playing\":String(!!(o&&r)),\"data-source-loc\":\"src/components/Showreel.tsx:194:1\"',
+    BUNDLE,
+  ],
+  [
+    'children:t.tag})]}),u.jsx("span",{className:"hidden shrink-0 text-[11px] tabular-nums text-mist xs:inline sm:inline","data-source-loc":"src/components/Showreel.tsx:230:1",children:bi(t.duration)}),u.jsx("span",{className:"shrink-0 text-mist","data-source-loc":"src/components/Showreel.tsx:233:1",children:o&&r?u.jsx(bu,{size:16,"data-source-loc":"src/components/Showreel.tsx:234:24"}):u.jsx(Ai,{size:16,"data-source-loc":"src/components/Showreel.tsx:234:46"})})',
+    'children:t.tag+" · "+bi(t.duration)})]})',
+    BUNDLE,
+  ],
+  // Accessible name must contain the visible text (axe label-content-name-mismatch):
+  // the link reads "Enter" but announced "Scroll to showreel".
+  ['"aria-label":"Scroll to showreel"', '"aria-label":"Enter the showreel"', BUNDLE],
+  ['aria-label="Scroll to showreel"', 'aria-label="Enter the showreel"', HTML],
+  // The desktop portrait is display:none below 1024px; lazy keeps mobile from
+  // downloading 143 KB it can never show (desktop is in-viewport, so it still loads).
+  ['alt:"Zazie Kanwar-Torge, horror composer and founder of Zazie Productions",width:896,height:1152,decoding:"async"', 'alt:"Zazie Kanwar-Torge, horror composer and founder of Zazie Productions",width:896,height:1152,loading:"lazy",decoding:"async"', BUNDLE],
   // Services heading
   ['04 · Scope and budget', '04 · Scoring services', BOTH],
   ['Build a scope and estimate', 'Choose a package, then estimate', BOTH],
@@ -144,6 +174,27 @@ function countOf(text, needle) {
   return text.split(needle).length - 1;
 }
 
+/**
+ * A replacement string is spliced into the bundle's own JavaScript source, not
+ * into HTML. A pair whose new text carries an unescaped `"` turns the enclosing
+ * double-quoted literal into two literals and the whole homepage bundle dies at
+ * parse time - which is exactly what shipped before 2026-10-22: the file was
+ * served, threw `SyntaxError`, and none of the React behaviour (poster lightbox,
+ * film player, 32-cue audio player, sticky player) ever ran while every other
+ * check still passed. Parsing the patched text here makes that a build failure
+ * instead of a silent runtime failure.
+ */
+function assertBundleParses(source) {
+  const file = ts.createSourceFile('index-bundle.js', source, ts.ScriptTarget.ES2020, false, ts.ScriptKind.JS);
+  const diagnostics = file.parseDiagnostics ?? [];
+  if (diagnostics.length) {
+    const first = diagnostics[0];
+    const at = first.start ?? 0;
+    const context = JSON.stringify(source.slice(Math.max(0, at - 120), at + 80));
+    throw new Error(`patched bundle does not parse: ${ts.flattenDiagnosticMessageText(first.messageText, ' ')} near ${context}`);
+  }
+}
+
 function patchBundle(orig) {
   let out = orig;
   for (const [oldText, newText, target] of PAIRS) {
@@ -160,6 +211,7 @@ function patchBundle(orig) {
   const { start, end } = findTopLevelFunction(out, 'lj');
   const replacement = `function lj(){return u.jsx("div",{className:"zp-home-island","data-zp-island":"estimator",dangerouslySetInnerHTML:{__html:${JSON.stringify(islandHtml(false))}}})}`;
   out = out.slice(0, start) + replacement + out.slice(end);
+  assertBundleParses(out);
   return out;
 }
 
@@ -180,6 +232,18 @@ function patchStatic(html) {
       throw new Error(`index.html: "${oldText.slice(0, 60)}" matched ${n} times, expected 1`);
     }
   }
+
+  // Showreel rows in the static snapshot must match the patched React rows, so
+  // the same three nodes come out of both render paths. Idempotent: once a row
+  // has zp-track + the merged duration line, the pattern no longer matches.
+  const rowPattern =
+    /<button class="(flex min-h-\[56px\][^"]*?)"><span class="w-7[^"]*">([\s\S]*?)<\/span><div class="min-w-0 flex-1"><p class="([^"]*)">([\s\S]*?)<\/p><p class="mt-0\.5[^"]*">([\s\S]*?)<\/p><\/div><span class="hidden shrink-0[^"]*">([\s\S]*?)<\/span><span class="shrink-0 text-mist"><svg[\s\S]*?<\/svg><\/span><\/button>/g;
+  let trimmedRows = 0;
+  out = out.replace(rowPattern, (_match, buttonClass, indexHtml, titleClass, titleHtml, tagHtml, durationHtml) => {
+    trimmedRows += 1;
+    return `<button class="${buttonClass} zp-track" data-row-playing="false"><span class="w-7 shrink-0 text-[11px] tabular-nums text-mist sm:w-8">${indexHtml}</span><div class="min-w-0 flex-1"><p class="${titleClass}">${titleHtml}</p><p class="mt-0.5 truncate text-[10px] uppercase tracking-[0.2em] text-mist">${tagHtml} · ${durationHtml}</p></div></button>`;
+  });
+  if (trimmedRows) applied.push(`showreel rows trimmed (${trimmedRows})`);
 
   // Services: replace the old React estimator snapshot with the static island.
   // The header paragraph is followed by its wrapper's </div>, then the grid
@@ -227,7 +291,27 @@ function ensureEstimatorAssets(html) {
   if (!css || !js) throw new Error('estimator assets missing: run node scripts/build-estimator.mjs first');
   let out = html;
   if (!/\/estimator-[0-9a-f]{8}\.css/.test(out)) {
-    out = out.replace('</head>', () => `<link href="/${css}" rel="stylesheet"/>\n</head>`);
+    // Non-blocking: this sheet only paints the below-fold scope builder and the
+    // inquiry form, so it must never sit on the hero's render path.
+    out = out.replace(
+      '</head>',
+      () =>
+        `<link href="/${css}" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"/>\n` +
+        `<noscript><link href="/${css}" rel="stylesheet"/></noscript>\n</head>`,
+    );
+  } else {
+    // A rebuild that changes the estimator hash must not leave the preload
+    // pointing at a file that no longer exists. Also upgrade an older static
+    // snapshot whose stylesheet still blocks the hero paint.
+    out = out.replace(/\/estimator-[0-9a-f]{8}\.css/g, () => `/${css}`);
+    if (!out.includes(`<link href="/${css}" rel="preload"`)) {
+      out = out.replace(
+        `<link href="/${css}" rel="stylesheet"/>`,
+        () =>
+          `<link href="/${css}" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"/>\n` +
+          `<noscript><link href="/${css}" rel="stylesheet"/></noscript>`,
+      );
+    }
   }
   if (!/\/estimator-[0-9a-f]{8}\.js/.test(out)) {
     out = out.replace('</body>', () => `<script src="/${js}" defer></script>\n</body>`);
@@ -287,14 +371,6 @@ const origHash = crypto.createHash('sha256').update(orig).digest('hex');
 if (!origHash.startsWith('2afd4ec8')) throw new Error(`bundle.orig.js is not the shipped bundle (sha256 ${origHash})`);
 
 const patched = patchBundle(orig);
-const syntaxTree = ts.createSourceFile('patched-home.js', patched, ts.ScriptTarget.ES2020, true, ts.ScriptKind.JS);
-if (syntaxTree.parseDiagnostics.length) {
-  const diagnostic = syntaxTree.parseDiagnostics[0];
-  const offset = diagnostic.start ?? 0;
-  const position = syntaxTree.getLineAndCharacterOfPosition(offset);
-  const excerpt = patched.slice(Math.max(0, offset - 500), offset + 120);
-  throw new Error(`patched home bundle is invalid JavaScript at ${position.line + 1}:${position.character + 1}: ${ts.flattenDiagnosticMessageText(diagnostic.messageText, ' ')}; near ${JSON.stringify(excerpt)}`);
-}
 const hash = crypto.createHash('sha256').update(patched).digest('hex').slice(0, 8);
 const name = `index-${hash}.js`;
 const homeAssets = await buildHomeAssets(name);

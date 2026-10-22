@@ -24,7 +24,8 @@ export const hubs: Hub[] = [
   {
     path: "/",
     name: "Portfolio",
-    title: "Horror Composer for Hire — Film, TV & Game Scores | Zazie Productions",
+    // Keep the SERP title within its pixel budget and the description concise.
+    title: "Horror Composer for Hire — Film, TV & Game Scores",
     description: `Hire horror composer Zazie Kanwar-Torge for film, TV, and games. Hear 32 cues, view 9 productions, and see rates from $${MINIMUM_FEE} USD.`,
     lastmod: "2026-10-22",
     images: [
