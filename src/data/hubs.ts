@@ -24,8 +24,12 @@ export const hubs: Hub[] = [
   {
     path: "/",
     name: "Portfolio",
+    // Main's shorter title (no "| Zazie Productions" suffix) keeps the SERP
+    // title well inside the pixel budget; the description is the 129-character
+    // one the PageSpeed/SEO audit asked for (100-130), not the earlier 220-char
+    // sentence. Both are what the WebPage JSON-LD and sitemap reuse.
     title: "Horror Composer for Hire — Film, TV & Game Scores",
-    description: `Hire IMDb-credited horror composer Zazie Kanwar-Torge for psychological, folk, and body horror scores for film, TV, and games. 32 cues; packages from $${MINIMUM_FEE} USD.`,
+    description: `IMDb-credited horror composer Zazie Kanwar-Torge scores psychological and folk films, TV, and games. Custom scores from $${MINIMUM_FEE} USD.`,
     lastmod: "2026-10-22",
     images: [
       { loc: "https://horror.zazieproductions.com/images/hero-portrait.jpg", caption: "Portfolio portrait for Zazie Productions, a composer and sound-design studio working across screen and experimental media.", title: "Zazie Kanwar-Torge: Psychological Horror Composer - Dark Atmospheric Scores" },
