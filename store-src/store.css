@@ -248,7 +248,7 @@ i{font-style:italic}
 .filter-group{display:none;align-items:center;gap:.4rem;flex:none}
 .has-js .filter-group{display:flex}
 .filter-group + .filter-group{margin-left:.5rem;padding-left:1.25rem;border-left:1px solid var(--edge)}
-.filter-label{flex:none;margin-right:.25rem;font-size:.5625rem;letter-spacing:.26em;text-transform:uppercase;color:rgba(154,149,144,.75)}
+.filter-label{flex:none;margin-right:.25rem;font-size:.5625rem;letter-spacing:.26em;text-transform:uppercase;color:var(--mist)}
 .chip{flex:none;cursor:pointer;background:transparent;border:1px solid var(--ash);padding:.5rem .85rem;font-size:.625rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mist);transition:border-color .2s,color .2s,background .2s,box-shadow .2s}
 .chip:hover{border-color:rgba(196,30,30,.55);color:var(--bone)}
 .chip[aria-pressed="true"]{background:var(--blood);border-color:var(--blood);color:var(--bone);box-shadow:0 0 18px rgba(196,30,30,.3)}
@@ -361,7 +361,7 @@ i{font-style:italic}
 .is-filtered .empty{display:block}
 .empty a{color:var(--bone);text-decoration:underline;text-underline-offset:4px}
 .empty a:hover{color:var(--blood)}
-.shelf-note{margin:0;padding:1.75rem 0 clamp(2rem,5vw,3rem);font-size:.6875rem;line-height:1.8;color:rgba(154,149,144,.85)}
+.shelf-note{margin:0;padding:1.75rem 0 clamp(2rem,5vw,3rem);font-size:.6875rem;line-height:1.8;color:var(--mist)}
 .shelf-note code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.6875rem;color:rgba(240,235,227,.8)}
 
 /* --- Discography band ---------------------------------------------------- */
@@ -416,10 +416,10 @@ i{font-style:italic}
 .foot-links a{font-size:.625rem;letter-spacing:.24em;text-transform:uppercase;color:var(--mist);transition:color .2s}
 .foot-links a:hover{color:var(--blood)}
 .foot-law{margin:1.75rem 0 0;padding-top:1.25rem;border-top:1px solid var(--edge);display:flex;flex-wrap:wrap;gap:.6rem 1.15rem}
-.foot-law .lbl{font-size:.5625rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(154,149,144,.6)}
+.foot-law .lbl{font-size:.5625rem;letter-spacing:.3em;text-transform:uppercase;color:var(--mist)}
 .foot-law a{font-size:.625rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mist);transition:color .2s}
 .foot-law a:hover{color:var(--blood)}
-.foot-legal{margin:1.25rem 0 0;padding-top:1.5rem;border-top:1px solid var(--edge);display:flex;flex-wrap:wrap;gap:.5rem 1rem;justify-content:space-between;font-size:.625rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(154,149,144,.6)}
+.foot-legal{margin:1.25rem 0 0;padding-top:1.5rem;border-top:1px solid var(--edge);display:flex;flex-wrap:wrap;gap:.5rem 1rem;justify-content:space-between;font-size:.625rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mist)}
 
 /* --- Motion / print ------------------------------------------------------ */
 @media (prefers-reduced-motion:reduce){
@@ -453,3 +453,9 @@ i{font-style:italic}
     backdrop-filter:none !important;
   }
 }
+
+/* Keep keyboard focus visible, including on dark/red controls. */
+:focus-visible{outline:2px solid var(--bone);outline-offset:4px}
+:target{scroll-margin-top:7rem}
+
+.plat a,.how p a,.shelf-note a{ text-decoration:underline; text-underline-offset:3px }

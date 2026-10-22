@@ -1,0 +1,10 @@
+/* Text accents are lighter than decorative blood-red backgrounds. */
+.text-blood, .hover\:text-blood:hover { color:#e65650; }
+[class~="text-mist/60"], [class~="text-mist/50"] { color:#9a9590; }
+:focus-visible { outline:2px solid #f0ebe3 !important; outline-offset:4px; }
+:target { scroll-margin-top:7rem; }
+/* Form boundaries remain distinguishable from the dark canvas (3:1). */
+input:not([type="range"]), select, textarea { border-color:#77716c; }
+@media (prefers-reduced-motion:reduce) {
+  *, *::before, *::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+}

@@ -76,21 +76,22 @@
 // added /how-to-hire-a-horror-composer hub, /llms.txt + /llms-full.txt,
 // <main>-wrapped document headers and spaced numeral headings across all 85 routes,
 // clean JSON-LD schema graphs, and re-hashed home bundle index-4d715571.js.
-const CACHE_NAME = 'zazie-v34';
+const CACHE_NAME = 'zazie-v35';
 
 const PRECACHE_ASSETS = [
   '/',
   '/favicon.svg',
+  '/home-a11y-b255cd9f.css',
   '/fonts/cormorant-garamond-latin-400-normal.woff2',
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-f509fde0.css',
-  '/index-4d715571.js',
-  '/store-eed3eeee.css',
+  '/index-47fe2030.js',
+  '/store-a617a0a2.css',
   '/store-3fc01be0.js',
-  '/legal-886033c7.css',
+  '/legal-30253474.css',
   '/legal-ab598df8.js',
-  '/estimator-c0d6291c.css',
+  '/estimator-f17dde16.css',
   '/estimator-e20a6c5d.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',

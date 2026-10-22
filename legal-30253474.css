@@ -166,7 +166,7 @@ button{font:inherit;color:inherit}
 @media (min-width:1000px){
   .doc-index{display:block;position:sticky;top:6.5rem;max-height:calc(100svh - 9rem);overflow-y:auto;padding-right:.5rem}
 }
-.doc-index p{margin:0 0 .85rem;font-size:.5625rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(154,149,144,.7)}
+.doc-index p{margin:0 0 .85rem;font-size:.5625rem;letter-spacing:.3em;text-transform:uppercase;color:var(--mist)}
 .doc-index ol{margin:0;padding:0;list-style:none;border-left:1px solid var(--edge)}
 .doc-index li{margin:0}
 .doc-index a{
@@ -175,12 +175,12 @@ button{font:inherit;color:inherit}
 }
 .doc-index a:hover{color:var(--bone)}
 .doc-index a[aria-current="true"]{color:var(--bone);border-left-color:var(--blood)}
-.doc-index .idx{display:block;font-family:var(--display);font-size:.6875rem;letter-spacing:.06em;color:rgba(154,149,144,.55)}
+.doc-index .idx{display:block;font-family:var(--display);font-size:.6875rem;letter-spacing:.06em;color:var(--mist)}
 .doc-index a[aria-current="true"] .idx{color:var(--blood-text)}
 
 /* mobile section jump (native select would break the aesthetic; use chips) */
 .doc-jump{margin:0 0 2rem;padding:1rem;border:1px solid var(--edge);background:var(--ink)}
-.doc-jump p{margin:0 0 .7rem;font-size:.5625rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(154,149,144,.75)}
+.doc-jump p{margin:0 0 .7rem;font-size:.5625rem;letter-spacing:.3em;text-transform:uppercase;color:var(--mist)}
 .doc-jump ul{display:flex;flex-wrap:wrap;gap:.4rem;margin:0;padding:0;list-style:none}
 .doc-jump a{display:block;padding:.45rem .7rem;border:1px solid var(--ash);font-size:.625rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mist);transition:border-color .2s,color .2s}
 .doc-jump a:hover{border-color:rgba(196,30,30,.55);color:var(--bone)}
@@ -277,7 +277,7 @@ td code,th code{white-space:nowrap}
 .faq-item summary:hover{color:var(--ember)}
 .faq-item summary .qno{
   flex:none;width:1.9rem;font-family:var(--display);font-size:.875rem;
-  color:rgba(154,149,144,.6);font-variant-numeric:tabular-nums;
+  color:var(--mist);font-variant-numeric:tabular-nums;
 }
 .faq-item summary .qtext{flex:1}
 .faq-item summary .qmark{
@@ -346,10 +346,10 @@ td code,th code{white-space:nowrap}
   transition:border-color .3s,background .3s,transform .3s;
 }
 .hub-card:hover{border-color:rgba(196,30,30,.55);background:var(--smoke);transform:translateY(-2px)}
-.hub-card .no{font-family:var(--display);font-size:.8125rem;letter-spacing:.08em;color:rgba(154,149,144,.6)}
+.hub-card .no{font-family:var(--display);font-size:.8125rem;letter-spacing:.08em;color:var(--mist)}
 .hub-card h2, .hub-card h3{margin:0;font-family:var(--display);font-weight:400;font-size:1.5rem;line-height:1.15;color:var(--bone)}
 .hub-card p{margin:0;font-size:.8125rem;line-height:1.75;color:var(--body-dim)}
-.hub-card .stamp{margin-top:auto;padding-top:.85rem;font-size:.5625rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(154,149,144,.75)}
+.hub-card .stamp{margin-top:auto;padding-top:.85rem;font-size:.5625rem;letter-spacing:.24em;text-transform:uppercase;color:var(--mist)}
 .hub-card .stamp time{color:var(--mist)}
 .hub-card a.stretch::after{content:"";position:absolute;inset:0}
 .hub-card{position:relative}
@@ -417,13 +417,13 @@ td code,th code{white-space:nowrap}
   margin:1.75rem 0 0;padding-top:1.25rem;border-top:1px solid var(--edge);
   display:flex;flex-wrap:wrap;gap:.6rem 1.15rem;
 }
-.foot-law span.lbl{font-size:.5625rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(154,149,144,.6)}
+.foot-law span.lbl{font-size:.5625rem;letter-spacing:.3em;text-transform:uppercase;color:var(--mist)}
 .foot-law a{font-size:.625rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mist);transition:color .2s}
 .foot-law a:hover{color:var(--blood)}
 .foot-legal{
   margin:1.25rem 0 0;padding-top:1.25rem;border-top:1px solid var(--edge);
   display:flex;flex-wrap:wrap;gap:.5rem 1rem;justify-content:space-between;
-  font-size:.625rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(154,149,144,.6);
+  font-size:.625rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mist);
 }
 
 /* --- Editorial layer -------------------------------------------------------
@@ -499,7 +499,7 @@ td code,th code{white-space:nowrap}
 .doc-more > summary:hover{color:var(--bone)}
 .doc-more > summary span{
   margin-left:.15rem;font-size:.6875rem;font-weight:400;letter-spacing:.06em;
-  text-transform:none;color:rgba(154,149,144,.75);
+  text-transform:none;color:var(--mist);
 }
 .doc-more[open] > summary{border-bottom:1px solid var(--edge)}
 .doc-more .more-body{padding:1.05rem 1.15rem 1.2rem}
@@ -564,3 +564,7 @@ td code,th code{white-space:nowrap}
     background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.018) 0 1px,transparent 1px 3px);
   }
 }
+
+/* Keep keyboard focus visible, including on dark/red controls. */
+:focus-visible{outline:2px solid var(--bone);outline-offset:4px}
+:target{scroll-margin-top:7rem}

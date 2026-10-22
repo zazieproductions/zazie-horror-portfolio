@@ -171,7 +171,7 @@ audio.audio-player {
 }
 
 .doc-body .hub-card .stamp {
-  color: rgba(154, 149, 144, 0.75);
+  color: var(--mist);
 }
 
 /* --- Credit line -------------------------------------------------------- */

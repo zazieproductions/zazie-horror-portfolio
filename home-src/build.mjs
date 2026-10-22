@@ -44,6 +44,9 @@ const HTML = 'html';
 
 /** [old, new, targets]. Text is matched exactly; see the header note. */
 const PAIRS = [
+  ['Scroll to showreel', 'Enter showreel', BOTH],
+  ['className:"-mx-4 flex snap-x', 'tabIndex:0,role:"region","aria-label":"Collaborator reviews",className:"-mx-4 flex snap-x', BUNDLE],
+  ['<div class="-mx-4 flex snap-x', '<div tabindex="0" role="region" aria-label="Collaborator reviews" class="-mx-4 flex snap-x', HTML],
   // Hero
   ['Original music for psychological horror ', 'Dark, atmospheric horror scores, ', HTML],
   ['& experimental cinema.', 'written to your picture.', HTML],
@@ -233,12 +236,26 @@ const indexFile = path.join(root, 'index.html');
 const { html, applied } = patchStatic(fs.readFileSync(indexFile, 'utf8'));
 let nextHtml = html.replace(/\/?index-[0-9a-f]{8}\.js/g, (m) => (m.startsWith('/') ? `/${name}` : name));
 nextHtml = ensureEstimatorAssets(nextHtml);
+// Keep accessibility styles in source, content-hashed like the other assets.
+const a11yCss = fs.readFileSync(path.join(here, 'accessibility.css'), 'utf8');
+const a11yName = `home-a11y-${crypto.createHash('sha256').update(a11yCss).digest('hex').slice(0, 8)}.css`;
+for (const f of fs.readdirSync(root)) {
+  if (/^home-a11y-[0-9a-f]{8}\.css$/.test(f) && f !== a11yName) fs.rmSync(path.join(root, f));
+}
+fs.writeFileSync(path.join(root, a11yName), a11yCss);
+nextHtml = nextHtml.replace(/<link[^>]*href="\/home-a11y-[0-9a-f]{8}\.css"[^>]*>\s*/g, '');
+nextHtml = nextHtml.replace('</head>', `<link href="/${a11yName}" rel="stylesheet"/>\n</head>`);
 fs.writeFileSync(indexFile, nextHtml, 'utf8');
 
 const swFile = path.join(root, 'sw.js');
 if (fs.existsSync(swFile)) {
   const sw = fs.readFileSync(swFile, 'utf8');
-  const nextSw = sw.replace(/\/index-[0-9a-f]{8}\.js/g, `/${name}`);
+  let nextSw = sw.replace(/\/index-[0-9a-f]{8}\.js/g, `/${name}`);
+  if (/\/home-a11y-[0-9a-f]{8}\.css/.test(nextSw)) {
+    nextSw = nextSw.replace(/\/home-a11y-[0-9a-f]{8}\.css/g, `/${a11yName}`);
+  } else {
+    nextSw = nextSw.replace("  '/favicon.svg',", `  '/favicon.svg',\n  '/${a11yName}',`);
+  }
   if (nextSw !== sw) fs.writeFileSync(swFile, nextSw, 'utf8');
 }
 

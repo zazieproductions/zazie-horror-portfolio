@@ -56,7 +56,7 @@ function tableRows(rows: Array<[string, string]>): string {
   const body = rows
     .map(([label, value]) => `        <tr><th scope="row">${esc(label)}</th><td>${value}</td></tr>`)
     .join('\n');
-  return `<div class="table-wrap">
+  return `<div class="table-wrap" tabindex="0" role="region" aria-label="Scrollable table">
     <table><tbody>
 ${body}
     </tbody></table>
