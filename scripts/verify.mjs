@@ -78,6 +78,8 @@ for (const loc of sitemapLocs) {
 }
 
 /* --------------------------------------------------------------- page files */
+/** Snippet blocking makes the page ineligible for normal SERP descriptions. */
+const SNIPPET_BLOCK = /\bnosnippet\b|\bmax-snippet\s*:\s*0\b/i;
 let resolved = 0;
 const missing = [];
 for (const route of allRoutes) {
@@ -97,6 +99,7 @@ for (const route of allRoutes) {
   if (descriptions.length !== 1) fail(`${route.path}: expected one description, found ${descriptions.length}`);
   if (canonical.length !== 1 || canonical[0][1] !== expected) fail(`${route.path}: canonical is not uniquely self-referential`);
   if (!robots || /\bnoindex\b/i.test(robots) || !/\bindex\b/i.test(robots)) fail(`${route.path}: missing indexable robots metadata`);
+  if (SNIPPET_BLOCK.test(robots)) fail(`${route.path}: robots metadata blocks search snippets (nosnippet / max-snippet:0)`);
   if (!html.includes(`property="og:url" content="${expected}"`)) fail(`${route.path}: missing route-specific og:url`);
   if (!/<meta\s+name="twitter:card"/i.test(html)) fail(`${route.path}: missing Twitter card metadata`);
   if (/(?:href|src)="#"/.test(html)) fail(`${route.path}: contains a placeholder # link`);
@@ -116,6 +119,15 @@ if (resolved !== sitemapLocs.length) fail(`${sitemapLocs.length} sitemap URLs bu
 
 /* ---------------------------------------------------------- JSON-LD & media */
 const home = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+/**
+ * SERP display limits for the homepage, the one route an external audit reads
+ * first. Titles are measured as rendered (entities decoded): 30-60 characters
+ * fit Google's title link, 120-160 render without truncation in a description.
+ */
+const homeMetaTitle = decodeXml(/<title>([^<]*)<\/title>/i.exec(home)?.[1] ?? '');
+const homeMetaDescription = decodeXml(/<meta\s+name="description"\s+content="([^"]*)"/i.exec(home)?.[1] ?? '');
+if (homeMetaTitle.length < 30 || homeMetaTitle.length > 60) fail(`homepage title is ${homeMetaTitle.length} characters; keep it between 30 and 60`);
+if (homeMetaDescription.length < 120 || homeMetaDescription.length > 160) fail(`homepage description is ${homeMetaDescription.length} characters; keep it between 120 and 160`);
 const homeNodes = jsonLdBlocks(home, '/');
 const homeTypes = allTypes(homeNodes);
 for (const required of ['Person', 'Organization', 'WebSite', 'WebPage']) {
@@ -230,6 +242,12 @@ if (unreachableHubs.length) fail(`original hub routes not reachable from /: ${un
 /* --------------------------------------------------------------- real 404 */
 const notFound = fs.readFileSync(path.join(root, '404.html'), 'utf8');
 if (!/<meta[^>]+name="robots"[^>]+content="[^"]*noindex/i.test(notFound)) fail('404.html must carry noindex, follow');
+const headerRules = fs.readFileSync(path.join(root, '_headers'), 'utf8');
+for (const line of headerRules.split(/\r?\n/)) {
+  if (/^\s*X-Robots-Tag\s*:/i.test(line) && SNIPPET_BLOCK.test(line)) {
+    fail(`_headers blocks search snippets: ${line.trim()}`);
+  }
+}
 const redirectLines = fs.readFileSync(path.join(root, '_redirects'), 'utf8')
   .split(/\r?\n/)
   .map((line) => line.replace(/#.*$/, '').trim())
