@@ -79,7 +79,11 @@
 // v36: 2026-10-22 mobile-audit pass — 12px type floor and 44px targets in the
 // home/estimator CSS, WCAG AA label colours, styled skip link, poster AVIF
 // 400/480/640 ladder, and re-hashed home bundle index-9e03d452.js.
-const CACHE_NAME = 'zazie-v36';
+// v37: the archive-boot intro is back in index.html (the gate script that had
+// been dropped in the prerender pass is restored, so the overlay actually
+// plays again). The document is precached as '/', so the cache name moves with
+// it: without the bump a returning visitor could keep the boot-less document.
+const CACHE_NAME = 'zazie-v37';
 
 const PRECACHE_ASSETS = [
   '/',

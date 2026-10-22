@@ -139,6 +139,22 @@ if (homeNodes.length !== 4) fail(`homepage JSON-LD should contain only Person, O
 // selects one sample from the portfolio and rejects it as non-primary content.
 if (homeTypes.includes('VideoObject')) fail('homepage must not declare VideoObject schema; publish video schema only on a dedicated watch page');
 
+/**
+ * Archive boot (homepage only). It has already shipped inert once: the
+ * prerender pass rewrote the <head> and dropped the synchronous gate, so the
+ * overlay stayed display:none and a later audit deleted it as dead weight.
+ * These four assertions make that failure a build error instead.
+ */
+const bootGateAt = home.indexOf("classList.add('zp-boot-on')");
+const bootOverlayAt = home.indexOf('id="zp-boot"');
+if (bootGateAt === -1) fail('homepage lost the archive-boot gate script: the overlay would never display (see PERFORMANCE.md)');
+if (bootOverlayAt === -1) fail('homepage lost the archive-boot overlay markup (see PERFORMANCE.md)');
+if (bootGateAt !== -1 && bootOverlayAt !== -1 && bootGateAt > bootOverlayAt) {
+  fail('the archive-boot gate must run synchronously in <head>, before the overlay markup');
+}
+if (!home.includes('html.zp-boot-on #zp-boot')) fail('homepage lost the archive-boot stylesheet that reveals the overlay');
+if (/sessionStorage|localStorage/.test(home)) fail('homepage must not write a storage key for the archive boot (LEGAL.md / /privacy claims)');
+
 for (const item of items) {
   const route = routeByPath.get(item.path);
   const file = route ? fileFor(route) : null;
