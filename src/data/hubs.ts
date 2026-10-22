@@ -24,7 +24,7 @@ export const hubs: Hub[] = [
   {
     path: "/",
     name: "Portfolio",
-    title: "Horror Composer for Hire — Film, TV & Game Scores | Zazie Productions",
+    title: "Horror Composer for Hire — Film, TV & Game Scores",
     description: `Hire IMDb-credited horror composer Zazie Kanwar-Torge (Zazie Productions) for psychological, folk, body, and experimental scores across film, TV, and games. 32 playable cues, 9 screen productions, packages from $${MINIMUM_FEE} USD.`,
     lastmod: "2026-10-18",
     images: [

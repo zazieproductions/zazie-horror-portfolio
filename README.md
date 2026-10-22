@@ -204,8 +204,8 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 ├── index-<hash>.js / .css      # Retained legacy homepage assets (not rebuilt here)
 ├── 404.html                    # "Signal Lost" — served with real 404 status
 ├── sw.js                       # Service worker (CACHE_NAME zazie-v29; bump it on any precache change)
-├── server.mjs                  # Local static server, clean routes + 404 fallback
-├── _headers                    # CSP, canonical Link headers, cache policy
+├── server.mjs                  # Local static server: clean routes + 404 fallback, Brotli/Gzip, ETag/304
+├── _headers                    # CSP, canonical Link headers, per-path cache policy (read the top comment)
 ├── _redirects                  # Legacy aliases + explicit real-404 fallback
 ├── robots.txt / sitemap.xml    # Crawl control; 84 URLs / 79 images / 12 videos
 ├── <32-hex>.txt                # IndexNow key file (public by design; see tools/indexnow.mjs)
@@ -251,7 +251,7 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 | Catalogue / documents | `store-src/` and `legal-src/` build sources |
 | Metadata / SEO | Route-specific source HTML heads; generated `sitemap.xml`; `robots.txt`; canonical `Link:` headers in `_headers` |
 | Configuration | `package.json`, `tsconfig.json`, `vite.config.ts`, `_headers`, `_redirects`, `sw.js` |
-| Utilities | `scripts/`, `tools/check-sitemap.mjs`, `tools/route-aliases.mjs`, `server.mjs` |
+| Utilities | `scripts/`, `tools/check-sitemap.mjs`, `tools/check-links.mjs`, `tools/check-headers.mjs`, `tools/route-aliases.mjs`, `server.mjs` |
 | Public/static assets | root + `/audio` + `/fonts` + `/images` |
 
 ## Where to add new work
@@ -306,11 +306,43 @@ There are **no environment variables and no secrets**. The `.gitignore` pre-empt
 
 | File | Controls |
 | --- | --- |
-| `_headers` | CSP allowlist, `X-Robots-Tag`, canonical `Link:` headers, per-path `Cache-Control` |
+| `_headers` | Security policy (HSTS, CSP, X-Frame-Options), `X-Robots-Tag`, canonical `Link:` headers, per-path `Cache-Control` |
+| `tools/headers.mjs` | The same security/cache policy as data: `server.mjs` serves it, `tools/check-headers.mjs` validates `_headers` against it |
 | `_redirects` | Legacy `.html` aliases plus `/* /404.html 404` fallback |
 | `robots.txt` | Default crawl policy and sitemap declaration |
 | `sw.js` | Offline strategy; `CACHE_NAME` + precache manifest |
-| `server.mjs` | `PORT` (local dev only) |
+| `server.mjs` | `PORT` (local dev only), `LOCAL_HTTPS=1` to also send HSTS when testing over TLS |
+
+### Response headers, caching and compression
+
+`_headers` is not a cascade: **every** rule whose pattern matches contributes,
+and a header set twice is joined with a comma (`/*` first, then `/fonts/*`
+produced `max-age=0, must-revalidate, …, max-age=31536000` — and RFC 9111 reads
+the *first* `max-age`, so nothing was cacheable). The file's top comment states
+the rule that follows from it: `/*` is the only default, and every narrower
+`Cache-Control` detaches it first with `! Cache-Control`.
+
+| Path | `Cache-Control` |
+| --- | --- |
+| HTML documents (`/`, `/work`, `/work/`, `/<slug>`) | `public, max-age=0, must-revalidate` |
+| `/index-*`, `/store-*`, `/legal-*`, `/estimator-*`, `/item-*` CSS/JS, `/*.css`, `/fonts/*` | `public, max-age=31536000, immutable` |
+| `/images/*`, `/audio/*`, `/favicon.svg` | `public, max-age=2592000, stale-while-revalidate=86400` |
+| `/sitemap.xml`, `/robots.txt`, `/llms.txt`, `/llms-full.txt` | `public, max-age=3600` |
+| `/404.html` | `no-store` |
+| `/sw.js` | `no-cache, no-store, must-revalidate` |
+
+Compression is negotiated per request. Cloudflare Pages Brotli/Gzip-compresses
+static text at the edge; `server.mjs` does the same locally (Brotli q11 when
+`Accept-Encoding` offers it, Gzip next, `Vary: Accept-Encoding`, nothing below
+1 KB) so the behaviour is testable before it ships. `npm run build` fails if
+`_headers` drifts from the policy, if any path would serve two cache lifetimes,
+or if any internal link or `#fragment` stops resolving:
+
+```
+npm run check:headers
+npm run check:links
+node tools/live-route-audit.mjs https://horror.zazieproductions.com
+```
 
 The zero-tracking privacy claim is structural: adding an analytics script or a cookie would invalidate `/privacy`, the footer statement on every page, and the device inspector on `/privacy`. Don't.
 
