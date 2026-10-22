@@ -85,7 +85,9 @@ test('/how-to-hire-a-horror-composer guide answers fan-out queries with Article 
 
 test('homepage links directly to /hire-a-composer and /how-to-hire-a-horror-composer in both SSR HTML and client bundle', () => {
   const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-  assert.match(html, /<title>Horror Composer for Hire — Film, TV &amp; Game Scores \| Zazie Productions<\/title>/);
+  assert.match(html, /<title>Horror Composer for Film, TV &amp; Games \| Zazie Productions<\/title>/);
+  const title = /<title>([^<]*)<\/title>/.exec(html)[1].replace(/&amp;/g, '&');
+  assert.ok(title.length <= 60, `homepage title is ${title.length} characters; keep it within 60`);
   assert.match(html, new RegExp(`from \\$${MINIMUM_FEE} USD`));
   assert.match(html, /href="\/hire-a-composer"/);
   assert.match(html, /href="\/how-to-hire-a-horror-composer"/);

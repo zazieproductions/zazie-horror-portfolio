@@ -306,7 +306,7 @@ test('homepage contact keeps a single neutral format and tone default', () => {
   const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
   const contactIntro = 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.';
   assert.equal(html.split(contactIntro).length - 1, 1, 'homepage contact copy is not duplicated');
-  assert.match(html, /"dateModified": "2026-10-18"/);
+  assert.match(html, /"dateModified": "2026-10-22"/);
   for (const label of ['Theme / tone', 'Format']) {
     const labelIndex = html.indexOf(`aria-label="${label}"`);
     const start = html.lastIndexOf('<select', labelIndex);

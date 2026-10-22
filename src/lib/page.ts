@@ -478,7 +478,7 @@ export function renderItemPage(item: ItemRoute, chrome: PageChrome): RenderedIte
     title: item.title,
     description: item.description,
     canonical: url(item.path),
-    robots: 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+    robots: 'index, follow, max-image-preview:large',
     ogType: item.kind === 'production'
       ? (productionBySlug.get(item.slug)?.sample ? OG_TYPES.video : OG_TYPES.website)
       : item.kind === 'cue'
