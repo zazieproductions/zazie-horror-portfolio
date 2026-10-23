@@ -10,6 +10,7 @@ import { allRoutes, items, siblingsOf, productionBySlug, cueBySlug, releaseBySlu
 import { productions } from '../build/data/productions.js';
 import { cues } from '../build/data/cues.js';
 import { releases } from '../build/data/releases.js';
+import { additionalHomePosters, featuredPosterSlugs } from '../build/data/home.js';
 import { SITE_HOST, SITE_ORIGIN, escapeHtml, oneLine, url } from '../build/data/site.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -138,6 +139,49 @@ if (homeNodes.length !== 4) fail(`homepage JSON-LD should contain only Person, O
 // watch page. Keep VideoObject markup off the homepage; Google otherwise
 // selects one sample from the portfolio and rejects it as non-primary content.
 if (homeTypes.includes('VideoObject')) fail('homepage must not declare VideoObject schema; publish video schema only on a dedicated watch page');
+
+/* ---------------------------------------------------- home mobile + posters */
+const homeBundleMatch = /import\("\/(index-[a-f\d]+\.js)"\)/.exec(home);
+if (!homeBundleMatch) {
+  fail('homepage React bundle reference is missing; cannot verify poster/mobile parity');
+}
+const homeBundle = homeBundleMatch ? fs.readFileSync(path.join(root, homeBundleMatch[1]), 'utf8') : '';
+const expectedPosterSlugs = [...featuredPosterSlugs, ...additionalHomePosters.map((poster) => poster.slug)];
+const staticPosterSlugs = [...home.matchAll(/data-home-poster="([^"]+)"/g)].map((match) => match[1]);
+if (JSON.stringify(staticPosterSlugs) !== JSON.stringify(expectedPosterSlugs)) {
+  fail(`homepage poster cards do not match src/data/home.ts: ${staticPosterSlugs.join(', ')}`);
+}
+const posterTitles = new Map([
+  ...productions.map((production) => [production.slug, production.title]),
+  ...additionalHomePosters.map((poster) => [poster.slug, poster.title]),
+]);
+for (const slug of expectedPosterSlugs) {
+  const title = posterTitles.get(slug);
+  if (title && !homeBundle.includes(`title:${JSON.stringify(title)}`)) {
+    fail(`homepage React poster wall is missing ${title}`);
+  }
+}
+for (const item of additionalHomePosters) {
+  const artwork = item.poster;
+  const references = [artwork.src, artwork.avif, artwork.avifSet, artwork.srcset]
+    .filter(Boolean)
+    .flatMap((value) => value.split(','))
+    .map((value) => value.trim().split(/\s+/)[0])
+    .filter((value) => value.startsWith('/'));
+  for (const reference of new Set(references)) {
+    if (!fs.existsSync(path.join(root, reference.slice(1)))) fail(`homepage poster asset is missing: ${reference}`);
+  }
+}
+for (const className of ['zp-mobile-quote', 'zp-menu-button', 'zp-poster-dialog', 'zp-poster-close', 'zp-poster-contain', 'zp-est-advanced', 'zp-result-details']) {
+  if (!home.includes(className)) fail(`homepage mobile stylesheet/markup is missing ${className}`);
+  if (!homeBundle.includes(className)) fail(`homepage React bundle is missing ${className}`);
+}
+if (!homeBundle.includes('"aria-expanded":n') || !homeBundle.includes('"aria-controls":"mobile-navigation"')) {
+  fail('mobile menu no longer exposes its expanded state and controlled navigation');
+}
+if (!home.includes('<section id="services"') || !homeBundle.includes('id:"services"') || !homeBundle.includes('Rates &amp; estimates')) {
+  fail('React must preserve the homepage Rates section, its #services anchor and its heading');
+}
 
 /**
  * Archive boot (homepage only). It has already shipped inert once: the

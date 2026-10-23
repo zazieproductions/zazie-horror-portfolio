@@ -34,6 +34,7 @@ import {
 import {
   contactHref,
   estimatorHtml,
+  inclusionsHtml,
   pricingMetaHtml,
   inquiryFormHtml,
   offersGraph,
@@ -273,14 +274,25 @@ test('pricing cards, estimator and inquiry explain starting fees and feature sco
   assert.match(cards, /From \$650/);
   assert.match(cards, /From \$1,500/);
   assert.match(cards, /not fixed-price caps/);
-  assert.match(cards, /not a guarantee of a specific amount of finished music/);
-  assert.match(cards, /\$2,500 USD for substantial scoring engagements only/);
+  assert.match(cards, /Scored minutes are scope guides\./);
+  assert.match(cards, /Substantial scores: indicative \$2,500 USD minimum/);
   assert.match(cards, /Single-scene needs use Individual Scene Scoring/);
+  assert.equal((cards.match(/<details class="zp-pkg-details">/g) ?? []).length, 4, 'long scope copy is progressively disclosed on every card');
+  assert.match(cards, /Guide: 1–2 scored minutes/);
+  assert.match(cards, /One pivotal scene, reveal, transition or stinger\./);
 
   const estimator = estimatorHtml();
   assert.match(estimator, /name="substantial"/);
   assert.match(estimator, /leave unchecked for one scene\/cue/i);
   assert.match(estimator, /From \$650|\$650/);
+  assert.match(estimator, /<details class="zp-est-advanced">/);
+  assert.match(estimator, /Optional · cues, feature scope, complexity, timing &amp; rights/);
+  assert.match(estimator, /<details class="zp-result-details"><summary>Breakdown &amp; terms<\/summary>/);
+  assert.ok(estimator.indexOf('name="min"') < estimator.indexOf('class="zp-est-advanced"'), 'scored minutes is the first and only always-visible estimator input');
+
+  const inclusions = inclusionsHtml();
+  assert.match(inclusions, /<details class="zp-inclusions-disclosure">/);
+  assert.match(inclusions, /Standard delivery &amp; optional add-ons/);
 
   const inquiry = inquiryFormHtml();
   assert.match(inquiry, /Focused Short-Film Score \(From \$650 USD starting fee\)/);
