@@ -1,6 +1,6 @@
 /** Homepage fragments generated from the same content modules as item pages. */
 
-import { featuredPosterSlugs } from '../data/home.js';
+import { additionalHomePosters, featuredPosterSlugs } from '../data/home.js';
 import { person, organization, website } from '../data/entities.js';
 import { hubs } from '../data/hubs.js';
 import { productions } from '../data/productions.js';
@@ -13,20 +13,22 @@ const homeRoute = hubs.find((hub) => hub.path === '/');
 if (!homeRoute) throw new Error('src/data/hubs.ts has no home route');
 
 const productionBySlug = new Map(productions.map((production) => [production.slug, production]));
-const homePosters: Production[] = featuredPosterSlugs.map((slug) => {
+const productionPosters: Production[] = featuredPosterSlugs.map((slug) => {
   const production = productionBySlug.get(slug);
   if (!production) throw new Error(`src/data/home.ts references unknown production "${slug}"`);
   return production;
 });
-if (new Set(featuredPosterSlugs).size !== featuredPosterSlugs.length) {
+const homePosters = [...productionPosters, ...additionalHomePosters];
+const posterSlugs = homePosters.map((poster) => poster.slug);
+if (new Set(posterSlugs).size !== posterSlugs.length) {
   throw new Error('src/data/home.ts has a duplicate poster-wall slug');
 }
 
 /** Exact button markup used by the existing poster wall and lightbox. */
 export function renderHomePosterCards(): string {
   return homePosters
-    .map((production) => {
-      const poster = production.poster;
+    .map((homePoster) => {
+      const poster = homePoster.poster;
       const avifSet = poster.avifSet ?? (poster.avif ? `${poster.avif} 640w` : '');
       const source = avifSet
         ? `<source srcset="${escapeHtml(avifSet)}" sizes="(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 46vw" type="image/avif">`
@@ -34,16 +36,18 @@ export function renderHomePosterCards(): string {
       const srcset = poster.srcset
         ? ` srcset="${escapeHtml(poster.srcset)}" sizes="(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 46vw"`
         : '';
-      return `<button type="button" class="group relative w-full overflow-hidden border border-ash bg-smoke text-left transition-all duration-500 hover:border-blood/60 hover:shadow-[0_12px_40px_rgba(80,0,0,0.35)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blood" aria-label="View ${escapeHtml(production.title)} poster" data-home-poster="${escapeHtml(production.slug)}">
+      const contain = 'fit' in homePoster && homePoster.fit === 'contain';
+      const fitClass = contain ? 'zp-poster-contain' : 'object-cover object-top group-hover:scale-105';
+      return `<button type="button" class="group relative w-full overflow-hidden border border-ash bg-smoke text-left transition-all duration-500 hover:border-blood/60 hover:shadow-[0_12px_40px_rgba(80,0,0,0.35)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blood" aria-label="View ${escapeHtml(homePoster.title)} poster" data-home-poster="${escapeHtml(homePoster.slug)}">
 <div class="relative aspect-[2/3] overflow-hidden bg-void">
 <picture>
 ${source}
-<img alt="${escapeHtml(production.title)} poster artwork" class="h-full w-full object-cover object-top opacity-95 transition-transform duration-700 ease-out group-hover:scale-105 group-hover:opacity-100" loading="lazy" decoding="async" src="${escapeHtml(poster.src)}" width="${poster.width}" height="${poster.height}"${srcset}>
+<img alt="${escapeHtml(homePoster.title)} poster artwork" class="h-full w-full ${fitClass} opacity-95 transition-transform duration-700 ease-out group-hover:opacity-100" loading="lazy" decoding="async" src="${escapeHtml(poster.src)}" width="${poster.width}" height="${poster.height}"${srcset}>
 </picture>
 <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-void via-void/5 to-transparent opacity-80"></div>
 <div class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"><div class="absolute inset-0 bg-blood/10 mix-blend-multiply"></div></div>
 <div class="absolute inset-x-0 bottom-0 z-10 p-3 sm:p-4 md:p-5">
-<h3 class="font-display text-base leading-tight text-bone transition-colors group-hover:text-blood sm:text-xl md:text-2xl">${escapeHtml(production.title)}</h3>
+<h3 class="font-display text-base leading-tight text-bone transition-colors group-hover:text-blood sm:text-xl md:text-2xl">${escapeHtml(homePoster.title)}</h3>
 </div>
 </div>
 </button>`;

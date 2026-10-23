@@ -44,6 +44,7 @@ export const hubs: Hub[] = [
       { loc: "https://horror.zazieproductions.com/images/posters/choleric-1200.jpg", caption: "Poster artwork for CHOLERIC. IMDb credits Zazie Kanwar-Torge as co-producer.", title: "CHOLERIC - Short Film; Co-Producer Credit" },
       { loc: "https://horror.zazieproductions.com/images/posters/mike-has-a-visitor-1200.jpg", caption: "Poster artwork for MIKE HAS A VISITOR; IMDb credits Zazie Kanwar-Torge as composer.", title: "MIKE HAS A VISITOR - Horror Short; Composer Credit" },
       { loc: "https://horror.zazieproductions.com/images/posters/the-dark-awaits-1200.jpg", caption: "Poster artwork for THE DARK AWAITS, a paranormal reality-TV series; IMDb credits Zazie Kanwar-Torge as composer.", title: "THE DARK AWAITS - Paranormal Reality-TV Series" },
+      { loc: "https://horror.zazieproductions.com/images/posters/uncle-freds-monster-problem-1200.jpg", caption: "Poster artwork for UNCLE FRED'S MONSTER PROBLEM.", title: "UNCLE FRED'S MONSTER PROBLEM - Film Poster" },
     ],
     videos: [
       {
