@@ -147,12 +147,17 @@ if (homeTypes.includes('VideoObject')) fail('homepage must not declare VideoObje
  */
 const bootGateAt = home.indexOf("classList.add('zp-boot-on')");
 const bootOverlayAt = home.indexOf('id="zp-boot"');
+const bootSkipBtnAt = home.indexOf('id="zp-boot-skip"');
 if (bootGateAt === -1) fail('homepage lost the archive-boot gate script: the overlay would never display (see PERFORMANCE.md)');
 if (bootOverlayAt === -1) fail('homepage lost the archive-boot overlay markup (see PERFORMANCE.md)');
+if (bootSkipBtnAt === -1) fail('homepage lost the archive-boot #zp-boot-skip button');
 if (bootGateAt !== -1 && bootOverlayAt !== -1 && bootGateAt > bootOverlayAt) {
   fail('the archive-boot gate must run synchronously in <head>, before the overlay markup');
 }
 if (!home.includes('html.zp-boot-on #zp-boot')) fail('homepage lost the archive-boot stylesheet that reveals the overlay');
+if (/<div[^>]*id="zp-boot"[^>]*aria-hidden="true"/i.test(home)) {
+  fail('#zp-boot must not set aria-hidden="true" while containing focusable #zp-boot-skip (axe aria-hidden-focus)');
+}
 if (/sessionStorage|localStorage/.test(home)) fail('homepage must not write a storage key for the archive boot (LEGAL.md / /privacy claims)');
 
 for (const item of items) {

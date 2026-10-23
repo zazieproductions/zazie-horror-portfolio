@@ -45,14 +45,19 @@ nodes — and deleted it. The markup was never the problem; the gate was.
   adds the class, so no-JS, crawlers, bots, Lighthouse runs and
   `prefers-reduced-motion` visitors pay only the bytes, never a frame.
 - **Timing**: progress reaches 100 % at ≈2.8 s, the overlay is removed at
-  ≈4 s (700 ms hold + 450 ms power-down). Any click, key, wheel or tap skips
-  instantly; a 6.5 s JS cap, a 7 s CSS force-hide and `pageshow.persisted`
-  cover error and bfcache paths. The node removes itself, and any `zp:bootdone`
-  listener is dispatched after teardown.
-- **Not page copy**: the overlay is `aria-hidden`, so it is exempt from the
-  12 px mobile type floor and the tap-target floor applied to page content in
-  the mobile-audit pass. Do not "fix" its 8–10 px HUD labels; they are the
-  aesthetic, and nothing in it is required to read the page.
+  ≈4 s (700 ms hold + 450 ms power-down). A high-contrast `Skip intro` button
+  (`#zp-boot-skip`, `z-index: 8` above the scanline/vignette glass, ≥44 px
+  target, 12 px type, AAA contrast, `[ESC]` hint on fine pointers, full-width
+  on mobile portrait) skips via a snappy 160 ms dissolve (`zp-fast`), and any
+  click, swipe, wheel or non-modifier key skips immediately too; a 6.5 s JS
+  cap, a 7 s CSS force-hide and `pageshow.persisted` cover error and bfcache
+  paths. The node removes itself, and any `zp:bootdone` listener is dispatched
+  after teardown.
+- **Accessibility & HUD isolation**: decorative HUD chrome inside `#zp-boot`
+  carries `aria-hidden="true"` so the 8–10 px tape telemetry stays exempt from
+  the 12 px page-copy floor and screen-reader announcements, while
+  `#zp-boot-skip` sits outside any `aria-hidden` ancestor so keyboard `Tab`,
+  `Enter`/`Space`, and assistive technology reach it cleanly (`zazie-v38`).
 - **Bypass**: `?boot=0` / `#noboot` disables it, `?boot=1` / `#boot` forces it
   past the reduced-motion gate.
 
