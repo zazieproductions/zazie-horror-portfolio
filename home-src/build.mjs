@@ -59,6 +59,13 @@ const PAIRS = [
   ['<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a composer</a><a href="/sound-design"', '<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a horror composer</a><a href="/how-to-hire-a-horror-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hiring guide</a><a href="/sound-design"', HTML],
   ["children:It.bio}", "dangerouslySetInnerHTML:{__html:It.bio}}", "bundle"],
   ["u.jsx(\"p\",{className:\"text-mist leading-relaxed mb-8 text-sm sm:text-base\",\"data-source-loc\":\"src/components/About.tsx:43:1\",children:It.bio2})", "u.jsx(\"div\",{className:\"text-mist leading-relaxed mb-8 text-sm sm:text-base space-y-5\",\"data-source-loc\":\"src/components/About.tsx:43:1\",dangerouslySetInnerHTML:{__html:\"<p>\"+It.bio2+\"</p>\"}})", "bundle"],
+  // Poster-wall kicker: `year` is the label the lightbox prints above the title,
+  // so it has to carry the work's actual format. ECLIPSED is a short body horror
+  // film and THE DARK AWAITS is a paranormal reality-TV series; the shipped
+  // bundle called both of them a "Feature". "Short" and "Series" are the labels
+  // the wall already uses for Phantom Requiem/CHOLERIC and PEREGRINUS.
+  ['title:"ECLIPSED",year:"Feature"', 'title:"ECLIPSED",year:"Short"', BUNDLE],
+  ['title:"THE DARK AWAITS",year:"Feature"', 'title:"THE DARK AWAITS",year:"Series"', BUNDLE],
   // Mobile poster wall: a 400w AVIF keeps the 640w file for retina desktop.
   // Phones render the 46vw cells at ~190 CSS px (~380 device px at DPR 2), so
   // the 640w poster was ~2.6x the pixels the slot needed.

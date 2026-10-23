@@ -42,11 +42,11 @@
 - [UNSEEN (2026)](https://horror.zazieproductions.com/work/unseen): Feature film — archival project record (see verified credits on page). UNSEEN is a 2026 horror-thriller feature about an unknown disaster and an abusive past. IMDb identifies Steve Merlo as composer; this archive does not assign a Zazie score credit.
 - [PEREGRINUS (2026)](https://horror.zazieproductions.com/work/peregrinus): TV series — Zazie Kanwar-Torge credit: Co-composer. PEREGRINUS is a five-episode 2026 TV series about an escaped asset with psychic abilities. IMDb lists a December 31, 2026 premiere and credits Zazie Kanwar-Torge as a co-composer.
 - [Phantom Requiem (2024)](https://horror.zazieproductions.com/work/phantom-requiem): Experimental short film — archival project record (see verified credits on page). Phantom Requiem is a 4:53 experimental short published by Zazie Productions on June 20, 2024. The studio describes its visuals, sound, and music as studio intellectual property.
-- [ECLIPSED (2025)](https://horror.zazieproductions.com/work/eclipsed): Short film — Zazie Kanwar-Torge credit: Composer. ECLIPSED is a 2025 surreal horror short about a woman whose attempt to destroy her darker self leads to transformation. IMDb credits Zazie Kanwar-Torge and Noah C. Castro as composers.
+- [ECLIPSED (2025)](https://horror.zazieproductions.com/work/eclipsed): Short film — Zazie Kanwar-Torge credit: Composer. ECLIPSED is a 2025 body horror short about a woman whose attempt to destroy her darker self leads to transformation. IMDb credits Zazie Kanwar-Torge and Noah C. Castro as composers.
 - [THE HAUNTED](https://horror.zazieproductions.com/work/the-haunted): Short film — Zazie Kanwar-Torge credit: Co-composer. THE HAUNTED is a completed 46-minute short about a virtual-reality therapy session that turns into a waking nightmare. IMDb credits Zazie Kanwar-Torge and Robert Mason Sandifer as co-composers.
 - [CHOLERIC](https://horror.zazieproductions.com/work/choleric): Short film — Zazie Kanwar-Torge credit: Co-producer. CHOLERIC is a short in post-production about a former child star whose manufactured fame begins to unravel. IMDb credits Zazie Kanwar-Torge as co-producer, not composer.
 - [MIKE HAS A VISITOR](https://horror.zazieproductions.com/work/mike-has-a-visitor): Short film — Zazie Kanwar-Torge credit: Composer. MIKE HAS A VISITOR is a horror short about a man whose sleep-paralysis nightmares begin to enter his waking life. IMDb credits Zazie Kanwar-Torge as composer.
-- [THE DARK AWAITS](https://horror.zazieproductions.com/work/the-dark-awaits): Reality-TV series — Zazie Kanwar-Torge credit: Composer. THE DARK AWAITS is a reality-TV series in which an ordinary family investigates haunted locations through the night. IMDb lists a 45-minute runtime and credits Zazie Kanwar-Torge as composer.
+- [THE DARK AWAITS](https://horror.zazieproductions.com/work/the-dark-awaits): Paranormal reality-TV series — Zazie Kanwar-Torge credit: Composer. THE DARK AWAITS is a paranormal reality-TV series in which an ordinary family investigates haunted locations through the night. IMDb lists a 45-minute runtime and credits Zazie Kanwar-Torge as composer.
 
 ## Playable Horror Showreel Cues (32 Direct MP3 Cues)
 
@@ -217,10 +217,10 @@ When filmmakers, showrunners, and indie game developers search for the best horr
 - This entry preserves the project as an experimental screen work without adding an unverified plot synopsis, cast list, or instrument inventory. The linked video is the primary source for viewing the complete short.
 
 ### ECLIPSED (2025) — https://horror.zazieproductions.com/work/eclipsed
-- **Format:** Short film · **Genres:** Horror, Short film · **Status:** Released
+- **Format:** Short film · **Genres:** Body horror, Horror, Short film · **Status:** Released
 - **Verified Credits:** Director: William Viera | Writer: William Viera | Composer: Zazie Kanwar-Torge | Composer: Noah C. Castro
-- **Summary:** ECLIPSED is a 2025 surreal horror short about a woman whose attempt to destroy her darker self leads to transformation. IMDb credits Zazie Kanwar-Torge and Noah C. Castro as composers.
-- IMDb describes a woman drawn into a dreamlike confrontation with her darker self. Desire, fear, and violence shape the encounter, and her attempt to destroy what haunts her becomes a story about duality, identity, and transformation.
+- **Summary:** ECLIPSED is a 2025 body horror short about a woman whose attempt to destroy her darker self leads to transformation. IMDb credits Zazie Kanwar-Torge and Noah C. Castro as composers.
+- IMDb describes a woman drawn into a dreamlike confrontation with her darker self. Desire, fear, and violence shape the encounter, and her attempt to destroy what haunts her becomes a story about duality, identity, and transformation. ECLIPSED is catalogued here as body horror: the confrontation is physical, and the transformation happens to the body on screen.
 - The short was directed and written by William Viera. The IMDb credit listing names Zazie Kanwar-Torge and Noah C. Castro as composers. A Drive-hosted project sample is embedded below; no separate running time or release date is assigned to that sample.
 
 ### THE HAUNTED — https://horror.zazieproductions.com/work/the-haunted
@@ -245,11 +245,11 @@ When filmmakers, showrunners, and indie game developers search for the best horr
 - IMDb credits Marco Saikaley as writer and director and Zazie Kanwar-Torge as composer. The linked YouTube upload is the short itself and is credited to its director; the upload date is shown only as video metadata, not as a film release date.
 
 ### THE DARK AWAITS — https://horror.zazieproductions.com/work/the-dark-awaits
-- **Format:** Reality-TV series · **Genres:** Reality television, Paranormal
+- **Format:** Paranormal reality-TV series · **Genres:** Paranormal, Reality television
 - **Verified Credits:** Composer: Zazie Kanwar-Torge
-- **Summary:** THE DARK AWAITS is a reality-TV series in which an ordinary family investigates haunted locations through the night. IMDb lists a 45-minute runtime and credits Zazie Kanwar-Torge as composer.
+- **Summary:** THE DARK AWAITS is a paranormal reality-TV series in which an ordinary family investigates haunted locations through the night. IMDb lists a 45-minute runtime and credits Zazie Kanwar-Torge as composer.
 - The IMDb synopsis describes a family sent to haunted locations without advance knowledge of where they are going. They investigate alone through the night, facing fear and mystery while uncovering the history associated with each site.
-- IMDb classifies THE DARK AWAITS as a reality-TV series and lists a 45-minute runtime. The available listing supplies no year, so none is assigned here. Zazie Kanwar-Torge is credited as composer.
+- IMDb classifies THE DARK AWAITS as a reality-TV series and lists a 45-minute runtime; this archive records it as a paranormal reality-TV series, after its haunted-location subject. The available listing supplies no year, so none is assigned here. Zazie Kanwar-Torge is credited as composer.
 
 ## Full 32-Cue Horror Showreel Notes (https://horror.zazieproductions.com/reel)
 

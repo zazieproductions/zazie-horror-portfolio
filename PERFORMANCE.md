@@ -4,6 +4,90 @@ Date: 2026-09-25 · Branch: `arena/01a0d613-zazie-horror-portfolio`
 Scope: horror.zazieproductions.com (static prerendered React build on an edge host with `_headers`/`_redirects` semantics, i.e. Netlify/Cloudflare-Pages style).
 
 
+## Production metadata corrections: 2026-10-23
+
+Two of the nine production records carried the wrong format and genre, and the
+homepage poster lightbox repeated the error. Corrected at the source of truth
+(`src/data/productions.ts`) and re-derived everywhere else.
+
+### What was wrong
+
+- **ECLIPSED** was catalogued as a "surreal horror" short. The `/work` hub went
+  further on its Drive-sample card and called it a *"Psychological horror
+  feature sample"* with the genre stamp `Psychological Horror, Dark Sci-Fi`, and
+  the matching sitemap film still said *"psychological thriller"*. It is a short
+  **body horror** film.
+- **THE DARK AWAITS** was catalogued as a plain "reality-TV series". It is a
+  **paranormal** reality-TV series, and `/game-scoring` described its poster as a
+  *"horror film poster"*.
+- **The bundle disagreed with the archive.** `PosterWall`'s data array carried
+  `year:"Feature"` for both titles. `year` is not a year here - it is the
+  uppercase kicker the lightbox prints above the title
+  (`src/components/PosterWall.tsx:104`), so opening either poster told a visitor
+  "FEATURE" for a short film and for a TV series. `"Short"` and `"Series"` were
+  already the wall's labels for the other three shorts and for PEREGRINUS; only
+  these two were wrong.
+
+### What changed
+
+- `src/data/productions.ts` - ECLIPSED genres now `['Body horror', 'Horror',
+  'Short film']` with body-horror wording through headline, summary, logline,
+  first paragraph and sample description; THE DARK AWAITS
+  `workType: 'Paranormal reality-TV series'`, genres alphabetised to
+  `['Paranormal', 'Reality television']` to match the rest of the file, and the
+  same wording through headline, summary, logline and paragraphs. `schemaType`
+  was already correct on both (`Movie`, `TVSeries`) and is untouched, as are the
+  credits: no claim was added, moved or removed.
+- `src/data/hubs.ts` - the `/` and `/work` poster captions and image titles, the
+  ECLIPSED Drive video description and tag, and the film-still entry that said
+  "psychological thriller".
+- `home-src/build.mjs` - two new `BUNDLE` pairs rewrite `year:"Feature"` to
+  `"Short"` (ECLIPSED) and `"Series"` (THE DARK AWAITS). `bundle.orig.js` stays
+  pristine and hash-checked (`2afd4ec8...`), so this is a build-time patch like
+  every other bundle correction and survives the next rebuild instead of being
+  silently reverted.
+- Hand-maintained hubs: `work/index.html` (ECLIPSED card, its genre stamp and the
+  Drive-sample card; THE DARK AWAITS blurb), `game-scoring/index.html` (poster
+  `alt`), `legal-src/pages/hire-a-composer.html` (credit list: "paranormal
+  reality-TV series", "body horror short"). Root twins re-derived by
+  `tools/route-aliases.mjs`, which copies `<slug>/index.html` -> `<slug>.html`,
+  so the directory indexes are the files that were edited.
+- Re-derived by `npm run build`: 65 item pages, `sitemap.xml`, `llms.txt`,
+  `llms-full.txt` and `index.html`. Every production page lists ECLIPSED in its
+  sibling cards, so all nine `work/*.html` files moved.
+
+### Cache discipline
+
+The bundle patch changes its bytes, so the immutable hash moved
+`index-a7313e86.js` -> `index-8c9e43c9.js` (raw `sha256[:8]`), the retired file
+is deleted, `index.html` and the `sw.js` precache list point at the new name,
+and `CACHE_NAME` is bumped `zazie-v37` -> `zazie-v38`. Without the bump a
+returning visitor would keep the old immutably-cached bundle and go on reading
+"FEATURE" on both posters.
+
+### Verification
+
+`npm run build` exits 0 - `scripts/verify.mjs`, `check-headers`, `check-links`
+and `route-aliases --check` all pass, and the sitemap validator reports 85 URLs
+/ 77 images / 12 videos with 0 errors. `npm test` passes 44/44. Re-running the
+build writes nothing new. Both new pairs matched exactly once in
+`bundle.orig.js` (a non-unique match fails the build) and the patched bundle
+passes `assertBundleParses`.
+
+### Left alone on purpose
+
+- `/game-scoring` still captions the poster `THE DARK AWAITS (2025)`. The archive
+  record states the IMDb listing supplies no year, so none is assigned there;
+  the 2025 on this page is unsupported by the source of truth. That is a year
+  claim rather than a format claim, so it was not folded into this pass - it
+  needs a decision (confirm 2025, or drop the year) rather than a guess.
+- Two other lightbox kickers still disagree with the archive and predate this
+  pass: THE HAUNTED reads `"Feature"` against `workType: 'Short film'` (46 min),
+  and EXPIRE reads `"2025"` where every other card carries a format. Neither
+  title was in scope here.
+- `README.md` lines 182 and 206 still describe the service worker as
+  `zazie-v29`; that drift predates this change and was already stale at v37.
+
 ## Archive boot restored: 2026-10-22
 
 The terminal loading screen is back in `index.html`. This records what was

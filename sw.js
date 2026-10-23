@@ -83,7 +83,14 @@
 // been dropped in the prerender pass is restored, so the overlay actually
 // plays again). The document is precached as '/', so the cache name moves with
 // it: without the bump a returning visitor could keep the boot-less document.
-const CACHE_NAME = 'zazie-v37';
+// v38: production metadata corrections - the poster-wall lightbox kicker comes
+// from the bundle's own `year` field, which called both ECLIPSED and THE DARK
+// AWAITS a "Feature". ECLIPSED is a short body horror film ("Short") and THE
+// DARK AWAITS is a paranormal reality-TV series ("Series"), so the bundle is
+// re-hashed (index-8c9e43c9.js) and the cache name moves with it: the old
+// bundle is immutable, and without the bump a returning visitor keeps reading
+// the wrong format label.
+const CACHE_NAME = 'zazie-v38';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -92,7 +99,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-40232616.css',
-  '/index-a7313e86.js',
+  '/index-8c9e43c9.js',
   '/store-eed3eeee.css',
   '/store-3fc01be0.js',
   '/legal-886033c7.css',

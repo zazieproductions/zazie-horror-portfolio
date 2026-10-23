@@ -54,8 +54,8 @@
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/eclipsed-1200.jpg</image:loc>
-      <image:caption>Poster artwork for ECLIPSED, a short whose IMDb composer credits include Zazie Kanwar-Torge and Noah C. Castro.</image:caption>
-      <image:title>ECLIPSED - Short Film; Composer Credits Include Zazie Kanwar-Torge and Noah C. Castro</image:title>
+      <image:caption>Poster artwork for ECLIPSED, a body horror short whose IMDb composer credits include Zazie Kanwar-Torge and Noah C. Castro.</image:caption>
+      <image:title>ECLIPSED - Body Horror Short; Composer Credits Include Zazie Kanwar-Torge and Noah C. Castro</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/choleric-1200.jpg</image:loc>
@@ -141,10 +141,10 @@
     <video:video>
       <video:thumbnail_loc>https://horror.zazieproductions.com/images/eclipsed-cover-1280.jpg</video:thumbnail_loc>
       <video:title>ECLIPSED project sample</video:title>
-      <video:description>A Drive-hosted project sample associated with the ECLIPSED short. IMDb describes the surreal horror premise and credits Zazie Kanwar-Torge and Noah C. Castro as composers.</video:description>
+      <video:description>A Drive-hosted project sample associated with the ECLIPSED body horror short. IMDb describes the premise and credits Zazie Kanwar-Torge and Noah C. Castro as composers.</video:description>
       <video:player_loc>https://drive.google.com/file/d/1zKtAavEx-Yjd2To_troEYlxTTt62Y2OU/preview</video:player_loc>
       <video:tag>ECLIPSED</video:tag>
-      <video:tag>short film sample</video:tag>
+      <video:tag>body horror short film sample</video:tag>
     </video:video>
   </url>
 
@@ -173,8 +173,8 @@
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/eclipsed-640.jpg</image:loc>
-      <image:caption>ECLIPSED short; IMDb lists Zazie Kanwar-Torge and Noah C. Castro as composers.</image:caption>
-      <image:title>ECLIPSED - Short Film; Composer Credits</image:title>
+      <image:caption>ECLIPSED body horror short; IMDb lists Zazie Kanwar-Torge and Noah C. Castro as composers.</image:caption>
+      <image:title>ECLIPSED - Body Horror Short; Composer Credits</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/the-haunted-640.jpg</image:loc>
@@ -233,8 +233,8 @@
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/eclipsed-cover-1280.jpg</image:loc>
-      <image:caption>Eclipsed film sample still - psychological thriller horror score by Zazie Kanwar-Torge</image:caption>
-      <image:title>Eclipsed - Psychological Thriller Film Sample</image:title>
+      <image:caption>Eclipsed film sample still - body horror short score by Zazie Kanwar-Torge</image:caption>
+      <image:title>Eclipsed - Body Horror Short Film Sample</image:title>
     </image:image>
   </url>
 
