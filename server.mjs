@@ -44,6 +44,22 @@ import { headersFor } from './tools/headers.mjs';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 8080;
 const IS_HTTPS = process.env.LOCAL_HTTPS === '1';
+const ALLOW_EMBED = process.env.ALLOW_EMBED === '1';
+
+function responseHeaders(urlPath, { html = false, extra = {} } = {}) {
+  const headers = { ...headersFor(urlPath, { https: IS_HTTPS, html }), ...extra };
+  if (ALLOW_EMBED) {
+    delete headers['X-Frame-Options'];
+    if (headers['Content-Security-Policy']) {
+      headers['Content-Security-Policy'] = headers['Content-Security-Policy']
+        .split(';')
+        .map((directive) => directive.trim())
+        .filter((directive) => directive && !/^frame-ancestors\b/i.test(directive))
+        .join('; ');
+    }
+  }
+  return headers;
+}
 
 const MIME = {
   '.html': 'text/html; charset=utf-8',
@@ -146,7 +162,7 @@ const etagOf = (buffer) => `"${crypto.createHash('sha1').update(buffer).digest('
 /** Send a full response with the site's policy headers. */
 function respond(req, res, { status = 200, urlPath, body, type, extra = {} }) {
   const html = String(type || '').startsWith('text/html');
-  const headers = { ...headersFor(urlPath, { https: IS_HTTPS, html }), ...extra };
+  const headers = responseHeaders(urlPath, { html, extra });
   if (type) headers['Content-Type'] = type;
 
   const etag = body ? etagOf(body) : null;
@@ -184,7 +200,7 @@ const server = http.createServer((req, res) => {
 
   const explicit = explicitRedirects.get(urlPath);
   if (explicit) {
-    res.writeHead(explicit.status, { ...headersFor(urlPath, { https: IS_HTTPS }), Location: explicit.to + parsed.search });
+    res.writeHead(explicit.status, responseHeaders(urlPath, { extra: { Location: explicit.to + parsed.search } }));
     res.end();
     return;
   }
@@ -195,7 +211,7 @@ const server = http.createServer((req, res) => {
   if (urlPath !== '/' && urlPath.endsWith('.html') && urlPath !== '/404.html' && urlPath !== '/index.html') {
     const targetPath = urlPath.slice(0, -'.html'.length);
     if (resolve(targetPath)) {
-      res.writeHead(308, { ...headersFor(urlPath, { https: IS_HTTPS }), Location: targetPath + parsed.search });
+      res.writeHead(308, responseHeaders(urlPath, { extra: { Location: targetPath + parsed.search } }));
       res.end();
       return;
     }
@@ -231,12 +247,13 @@ const server = http.createServer((req, res) => {
 
   const stats = fs.statSync(file(rel));
   const etag = `"${stats.size.toString(16)}-${stats.mtimeMs.toString(16)}"`;
-  const headers = {
-    ...headersFor(urlPath, { https: IS_HTTPS }),
-    'Content-Type': type,
-    'Access-Control-Allow-Origin': '*',
-    ETag: etag,
-  };
+  const headers = responseHeaders(urlPath, {
+    extra: {
+      'Content-Type': type,
+      'Access-Control-Allow-Origin': '*',
+      ETag: etag,
+    },
+  });
   if (req.headers['if-none-match'] === etag) {
     res.writeHead(304, headers);
     res.end();

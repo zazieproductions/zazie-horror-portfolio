@@ -83,7 +83,10 @@
 // been dropped in the prerender pass is restored, so the overlay actually
 // plays again). The document is precached as '/', so the cache name moves with
 // it: without the bump a returning visitor could keep the boot-less document.
-const CACHE_NAME = 'zazie-v37';
+// v38: adds a prominent high-contrast "Skip intro" button (#zp-boot-skip) in
+// the archive-boot deck above the CRT vignette layer, with 160ms fast teardown,
+// accessible keyboard Tab/Enter/Space/Escape support, and mobile safe-area sizing.
+const CACHE_NAME = 'zazie-v38';
 
 const PRECACHE_ASSETS = [
   '/',
