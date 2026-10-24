@@ -288,7 +288,7 @@ test('skip button markup is accessible, free of aria-hidden ancestors, and style
   assert.match(btnRule, /font:600 12px\/1/);
   assert.match(bootCss, /html\.zp-boot-on \.zp-skip\{display:none\}/);
   assert.match(bootCss, /#zp-boot\.zp-off\.zp-fast\{animation:zpFadeOut \.16s ease forwards\}/);
-  assert.match(sw, /CACHE_NAME\s*=\s*'zazie-v38'/);
+  assert.match(sw, /CACHE_NAME\s*=\s*'zazie-v39'/);
 });
 
 test('clicking #zp-boot-skip immediately dismisses the intro in fast mode and removes the node', async () => {

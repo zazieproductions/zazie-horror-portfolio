@@ -86,7 +86,8 @@
 // v38: adds a prominent high-contrast "Skip intro" button (#zp-boot-skip) in
 // the archive-boot deck above the CRT vignette layer, with 160ms fast teardown,
 // accessible keyboard Tab/Enter/Space/Escape support, and mobile safe-area sizing.
-const CACHE_NAME = 'zazie-v38';
+// v39: native film-play buttons, accessible close control, and focus restoration.
+const CACHE_NAME = 'zazie-v39';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -94,8 +95,8 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-normal.woff2',
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
-  '/index-40232616.css',
-  '/index-b564d3f9.js',
+  '/index-e5dac783.css',
+  '/index-589e7712.js',
   '/store-c22a1a44.css',
   '/store-3fc01be0.js',
   '/legal-817a8ca2.css',

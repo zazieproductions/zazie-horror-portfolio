@@ -57,6 +57,18 @@ class Element {
     this.parentElement.children = this.parentElement.children.filter((child) => child !== this);
     this.parentElement = null;
   }
+  replaceWith(replacement) {
+    const parent = this.parentElement;
+    const index = parent.children.indexOf(this);
+    replacement.parentElement = parent;
+    parent.children[index] = replacement;
+    this.parentElement = null;
+  }
+  cloneNode(deep = false) {
+    const clone = new Element(this.tagName, { ...this.attributes, class: this.className });
+    if (deep) this.children.forEach((child) => clone.appendChild(child.cloneNode(true)));
+    return clone;
+  }
   matches(selector) {
     if (selector.startsWith('[data-video-card]')) {
       return this.getAttribute('data-video-card') !== null &&
@@ -74,15 +86,16 @@ class Element {
   querySelector(selector) { return this.querySelectorAll(selector)[0] || null; }
   closest(selector) { return this.matches(selector) ? this : this.parentElement?.closest(selector) || null; }
   scrollIntoView() {}
+  focus() { this.focused = true; }
 }
 
 function fixture(project) {
   const article = new Element('article', { class: 'zp-vcard' });
   const frame = article.appendChild(new Element('div', { class: 'zp-vframe' }));
-  const poster = frame.appendChild(new Element('div', {
-    class: 'zp-poster', 'data-video-card': '', 'data-title': project.title,
+  const poster = frame.appendChild(new Element('button', {
+    type: 'button', class: 'zp-poster', 'data-video-card': '', 'data-title': project.title,
     ...(project.drive ? { 'data-drive': project.drive } : { 'data-yt': project.yt }),
-    role: 'button', tabindex: '0',
+    'aria-label': `Play ${project.title} film sample`,
   }));
   poster.appendChild(new Element('img'));
   const caption = article.appendChild(new Element('div'));
@@ -147,15 +160,18 @@ function reactDrive(player) {
     actions: findClass(article, 'zp-vactions'),
     iframe: nodes(article).find((node) => node.type === 'iframe'),
     fullscreen: findClass(article, 'zp-drive-fs'),
+    close: findClass(article, 'zp-player-close'),
   };
 }
 
 test('early and React players emit the same standard Drive iframe, with native fullscreen allowed', () => {
   const early = earlyPlayer();
   early.zpActivate(early.drive.poster);
-  const frame = early.drive.poster.querySelector('iframe');
+  const livePoster = early.drive.article.querySelector('[data-video-card].is-live');
+  const frame = early.drive.article.querySelector('iframe');
   const react = reactDrive(reactPlayer()).iframe.props;
-  assert.equal(frame.parentElement, early.drive.poster, 'the early iframe must not sit in a hidden wrapper');
+  assert.equal(livePoster.tagName, 'div', 'the active player wrapper is non-interactive');
+  assert.equal(frame.parentElement, livePoster, 'the early iframe must not sit in a hidden wrapper');
   assert.equal(frame.src, react.src);
   assert.equal(frame.title, react.title);
   assert.equal(frame.className, react.className);
@@ -195,6 +211,28 @@ test('prefixed WebKit fullscreen remains available where supported', () => {
   assert.ok(reactDrive(reactPlayer(eclipsed.drive, false, true)).fullscreen);
 });
 
+test('active embeds provide a focused, keyboard-accessible close control in both implementations', () => {
+  const early = earlyPlayer();
+  early.zpActivate(early.drive.poster);
+  const close = early.drive.article.querySelector('.zp-player-close');
+  assert.equal(close.tagName, 'button');
+  assert.equal(close.getAttribute('aria-label'), 'Close Eclipsed player');
+  assert.equal(close.focused, true);
+  close.listeners.click({ stopPropagation() {} });
+  assert.equal(early.window.__zpPlayer, null);
+  assert.equal(early.drive.article.querySelector('iframe'), null);
+  assert.equal(early.drive.article.querySelector('[data-video-card]').focused, true);
+
+  const reactState = reactPlayer();
+  const react = reactDrive(reactState);
+  assert.equal(react.close.type, 'button');
+  assert.equal(react.close.props['aria-label'], 'Close Eclipsed player');
+  assert.match(bundle, /const close=c\.querySelector\("\.zp-player-close"\);if\(close\)close\.focus\(\)/);
+  assert.match(bundle, /const trigger=c\.querySelector\("\.zp-poster"\);if\(trigger\)trigger\.focus\(\)/);
+  react.close.props.onClick({ stopPropagation() {} });
+  assert.equal(reactState.selected, null);
+});
+
 test('fullscreen targets only the film frame and handles API rejection in both implementations', async () => {
   const early = earlyPlayer();
   early.zpActivate(early.drive.poster);
@@ -227,18 +265,20 @@ test('switching films removes the prior iframe, Drive sizing and fullscreen acti
   assert.equal(early.document.querySelectorAll('iframe').length, 1);
   assert.equal(early.drive.article.classList.contains('is-drive'), false);
   assert.equal(early.drive.actions.querySelector('.zp-drive-fs'), null);
-  assert.equal(early.drive.poster.getAttribute('role'), 'button');
-  assert.equal(early.drive.poster.getAttribute('tabindex'), '0');
-  early.zpActivate(early.drive.poster);
+  const restoredPoster = early.drive.article.querySelector('[data-video-card]');
+  assert.equal(restoredPoster.tagName, 'button');
+  assert.equal(restoredPoster.getAttribute('role'), null);
+  assert.equal(restoredPoster.getAttribute('tabindex'), null);
+  early.zpActivate(restoredPoster);
   assert.equal(early.document.querySelectorAll('iframe').length, 1);
   assert.equal(early.document.querySelectorAll('.zp-drive-fs').length, 1);
-  assert.equal(early.yt.poster.querySelector('iframe'), null);
+  assert.equal(early.yt.article.querySelector('iframe'), null);
 });
 
 test('YouTube parameters and its single-iframe layout stay unchanged', () => {
   const early = earlyPlayer();
   early.zpActivate(early.yt.poster);
-  const iframe = early.yt.poster.querySelector('iframe');
+  const iframe = early.yt.article.querySelector('iframe');
   const react = nodes(reactPlayer(youtube.yt).tree).find((node) => node.type === 'iframe');
   assert.equal(iframe.src, react.props.src);
   assert.equal(new URL(iframe.src).hostname, 'www.youtube-nocookie.com');
@@ -247,18 +287,22 @@ test('YouTube parameters and its single-iframe layout stay unchanged', () => {
   assert.equal(early.yt.article.querySelector('.zp-drive-fs'), null);
 });
 
-test('Space activates both posters without scrolling the page', () => {
+test('film posters use native buttons and do not install custom keyboard interception', () => {
   const early = earlyPlayer();
-  early.document.activeElement = early.drive.poster;
-  let prevented = 0;
-  const event = { key: ' ', currentTarget: early.drive.poster, preventDefault: () => { prevented++; } };
-  early.listeners.keydown(event);
+  const event = { target: early.drive.poster, preventDefault() { throw new Error('native button click must not be canceled'); } };
+  early.listeners.click(event);
   assert.equal(early.window.__zpPlayer.id, eclipsed.drive);
   const react = reactPlayer(null);
   const poster = nodes(react.tree).find((node) => node.props['aria-label'] === 'Play Eclipsed film sample');
-  poster.props.onKeyDown(event);
-  assert.equal(react.selected, eclipsed.drive);
-  assert.equal(prevented, 2);
+  assert.equal(poster.type, 'button');
+  assert.equal(poster.props.type, 'button');
+  assert.equal(poster.props.role, undefined);
+  assert.equal(poster.props.tabIndex, undefined);
+  assert.equal(poster.props.onKeyDown, undefined);
+  assert.equal(react.selected, undefined);
+  assert.equal((html.match(/<button type="button" aria-label="Play [^"]+ film sample" data-video-card/g) || []).length, 8);
+  assert.doesNotMatch(html, /role="button"|tabindex="0"/);
+  assert.doesNotMatch(inline, /addEventListener\("keydown"/);
 });
 
 test('all prerendered film captions provide an action slot and the duplicate Drive loader is gone', () => {
@@ -280,7 +324,7 @@ test('inline and bundled cinema CSS match: no overlaid actions, mobile room and 
   assert.doesNotMatch(buttonCss, /position\s*:|z-index\s*:|backdrop-filter\s*:/);
   assert.match(buttonCss, /width:44px;height:44px/);
   assert.match(bundledCss, /@media \(max-width:767px\)\{\s*\.zp-vcard\.is-drive \.zp-vframe\{min-height:240px\}/);
-  assert.doesNotMatch(bundledCss, /rotate\(|scale\(|transform\s*:/);
+  assert.doesNotMatch(bundledCss, /rotate\(|scale\(|(?:^|[;{])\s*transform\s*:/m);
   assert.match(bundledCss, /height:100dvh/);
   assert.match(bundledCss, /\.zp-vcard\.is-drive\{scroll-margin-top:5rem;scroll-margin-bottom:\.5rem\}/);
   assert.match(bundledCss, /\.zp-vcard\.is-drive\{--zp-frame-w:min\(94vw,1600px,calc\(\(100svh - 11rem\)/);
