@@ -289,8 +289,9 @@ test('skip button markup is accessible, free of aria-hidden ancestors, and style
   assert.match(bootCss, /html\.zp-boot-on \.zp-skip\{display:none\}/);
   assert.match(bootCss, /#zp-boot\.zp-off\.zp-fast\{animation:zpFadeOut \.16s ease forwards\}/);
   // The document is precached as '/', so any change to index.html or its home
-  // bundle has to move the cache name with it (v40: hero artwork plate).
-  assert.match(sw, /CACHE_NAME\s*=\s*'zazie-v40'/);
+  // bundle has to move the cache name with it (v41: biography moved above the
+  // press kit and rates).
+  assert.match(sw, /CACHE_NAME\s*=\s*'zazie-v41'/);
 });
 
 test('clicking #zp-boot-skip immediately dismisses the intro in fast mode and removes the node', async () => {

@@ -49,7 +49,7 @@ Primary routes:
 
 | Route | Role |
 | --- | --- |
-| `/` | The portfolio: a single continuous React experience (productions, showreel, film samples, press, approach, rates, composer, reviews, inquiry) |
+| `/` | The portfolio: a single continuous React experience (productions, film samples, showreel, composer, press, approach, rates, reviews, inquiry) |
 | `/work` · `/reel` · `/composer` · `/process` · `/services` · `/contact` | Indexable hub pages mirroring the portfolio's content silos |
 | `/hire-a-composer` · `/sound-design` · `/game-scoring` | Commission pages: the commercial pillar and its first two format spokes |
 | `/store` | The Catalogue: records, sound libraries, tools and objects — 24 items, checkout delegated to Bandcamp, itch.io, Gumroad and eBay |
@@ -179,7 +179,7 @@ src/
 ### Rendering & delivery model
 
 - **Static first paint.** Fonts, route metadata, descriptions, cue copy, credits, and internal links are in HTML before any JavaScript runs. The item-page bundle adds enhancement; it does not create the content.
-- **Service worker (`sw.js`, v29)** — retains the existing navigation/static strategies; generated item pages are not bulk-precached. `CACHE_NAME` must be bumped when precached hashes or cache behavior change.
+- **Service worker (`sw.js`, v41)** — retains the existing navigation/static strategies; generated item pages are not bulk-precached. `CACHE_NAME` must be bumped when precached hashes or cache behavior change.
 - **Edge layer** — `_headers` carries the CSP allowlist and canonical `Link:` headers. `_redirects` preserves legacy `.html` aliases and sends unknown routes to `/404.html` with status 404; there is no `/* /index.html 200` SPA splat.
 
 ## Technology stack
@@ -203,7 +203,7 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 ├── index.html                  # Home: prerendered DOM + archive boot (gate, overlay, driver) + 4 generated JSON-LD blocks
 ├── index-<hash>.js / .css      # Retained legacy homepage assets (not rebuilt here)
 ├── 404.html                    # "Signal Lost" — served with real 404 status
-├── sw.js                       # Service worker (CACHE_NAME zazie-v29; bump it on any precache change)
+├── sw.js                       # Service worker (CACHE_NAME zazie-v41; bump it on any precache change)
 ├── server.mjs                  # Local static server: clean routes + 404 fallback, Brotli/Gzip, ETag/304
 ├── _headers                    # CSP, canonical Link headers, per-path cache policy (read the top comment)
 ├── _redirects                  # Legacy aliases + explicit real-404 fallback
@@ -471,7 +471,7 @@ For future AI-assisted development sessions. **Before changing anything:**
 
 **Implemented** (all verifiable in this tree):
 
-- Full portfolio experience: poster wall + lightbox (9 productions), 32-cue showreel with mood clusters and sticky player, 7 film samples, press kit, scope-and-estimate, reviews, `mailto:` inquiry
+- Full portfolio experience: poster wall + lightbox (9 productions), 32-cue showreel with mood clusters and sticky player, 7 film samples, composer biography, press kit, scope-and-estimate, reviews, `mailto:` inquiry
 - Archive boot restored 2026-10-22: the terminal loading screen the prerender pass had silently disabled plays again on the homepage, now gated in the head so it can never become inert unnoticed (`PERFORMANCE.md`)
 - 19 original hub routes + 65 data-generated production/cue/catalogue pages, seven legal/operating documents with generated FAQ schema, and a hub-only human sitemap
 - Service worker (SWR / network-first / cache-first tiers), CSP + canonical headers, 301 map, real 404

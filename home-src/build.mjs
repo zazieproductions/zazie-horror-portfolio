@@ -143,13 +143,36 @@ const PAIRS = [
     '_.useEffect(function(){let c=zpCard.current;if(!e){if(c){const trigger=c.querySelector(".zp-poster");if(trigger)trigger.focus()}zpCard.current=null;return}if(!c)c=document.querySelector(".zp-vcard.is-playing");if(!c)return;zpCard.current=c;const close=c.querySelector(".zp-player-close");if(close)close.focus();try{const reduce=',
     BUNDLE,
   ],
-  // Services heading
-  ['04 · Scope and budget', '04 · Scoring services', BOTH],
+  // Section order (2026-10-24): the biography sits directly after the
+  // showreel, ahead of the press kit and the rates. Moving it in the bundle
+  // means moving the `rj` child (About.tsx) from its old slot after the
+  // services island (`lj`) to just before the press kit (`I5`) in the App
+  // children list; the matching static move happens in patchStatic().
+  [
+    'u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"}),u.jsx(I5,',
+    'u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"}),u.jsx(rj,{"data-source-loc":"src/App.tsx:45:10"}),u.jsx(I5,',
+    BUNDLE,
+  ],
+  [
+    'u.jsx(lj,{"data-source-loc":"src/App.tsx:44:10"}),u.jsx(rj,{"data-source-loc":"src/App.tsx:45:10"}),',
+    'u.jsx(lj,{"data-source-loc":"src/App.tsx:44:10"}),',
+    BUNDLE,
+  ],
+  // Services heading. The eyebrow is 05 now that the biography precedes it;
+  // the direct jump keeps the static "already applied" check working after
+  // later builds, when neither the old 04 text nor an intermediate label is
+  // left in index.html.
+  ['04 · Scope and budget', '05 · Scoring services', BOTH],
   ['Build a scope and estimate', 'Rates & estimates', BUNDLE],
   ['Build a scope and estimate', 'Rates &amp; estimates', HTML],
   ['Choose a project type, scored runtime, complexity, and delivery needs.', 'Packages are priced by scored music minutes, not film length.', BOTH],
   ["Estimates scale with your project's funding.", 'Preliminary estimate — final quotation subject to creative scope and written agreement.', BUNDLE],
   ['Packages are priced by scored music minutes, not film length. Estimates are indicative and nonbinding.', 'Packages are priced by scored music minutes, not film length. Preliminary estimate — final quotation subject to creative scope and written agreement.', HTML],
+  // Numbered eyebrows stay sequential in reading order after the move:
+  // 01 On screen, 02 Showreel, 03 Biography, 04 Approach, 05 Scoring services,
+  // 06 Contact.
+  ['05 · Biography', '03 · Biography', BOTH],
+  ['03 · Approach', '04 · Approach', BOTH],
   // Contact
   ['Share your format, runtime, timeline, and budget.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', BUNDLE],
   ['Share your format, scored minutes, timeline, and budget.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', HTML],
@@ -185,7 +208,7 @@ const ISLAND_OPEN = '<div class="zp-home-section zp-home-island" data-zp-island=
 const ISLAND_CLOSE = '</div></div>';
 const SERVICES_HEADER = [
   '<div class="mb-10 max-w-2xl sm:mb-14">',
-  '<p class="mb-3 text-[10px] uppercase tracking-[0.35em] text-blood sm:text-[11px] sm:tracking-[0.4em]">04 · Scoring services</p>',
+  '<p class="mb-3 text-[10px] uppercase tracking-[0.35em] text-blood sm:text-[11px] sm:tracking-[0.4em]">05 · Scoring services</p>',
   '<h2 class="mb-4 font-display text-3xl leading-none text-bone sm:text-4xl md:text-6xl">Rates &amp; estimates</h2>',
   '<p class="text-sm leading-relaxed text-mist sm:text-base">Packages are priced by scored music minutes, not film length. Preliminary estimate — final quotation subject to creative scope and written agreement.</p>',
   '</div>',
@@ -347,6 +370,29 @@ function patchStatic(html) {
     if (gridEnd < 0 || gridEnd > sectionEnd) throw new Error('index.html: services grid did not close inside #services');
     out = out.slice(0, gridStart) + islandHtml(true) + out.slice(gridEnd);
     applied.push(`services grid replaced by island (${gridEnd - gridStart} chars)`);
+  }
+
+  // Biography placement. The React bundle moves `rj` above `I5` (see the
+  // section-order pairs); the static snapshot has to make the same move or a
+  // no-JS/crawler view would disagree with the hydrated page. Matched by
+  // section id and re-inserted before #press, so it is idempotent: once the
+  // biography precedes the press kit there is nothing left to do.
+  {
+    const aboutStart = out.indexOf('<section id="about"');
+    const pressStart = out.indexOf('<section id="press"');
+    if (aboutStart < 0) throw new Error('index.html: no #about section');
+    if (pressStart < 0) throw new Error('index.html: no #press section');
+    if (aboutStart > pressStart) {
+      const close = '</section>';
+      const aboutEnd = out.indexOf(close, aboutStart);
+      if (aboutEnd < 0) throw new Error('index.html: #about section does not close');
+      const aboutSection = out.slice(aboutStart, aboutEnd + close.length);
+      const withoutAbout = out.slice(0, aboutStart) + out.slice(aboutStart + aboutSection.length);
+      const at = withoutAbout.indexOf('<section id="press"');
+      if (at < 0) throw new Error('index.html: #press section not found after removing #about');
+      out = withoutAbout.slice(0, at) + aboutSection + withoutAbout.slice(at);
+      applied.push('biography moved above the press kit');
+    }
   }
 
   // Budget select: option list from the package list.
