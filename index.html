@@ -346,7 +346,7 @@ html.zp-boot-on .zp-skip{display:none}
 
 
 <style>
-.border-bone\/70{border-color:#f0ebe3b3}
+.border-bone\/70{border-color:#f2ece3a6}
 .bg-black\/60{background-color:#00000099}
 </style>
 <script type="module">
@@ -515,7 +515,7 @@ const boot = () => {
 };
 document.readyState === "complete" ? boot() : window.addEventListener("load", boot, { once: true });
 </script>
-<link href="index-e5dac783.css" rel="stylesheet"/>
+<link href="index-b92927f2.css" rel="stylesheet"/>
 
 
 
@@ -574,12 +574,12 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
      plate, because the plate stops 8% above the section's bottom. */
   .zp-hero-art-scrim{
     position:absolute;inset-inline:0;bottom:0;height:42%;pointer-events:none;
-    background:linear-gradient(to top,#030303 0%,#030303f2 9%,#030303b8 26%,#0303034d 62%,#03030300 100%);
+    background:linear-gradient(to top,#070605 0%,#070605f2 9%,#070605b8 26%,#0706054d 62%,#07060500 100%);
   }
   /* Red hairline: a pseudo-element now, so it belongs to the plate. */
   .zp-hero-art-plate:after{
     content:"";position:absolute;right:0;inset-block:15%;width:1px;
-    background:linear-gradient(to bottom,transparent,#c41e1e80 50%,transparent);
+    background:linear-gradient(to bottom,transparent,rgba(242,236,227,.18) 50%,transparent);
   }
 </style>
 
@@ -605,7 +605,7 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
   .zp-mobile-quote{
     display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;
     min-height:44px;margin-left:auto;margin-right:.75rem;padding:.65rem .9rem;
-    border:1px solid #c41e1e;background:#c41e1e;color:#f0ebe3;
+    border:1px solid #8e2b24;background:#8e2b24;color:#f2ece3;
     font:500 .75rem/1.2 Inter,ui-sans-serif,system-ui,sans-serif;
     letter-spacing:.08em;text-transform:uppercase;text-decoration:none;
   }
@@ -614,10 +614,10 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
     width:44px;height:44px;border:1px solid rgba(255,255,255,.1);
     background:transparent;color:#f0ebe3;cursor:pointer;
   }
-  .zp-mobile-quote:hover,.zp-mobile-quote:focus-visible{background:#ff2a2a;border-color:#ff2a2a}
-  .zp-menu-button:hover{border-color:rgba(196,30,30,.6)}
+  .zp-mobile-quote:hover,.zp-mobile-quote:focus-visible{background:#7c241f;border-color:#7c241f}
+  .zp-menu-button:hover{border-color:rgba(242,236,227,.35)}
   .zp-mobile-quote:focus-visible,.zp-menu-button:focus-visible,
-  .zp-poster-close:focus-visible{outline:2px solid #ff2a2a;outline-offset:3px}
+  .zp-poster-close:focus-visible{outline:2px solid #c88076;outline-offset:3px}
   .zp-poster-close{min-width:44px;min-height:44px}
   .zp-poster-dialog{overscroll-behavior:contain;scrollbar-width:thin}
   .zp-poster-contain{object-fit:contain!important;object-position:center!important;background:#000}
@@ -659,27 +659,27 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
     max-width:none!important;max-height:none!important;
     border:0;background:#000;
   }
-  .zp-vcard.is-playing{border-color:#c41e1e73}
+  .zp-vcard.is-playing{border-color:rgba(242,236,227,.32)}
   .zp-vcard.is-drive{scroll-margin-top:5rem;scroll-margin-bottom:.5rem}
   .zp-vcard.is-playing .zp-vframe{
-    box-shadow:inset 0 0 0 1px #c41e1e38,0 24px 70px #000000bf,0 0 90px #c41e1e1a;
+    box-shadow:inset 0 0 0 1px rgba(242,236,227,.12),0 24px 70px #000000bf;
   }
   /* Both early playback and React use a single iframe, not a hidden wrapper. */
   .zp-poster{appearance:none;border:0;padding:0;background:transparent;color:inherit;font:inherit;text-align:inherit}
   .zp-poster.is-live{cursor:default}
   .zp-poster.is-live>*:not(iframe){display:none!important}
-  .zp-player-close{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 10px;border:1px solid rgba(240,235,227,.25);background:#050505;color:#f0ebe3;cursor:pointer;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
-  .zp-player-close:hover{border-color:#c41e1e;background:#c41e1e;color:#fff}
-  .zp-player-close:focus-visible{outline:2px solid #c41e1e;outline-offset:2px}
+  .zp-player-close{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 10px;border:1px solid rgba(240,235,227,.25);background:#0a0807;color:#f2ece3;cursor:pointer;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+  .zp-player-close:hover{border-color:#8e2b24;background:#8e2b24;color:#fff}
+  .zp-player-close:focus-visible{outline:2px solid #c88076;outline-offset:2px}
   .zp-vactions{display:flex;align-items:center;gap:4px;flex-shrink:0}
   .zp-drive-fs{
     display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;
     width:44px;height:44px;border:1px solid rgba(240,235,227,.25);
-    background:#050505;color:#f0ebe3;cursor:pointer;
+    background:#0a0807;color:#f2ece3;cursor:pointer;
     transition:background-color .2s ease,border-color .2s ease,color .2s ease;
   }
-  .zp-drive-fs:hover{border-color:#c41e1e;background:#c41e1e;color:#fff}
-  .zp-drive-fs:focus-visible{outline:2px solid #c41e1e;outline-offset:2px}
+  .zp-drive-fs:hover{border-color:#8e2b24;background:#8e2b24;color:#fff}
+  .zp-drive-fs:focus-visible{outline:2px solid #c88076;outline-offset:2px}
   /* A 160–200px-tall phone embed crowds Drive's own toolbar. Give it room
      without cropping, scaling or rotating the film or its native controls. */
   @media (max-width:767px){
@@ -742,8 +742,235 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
      form, so it must not block the hero paint. It is fetched as a preload and
      promoted to a stylesheet as soon as it lands; the <noscript> copy keeps the
      form styled with scripting off. -->
-<link href="/estimator-43a25eec.css" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"/>
-<noscript><link href="/estimator-43a25eec.css" rel="stylesheet"/></noscript>
+<link href="/estimator-849a1711.css" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"/>
+<noscript><link href="/estimator-849a1711.css" rel="stylesheet"/></noscript>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style id="zp-studio-pass">
+/* ═══════════════════════════════════════════════════════════════════════════
+   STUDIO PASS — boutique restraint (2026-10-24)
+
+   The portfolio keeps every interactive system it had: the archive boot, the
+   shared showreel engine and sticky player, the film-sample players, the
+   poster lightbox, the scope estimator and the inquiry handoff. What changes
+   is the register the page is written in:
+
+     · one stock — warm black — with bone ink and a single oxblood accent,
+       instead of red shouts on pure black;
+     · hairlines and letter-spaced small caps instead of glow shadows,
+       gradient text and blurred colour blooms;
+     · type set for reading: balanced headings, a wider measure, calmer
+       labels, prices and figures set as type rather than as glowing numbers.
+
+   These rules sit outside Tailwind's layers, so they win over the utilities
+   without !important, and the React bundle (which re-renders #root with the
+   same class names) inherits them too.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* 1 — Palette -------------------------------------------------------------- */
+:root{
+  --color-void:#070605;
+  --color-ink:#0b0908;
+  --color-smoke:#141110;
+  --color-ash:#272220;
+  --color-mist:#a89f95;
+  --color-bone:#f2ece3;
+  --color-blood:#8e2b24;
+  --color-ember:#a33a30;
+}
+html{background:#070605;color-scheme:dark}
+body{background:#070605;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+::selection{background:rgba(142,43,36,.55);color:#f2ece3}
+:focus-visible{outline-color:#c88076}
+
+/* 2 — Atmosphere: film, not filter ---------------------------------------- */
+.grain{opacity:.03;mix-blend-mode:soft-light}
+.vignette{background:radial-gradient(ellipse at 50% 44%,rgba(0,0,0,0) 40%,rgba(0,0,0,.6) 100%)}
+[class*="shadow-["]{box-shadow:none!important}
+main [class*="blur-[100px]"],main [class*="blur-3xl"]{
+  filter:none!important;
+  background-color:transparent!important;
+  background-image:radial-gradient(closest-side,rgba(142,43,36,.15),rgba(142,43,36,0))!important;
+  opacity:.8;
+}
+
+/* 2b — Baked accent alphas ------------------------------------------------
+   Tailwind writes opacity-modified palette values as literals (#c41e1e4d),
+   so the theme override above cannot reach them. Restate the ones this page
+   actually uses, at the new oxblood base. Hover variants are handled in
+   section 7 and stay exact-token matches, so they never leak into rest state. */
+[class~="bg-blood/10"]{background-color:rgba(142,43,36,.1)}
+[class~="bg-blood/15"]{background-color:rgba(142,43,36,.14)}
+[class~="bg-blood/20"]{background-color:rgba(142,43,36,.18)}
+[class~="bg-blood/60"]{background-color:rgba(142,43,36,.55)}
+[class~="border-blood/10"]{border-color:rgba(142,43,36,.14)}
+[class~="border-blood/15"]{border-color:rgba(142,43,36,.18)}
+[class~="border-blood/30"]{border-color:rgba(242,236,227,.14)}
+[class~="border-blood/35"]{border-color:rgba(142,43,36,.4)}
+[class~="border-blood/40"]{border-color:rgba(142,43,36,.45)}
+[class~="text-blood/50"]{color:rgba(242,236,227,.18)}
+::-webkit-scrollbar-thumb:hover{background:#8e2b24}
+input[type="range"].seek::-webkit-slider-thumb{background:#c88076;box-shadow:none}
+
+/* 3 — Type: one serif voice, set with air --------------------------------- */
+main h1,main h2{font-weight:400;letter-spacing:-.004em}
+main h1{line-height:1.03;text-wrap:balance}
+main h2{line-height:1.08;text-wrap:balance}
+main p,main li{text-wrap:pretty}
+main p[class*="text-sm"]{font-size:.9375rem;line-height:1.8}
+main p[class*="text-base"]{line-height:1.85}
+main [class~="text-blood"]{color:#c08d82}
+main [class~="text-blood"][class*="uppercase"]{font-weight:500}
+main > section p[class~="text-blood"][class*="uppercase"]{font-size:.6875rem;letter-spacing:.3em}
+main [class~="text-blood"] svg{color:inherit}
+main p[class*="text-mist"]{color:#a89f95}
+
+/* 4 — Masthead: hairline, letterspaced, one filled action ----------------- */
+header.fixed{border-bottom:1px solid transparent}
+header.fixed[class*="bg-void"]{background-color:rgba(7,6,5,.92);border-bottom-color:rgba(242,236,227,.08)}
+header nav a{font-size:10px;letter-spacing:.22em;color:#a89f95}
+header nav a:hover{color:#f2ece3}
+header nav a[class*="bg-blood"]{
+  padding:.7rem 1.15rem;border:1px solid #8e2b24;border-radius:0;
+  background-color:#8e2b24;box-shadow:none;color:#f4eee5;
+}
+header nav a[class*="bg-blood"]:hover{background-color:#7c241f;border-color:#7c241f;color:#fff}
+header a > span[class*="border-blood/40"]{
+  border-radius:0;border-color:rgba(142,43,36,.6);
+  background-color:rgba(142,43,36,.12);color:#c88076;
+}
+header a:hover > span[class*="border-blood/40"]{background-color:#8e2b24;border-color:#8e2b24;color:#f2ece3}
+header [class*="bg-void/95"]{background-color:rgba(7,6,5,.97)}
+
+/* 5 — Hero: the photograph and the sentence carry it ---------------------- */
+#top .hero-kenburns{opacity:.3}
+#top .mb-5 > span{
+  padding:.45rem .7rem;border-radius:0;border-color:rgba(242,236,227,.16);
+  background-color:rgba(242,236,227,.03);color:#c3b6a7;
+  letter-spacing:.2em;-webkit-backdrop-filter:none;backdrop-filter:none;
+}
+#top .mb-5 .animate-ping{animation:none;opacity:0}
+#top .lucide-sparkles{display:none}
+#top .mb-5 .bg-blood{background-color:#a5564a}
+#top h1{max-width:18ch;font-size:clamp(2.5rem,4.6vw,4.4rem);line-height:1.02;letter-spacing:-.012em}
+#top h1 .bg-clip-text{
+  background-image:none!important;color:#f2ece3;-webkit-text-fill-color:#f2ece3;font-style:italic;
+}
+#top p[class*="font-display"]{line-height:1.32}
+#top button{
+  min-height:56px;padding:1.05rem 1.9rem;border:1px solid #8e2b24;border-radius:0;
+  background-color:#8e2b24;box-shadow:none;
+  font-size:.72rem;font-weight:500;line-height:1.2;letter-spacing:.2em;text-transform:uppercase;
+}
+#top button:hover{background-color:#7c241f;border-color:#7c241f;box-shadow:none}
+#top button > span[class*="translate-x-full"]{display:none}
+#top a[href="#contact"]{
+  min-height:56px;border:1px solid rgba(242,236,227,.22);border-radius:0;
+  background-color:transparent;color:#f2ece3;
+  font-size:.7rem;letter-spacing:.2em;-webkit-backdrop-filter:none;backdrop-filter:none;
+}
+#top a[href="#contact"]:hover{
+  border-color:rgba(242,236,227,.45);background-color:rgba(242,236,227,.04);color:#f2ece3;
+}
+#top [class*="F5C518"]{color:#b5a189}
+#top [class*="radial-gradient(ellipse_at_70%"]{background-image:radial-gradient(ellipse at 70% 30%,rgba(120,38,32,.2),transparent 58%)}
+#top [class*="radial-gradient(ellipse_at_20%"]{background-image:radial-gradient(ellipse at 20% 80%,rgba(142,43,36,.07),transparent 50%)}
+#top [class*="border-blood/40"]{border-color:rgba(242,236,227,.16)}
+#top [class*="border-white/"]{border-color:rgba(242,236,227,.07)}
+
+/* 6 — Chapter rhythm: one measure, hairlines between sections ------------- */
+main > section:not(#top){padding-block:clamp(4.5rem,8.5vw,8rem)}
+main > section + section{border-top:1px solid rgba(242,236,227,.07)}
+#press,#reviews{border-color:rgba(242,236,227,.08);border-bottom-width:0}
+#showreel p[class*="text-5xl"]{color:#f2ece3;font-feature-settings:"lnum" 1}
+#showreel [class*="rounded-sm"][class*="backdrop-blur-sm"]{
+  border-radius:0;border-color:rgba(242,236,227,.08);
+  background-color:rgba(242,236,227,.02);
+  -webkit-backdrop-filter:none;backdrop-filter:none;
+}
+#showreel .wave-bar{border-radius:0}
+#showreel [class*="glass-panel"]{
+  border-color:rgba(242,236,227,.09);background-color:#0b0908;
+  -webkit-backdrop-filter:none;backdrop-filter:none;
+}
+main [class*="border-blood/30"]{border-color:rgba(242,236,227,.14)}
+main [class*="bg-blood/10"][class*="border-blood/30"]{background-color:rgba(242,236,227,.03);color:#cdc1b4}
+
+/* 7 — Plates, posters and players: hairline frames, quiet hovers ---------- */
+#posters button{border-color:#272220;background-color:#141110}
+#posters button:hover{border-color:rgba(242,236,227,.3)}
+#posters button img{opacity:.94}
+#posters button:hover img{scale:1.02;opacity:1}
+[class*="hover:border-blood"]:hover{border-color:rgba(242,236,227,.3)}
+[class*="hover:text-blood"]:hover{color:#f2ece3}
+.group:hover [class*="group-hover:text-blood"]{color:#f2ece3}
+[class~="group/vid"]:hover [class~="group-hover/vid:bg-blood/70"]{background-color:rgba(142,43,36,.78)}
+[class~="group/vid"]:hover [class~="group-hover/vid:border-blood"]{border-color:rgba(242,236,227,.65)}
+[class*="hover:bg-blood/10"]:hover{background-color:rgba(242,236,227,.04)}
+.zp-vcard{border-color:#272220}
+.zp-vcard:hover{border-color:rgba(242,236,227,.26)}
+#work span[class*="rounded-full"]{
+  border-radius:0;border-color:rgba(242,236,227,.45);
+  background-color:rgba(7,6,5,.62);box-shadow:none!important;
+}
+#showreel .chip-scroll button{border-color:#272220;color:#a89f95}
+#showreel .chip-scroll button[class*="bg-blood"]{border-color:#8e2b24;background-color:rgba(142,43,36,.2);color:#f2ece3}
+
+/* 8 — Reviews, approach, press: ink marks instead of red blocks ----------- */
+#reviews [class*="text-blood/50"]{color:rgba(242,236,227,.18)}
+#reviews [class*="F5C518"]{color:#b5a189}
+#method [class*="bg-blood/10"],#press [class*="bg-blood/10"]{background-color:rgba(242,236,227,.03)}
+
+/* 9 — Inquiry form: paper fields, one oxblood action ---------------------- */
+#contact input,#contact select,#contact textarea{
+  border:1px solid rgba(242,236,227,.13);border-radius:0;
+  background-color:#0a0807;color:#f2ece3;
+}
+#contact input:focus,#contact select:focus,#contact textarea:focus{
+  border-color:rgba(242,236,227,.45);outline:none;box-shadow:0 0 0 1px rgba(242,236,227,.12);
+}
+#contact button[type="submit"]{
+  min-height:54px;padding:1rem 1.9rem;border:1px solid #8e2b24;border-radius:0;
+  background-color:#8e2b24;box-shadow:none;
+  font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;
+}
+#contact button[type="submit"]:hover{background-color:#7c241f;border-color:#7c241f}
+#contact label{color:#a89f95}
+#contact ::placeholder{color:rgba(168,159,149,.6)}
+
+/* 10 — Footer and sticky player ------------------------------------------ */
+footer{border-top-color:rgba(242,236,227,.08)}
+footer [class*="via-blood/40"]{background-image:none;background-color:rgba(242,236,227,.12)}
+footer a{letter-spacing:.24em}
+footer a:hover{color:#f2ece3}
+.player-shell{
+  border-top-color:rgba(242,236,227,.1);background-color:rgba(7,6,5,.97);
+  -webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);
+}
+</style>
 <title>Horror Composer for Hire — Film, TV &amp; Game Scores</title>
 <meta name="description" content="IMDb-credited horror composer Zazie Kanwar-Torge scores psychological and folk films, TV, and games. Custom scores from $250 USD."/>
 <link rel="canonical" href="https://horror.zazieproductions.com/"/>

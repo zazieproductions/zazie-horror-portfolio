@@ -76,7 +76,7 @@ Zazie Productions scores psychological horror: dread, tension, possession, cosmi
 
 The site is built to *demonstrate* rather than describe that identity:
 
-- **A restrained dark system, not decoration.** One palette (`void #030303`, `ink`, `smoke`, `ash`, `mist #9a9590`, `bone #f0ebe3`, `blood #c41e1e`, `ember #ff2a2a`), one serif voice (Cormorant Garamond) against one workhorse sans (Inter variable), and a fixed atmosphere layer (film grain, vignette, drifting ambient orbs, ken-burns hero) that is part of the first painted frame, not an after-effect of JavaScript.
+- **A restrained dark system, not decoration.** One palette (`void #070605`, `ink #0b0908`, `smoke`, `ash`, `mist #a89f95`, `bone #f2ece3`, `blood #8e2b24` oxblood, `ember #a33a30`), one serif voice (Cormorant Garamond) against one workhorse sans (Inter variable), and a fixed atmosphere layer (film grain, vignette, low ambient warmth, ken-burns hero) that is part of the first painted frame, not an after-effect of JavaScript. The accent is ink, not neon: rules, fills and one action per surface — see `STUDIO-PASS.md`.
 - **"The Archive" frame.** The 404 is an archive-entry error; the homepage opens on a tape-deck boot transmission, while the copy speaks in catalogue and signal language. The metaphor is consistent and quiet.
 - **Listen first.** The showreel — 32 original cues, playable inline, organised by mood — is the centre of gravity of the whole site. Film samples embed the scores *in context*. Commerce points outward to marketplaces rather than building a parallel shop.
 - **No backend, no tracking.** The inquiry form composes an email in the visitor's own mail client. No cookies, no analytics, no accounts, no newsletter. The privacy notice inventories every third party the site can touch, and a device inspector lets the visitor verify the claims themselves.
@@ -522,3 +522,4 @@ The root `*.md` files are dated implementation records — the repo's developmen
 | `SEO-DOSSIER.md` | The technical SEO programme: IA silos, schema matrix, crawl policy |
 | `SITEMAP.md` | Sitemap fixes and the validator contract |
 | `STORE.md` | Catalogue build, data model, deployment lessons (the redirect loop) |
+| `STUDIO-PASS.md` | The boutique/prestige pass: palette contract, what was removed, how to extend it |
