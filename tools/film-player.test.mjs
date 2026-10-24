@@ -70,12 +70,14 @@ class Element {
     return clone;
   }
   matches(selector) {
-    if (selector.startsWith('[data-video-card]')) {
-      return this.getAttribute('data-video-card') !== null &&
-        (selector === '[data-video-card]' || this.classList.contains('is-live'));
-    }
-    if (selector.startsWith('.')) return selector.slice(1).split('.').every((name) => this.classList.contains(name));
-    return this.tagName === selector;
+    // Compound selectors only (tag, .class, [attr]): enough for both players and
+    // the item-page click-to-load script, and no dependency to install.
+    const parts = selector.match(/[a-zA-Z][\w-]*|\.[\w-]+|\[[\w-]+\]/g) ?? [];
+    return parts.every((part) => {
+      if (part.startsWith('.')) return this.classList.contains(part.slice(1));
+      if (part.startsWith('[')) return this.getAttribute(part.slice(1, -1)) !== null;
+      return this.tagName === part;
+    });
   }
   querySelectorAll(selector) {
     return this.children.flatMap((child) => [
@@ -85,6 +87,7 @@ class Element {
   }
   querySelector(selector) { return this.querySelectorAll(selector)[0] || null; }
   closest(selector) { return this.matches(selector) ? this : this.parentElement?.closest(selector) || null; }
+  contains(node) { return node === this || this.querySelectorAll('*').includes(node); }
   scrollIntoView() {}
   focus() { this.focused = true; }
 }
@@ -327,7 +330,7 @@ test('inline and bundled cinema CSS match: no overlaid actions, mobile room and 
   assert.doesNotMatch(bundledCss, /rotate\(|scale\(|(?:^|[;{])\s*transform\s*:/m);
   assert.match(bundledCss, /height:100dvh/);
   assert.match(bundledCss, /\.zp-vcard\.is-drive\{scroll-margin-top:5rem;scroll-margin-bottom:\.5rem\}/);
-  assert.match(bundledCss, /\.zp-vcard\.is-drive\{--zp-frame-w:min\(94vw,1600px,calc\(\(100svh - 11rem\)/);
+  assert.match(bundledCss, /\.zp-vcard\.is-drive\{--zp-frame-w:min\(94vw,1760px,calc\(\(100svh - 11rem\)/);
 });
 
 test('showreel player starts with The Fatal Overdose in both the static page and playlist', () => {
@@ -354,3 +357,223 @@ test('immutable player assets have fresh content hashes and service-worker preca
   }
   assert.equal(read('sw.js').includes("const CACHE_NAME = 'zazie-v20'"), false);
 });
+
+/* --------------------------------------------------------------------------
+ * HD pass (2026-10-24): one parameter set for every player, and item pages
+ * that carry a poster instead of a provider iframe.
+ * ------------------------------------------------------------------------ */
+
+const embedModule = read('src/data/embed.ts');
+const sharedParams = /export const YOUTUBE_EMBED_PARAMS = '([^']+)'/.exec(embedModule)[1];
+const inlineParams = /var ZP_PARAMS = "([^"]+)"/.exec(html)[1];
+const escapedParams = sharedParams.replace(/&/g, '&amp;');
+const itemPages = ['expire', 'the-haunted', 'mike-has-a-visitor', 'phantom-requiem', 'eclipsed'];
+
+test('the homepage, the React bundle and the item pages ask for the same HD rendition', () => {
+  assert.equal(inlineParams, sharedParams, 'index.html ZP_PARAMS must stay identical to src/data/embed.ts');
+  assert.match(sharedParams, /^vq=hd1080&/, 'vq=hd1080 leads the parameter set');
+  assert.doesNotMatch(sharedParams, /(?:^|&)hd=1(?:&|$)/, 'hd=1 was deprecated with the Flash player');
+  assert.match(sharedParams, /playsinline=1/);
+
+  // Both React iframe props and the early inline player's src.
+  assert.ok(bundle.includes(`?autoplay=1&${sharedParams}`), 'bundle YouTube src carries the shared parameters');
+  assert.ok(bundle.includes(`?${sharedParams}`), 'bundle data-embed-src carries the shared parameters');
+  assert.ok(inline.includes('"https://www.youtube-nocookie.com/embed/" + yt + "?" + (a ? a + "&" : "") + ZP_PARAMS'));
+
+  // Item pages: the player URL is carried as the poster's click payload.
+  for (const slug of itemPages.filter((name) => name !== 'eclipsed')) {
+    const page = read(`work/${slug}.html`);
+    assert.ok(page.includes(`?autoplay=1&amp;${escapedParams}`), `${slug} requests the shared HD parameters`);
+  }
+
+  // The prefetch of the embed document is gone from both sides: warming a
+  // connection is the part that shortens the click, fetching the page is not.
+  assert.doesNotMatch(inline, /rel\s*=\s*"prefetch"/);
+  assert.equal(bundle.includes('rel="prefetch"'), false);
+  assert.match(inline, /l\.rel = "preconnect"/);
+});
+
+test('no item page ships a provider iframe: the film is a poster and a link until it is asked for', () => {
+  for (const dir of ['work', 'reel', 'store']) {
+    for (const entry of fs.readdirSync(new URL(`${dir}/`, root))) {
+      if (!entry.endsWith('.html')) continue;
+      const page = read(`${dir}/${entry}`);
+      assert.equal(page.includes('<iframe'), false, `${dir}/${entry} must not load a provider player on view`);
+      assert.equal(page.includes('youtube.com/embed'), false, `${dir}/${entry} must not preload a YouTube embed URL`);
+      assert.equal(/src="https:\/\/drive\.google\.com/.test(page), false, `${dir}/${entry} must not preload a Drive preview`);
+    }
+  }
+
+  const expire = read('work/expire.html');
+  assert.equal((expire.match(/data-video-play/g) || []).length, 1);
+  assert.match(expire, /<a class="entry-embed-poster" href="https:\/\/www\.youtube\.com\/watch\?v=lWm4Ies7edI"[^>]*data-video-play/);
+  // A real link target, so the film is still one click away without JavaScript.
+  assert.match(expire, /class="entry-embed-poster" href="https:\/\/www\.youtube\.com\/watch\?v=lWm4Ies7edI" target="_blank" rel="noopener noreferrer"/);
+  // The HD still, with the guaranteed 4:3 thumbnail as its fallback.
+  assert.match(expire, /<img class="entry-embed-still" src="https:\/\/i\.ytimg\.com\/vi\/lWm4Ies7edI\/maxresdefault\.jpg" data-fallback="https:\/\/i\.ytimg\.com\/vi\/lWm4Ies7edI\/hqdefault\.jpg" alt="" width="1280" height="720" loading="lazy" decoding="async"\/>/);
+
+  const eclipsed = read('work/eclipsed.html');
+  assert.match(eclipsed, /class="entry-embed-poster" href="https:\/\/drive\.google\.com\/file\/d\/1zKtAavEx-Yjd2To_troEYlxTTt62Y2OU\/view"[^>]*data-embed="https:\/\/drive\.google\.com\/file\/d\/1zKtAavEx-Yjd2To_troEYlxTTt62Y2OU\/preview\?autoplay=1"/);
+});
+
+test('the film stage is wider than the text measure, and the prose keeps its measure', () => {
+  const itemCss = read('src/item/item.css');
+  assert.match(itemCss, /\.doc-body--film \{\s*max-width: 100%;/);
+  assert.match(itemCss, /@media \(min-width: 1000px\) \{\s*[\s\S]*?\.doc-layout--film \{\s*grid-template-columns: minmax\(0, 1fr\);/);
+  assert.match(itemCss, /\.doc-body--film \.clause > p,[\s\S]*?max-width: var\(--measure\);/);
+  // No CSS scaling of the player: the frame's own pixels are the rendition.
+  assert.match(itemCss, /\.entry-embed,\s*\n\.entry-embed iframe,\s*\naudio\.audio-player \{\s*\n  rotate: none !important;\s*\n  scale: none !important;/);
+  assert.doesNotMatch(itemCss, /(?<![\w-])(?:scale|rotate)\(/);
+  assert.doesNotMatch(itemCss, /object-fit:\s*fill/);
+
+  for (const slug of itemPages) {
+    const page = read(`work/${slug}.html`);
+    assert.ok(page.includes('<div class="shell doc-layout doc-layout--film">'), `${slug} uses the wide film stage`);
+    assert.ok(page.includes('<div class="doc-body doc-body--film">'), `${slug} widens the body for its player`);
+  }
+  // Pages without a film keep the text column.
+  assert.ok(read('work/unseen.html').includes('<div class="shell doc-layout">'));
+});
+
+/* ------------------------------------------------- item-page click-to-load */
+
+const itemBundle = read(/<script src="\/(item-[A-Za-z0-9_-]+\.js)" defer><\/script>/.exec(read('work/expire.html'))[1]);
+const itemCssFile = /<link href="\/(item-[A-Za-z0-9_-]+\.css)" rel="stylesheet"\/>/.exec(read('work/expire.html'))[1];
+const ID = 'lWm4Ies7edI';
+const WATCH = `https://www.youtube.com/watch?v=${ID}`;
+const PLAYER_SRC = `https://www.youtube-nocookie.com/embed/${ID}?autoplay=1&${sharedParams}`;
+const PLAYER_ALLOW = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen';
+const PLAYER_TITLE = 'EXPIRE — official first-look clip: film sample (embedded player)';
+const FALLBACK = `https://i.ytimg.com/vi/${ID}/hqdefault.jpg`;
+
+function itemPage() {
+  const head = new Element('head');
+  const html_ = new Element('html');
+  const body = new Element('body');
+  const stage = new Element('div', { 'data-video-embed': '' });
+  stage.dataset = {};
+  const poster = new Element('a', {
+    class: 'entry-embed-poster', href: WATCH, target: '_blank', 'data-video-play': '',
+    'data-embed': PLAYER_SRC, 'data-allow': PLAYER_ALLOW, 'data-title': PLAYER_TITLE,
+  });
+  poster.dataset = { embed: PLAYER_SRC, allow: PLAYER_ALLOW, title: PLAYER_TITLE };
+  poster.tabIndex = 0;
+  const still = new Element('img', {
+    class: 'entry-embed-still',
+    src: `https://i.ytimg.com/vi/${ID}/maxresdefault.jpg`,
+    'data-fallback': FALLBACK,
+  });
+  still.dataset = { fallback: FALLBACK };
+  still.complete = true;
+  still.naturalWidth = 1280;
+  poster.appendChild(still);
+  stage.appendChild(poster);
+  body.appendChild(stage);
+
+  const document = {
+    documentElement: html_,
+    head,
+    body,
+    createElement: (tag) => new Element(tag),
+    querySelectorAll: (selector) => [...body.querySelectorAll(selector), ...head.querySelectorAll(selector)],
+    querySelector: (selector) => body.querySelector(selector),
+    addEventListener() {},
+  };
+  const context = vm.createContext({
+    document,
+    window: { location: { href: `https://horror.zazieproductions.com/work/expire` } },
+    URL,
+    Set,
+  });
+  vm.runInContext(itemBundle, context);
+  return { document, head, html: html_, body, stage, poster, still };
+}
+
+test('an item-page poster loads the player on a plain click, at the stage size, and keeps the still until then', () => {
+  const page = itemPage();
+  assert.equal(page.html.classList.contains('has-item-js'), true);
+  assert.equal(page.stage.dataset.playing, undefined);
+  assert.equal(page.stage.children.length, 1, 'nothing but the poster is in the stage before the click');
+
+  let prevented = 0;
+  page.poster.listeners.click({ button: 0, preventDefault: () => { prevented++; } });
+
+  const frame = page.stage.children.find((child) => child.tagName === 'iframe');
+  assert.ok(frame, 'the click mounts the player');
+  assert.equal(prevented, 1, 'the in-page player takes over from the link');
+  assert.equal(page.stage.dataset.playing, 'true');
+  assert.equal(frame.src, PLAYER_SRC);
+  assert.equal(frame.title, PLAYER_TITLE);
+  assert.equal(frame.className, 'entry-embed-frame');
+  assert.equal(frame.getAttribute('allow'), PLAYER_ALLOW);
+  assert.equal(frame.getAttribute('allowfullscreen'), '');
+  assert.equal(frame.getAttribute('referrerpolicy'), 'strict-origin-when-cross-origin');
+  assert.equal(new URL(frame.src).searchParams.get('vq'), 'hd1080');
+  assert.equal(new URL(frame.src).searchParams.get('autoplay'), '1');
+
+  // The still stays painted under the player and leaves the tab order at once.
+  assert.equal(page.poster.getAttribute('aria-hidden'), 'true');
+  assert.equal(page.poster.tabIndex, -1);
+  assert.equal(page.poster.parentElement, page.stage);
+  assert.equal(page.poster.children.some((child) => child.tagName === 'img'), true);
+
+  page.document.activeElement = page.poster;
+  frame.listeners.load();
+  assert.equal(page.poster.parentElement, null, 'the poster is removed once the player has loaded');
+  assert.equal(frame.focused, true, 'focus follows the poster into the player');
+
+  // A second click never adds a second player.
+  page.poster.listeners.click({ button: 0, preventDefault: () => { prevented++; } });
+  assert.equal(page.stage.children.filter((child) => child.tagName === 'iframe').length, 1);
+});
+
+test('modified clicks keep the real link target and never mount a player', () => {
+  for (const modifier of ['metaKey', 'ctrlKey', 'shiftKey', 'altKey']) {
+    const page = itemPage();
+    let prevented = 0;
+    page.poster.listeners.click({ button: 0, [modifier]: true, preventDefault: () => { prevented++; } });
+    assert.equal(prevented, 0, `${modifier}+click belongs to the browser`);
+    assert.equal(page.stage.children.some((child) => child.tagName === 'iframe'), false);
+    assert.equal(page.stage.dataset.playing, undefined);
+  }
+  const page = itemPage();
+  page.poster.listeners.click({ button: 1, preventDefault() { throw new Error('middle click must not be canceled'); } });
+  assert.equal(page.stage.children.some((child) => child.tagName === 'iframe'), false);
+});
+
+test('intent warms the provider origin once, with a preconnect rather than a prefetch', () => {
+  const page = itemPage();
+  page.poster.listeners.pointerenter();
+  page.poster.listeners.focus();
+  page.poster.listeners.touchstart();
+  const links = page.head.children.filter((child) => child.tagName === 'link');
+  assert.equal(links.length, 1);
+  assert.equal(links[0].rel, 'preconnect');
+  assert.equal(links[0].href, 'https://www.youtube-nocookie.com');
+  assert.equal(links[0].crossOrigin, '');
+  assert.equal(page.head.children.some((child) => child.rel === 'prefetch'), false);
+});
+
+test('a missing HD still falls back to the guaranteed 4:3 thumbnail, once', () => {
+  const page = itemPage();
+  page.still.listeners.error();
+  assert.equal(page.still.getAttribute('src'), FALLBACK);
+  page.still.listeners.error();
+  assert.equal(page.still.getAttribute('src'), FALLBACK);
+});
+
+test('the item bundle and stylesheet the pages reference are the files the build wrote', () => {
+  const css = /<link href="\/(item-[A-Za-z0-9_-]+\.css)" rel="stylesheet"\/>/.exec(read('work/expire.html'))[1];
+  assert.match(css, /^item-[A-Za-z0-9_-]{8}\.css$/);
+  assert.ok(fs.existsSync(new URL(css, root)), `${css} is served at the root`);
+  assert.ok(fs.existsSync(new URL(itemBundleFile(), root)), `${itemBundleFile()} is served at the root`);
+  assert.equal(itemBundle, read(itemBundleFile()));
+  for (const stale of ['item-L0PUZNzP.css', 'item-C8C9Qc-4.js']) {
+    assert.equal(read('work/expire.html').includes(stale), false, `${stale} is gone`);
+  }
+  assert.ok(read('sw.js').includes("const CACHE_NAME = 'zazie-v42'"), 'the cache name moves with the player assets');
+});
+
+function itemBundleFile() {
+  return /<script src="\/(item-[A-Za-z0-9_-]+\.js)" defer><\/script>/.exec(read('work/expire.html'))[1];
+}

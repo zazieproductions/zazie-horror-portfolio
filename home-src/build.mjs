@@ -107,6 +107,28 @@ const PAIRS = [
     'o?u.jsx("button",{type:"button",className:"zp-player-close","aria-label":`Close ${n.title} player`,onClick:function(e){e.stopPropagation();window.__zpPlayer=null;t(null)},children:"Close player"}):null,u.jsx("a",{href:n.drive?`https://drive.google.com/file/d/${n.drive}/view`',
     BUNDLE,
   ],
+  // Film player, HD pass (2026-10-24). The item pages and the homepage share
+  // one parameter set now: vq=hd1080 plus the quiet-player flags that were
+  // already there. The rendition itself comes from the player's pixel size, so
+  // the CSS stage moved as well (see the .zp-vcard rules in index.html and
+  // index-<hash>.css, and .doc-layout--film in src/item/item.css). This pair
+  // keeps the React render byte-identical to the early inline player's src,
+  // which tools/film-player.test.mjs compares.
+  [
+    'src:`https://www.youtube-nocookie.com/embed/${n.yt}?autoplay=1&rel=0&color=white&playsinline=1&iv_load_policy=3&fs=1`,"data-embed-src":`https://www.youtube-nocookie.com/embed/${n.yt}?rel=0&color=white&playsinline=1&iv_load_policy=3&fs=1`',
+    'src:`https://www.youtube-nocookie.com/embed/${n.yt}?autoplay=1&vq=hd1080&rel=0&color=white&playsinline=1&iv_load_policy=3&fs=1`,"data-embed-src":`https://www.youtube-nocookie.com/embed/${n.yt}?vq=hd1080&rel=0&color=white&playsinline=1&iv_load_policy=3&fs=1`',
+    BUNDLE,
+  ],
+  // The poster used to prefetch the whole embed document on hover - one stray
+  // <link> per card, fetching a page the visitor never navigated to. Warming
+  // the origin is the part that actually shortens the click; the document-level
+  // pointerenter/pointerdown/focusin handler in index.html does it once for both
+  // implementations, so this prop comes out rather than being duplicated.
+  [
+    ',onPointerEnter:()=>{if(n.yt&&!document.querySelector(`link[href*="${n.yt}"]`)){const e=document.createElement("link");e.rel="prefetch",e.href=`https://www.youtube-nocookie.com/embed/${n.yt}?rel=0&color=white&playsinline=1&iv_load_policy=3&fs=1`,document.head.appendChild(e)}}',
+    '',
+    BUNDLE,
+  ],
   // Poster lightbox: touch-friendly close, Escape support, background scroll
   // lock, and a scrollable dialog on short phone screens.
   ['function Q5(){const[e,t]=_.useState(null);return', 'function Q5(){const[e,t]=_.useState(null);_.useEffect(()=>{if(!e)return;const n=document.body.style.overflow,r=e=>{e.key==="Escape"&&t(null)};return document.body.style.overflow="hidden",document.addEventListener("keydown",r),()=>{document.body.style.overflow=n,document.removeEventListener("keydown",r)}},[e]);return', BUNDLE],

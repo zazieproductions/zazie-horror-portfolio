@@ -205,9 +205,12 @@ main a[href^="mailto:"], main a[href^="tel:"], main a[href="#reviews"] { min-hei
     .zp-vframe:-webkit-full-screen{height:100dvh!important}
   }
   @media (min-width:768px){
-    .zp-vcard{--zp-frame-w:min(94vw,1600px,calc((100vh - 7rem) * 16 / 9))}
+    /* 1760px clears the ~1633px player width YouTube's ladder wants before it
+       offers a 1080p rendition; the height guard keeps the 16:9 frame inside
+       the fold, and nothing is ever scaled up in CSS. */
+    .zp-vcard{--zp-frame-w:min(94vw,1760px,calc((100vh - 7rem) * 16 / 9))}
     /* Reserve the fixed mobile header and the caption when a phone turns sideways. */
-    .zp-vcard.is-drive{--zp-frame-w:min(94vw,1600px,calc((100vh - 11rem) * 16 / 9))}
+    .zp-vcard.is-drive{--zp-frame-w:min(94vw,1760px,calc((100vh - 11rem) * 16 / 9))}
     .zp-vcard.is-playing{
       grid-column:1/-1;
       width:var(--zp-frame-w);
@@ -216,8 +219,8 @@ main a[href^="mailto:"], main a[href^="tel:"], main a[href="#reviews"] { min-hei
   }
   @supports (height:100svh){
     @media (min-width:768px){
-      .zp-vcard{--zp-frame-w:min(94vw,1600px,calc((100svh - 7rem) * 16 / 9))}
-      .zp-vcard.is-drive{--zp-frame-w:min(94vw,1600px,calc((100svh - 11rem) * 16 / 9))}
+      .zp-vcard{--zp-frame-w:min(94vw,1760px,calc((100svh - 7rem) * 16 / 9))}
+      .zp-vcard.is-drive{--zp-frame-w:min(94vw,1760px,calc((100svh - 11rem) * 16 / 9))}
     }
   }
   /* Decorative overlays must never dim or sit on top of player chrome. */

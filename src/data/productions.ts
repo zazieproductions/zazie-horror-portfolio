@@ -214,6 +214,9 @@ export const productions: Production[] = [
     sample: {
       kind: 'drive',
       embedUrl: 'https://drive.google.com/file/d/1zKtAavEx-Yjd2To_troEYlxTTt62Y2OU/preview',
+      // The poster's own link target: with JavaScript off (or for a modified
+      // click) the still opens the Drive file directly instead of the player.
+      watchUrl: 'https://drive.google.com/file/d/1zKtAavEx-Yjd2To_troEYlxTTt62Y2OU/view',
       title: 'ECLIPSED project sample',
       description: 'A Google Drive-hosted project sample associated with the existing ECLIPSED work entry. IMDb identifies ECLIPSED as a 2025 short and lists Zazie Kanwar-Torge and Noah C. Castro as composers.',
       thumbnail: {

@@ -6,6 +6,7 @@ import { cues } from '../data/cues.js';
 import { releases } from '../data/releases.js';
 import { cueBySlug, hubByPath, productionBySlug, releaseBySlug, siblingsOf, stripMarkup } from '../data/routes.js';
 import { displayDuration } from '../data/site.js';
+import { playerAllow, playerSrc, playerTitle, posterFor, watchUrlFor } from '../data/embed.js';
 import {
   OG_TYPES,
   breadcrumbList,
@@ -17,7 +18,7 @@ import {
   seoBlock,
   webPageNode,
 } from './head.js';
-import type { Cue, Image, ItemRoute, Json, Production, Release } from '../data/types.js';
+import type { Cue, Image, ItemRoute, Json, Production, Release, VideoSample } from '../data/types.js';
 
 export interface PageChrome {
   masthead: string;
@@ -173,15 +174,34 @@ function figure(image: Image, shape: 'poster' | 'still' | 'square', loading: 'ea
           </figure>`;
 }
 
-function embedMarkup(sample: { kind: 'youtube' | 'drive'; embedUrl: string; title: string }): string {
+function embedMarkup(sample: VideoSample): string {
+  // Click-to-load, the same pattern the homepage uses: the served document
+  // carries a still, not a player. An <iframe src=...> here used to pull the
+  // provider's whole player (its JavaScript, fonts and manifests) on every page
+  // view, lazily or not, and - because the embed sat in the 74ch text column -
+  // YouTube answered with a 360/480p rendition of a 1280x720 film.
+  //
+  // The still is a real link to the film's own host: with JavaScript off, or
+  // with a modifier key, it opens there. src/item/main.ts intercepts a plain
+  // click, drops the iframe in at the player's own size and removes the poster
+  // once the player has actually loaded. Nothing contacts YouTube or Drive
+  // until then, and the click warms the connection first.
+  //
   // Keep Drive's standard preview UI; its controls are owned by the provider.
   // Include fullscreen + picture-in-picture + encrypted-media so mobile
   // browsers don't fall back to a cramped audio-only UI with an inverted bar.
-  const allow = sample.kind === 'youtube'
-    ? 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen'
-    : 'autoplay; clipboard-write; encrypted-media; picture-in-picture; fullscreen';
-  return `        <div class="entry-embed">
-          <iframe src="${esc(sample.embedUrl)}" title="${esc(sample.title)}" loading="lazy" allow="${allow}" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  const kind = sample.kind;
+  const poster = posterFor(sample);
+  const src = playerSrc(kind, sample.embedUrl, true);
+  const watch = watchUrlFor(sample);
+  const title = playerTitle(sample);
+  const host = kind === 'youtube' ? 'YouTube' : 'Drive';
+  return `        <div class="entry-embed" data-video-embed>
+          <a class="entry-embed-poster" href="${esc(watch)}" target="_blank" rel="noopener noreferrer" data-video-play data-embed="${esc(src)}" data-allow="${esc(playerAllow(kind))}" data-title="${esc(title)}">
+            <img class="entry-embed-still" src="${esc(poster.src)}"${poster.fallbackSrc ? ` data-fallback="${esc(poster.fallbackSrc)}"` : ''} alt="" width="${poster.width}" height="${poster.height}" loading="lazy" decoding="async"/>
+            <span class="entry-embed-play" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"/></svg></span>
+            <span class="entry-embed-note"><span class="entry-embed-sr">Play ${esc(sample.title)}. </span><span class="entry-embed-note-idle">Plays in page · HD</span><span class="entry-embed-note-busy">Loading player…</span><span class="entry-embed-sr">, loaded from ${host} when pressed</span></span>
+          </a>
         </div>`;
 }
 
@@ -263,7 +283,7 @@ function productionMeta(production: Production, item: ItemRoute): MetaSections {
         <h2><span class="no">III</span> Project video</h2>
         <p>${esc(sample.description)}${sample.durationSeconds ? ` Runtime ${esc(displayDuration(sample.durationSeconds))}.` : ''}</p>
 ${embedMarkup(sample)}
-${sample.watchUrl ? `        <p style="margin-top:1rem">If the embed is unavailable, <a href="${esc(sample.watchUrl)}" target="_blank" rel="noopener noreferrer">open the video on its original host</a>.</p>` : ''}
+${sample.watchUrl ? `        <p style="margin-top:1rem">If the player does not start, <a href="${esc(sample.watchUrl)}" target="_blank" rel="noopener noreferrer">open the video on its original host</a>.</p>` : ''}
       </section>`
     : `      <section class="clause" id="sample">
         <h2><span class="no">III</span> Adjacent showreel listening</h2>
@@ -490,6 +510,10 @@ export function renderItemPage(item: ItemRoute, chrome: PageChrome): RenderedIte
 
   const h1 = headlineFor(item);
   const pageTitle = displayName(item);
+  // A production with a film sample gets the wide stage: the player's pixel
+  // width is what picks the rendition, so its column cannot be a text measure
+  // (see the .doc-layout--film rules in src/item/item.css).
+  const hasFilm = item.kind === 'production' && Boolean(productionBySlug.get(item.slug)?.sample);
   const pageHtml = `<!DOCTYPE html>
 <html lang="en" style="background:#030303;color-scheme:dark">
 <head>
@@ -521,7 +545,7 @@ ${chrome.masthead.trim()}
 </header>
 
 <div class="doc">
-  <div class="shell doc-layout">
+  <div class="shell doc-layout${hasFilm ? ' doc-layout--film' : ''}">
     <nav class="doc-index" aria-label="On this page">
       <p>Contents</p>
       <ol>
@@ -529,7 +553,7 @@ ${meta.index}
       </ol>
     </nav>
 
-    <div class="doc-body">
+    <div class="doc-body${hasFilm ? ' doc-body--film' : ''}">
 ${meta.sections}
 
       <section class="clause" id="related">

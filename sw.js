@@ -94,7 +94,15 @@
 // index-b29b75e2.js both change, so the cache name moves with them.
 // v41: seamless hero artwork blend — screen-blended dark-point-aligned <img>,
 // wide cosine-eased intersected top/left/bottom masks, and radial void scrim.
-const CACHE_NAME = 'zazie-v41';
+// v42: HD film pass - every player asks for vq=hd1080, the film stages are wide
+// enough for the rendition YouTube's ladder actually serves (item pages drop the
+// 74ch text column for a single-column stage), item pages ship a poster instead
+// of a provider iframe until the film is asked for, and the embed-host prefetch
+// is replaced by a preconnect on intent. The home bundle, the home stylesheet and
+// the item bundle all moved, so the cache name moves with them. The legal/store/
+// estimator stylesheets are re-hashed too: their names had drifted from their
+// bytes, which is a stale-forever bug under `immutable` caching.
+const CACHE_NAME = 'zazie-v42';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -102,13 +110,13 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-normal.woff2',
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
-  '/index-e5dac783.css',
-  '/index-13ac807d.js',
-  '/store-c22a1a44.css',
+  '/index-1d9e91a5.css',
+  '/index-04fbac4f.js',
+  '/store-1e13177a.css',
   '/store-3fc01be0.js',
-  '/legal-817a8ca2.css',
+  '/legal-00909f42.css',
   '/legal-ab598df8.js',
-  '/estimator-43a25eec.css',
+  '/estimator-44035344.css',
   '/estimator-0ca1de83.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',

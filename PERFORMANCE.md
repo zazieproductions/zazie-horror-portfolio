@@ -4,6 +4,91 @@ Date: 2026-09-25 · Branch: `arena/01a0d613-zazie-horror-portfolio`
 Scope: horror.zazieproductions.com (static prerendered React build on an edge host with `_headers`/`_redirects` semantics, i.e. Netlify/Cloudflare-Pages style).
 
 
+## HD film pass: 2026-10-24
+
+The homepage player was already click-to-load, but the item pages were not, and
+both were asking for the wrong thing from the provider. This pass fixes the
+picture quality and the cost of the click together.
+
+### What was wrong
+
+1. **Item pages shipped a live provider iframe.** `/work/expire`,
+   `/work/the-haunted`, `/work/mike-has-a-visitor`, `/work/phantom-requiem` and
+   `/work/eclipsed` each contained an `<iframe src="...">` in the served
+   document. `loading="lazy"` only defers it until it is near the viewport, and
+   on a production entry the film sits directly under the header - so a visitor
+   who never pressed play still pulled YouTube's player JavaScript, fonts and
+   manifests (≈1 MB, dozens of requests, several third-party connections), or
+   Drive's preview shell.
+2. **The player was in a text column.** `.doc-body` is capped at `--measure`
+   (74ch ≈ 550px). YouTube chooses the rendition from the player's pixel width
+   - roughly 726px for 480p, 1089px for 720p, 1633px for 1080p - so a 550px
+   frame was answered with 360/480p no matter what the URL said, while the
+   source films are 1280x720. That was the soft picture.
+3. **Hover fetched a page nobody visited.** Both implementations created a
+   `<link rel="prefetch">` per card pointing at the embed document, which
+   downloaded an HTML page the visitor would never navigate to and left a stray
+   node in `<head>`.
+
+### What it does now
+
+- **Poster until asked.** Item pages carry a still, a native `<a>` to the film's
+  own host, and the player URL as a `data-embed` payload. `src/item/main.ts`
+  swaps in the iframe inside the click (so the gesture counts as user-initiated
+  and the film may start with sound) and removes the poster after the player's
+  `load`. With JavaScript off, the poster is simply a link to YouTube or Drive.
+  Nothing third-party is requested on page view; the still is one lazy image.
+- **HD where the ladder can give it.** One parameter set, shared by the homepage
+  inline player, the React bundle and the item renderer:
+  `vq=hd1080&rel=0&color=white&playsinline=1&iv_load_policy=3&fs=1`. `vq` is
+  undocumented and has been removed and restored by YouTube more than once, so
+  it is a hint only; `hd=1` (Flash-era, ignored) is not sent.
+  `src/data/embed.ts` is the source of truth and `tools/film-player.test.mjs`
+  fails the build if the inline copy in `index.html` drifts from it.
+- **A stage wide enough to matter.** Film entries render
+  `doc-layout--film` / `doc-body--film`: a single column as wide as the shell
+  (~1264px at the 84rem cap) instead of the 74ch text measure, with the sections
+  nav turned into a chip row above it and every paragraph capped at `--measure`.
+  The homepage's active card keeps its breakout and its cap moves 1600px →
+  1760px so a full-HD desktop lands above the 1633px line. Nothing is scaled up
+  in CSS: the iframe is always rendered at the frame's real pixel size.
+- **A warm connection instead of a fetched document.** `preconnect` to
+  `https://www.youtube-nocookie.com` (or `https://drive.google.com`) on
+  `pointerenter`, `pointerdown` and `focusin`, once per page, on both the
+  homepage cards and the item posters. The duplicate `zpCloseAll` lookup and the
+  dead second `querySelector` are gone.
+- **A poster that does not flash.** The still stays painted under the iframe,
+  the play glyph is removed and the note reads "Loading player…" while the
+  provider negotiates, so the click does not produce a black rectangle.
+
+### Cost
+
+| | before | after |
+| --- | --- | --- |
+| `/work/<slug>` with a film, no interaction | provider iframe (≈1 MB third-party) | one lazy still (~100–200 KB, cached 30 days) |
+| item bundle added | – | 2.49 KB JS / 5.08 KB CSS (1.01 / 1.56 KB gzip) |
+| homepage click | embed prefetch on hover | preconnect, then the player |
+
+### Verification
+
+`npm test` 59/59, including new checks that no item page ships a provider
+iframe, that the homepage/bundle/item parameter sets are identical, that the
+stage rules exist, and a run of the shipped `item-<hash>.js` against a DOM
+fixture: plain click mounts one player with the shared parameters and the
+poster's title/allow list, modified and middle clicks keep the real link,
+intent warms the origin exactly once, and the HD still falls back to the
+`hqdefault` thumbnail once.
+
+The legal/store/estimator stylesheets also come back with the names their bytes
+hash to in this build (`legal-00909f42.css`, `store-1e13177a.css`,
+`estimator-44035344.css`): their committed names had drifted from their
+contents, which under the year-long `immutable` cache policy in `_headers` would
+have served stale CSS to every returning visitor forever.
+
+`sw.js` moves to `zazie-v42` (the document, the home bundle, the home
+stylesheet and the item bundle all changed).
+
+
 ## Archive boot restored: 2026-10-22
 
 The terminal loading screen is back in `index.html`. This records what was

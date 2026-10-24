@@ -89,7 +89,7 @@ Unconventional choices exist for artistic or experiential reasons and are docume
 
 - **Production records** — 9 individual project pages with source-linked, role-specific credits and verified artwork. The archive does not imply that every title is a Zazie composition credit.
 - **Showreel** — 32 title-derived cue pages plus the existing cue hub and MP3s (`/audio/track-00.mp3` … `track-31.mp3`). Each item page carries readable cue notes, duration/category, native optional playback, and sibling links.
-- **Film samples** — 8 embeds: 7 lazy `youtube-nocookie.com` players plus 1 Google Drive preview, with poster-`<picture>` covers.
+- **Film samples** — 8 poster-led players: 7 `youtube-nocookie.com` embeds plus 1 Google Drive preview, each loaded only when a visitor presses play.
 - **Press kit** — features and coverage (Visual Container award-winners press release PDF, Grammy Weekly, Limitless Magazine, Billboard Wire).
 - **Approach / Rates / Composer / Reviews / Inquiry** — scoring method, scope-and-estimate bands (packages priced by scored minutes of music, as published on `/services`), biography, 5.0 collaborator rating with 3 featured reviews, and a structured inquiry form that builds a `mailto:` handoff.
 
@@ -116,7 +116,7 @@ All artwork © the respective productions. See the [live site](https://horror.za
 | Showreel audio engine | `src/lib/audioContext.tsx` (in bundle), rendered by `Showreel.tsx` + `StickyPlayer.tsx` | One `<audio>` element for the whole site, shared through React context: `playTrack / toggle / next / prev / seek / setVolume`. Previous-track restarts if >3 s in. `preload="metadata"`; MP3s stream from `/audio/`, cached `immutable` at the edge. |
 | Mood clusters | `tracks` array in the bundle (32 entries: `id, title, src, duration, tag`) | Each cue carries one mood tag; its dedicated item page uses `MusicComposition` + `AudioObject` schema. |
 | Sticky player | `StickyPlayer.tsx` | Hidden until first play; animated wave-bar visualisation; respects `prefers-reduced-motion`. |
-| Film samples | `Projects.tsx` data + prerendered covers | 6 YouTube-nocookie iframes get a real `src` only when lazy-loaded; 1 Google Drive embed; `preconnect` to YouTube deferred off the critical path. |
+| Film samples | `Projects.tsx` data + `src/lib/page.ts` (`src/data/embed.ts`) | Poster-led on both surfaces: the served HTML carries a still and a native link, never a provider iframe. The player is created inside the click, at the stage's real pixel size (playlist `vq=hd1080`), with `preconnect` to the provider on hover/focus/touch intent and the still kept painted until the player loads. Item pages give film entries a single wide column so the rendition is not decided by a 74ch text measure. |
 | Boot overlay | legacy inline markup in `index.html` | Disabled by default; never covers the readable homepage content. |
 | Store previews & room tone | `store-src/store.js` | Per-card audio previews (`data-preview`); a looping room tone (`data-ambience`) crossfades down while previews play. `preload="none"`. |
 | External score player | Reelcrafter | Allowlisted in CSP (`frame-src`) and referenced as a `significantLink` in JSON-LD; currently linked, not embedded. |
@@ -367,7 +367,7 @@ Rules: always set `width`/`height` (CLS-safe); grid and client render must refer
 
 ### Video & external embeds
 
-No video files in the repo. Film samples are lazy `youtube-nocookie.com` iframes (real `src` assigned post-load so `loading="lazy"` holds) and one Google Drive preview. YouTube thumbnails come from `i.ytimg.com`; catalogue covers from four marketplace CDNs — all enumerated in the CSP. External embeds are a known fragility: the Drive preview depends on Google's scanner behaviour (recorded in `PERFORMANCE.md`).
+No video files in the repo. Film samples are click-to-load `youtube-nocookie.com` players plus one Google Drive preview: the document carries a still and a link, and the iframe exists only after the visit presses play (`src/item/main.ts` on item pages, the inline player plus `Projects.tsx` on the homepage). YouTube thumbnails come from `i.ytimg.com`; catalogue covers from four marketplace CDNs — all enumerated in the CSP. External embeds are a known fragility: the Drive preview depends on Google's scanner behaviour (recorded in `PERFORMANCE.md`).
 
 ### Adding media safely — checklist
 

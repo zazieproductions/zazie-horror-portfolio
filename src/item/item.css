@@ -30,6 +30,65 @@
   }
 }
 
+/* --- Film sample stage --------------------------------------------------- */
+/* A production with a film gets one wide column instead of the 74ch text
+   measure. The player's own pixel width is what makes YouTube serve an HD
+   rendition (~1089px for 720p, ~1633px for 1080p); a 550px frame in the text
+   column was answered with 360/480p however the URL was written. Prose keeps
+   its measure - only the stage widens. */
+.doc-body--film {
+  max-width: 100%;
+}
+
+.doc-body--film .clause > p,
+.doc-body--film .clause > ul,
+.doc-body--film .clause > ol,
+.doc-body--film .clause > blockquote,
+.doc-body--film .clause > h3 {
+  max-width: var(--measure);
+}
+
+@media (min-width: 1000px) {
+  /* The sections nav stays, as a chip row above the stage: the sticky rail
+     would take a third of the width the player needs. */
+  .doc-layout--film {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .doc-layout--film .doc-index {
+    position: static;
+    display: block;
+    grid-column: 1 / -1;
+    max-height: none;
+    overflow: visible;
+    padding-right: 0;
+  }
+
+  .doc-layout--film .doc-index ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    border-left: 0;
+  }
+
+  .doc-layout--film .doc-index a {
+    display: flex;
+    align-items: baseline;
+    gap: 0.45rem;
+    margin-left: 0;
+    padding: 0.45rem 0.7rem;
+    border: 1px solid var(--edge);
+    font-size: 0.625rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  .doc-layout--film .doc-index .idx {
+    display: inline;
+    font-size: 0.625rem;
+  }
+}
+
 /* --- Embed frame (film samples) ----------------------------------------- */
 /* Cinema players stay upright at their real size. The provider owns the
    playback bar; site chrome lives outside the iframe. No rotate/scale/filter
@@ -37,7 +96,7 @@
    hard to see, especially on mobile where Drive's toolbar is already tight. */
 .entry-embed {
   position: relative;
-  margin: 1.25rem 0 0;
+  margin: 1.5rem 0 0;
   border: 1px solid var(--ash);
   background: #000;
   overflow: hidden;
@@ -52,6 +111,105 @@
     0 0 64px rgba(196, 30, 30, 0.1);
 }
 
+/* The still that stands in for the player. Nothing here contacts YouTube or
+   Drive: it is one lazy image and a native link, so the film is still one
+   click away with JavaScript off (it opens on the host instead). */
+.entry-embed-poster {
+  position: absolute;
+  inset: 0;
+  display: block;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  color: var(--bone);
+  text-decoration: none !important;
+  background: #000;
+}
+
+.doc-body .entry-embed-poster,
+.doc-body .entry-embed-poster:hover {
+  text-decoration: none;
+}
+
+.entry-embed-still {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.86;
+  transition: opacity 0.35s ease, filter 0.6s ease;
+  filter: saturate(0.9);
+}
+
+.entry-embed-poster:hover .entry-embed-still,
+.entry-embed-poster:focus-visible .entry-embed-still {
+  opacity: 1;
+  filter: none;
+}
+
+.entry-embed-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.25rem;
+  height: 4.25rem;
+  margin: -2.125rem 0 0 -2.125rem;
+  border: 1px solid rgba(240, 235, 227, 0.7);
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--bone);
+  box-shadow: 0 0 24px rgba(196, 30, 30, 0.4);
+  transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.entry-embed-play svg {
+  margin-left: 3px;
+}
+
+.entry-embed-poster:hover .entry-embed-play,
+.entry-embed-poster:focus-visible .entry-embed-play {
+  border-color: var(--blood);
+  background: rgba(196, 30, 30, 0.7);
+  box-shadow: 0 0 32px rgba(196, 30, 30, 0.55);
+}
+
+.entry-embed-note {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 0.7rem 0.9rem;
+  font-size: 0.625rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(240, 235, 227, 0.8);
+  background: linear-gradient(to top, rgba(3, 3, 3, 0.85), rgba(3, 3, 3, 0));
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
+}
+
+.entry-embed-poster:focus-visible {
+  outline: 2px solid var(--ember);
+  outline-offset: -2px;
+}
+
+/* Read out to assistive technology, never painted. */
+.entry-embed-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* The player, once the visitor has asked for it. It sits over the still, so
+   the poster covers the gap while the provider negotiates the stream. */
 .entry-embed iframe {
   position: absolute;
   inset: 0;
@@ -66,12 +224,48 @@
   filter: none;
 }
 
+/* Asked for: the poster is no longer a target, the play glyph goes, and the
+   note says what the wait is for. The still stays painted underneath, so
+   there is no black flash while the provider negotiates the stream. */
+.entry-embed-note-busy {
+  display: none;
+}
+
+.entry-embed[data-playing="true"] .entry-embed-poster {
+  cursor: default;
+}
+
+.entry-embed[data-playing="true"] .entry-embed-play {
+  display: none;
+}
+
+.entry-embed[data-playing="true"] .entry-embed-note-idle {
+  display: none;
+}
+
+.entry-embed[data-playing="true"] .entry-embed-note-busy {
+  display: inline;
+}
+
 /* A 160-200px-tall phone embed crowds Drive's own toolbar and can make its
    volume/progress UI appear cramped or inverted. Give it room without
    cropping, scaling or rotating the film or its native controls. */
 @media (max-width: 767px) {
   .entry-embed {
     min-height: 260px;
+  }
+
+  .entry-embed-play {
+    width: 3.5rem;
+    height: 3.5rem;
+    margin: -1.75rem 0 0 -1.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .entry-embed-still,
+  .entry-embed-play {
+    transition: none;
   }
 }
 
