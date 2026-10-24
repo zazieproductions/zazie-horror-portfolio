@@ -123,11 +123,11 @@ html.zp-boot-on .zp-skip{display:none}
   animation:zpRise .7s ease .18s both;
 }
 #zp-boot .zp-eyebrow::before{content:"";width:24px;height:1px;background:var(--zp-red);box-shadow:0 0 10px var(--zp-red)}
-#zp-boot .zp-wordmark{margin:0;font-family:Inter,Arial,Helvetica,sans-serif;text-transform:uppercase;animation:zpRise .8s cubic-bezier(.2,.7,.2,1) .27s both}
+#zp-boot .zp-wordmark{margin:0;font-family:"Cormorant Garamond",Georgia,"Times New Roman",serif;text-transform:uppercase;animation:zpRise .8s cubic-bezier(.2,.7,.2,1) .27s both}
 #zp-boot .zp-wordmark-main{
   display:block;position:relative;width:max-content;max-width:100%;
-  font-size:clamp(68px,9.6vw,148px);font-weight:900;line-height:.8;letter-spacing:-.105em;color:var(--zp-red);
-  text-shadow:0 0 42px rgba(223,23,35,.35),2px 3px 0 #3c070b;
+  font-size:clamp(72px,10.2vw,156px);font-weight:400;line-height:.82;letter-spacing:.02em;color:var(--zp-red);
+  text-shadow:2px 3px 0 #3c070b;
 }
 #zp-boot .zp-wordmark-main::after{
   content:attr(data-text);position:absolute;inset:0;color:#ff9186;opacity:.24;
@@ -135,9 +135,8 @@ html.zp-boot-on .zp-skip{display:none}
 }
 #zp-boot.zp-interference .zp-wordmark-main::after{opacity:.8;transform:translate(11px,-3px)}
 #zp-boot .zp-wordmark-sub{
-  display:block;margin-top:clamp(13px,2vw,30px);
-  font-size:clamp(27px,3.7vw,56px);font-weight:800;line-height:1;letter-spacing:.115em;color:#e9d8d3;
-  text-shadow:2px 0 rgba(235,49,56,.5),0 0 24px rgba(243,52,61,.16);
+  display:block;margin-top:clamp(10px,1.6vw,22px);
+  font-size:clamp(18px,2.4vw,34px);font-weight:400;line-height:1;letter-spacing:.38em;color:#e9d8d3;
 }
 #zp-boot .zp-tagline{
   margin:clamp(18px,3vh,32px) 0 0;font:500 clamp(10px,.85vw,12px)/1.5 var(--zp-mono);
@@ -211,7 +210,7 @@ html.zp-boot-on .zp-skip{display:none}
   background:#26070b linear-gradient(180deg,rgba(238,62,66,.22),rgba(238,62,66,.05));
   color:#f7efec;font:600 12px/1 var(--zp-mono);letter-spacing:.2em;text-transform:uppercase;
   white-space:nowrap;cursor:pointer;touch-action:manipulation;
-  box-shadow:0 0 28px rgba(238,62,66,.3),inset 0 1px 0 rgba(255,175,170,.2);
+  box-shadow:inset 0 1px 0 rgba(255,175,170,.16);
   transition:background-color .16s ease,border-color .16s ease,color .16s ease,box-shadow .16s ease,transform .16s ease;
 }
 #zp-boot .zp-skip-btn:hover{
@@ -737,6 +736,92 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
 
 
 
+
+<style id="zp-atelier">
+/* Boutique scoring house — same palette, quieter craft. Interactive
+   layers (boot, poster wall, showreel, cursor, kenburns) stay in play. */
+.font-display{
+  font-weight:400;
+  font-feature-settings:"kern" 1,"liga" 1;
+}
+#top h1{text-wrap:balance;letter-spacing:-.018em}
+#top h1 span.bg-clip-text,
+#top h1 span.text-transparent{
+  background-image:none !important;
+  -webkit-background-clip:unset;
+  background-clip:unset;
+  -webkit-text-fill-color:#c41e1e;
+  color:#c41e1e;
+}
+#top .inline-flex.rounded-full{
+  border-radius:0;
+  background-color:transparent;
+  -webkit-backdrop-filter:none;
+  backdrop-filter:none;
+}
+#top .animate-ping{animation:none !important;opacity:0 !important}
+#top button.group > span.absolute.inset-0{opacity:0 !important;transform:none !important}
+h2.font-display{letter-spacing:-.02em}
+
+/* Hairline CTAs instead of neon bloom */
+.shadow-\[0_0_24px_rgba\(196\,30\,30\,0\.25\)\],
+.shadow-\[0_0_24px_rgba\(196\,30\,30\,0\.8\)\],
+.shadow-\[0_0_40px_rgba\(196\,30\,30\,0\.35\)\],
+.shadow-\[0_0_80px_rgba\(196\,30\,30\,0\.2\)\]{box-shadow:none}
+@media (hover:hover){
+  .hover\:shadow-\[0_0_32px_rgba\(255\,42\,42\,0\.35\)\]:hover,
+  .hover\:shadow-\[0_0_56px_rgba\(255\,42\,42\,0\.45\)\]:hover{
+    box-shadow:0 14px 32px rgba(0,0,0,.42);
+  }
+}
+header nav a.bg-blood,
+#top a.bg-blood,
+#top button.bg-blood,
+.zp-mobile-quote{
+  box-shadow:none;
+  letter-spacing:.16em;
+}
+header.fixed{border-bottom:1px solid rgba(240,235,227,.05)}
+header a[href="#top"] span.border{border-radius:0}
+
+.glass-panel{
+  background:rgba(8,8,8,.62);
+  box-shadow:none;
+  -webkit-backdrop-filter:blur(10px);
+  backdrop-filter:blur(10px);
+}
+.glass-panel .blur-3xl{opacity:.35}
+.lift-card:hover{
+  border-color:rgba(196,30,30,.42);
+  box-shadow:0 18px 40px rgba(0,0,0,.5);
+}
+
+/* Atmosphere: filmic, not arcade */
+.grain{opacity:.03}
+.scanlines{opacity:.018}
+.vignette{opacity:.7}
+.ambient-orb-a{opacity:.2}
+.ambient-orb-b{opacity:.12}
+.ambient-orb-c{opacity:.07}
+.corner-mark{opacity:.28}
+.pulse-blood{animation:none;box-shadow:none}
+.glitch:hover:after{color:#c41e1e}
+.cursor-pointer-wrap{filter:drop-shadow(0 0 2px rgba(196,30,30,.4))}
+.cursor-pointer-wrap.hovering{filter:drop-shadow(0 0 4px rgba(196,30,30,.5))}
+.zp-hero-art-plate img{opacity:.9}
+
+.zp-cta,
+.zp-cta:hover,
+.zp-cta-ghost:hover{box-shadow:none}
+.zp-cta:hover{box-shadow:0 12px 28px rgba(0,0,0,.4)}
+.zp-pkg{transition:background .3s ease}
+.zp-packages{background:#161616}
+
+@media (max-width:767px){
+  .grain{opacity:.022}
+  .scanlines{opacity:.012}
+}
+</style>
 
 <!-- The estimator stylesheet only paints the below-fold scope builder and inquiry
      form, so it must not block the hero paint. It is fetched as a preload and
