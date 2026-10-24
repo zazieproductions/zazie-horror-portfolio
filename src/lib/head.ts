@@ -15,6 +15,7 @@ import {
   url,
 } from '../data/site.js';
 import { stripMarkup } from '../data/routes.js';
+import { SYNC_CONTACT_PATH, SYNC_LICENSING_PATH, syncSheet } from '../data/sync.js';
 import type { Cue, Credit, Image, Json, Production, Release } from '../data/types.js';
 
 export interface OgImage {
@@ -191,7 +192,10 @@ export function productionNodes(production: Production, path: string): Json[] {
 export function cueNodes(cue: Cue, path: string): Json[] {
   const compositionId = `${url(path)}#composition`;
   const audioId = `${url(path)}#audio`;
+  const recordingId = `${url(path)}#recording`;
   const description = oneLine(`${cue.description} ${cue.paragraphs[0]}`);
+  const sync = syncSheet(cue);
+  const keywords = sync.tags.join(', ');
   const composition: Json = {
     '@context': 'https://schema.org',
     '@type': 'MusicComposition',
@@ -205,6 +209,39 @@ export function cueNodes(cue: Cue, path: string): Json[] {
     duration: isoDuration(cue.durationSeconds),
     isPartOf: { '@id': WEBSITE_ID },
     audio: { '@id': audioId },
+    mainEntityOfPage: { '@id': `${url(path)}#webpage` },
+    dateModified: cue.updatedAt,
+  };
+  /**
+   * The recording, as distinct from the composition: a sync licence is granted
+   * over the master, and the ISRC identifies that master. The code is emitted
+   * only when the studio discography database carries a verified match.
+   */
+  const recording: Json = {
+    '@context': 'https://schema.org',
+    '@type': 'MusicRecording',
+    '@id': recordingId,
+    url: url(path),
+    name: cue.title,
+    description,
+    genre: cue.category,
+    duration: isoDuration(cue.durationSeconds),
+    byArtist: { '@id': PERSON_ID },
+    copyrightHolder: { '@id': ORG_ID },
+    recordingOf: { '@id': compositionId },
+    audio: { '@id': audioId },
+    ...(sync.isrc
+      ? {
+          isrcCode: sync.isrc.code,
+          identifier: { '@type': 'PropertyValue', propertyID: 'ISRC', value: sync.isrc.code },
+        }
+      : {}),
+    ...(keywords ? { keywords } : {}),
+    license: url(SYNC_LICENSING_PATH),
+    acquireLicensePage: url(SYNC_CONTACT_PATH),
+    usageInfo:
+      'Synchronisation licence available for film, television, streaming, trailers and games. Not licensed for AI training, fine-tuning or model imitation.',
+    isPartOf: { '@id': WEBSITE_ID },
     mainEntityOfPage: { '@id': `${url(path)}#webpage` },
     dateModified: cue.updatedAt,
   };
@@ -222,7 +259,7 @@ export function cueNodes(cue: Cue, path: string): Json[] {
     isPartOf: { '@id': WEBSITE_ID },
     mainEntityOfPage: { '@id': `${url(path)}#webpage` },
   };
-  return [composition, audio];
+  return [composition, recording, audio];
 }
 
 function releaseCreator(release: Release): Json | undefined {

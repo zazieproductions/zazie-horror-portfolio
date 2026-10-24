@@ -6,7 +6,7 @@
 
 import type { Cue } from './types.js';
 
-const updatedAt = '2026-10-04';
+const updatedAt = '2026-10-24';
 
 export const cues: Cue[] = [
   {

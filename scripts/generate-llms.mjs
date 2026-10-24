@@ -25,6 +25,7 @@ const { VERIFIED_SAME_AS } = await import('../build/data/entities.js');
 const { hubs } = await import('../build/data/hubs.js');
 const { productions } = await import('../build/data/productions.js');
 const { cues } = await import('../build/data/cues.js');
+const { syncSheet } = await import('../build/data/sync.js');
 const { releases, stripMarkup: _unused } = await import('../build/data/releases.js');
 const { stripMarkup } = await import('../build/data/routes.js');
 const {
@@ -62,6 +63,18 @@ const packageLines = PACKAGES.map((pkg) => {
   const revLabel = `${rounds} consolidated revision ${rounds === 1 ? 'round' : 'rounds'}`;
   return `- **${pkg.name}** — **${priceLabel(pkg)}** (${CURRENCY}) · ${pkg.scopeLabel} · Includes ${revLabel}. ${pkg.bestFor}`;
 }).join('\n');
+
+/** ISRC only where the discography database verifies the recording. */
+function isrcLine(cue) {
+  const { isrc } = syncSheet(cue);
+  return isrc ? ` · ISRC ${isrc.code} (${isrc.releaseTitle})` : '';
+}
+
+/** Description-grounded sync tags, so a supervisor can search the dossier. */
+function syncLine(cue) {
+  const { tags } = syncSheet(cue);
+  return tags.length ? ` · Sync tags: ${tags.join(', ')}` : '';
+}
 
 const llmsTxt = `# ${SITE_NAME} — Hire Horror Composer ${AUTHOR_NAME}
 
@@ -117,7 +130,7 @@ ${productions
 ${cues
   .map(
     (c) =>
-      `- [${String(c.track + 1).padStart(2, '0')}. ${c.title}](${SITE_ORIGIN}/reel/${c.slug}) ([MP3](${SITE_ORIGIN}${c.audioPath})): ${c.category} · ${c.duration} — ${c.description}`,
+      `- [${String(c.track + 1).padStart(2, '0')}. ${c.title}](${SITE_ORIGIN}/reel/${c.slug}) ([MP3](${SITE_ORIGIN}${c.audioPath})): ${c.category} · ${c.duration}${isrcLine(c)}${syncLine(c)} — ${c.description}`,
   )
   .join('\n')}
 

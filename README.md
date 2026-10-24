@@ -245,6 +245,7 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 | --- | --- |
 | Pages / routes | `<slug>/index.html` at root; home in `index.html` |
 | Production / cue / catalogue item data | `src/data/productions.ts`, `cues.ts`, `releases.ts`; route and hub registry in `routes.ts` / `hubs.ts` |
+| Sync metadata (ISRC, rights, deliverables, tags) | `src/data/sync.ts`, rendered as section IV of every cue page and as a `MusicRecording` JSON-LD node |
 | Item-page HTML and SEO | `src/lib/page.ts`, `head.ts`, `home.ts`; static output in `work/*.html`, `reel/*.html`, `store/*.html` |
 | Audio | `/audio/track-NN.mp3`; all 32 cue pages include optional native MP3 playback |
 | Images / video | `/images`; source-verified poster and item artwork, plus project embeds where available |
@@ -261,6 +262,7 @@ Item content is data-first and routes are generated from the title-owned slug in
 
 - **Production record:** add or update `src/data/productions.ts`; verify role-by-role credits, source links, poster, paragraphs, and `updatedAt`.
 - **Showreel cue:** add or update `src/data/cues.ts`; the slug must derive from the cue title, and the record must identify its MP3, duration, category, unique paragraphs, and related catalogue records.
+- **Sync metadata:** `src/data/sync.ts` holds the only ISRCs the site publishes and the description-grounded sync tags. Add a cue there only when the discography database carries a same-title recording with the same runtime; a cue with no distributed release says so instead of borrowing a code. Never add a tempo or key that has not been measured and published.
 - **Catalogue item:** add or update `src/data/releases.ts`; keep marketplace terms and prices out of structured data, include only verified source facts/artwork, and omit unavailable metadata.
 - **Existing hub:** update its source where one exists (`store-src/` or `legal-src/`); manually maintained hub pages keep their current layout and canonical URL. Run `node tools/route-aliases.mjs` after editing a hub directory page.
 

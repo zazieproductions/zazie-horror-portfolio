@@ -92,7 +92,11 @@
 // 896x1152 ratio, is feathered into the UI, and fades into the fold under one
 // bottom scrim. The document (precached as '/') and the home bundle
 // index-b29b75e2.js both change, so the cache name moves with them.
-const CACHE_NAME = 'zazie-v40';
+// v41: sync sheet pass — every cue route now carries a section IV sync block
+// (ISRC where the discography database verifies one, rights, deliverables,
+// description-grounded tags) plus a MusicRecording JSON-LD node. The cue
+// documents are cached on first use, so the cache name moves with them.
+const CACHE_NAME = 'zazie-v41';
 
 const PRECACHE_ASSETS = [
   '/',

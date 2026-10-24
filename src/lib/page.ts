@@ -1,10 +1,17 @@
 /** Static HTML renderer for production, cue and catalogue item routes. */
 
-import { AUTHOR_NAME, SITE_HOST, escapeHtml, oneLine, url } from '../data/site.js';
+import { AUTHOR_NAME, SITE_HOST, STUDIO_NAME, escapeHtml, oneLine, url } from '../data/site.js';
 import { productions } from '../data/productions.js';
 import { cues } from '../data/cues.js';
 import { releases } from '../data/releases.js';
 import { cueBySlug, hubByPath, productionBySlug, releaseBySlug, siblingsOf, stripMarkup } from '../data/routes.js';
+import {
+  ISRC_SOURCE,
+  SYNC_CONTACT_PATH,
+  SYNC_EMAIL,
+  SYNC_LICENSING_PATH,
+  syncSheet,
+} from '../data/sync.js';
 import { displayDuration } from '../data/site.js';
 import {
   OG_TYPES,
@@ -45,6 +52,15 @@ interface MetaSections {
 }
 
 const esc = escapeHtml;
+
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+/** `2026-05-07` → `7 May 2026`. Kept timezone-free so the build is deterministic. */
+function displayDate(iso: string): string {
+  const [year, month, day] = iso.split('-').map(Number);
+  if (!year || !month || !day || !MONTHS[month - 1]) return iso;
+  return `${day} ${MONTHS[month - 1]} ${year}`;
+}
 
 function headlineMarkup(headline: string): string {
   const split = headline.indexOf(': ');
@@ -301,10 +317,12 @@ ${sampleSection}`,
 /* --------------------------------------------------------------------- cue */
 
 function cueMeta(cue: Cue, item: ItemRoute): MetaSections {
+  const sync = syncSheet(cue);
   const metaList = [
     `<li>Showreel track <b>${String(cue.track + 1).padStart(2, '0')} / ${cues.length}</b></li>`,
     `<li>Category <b>${esc(cue.category)}</b></li>`,
     `<li>Runtime <b>${esc(cue.duration)}</b></li>`,
+    ...(sync.isrc ? [`<li>ISRC <b>${esc(sync.isrc.code)}</b></li>`] : []),
   ].join('\n      ');
   const rows: Array<[string, string]> = [
     ['Showreel position', `${cue.track + 1} of ${cues.length}`],
@@ -317,15 +335,38 @@ function cueMeta(cue: Cue, item: ItemRoute): MetaSections {
     updatedRow(item),
   ];
 
+  const isrcValue = sync.isrc
+    ? `<b>${esc(sync.isrc.code)}</b> · <a href="/store/${esc(sync.isrc.releaseSlug)}">${esc(sync.isrc.releaseTitle)}</a> · ${esc(displayDate(sync.isrc.releaseDate))} · track ${sync.isrc.trackNumber}`
+    : 'Not published — this showreel cue is not on a distributed release in the studio discography.';
+  const syncRows: Array<[string, string]> = [
+    ['ISRC', isrcValue],
+    ['Composer & rights', `${esc(AUTHOR_NAME)} · master held by ${esc(STUDIO_NAME)}`],
+    [
+      'Sync licence',
+      `Available for film, TV, streaming, trailers and games · <a href="${esc(SYNC_LICENSING_PATH)}">terms and quote</a>`,
+    ],
+    ['Deliverables', 'WAV master on licence · stems and alternates scoped at quote stage · cue-sheet data at delivery'],
+    ['AI training', 'Excluded'],
+    ['Sync tags', sync.tags.length ? sync.tags.map((tag) => esc(tag)).join(' · ') : 'No descriptor published for this cue.'],
+    ...(sync.instrumentation.length
+      ? [['Named instrumentation', sync.instrumentation.map((voice) => esc(voice)).join(' · ')] as [string, string]]
+      : []),
+    [
+      'Enquiries',
+      `<a href="mailto:${esc(SYNC_EMAIL)}?subject=${encodeURIComponent(`Sync enquiry: ${cue.title}`)}">${esc(SYNC_EMAIL)}</a> · <a href="${esc(SYNC_CONTACT_PATH)}">contact form</a>`,
+    ],
+  ];
+
   return {
     metaList,
     index: indexList([
       ['entry', 'Cue description'],
       ['listen', 'Listen to the MP3'],
       ['detail', 'Cue facts'],
+      ['sync', 'Sync-ready metadata'],
       ['related', 'Related entries'],
     ]),
-    relatedNo: 'IV',
+    relatedNo: 'V',
     sections: `      <section class="clause" id="entry">
         <h2><span class="no">I</span> Cue description</h2>
         <p>${esc(cue.description)}</p>
@@ -341,6 +382,15 @@ ${cuePlayerList(cue)}
       <section class="clause" id="detail">
         <h2><span class="no">III</span> Cue facts</h2>
 ${tableRows(rows)}
+      </section>
+
+      <section class="clause" id="sync">
+        <h2><span class="no">IV</span> Sync-ready metadata</h2>
+        <p>The clearance view of this cue: what identifies the recording, who holds it, and what ships with a licence.</p>
+${tableRows(syncRows)}
+        <p class="small">${sync.isrc
+          ? `ISRC cited from ${esc(ISRC_SOURCE)}; it belongs to the release named above.`
+          : 'No ISRC is cited: this recording has no distributed release in that database, and none is inferred from a similar title.'} Tempo and key are unpublished for it, so they are not guessed here — ask in a sync enquiry. Tags quote the cue description and claim no placement.</p>
       </section>`,
     crossLinks: `Browse <a href="/reel">all ${cues.length} showreel cues</a> · <a href="/hire-a-composer">hire a horror composer</a> · related releases: ${releaseLinkList(cue.releaseSlugs)} · <a href="/contact">scoring inquiry</a>.`,
   };
