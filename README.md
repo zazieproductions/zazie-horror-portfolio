@@ -77,7 +77,7 @@ Zazie Productions scores psychological horror: dread, tension, possession, cosmi
 The site is built to *demonstrate* rather than describe that identity:
 
 - **A restrained dark system, not decoration.** One palette (`void #030303`, `ink`, `smoke`, `ash`, `mist #9a9590`, `bone #f0ebe3`, `blood #c41e1e`, `ember #ff2a2a`), one serif voice (Cormorant Garamond) against one workhorse sans (Inter variable), and a fixed atmosphere layer (film grain, vignette, drifting ambient orbs, ken-burns hero) that is part of the first painted frame, not an after-effect of JavaScript.
-- **"The Archive" frame.** The 404 is an archive-entry error; the dormant boot markup is a hidden tape-deck treatment, while the copy speaks in catalogue and signal language. The metaphor is consistent and quiet.
+- **"The Archive" frame.** The 404 is an archive-entry error; the homepage opens on a tape-deck boot transmission, while the copy speaks in catalogue and signal language. The metaphor is consistent and quiet.
 - **Listen first.** The showreel — 32 original cues, playable inline, organised by mood — is the centre of gravity of the whole site. Film samples embed the scores *in context*. Commerce points outward to marketplaces rather than building a parallel shop.
 - **No backend, no tracking.** The inquiry form composes an email in the visitor's own mail client. No cookies, no analytics, no accounts, no newsletter. The privacy notice inventories every third party the site can touch, and a device inspector lets the visitor verify the claims themselves.
 
@@ -93,7 +93,7 @@ Unconventional choices exist for artistic or experiential reasons and are docume
 - **Press kit** — features and coverage (Visual Container award-winners press release PDF, Grammy Weekly, Limitless Magazine, Billboard Wire).
 - **Approach / Rates / Composer / Reviews / Inquiry** — scoring method, scope-and-estimate bands (packages priced by scored minutes of music, as published on `/services`), biography, 5.0 collaborator rating with 3 featured reviews, and a structured inquiry form that builds a `mailto:` handoff.
 
-**Boot overlay** — legacy overlay markup and its hidden-by-default CSS remain in `index.html`; no script adds `zp-boot-on`. Portfolio text is not gated behind an overlay, audio, or JavaScript.
+**Archive boot** — the terminal loading screen plays at first paint on the homepage only: a silent, ~3 s analog-signal intro (wordmark, typed console lines, oscilloscope, progress deck) that any click, key or tap skips and that removes itself afterwards. A synchronous head gate keeps it away from no-JS visitors, crawlers, bots, Lighthouse and `prefers-reduced-motion`; `?boot=0` / `#noboot` disables it and `?boot=1` / `#boot` forces it. It makes no network requests and writes no storage key. Portfolio text is never gated behind it.
 
 **The Catalogue (`/store`)** — the existing hub plus 24 individual catalogue records. Item pages link to verified listings when available, omit mutable price/stock schema, and keep the source platform authoritative for current terms.
 
@@ -200,12 +200,12 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 
 ```
 .
-├── index.html                  # Home: prerendered DOM + inactive boot markup + 4 generated JSON-LD blocks
+├── index.html                  # Home: prerendered DOM + archive boot (gate, overlay, driver) + 4 generated JSON-LD blocks
 ├── index-<hash>.js / .css      # Retained legacy homepage assets (not rebuilt here)
 ├── 404.html                    # "Signal Lost" — served with real 404 status
 ├── sw.js                       # Service worker (CACHE_NAME zazie-v29; bump it on any precache change)
-├── server.mjs                  # Local static server, clean routes + 404 fallback
-├── _headers                    # CSP, canonical Link headers, cache policy
+├── server.mjs                  # Local static server: clean routes + 404 fallback, Brotli/Gzip, ETag/304
+├── _headers                    # CSP, canonical Link headers, per-path cache policy (read the top comment)
 ├── _redirects                  # Legacy aliases + explicit real-404 fallback
 ├── robots.txt / sitemap.xml    # Crawl control; 84 URLs / 79 images / 12 videos
 ├── <32-hex>.txt                # IndexNow key file (public by design; see tools/indexnow.mjs)
@@ -252,7 +252,7 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 | Catalogue / documents | `store-src/` and `legal-src/` build sources |
 | Metadata / SEO | Route-specific source HTML heads; generated `sitemap.xml`; `robots.txt`; canonical `Link:` headers in `_headers` |
 | Configuration | `package.json`, `tsconfig.json`, `vite.config.ts`, `_headers`, `_redirects`, `sw.js` |
-| Utilities | `scripts/`, `tools/check-sitemap.mjs`, `tools/route-aliases.mjs`, `server.mjs` |
+| Utilities | `scripts/`, `tools/check-sitemap.mjs`, `tools/check-links.mjs`, `tools/check-headers.mjs`, `tools/route-aliases.mjs`, `server.mjs` |
 | Public/static assets | root + `/audio` + `/fonts` + `/images` |
 
 ## Where to add new work
@@ -307,11 +307,43 @@ There are **no environment variables and no secrets**. The `.gitignore` pre-empt
 
 | File | Controls |
 | --- | --- |
-| `_headers` | CSP allowlist, `X-Robots-Tag`, canonical `Link:` headers, per-path `Cache-Control` |
+| `_headers` | Security policy (HSTS, CSP, X-Frame-Options), `X-Robots-Tag`, canonical `Link:` headers, per-path `Cache-Control` |
+| `tools/headers.mjs` | The same security/cache policy as data: `server.mjs` serves it, `tools/check-headers.mjs` validates `_headers` against it |
 | `_redirects` | Legacy `.html` aliases plus `/* /404.html 404` fallback |
 | `robots.txt` | Default crawl policy and sitemap declaration |
 | `sw.js` | Offline strategy; `CACHE_NAME` + precache manifest |
-| `server.mjs` | `PORT` (local dev only) |
+| `server.mjs` | `PORT` (local dev only), `LOCAL_HTTPS=1` to also send HSTS when testing over TLS |
+
+### Response headers, caching and compression
+
+`_headers` is not a cascade: **every** rule whose pattern matches contributes,
+and a header set twice is joined with a comma (`/*` first, then `/fonts/*`
+produced `max-age=0, must-revalidate, …, max-age=31536000` — and RFC 9111 reads
+the *first* `max-age`, so nothing was cacheable). The file's top comment states
+the rule that follows from it: `/*` is the only default, and every narrower
+`Cache-Control` detaches it first with `! Cache-Control`.
+
+| Path | `Cache-Control` |
+| --- | --- |
+| HTML documents (`/`, `/work`, `/work/`, `/<slug>`) | `public, max-age=0, must-revalidate` |
+| `/index-*`, `/store-*`, `/legal-*`, `/estimator-*`, `/item-*` CSS/JS, `/*.css`, `/fonts/*` | `public, max-age=31536000, immutable` |
+| `/images/*`, `/audio/*`, `/favicon.svg` | `public, max-age=2592000, stale-while-revalidate=86400` |
+| `/sitemap.xml`, `/robots.txt`, `/llms.txt`, `/llms-full.txt` | `public, max-age=3600` |
+| `/404.html` | `no-store` |
+| `/sw.js` | `no-cache, no-store, must-revalidate` |
+
+Compression is negotiated per request. Cloudflare Pages Brotli/Gzip-compresses
+static text at the edge; `server.mjs` does the same locally (Brotli q11 when
+`Accept-Encoding` offers it, Gzip next, `Vary: Accept-Encoding`, nothing below
+1 KB) so the behaviour is testable before it ships. `npm run build` fails if
+`_headers` drifts from the policy, if any path would serve two cache lifetimes,
+or if any internal link or `#fragment` stops resolving:
+
+```
+npm run check:headers
+npm run check:links
+node tools/live-route-audit.mjs https://horror.zazieproductions.com
+```
 
 The zero-tracking privacy claim is structural: adding an analytics script or a cookie would invalidate `/privacy`, the footer statement on every page, and the device inspector on `/privacy`. Don't.
 
@@ -363,7 +395,7 @@ Not yet measured in a real browser: field LCP/CLS/CrUX data. The audit was verif
 Target: **WCAG 2.2 Level AA, partially conformant** — stated precisely on [`/accessibility`](https://horror.zazieproductions.com/accessibility), which implements the pattern this repo expects: *implemented features and measured gaps are named, not hand-waved*.
 
 - Progressive enhancement everywhere: every document clause, FAQ answer, catalogue card and link works with JavaScript off.
-- `prefers-reduced-motion` stops the ken-burns hero, ambient orbs and wave animation; dormant boot markup is hidden by default and never gates page text.
+- `prefers-reduced-motion` stops the ken-burns hero, ambient orbs and wave animation; the archive boot never plays for a reduced-motion visitor, is `aria-hidden`, skippable by any input and never gates page text.
 - Semantic headings, single H1 per page, skip links, `aria-pressed`/`aria-label` on controls, breadcrumbs in schema and (on document pages) visibly.
 - Document pages keep a legibility red (`--blood-text #e65650`, 5.71:1 on void) where small text needs it.
 - **Named gaps** (see `/accessibility` §4): the portfolio and catalogue still use darker red `#c41e1e` (3.49:1) for small labels, and atmosphere effects create exceptions on the portfolio pages. These are recorded deliberately — fix them in the open, don't quietly restyle the identity either way.
@@ -440,7 +472,7 @@ For future AI-assisted development sessions. **Before changing anything:**
 **Implemented** (all verifiable in this tree):
 
 - Full portfolio experience: poster wall + lightbox (9 productions), 32-cue showreel with mood clusters and sticky player, 7 film samples, press kit, scope-and-estimate, reviews, `mailto:` inquiry
-- Legacy terminal boot markup retained but inactive by default; no overlay blocks text on the homepage
+- Archive boot restored 2026-10-22: the terminal loading screen the prerender pass had silently disabled plays again on the homepage, now gated in the head so it can never become inert unnoticed (`PERFORMANCE.md`)
 - 19 original hub routes + 65 data-generated production/cue/catalogue pages, seven legal/operating documents with generated FAQ schema, and a hub-only human sitemap
 - Service worker (SWR / network-first / cache-first tiers), CSP + canonical headers, 301 map, real 404
 - 84-URL sitemap with verified image/video extensions; per-type item JSON-LD; route, alias, link, media, and 404 verifiers

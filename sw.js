@@ -76,7 +76,17 @@
 // added /how-to-hire-a-horror-composer hub, /llms.txt + /llms-full.txt,
 // <main>-wrapped document headers and spaced numeral headings across all 85 routes,
 // clean JSON-LD schema graphs, and re-hashed home bundle index-4d715571.js.
-const CACHE_NAME = 'zazie-v34';
+// v36: 2026-10-22 mobile-audit pass — 12px type floor and 44px targets in the
+// home/estimator CSS, WCAG AA label colours, styled skip link, poster AVIF
+// 400/480/640 ladder, and re-hashed home bundle index-9e03d452.js.
+// v37: the archive-boot intro is back in index.html (the gate script that had
+// been dropped in the prerender pass is restored, so the overlay actually
+// plays again). The document is precached as '/', so the cache name moves with
+// it: without the bump a returning visitor could keep the boot-less document.
+// v38: adds a prominent high-contrast "Skip intro" button (#zp-boot-skip) in
+// the archive-boot deck above the CRT vignette layer, with 160ms fast teardown,
+// accessible keyboard Tab/Enter/Space/Escape support, and mobile safe-area sizing.
+const CACHE_NAME = 'zazie-v38';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -84,14 +94,14 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-normal.woff2',
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
-  '/index-f509fde0.css',
-  '/index-4d715571.js',
+  '/index-40232616.css',
+  '/index-b564d3f9.js',
   '/store-c22a1a44.css',
   '/store-3fc01be0.js',
   '/legal-817a8ca2.css',
   '/legal-ab598df8.js',
-  '/estimator-c0d6291c.css',
-  '/estimator-e20a6c5d.js',
+  '/estimator-43a25eec.css',
+  '/estimator-0ca1de83.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',
   '/images/hero-portrait.avif',

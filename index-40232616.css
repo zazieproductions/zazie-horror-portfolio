@@ -33,7 +33,134 @@
   }
 }
 
-  /* Cinema players stay upright at their real size. The provider owns the
+  /* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE READABILITY + TAP TARGETS (2026-10-22)
+   PageSpeed flagged the homepage as not mobile friendly: the design leaned on
+   9-11px uppercase labels (232 occurrences of text-[9px] / text-[10px] /
+   text-[11px]) and 32-40px control hit areas. Nothing here changes the desktop
+   composition; every rule is scoped to small viewports.
+   1. 12px floor for the small-caps labels, with the line-height the tracking
+      needs so labels do not clip.
+   2. 44px minimum hit area (WCAG 2.5.5) for text links and icon buttons that
+      were previously 16-32px tall, without moving anything that flows inline
+      inside a paragraph.
+   3. 16px form controls, so iOS Safari does not zoom the viewport on focus.
+   4. touch-action:manipulation on every control, which removes the ~300ms
+      double-tap-zoom wait that delayed taps (an INP contributor).
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 767px) {
+  a[href],
+  button,
+  [role="button"],
+  input,
+  select,
+  textarea,
+  summary {
+    touch-action: manipulation;
+  }
+}
+
+@media (max-width: 639px) {
+  .text-\[9px\],
+  .text-\[10px\],
+  .text-\[11px\] {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  /* Text links and icon buttons: 44px tall targets that keep their alignment. */
+  footer a,
+  footer nav a,
+  .chip-scroll button {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
+  footer nav {
+    gap: 0.25rem 1.25rem;
+  }
+
+  /* The external-link and player controls were 32px squares. Only the box is
+     enlarged: never force `display`, or a `hidden`/`sm:flex` control would be
+     shown at mobile widths (the "Enter the showreel" link was). */
+  a[aria-label],
+  button[aria-label] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* 16px inputs stop iOS from zooming on focus. */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SHOWREEL ROW STATE ICON (2026-10-22)
+   The 32-cue list drew its play/pause glyph as an inline <svg> (3 DOM nodes per
+   row) and hid the cue duration below 640px. Both are now CSS: the duration is
+   in the mood line, and this pseudo-element carries the state, so the list is
+   96 elements lighter without losing an affordance.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.zp-track::after {
+  content: "";
+  flex: 0 0 auto;
+  align-self: center;
+  width: 0;
+  height: 0;
+  border-left: 7px solid rgba(240, 235, 227, 0.55);
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  transition: border-left-color 0.2s ease;
+}
+.zp-track:hover::after,
+.zp-track:focus-visible::after {
+  border-left-color: #c41e1e;
+}
+.zp-track[data-row-playing="true"]::after {
+  width: 7px;
+  height: 13px;
+  border: 1px solid transparent;
+  background: linear-gradient(90deg, #c41e1e 0 2px, transparent 2px 5px, #c41e1e 5px 7px);
+}
+
+/* 2026-10-22 Mobile-friendly pass 3.
+   .zp-skip shipped with no styles at all, so "Skip to content" rendered as a
+   visible unstyled link over the header on every page. Standard skip-link
+   treatment: off-screen until focused, 44px tall when it appears.
+   The header wordmark link was a 36x36 hit area (the text half is hidden
+   below 640px): keep the 36px badge but give the anchor a 44px target.
+   Inline prose links were only as tall as their line box (~18px), under the
+   24px WCAG 2.5.8 minimum. Vertical padding on an inline box is invisible but
+   grows the hit area to ~28px; horizontal metrics are untouched. */
+.zp-skip { position:fixed; top:.75rem; left:.75rem; z-index:100; display:inline-flex; align-items:center;
+  min-height:44px; padding:.6rem 1rem; background:#080808; color:#f0ebe3; border:1px solid #c41e1e;
+  font:500 .75rem/1.2 Inter,ui-sans-serif,system-ui,sans-serif; letter-spacing:.16em; text-transform:uppercase;
+  text-decoration:none; transform:translateY(-250%); transition:transform .15s ease; }
+.zp-skip:focus { transform:translateY(0); outline:2px solid #f0ebe3; outline-offset:2px; }
+header a[href="#top"] { min-height:44px; min-width:44px; }
+main p a, main li a, main dd a, main dt a { padding-block:.4em; }
+main a[href^="mailto:"], main a[href^="tel:"], main a[href="#reviews"] { min-height:44px; }
+@media (prefers-reduced-motion:reduce) { .zp-skip { transition:none; } }
+
+/* 2026-10-22 WCAG AA contrast. The brand red #c41e1e is 3.4:1 on the ink
+   background and mist at 60% is 3.1:1, so both fail AA for the 10-12px
+   eyebrow and footer labels. Display type keeps the brand red (3:1 passes at
+   24px and up); only the small labels move to AA tints (5.1:1 / 5.2:1).
+   Keep this before the "Cinema players stay upright" marker: the film-player
+   test asserts that everything from the marker to EOF is byte-identical to the
+   inline <style> in index.html. */
+.text-\[9px\].text-blood,
+.text-\[10px\].text-blood,
+.text-\[11px\].text-blood,
+.text-\[12px\].text-blood,
+.hover\:text-blood:hover,
+.text-blood :where(.text-\[9px\], .text-\[10px\], .text-\[11px\], .text-\[12px\]) { color:#e34b4b; }
+.text-mist\/60 { color:#8b8681; }
+/* Cinema players stay upright at their real size. The provider owns the
      playback bar; site actions live in the caption BELOW the iframe. */
   .zp-vcard{--zp-frame-w:100%}
   .zp-vframe{position:relative;background:#000;overflow:hidden}
@@ -93,3 +220,4 @@
   body.zp-player-open .vignette,
   body.zp-player-open .blood-vignette,
   body.zp-player-open .grain{opacity:0!important;transition:opacity .3s ease}
+

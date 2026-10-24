@@ -51,6 +51,8 @@ export interface Image {
   width: number;
   height: number;
   avif?: string;
+  /** Candidate list for the AVIF <source>, e.g. "a-400.avif 400w, a-640.avif 640w". */
+  avifSet?: string;
   srcset?: string;
 }
 

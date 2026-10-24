@@ -179,7 +179,7 @@ function buildHomeDocument() {
   html = replaceMarkedContents(html, HOME_POSTERS_START, HOME_POSTERS_END, renderHomePosterCards(), 'home-poster');
   fs.writeFileSync(indexFile, html, 'utf8');
   console.log('prerender: replaced the complete homepage <head> from src/lib/home.ts + home entities');
-  console.log('prerender: rendered 9 curated poster-wall cards from src/data/home.ts + productions.ts');
+  console.log('prerender: rendered curated poster-wall cards from src/data/home.ts + productions.ts');
 }
 const chrome = readChrome();
 const only = process.argv

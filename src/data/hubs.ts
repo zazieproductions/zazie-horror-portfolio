@@ -24,9 +24,13 @@ export const hubs: Hub[] = [
   {
     path: "/",
     name: "Portfolio",
-    title: "Horror Composer for Hire — Film, TV & Game Scores | Zazie Productions",
-    description: `Hire IMDb-credited horror composer Zazie Kanwar-Torge (Zazie Productions) for psychological, folk, body, and experimental scores across film, TV, and games. 32 playable cues, 9 screen productions, packages from $${MINIMUM_FEE} USD.`,
-    lastmod: "2026-10-18",
+    // Main's shorter title (no "| Zazie Productions" suffix) keeps the SERP
+    // title well inside the pixel budget; the description is the 129-character
+    // one the PageSpeed/SEO audit asked for (100-130), not the earlier 220-char
+    // sentence. Both are what the WebPage JSON-LD and sitemap reuse.
+    title: "Horror Composer for Hire — Film, TV & Game Scores",
+    description: `IMDb-credited horror composer Zazie Kanwar-Torge scores psychological and folk films, TV, and games. Custom scores from $${MINIMUM_FEE} USD.`,
+    lastmod: "2026-10-22",
     images: [
       { loc: "https://horror.zazieproductions.com/images/hero-portrait.jpg", caption: "Portfolio portrait for Zazie Productions, a composer and sound-design studio working across screen and experimental media.", title: "Zazie Kanwar-Torge: Psychological Horror Composer - Dark Atmospheric Scores" },
       { loc: "https://horror.zazieproductions.com/images/headshot.jpg", caption: "Zazie Kanwar-Torge, composer and sound designer associated with Zazie Productions LLC.", title: "Zazie Kanwar-Torge headshot - horror film composer, Zazie Productions LLC" },
@@ -40,6 +44,7 @@ export const hubs: Hub[] = [
       { loc: "https://horror.zazieproductions.com/images/posters/choleric-1200.jpg", caption: "Poster artwork for CHOLERIC. IMDb credits Zazie Kanwar-Torge as co-producer.", title: "CHOLERIC - Short Film; Co-Producer Credit" },
       { loc: "https://horror.zazieproductions.com/images/posters/mike-has-a-visitor-1200.jpg", caption: "Poster artwork for MIKE HAS A VISITOR; IMDb credits Zazie Kanwar-Torge as composer.", title: "MIKE HAS A VISITOR - Horror Short; Composer Credit" },
       { loc: "https://horror.zazieproductions.com/images/posters/the-dark-awaits-1200.jpg", caption: "Poster artwork for THE DARK AWAITS, a paranormal reality-TV series; IMDb credits Zazie Kanwar-Torge as composer.", title: "THE DARK AWAITS - Paranormal Reality-TV Series" },
+      { loc: "https://horror.zazieproductions.com/images/posters/uncle-freds-monster-problem-1200.jpg", caption: "Poster artwork for UNCLE FRED'S MONSTER PROBLEM.", title: "UNCLE FRED'S MONSTER PROBLEM - Film Poster" },
     ],
     videos: [
       {

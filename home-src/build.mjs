@@ -52,16 +52,62 @@ const PAIRS = [
   ['Start an inquiry', 'Request a scoring quote', BOTH],
   // User-provided biography; HTML emphasis is shared with the static snapshot.
   ["Zazie Kanwar-Torge is an award-winning composer, experimental producer, and multi-instrumentalist. Under Zazie Productions, he writes and performs original scores for psychological, folk, and body horror, supernatural thrillers, and dark sci-fi.", "<strong>Zazie Kanwar-Torge</strong> is an award-winning film composer, experimental producer, and multi-instrumentalist specializing in <strong>psychological horror, folk horror, body horror, supernatural thrillers, and dark science fiction</strong>. Through Zazie Productions, he creates original film scores and immersive sonic atmospheres that explore dread, dissonance, isolation, and the uncanny.", "bundle"],
-  ["His palette combines struck strings, bowed metal, hybrid orchestration, and custom synths, shaped to picture for projects from shorts to features.", "Working at the intersection of cinematic scoring, musique concrète, and electroacoustic composition, his distinctive palette combines bowed metal, struck strings, experimental synthesis, and hybrid orchestration. His work has been featured at <strong>Ars Electronica 2026</strong>, performed in 20.4-channel spatial audio, and selected for international experimental music and film programs, including <strong>MUSLAB/Cero Records</strong> and <strong>EXiS in Seoul</strong>. Previously commissioned by the <strong>Black Mountain College Museum + Arts Center</strong>, he also develops original audio instruments and experimental sound libraries.</p><p>Drawing on a background in experimental film, sound art, and audiovisual composition, Zazie approaches each score as an extension of the film's psychological and emotional world, creating visceral, atmospheric music tailored to independent shorts, feature films, series, and horror video games. Directors, producers, and game developers ready to <a href=\"/hire-a-composer\" class=\"text-bone underline underline-offset-4 hover:text-blood\">hire a horror composer</a> can review published packages, verified credits, and the <a href=\"/how-to-hire-a-horror-composer\" class=\"text-bone underline underline-offset-4 hover:text-blood\">filmmaker &amp; game-developer hiring guide</a>.", "bundle"],
-  ['Drawing on a background in experimental film, sound art, and audiovisual composition, Zazie approaches each score as an extension of the film\'s psychological and emotional world, creating visceral, atmospheric music tailored to independent shorts, feature films, and unconventional genre cinema.', 'Drawing on a background in experimental film, sound art, and audiovisual composition, Zazie approaches each score as an extension of the film\'s psychological and emotional world, creating visceral, atmospheric music tailored to independent shorts, feature films, series, and horror video games. Directors, producers, and game developers ready to <a href="/hire-a-composer" class="text-bone underline underline-offset-4 hover:text-blood">hire a horror composer</a> can review published packages, verified credits, and the <a href="/how-to-hire-a-horror-composer" class="text-bone underline underline-offset-4 hover:text-blood">filmmaker &amp; game-developer hiring guide</a>.', HTML],
+  ["His palette combines struck strings, bowed metal, hybrid orchestration, and custom synths, shaped to picture for projects from shorts to features.", "Working at the intersection of cinematic scoring, musique concrète, and electroacoustic composition, his distinctive palette combines bowed metal, struck strings, experimental synthesis, and hybrid orchestration. His work has been featured at <strong>Ars Electronica 2026</strong>, performed in 20.4-channel spatial audio, and selected for international experimental music and film programs, including <strong>MUSLAB/Cero Records</strong> and <strong>EXiS in Seoul</strong>. Previously commissioned by the <strong>Black Mountain College Museum + Arts Center</strong>, he also develops original audio instruments and experimental sound libraries.</p><p>Drawing on a background in experimental film, sound art, and audiovisual composition, Zazie approaches each score as an extension of the film's psychological and emotional world, creating visceral, atmospheric music tailored to independent shorts, feature films, series, and horror video games.", "bundle"],
+  ['Drawing on a background in experimental film, sound art, and audiovisual composition, Zazie approaches each score as an extension of the film\'s psychological and emotional world, creating visceral, atmospheric music tailored to independent shorts, feature films, and unconventional genre cinema.', 'Drawing on a background in experimental film, sound art, and audiovisual composition, Zazie approaches each score as an extension of the film\'s psychological and emotional world, creating visceral, atmospheric music tailored to independent shorts, feature films, series, and horror video games.', HTML],
   ['<a href="#services" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Rates</a><a href="/store"', '<a href="#services" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Rates</a><a href="/hire-a-composer" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Hire</a><a href="/store"', HTML],
   ['[["/hire-a-composer","Hire a composer"],["/sound-design","Sound design"]', '[["/hire-a-composer","Hire a horror composer"],["/how-to-hire-a-horror-composer","Hiring guide"],["/sound-design","Sound design"]', BUNDLE],
   ['<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a composer</a><a href="/sound-design"', '<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a horror composer</a><a href="/how-to-hire-a-horror-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hiring guide</a><a href="/sound-design"', HTML],
+  // Keep a direct, 44px quote action visible on phones; the full section menu
+  // remains available beside it. aria-expanded follows the React menu state.
+  [']}),u.jsx("button",{className:"border border-white/10 p-2.5 text-bone transition-colors hover:border-blood/50 xl:hidden",onClick:()=>r(e=>!e),"aria-label":n?"Close menu":"Open menu",', ']}),u.jsx("a",{href:"/contact",className:"zp-mobile-quote",children:"Get a quote"}),u.jsx("button",{type:"button",className:"zp-menu-button xl:hidden",onClick:()=>r(e=>!e),"aria-expanded":n,"aria-controls":"mobile-navigation","aria-label":n?"Close menu":"Open menu",', BUNDLE],
+  ['<button class="border border-white/10 p-2.5 text-bone transition-colors hover:border-blood/50 xl:hidden" aria-label="Open menu">', '<a href="/contact" class="zp-mobile-quote">Get a quote</a><button type="button" class="zp-menu-button xl:hidden" aria-expanded="false" aria-controls="mobile-navigation" aria-label="Open menu">', HTML],
+  ['className:"overflow-hidden border-t border-white/5 bg-void/95 backdrop-blur-xl xl:hidden",', 'id:"mobile-navigation",className:"overflow-hidden border-t border-white/5 bg-void/95 backdrop-blur-xl xl:hidden",', BUNDLE],
   ["children:It.bio}", "dangerouslySetInnerHTML:{__html:It.bio}}", "bundle"],
   ["u.jsx(\"p\",{className:\"text-mist leading-relaxed mb-8 text-sm sm:text-base\",\"data-source-loc\":\"src/components/About.tsx:43:1\",children:It.bio2})", "u.jsx(\"div\",{className:\"text-mist leading-relaxed mb-8 text-sm sm:text-base space-y-5\",\"data-source-loc\":\"src/components/About.tsx:43:1\",dangerouslySetInnerHTML:{__html:\"<p>\"+It.bio2+\"</p>\"}})", "bundle"],
+  // User-supplied standalone poster. It joins the wall and lightbox without
+  // creating an unverified production route or claiming credits not present in
+  // productions.ts. `contain` preserves the full 3:4 artwork in the 2:3 card.
+  ['featured:!0}];function Z5(e)', 'featured:!0},{title:"UNCLE FRED\'S MONSTER PROBLEM",year:"Film",tagline:"His problem is now your problem.",poster:"/images/posters/uncle-freds-monster-problem-1200.jpg",thumb:"/images/posters/uncle-freds-monster-problem-640.jpg",thumbA:"/images/posters/uncle-freds-monster-problem-640.avif",featured:!0,contain:!0,width:640,height:854}];function Z5(e)', BUNDLE],
+  // Mobile poster wall: a 400w AVIF keeps the 640w file for retina desktop.
+  // Phones render the 46vw cells at ~190 CSS px (~380 device px at DPR 2), so
+  // the 640w poster was ~2.6x the pixels the slot needed.
+  ['srcSet:e.thumbA+" 640w"', 'srcSet:e.thumbA.replace("-640.avif","-400.avif")+" 400w, "+e.thumbA.replace("-640.avif","-480.avif")+" 480w, "+e.thumbA+" 640w"', BUNDLE],
+  // Alt text: the poster wall and the hero portrait are content images, not
+  // decoration, so they carry the artwork's own name. (The atmosphere plate and
+  // the press photo stay alt="" - they are backgrounds behind live copy.)
+  ['width:640,height:960,alt:"",className:"h-full w-full object-cover object-top opacity-95 transition-transform duration-700 ease-out group-hover:scale-105 group-hover:opacity-100"', 'width:e.width||640,height:e.height||960,alt:e.title+" poster artwork",className:"h-full w-full "+(e.contain?"zp-poster-contain":"object-cover object-top group-hover:scale-105")+" opacity-95 transition-transform duration-700 ease-out group-hover:opacity-100"', BUNDLE],
+  ['className:"h-full w-full object-cover object-top","data-source-loc":"src/components/PosterWall.tsx:96:1"', 'className:"h-full w-full "+(e.contain?"zp-poster-contain":"object-cover object-top"),"data-source-loc":"src/components/PosterWall.tsx:96:1"', BUNDLE],
+  ['u.jsx("img",{src:It.images.hero,alt:"",width:896,height:1152,decoding:"async"', 'u.jsx("img",{src:It.images.hero,alt:"Zazie Kanwar-Torge, horror composer and founder of Zazie Productions",width:896,height:1152,decoding:"async"', BUNDLE],
+  ['<img alt="" class="absolute bottom-0 right-0 h-full w-auto max-w-none object-cover object-top opacity-80" src="/images/hero-portrait.jpg"', '<img alt="Zazie Kanwar-Torge, horror composer and founder of Zazie Productions" class="absolute bottom-0 right-0 h-full w-auto max-w-none object-cover object-top opacity-80" src="/images/hero-portrait.jpg"', HTML],
+  // Poster lightbox: touch-friendly close, Escape support, background scroll
+  // lock, and a scrollable dialog on short phone screens.
+  ['function Q5(){const[e,t]=_.useState(null);return', 'function Q5(){const[e,t]=_.useState(null);_.useEffect(()=>{if(!e)return;const n=document.body.style.overflow,r=e=>{e.key==="Escape"&&t(null)};return document.body.style.overflow="hidden",document.addEventListener("keydown",r),()=>{document.body.style.overflow=n,document.removeEventListener("keydown",r)}},[e]);return', BUNDLE],
+  ['className:"relative grid max-h-[90svh] w-full max-w-3xl overflow-hidden border border-blood/30 bg-ink shadow-[0_0_80px_rgba(196,30,30,0.2)] md:grid-cols-2"', 'className:"zp-poster-dialog relative grid max-h-[90svh] w-full max-w-3xl overflow-hidden border border-blood/30 bg-ink shadow-[0_0_80px_rgba(196,30,30,0.2)] md:grid-cols-2"', BUNDLE],
+  ['type:"button",onClick:()=>t(null),className:"absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center border border-ash bg-void/90 text-bone hover:border-blood hover:text-blood","aria-label":"Close"', 'type:"button",autoFocus:!0,onClick:()=>t(null),className:"zp-poster-close absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center border border-ash bg-void/90 text-bone hover:border-blood hover:text-blood","aria-label":"Close "+e.title+" poster"', BUNDLE],
+  // Showreel rows: 32 rows x 3 decorative nodes became 32 x 1. The duration moves
+  // into the mood line (it was hidden below 640px, so phones lost it entirely) and
+  // the play/pause glyph becomes a pseudo-element keyed off data-row-playing.
+  [
+    'md:px-6 "+(o?"bg-blood/10":"hover:bg-smoke"),\"data-source-loc\":\"src/components/Showreel.tsx:194:1\"',
+    'md:px-6 zp-track "+(o?"bg-blood/10":"hover:bg-smoke"),\"data-row-playing\":String(!!(o&&r)),\"data-source-loc\":\"src/components/Showreel.tsx:194:1\"',
+    BUNDLE,
+  ],
+  [
+    'children:t.tag})]}),u.jsx("span",{className:"hidden shrink-0 text-[11px] tabular-nums text-mist xs:inline sm:inline","data-source-loc":"src/components/Showreel.tsx:230:1",children:bi(t.duration)}),u.jsx("span",{className:"shrink-0 text-mist","data-source-loc":"src/components/Showreel.tsx:233:1",children:o&&r?u.jsx(bu,{size:16,"data-source-loc":"src/components/Showreel.tsx:234:24"}):u.jsx(Ai,{size:16,"data-source-loc":"src/components/Showreel.tsx:234:46"})})',
+    'children:t.tag+" · "+bi(t.duration)})]})',
+    BUNDLE,
+  ],
+  // Accessible name must contain the visible text (axe label-content-name-mismatch):
+  // the link reads "Enter" but announced "Scroll to showreel".
+  ['"aria-label":"Scroll to showreel"', '"aria-label":"Enter the showreel"', BUNDLE],
+  ['aria-label="Scroll to showreel"', 'aria-label="Enter the showreel"', HTML],
+  // The desktop portrait is display:none below 1024px; lazy keeps mobile from
+  // downloading 143 KB it can never show (desktop is in-viewport, so it still loads).
+  ['alt:"Zazie Kanwar-Torge, horror composer and founder of Zazie Productions",width:896,height:1152,decoding:"async"', 'alt:"Zazie Kanwar-Torge, horror composer and founder of Zazie Productions",width:896,height:1152,loading:"lazy",decoding:"async"', BUNDLE],
   // Services heading
   ['04 · Scope and budget', '04 · Scoring services', BOTH],
-  ['Build a scope and estimate', 'Choose a package, then estimate', BOTH],
+  ['Build a scope and estimate', 'Rates & estimates', BUNDLE],
+  ['Build a scope and estimate', 'Rates &amp; estimates', HTML],
   ['Choose a project type, scored runtime, complexity, and delivery needs.', 'Packages are priced by scored music minutes, not film length.', BOTH],
   ["Estimates scale with your project's funding.", 'Preliminary estimate — final quotation subject to creative scope and written agreement.', BUNDLE],
   ['Packages are priced by scored music minutes, not film length. Estimates are indicative and nonbinding.', 'Packages are priced by scored music minutes, not film length. Preliminary estimate — final quotation subject to creative scope and written agreement.', HTML],
@@ -70,7 +116,6 @@ const PAIRS = [
   ['Share your format, scored minutes, timeline, and budget.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', HTML],
   // Repair the duplicate sentence present in the latest static homepage snapshot.
   ['Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send. The form prepares an email for you to review and send.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', HTML],
-  ['"dateModified": "2026-10-17"', '"dateModified": "2026-10-18"', HTML],
   ['gu=["Short film","Feature","Series episode","Game / interactive","Installation / art"]', 'gu=["Not sure yet","Short film","Feature","Series episode","Game / interactive","Installation / art"]', BUNDLE],
   ['a1=["Psychological / atmospheric horror","Supernatural dread","Body horror (musical atmosphere)","Folk horror","Techno-thriller","Cosmic dread","Dark drama / thriller","Game adaptive score","Other / hybrid cinematic"]', 'a1=["Not sure yet","Psychological / atmospheric horror","Supernatural dread","Body horror (musical atmosphere)","Folk horror","Techno-thriller","Cosmic dread","Dark drama / thriller","Game adaptive score","Other / hybrid cinematic"]', BUNDLE],
   ['<select class="w-full border border-ash bg-void px-4 py-3 text-sm text-bone outline-none focus:border-blood" aria-label="Theme / tone"><option value="Psychological / atmospheric horror">Psychological / atmospheric horror</option>', '<select class="w-full border border-ash bg-void px-4 py-3 text-sm text-bone outline-none focus:border-blood" aria-label="Theme / tone"><option value="Not sure yet" selected>Not sure yet</option><option value="Psychological / atmospheric horror">Psychological / atmospheric horror</option>', HTML],
@@ -88,8 +133,15 @@ const PAIRS = [
 const BUNDLE_BUDGET_OLD = 'xu=["Under $300","$300 - $500","$500 - $700","$700 - $900","$900+","Flexible / discuss"]';
 const BUNDLE_BUDGET_DEFAULT_OLD = 'useState(xu[1])';
 
-const ISLAND_OPEN = '<div class="zp-home-section"><div class="zp-shell">';
+const ISLAND_OPEN = '<div class="zp-home-section zp-home-island" data-zp-island="estimator"><div class="zp-shell">';
 const ISLAND_CLOSE = '</div></div>';
+const SERVICES_HEADER = [
+  '<div class="mb-10 max-w-2xl sm:mb-14">',
+  '<p class="mb-3 text-[10px] uppercase tracking-[0.35em] text-blood sm:text-[11px] sm:tracking-[0.4em]">04 · Scoring services</p>',
+  '<h2 class="mb-4 font-display text-3xl leading-none text-bone sm:text-4xl md:text-6xl">Rates &amp; estimates</h2>',
+  '<p class="text-sm leading-relaxed text-mist sm:text-base">Packages are priced by scored music minutes, not film length. Preliminary estimate — final quotation subject to creative scope and written agreement.</p>',
+  '</div>',
+].join('');
 
 /**
  * Markup for the homepage island. The bundle renders the real markup; the
@@ -106,7 +158,6 @@ function islandHtml(staticMarkers = false) {
   return [
     ISLAND_OPEN,
     '<p class="zp-kicker">Commission packages</p>',
-    '<h3 class="zp-sub" style="margin-top:0">Choose by scored music minutes</h3>',
     block('packages', packagesHtml),
     block('inclusions', inclusionsHtml),
     microbudget,
@@ -129,6 +180,27 @@ function countOf(text, needle) {
   return text.split(needle).length - 1;
 }
 
+/**
+ * A replacement string is spliced into the bundle's own JavaScript source, not
+ * into HTML. A pair whose new text carries an unescaped `"` turns the enclosing
+ * double-quoted literal into two literals and the whole homepage bundle dies at
+ * parse time - which is exactly what shipped before 2026-10-22: the file was
+ * served, threw `SyntaxError`, and none of the React behaviour (poster lightbox,
+ * film player, 32-cue audio player, sticky player) ever ran while every other
+ * check still passed. Parsing the patched text here makes that a build failure
+ * instead of a silent runtime failure.
+ */
+function assertBundleParses(source) {
+  const file = ts.createSourceFile('index-bundle.js', source, ts.ScriptTarget.ES2020, false, ts.ScriptKind.JS);
+  const diagnostics = file.parseDiagnostics ?? [];
+  if (diagnostics.length) {
+    const first = diagnostics[0];
+    const at = first.start ?? 0;
+    const context = JSON.stringify(source.slice(Math.max(0, at - 120), at + 80));
+    throw new Error(`patched bundle does not parse: ${ts.flattenDiagnosticMessageText(first.messageText, ' ')} near ${context}`);
+  }
+}
+
 function patchBundle(orig) {
   let out = orig;
   for (const [oldText, newText, target] of PAIRS) {
@@ -143,8 +215,10 @@ function patchBundle(orig) {
     out = out.replace(oldText, () => newText);
   }
   const { start, end } = findTopLevelFunction(out, 'lj');
-  const replacement = `function lj(){return u.jsx("div",{className:"zp-home-island","data-zp-island":"estimator",dangerouslySetInnerHTML:{__html:${JSON.stringify(islandHtml(false))}}})}`;
+  const servicesMarkup = SERVICES_HEADER + islandHtml(false);
+  const replacement = `function lj(){return u.jsx("section",{id:"services",className:"relative bg-ink py-14 sm:py-20 md:py-28",children:u.jsx("div",{className:"mx-auto max-w-7xl px-4 sm:px-6 md:px-8",dangerouslySetInnerHTML:{__html:${JSON.stringify(servicesMarkup)}}})})}`;
   out = out.slice(0, start) + replacement + out.slice(end);
+  assertBundleParses(out);
   return out;
 }
 
@@ -166,12 +240,34 @@ function patchStatic(html) {
     }
   }
 
+  // Showreel rows in the static snapshot must match the patched React rows, so
+  // the same three nodes come out of both render paths. Idempotent: once a row
+  // has zp-track + the merged duration line, the pattern no longer matches.
+  const rowPattern =
+    /<button class="(flex min-h-\[56px\][^"]*?)"><span class="w-7[^"]*">([\s\S]*?)<\/span><div class="min-w-0 flex-1"><p class="([^"]*)">([\s\S]*?)<\/p><p class="mt-0\.5[^"]*">([\s\S]*?)<\/p><\/div><span class="hidden shrink-0[^"]*">([\s\S]*?)<\/span><span class="shrink-0 text-mist"><svg[\s\S]*?<\/svg><\/span><\/button>/g;
+  let trimmedRows = 0;
+  out = out.replace(rowPattern, (_match, buttonClass, indexHtml, titleClass, titleHtml, tagHtml, durationHtml) => {
+    trimmedRows += 1;
+    return `<button class="${buttonClass} zp-track" data-row-playing="false"><span class="w-7 shrink-0 text-[11px] tabular-nums text-mist sm:w-8">${indexHtml}</span><div class="min-w-0 flex-1"><p class="${titleClass}">${titleHtml}</p><p class="mt-0.5 truncate text-[10px] uppercase tracking-[0.2em] text-mist">${tagHtml} · ${durationHtml}</p></div></button>`;
+  });
+  if (trimmedRows) applied.push(`showreel rows trimmed (${trimmedRows})`);
+
   // Services: replace the old React estimator snapshot with the static island.
   // The header paragraph is followed by its wrapper's </div>, then the grid
   // that holds the old "Scope builder". We replace the grid, matched by depth.
   const sectionStart = out.indexOf('<section id="services"');
   const sectionEnd = out.indexOf('</section>', sectionStart);
   if (sectionStart < 0 || sectionEnd < 0) throw new Error('index.html: no #services section');
+  const previousPackageSubheading = '<h3 class="zp-sub" style="margin-top:0">Choose by scored music minutes</h3>';
+  if (out.includes(previousPackageSubheading)) {
+    out = out.replace(previousPackageSubheading, '');
+    applied.push('redundant package subheading removed');
+  }
+  const legacyIslandOpen = '<div class="zp-home-section"><div class="zp-shell">';
+  if (out.includes(legacyIslandOpen)) {
+    out = out.replace(legacyIslandOpen, ISLAND_OPEN);
+    applied.push('services island identity updated');
+  }
   if (!out.slice(sectionStart, sectionEnd).includes('zp-home-section')) {
     const header = out.indexOf('Packages are priced by scored music minutes, not film length.', sectionStart);
     if (header < 0) throw new Error('index.html: services header paragraph not found');
@@ -206,7 +302,18 @@ function ensureEstimatorAssets(html) {
   if (!css || !js) throw new Error('estimator assets missing: run node scripts/build-estimator.mjs first');
   let out = html;
   if (!/\/estimator-[0-9a-f]{8}\.css/.test(out)) {
-    out = out.replace('</head>', () => `<link href="/${css}" rel="stylesheet"/>\n</head>`);
+    // Non-blocking: this sheet only paints the below-fold scope builder and the
+    // inquiry form, so it must never sit on the hero's render path.
+    out = out.replace(
+      '</head>',
+      () =>
+        `<link href="/${css}" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"/>\n` +
+        `<noscript><link href="/${css}" rel="stylesheet"/></noscript>\n</head>`,
+    );
+  } else {
+    // A rebuild that changes the estimator hash must not leave the preload
+    // pointing at a file that no longer exists.
+    out = out.replace(/\/estimator-[0-9a-f]{8}\.css/g, () => `/${css}`);
   }
   if (!/\/estimator-[0-9a-f]{8}\.js/.test(out)) {
     out = out.replace('</body>', () => `<script src="/${js}" defer></script>\n</body>`);
