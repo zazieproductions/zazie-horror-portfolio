@@ -18,6 +18,13 @@
  *      is replaced by static markup generated from src/data/pricing.ts. Its
  *      live behaviour comes from estimator-<hash>.js, which delegates events on
  *      the document, so it works inside the React island.
+ *   3. The testimonial section is deleted outright (2026-10-24): there are no
+ *      attributable, permissioned quotes to publish, and a "5.0 collaborator
+ *      rating" badge pointing at placeholder reviews reads as fabricated.
+ *      The hero badge + its divider and the App render call come out as
+ *      pairs; the section component (`cj`), the now-unreferenced StarRating
+ *      pair (`zi`, `t1`) and the quotes data (`s1`) are cut with the parser,
+ *      like step 2. The static copy loses the same badge and section.
  *
  * Every pair must match exactly once in the pristine bundle, or the build
  * fails. In index.html, a pair that is already applied is skipped, so the
@@ -143,6 +150,18 @@ const PAIRS = [
     '_.useEffect(function(){let c=zpCard.current;if(!e){if(c){const trigger=c.querySelector(".zp-poster");if(trigger)trigger.focus()}zpCard.current=null;return}if(!c)c=document.querySelector(".zp-vcard.is-playing");if(!c)return;zpCard.current=c;const close=c.querySelector(".zp-player-close");if(close)close.focus();try{const reduce=',
     BUNDLE,
   ],
+  // Testimonials removed (2026-10-24): no attributable, permissioned quotes to
+  // publish, so the "5.0 collaborator rating" hero badge and its divider come
+  // out with the section itself. The unreferenced statements (cj, zi, t1, s1)
+  // are cut in patchBundle; the matching static markup comes out in
+  // patchStatic. Without the badge pair, the zi/t1 cut below would leave the
+  // hero pointing at a component that no longer exists.
+  [
+    'u.jsxs("a",{href:"#reviews",className:"inline-flex items-center gap-2.5 transition-colors hover:text-bone","data-source-loc":"src/components/Hero.tsx:175:12",children:[u.jsx(zi,{rating:5,size:"sm","data-source-loc":"src/components/Hero.tsx:179:14"}),u.jsxs("span",{className:"text-[11px] text-mist","data-source-loc":"src/components/Hero.tsx:180:14",children:[u.jsx("span",{className:"font-semibold text-[#F5C518]","data-source-loc":"src/components/Hero.tsx:181:16",children:"5.0"})," collaborator rating"]})]}),u.jsx("span",{className:"hidden h-4 w-px bg-white/10 sm:block","aria-hidden":!0,"data-source-loc":"src/components/Hero.tsx:184:12"}),',
+    '',
+    BUNDLE,
+  ],
+  ['u.jsx(cj,{"data-source-loc":"src/App.tsx:46:10"}),', '', BUNDLE],
   // Services heading
   ['04 · Scope and budget', '04 · Scoring services', BOTH],
   ['Build a scope and estimate', 'Rates & estimates', BUNDLE],
@@ -224,6 +243,18 @@ function findTopLevelFunction(source, name) {
   return { start: hits[0].getStart(sf), end: hits[0].getEnd() };
 }
 
+/** Same lookup for a `const name = ...;` statement (the testimonials data). */
+function findTopLevelVariable(source, name) {
+  const sf = ts.createSourceFile('bundle.js', source, ts.ScriptTarget.ES2020, true, ts.ScriptKind.JS);
+  const hits = sf.statements.filter(
+    (s) =>
+      ts.isVariableStatement(s) &&
+      s.declarationList.declarations.some((d) => ts.isIdentifier(d.name) && d.name.text === name),
+  );
+  if (hits.length !== 1) throw new Error(`expected exactly one top-level variable ${name}, found ${hits.length}`);
+  return { start: hits[0].getStart(sf), end: hits[0].getEnd() };
+}
+
 function countOf(text, needle) {
   return text.split(needle).length - 1;
 }
@@ -277,6 +308,24 @@ function patchBundle(orig) {
     if (n !== 1) throw new Error(`bundle: "${oldText}" matched ${n} times, expected 1`);
     out = out.replace(oldText, () => newText);
   }
+  // Testimonials excision, part two. The pairs above removed the render call
+  // and the hero badge, so the section component (cj), the StarRating widget
+  // only it and the badge used (zi + its star glyph t1), and the quotes data
+  // (s1) are unreferenced. Statement-level cuts keep the minified neighbours
+  // intact; each finder re-parses the current text and demands exactly one
+  // top-level hit, so a future minifier rename fails the build here instead
+  // of shipping a half-removed section.
+  for (const name of ['cj', 'zi', 't1']) {
+    const cut = findTopLevelFunction(out, name);
+    out = out.slice(0, cut.start) + out.slice(cut.end);
+  }
+  {
+    const cut = findTopLevelVariable(out, 's1');
+    out = out.slice(0, cut.start) + out.slice(cut.end);
+    if (/\bs1\b/.test(out)) {
+      throw new Error('bundle: testimonials data s1 is still referenced after removal');
+    }
+  }
   const { start, end } = findTopLevelFunction(out, 'lj');
   const servicesMarkup = SERVICES_HEADER + islandHtml(false);
   const replacement = `function lj(){return u.jsx("section",{id:"services",className:"relative bg-ink py-14 sm:py-20 md:py-28",children:u.jsx("div",{className:"mx-auto max-w-7xl px-4 sm:px-6 md:px-8",dangerouslySetInnerHTML:{__html:${JSON.stringify(servicesMarkup)}}})})}`;
@@ -314,6 +363,37 @@ function patchStatic(html) {
     if (next !== out) {
       out = next;
       applied.push('hero artwork panel rebuilt');
+    }
+  }
+
+  // Testimonials removed in the bundle too, so the static copy must drop the
+  // same two pieces or first paint would resurrect them: the hero "5.0
+  // collaborator rating" badge (plus the divider that only separated the
+  // badge from the IMDb note) and the complete #reviews section. The section
+  // contains no nested <section> and the badge no nested <a>, so the first
+  // closer is the right one. Idempotent - once both are gone, nothing runs.
+  {
+    const badgeOpen = '<a href="#reviews" class="inline-flex items-center gap-2.5 transition-colors hover:text-bone">';
+    const badgeStart = out.indexOf(badgeOpen);
+    if (badgeStart >= 0) {
+      const anchorEnd = out.indexOf('</a>', badgeStart);
+      if (anchorEnd < 0) throw new Error('index.html: hero rating badge never closes');
+      let badgeEnd = anchorEnd + '</a>'.length;
+      const divider = '<span class="hidden h-4 w-px bg-white/10 sm:block" aria-hidden="true"></span>';
+      if (out.startsWith(divider, badgeEnd)) badgeEnd += divider.length;
+      out = out.slice(0, badgeStart) + out.slice(badgeEnd);
+      applied.push('hero rating badge removed');
+    } else if (out.includes('href="#reviews"')) {
+      throw new Error('index.html: a #reviews link exists in an unexpected shape');
+    }
+    const reviewsStart = out.indexOf('<section id="reviews"');
+    if (reviewsStart >= 0) {
+      const reviewsEnd = out.indexOf('</section>', reviewsStart);
+      if (reviewsEnd < 0) throw new Error('index.html: #reviews section never closes');
+      out = out.slice(0, reviewsStart) + out.slice(reviewsEnd + '</section>'.length);
+      applied.push('reviews section removed');
+    } else if (out.includes('id="reviews"')) {
+      throw new Error('index.html: a #reviews target exists in an unexpected shape');
     }
   }
 
