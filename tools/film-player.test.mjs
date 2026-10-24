@@ -330,6 +330,22 @@ test('inline and bundled cinema CSS match: no overlaid actions, mobile room and 
   assert.match(bundledCss, /\.zp-vcard\.is-drive\{--zp-frame-w:min\(94vw,1600px,calc\(\(100svh - 11rem\)/);
 });
 
+test('showreel player starts with The Fatal Overdose in both the static page and playlist', () => {
+  const tracksSource = /tracks:(\[.*?\]),projects:/.exec(bundle)?.[1];
+  assert.ok(tracksSource, 'homepage bundle contains the cue playlist');
+  const tracks = vm.runInNewContext(`(${tracksSource})`);
+  assert.equal(tracks.length, 32);
+  assert.equal(tracks[0].title, 'The Fatal Overdose');
+  assert.equal(tracks[0].src, '/audio/track-12.mp3');
+  assert.deepEqual(Array.from(tracks, (track) => track.id), Array.from({ length: 32 }, (_, index) => index));
+
+  const sectionStart = html.indexOf('<section id="showreel"');
+  const section = html.slice(sectionStart, html.indexOf('</section>', sectionStart));
+  assert.ok(section.includes('Now playing</p><h3 class="mb-1 truncate font-display text-xl text-bone sm:text-2xl md:text-4xl">The Fatal Overdose</h3>'));
+  assert.ok(section.includes('<span class="w-7 shrink-0 text-[11px] tabular-nums text-mist sm:w-8">01</span><div class="min-w-0 flex-1"><p class="truncate font-display text-base sm:text-lg md:text-xl text-blood">The Fatal Overdose</p>'));
+  assert.equal(section.includes('<span class="w-7 shrink-0 text-[11px] tabular-nums text-mist sm:w-8">01</span><div class="min-w-0 flex-1"><p class="truncate font-display text-base sm:text-lg md:text-xl text-blood">Needle in The Nerve</p>'), false);
+});
+
 test('immutable player assets have fresh content hashes and service-worker precache references', () => {
   for (const file of [jsFile, cssFile]) {
     const hash = createHash('sha256').update(read(file)).digest('hex').slice(0, 8);
