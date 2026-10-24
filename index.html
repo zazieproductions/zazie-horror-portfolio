@@ -536,82 +536,59 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
 <style>
   /* ==================================================================
      HERO ARTWORK PLATE (desktop only, lg and up)
-     Seamless atmospheric integration of /images/hero-portrait.{avif,jpg}
-     (896x1152) into <section id="top">:
-       1. Zero stacking-context isolation on .zp-hero-art, .zp-hero-art-plate,
-          or <picture>, so mix-blend-mode:screen on the <img> blends directly
-          against the hero's atmosphere-bg, void washes, and crimson radials
-          rather than stamping an opaque charcoal (#101010) rectangle.
-       2. Exact replaced-element sizing on the <img> itself (inset:auto 0 0
-          auto; width/height:auto; max-width:min(100%,720px); max-height:100%
-          inside a plate inset 4.5rem below the fixed desktop header): the
-          element box always equals the 896:1152 rendered pixels with zero
-          letterbox dead space and keeps "ZAZIE / PRODUCTIONS" clear of the
-          header at every width and short viewport, while object-contain keeps
-          both side eye columns uncropped.
-       3. Dark-point alignment (filter:brightness(.9) contrast(1.2)) maps the
-          distressed charcoal paper ground (~15-22/255) to #000 so screen
-          blend drops the background by construction while preserving pale
-          typography, eyes, and faces; opacity:.84 keeps hero copy dominant.
-       4. Wide cosine-eased horizontal (0->38%) and vertical (top 0->10%,
-          bottom 62->100%) masks intersected via -webkit-mask-composite:
-          source-in / mask-composite:intersect dissolve top, left, bottom, and
-          corners without 8-bit gradient banding, with progressive single-mask
-          and @supports not (mask-image) fallbacks.
-       5. Bottom-right radial scrim (ellipse 95% 100% at 100% 100%) anchors
-          the bright lower shoulder into #030303 void before the fold while
-          fading to 0% alpha before both its top edge and the 54vw panel seam.
+     The full 896x1152 "ZAZIE PRODUCTIONS" key art is shown as a deliberate
+     poster plate, not dissolved into the atmosphere. No edge masks, screen
+     blend, dimming filter, or bottom scrim: the artwork runs edge-to-edge at
+     full opacity inside a thin bordered frame. The plate keeps the source
+     aspect ratio and is centred in the right half of the hero, so the whole
+     title, both eye columns, and the lower faces remain visible. The legacy
+     .zp-hero-art-scrim node stays in both render paths but is hidden here.
      ================================================================== */
-  .zp-hero-art{position:absolute;inset:0;pointer-events:none}
-  .zp-hero-art-plate{position:absolute;inset:4.5rem 0 0;pointer-events:none}
+  .zp-hero-art{
+    --zp-art-zone:46vw;
+    position:absolute;
+    top:0;right:0;bottom:0;left:auto;
+    width:var(--zp-art-zone);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:5.5rem 2rem 2rem;
+    pointer-events:none;
+  }
+  .zp-hero-art-plate{
+    position:relative;
+    width:auto;
+    height:min(100%,calc(59vw - 5.25rem));
+    max-width:100%;
+    aspect-ratio:896 / 1152;
+    overflow:hidden;
+    background:#020202;
+    border:1px solid rgba(240,235,227,.14);
+    box-shadow:0 1.75rem 4.5rem rgba(0,0,0,.72);
+    pointer-events:none;
+  }
   .zp-hero-art-plate picture{position:absolute;inset:0;display:block}
   .zp-hero-art-plate img{
-    inset:auto 0 0 auto;
-    width:auto;height:auto;
-    max-width:min(100%,720px);
-    max-height:100%;
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    max-width:none;
+    max-height:none;
     object-fit:contain;
-    object-position:right bottom;
-    opacity:.84;
-    filter:brightness(.9) contrast(1.2);
-    mix-blend-mode:screen;
+    object-position:center;
+    opacity:1;
+    filter:none;
+    mix-blend-mode:normal;
+    -webkit-mask-image:none;
+    mask-image:none;
+    -webkit-mask-composite:initial;
+    mask-composite:initial;
   }
-  .zp-hero-art-scrim{
-    position:absolute;inset-inline:0;bottom:0;height:40%;pointer-events:none;
-    background:radial-gradient(ellipse 95% 100% at 100% 100%,#030303 0%,#030303eb 18%,#03030394 42%,#0303032e 68%,#03030308 88%,#03030300 100%);
-  }
-  @supports ((-webkit-mask-image:linear-gradient(#000,#0000)) or (mask-image:linear-gradient(#000,#0000))){
-    .zp-hero-art-plate img{
-      -webkit-mask-image:radial-gradient(ellipse 100% 94% at 100% 44%,#000 0%,#000 46%,#000000cc 62%,#00000066 78%,#0000001a 91%,#0000 100%);
-      mask-image:radial-gradient(ellipse 100% 94% at 100% 44%,#000 0%,#000 46%,#000000cc 62%,#00000066 78%,#0000001a 91%,#0000 100%);
-    }
-  }
-  @supports ((-webkit-mask-image:linear-gradient(#000,#0000)) and (-webkit-mask-composite:source-in)){
-    .zp-hero-art-plate img{
-      -webkit-mask-image:
-        linear-gradient(to right,#0000 0%,#00000008 3%,#0000001f 7%,#0000004d 12%,#0000008a 18%,#000000c7 25%,#000000ed 32%,#000 38%,#000 100%),
-        linear-gradient(to bottom,#0000 0%,#00000014 2%,#0000005c 4.5%,#000000bd 7%,#000 10%,#000 62%,#000000e6 70%,#000000ad 78%,#00000066 85%,#00000026 92%,#00000008 97%,#0000 100%);
-      -webkit-mask-composite:source-in;
-    }
-  }
-  @supports ((mask-image:linear-gradient(#000,#0000)) and (mask-composite:intersect)){
-    .zp-hero-art-plate img{
-      mask-image:
-        linear-gradient(to right,#0000 0%,#00000008 3%,#0000001f 7%,#0000004d 12%,#0000008a 18%,#000000c7 25%,#000000ed 32%,#000 38%,#000 100%),
-        linear-gradient(to bottom,#0000 0%,#00000014 2%,#0000005c 4.5%,#000000bd 7%,#000 10%,#000 62%,#000000e6 70%,#000000ad 78%,#00000066 85%,#00000026 92%,#00000008 97%,#0000 100%);
-      mask-composite:intersect;
-    }
-  }
-  @supports not ((-webkit-mask-image:linear-gradient(#000,#0000)) or (mask-image:linear-gradient(#000,#0000))){
-    .zp-hero-art-plate img{opacity:.68}
-    .zp-hero-art-scrim{
-      height:52%;
-      background:radial-gradient(ellipse 96% 100% at 100% 100%,#030303 0%,#030303 22%,#030303eb 38%,#03030399 58%,#03030333 78%,#03030300 100%);
-    }
-  }
-  .zp-hero-art-plate:after{
-    content:"";position:absolute;right:0;inset-block:15%;width:1px;pointer-events:none;
-    background:linear-gradient(to bottom,transparent,#c41e1e66 50%,transparent);
+  .zp-hero-art-scrim{display:none}
+  @media (min-width:1280px){
+    .zp-hero-art{--zp-art-zone:50vw}
+    .zp-hero-art-plate{height:min(100%,calc(64vw - 5.25rem))}
   }
 </style>
 
@@ -841,7 +818,6 @@ header a[href="#top"] span.border{border-radius:0}
 .glitch:hover:after{color:#c41e1e}
 .cursor-pointer-wrap{filter:drop-shadow(0 0 2px rgba(196,30,30,.4))}
 .cursor-pointer-wrap.hovering{filter:drop-shadow(0 0 4px rgba(196,30,30,.5))}
-.zp-hero-art-plate img{opacity:.9}
 
 .zp-cta,
 .zp-cta:hover,
