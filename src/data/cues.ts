@@ -1,14 +1,31 @@
 /**
- * The 32 published showreel cues. Descriptions are transcribed from the
+ * The 30 published showreel cues. Descriptions are transcribed from the
  * first-party /reel page. Additional notes explain each entry's place in that
  * catalogue without inventing BPM, instruments, workflow, or film placements.
  */
 
 import type { Cue } from './types.js';
 
-const updatedAt = '2026-10-04';
+const updatedAt = '2026-10-24';
 
 export const cues: Cue[] = [
+  {
+    track: 30,
+    slug: 'the-beautiful-wrongness',
+    title: 'The Beautiful Wrongness',
+    headline: 'The Beautiful Wrongness: unresolved theme and glass harmonics',
+    category: 'Psychological Orchestral',
+    duration: '1m 5s',
+    durationSeconds: 65,
+    description: 'Psychological orchestral cue: a theme that never quite resolves, bowed strings and glass harmonics circling something beautiful and wrong.',
+    paragraphs: [
+      'This description names an unresolved theme, bowed strings, and glass harmonics circling an uneasy beauty. The wording comes from the first-party showreel and is the most specific source note attached to the track.',
+      'The full cue lasts 65 seconds. It is linked to neighboring psychological-orchestral entries for discovery, but no extra harmonic analysis or use in a film is invented for this page.',
+    ],
+    audioPath: '/audio/track-30.mp3',
+    releaseSlugs: [],
+    updatedAt,
+  },
   {
     track: 0,
     slug: 'needle-in-the-nerve',
@@ -20,7 +37,7 @@ export const cues: Cue[] = [
     description: 'Psychological horror cue: dissociative tension built for slow-burn dread, bowed metal harmonics, and sub-audible pressure.',
     paragraphs: [
       'The showreel introduces this cue through the idea of a nerve held under pressure. Its published description names dissociative tension, slow-burn dread, bowed metal harmonics, and sub-audible pressure without assigning the music to a specific film.',
-      'The 72-second MP3 is one entry in the 32-cue listening archive. A matching title also appears among the tracks on Anesthesia for the Signal Age; the catalogue link records that title match and does not claim a particular screen placement.',
+      'The 72-second MP3 is one entry in the 30-cue listening archive. A matching title also appears among the tracks on Anesthesia for the Signal Age; the catalogue link records that title match and does not claim a particular screen placement.',
     ],
     audioPath: '/audio/track-00.mp3',
     releaseSlugs: ['anesthesia-for-the-signal-age'],
@@ -163,23 +180,6 @@ export const cues: Cue[] = [
     updatedAt,
   },
   {
-    track: 9,
-    slug: 'dark-thriller-cinematic-cue',
-    title: 'Dark Thriller Cinematic Cue',
-    headline: 'Dark Thriller Cinematic Cue: pursuit and narrative tension',
-    category: 'Thriller',
-    duration: '1m 5s',
-    durationSeconds: 65,
-    description: 'Dark cinematic thriller cue: tension, pursuit, and high-stakes narrative revelation shaped for picture.',
-    paragraphs: [
-      'Unlike the more abstractly titled tracks, this entry names its intended broad context directly: a cinematic thriller cue associated with tension, pursuit, and narrative revelation. That framing comes from the showreel’s own description.',
-      'The 65-second recording can be heard with the native player or opened as a direct MP3. The page does not attach it to a particular title or add an unsupported account of its arrangement.',
-    ],
-    audioPath: '/audio/track-09.mp3',
-    releaseSlugs: [],
-    updatedAt,
-  },
-  {
     track: 10,
     slug: 'opaline-lament-life-from-the-beyond',
     title: 'Opaline Lament (Life From The Beyond)',
@@ -258,7 +258,7 @@ export const cues: Cue[] = [
     description: 'Cosmic horror cue: hybrid orchestration and dread architecture for gothic halls and supernatural spaces.',
     paragraphs: [
       'The source describes a cosmic-horror cue whose setting is suggested by “gothic halls and supernatural spaces.” It also names hybrid orchestration and dread architecture, without listing individual instruments or a specific project.',
-      'The full 108-second audio file is linked directly from the page. It can be read as one catalogue entry among 32, with the cue’s category and title supplying its stated context.',
+      'The full 108-second audio file is linked directly from the page. It can be read as one catalogue entry among 30, with the cue’s category and title supplying its stated context.',
     ],
     audioPath: '/audio/track-14.mp3',
     releaseSlugs: [],
@@ -401,23 +401,6 @@ export const cues: Cue[] = [
     updatedAt,
   },
   {
-    track: 23,
-    slug: 'screams-of-the-damned',
-    title: 'Screams of The Damned',
-    headline: 'Screams of The Damned: creature-vocal design for body horror',
-    category: 'Body Horror',
-    duration: '3m 20s',
-    durationSeconds: 200,
-    description: 'Body horror cue: creature vocal design, organic guttural processing, and damned vocalizations.',
-    paragraphs: [
-      'The showreel describes this as a body-horror cue centered on creature-vocal design, organic guttural processing, and damned vocalizations. Those terms distinguish it from the adjacent body-horror tracks focused on atmosphere or mortality.',
-      'At 3 minutes 20 seconds, it is one of the longer entries. The page presents the direct showreel MP3 as a cue, not as an individual sound-effects pack or a specific film placement.',
-    ],
-    audioPath: '/audio/track-23.mp3',
-    releaseSlugs: [],
-    updatedAt,
-  },
-  {
     track: 24,
     slug: 'narrow-pulse',
     title: 'Narrow Pulse',
@@ -516,23 +499,6 @@ export const cues: Cue[] = [
       'Its 2-minute-53-second runtime gives the piece room to stand apart from the shorter stingers. The direct MP3 is the complete showreel recording; no connection to Phantom Requiem or another production is claimed.',
     ],
     audioPath: '/audio/track-29.mp3',
-    releaseSlugs: [],
-    updatedAt,
-  },
-  {
-    track: 30,
-    slug: 'the-beautiful-wrongness',
-    title: 'The Beautiful Wrongness',
-    headline: 'The Beautiful Wrongness: unresolved theme and glass harmonics',
-    category: 'Psychological Orchestral',
-    duration: '1m 5s',
-    durationSeconds: 65,
-    description: 'Psychological orchestral cue: a theme that never quite resolves, bowed strings and glass harmonics circling something beautiful and wrong.',
-    paragraphs: [
-      'This description names an unresolved theme, bowed strings, and glass harmonics circling an uneasy beauty. The wording comes from the first-party showreel and is the most specific source note attached to the track.',
-      'The full cue lasts 65 seconds. It is linked to neighboring psychological-orchestral entries for discovery, but no extra harmonic analysis or use in a film is invented for this page.',
-    ],
-    audioPath: '/audio/track-30.mp3',
     releaseSlugs: [],
     updatedAt,
   },

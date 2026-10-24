@@ -92,7 +92,9 @@
 // 896x1152 ratio, is feathered into the UI, and fades into the fold under one
 // bottom scrim. The document (precached as '/') and the home bundle
 // index-b29b75e2.js both change, so the cache name moves with them.
-const CACHE_NAME = 'zazie-v40';
+// v41: The Beautiful Wrongness leads the 30-cue showreel; the two retired cues
+// and their direct audio/page routes are removed. The home bundle is re-hashed.
+const CACHE_NAME = 'zazie-v41';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -101,7 +103,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-e5dac783.css',
-  '/index-b29b75e2.js',
+  '/index-4258fc28.js',
   '/store-c22a1a44.css',
   '/store-3fc01be0.js',
   '/legal-817a8ca2.css',

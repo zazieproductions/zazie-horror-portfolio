@@ -301,13 +301,14 @@ ${sampleSection}`,
 /* --------------------------------------------------------------------- cue */
 
 function cueMeta(cue: Cue, item: ItemRoute): MetaSections {
+  const position = entryNumber(item);
   const metaList = [
-    `<li>Showreel track <b>${String(cue.track + 1).padStart(2, '0')} / ${cues.length}</b></li>`,
+    `<li>Showreel track <b>${String(position).padStart(2, '0')} / ${cues.length}</b></li>`,
     `<li>Category <b>${esc(cue.category)}</b></li>`,
     `<li>Runtime <b>${esc(cue.duration)}</b></li>`,
   ].join('\n      ');
   const rows: Array<[string, string]> = [
-    ['Showreel position', `${cue.track + 1} of ${cues.length}`],
+    ['Showreel position', `${position} of ${cues.length}`],
     ['Category', esc(cue.category)],
     ['Runtime', `${esc(cue.duration)} (${cue.durationSeconds} seconds)`],
     ['Composer', esc(AUTHOR_NAME)],
@@ -426,7 +427,7 @@ function leadFor(item: ItemRoute): string {
   }
   if (item.kind === 'cue') {
     const cue = cueBySlug.get(item.slug)!;
-    return `Track ${String(cue.track + 1).padStart(2, '0')} · ${cue.category} · ${cue.duration}`;
+    return `Track ${String(entryNumber(item)).padStart(2, '0')} · ${cue.category} · ${cue.duration}`;
   }
   const release = releaseBySlug.get(item.slug)!;
   return `${release.section} · ${release.kicker}${release.platform ? ` · ${release.platform}` : ''}`;
