@@ -453,3 +453,10 @@ i{font-style:italic}
     backdrop-filter:none !important;
   }
 }
+
+/* Link from a catalogue card to its own record page on this site. The card is a
+   list of external listings, so the internal record needs to be a visible,
+   separately clickable line rather than a hidden second target. */
+.card-record{margin:.55rem 0 0;font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase}
+.card-record a{color:rgba(240,235,227,.6);text-decoration:underline;text-decoration-color:rgba(255,0,60,.45);text-underline-offset:3px;transition:color .2s}
+.card-record a:hover,.card-record a:focus-visible{color:#f0ebe3;text-decoration-color:#ff003c}

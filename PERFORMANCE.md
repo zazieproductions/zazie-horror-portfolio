@@ -4,6 +4,139 @@ Date: 2026-09-25 · Branch: `arena/01a0d613-zazie-horror-portfolio`
 Scope: horror.zazieproductions.com (static prerendered React build on an edge host with `_headers`/`_redirects` semantics, i.e. Netlify/Cloudflare-Pages style).
 
 
+## Archive boot restored: 2026-10-22
+
+The terminal loading screen is back in `index.html`. This records what was
+actually broken, what version was restored, and what it costs.
+
+### What happened
+
+The boot was built in `b4a04c0`, deepened in `edddb48`, pared back in
+`9e79fc2` and redesigned as the analog "archive transmission" in `09baad1`
+(the version documented below as *ZP Archive Boot, minimal terminal intro*,
+plus the tape-deck chrome, oscilloscope and interference beat). It then stopped
+displaying: `16f90be` (prerendered item pages) rewrote the homepage `<head>`
+and dropped the synchronous gate script that adds `html.zp-boot-on`. With no
+gate the overlay stayed `display:none`, so the following mobile-audit pass
+(`3ece5f7`) read it as dead weight — 14 KB of CSS, 4 KB of script and 45
+nodes — and deleted it. The markup was never the problem; the gate was.
+
+### What was restored
+
+- The overlay markup, stylesheet and sequence driver from `09baad1`, unchanged
+  in design: shell/HUD frame, wordmark, console typing, oscilloscope, progress
+  deck, grain, scanlines, roll bar, interference tear, power-down teardown.
+- The gate, rebuilt in the head where `16f90be` removed it. It is the only
+  thing that decides whether the overlay is ever displayed.
+- Copy counts moved with the data: `001 / 032` and `32 CUES / ARCHIVE MOUNTED`
+  (the restored source still said 29; the showreel has 32 cues, and README
+  guardrail "counts move together" applies to the loader too).
+- Teardown clears both `zp-boot-on` and `zp-boot-force` from `<html>` and the
+  session-storage write the later revision had re-added is gone, so the loader
+  writes no storage key (matching the `/privacy` and `LEGAL.md` claims).
+- The two `.zp-skip` rules that travelled with the old stylesheet are **not**
+  restored: the site now ships its own skip-link styles.
+
+### Cost & guardrails (unchanged from the original design)
+
+- **Zero network requests**: ~22 KB raw / ~7 KB gzip of inline CSS + markup +
+  JS on `index.html` only (measured on the served document). No fonts (`ui-monospace` stack), no images, no audio.
+- **Nothing paints when off**: the overlay is `display:none` until the gate
+  adds the class, so no-JS, crawlers, bots, Lighthouse runs and
+  `prefers-reduced-motion` visitors pay only the bytes, never a frame.
+- **Timing**: progress reaches 100 % at ≈2.8 s, the overlay is removed at
+  ≈4 s (700 ms hold + 450 ms power-down). A high-contrast `Skip intro` button
+  (`#zp-boot-skip`, `z-index: 8` above the scanline/vignette glass, ≥44 px
+  target, 12 px type, AAA contrast, `[ESC]` hint on fine pointers, full-width
+  on mobile portrait) skips via a snappy 160 ms dissolve (`zp-fast`), and any
+  click, swipe, wheel or non-modifier key skips immediately too; a 6.5 s JS
+  cap, a 7 s CSS force-hide and `pageshow.persisted` cover error and bfcache
+  paths. The node removes itself, and any `zp:bootdone` listener is dispatched
+  after teardown.
+- **Accessibility & HUD isolation**: decorative HUD chrome inside `#zp-boot`
+  carries `aria-hidden="true"` so the 8–10 px tape telemetry stays exempt from
+  the 12 px page-copy floor and screen-reader announcements, while
+  `#zp-boot-skip` sits outside any `aria-hidden` ancestor so keyboard `Tab`,
+  `Enter`/`Space`, and assistive technology reach it cleanly (`zazie-v38`).
+- **Bypass**: `?boot=0` / `#noboot` disables it, `?boot=1` / `#boot` forces it
+  past the reduced-motion gate.
+
+### Verification
+
+`npm run build` green (85 URLs, 77 images, 12 videos), `npm test` 44/44, and a
+jsdom run of the built `index.html` exercising the real gate and driver:
+plays on default and `?boot=0`-free production/preview hosts, stays hidden for
+`?boot=0`, `#noboot`, `prefers-reduced-motion` and bot/Lighthouse user agents,
+plays for `?boot=1` under reduced motion, types all four console lines,
+reaches 100 %, removes the overlay and leaves `<html>` class-free. The same
+pass confirms the restored head survives `scripts/prerender.mjs`'s head rebuild
+(the boot `<style>` and gate `<script>` are non-SEO resources and are kept).
+
+`sw.js` moves to `zazie-v37`: `/` is precached, so a returning visitor would
+otherwise keep the boot-less document.
+
+## Mobile audit remediation: 2026-10-22
+
+An external PageSpeed/SEO audit of the live site raised five items: input delay
+(INP), mobile friendliness (tiny text, hard-to-tap controls), missing image alt
+text, an over-long meta description, and an unobtainable DOM-size reading. This
+section records what changed and what was measured in the sandbox browser.
+
+### Measured, before → after (Lighthouse 12, mobile, local server)
+
+| Signal | Before | After |
+| --- | --- | --- |
+| Performance | 77 | **79** |
+| Accessibility | 97 | **100** |
+| Best practices | 96 | **100** |
+| SEO | 100 | **100** |
+| Total blocking time | 130 ms | **20 ms** |
+| DOM elements | 1,386 | **1,213** |
+| `uses-responsive-images` estimate | 374 KiB | **114 KiB** |
+
+Merging `main`'s Brotli/Gzip negotiation (`server.mjs`) and the edge cache-header
+fix on top of this pass moves the same local run to **87** performance:
+FCP 1.4 s, LCP 3.9 s, TBT 30 ms, CLS 0.034 — accessibility, best practices and
+SEO stay at 100.
+
+LCP is left at 5.0 s *simulated*: Lantern charges the hero plate a multi-second
+"render delay" that does not reproduce in the browser (observed LCP 274 ms,
+puppeteer 301–306 ms, with the bundle allowed or blocked). Chasing that number
+by re-ordering the bundle load made the score worse, so it was not done.
+
+### Changes
+
+1. **Meta description** — `src/data/hubs.ts` home description 220 → 129
+   characters; the hub descriptions for the other pages were already in range.
+2. **Alt text** — the poster wall and the hero portrait now carry
+   `${title} poster artwork` / a named portrait alt in both renders: the
+   prerendered HTML (`src/lib/home.ts`, `src/lib/page.ts`) and the React bundle
+   (`home-src/build.mjs` pairs). The atmosphere plate and the press photo stay
+   `alt=""` (decorative).
+3. **DOM size** — the `zp-boot` archive-intro overlay was inert (nothing ever
+   added `html.zp-boot-on`), so its 14 KB stylesheet, 4 KB script and 45 nodes
+   were deleted: 1,429 → 1,256 nodes in the browser, 1,213 per Lighthouse.
+4. **Mobile readability** — a 12 px floor for small type: `11px/10px/9px`
+   Tailwind labels and the estimator island's `zp-*` micro-labels (`kicker`,
+   package metadata, factor list, legends, help text, CTAs) now set 12 px with
+   relaxed tracking below 640 px. Small red labels moved to `#e34b4b`
+   (5.1:1) and `mist/60` to `#8b8681` (5.2:1) so AA contrast passes; display
+   type keeps the brand `#c41e1e`.
+5. **Tap targets** — prose links get invisible vertical padding (≈28 px), the
+   header wordmark and the contact rows are 44 px, and `.zp-skip` — which
+   shipped with **no styles at all**, rendering a raw "Skip to content" link
+   over the header on every page — is now off-screen until focused.
+6. **Responsive images** — the poster wall serves a 400/480/640 AVIF ladder
+   from `src/data/productions.ts` (`avifSet`) instead of a single 640 w
+   candidate, so DPR 2 devices fetch 400 w and DPR 2.6 devices 480 w.
+
+### Verification
+
+`npm run build` green (`sync-pricing --check` PASS, `verify` PASS — 85 URLs,
+77 images, 12 videos), `npm test` 37/37, and a 412×915 browser pass: zero text
+nodes under 12 px, zero tap targets under 24 px, poster dialog opens, showreel
+row plays, no page errors.
+
 ## 0. Mobile loading follow-up: 2026-09-25
 
 This section supersedes the older entries below for the current `main`-derived
