@@ -210,7 +210,7 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 ├── robots.txt / sitemap.xml    # Crawl control; 84 URLs / 79 images / 12 videos
 ├── <32-hex>.txt                # IndexNow key file (public by design; see tools/indexnow.mjs)
 ├── audio/
-│   └── track-00..31.mp3        # 32 showreel cues (~98 MB) — the audio library
+│   └── track-00..31.mp3        # 32 showreel cues (~102 MB, ID3v2.3 sync-ready tags) — the audio library
 ├── fonts/                      # Cormorant Garamond 400 n/i + Inter variable (woff2)
 ├── images/
 │   ├── posters/<slug>-{640.avif,640.jpg,1200.jpg}   # 9 productions × 3 variants
@@ -231,6 +231,8 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 ├── tools/check-sitemap.mjs     # Sitemap, file, canonical, robot and hub-link audit
 ├── tools/route-aliases.mjs     # Checks 18 hub twins and flat item routes for slash twins
 ├── tools/index-coverage.mjs    # Per-URL words / in-body inbound links / duplicate ratio
+├── tools/export-cue-manifest.mjs # cues.ts -> JSON for the audio tagger (Node type stripping)
+├── tools/tag-audio.py          # Embeds ID3v2.3 sync-ready tags in all cues + WAV/AIFF masters
 ├── tools/indexnow.mjs          # Post-deploy IndexNow ping (Bing, Yandex, Seznam, Naver, Yep...)
 ├── Eclipsed.png                # Raw cover upload: source of images/eclipsed-cover-1280.jpg
 ├── The Dark Awaits.png         # Raw poster upload kept for provenance (unreferenced)
@@ -252,7 +254,7 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 | Catalogue / documents | `store-src/` and `legal-src/` build sources |
 | Metadata / SEO | Route-specific source HTML heads; generated `sitemap.xml`; `robots.txt`; canonical `Link:` headers in `_headers` |
 | Configuration | `package.json`, `tsconfig.json`, `vite.config.ts`, `_headers`, `_redirects`, `sw.js` |
-| Utilities | `scripts/`, `tools/check-sitemap.mjs`, `tools/check-links.mjs`, `tools/check-headers.mjs`, `tools/route-aliases.mjs`, `server.mjs` |
+| Utilities | `scripts/`, `tools/check-sitemap.mjs`, `tools/check-links.mjs`, `tools/check-headers.mjs`, `tools/route-aliases.mjs`, `tools/tag-audio.py` + `tools/export-cue-manifest.mjs` (embedded sync tags), `server.mjs` |
 | Public/static assets | root + `/audio` + `/fonts` + `/images` |
 
 ## Where to add new work
@@ -260,7 +262,7 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 Item content is data-first and routes are generated from the title-owned slug in `src/data/`. Do not add item links to the existing home or hub navigation; item pages connect to their hub and siblings, and the XML sitemap exposes the complete set.
 
 - **Production record:** add or update `src/data/productions.ts`; verify role-by-role credits, source links, poster, paragraphs, and `updatedAt`.
-- **Showreel cue:** add or update `src/data/cues.ts`; the slug must derive from the cue title, and the record must identify its MP3, duration, category, unique paragraphs, and related catalogue records.
+- **Showreel cue:** add or update `src/data/cues.ts`; the slug must derive from the cue title, and the record must identify its MP3, duration, category, unique paragraphs, and related catalogue records. After changing cue data, re-embed the sync-ready file tags with `npm run tag:audio` and verify them with `npm run check:audio-tags` (see [Audio](#audio)).
 - **Catalogue item:** add or update `src/data/releases.ts`; keep marketplace terms and prices out of structured data, include only verified source facts/artwork, and omit unavailable metadata.
 - **Existing hub:** update its source where one exists (`store-src/` or `legal-src/`); manually maintained hub pages keep their current layout and canonical URL. Run `node tools/route-aliases.mjs` after editing a hub directory page.
 
@@ -363,7 +365,29 @@ Rules: always set `width`/`height` (CLS-safe); grid and client render must refer
 
 ### Audio
 
-`/audio/track-NN.mp3`, positional numbering, ~98 MB for 32 cues. Streamed with `preload="metadata"`; edge-cached `immutable` 1 y. Audio quality decisions belong to the composer — don't transcode the library without asking. This is the repo's largest payload and grows linearly with the catalogue; see [Known technical debt](#known-technical-debt).
+`/audio/track-NN.mp3`, positional numbering, ~102 MB for 32 tagged cues. Streamed with `preload="metadata"`; edge-cached `immutable` 1 y. Audio quality decisions belong to the composer — don't transcode the library without asking. This is the repo's largest payload and grows linearly with the catalogue; see [Known technical debt](#known-technical-debt).
+
+#### Sync-ready embedded metadata
+
+Every showreel MP3 — plus the two hi-resolution masters in the repo root (`Earthpulse Protocol.wav` = track 32, `The Beautiful Wrongness.aif` = track 31) — carries a full ID3v2.3 tag block so a music supervisor can clear and cue a downloaded file without visiting the site:
+
+- **Identity:** canonical title from `src/data/cues.ts`, artist/album artist `Zazie Productions`, composer `Zazie Kanwar-Torge`, showreel album name, disc/track numbers, cue category as genre, year, and millisecond duration.
+- **Rights & clearance:** `TCOP` copyright line, `TPUB`/`TPRO`/`TOWN` publisher and owner, and a `TXXX:SYNC READY` one-stop statement (master and composition controlled by Zazie Productions LLC, single-contact clearance, sync licence required for film/TV/game/trailer/ads).
+- **Contact & links:** `COMM` sync-licensing brief with email, phone and the `/licensing` terms URL, `TXXX` contact fields, and `WOAR`/`WOAF`/`WOAS`/`WCOP` URL frames pointing at the composer page, per-cue page, direct MP3, and licensing page.
+- **Discovery:** `TXXX:CUE CATEGORY` and `TXXX:KEYWORDS` derived only from the published first-party category and description — no invented BPM, instruments, placements, or ISRCs.
+- **Artwork:** branded 600×600 JPEG front cover rendered from `images/hero-portrait.jpg`.
+
+The tagger never re-encodes audio: it rewrites tag frames only, and the MPEG/RIFF audio payload stays byte-identical (verified against `HEAD`). Provenance frames are preserved — `TENC`/`TSSE` encoder tags, the C2PA `GEOB` manifest on track 29, the `CHAP`/`CTOC` chapter table on track 26, and the `TBPM` value in the AIFF master. `Hidden Pattern.mp3` in the repo root is a third-party recording and is deliberately never tagged.
+
+Tooling (Python 3, local venv only — `.venv/` is gitignored):
+
+```bash
+python3 -m venv .venv && .venv/bin/pip install mutagen pillow
+npm run tag:audio        # write tags from src/data/cues.ts (tools/tag-audio.py)
+npm run check:audio-tags # fail if any required frame drifts or a stream changes
+```
+
+`tools/export-cue-manifest.mjs` emits the cue data as JSON via Node's type stripping, so `cues.ts` remains the single source of truth and no metadata is duplicated. Re-run the tagger whenever cue titles, categories, descriptions, or contact/rights strings change.
 
 ### Video & external embeds
 

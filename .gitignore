@@ -9,3 +9,8 @@ build/
 .vite/
 dist/
 .audit/
+
+# Local Python virtualenv used by tools/tag-audio.py
+.venv/
+__pycache__/
+*.pyc

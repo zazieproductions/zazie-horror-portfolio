@@ -18,7 +18,9 @@
     "test": "node --test tools/pricing.test.mjs tools/film-player.test.mjs tools/geo.test.mjs tools/headers.test.mjs tools/boot-skip.test.mjs",
     "serve": "node server.mjs",
     "seo:coverage": "node tools/index-coverage.mjs",
-    "seo:coverage:json": "node tools/index-coverage.mjs --json"
+    "seo:coverage:json": "node tools/index-coverage.mjs --json",
+    "tag:audio": "python3 tools/tag-audio.py",
+    "check:audio-tags": "python3 tools/tag-audio.py --check"
   },
   "devDependencies": {
     "esbuild": "0.21.5",
