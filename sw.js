@@ -87,7 +87,12 @@
 // the archive-boot deck above the CRT vignette layer, with 160ms fast teardown,
 // accessible keyboard Tab/Enter/Space/Escape support, and mobile safe-area sizing.
 // v39: native film-play buttons, accessible close control, and focus restoration.
-const CACHE_NAME = 'zazie-v39';
+// v40: hero artwork plate — the poster is no longer centre-cropped by a
+// 46%-wide panel and no longer stops on a hard vertical edge; it keeps its own
+// 896x1152 ratio, is feathered into the UI, and fades into the fold under one
+// bottom scrim. The document (precached as '/') and the home bundle
+// index-b29b75e2.js both change, so the cache name moves with them.
+const CACHE_NAME = 'zazie-v40';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -96,7 +101,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-e5dac783.css',
-  '/index-589e7712.js',
+  '/index-b29b75e2.js',
   '/store-c22a1a44.css',
   '/store-3fc01be0.js',
   '/legal-817a8ca2.css',

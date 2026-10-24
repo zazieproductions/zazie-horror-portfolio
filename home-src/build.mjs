@@ -77,8 +77,29 @@ const PAIRS = [
   // the press photo stay alt="" - they are backgrounds behind live copy.)
   ['width:640,height:960,alt:"",className:"h-full w-full object-cover object-top opacity-95 transition-transform duration-700 ease-out group-hover:scale-105 group-hover:opacity-100"', 'width:e.width||640,height:e.height||960,alt:e.title+" poster artwork",className:"h-full w-full "+(e.contain?"zp-poster-contain":"object-cover object-top group-hover:scale-105")+" opacity-95 transition-transform duration-700 ease-out group-hover:opacity-100"', BUNDLE],
   ['className:"h-full w-full object-cover object-top","data-source-loc":"src/components/PosterWall.tsx:96:1"', 'className:"h-full w-full "+(e.contain?"zp-poster-contain":"object-cover object-top"),"data-source-loc":"src/components/PosterWall.tsx:96:1"', BUNDLE],
-  ['u.jsx("img",{src:It.images.hero,alt:"",width:896,height:1152,decoding:"async"', 'u.jsx("img",{src:It.images.hero,alt:"Zazie Kanwar-Torge, horror composer and founder of Zazie Productions",width:896,height:1152,decoding:"async"', BUNDLE],
-  ['<img alt="" class="absolute bottom-0 right-0 h-full w-auto max-w-none object-cover object-top opacity-80" src="/images/hero-portrait.jpg"', '<img alt="Zazie Kanwar-Torge, horror composer and founder of Zazie Productions" class="absolute bottom-0 right-0 h-full w-auto max-w-none object-cover object-top opacity-80" src="/images/hero-portrait.jpg"', HTML],
+  // Hero artwork. The shipped markup sized the portrait off its *height*
+  // (`h-full w-auto`) inside a 46%-wide, 92%-tall panel and then clipped the
+  // result with `object-cover`, so the poster art (896x1152) was centred-cropped
+  // and spilled left past the panel that carried its gradients: the scrimmed
+  // band and the unscrimmed band met in a hard vertical seam, and the cropped
+  // side panels of the artwork read as a torn image. The plate now derives its
+  // width from the artwork's own ratio (see .zp-hero-art-plate), so the whole
+  // poster is shown, and it is feathered instead of cut. Alt text and the lazy
+  // attribute ride along here; the portrait is display:none below 1024px.
+  [
+    'className:"pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] lg:block","aria-hidden":!0,"data-source-loc":"src/components/Hero.tsx:56:6",children:u.jsxs("div",{className:"absolute bottom-0 right-0 h-[92%] w-full","data-source-loc":"src/components/Hero.tsx:63:8",children:[u.jsxs("picture",{children:[u.jsx("source",{srcSet:"/images/hero-portrait.avif",type:"image/avif"}),u.jsx("img",{src:It.images.hero,alt:"",width:896,height:1152,decoding:"async",className:"absolute bottom-0 right-0 h-full w-auto max-w-none object-cover object-top opacity-80","data-source-loc":"src/components/Hero.tsx:64:10"})]}),u.jsx("div",{className:"absolute inset-0 bg-gradient-to-l from-transparent via-void/20 to-void","data-source-loc":"src/components/Hero.tsx:69:10"}),u.jsx("div",{className:"absolute inset-0 bg-gradient-to-t from-void via-transparent to-void/40","data-source-loc":"src/components/Hero.tsx:70:10"}),u.jsx("div",{className:"absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-void","data-source-loc":"src/components/Hero.tsx:71:10"}),u.jsx("div",{className:"absolute inset-y-[15%] right-0 w-px bg-gradient-to-b from-transparent via-blood/50 to-transparent","data-source-loc":"src/components/Hero.tsx:73:10"})]})',
+    'className:"pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] lg:block","aria-hidden":!0,"data-source-loc":"src/components/Hero.tsx:56:6",children:u.jsxs("div",{className:"zp-hero-art","data-source-loc":"src/components/Hero.tsx:63:8",children:[u.jsx("div",{className:"zp-hero-art-plate",children:u.jsxs("picture",{children:[u.jsx("source",{srcSet:"/images/hero-portrait.avif",type:"image/avif"}),u.jsx("img",{src:It.images.hero,alt:"Zazie Kanwar-Torge, horror composer and founder of Zazie Productions",width:896,height:1152,loading:"lazy",decoding:"async",className:"absolute inset-0 h-full w-full object-contain","data-source-loc":"src/components/Hero.tsx:64:10"})]})}),u.jsx("div",{className:"zp-hero-art-scrim","aria-hidden":!0})]})',
+    BUNDLE,
+  ],
+  // Film cards: the close action has to be part of the React render too, not
+  // only the early document-delegated handler in index.html. A re-render used
+  // to drop the button the inline script had inserted, leaving an open player
+  // with no way out except another card.
+  [
+    'u.jsx("a",{href:n.drive?`https://drive.google.com/file/d/${n.drive}/view`',
+    'o?u.jsx("button",{type:"button",className:"zp-player-close","aria-label":`Close ${n.title} player`,onClick:function(e){e.stopPropagation();window.__zpPlayer=null;t(null)},children:"Close player"}):null,u.jsx("a",{href:n.drive?`https://drive.google.com/file/d/${n.drive}/view`',
+    BUNDLE,
+  ],
   // Poster lightbox: touch-friendly close, Escape support, background scroll
   // lock, and a scrollable dialog on short phone screens.
   ['function Q5(){const[e,t]=_.useState(null);return', 'function Q5(){const[e,t]=_.useState(null);_.useEffect(()=>{if(!e)return;const n=document.body.style.overflow,r=e=>{e.key==="Escape"&&t(null)};return document.body.style.overflow="hidden",document.addEventListener("keydown",r),()=>{document.body.style.overflow=n,document.removeEventListener("keydown",r)}},[e]);return', BUNDLE],
@@ -101,9 +122,27 @@ const PAIRS = [
   // the link reads "Enter" but announced "Scroll to showreel".
   ['"aria-label":"Scroll to showreel"', '"aria-label":"Enter the showreel"', BUNDLE],
   ['aria-label="Scroll to showreel"', 'aria-label="Enter the showreel"', HTML],
-  // The desktop portrait is display:none below 1024px; lazy keeps mobile from
-  // downloading 143 KB it can never show (desktop is in-viewport, so it still loads).
-  ['alt:"Zazie Kanwar-Torge, horror composer and founder of Zazie Productions",width:896,height:1152,decoding:"async"', 'alt:"Zazie Kanwar-Torge, horror composer and founder of Zazie Productions",width:896,height:1152,loading:"lazy",decoding:"async"', BUNDLE],
+
+  // Two accessibility fixes that shipped by hand before this build knew about
+  // them; without these pairs a rebuild silently reverted them (and the player
+  // tests caught it). The poster is a native <button>, so the custom Enter/Space
+  // handler is gone, and focus moves into the open player and back to the
+  // triggering poster when it closes.
+  [
+    'u.jsxs("div",{role:"button",tabIndex:0,"aria-label":`Play ${n.title} film sample`',
+    'u.jsxs("button",{type:"button","aria-label":`Play ${n.title} film sample`',
+    BUNDLE,
+  ],
+  [
+    ',onKeyDown:function(zpEv){(zpEv.key==="Enter"||zpEv.key===" ")&&(zpEv.preventDefault(),zpCard.current=zpEv.currentTarget&&zpEv.currentTarget.closest?zpEv.currentTarget.closest(".zp-vcard"):null,window.__zpPlayer={id:s},t(s))}',
+    '',
+    BUNDLE,
+  ],
+  [
+    '_.useEffect(function(){const c=zpCard.current;if(!e||!c)return;zpCard.current=null;try{const reduce=',
+    '_.useEffect(function(){let c=zpCard.current;if(!e){if(c){const trigger=c.querySelector(".zp-poster");if(trigger)trigger.focus()}zpCard.current=null;return}if(!c)c=document.querySelector(".zp-vcard.is-playing");if(!c)return;zpCard.current=c;const close=c.querySelector(".zp-player-close");if(close)close.focus();try{const reduce=',
+    BUNDLE,
+  ],
   // Services heading
   ['04 · Scope and budget', '04 · Scoring services', BOTH],
   ['Build a scope and estimate', 'Rates & estimates', BUNDLE],
@@ -132,6 +171,15 @@ const PAIRS = [
 /** Budget options come from the package list; the bundle reads xu[]. */
 const BUNDLE_BUDGET_OLD = 'xu=["Under $300","$300 - $500","$500 - $700","$700 - $900","$900+","Flexible / discuss"]';
 const BUNDLE_BUDGET_DEFAULT_OLD = 'useState(xu[1])';
+
+/**
+ * The hero's right-hand artwork panel: one plate (the poster, whole, at its own
+ * aspect ratio), one scrim. All geometry and feathering lives in the
+ * .zp-hero-art* rules in index.html so the prerendered and React renders cannot
+ * drift; this markup only has to match the bundle's output.
+ */
+const HERO_ART_HTML =
+  '<div class="pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] lg:block" aria-hidden="true"><div class="zp-hero-art"><div class="zp-hero-art-plate"><picture><source srcset="/images/hero-portrait.avif" type="image/avif"><img alt="Zazie Kanwar-Torge, horror composer and founder of Zazie Productions" class="absolute inset-0 h-full w-full object-contain" src="/images/hero-portrait.jpg" width="896" height="1152" loading="lazy" decoding="async"></picture></div><div class="zp-hero-art-scrim" aria-hidden="true"></div></div></div>';
 
 const ISLAND_OPEN = '<div class="zp-home-section zp-home-island" data-zp-island="estimator"><div class="zp-shell">';
 const ISLAND_CLOSE = '</div></div>';
@@ -237,6 +285,20 @@ function patchStatic(html) {
       continue; // already applied
     } else {
       throw new Error(`index.html: "${oldText.slice(0, 60)}" matched ${n} times, expected 1`);
+    }
+  }
+
+  // Hero artwork panel. Structural rather than a text pair: the panel is
+  // rebuilt from one opening div to the hero copy wrapper, so a rebuild repairs
+  // an older or hand-edited snapshot instead of demanding exact old markup.
+  // Idempotent - once the panel carries .zp-hero-art it is left alone.
+  {
+    const heroPanel = /<div class="pointer-events-none absolute inset-y-0 right-0 hidden w-\[46%\] lg:block"[^>]*>[\s\S]*?(?=<div class="relative z-10)/;
+    if (!heroPanel.test(out)) throw new Error('index.html: hero artwork panel not found');
+    const next = out.replace(heroPanel, () => HERO_ART_HTML);
+    if (next !== out) {
+      out = next;
+      applied.push('hero artwork panel rebuilt');
     }
   }
 
