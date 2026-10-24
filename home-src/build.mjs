@@ -90,9 +90,10 @@ const PAIRS = [
   // and spilled left past the panel that carried its gradients: the scrimmed
   // band and the unscrimmed band met in a hard vertical seam, and the cropped
   // side panels of the artwork read as a torn image. The plate now derives its
-  // width from the artwork's own ratio (see .zp-hero-art-plate), so the whole
-  // poster is shown, and it is feathered instead of cut. Alt text and the lazy
-  // attribute ride along here; the portrait is display:none below 1024px.
+  // width from the artwork's own ratio and is framed at full opacity (see the
+  // .zp-hero-art* rules in index.html), so the whole poster is shown without
+  // masks or a bottom fade. Alt text and the lazy attribute ride along here;
+  // the portrait is display:none below 1024px.
   [
     'className:"pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] lg:block","aria-hidden":!0,"data-source-loc":"src/components/Hero.tsx:56:6",children:u.jsxs("div",{className:"absolute bottom-0 right-0 h-[92%] w-full","data-source-loc":"src/components/Hero.tsx:63:8",children:[u.jsxs("picture",{children:[u.jsx("source",{srcSet:"/images/hero-portrait.avif",type:"image/avif"}),u.jsx("img",{src:It.images.hero,alt:"",width:896,height:1152,decoding:"async",className:"absolute bottom-0 right-0 h-full w-auto max-w-none object-cover object-top opacity-80","data-source-loc":"src/components/Hero.tsx:64:10"})]}),u.jsx("div",{className:"absolute inset-0 bg-gradient-to-l from-transparent via-void/20 to-void","data-source-loc":"src/components/Hero.tsx:69:10"}),u.jsx("div",{className:"absolute inset-0 bg-gradient-to-t from-void via-transparent to-void/40","data-source-loc":"src/components/Hero.tsx:70:10"}),u.jsx("div",{className:"absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-void","data-source-loc":"src/components/Hero.tsx:71:10"}),u.jsx("div",{className:"absolute inset-y-[15%] right-0 w-px bg-gradient-to-b from-transparent via-blood/50 to-transparent","data-source-loc":"src/components/Hero.tsx:73:10"})]})',
     'className:"pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] lg:block","aria-hidden":!0,"data-source-loc":"src/components/Hero.tsx:56:6",children:u.jsxs("div",{className:"zp-hero-art","data-source-loc":"src/components/Hero.tsx:63:8",children:[u.jsx("div",{className:"zp-hero-art-plate",children:u.jsxs("picture",{children:[u.jsx("source",{srcSet:"/images/hero-portrait.avif",type:"image/avif"}),u.jsx("img",{src:It.images.hero,alt:"Zazie Kanwar-Torge, horror composer and founder of Zazie Productions",width:896,height:1152,loading:"lazy",decoding:"async",className:"absolute inset-0 h-full w-full object-contain","data-source-loc":"src/components/Hero.tsx:64:10"})]})}),u.jsx("div",{className:"zp-hero-art-scrim","aria-hidden":!0})]})',
@@ -193,9 +194,9 @@ const BUNDLE_BUDGET_DEFAULT_OLD = 'useState(xu[1])';
 
 /**
  * The hero's right-hand artwork panel: one plate (the poster, whole, at its own
- * aspect ratio), one scrim. All geometry and feathering lives in the
- * .zp-hero-art* rules in index.html so the prerendered and React renders cannot
- * drift; this markup only has to match the bundle's output.
+ * aspect ratio) plus the legacy scrim node, hidden by CSS. All geometry and
+ * framing lives in the .zp-hero-art* rules in index.html so the prerendered and
+ * React renders cannot drift; this markup only has to match the bundle's output.
  */
 const HERO_ART_HTML =
   '<div class="pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] lg:block" aria-hidden="true"><div class="zp-hero-art"><div class="zp-hero-art-plate"><picture><source srcset="/images/hero-portrait.avif" type="image/avif"><img alt="Zazie Kanwar-Torge, horror composer and founder of Zazie Productions" class="absolute inset-0 h-full w-full object-contain" src="/images/hero-portrait.jpg" width="896" height="1152" loading="lazy" decoding="async"></picture></div><div class="zp-hero-art-scrim" aria-hidden="true"></div></div></div>';
