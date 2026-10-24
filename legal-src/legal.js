@@ -2,8 +2,9 @@
    Progressive enhancement only. Without this file every clause is visible,
    every FAQ answer is open, the section index is a plain list of links, and
    the device inspector simply stays closed. No third-party request is made
-   from this file and nothing is written to storage except where the visitor
-   presses a button that says so. */
+   from this file until the visitor presses a "Load Bandcamp player" button,
+   and nothing is written to storage except where the visitor presses a
+   button that says so. */
 (function () {
   "use strict";
 
@@ -157,6 +158,28 @@
   };
   window.addEventListener("hashchange", openHashTarget);
   openHashTarget();
+
+  /* --- Click-to-load Bandcamp players --------------------------------------
+     Nothing is requested from bandcamp.com until the visitor presses the
+     button; only then is the iframe created. The source must be a Bandcamp
+     embedded-player URL, and is read from the page's own markup. */
+  var BC_PREFIX = "https://bandcamp.com/EmbeddedPlayer/";
+  $$(".bc-embed").forEach(function (box) {
+    var btn = $(".bc-load", box);
+    var src = box.getAttribute("data-bc-src") || "";
+    if (!btn || src.indexOf(BC_PREFIX) !== 0) return;
+    btn.addEventListener("click", function () {
+      var frame = document.createElement("iframe");
+      frame.src = src;
+      frame.title = box.getAttribute("data-bc-title") || "Bandcamp player";
+      frame.setAttribute("allow", "autoplay; encrypted-media");
+      frame.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+      frame.setAttribute("loading", "eager");
+      frame.setAttribute("seamless", "");
+      box.replaceChild(frame, btn);
+      frame.focus();
+    });
+  });
 
   /* --- Copy plates -------------------------------------------------------- */
   $$("[data-copy]").forEach(function (btn) {

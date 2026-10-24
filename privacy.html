@@ -29,7 +29,7 @@
 <meta name="twitter:image:alt" content="Zazie Kanwar-Torge, psychological horror composer studio press photo"/>
 <meta name="twitter:title" content="Privacy Notice: No Trackers, No Cookies | Zazie Productions" />
 <meta name="twitter:description" content="Privacy notice for horror.zazieproductions.com: zero advertising trackers, zero analytics cookies, local storage inventory, third-party media embeds, and NDA inquiry handling." />
-<link href="/legal-817a8ca2.css" rel="stylesheet"/>
+<link href="/legal-410313e4.css" rel="stylesheet"/>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -51,7 +51,7 @@
       },
       "inLanguage": "en",
       "datePublished": "2026-09-18",
-      "dateModified": "2026-10-13"
+      "dateModified": "2026-10-24"
     },
     {
       "@type": "BreadcrumbList",
@@ -184,7 +184,7 @@
     <h1>Privacy notice: <em>no trackers, no cookies set by this site</em></h1>
     <p class="doc-lead">This site runs no analytics, sets no cookies, has no accounts and sells nothing to anybody. That makes the honest version of this page short, so the rest of it is the detail: every third party that gets contacted, when it happens, and how you can check the claim on your own machine.</p>
     <ul class="doc-meta">
-      <li>Effective <time datetime="2026-10-13">13 October 2026</time></li>
+      <li>Effective <time datetime="2026-10-24">24 October 2026</time></li>
       <li>Controller <b>Zazie Productions LLC</b></li>
       <li>Contact <b>zaziediya@gmail.com</b></li>
     </ul>
@@ -341,6 +341,11 @@
                 <td>Your IP address, user agent and the file identifier, under Google's own policies.</td>
               </tr>
               <tr>
+                <th scope="row">bandcamp.com<br/><span class="small">Bandcamp</span></th>
+                <td>Only when you press &ldquo;Load Bandcamp player&rdquo; on a compilation track on the showreel page. No Bandcamp iframe exists in the page until you do, and nothing is pre fetched on hover.</td>
+                <td>Your IP address, user agent and the page URL, under Bandcamp's own policies. The player may also set or read its own cookies on bandcamp.com; the device inspector above cannot see them because they belong to Bandcamp, not to this site.</td>
+              </tr>
+              <tr>
                 <th scope="row">f4.bcbits.com<br/><span class="small">Bandcamp</span></th>
                 <td>When the catalogue loads: cover art for the records is served from Bandcamp's image server.</td>
                 <td>Your IP address, user agent and the requested image path. These requests carry no referring page: cover images are loaded with <code>referrerpolicy="no-referrer"</code>.</td>
@@ -373,7 +378,8 @@
       <section class="clause" id="video">
         <h2><span class="no">7</span> Embedded video and audio</h2>
         <p>Film samples are embedded with the privacy enhancing <code>youtube-nocookie.com</code> host and no iframe exists in the page until you press play, so a visit that never plays anything never loads a player. The showreel audio is served from this domain.</p>
-        <p>Every image on this site is self hosted, the film sample cover frames included, so no image request leaves this domain. A visit that never presses play, and never hovers a sample, makes no third party request at all.</p>
+        <p>The compilation tracks on the showreel page use Bandcamp's embedded player. It sits behind a button in the same way: the iframe is created only when you press &ldquo;Load Bandcamp player&rdquo;, and every track also has a plain link to its Bandcamp page.</p>
+        <p>Every image on this site is self hosted, the film sample cover frames included, so no image request leaves this domain. A visit that never presses play, never loads a Bandcamp player, and never hovers a sample makes no third party request at all.</p>
         <p>One behaviour is worth stating precisely because it is easy to hide: hovering a film sample pre fetches the embed document from YouTube so that playback starts instantly. That is a network request to a third party made before you press play, and it is disclosed here rather than buried.</p>
         <p>If you would rather no third party were contacted at all, browse with images and media blocked, or use a browser that partitions or blocks third party requests. Every cue title, credit and description on this site is readable as text without loading a single embedded player.</p>
       </section>
@@ -535,6 +541,6 @@
 <script>
 if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("/sw.js").catch(()=>{})},{once:true})}
 </script>
-<script src="/legal-ab598df8.js" defer></script>
+<script src="/legal-99b8bf5d.js" defer></script>
 </body>
 </html>

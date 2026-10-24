@@ -356,6 +356,42 @@ td code,th code{white-space:nowrap}
 .hub-card a.stretch{color:inherit}
 .hub-card a.stretch:focus-visible{outline:1px solid var(--ember);outline-offset:3px}
 
+/* --- Compilation appearances (/reel) -------------------------------------- */
+/* Each card holds a click-to-load Bandcamp player. The iframe is created by
+   legal.js only when the visitor presses the button, so the page itself makes
+   no Bandcamp request (see the privacy notice, sections 6 and 7). */
+.comp-grid{display:grid;gap:1rem;margin:1.25rem 0 0;padding:0;list-style:none}
+@media (min-width:900px){.comp-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.comp-card{
+  display:flex;flex-direction:column;gap:.65rem;min-width:0;
+  padding:1.25rem;border:1px solid var(--ash);background:var(--ink);
+  transition:border-color .3s;
+}
+.comp-card:hover,.comp-card:focus-within{border-color:rgba(196,30,30,.55)}
+.comp-meta{display:flex;flex-direction:column;gap:.15rem;margin:0;font-size:.625rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(154,149,144,.8)}
+.comp-meta span:first-child{color:var(--blood)}
+.comp-card h3{margin:0;font-family:var(--display);font-weight:400;font-size:1.5rem;line-height:1.15;color:var(--bone);overflow-wrap:anywhere}
+.comp-card > p{margin:0;font-size:.8125rem;line-height:1.75;color:var(--body-dim)}
+.bc-embed{margin-top:auto;min-height:120px;display:flex;flex-direction:column;justify-content:center}
+.bc-embed iframe{display:block;width:100%;height:120px;border:0;background:var(--smoke)}
+.bc-load{
+  display:none;align-items:center;justify-content:center;gap:.6rem;width:100%;min-height:120px;
+  padding:.75rem 1rem;border:1px solid var(--ash);background:var(--smoke);color:var(--bone);
+  font:inherit;font-size:.6875rem;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;
+  transition:border-color .25s,background .25s;
+}
+.has-js .bc-load{display:flex}
+.bc-load:hover{border-color:rgba(196,30,30,.7);background:#171717}
+.bc-load:focus-visible{outline:1px solid var(--ember);outline-offset:3px}
+.bc-load span{color:var(--blood)}
+.bc-nojs{margin:0;font-size:.75rem;line-height:1.7;color:var(--body-dim)}
+.has-js .bc-nojs{display:none}
+.comp-links{margin:0;font-size:.75rem;letter-spacing:.04em;color:var(--body-dim)}
+.comp-links a{color:var(--bone);text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(196,30,30,.6)}
+.comp-links a:hover{text-decoration-color:var(--ember)}
+.comp-grid + .sidenote{margin-top:1.25rem}
+@media print{.bc-embed{display:none}}
+
 /* --- Site map (/sitemap) ------------------------------------------------- */
 /* Page entries are h3 + one-line summary + a list of that page's sections.
    Long section lists run in two columns on wide screens; padding instead of
