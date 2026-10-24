@@ -92,7 +92,9 @@
 // 896x1152 ratio, is feathered into the UI, and fades into the fold under one
 // bottom scrim. The document (precached as '/') and the home bundle
 // index-b29b75e2.js both change, so the cache name moves with them.
-const CACHE_NAME = 'zazie-v40';
+// v41: seamless hero artwork blend — screen-blended dark-point-aligned <img>,
+// wide cosine-eased intersected top/left/bottom masks, and radial void scrim.
+const CACHE_NAME = 'zazie-v41';
 
 const PRECACHE_ASSETS = [
   '/',
