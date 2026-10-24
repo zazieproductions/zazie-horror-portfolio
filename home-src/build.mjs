@@ -288,6 +288,21 @@ function patchBundle(orig) {
     if (n !== 1) throw new Error(`bundle: "${oldText.slice(0, 60)}" matched ${n} times, expected 1`);
     out = out.replace(oldText, () => newText);
   }
+  // The homepage player starts at playlist index zero. Promote The Fatal
+  // Overdose without changing any audio-file mappings, and keep playlist IDs
+  // aligned with their new displayed positions.
+  const tracksMatch = out.match(/tracks:\[([\s\S]*?)\],projects:/);
+  if (!tracksMatch) throw new Error('bundle: homepage player track list not found');
+  const tracks = tracksMatch[1].split('},{').map((track) =>
+    `{${track.replace(/^\{/, '').replace(/\}$/, '')}}`
+  );
+  const fatalIndex = tracks.findIndex((track) => track.includes('title:"The Fatal Overdose"'));
+  if (tracks.length !== 32 || fatalIndex < 0) throw new Error('bundle: expected 32 tracks including The Fatal Overdose');
+  const [fatal] = tracks.splice(fatalIndex, 1);
+  tracks.unshift(fatal);
+  const orderedTracks = tracks.map((track, index) => track.replace(/^\{id:\d+/, `{id:${index}`)).join(',');
+  out = out.replace(tracksMatch[0], `tracks:[${orderedTracks}],projects:`);
+
   for (const [oldText, newText] of [[BUNDLE_BUDGET_OLD, `xu=${JSON.stringify(budgetOptions())}`], [BUNDLE_BUDGET_DEFAULT_OLD, 'useState(xu[0])']]) {
     const n = countOf(out, oldText);
     if (n !== 1) throw new Error(`bundle: "${oldText}" matched ${n} times, expected 1`);
@@ -393,6 +408,37 @@ function patchStatic(html) {
     return `<button class="${buttonClass} zp-track" data-row-playing="false"><span class="w-7 shrink-0 text-[11px] tabular-nums text-mist sm:w-8">${indexHtml}</span><div class="min-w-0 flex-1"><p class="${titleClass}">${titleHtml}</p><p class="mt-0.5 truncate text-[10px] uppercase tracking-[0.2em] text-mist">${tagHtml} · ${durationHtml}</p></div></button>`;
   });
   if (trimmedRows) applied.push(`showreel rows trimmed (${trimmedRows})`);
+
+  // Keep the prerendered playlist in sync with the client bundle: the Fatal
+  // Overdose is the first cue and the default, paused selection.
+  const showreelStart = out.indexOf('<section id="showreel"');
+  const showreelEnd = out.indexOf('</section>', showreelStart);
+  if (showreelStart < 0 || showreelEnd < 0) throw new Error('index.html: no #showreel section');
+  let showreel = out.slice(showreelStart, showreelEnd);
+  const rowRe = /<button class="([^"]*\bzp-track\b[^"]*)"[^>]*>[\s\S]*?<\/button>/g;
+  const rows = [...showreel.matchAll(rowRe)].map((match) => match[0]);
+  const fatalRowIndex = rows.findIndex((row) => row.includes('>The Fatal Overdose</p>'));
+  if (rows.length !== 32 || fatalRowIndex < 0) throw new Error(`index.html: expected 32 showreel rows including The Fatal Overdose; found ${rows.length}`);
+  const [fatalRow] = rows.splice(fatalRowIndex, 1);
+  rows.unshift(fatalRow);
+  const orderedRows = rows.map((row, index) => {
+    let next = row.replace(/(<span class="w-7[^"]*">)[\s\S]*?(<\/span>)/, `$1${String(index + 1).padStart(2, '0')}$2`);
+    next = next.replace(/<button class="([^"]*)"/, (_match, className) => {
+      const classes = className.split(/\s+/).filter((name) => name && name !== 'bg-blood/10');
+      if (index === 0) classes.push('bg-blood/10');
+      return `<button class="${classes.join(' ')}"`;
+    });
+    next = next.replace(/(<p class="[^"]*font-display[^"]*)text-(?:bone|blood)([^"]*">)/, (_match, before, after) =>
+      `${before}text-${index === 0 ? 'blood' : 'bone'}${after}`
+    );
+    return next;
+  });
+  let rowIndex = 0;
+  showreel = showreel.replace(rowRe, () => orderedRows[rowIndex++]);
+  showreel = showreel.replace('<h3 class="mb-1 truncate font-display text-xl text-bone sm:text-2xl md:text-4xl">Needle in The Nerve</h3>', '<h3 class="mb-1 truncate font-display text-xl text-bone sm:text-2xl md:text-4xl">The Fatal Overdose</h3>');
+  showreel = showreel.replace('<p class="text-[10px] uppercase tracking-[0.2em] text-blood sm:text-xs">Psychological Orchestral</p>', '<p class="text-[10px] uppercase tracking-[0.2em] text-blood sm:text-xs">Body Horror</p>');
+  out = out.slice(0, showreelStart) + showreel + out.slice(showreelEnd);
+  applied.push('showreel player reordered with The Fatal Overdose first');
 
   // Services: replace the old React estimator snapshot with the static island.
   // The header paragraph is followed by its wrapper's </div>, then the grid
