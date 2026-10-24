@@ -312,6 +312,7 @@ html.zp-boot-on .zp-skip{display:none}
   #zp-boot .zp-term{height:5.8em;margin-top:3px;line-height:1.45}
   #zp-boot .zp-deck{flex-direction:row;align-items:center;gap:14px;padding-top:6px}
   #zp-boot .zp-progress,#zp-boot .zp-footer{margin-top:5px}
+  #zp-boot .zp-scope{display:none}
   #zp-boot .zp-skip-btn{width:auto;min-height:44px;padding:0 16px}
 }
 @media (prefers-reduced-motion:reduce){
@@ -320,6 +321,117 @@ html.zp-boot-on .zp-skip{display:none}
   #zp-boot *::before,#zp-boot *::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
   #zp-boot.zp-off{display:none!important}
 }
+
+/* ═════════════════════════════════════════════════════════════════════
+   Archive boot — extra detail layer: CRT scan texture, tape-deck readout,
+   oscilloscope sweep, hex console, chromatic interference. Decorative CSS
+   only; nothing here styles the site beneath the overlay.
+   ═════════════════════════════════════════════════════════════════════ */
+
+/* Slow rolling scanlines with a faint phosphor phosphor haze over the screen. */
+#zp-boot .zp-scan{
+  position:absolute;inset:0;z-index:12;pointer-events:none;opacity:.5;mix-blend-mode:overlay;
+  background:
+    linear-gradient(rgba(18,4,5,0) 50%,rgba(0,0,0,.42) 51%,rgba(18,4,5,0) 100%),
+    linear-gradient(90deg,rgba(255,40,45,.045),rgba(0,255,0,.012),rgba(40,90,255,.045));
+  background-size:100% 4px,3px 100%;
+  animation:zpScan 6s linear infinite;
+}
+/* Rare bright tape-head flicker. */
+#zp-boot .zp-flicker{
+  position:absolute;inset:0;z-index:13;pointer-events:none;opacity:0;
+  background:rgba(255,255,255,.08);
+  animation:zpFlicker 9s ease-in-out infinite;
+}
+@keyframes zpScan{to{background-position:0 100%,100% 0}}
+@keyframes zpFlicker{0%,93%,100%{opacity:0}94%{opacity:.45}95%{opacity:.15}96%{opacity:0}}
+
+/* Tape-deck spec chips below the progress bar. */
+#zp-boot .zp-chip-row{
+  display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;
+  font:500 8px/1.4 var(--zp-mono);letter-spacing:.16em;text-transform:uppercase;
+}
+#zp-boot .zp-chip{
+  display:inline-flex;align-items:center;gap:6px;padding:2px 8px 3px;
+  border:1px solid rgba(196,30,30,.35);
+  background:rgba(38,7,11,.55);color:#c89590;
+}
+#zp-boot .zp-chip .zp-dot{
+  width:6px;height:6px;border-radius:50%;background:var(--zp-red);
+  box-shadow:0 0 10px var(--zp-red);animation:zpRec 1.2s ease-in-out infinite;
+}
+
+/* Tape spec panel beneath the console. */
+#zp-boot .zp-tech{
+  position:relative;margin-top:clamp(14px,3vh,24px);
+  border:1px solid rgba(238,62,66,.24);border-top:2px solid rgba(238,62,66,.55);
+  background:linear-gradient(110deg,rgba(24,5,7,.35),transparent 58%,rgba(28,3,6,.14));
+  padding:11px 14px 13px;
+  font-size:9px;line-height:1.6;letter-spacing:.08em;color:#b36b6b;
+}
+#zp-boot .zp-tech strong{color:#e4c0b9}
+#zp-boot .zp-tech .zp-spec{
+  display:flex;justify-content:space-between;gap:10px;
+}
+#zp-boot .zp-tech .zp-spec span:last-child{color:#e9d6d3;font-variant-numeric:tabular-nums}
+
+/* Console fine detail: memory addresses + instant OK lines. */
+#zp-boot .zp-addr{
+  flex:none;width:48px;color:#8a5a5b;letter-spacing:.1em;opacity:.7;
+}
+#zp-boot .zp-line.zp-hex{color:#7a5c5d;min-height:1.4em}
+#zp-boot .zp-line.zp-ok{color:#d7bab6}
+#zp-boot .zp-line.zp-ok .zp-ok-mark{color:#8ec98e;margin-right:8px}
+
+/* Oscilloscope sweep detail in the deck. */
+#zp-boot .zp-scope{
+  position:relative;height:86px;margin-top:clamp(8px,2vh,14px);
+  border:1px solid rgba(238,62,66,.2);background:#010101;overflow:hidden;
+  box-shadow:inset 0 0 16px rgba(0,0,0,.9),0 0 0 1px rgba(238,62,66,.06);
+}
+#zp-boot .zp-scope::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    repeating-linear-gradient(0deg,transparent,transparent 19px,rgba(158,21,33,.07) 20px),
+    linear-gradient(rgba(184,12,25,.05),transparent 50%);
+  background-size:100% 24px,100% 100%;
+}
+#zp-boot .zp-scope-sweep{
+  position:absolute;left:0;top:0;bottom:0;width:1px;
+  background:linear-gradient(0deg,transparent,#fa7670,transparent);
+  box-shadow:0 0 10px #ee3e42,0 0 4px #ee3e42;opacity:.85;
+  animation:zpSweep 2.4s linear infinite;
+}
+#zp-boot .zp-scope-cap{
+  position:absolute;bottom:6px;left:8px;
+  font:700 8px/1 var(--zp-mono);letter-spacing:.14em;text-transform:uppercase;
+  color:#8e4a4c;opacity:.8;
+}
+@keyframes zpSweep{
+  0%{transform:translateX(0);opacity:0}
+  8%{opacity:1}
+  92%{opacity:1}
+  100%{transform:translateX(108%);opacity:0}
+}
+
+/* Interference: chromatic wordmark + screen jitter. */
+#zp-boot.zp-interference .zp-screen{animation:zpJitter .34s steps(4) infinite}
+#zp-boot.zp-interference .zp-wordmark-main{
+  text-shadow:0 0 52px rgba(223,23,35,.75),3px 0 #ff9186,-3px 0 #3c070b;
+}
+@keyframes zpJitter{
+  0%,100%{transform:translate(0,0)}
+  25%{transform:translate(-1px,1px)}
+  50%{transform:translate(1px,-1px)}
+  75%{transform:translate(-1px,-1px)}
+}
+
+/* Fade added texture layers out with the rest of the overlay. */
+#zp-boot.zp-off .zp-scan,#zp-boot.zp-off .zp-flicker{animation:none;opacity:0}
+#zp-boot.zp-off .zp-scope-sweep{animation:none}
+
+/* Slightly taller console so more of the scrolling terminal detail stays visible. */
+#zp-boot .zp-term{height:9em}
 </style>
 <link href="favicon.svg" rel="icon" type="image/svg+xml"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
@@ -905,6 +1017,8 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
   <div class="zp-screen">
     <div class="zp-grain" id="zp-grain" aria-hidden="true"></div>
     <div class="zp-rift" aria-hidden="true"></div>
+    <div class="zp-scan" aria-hidden="true"></div>
+    <div class="zp-flicker" aria-hidden="true"></div>
     <div class="zp-shell">
       <div class="zp-header" aria-hidden="true">
         <span><strong>ZP</strong><span class="zp-header-sep">///</span> ARCHIVE_001 <span class="zp-format">/ SIDE A</span></span>
@@ -918,12 +1032,17 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
             <span class="zp-wordmark-sub">PRODUCTIONS</span>
           </div>
           <p class="zp-tagline">Sound for the unseen.</p>
-          <div class="zp-console">
-            <div class="zp-console-head"><span>ZP://ARCHIVE/TAPE_001</span><span id="zp-signal">NO SIGNAL</span></div>
-            <div class="zp-term" id="zp-term"></div>
+            <div class="zp-console">
+              <div class="zp-console-head"><span>ZP://ARCHIVE/TAPE_001</span><span id="zp-signal">NO SIGNAL</span></div>
+              <div class="zp-term" id="zp-term"></div>
+            </div>
+            <div class="zp-tech" aria-hidden="true">
+              <div class="zp-spec"><span>TAPE</span><strong id="zp-tape-label">TAPE_001</strong></div>
+              <div class="zp-spec"><span>ARCHIVE</span><strong id="zp-archive-size">032 CUES</strong></div>
+              <div class="zp-spec"><span>SIGNAL</span><strong id="zp-signal-strength">—</strong></div>
+            </div>
           </div>
-        </div>
-        <div class="zp-visual">
+          <div class="zp-visual">
           <div class="zp-disc"></div>
           <svg class="zp-wave" viewBox="0 0 500 160" preserveAspectRatio="none">
             <path class="zp-wave-base" d="M0 80 L70 80 83 77 96 83 112 80 132 80 145 60 155 108 166 37 180 124 192 74 203 83 225 80 249 80 260 88 271 50 283 113 294 78 310 80 335 80 348 66 357 89 367 80 392 80 405 77 418 83 430 80 500 80"/>
@@ -936,6 +1055,17 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
         <div class="zp-deck-main" aria-hidden="true">
           <div class="zp-deck-row"><span id="zp-status">ACQUIRING SIGNAL</span><span id="zp-percent">00%</span></div>
           <div class="zp-progress"><div class="zp-progress-fill" id="zp-fill"></div></div>
+          <div class="zp-chip-row" aria-hidden="true">
+            <span class="zp-chip"><span class="zp-dot" id="zp-dot" aria-hidden="true"></span>TAPE_001</span>
+            <span class="zp-chip">32 CUES</span>
+            <span class="zp-chip">44.1kHz</span>
+            <span class="zp-chip">SIDE A</span>
+            <span class="zp-chip" id="zp-status-chip">SECURE</span>
+          </div>
+          <div class="zp-scope" aria-hidden="true">
+            <div class="zp-scope-sweep" aria-hidden="true"></div>
+            <div class="zp-scope-cap">LEFT CHANNEL · VU</div>
+          </div>
           <div class="zp-footer"><span>PROPERTY OF ZAZIE PRODUCTIONS · SIDE A</span><span>CLICK ANYWHERE OR PRESS ANY KEY TO ENTER</span></div>
         </div>
         <button type="button" class="zp-skip-btn" id="zp-boot-skip">
@@ -955,7 +1085,8 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
   var term=d.getElementById('zp-term'),grain=d.getElementById('zp-grain'),
       clock=d.getElementById('zp-timecode'),signal=d.getElementById('zp-signal'),
       status=d.getElementById('zp-status'),percent=d.getElementById('zp-percent'),
-      fill=d.getElementById('zp-fill'),skipBtn=d.getElementById('zp-boot-skip');
+      fill=d.getElementById('zp-fill'),skipBtn=d.getElementById('zp-boot-skip'),
+      dot=d.getElementById('zp-dot'),statusChip=d.getElementById('zp-status-chip');
   var done=false,timers=[],wake=null,start=Date.now(),downAt=null;
   function schedule(fn,ms){var id=setTimeout(fn,ms);timers.push(id);return id;}
   function wait(ms){
@@ -972,6 +1103,10 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
   function progress(n,label){
     status.textContent=label;percent.textContent=pad(n)+'%';fill.style.transform='scaleX('+(n/100)+')';
   }
+  function chip(label,state){
+    if(statusChip)statusChip.textContent=label;
+    if(dot)dot.style.opacity=state==='online'?'1':'.45';
+  }
   function makeGrain(){
     try{
       var c=d.createElement('canvas');c.width=c.height=96;
@@ -985,9 +1120,24 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
       grain.style.backgroundImage='url('+c.toDataURL('image/png')+')';
     }catch(e){} // The scanlines still work if canvas is unavailable.
   }
-  async function typeLine(text,kind,mark){
+  function addLine(text,kind,addr){
     if(done)return;
     var row=d.createElement('div');row.className='zp-line'+(kind?' '+kind:'');
+    if(addr){var a=d.createElement('span');a.className='zp-addr';a.textContent=addr;row.appendChild(a);}
+    var words=d.createElement('span');words.textContent=text;row.appendChild(words);term.appendChild(row);
+  }
+  function okLine(text,addr){
+    if(done)return;
+    var row=d.createElement('div');row.className='zp-line zp-ok'+(addr?'':'');
+    if(addr){var a=d.createElement('span');a.className='zp-addr';a.textContent=addr;row.appendChild(a);}
+    var mark=d.createElement('span');mark.className='zp-ok-mark';mark.textContent='[OK]';
+    var words=d.createElement('span');words.textContent=text;
+    row.appendChild(mark);row.appendChild(words);term.appendChild(row);
+  }
+  async function typeLine(text,kind,mark,addr){
+    if(done)return;
+    var row=d.createElement('div');row.className='zp-line'+(kind?' '+kind:'');
+    if(addr){var a=d.createElement('span');a.className='zp-addr';a.textContent=addr;row.appendChild(a);}
     var prefix=d.createElement('span');prefix.className='zp-mark';prefix.textContent=mark;
     var words=d.createElement('span'),cursor=d.createElement('span');cursor.className='zp-cursor';
     row.appendChild(prefix);row.appendChild(words);row.appendChild(cursor);term.appendChild(row);
@@ -1050,25 +1200,42 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
   w.addEventListener('pageshow',onPageShow);
   schedule(function(){finish(false,false);},6500); // CSS also forces the overlay away at 7 seconds.
   async function run(){
-    makeGrain();tick();progress(4,'ACQUIRING SIGNAL');
+    makeGrain();tick();progress(4,'ACQUIRING SIGNAL');chip('SECURE','online');
     await wait(420);if(done)return;
     signal.textContent='SIGNAL FOUND';
-    await typeLine('TAPE_001 / SIGNAL FOUND','','>');
-    if(done)return;progress(36,'DECODING TAPE');
-    await wait(240);if(done)return;
-    await typeLine('32 CUES / ARCHIVE MOUNTED','','>');
-    if(done)return;progress(67,'VERIFYING TRANSMISSION');
-    await wait(260);if(done)return;
-    ov.classList.add('zp-interference');signal.textContent='INTERFERENCE';
-    await typeLine('DO NOT ADJUST YOUR SET','zp-warning','!');
-    if(done)return;
+    await typeLine('TAPE_001 / SIGNAL FOUND','','>','0000:');
+    if(done)return;addLine('CARRIER LOCKED · 44.1kHz / 16-bit','','0001:');
+    await wait(200);if(done)return;
+    progress(18,'INITIALIZING DECK');chip('DECK ONLINE','online');
+    await typeLine('32 CUES / ARCHIVE MOUNTED','','>','0002:');
+    if(done)return;addLine('CATALOG_SECTOR · CRC-16 · 0xA4F1','','0003:');
     await wait(220);if(done)return;
-    ov.classList.remove('zp-interference');progress(86,'SIGNAL RECOVERED');
-    signal.textContent='SIGNAL STABLE';
-    await typeLine('THE DARK IS WAITING','zp-last','>');
-    if(done)return;
-    progress(100,'ENTERING THE ARCHIVE');ov.classList.add('zp-ready');
-    await wait(700);finish();
+    progress(36,'VERIFYING CHECKSUM');
+    await typeLine('CHECKSUM 0x4A9F1C · [OK]','','>','0004:');
+    if(done)return;okLine('PREAMBLE VERIFIED','0005:');
+    await wait(180);if(done)return;
+    progress(52,'SECTOR SCAN');
+    await typeLine('0xB7E2 · 0x1C44 · 0x9F3A','','>','0006:');
+    if(done)return;okLine('BAD SECTORS · NONE','0007:');
+    await wait(160);if(done)return;
+    progress(64,'LOADING PROFILE');
+    await typeLine('PROFILE "ZAZIE" / SIDE A','','>','0008:');
+    if(done)return;okLine('TRUST CHAIN · ESTABLISHED','0009:');
+    await wait(140);if(done)return;
+    ov.classList.add('zp-interference');signal.textContent='INTERFERENCE';chip('SIGNAL LOSS','off');
+    progress(68,'SIGNAL DEGRADING');
+    await typeLine('DO NOT ADJUST YOUR SET','zp-warning','!','0010:');
+    if(done)return;addLine('TRACKING ERROR · HOLD','zp-warning','0011:');
+    await wait(180);if(done)return;
+    ov.classList.remove('zp-interference');signal.textContent='SIGNAL STABLE';chip('SECURE','online');
+    progress(86,'SIGNAL RECOVERED');
+    await typeLine('SIGNAL STABLE','','>','0012:');
+    if(done)return;await wait(140);if(done)return;
+    progress(94,'TRANSMISSION LOCKED');
+    await typeLine('THE DARK IS WAITING','zp-last','>','0013:');
+    if(done)return;await wait(100);if(done)return;
+    progress(100,'ENTERING THE ARCHIVE');ov.classList.add('zp-ready');chip('ARCHIVE OPEN','online');
+    await wait(500);finish();
   }
   run().catch(finish);
 })();
