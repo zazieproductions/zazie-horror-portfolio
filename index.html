@@ -324,27 +324,54 @@ html.zp-boot-on .zp-skip{display:none}
 
 /* ═════════════════════════════════════════════════════════════════════
    Archive boot — extra detail layer: CRT scan texture, tape-deck readout,
-   oscilloscope sweep, hex console, chromatic interference. Decorative CSS
-   only; nothing here styles the site beneath the overlay.
+   oscilloscope sweep, hex console, chromatic interference, film leader,
+   burn edges. Decorative CSS only; nothing here styles the site beneath
+   the overlay. All pinned by tools/boot-skip.test.mjs (skip button,
+   .zp-shell z-index, aria-hidden decorations, timing).
    ═════════════════════════════════════════════════════════════════════ */
 
-/* Slow rolling scanlines with a faint phosphor phosphor haze over the screen. */
+/* Slow rolling scanlines with phosphor haze. */
 #zp-boot .zp-scan{
-  position:absolute;inset:0;z-index:12;pointer-events:none;opacity:.5;mix-blend-mode:overlay;
+  position:absolute;inset:0;z-index:12;pointer-events:none;opacity:.55;mix-blend-mode:overlay;
   background:
-    linear-gradient(rgba(18,4,5,0) 50%,rgba(0,0,0,.42) 51%,rgba(18,4,5,0) 100%),
-    linear-gradient(90deg,rgba(255,40,45,.045),rgba(0,255,0,.012),rgba(40,90,255,.045));
+    linear-gradient(rgba(18,4,5,0) 50%,rgba(0,0,0,.45) 51%,rgba(18,4,5,0) 100%),
+    linear-gradient(90deg,rgba(255,40,45,.05),rgba(0,255,0,.014),rgba(40,90,255,.05));
   background-size:100% 4px,3px 100%;
   animation:zpScan 6s linear infinite;
 }
-/* Rare bright tape-head flicker. */
+/* Rare tape-head / film flicker. */
 #zp-boot .zp-flicker{
   position:absolute;inset:0;z-index:13;pointer-events:none;opacity:0;
-  background:rgba(255,255,255,.08);
-  animation:zpFlicker 9s ease-in-out infinite;
+  background:rgba(255,255,255,.1);
+  animation:zpFlicker 7s ease-in-out infinite;
+}
+/* Chromatic aberration wash that pulses during interference. */
+#zp-boot .zp-chromatic{
+  position:absolute;inset:-4px;z-index:14;pointer-events:none;opacity:0;
+  background:
+    linear-gradient(90deg,rgba(255,0,0,.18),transparent 33%,transparent 66%,rgba(0,0,255,.18)),
+    linear-gradient(rgba(0,255,0,.12),transparent);
+  animation:zpChromatic 5s ease-in-out infinite;
 }
 @keyframes zpScan{to{background-position:0 100%,100% 0}}
-@keyframes zpFlicker{0%,93%,100%{opacity:0}94%{opacity:.45}95%{opacity:.15}96%{opacity:0}}
+@keyframes zpFlicker{0%,93%,100%{opacity:0}94%{opacity:.5}95%{opacity:.15}96%{opacity:0}}
+@keyframes zpChromatic{0%,100%{opacity:0;transform:scale(1)}50%{opacity:.35;transform:scale(1.02)}}\
+
+/* Film-leader countdown (indie-cinema classic) sitting over the disc. */
+#zp-boot .zp-leader{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(.92);
+  z-index:30;width:170px;height:170px;border-radius:50%;
+  border:2px solid rgba(238,62,66,.55);box-shadow:0 0 40px rgba(238,62,66,.25),inset 0 0 20px rgba(0,0,0,.6);
+  display:grid;place-items:center;color:#fff;pointer-events:none;opacity:0;
+  font:900 110px/1 var(--zp-mono);letter-spacing:-.05em;
+  transition:opacity .28s ease,transform .28s ease;
+}
+#zp-boot .zp-leader-show .zp-leader{opacity:1;transform:translate(-50%,-50%) scale(1)}
+#zp-boot .zp-leader-num{font-variant-numeric:tabular-nums}
+#zp-boot .zp-leader::after{
+  content:"";position:absolute;inset:6px;border-radius:50%;
+  border:1px solid rgba(238,62,66,.35);
+}\
 
 /* Tape-deck spec chips below the progress bar. */
 #zp-boot .zp-chip-row{
@@ -382,8 +409,14 @@ html.zp-boot-on .zp-skip{display:none}
 #zp-boot .zp-line.zp-hex{color:#7a5c5d;min-height:1.4em}
 #zp-boot .zp-line.zp-ok{color:#d7bab6}
 #zp-boot .zp-line.zp-ok .zp-ok-mark{color:#8ec98e;margin-right:8px}
+#zp-boot .zp-line.zp-data{color:#7a5c5d;opacity:.85;min-height:1.4em}
+#zp-boot .zp-line.zp-glitch{color:#f2d1c7;text-shadow:1px 0 #ff9186,-1px 0 #3c070b}
+#zp-boot .zp-rule{
+  height:1px;background:linear-gradient(90deg,transparent,rgba(238,62,66,.35),transparent);
+  margin:8px 0;opacity:.6;
+}
 
-/* Oscilloscope sweep detail in the deck. */
+/* Oscilloscope + animated VU meters in the deck. */
 #zp-boot .zp-scope{
   position:relative;height:86px;margin-top:clamp(8px,2vh,14px);
   border:1px solid rgba(238,62,66,.2);background:#010101;overflow:hidden;
@@ -407,6 +440,17 @@ html.zp-boot-on .zp-skip{display:none}
   font:700 8px/1 var(--zp-mono);letter-spacing:.14em;text-transform:uppercase;
   color:#8e4a4c;opacity:.8;
 }
+#zp-boot .zp-vu{
+  position:absolute;right:10px;bottom:10px;display:flex;flex-direction:column;gap:2px;align-items:flex-end;
+}
+#zp-boot .zp-vu-bar{
+  width:4px;background:#fa7670;box-shadow:0 0 6px #ee3e42;border-radius:1px 1px 0 0;
+  animation:zpVu 1.1s ease-in-out infinite;opacity:.85;
+}
+#zp-boot .zp-vu-bar:nth-child(2){animation-delay:.18s;height:40%}
+#zp-boot .zp-vu-bar:nth-child(3){animation-delay:.35s;height:70%}
+#zp-boot .zp-vu-bar:nth-child(4){animation-delay:.1s;height:55%}
+@keyframes zpVu{0%,100%{height:20%}50%{height:95%}}
 @keyframes zpSweep{
   0%{transform:translateX(0);opacity:0}
   8%{opacity:1}
@@ -414,23 +458,30 @@ html.zp-boot-on .zp-skip{display:none}
   100%{transform:translateX(108%);opacity:0}
 }
 
-/* Interference: chromatic wordmark + screen jitter. */
-#zp-boot.zp-interference .zp-screen{animation:zpJitter .34s steps(4) infinite}
+/* Interference: chromatic wash, screen jitter, chromatic wordmark. */
+#zp-boot.zp-interference{animation:zpChromaticBody .35s steps(3) infinite}
+#zp-boot.zp-interference .zp-screen{animation:zpJitter .3s steps(5) infinite}
+#zp-boot.zp-interference .zp-chromatic{opacity:.5}
 #zp-boot.zp-interference .zp-wordmark-main{
-  text-shadow:0 0 52px rgba(223,23,35,.75),3px 0 #ff9186,-3px 0 #3c070b;
+  text-shadow:0 0 56px rgba(223,23,35,.9),4px 0 #ff9186,-4px 0 #3c070b;
+  animation:zpChromaticText .2s steps(4) infinite;
 }
+@keyframes zpChromaticBody{0%,100%{filter:none}50%{filter:hue-rotate(12deg) brightness(1.15)}}
 @keyframes zpJitter{
   0%,100%{transform:translate(0,0)}
-  25%{transform:translate(-1px,1px)}
-  50%{transform:translate(1px,-1px)}
-  75%{transform:translate(-1px,-1px)}
+  20%{transform:translate(-1px,1px)}
+  40%{transform:translate(1px,-1px)}
+  60%{transform:translate(-1px,-1px)}
+  80%{transform:translate(1px,1px)}
 }
+@keyframes zpChromaticText{0%,100%{text-shadow:0 0 56px rgba(223,23,35,.9),4px 0 #ff9186,-4px 0 #3c070b}50%{text-shadow:0 0 56px rgba(223,23,35,.9),-4px 0 #ff9186,4px 0 #3c070b}}
 
 /* Fade added texture layers out with the rest of the overlay. */
-#zp-boot.zp-off .zp-scan,#zp-boot.zp-off .zp-flicker{animation:none;opacity:0}
-#zp-boot.zp-off .zp-scope-sweep{animation:none}
+#zp-boot.zp-off .zp-scan,#zp-boot.zp-off .zp-flicker,#zp-boot.zp-off .zp-chromatic{animation:none;opacity:0}
+#zp-boot.zp-off .zp-scope-sweep,#zp-boot.zp-off .zp-vu-bar{animation:none}
+#zp-boot.zp-off .zp-leader{animation:none;opacity:0}
 
-/* Slightly taller console so more of the scrolling terminal detail stays visible. */
+/* Taller console so more scrolling terminal detail stays visible. */
 #zp-boot .zp-term{height:9em}
 </style>
 <link href="favicon.svg" rel="icon" type="image/svg+xml"/>
@@ -1019,6 +1070,7 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
     <div class="zp-rift" aria-hidden="true"></div>
     <div class="zp-scan" aria-hidden="true"></div>
     <div class="zp-flicker" aria-hidden="true"></div>
+    <div class="zp-chromatic" aria-hidden="true"></div>
     <div class="zp-shell">
       <div class="zp-header" aria-hidden="true">
         <span><strong>ZP</strong><span class="zp-header-sep">///</span> ARCHIVE_001 <span class="zp-format">/ SIDE A</span></span>
@@ -1044,6 +1096,7 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
           </div>
           <div class="zp-visual">
           <div class="zp-disc"></div>
+          <div class="zp-leader" aria-hidden="true"><span class="zp-leader-num" id="zp-leader-num">3</span></div>
           <svg class="zp-wave" viewBox="0 0 500 160" preserveAspectRatio="none">
             <path class="zp-wave-base" d="M0 80 L70 80 83 77 96 83 112 80 132 80 145 60 155 108 166 37 180 124 192 74 203 83 225 80 249 80 260 88 271 50 283 113 294 78 310 80 335 80 348 66 357 89 367 80 392 80 405 77 418 83 430 80 500 80"/>
             <path class="zp-wave-live" d="M0 80 L70 80 83 77 96 83 112 80 132 80 145 60 155 108 166 37 180 124 192 74 203 83 225 80 249 80 260 88 271 50 283 113 294 78 310 80 335 80 348 66 357 89 367 80 392 80 405 77 418 83 430 80 500 80"/>
@@ -1064,6 +1117,7 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
           </div>
           <div class="zp-scope" aria-hidden="true">
             <div class="zp-scope-sweep" aria-hidden="true"></div>
+            <div class="zp-vu" aria-hidden="true"><div class="zp-vu-bar"></div><div class="zp-vu-bar"></div><div class="zp-vu-bar"></div><div class="zp-vu-bar"></div></div>
             <div class="zp-scope-cap">LEFT CHANNEL · VU</div>
           </div>
           <div class="zp-footer"><span>PROPERTY OF ZAZIE PRODUCTIONS · SIDE A</span><span>CLICK ANYWHERE OR PRESS ANY KEY TO ENTER</span></div>
@@ -1201,41 +1255,49 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
   schedule(function(){finish(false,false);},6500); // CSS also forces the overlay away at 7 seconds.
   async function run(){
     makeGrain();tick();progress(4,'ACQUIRING SIGNAL');chip('SECURE','online');
-    await wait(420);if(done)return;
+    var leader=d.getElementById('zp-leader-num');
+    // Film-leader countdown — classic indie-cinema open.
+    if(leader){leader.textContent='3';ov.classList.add('zp-leader-show');}
+    await wait(100);if(done)return;
+    if(leader)leader.textContent='2';
+    await wait(100);if(done)return;
+    if(leader)leader.textContent='1';
+    await wait(100);if(done)return;
+    if(leader)ov.classList.remove('zp-leader-show');
     signal.textContent='SIGNAL FOUND';
     await typeLine('TAPE_001 / SIGNAL FOUND','','>','0000:');
     if(done)return;addLine('CARRIER LOCKED · 44.1kHz / 16-bit','','0001:');
-    await wait(200);if(done)return;
+    await wait(140);if(done)return;
     progress(18,'INITIALIZING DECK');chip('DECK ONLINE','online');
     await typeLine('32 CUES / ARCHIVE MOUNTED','','>','0002:');
     if(done)return;addLine('CATALOG_SECTOR · CRC-16 · 0xA4F1','','0003:');
-    await wait(220);if(done)return;
+    await wait(160);if(done)return;
     progress(36,'VERIFYING CHECKSUM');
     await typeLine('CHECKSUM 0x4A9F1C · [OK]','','>','0004:');
     if(done)return;okLine('PREAMBLE VERIFIED','0005:');
-    await wait(180);if(done)return;
+    await wait(140);if(done)return;
     progress(52,'SECTOR SCAN');
-    await typeLine('0xB7E2 · 0x1C44 · 0x9F3A','','>','0006:');
+    await typeLine('0xB7E2 · 0x1C44 · 0x9F3A · 0x22E1','','>','0006:');
     if(done)return;okLine('BAD SECTORS · NONE','0007:');
-    await wait(160);if(done)return;
+    await wait(120);if(done)return;
     progress(64,'LOADING PROFILE');
     await typeLine('PROFILE "ZAZIE" / SIDE A','','>','0008:');
     if(done)return;okLine('TRUST CHAIN · ESTABLISHED','0009:');
-    await wait(140);if(done)return;
+    await wait(100);if(done)return;
     ov.classList.add('zp-interference');signal.textContent='INTERFERENCE';chip('SIGNAL LOSS','off');
-    progress(68,'SIGNAL DEGRADING');
-    await typeLine('DO NOT ADJUST YOUR SET','zp-warning','!','0010:');
-    if(done)return;addLine('TRACKING ERROR · HOLD','zp-warning','0011:');
-    await wait(180);if(done)return;
+    progress(74,'SIGNAL DEGRADING');
+    await typeLine('DO NOT ADJUST YOUR SET','zp-warning','!','0012:');
+    if(done)return;addLine('TRACKING ERROR · HOLD','zp-warning','0013:');
+    await wait(140);if(done)return;
     ov.classList.remove('zp-interference');signal.textContent='SIGNAL STABLE';chip('SECURE','online');
-    progress(86,'SIGNAL RECOVERED');
-    await typeLine('SIGNAL STABLE','','>','0012:');
-    if(done)return;await wait(140);if(done)return;
+    progress(88,'SIGNAL RECOVERED');
+    await typeLine('SIGNAL STABLE','','>','0014:');
+    if(done)return;await wait(80);if(done)return;
     progress(94,'TRANSMISSION LOCKED');
-    await typeLine('THE DARK IS WAITING','zp-last','>','0013:');
-    if(done)return;await wait(100);if(done)return;
+    await typeLine('THE DARK IS WAITING','zp-last','>','0015:');
+    if(done)return;await wait(80);if(done)return;
     progress(100,'ENTERING THE ARCHIVE');ov.classList.add('zp-ready');chip('ARCHIVE OPEN','online');
-    await wait(500);finish();
+    await wait(150);finish();
   }
   run().catch(finish);
 })();
