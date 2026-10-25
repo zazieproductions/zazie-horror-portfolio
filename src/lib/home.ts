@@ -1,13 +1,23 @@
 /** Homepage fragments generated from the same content modules as item pages. */
 
-import { additionalHomePosters, featuredPosterSlugs } from '../data/home.js';
+import { additionalHomePosters, featuredCueSlugs, featuredPosterSlugs } from '../data/home.js';
 import { compilations } from '../data/compilations.js';
 import { cues } from '../data/cues.js';
 import { person, organization, website } from '../data/entities.js';
 import { hubs } from '../data/hubs.js';
 import { productions } from '../data/productions.js';
-import { INDEXABLE_ROBOTS, ORG_ID, PERSON_ID, SITE_ORIGIN, WEBSITE_ID, escapeHtml, isoDuration, url } from '../data/site.js';
-import type { Json, Production } from '../data/types.js';
+import {
+  INDEXABLE_ROBOTS,
+  ORG_ID,
+  PERSON_ID,
+  SITE_ORIGIN,
+  WEBSITE_ID,
+  escapeHtml,
+  isoDuration,
+  oneLine,
+  url,
+} from '../data/site.js';
+import type { Cue, Json, Production } from '../data/types.js';
 import { OG_TYPES, ogImageFor, seoBlock } from './head.js';
 import type { PageHead } from './head.js';
 
@@ -20,6 +30,74 @@ const productionPosters: Production[] = featuredPosterSlugs.map((slug) => {
   if (!production) throw new Error(`src/data/home.ts references unknown production "${slug}"`);
   return production;
 });
+
+const cueBySlug = new Map(cues.map((cue) => [cue.slug, cue]));
+const featuredCues: Cue[] = featuredCueSlugs.map((slug) => {
+  const cue = cueBySlug.get(slug);
+  if (!cue) throw new Error(`src/data/home.ts references unknown cue "${slug}"`);
+  return cue;
+});
+
+/**
+ * Homepage MusicComposition graph. The showreel section lists the full 30-cue
+ * archive; this ItemList republishes the curated cues as schema.org music
+ * works so rich results can attach durations, genres and playable MP3s to the
+ * homepage itself. Each node reuses the exact @id of the /reel/<slug> page's
+ * composition and audio nodes, so the graphs merge instead of duplicating the
+ * work. Nothing here is invented: titles, genres, durations and audio paths
+ * come from cues.ts, the same module that renders the item pages.
+ */
+function featuredCueCatalog(): Json {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    '@id': `${SITE_ORIGIN}/#cue-catalog`,
+    name: 'Featured psychological horror cues — Zazie Productions showreel',
+    description:
+      'Curated original horror compositions for film, TV and games by composer Zazie Kanwar-Torge: psychological orchestral cues, body-horror textures, stingers and dark ambient drones.',
+    url: `${SITE_ORIGIN}/#showreel`,
+    mainEntityOfPage: { '@id': `${SITE_ORIGIN}/#webpage` },
+    numberOfItems: featuredCues.length,
+    itemListElement: featuredCues.map((cue, index) => {
+      const cuePath = `/reel/${cue.slug}`;
+      const compositionId = `${url(cuePath)}#composition`;
+      const audioId = `${url(cuePath)}#audio`;
+      const description = oneLine(cue.description);
+      return {
+        '@type': 'ListItem',
+        position: index + 1,
+        item: {
+          '@context': 'https://schema.org',
+          '@type': 'MusicComposition',
+          '@id': compositionId,
+          url: url(cuePath),
+          name: cue.title,
+          description,
+          genre: cue.category,
+          composer: { '@id': PERSON_ID },
+          creator: { '@id': PERSON_ID },
+          duration: isoDuration(cue.durationSeconds),
+          isPartOf: { '@id': WEBSITE_ID },
+          mainEntityOfPage: { '@id': `${url(cuePath)}#webpage` },
+          dateModified: cue.updatedAt,
+          audio: {
+            '@id': audioId,
+            '@type': 'AudioObject',
+            name: cue.title,
+            description,
+            contentUrl: url(cue.audioPath),
+            encodingFormat: 'audio/mpeg',
+            duration: isoDuration(cue.durationSeconds),
+            genre: cue.category,
+            creator: { '@id': PERSON_ID },
+            isPartOf: { '@id': WEBSITE_ID },
+            mainEntityOfPage: { '@id': `${url(cuePath)}#webpage` },
+          },
+        },
+      };
+    }),
+  };
+}
 const homePosters = [...productionPosters, ...additionalHomePosters];
 const posterSlugs = homePosters.map((poster) => poster.slug);
 if (new Set(posterSlugs).size !== posterSlugs.length) {
@@ -80,8 +158,12 @@ ${source}
 }
 
 /**
- * Homepage schema includes the verified shared identities, the home WebPage,
- * the CreativeWork portfolio graph, and the MusicPlaylist showreel/compilations graph.
+ * Homepage schema: the verified shared identities and home WebPage, the
+ * CreativeWork portfolio graph, the MusicPlaylist showreel/compilations
+ * graph, and one curated ItemList of MusicComposition nodes (each with an
+ * AudioObject) whose @ids merge with the /reel/<slug> item graphs. No
+ * inherited reviews, awards, pricing, FAQ or video graphs from the
+ * historical markup are copied forward.
  */
 export const homeJsonLd: Json[] = [
   person as unknown as Json,
@@ -158,6 +240,7 @@ export const homeJsonLd: Json[] = [
       })),
     ],
   },
+  featuredCueCatalog(),
 ];
 
 const homeImage = {

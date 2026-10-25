@@ -260,12 +260,14 @@ Not changed by this work, flagged because the documents now give them weight:
   named gaps and measured contrast ratios.
 * **Confirm:** the gap list is accurate and that "partially conformant" is the
   claim you want to make publicly. It is the honest one.
-* **Open item worth doing:** the accent red on `/` and `/store` is 3.49:1
-  against the background, below AA for small text. The document pages already
-  use `#e65650` at 5.71:1. Applying the same token to the portfolio and the
-  store closes the largest open gap; it is a two file change
-  (`index-ba4ce5d7.css` is generated, so the source repo is needed, plus
-  `store-src/store.css`).
+* **Open item, half closed (2026-10-25):** the accent red was 3.49:1 against
+  the background, below AA for small text. The document pages already use
+  `#e65650` at 5.71:1. The portfolio homepage `/` now ships the same AA red
+  `#e65650` (4.61–5.71:1 across its dark surfaces) on every text-blood
+  foreground with persistent prose-link underlines, a 12px utility-label
+  floor and 16px mobile body text, under a fresh stylesheet content hash.
+  The remaining open half is `/store`: `store-src/store.css` still uses the
+  darker red for small labels.
 
 ---
 

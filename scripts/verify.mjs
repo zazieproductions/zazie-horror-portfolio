@@ -10,8 +10,8 @@ import { allRoutes, items, siblingsOf, productionBySlug, cueBySlug, releaseBySlu
 import { productions } from '../build/data/productions.js';
 import { cues } from '../build/data/cues.js';
 import { releases } from '../build/data/releases.js';
-import { additionalHomePosters, featuredPosterSlugs } from '../build/data/home.js';
-import { SITE_HOST, SITE_ORIGIN, escapeHtml, oneLine, url } from '../build/data/site.js';
+import { additionalHomePosters, featuredCueSlugs, featuredPosterSlugs } from '../build/data/home.js';
+import { SITE_HOST, SITE_ORIGIN, escapeHtml, isoDuration, oneLine, url } from '../build/data/site.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const errors = [];
@@ -131,14 +131,47 @@ if (homeMetaTitle.length < 30 || homeMetaTitle.length > 60) fail(`homepage title
 if (homeMetaDescription.length < 120 || homeMetaDescription.length > 160) fail(`homepage description is ${homeMetaDescription.length} characters; keep it between 120 and 160`);
 const homeNodes = jsonLdBlocks(home, '/');
 const homeTypes = allTypes(homeNodes);
-for (const required of ['Person', 'Organization', 'WebSite', 'WebPage', 'CreativeWork', 'MusicPlaylist']) {
+for (const required of ['Person', 'Organization', 'WebSite', 'WebPage', 'CreativeWork', 'MusicPlaylist', 'ItemList']) {
   if (homeTypes.filter((type) => type === required).length !== 1) fail(`homepage JSON-LD must contain exactly one ${required} node`);
 }
-if (homeNodes.length !== 6) fail(`homepage JSON-LD should contain Person, Organization, WebSite, WebPage, CreativeWork and MusicPlaylist; found ${homeNodes.length} nodes`);
+if (homeNodes.length !== 7) {
+  fail(`homepage JSON-LD should contain Person, Organization, WebSite, WebPage, CreativeWork, MusicPlaylist and the curated cue ItemList; found ${homeNodes.length} nodes`);
+}
 // This is a portfolio page with multiple supplementary samples, not a video
 // watch page. Keep VideoObject markup off the homepage; Google otherwise
 // selects one sample from the portfolio and rejects it as non-primary content.
 if (homeTypes.includes('VideoObject')) fail('homepage must not declare VideoObject schema; publish video schema only on a dedicated watch page');
+
+/* The homepage ItemList republishes curated cues as MusicComposition nodes.
+   It must describe works that really exist, mirror the /reel/<slug> graph
+   @ids, and point every AudioObject at a playable MP3 on this origin. */
+const cueCatalog = homeNodes.find((node) => node?.['@type'] === 'ItemList');
+if (cueCatalog) {
+  if (cueCatalog['@id'] !== `${SITE_ORIGIN}/#cue-catalog`) fail('homepage cue ItemList must use the stable /#cue-catalog @id');
+  const entries = cueCatalog.itemListElement ?? [];
+  if (entries.length !== featuredCueSlugs.length) {
+    fail(`homepage cue ItemList must list the ${featuredCueSlugs.length} featuredCueSlugs, found ${entries.length}`);
+  }
+  entries.forEach((entry, index) => {
+    const where = `homepage cue ItemList position ${index + 1}`;
+    if (entry?.['@type'] !== 'ListItem' || entry.position !== index + 1) fail(`${where}: ListItem wrapper or position is wrong`);
+    const composition = entry?.item;
+    if (composition?.['@type'] !== 'MusicComposition') fail(`${where}: item must be a MusicComposition`);
+    const cue = cueBySlug.get(featuredCueSlugs[index]);
+    if (!cue) return; // coverage of the slug list itself is asserted when cues load
+    const cuePath = `/reel/${cue.slug}`;
+    if (composition['@id'] !== `${url(cuePath)}#composition`) fail(`${where}: composition @id must match the ${cuePath} graph`);
+    if (composition.url !== url(cuePath)) fail(`${where}: composition url must point at ${cuePath}`);
+    if (composition.name !== cue.title) fail(`${where}: composition name does not match cues.ts`);
+    if (composition.genre !== cue.category) fail(`${where}: composition genre does not match cues.ts`);
+    if (composition.duration !== isoDuration(cue.durationSeconds)) fail(`${where}: composition duration is not the ISO-8601 cue duration`);
+    if (composition.composer?.['@id'] !== `${SITE_ORIGIN}/#person`) fail(`${where}: composition must credit the verified Person entity`);
+    const audio = composition.audio;
+    if (audio?.['@type'] !== 'AudioObject' || audio['@id'] !== `${url(cuePath)}#audio`) fail(`${where}: audio must reference the cue page AudioObject @id`);
+    if (audio.contentUrl !== url(cue.audioPath)) fail(`${where}: AudioObject contentUrl does not match the cue MP3`);
+    if (!fs.existsSync(path.join(root, cue.audioPath.slice(1)))) fail(`${where}: MP3 ${cue.audioPath} is missing from the repository`);
+  });
+}
 
 /* ---------------------------------------------------- home mobile + posters */
 const homeBundleMatch = /import\("\/(index-[a-f\d]+\.js)"\)/.exec(home);

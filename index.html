@@ -508,13 +508,24 @@ document.addEventListener("pointerenter", (e) => {
 }, true);
 
 // 4. React Bundle Mount
+//    The prerendered DOM is the complete document (copy, media, menus, the
+//    vanilla film player), so crawlers and automated clients must never run
+//    the bundle: createRoot().render() would tear that DOM down and rebuild
+//    every node, re-resolving the hero image, styles and fonts after the
+//    browser already painted them. Skipping the mount for these agents keeps
+//    the initial HTML as the indexed render and removes the redundant asset
+//    chain. Human visitors still get the React island (showreel audio, poster
+//    lightbox, mobile menu), scheduled at idle after load as before. The UA
+//    list matches the service-worker and archive-boot gates above.
+const ZP_RUNTIME_BOT = /bot|crawl|spider|google|bing|yandex|slurp|duckduck|baidu|applebot|lighthouse|headless/i.test(navigator.userAgent);
 const boot = () => {
+  if (ZP_RUNTIME_BOT) return;
   const go = () => import("/index-d5f85b1d.js");
   "requestIdleCallback" in window ? requestIdleCallback(go, { timeout: 1200 }) : setTimeout(go, 250);
 };
 document.readyState === "complete" ? boot() : window.addEventListener("load", boot, { once: true });
 </script>
-<link href="index-63bc4dcc.css" rel="stylesheet"/>
+<link href="index-688fefff.css" rel="stylesheet"/>
 
 
 
@@ -1731,6 +1742,298 @@ header a[href="#top"] span.border{border-radius:0}
       "url": "https://loudsilencedigital.bandcamp.com/album/two-years",
       "byArtist": {
         "@id": "https://horror.zazieproductions.com/#person"
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "@id": "https://horror.zazieproductions.com/#cue-catalog",
+  "name": "Featured psychological horror cues — Zazie Productions showreel",
+  "description": "Curated original horror compositions for film, TV and games by composer Zazie Kanwar-Torge: psychological orchestral cues, body-horror textures, stingers and dark ambient drones.",
+  "url": "https://horror.zazieproductions.com/#showreel",
+  "mainEntityOfPage": {
+    "@id": "https://horror.zazieproductions.com/#webpage"
+  },
+  "numberOfItems": 6,
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@context": "https://schema.org",
+        "@type": "MusicComposition",
+        "@id": "https://horror.zazieproductions.com/reel/the-beautiful-wrongness#composition",
+        "url": "https://horror.zazieproductions.com/reel/the-beautiful-wrongness",
+        "name": "The Beautiful Wrongness",
+        "description": "Psychological orchestral cue: a theme that never quite resolves, bowed strings and glass harmonics circling something beautiful and wrong.",
+        "genre": "Psychological Orchestral",
+        "composer": {
+          "@id": "https://horror.zazieproductions.com/#person"
+        },
+        "creator": {
+          "@id": "https://horror.zazieproductions.com/#person"
+        },
+        "duration": "PT1M5S",
+        "isPartOf": {
+          "@id": "https://horror.zazieproductions.com/#website"
+        },
+        "mainEntityOfPage": {
+          "@id": "https://horror.zazieproductions.com/reel/the-beautiful-wrongness#webpage"
+        },
+        "dateModified": "2026-10-24",
+        "audio": {
+          "@id": "https://horror.zazieproductions.com/reel/the-beautiful-wrongness#audio",
+          "@type": "AudioObject",
+          "name": "The Beautiful Wrongness",
+          "description": "Psychological orchestral cue: a theme that never quite resolves, bowed strings and glass harmonics circling something beautiful and wrong.",
+          "contentUrl": "https://horror.zazieproductions.com/audio/track-30.mp3",
+          "encodingFormat": "audio/mpeg",
+          "duration": "PT1M5S",
+          "genre": "Psychological Orchestral",
+          "creator": {
+            "@id": "https://horror.zazieproductions.com/#person"
+          },
+          "isPartOf": {
+            "@id": "https://horror.zazieproductions.com/#website"
+          },
+          "mainEntityOfPage": {
+            "@id": "https://horror.zazieproductions.com/reel/the-beautiful-wrongness#webpage"
+          }
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "item": {
+        "@context": "https://schema.org",
+        "@type": "MusicComposition",
+        "@id": "https://horror.zazieproductions.com/reel/needle-in-the-nerve#composition",
+        "url": "https://horror.zazieproductions.com/reel/needle-in-the-nerve",
+        "name": "Needle in The Nerve",
+        "description": "Psychological horror cue: dissociative tension built for slow-burn dread, bowed metal harmonics, and sub-audible pressure.",
+        "genre": "Psychological Orchestral",
+        "composer": {
+          "@id": "https://horror.zazieproductions.com/#person"
+        },
+        "creator": {
+          "@id": "https://horror.zazieproductions.com/#person"
+        },
+        "duration": "PT1M12S",
+        "isPartOf": {
+          "@id": "https://horror.zazieproductions.com/#website"
+        },
+        "mainEntityOfPage": {
+          "@id": "https://horror.zazieproductions.com/reel/needle-in-the-nerve#webpage"
+        },
+        "dateModified": "2026-10-24",
+        "audio": {
+          "@id": "https://horror.zazieproductions.com/reel/needle-in-the-nerve#audio",
+          "@type": "AudioObject",
+          "name": "Needle in The Nerve",
+          "description": "Psychological horror cue: dissociative tension built for slow-burn dread, bowed metal harmonics, and sub-audible pressure.",
+          "contentUrl": "https://horror.zazieproductions.com/audio/track-00.mp3",
+          "encodingFormat": "audio/mpeg",
+          "duration": "PT1M12S",
+          "genre": "Psychological Orchestral",
+          "creator": {
+            "@id": "https://horror.zazieproductions.com/#person"
+          },
+          "isPartOf": {
+            "@id": "https://horror.zazieproductions.com/#website"
+          },
+          "mainEntityOfPage": {
+            "@id": "https://horror.zazieproductions.com/reel/needle-in-the-nerve#webpage"
+          }
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "item": {
+        "@context": "https://schema.org",
+        "@type": "MusicComposition",
+        "@id": "https://horror.zazieproductions.com/reel/the-silence-began-crawling#composition",
+        "url": "https://horror.zazieproductions.com/reel/the-silence-began-crawling",
+        "name": "The Silence Began Crawling",
+        "description": "Psychological horror cue for atmospheric dread sequences: slow-building, creeping dissonance and rising acoustic pressure.",
+        "genre": "Psychological Orchestral",
+        "composer": {
+          "@id": "https://horror.zazieproductions.com/#person"
+        },
+        "creator": {
+          "@id": "https://horror.zazieproductions.com/#person"
+        },
+        "duration": "PT44S",
+        "isPartOf": {
+          "@id": "https://horror.zazieproductions.com/#website"
+        },
+        "mainEntityOfPage": {
+          "@id": "https://horror.zazieproductions.com/reel/the-silence-began-crawling#webpage"
+        },
+        "dateModified": "2026-10-24",
+        "audio": {
+          "@id": "https://horror.zazieproductions.com/reel/the-silence-began-crawling#audio",
+          "@type": "AudioObject",
+          "name": "The Silence Began Crawling",
+          "description": "Psychological horror cue for atmospheric dread sequences: slow-building, creeping dissonance and rising acoustic pressure.",
+          "contentUrl": "https://horror.zazieproductions.com/audio/track-06.mp3",
+          "encodingFormat": "audio/mpeg",
+          "duration": "PT44S",
+          "genre": "Psychological Orchestral",
+          "creator": {
+            "@id": "https://horror.zazieproductions.com/#person"
+          },
+          "isPartOf": {
+            "@id": "https://horror.zazieproductions.com/#website"
+          },
+          "mainEntityOfPage": {
+            "@id": "https://horror.zazieproductions.com/reel/the-silence-began-crawling#webpage"
+          }
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 4,
+      "item": {
+        "@context": "https://schema.org",
+        "@type": "MusicComposition",
+        "@id": "https://horror.zazieproductions.com/reel/the-fatal-overdose#composition",
+        "url": "https://horror.zazieproductions.com/reel/the-fatal-overdose",
+        "name": "The Fatal Overdose",
+        "description": "Body horror cue for medical dread and tragic mortality: fading heartbeats and sonic collapse.",
+        "genre": "Body Horror",
+        "composer": {
+          "@id": "https://horror.zazieproductions.com/#person"
+        },
+        "creator": {
+          "@id": "https://horror.zazieproductions.com/#person"
+        },
+        "duration": "PT42S",
+        "isPartOf": {
+          "@id": "https://horror.zazieproductions.com/#website"
+        },
+        "mainEntityOfPage": {
+          "@id": "https://horror.zazieproductions.com/reel/the-fatal-overdose#webpage"
+        },
+        "dateModified": "2026-10-24",
+        "audio": {
+          "@id": "https://horror.zazieproductions.com/reel/the-fatal-overdose#audio",
+          "@type": "AudioObject",
+          "name": "The Fatal Overdose",
+          "description": "Body horror cue for medical dread and tragic mortality: fading heartbeats and sonic collapse.",
+          "contentUrl": "https://horror.zazieproductions.com/audio/track-12.mp3",
+          "encodingFormat": "audio/mpeg",
+          "duration": "PT42S",
+          "genre": "Body Horror",
+          "creator": {
+            "@id": "https://horror.zazieproductions.com/#person"
+          },
+          "isPartOf": {
+            "@id": "https://horror.zazieproductions.com/#website"
+          },
+          "mainEntityOfPage": {
+            "@id": "https://horror.zazieproductions.com/reel/the-fatal-overdose#webpage"
+          }
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 5,
+      "item": {
+        "@context": "https://schema.org",
+        "@type": "MusicComposition",
+        "@id": "https://horror.zazieproductions.com/reel/dissociative-amnesia#composition",
+        "url": "https://horror.zazieproductions.com/reel/dissociative-amnesia",
+        "name": "Dissociative Amnesia",
+        "description": "Sharp stinger cue for jump-scare and tension-release moments: acoustic violence and rapid sub decay.",
+        "genre": "Horror Stinger",
+        "composer": {
+          "@id": "https://horror.zazieproductions.com/#person"
+        },
+        "creator": {
+          "@id": "https://horror.zazieproductions.com/#person"
+        },
+        "duration": "PT35S",
+        "isPartOf": {
+          "@id": "https://horror.zazieproductions.com/#website"
+        },
+        "mainEntityOfPage": {
+          "@id": "https://horror.zazieproductions.com/reel/dissociative-amnesia#webpage"
+        },
+        "dateModified": "2026-10-24",
+        "audio": {
+          "@id": "https://horror.zazieproductions.com/reel/dissociative-amnesia#audio",
+          "@type": "AudioObject",
+          "name": "Dissociative Amnesia",
+          "description": "Sharp stinger cue for jump-scare and tension-release moments: acoustic violence and rapid sub decay.",
+          "contentUrl": "https://horror.zazieproductions.com/audio/track-01.mp3",
+          "encodingFormat": "audio/mpeg",
+          "duration": "PT35S",
+          "genre": "Horror Stinger",
+          "creator": {
+            "@id": "https://horror.zazieproductions.com/#person"
+          },
+          "isPartOf": {
+            "@id": "https://horror.zazieproductions.com/#website"
+          },
+          "mainEntityOfPage": {
+            "@id": "https://horror.zazieproductions.com/reel/dissociative-amnesia#webpage"
+          }
+        }
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 6,
+      "item": {
+        "@context": "https://schema.org",
+        "@type": "MusicComposition",
+        "@id": "https://horror.zazieproductions.com/reel/ominous-drone#composition",
+        "url": "https://horror.zazieproductions.com/reel/ominous-drone",
+        "name": "Ominous Drone",
+        "description": "Dark ambient drone for sensory deprivation and psychological horror: continuous sub-harmonic rumination.",
+        "genre": "Dark Ambient",
+        "composer": {
+          "@id": "https://horror.zazieproductions.com/#person"
+        },
+        "creator": {
+          "@id": "https://horror.zazieproductions.com/#person"
+        },
+        "duration": "PT1M57S",
+        "isPartOf": {
+          "@id": "https://horror.zazieproductions.com/#website"
+        },
+        "mainEntityOfPage": {
+          "@id": "https://horror.zazieproductions.com/reel/ominous-drone#webpage"
+        },
+        "dateModified": "2026-10-24",
+        "audio": {
+          "@id": "https://horror.zazieproductions.com/reel/ominous-drone#audio",
+          "@type": "AudioObject",
+          "name": "Ominous Drone",
+          "description": "Dark ambient drone for sensory deprivation and psychological horror: continuous sub-harmonic rumination.",
+          "contentUrl": "https://horror.zazieproductions.com/audio/track-11.mp3",
+          "encodingFormat": "audio/mpeg",
+          "duration": "PT1M57S",
+          "genre": "Dark Ambient",
+          "creator": {
+            "@id": "https://horror.zazieproductions.com/#person"
+          },
+          "isPartOf": {
+            "@id": "https://horror.zazieproductions.com/#website"
+          },
+          "mainEntityOfPage": {
+            "@id": "https://horror.zazieproductions.com/reel/ominous-drone#webpage"
+          }
+        }
       }
     }
   ]
