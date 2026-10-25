@@ -155,7 +155,7 @@ const PAIRS = [
   // Alt text: the poster wall and the hero portrait are content images, not
   // decoration, so they carry the artwork's own name. (The atmosphere plate and
   // the press photo stay alt="" - they are backgrounds behind live copy.)
-  ['width:640,height:960,alt:"",className:"h-full w-full object-cover object-top opacity-95 transition-transform duration-700 ease-out group-hover:scale-105 group-hover:opacity-100"', 'width:e.width||640,height:e.height||960,alt:e.title+" poster artwork",className:"h-full w-full "+(e.contain?"zp-poster-contain":"object-cover object-top group-hover:scale-105")+" opacity-95 transition-transform duration-700 ease-out group-hover:opacity-100"', BUNDLE],
+  ['width:640,height:960,alt:"",className:"h-full w-full object-cover object-top opacity-95 transition-transform duration-700 ease-out group-hover:scale-105 group-hover:opacity-100"', 'width:e.width||640,height:e.height||960,alt:e.alt||e.title+" poster artwork",className:"h-full w-full "+(e.contain?"zp-poster-contain":"object-cover object-top group-hover:scale-105")+" opacity-95 transition-transform duration-700 ease-out group-hover:opacity-100"', BUNDLE],
   ['className:"h-full w-full object-cover object-top","data-source-loc":"src/components/PosterWall.tsx:96:1"', 'loading:"lazy",decoding:"async",className:"h-full w-full "+(e.contain?"zp-poster-contain":"object-cover object-top"),"data-source-loc":"src/components/PosterWall.tsx:96:1"', BUNDLE],
   ['e.tagline&&u.jsxs("p",{className:"mt-5 font-display text-lg italic leading-snug text-bone/90","data-source-loc":"src/components/PosterWall.tsx:114:1",children:["“",e.tagline,"”"]})', 'e.tagline&&u.jsxs("p",{className:"mt-5 font-display text-lg italic leading-snug text-bone/90","data-source-loc":"src/components/PosterWall.tsx:114:1",children:["“",e.tagline,"”"]}),e.summary&&u.jsx("p",{className:"mt-4 text-base leading-relaxed text-mist",children:e.summary})', BUNDLE],
   ['linkcol=c41e1e', 'linkcol=e65650', BUNDLE],
@@ -592,17 +592,17 @@ function patchBundle(orig) {
       n1Slice = n1Slice.replace(
         marker,
         () =>
-          `${marker}slug:${JSON.stringify(posterMeta.slug)},meta:${JSON.stringify(posterMeta.meta)},summary:${JSON.stringify(posterMeta.summary)},`,
+          `${marker}slug:${JSON.stringify(posterMeta.slug)},alt:${JSON.stringify(posterMeta.alt)},meta:${JSON.stringify(posterMeta.meta)},summary:${JSON.stringify(posterMeta.summary)},`,
       );
     }
     out = out.slice(0, n1Cut.start) + n1Slice + out.slice(n1Cut.end);
   }
 
-  // Replace F5 so PosterWall cards render as <article id="poster-${slug}"> with visible summary + links.
+  // Replace F5 so PosterWall cards render as <article id="poster-${slug}"> with artwork only; summaries remain in the clicked lightbox.
   {
     const cut = findTopLevelFunction(out, 'F5');
     const f5Replacement =
-      'function F5({film:e,delay:t=0,onOpen:n}){return u.jsxs("article",{id:e.slug?"poster-"+e.slug:void 0,className:"zp-poster-card flex flex-col border border-ash bg-smoke transition-all duration-500 hover:border-blood/60 hover:shadow-[0_12px_40px_rgba(80,0,0,0.35)]",children:[u.jsx(Bt.button,{type:"button",initial:!1,animate:{opacity:1,y:0},onClick:n,className:"group relative w-full overflow-hidden bg-smoke text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blood","aria-label":`View ${e.title} poster`,"data-home-poster":e.slug,"data-source-loc":"src/components/PosterWall.tsx:166:1",children:u.jsxs("div",{className:"relative aspect-[2/3] overflow-hidden bg-void","data-source-loc":"src/components/PosterWall.tsx:177:1",children:[u.jsxs("picture",{children:[u.jsx("source",{srcSet:e.thumbA.replace("-640.avif","-400.avif")+" 400w, "+e.thumbA.replace("-640.avif","-480.avif")+" 480w, "+e.thumbA+" 640w",sizes:"(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 46vw",type:"image/avif"}),u.jsx("img",{src:e.thumb,srcSet:e.thumb+" 640w, "+e.poster+" 1200w",sizes:"(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 46vw",width:e.width||640,height:e.height||960,alt:e.title+" poster artwork",className:"h-full w-full "+(e.contain?"zp-poster-contain":"object-cover object-top group-hover:scale-105")+" opacity-95 transition-transform duration-700 ease-out group-hover:opacity-100",loading:"lazy",decoding:"async","data-source-loc":"src/components/PosterWall.tsx:178:1"})]}),u.jsx("div",{className:"pointer-events-none absolute inset-0 bg-gradient-to-t from-void via-void/5 to-transparent opacity-80","data-source-loc":"src/components/PosterWall.tsx:184:1"}),u.jsx("div",{className:"pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100","data-source-loc":"src/components/PosterWall.tsx:185:1",children:u.jsx("div",{className:"absolute inset-0 bg-blood/10 mix-blend-multiply","data-source-loc":"src/components/PosterWall.tsx:186:1"})}),u.jsxs("div",{className:"absolute inset-x-0 bottom-0 z-10 p-3 sm:p-4 md:p-5","data-source-loc":"src/components/PosterWall.tsx:189:1",children:[u.jsx("h3",{className:"font-display text-base leading-tight text-bone transition-colors group-hover:text-blood sm:text-xl md:text-2xl","data-source-loc":"src/components/PosterWall.tsx:190:1",children:e.title})]})]})}),e.summary?u.jsxs("div",{className:"zp-poster-meta-box flex flex-1 flex-col justify-between gap-2 border-t border-ash bg-ink p-3 sm:p-4",children:[u.jsxs("div",{children:[u.jsx("p",{className:"text-[11px] uppercase tracking-[0.18em] text-blood",children:e.meta||e.year}),u.jsx("p",{className:"mt-1.5 text-base leading-relaxed text-mist",children:e.summary})]}),u.jsxs("p",{className:"pt-1 text-base text-mist",children:[u.jsx("a",{href:"#poster-"+e.slug,className:"text-blood underline underline-offset-4 hover:text-bone",children:"Permalink"})," · ",u.jsx("a",{href:"/work#productions",className:"text-blood underline underline-offset-4 hover:text-bone",children:"Production archive"})]})]}):null]})}';
+      'function F5({film:e,delay:t=0,onOpen:n}){return u.jsxs("article",{id:e.slug?"poster-"+e.slug:void 0,className:"zp-poster-card flex flex-col border border-ash bg-smoke transition-all duration-500 hover:border-blood/60 hover:shadow-[0_12px_40px_rgba(80,0,0,0.35)]",children:[u.jsx(Bt.button,{type:"button",initial:!1,animate:{opacity:1,y:0},onClick:n,className:"group relative w-full overflow-hidden bg-smoke text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blood","aria-label":`View ${e.title} poster`,"data-home-poster":e.slug,"data-source-loc":"src/components/PosterWall.tsx:166:1",children:u.jsxs("div",{className:"relative aspect-[2/3] overflow-hidden bg-void","data-source-loc":"src/components/PosterWall.tsx:177:1",children:[u.jsxs("picture",{children:[u.jsx("source",{srcSet:e.thumbA.replace("-640.avif","-400.avif")+" 400w, "+e.thumbA.replace("-640.avif","-480.avif")+" 480w, "+e.thumbA+" 640w",sizes:"(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 46vw",type:"image/avif"}),u.jsx("img",{src:e.thumb,srcSet:e.thumb+" 640w, "+e.poster+" 1200w",sizes:"(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 46vw",width:e.width||640,height:e.height||960,alt:e.alt||e.title+" poster artwork",className:"h-full w-full "+(e.contain?"zp-poster-contain":"object-cover object-top group-hover:scale-105")+" opacity-95 transition-transform duration-700 ease-out group-hover:opacity-100",loading:"lazy",decoding:"async","data-source-loc":"src/components/PosterWall.tsx:178:1"})]}),u.jsx("div",{className:"pointer-events-none absolute inset-0 bg-gradient-to-t from-void via-void/5 to-transparent opacity-80","data-source-loc":"src/components/PosterWall.tsx:184:1"}),u.jsx("div",{className:"pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100","data-source-loc":"src/components/PosterWall.tsx:185:1",children:u.jsx("div",{className:"absolute inset-0 bg-blood/10 mix-blend-multiply","data-source-loc":"src/components/PosterWall.tsx:186:1"})}),u.jsxs("div",{className:"absolute inset-x-0 bottom-0 z-10 p-3 sm:p-4 md:p-5","data-source-loc":"src/components/PosterWall.tsx:189:1",children:[u.jsx("h3",{className:"font-display text-base leading-tight text-bone transition-colors group-hover:text-blood sm:text-xl md:text-2xl","data-source-loc":"src/components/PosterWall.tsx:190:1",children:e.title})]})]})})]})}';
     out = out.slice(0, cut.start) + f5Replacement + out.slice(cut.end);
   }
 
@@ -873,31 +873,43 @@ function patchStatic(html, tracks) {
     '<a href="mailto:zaziediya@gmail.com?subject=Scoring%20Inquiry" class="flex items-center gap-3 text-bone transition-colors hover:text-blood">';
   const contactForm =
     '<form class="space-y-4 border border-ash bg-ink/70 p-4 sm:space-y-5 sm:p-6 md:p-8">';
-  if (!out.includes('<!--email_off-->' + mailtoAnchor)) {
-    // Collapse the earlier narrow, text-only wraps so the broad ones do not nest.
-    out = out.replace(
-      '<!--email_off--><span class="break-all text-sm">zaziediya@gmail.com</span><!--/email_off-->',
-      '<span class="break-all text-sm">zaziediya@gmail.com</span>',
-    );
-    out = out.replace(
-      '<!--email_off--><strong class="text-bone">zaziediya@gmail.com</strong><!--/email_off-->',
-      '<strong class="text-bone">zaziediya@gmail.com</strong>',
-    );
-    // 1. The whole contact mailto anchor, href attribute included.
-    if (out.includes(mailtoAnchor)) {
-      out = out.replace(mailtoAnchor, '<!--email_off-->' + mailtoAnchor);
+  // Collapse the earlier narrow, text-only wraps so the broad ones do not nest.
+  // These replace() calls are no-ops once the broad wraps own the regions.
+  out = out.replace(
+    '<!--email_off--><span class="break-all text-sm">zaziediya@gmail.com</span><!--/email_off-->',
+    '<span class="break-all text-sm">zaziediya@gmail.com</span>',
+  );
+  out = out.replace(
+    '<!--email_off--><strong class="text-bone">zaziediya@gmail.com</strong><!--/email_off-->',
+    '<strong class="text-bone">zaziediya@gmail.com</strong>',
+  );
+  // Self-heal a doubled marker left by an older partial run (HTML comments
+  // cannot nest). Each region is then guarded by its own MARKED-form check:
+  // a bare element string is also a substring of an already-marked one, so
+  // testing the bare string alone would prefix the marker twice.
+  out = out.split('<!--email_off--><!--email_off-->').join('<!--email_off-->');
+  out = out.split('<!--/email_off--><!--/email_off-->').join('<!--/email_off-->');
+  let emailRegionsWrapped = false;
+  // 1. The whole contact mailto anchor, href attribute included.
+  if (out.includes(mailtoAnchor) && !out.includes('<!--email_off-->' + mailtoAnchor)) {
+    out = out.replace(mailtoAnchor, '<!--email_off-->' + mailtoAnchor);
+    if (!out.includes('</a><!--/email_off--><a href="tel:+18644300606"')) {
       out = out.replace('</a><a href="tel:+18644300606"', '</a><!--/email_off--><a href="tel:+18644300606"');
     }
-    // 2. The whole contact form: placeholder, visible address and submit copy.
-    if (out.includes(contactForm)) {
-      out = out.replace(contactForm, '<!--email_off-->' + contactForm);
+    emailRegionsWrapped = true;
+  }
+  // 2. The whole contact form: placeholder, visible address and submit copy.
+  if (out.includes(contactForm) && !out.includes('<!--email_off-->' + contactForm)) {
+    out = out.replace(contactForm, '<!--email_off-->' + contactForm);
+    if (!out.includes('</p></form><!--/email_off-->')) {
       out = out.replace(
         '</p></form></div></div></div></section></main><footer',
         '</p></form><!--/email_off--></div></div></div></section></main><footer',
       );
     }
-    applied.push('wrapped contact email regions in <!--email_off-->');
+    emailRegionsWrapped = true;
   }
+  if (emailRegionsWrapped) applied.push('wrapped contact email regions in <!--email_off-->');
 
   // Ensure #top h1 span in #zp-atelier uses #e65650 (>=4.5:1 AA contrast).
   if (out.includes('-webkit-text-fill-color:#c41e1e;\n  color:#c41e1e;')) {
