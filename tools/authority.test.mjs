@@ -27,12 +27,16 @@ import {
   CONCEPTS,
   KNOWS_ABOUT,
   LABEL_CONCEPTS,
+  REFERENCE_TOPICS,
+  REFERENCE_TOPIC_KEYS,
   WIKIDATA_ENTITY,
   conceptNode,
   conceptNodes,
   conceptsForLabel,
   genreTerms,
   knowsAboutNodes,
+  publishedKnowsAbout,
+  referenceTopicNode,
 } from '../build/data/authority.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -138,11 +142,11 @@ test('published pages carry no unlinked genre or knowsAbout strings', () => {
 });
 
 test('the composer entity publishes the same linked vocabulary on / and /composer', () => {
-  const expected = knowsAboutNodes().map((node) => node['@id']);
+  const expected = publishedKnowsAbout();
   for (const relative of ['index.html', 'composer.html', 'composer/index.html']) {
     const person = nodesOf(read(relative)).find((node) => node['@type'] === 'Person');
     assert.ok(person?.knowsAbout, `${relative}: Person declares knowsAbout`);
-    assert.deepEqual(person.knowsAbout.map((node) => node['@id']), expected, `${relative}: canonical order`);
+    assert.deepEqual(person.knowsAbout, expected, `${relative}: canonical order`);
     for (const node of person.knowsAbout) {
       assert.equal(node['@type'], 'DefinedTerm');
       for (const url of node.sameAs) {
@@ -152,6 +156,37 @@ test('the composer entity publishes the same linked vocabulary on / and /compose
   }
   assert.equal(read('composer.html'), read('composer/index.html'), 'hub twins stay byte-identical');
   assert.equal(read('reel.html'), read('reel/index.html'), 'reel twins stay byte-identical');
+});
+
+test('craft vocabulary precedes topical references, and references stay disclaimed', () => {
+  const published = publishedKnowsAbout();
+  const craft = published.slice(0, KNOWS_ABOUT.length);
+  const references = published.slice(KNOWS_ABOUT.length);
+  assert.deepEqual(craft.map((node) => node['@id']), knowsAboutNodes().map((node) => node['@id']));
+  assert.deepEqual(references, REFERENCE_TOPIC_KEYS.map(referenceTopicNode));
+  assert.equal(references.length, REFERENCE_TOPIC_KEYS.length);
+
+  for (const node of references) {
+    assert.match(node.description, /not an affiliation|not a collaboration|reference topics/, `${node.name}: disclaimer published`);
+    assert.equal(node['@id'].startsWith(WIKIDATA_ENTITY), true, `${node.name}: has a Wikidata id`);
+    assert.ok(AUTHORITY_URLS.includes(node['@id']), `${node.name}: id is registered`);
+    assert.match(node.url, /^https:\/\/en.wikipedia.org\/wiki\//);
+  }
+
+  // A reference topic is never an identity alias or a studio affiliation.
+  for (const relative of ['index.html', 'composer.html']) {
+    const person = nodesOf(read(relative)).find((node) => node['@type'] === 'Person');
+    for (const node of references) {
+      assert.ok(!person.sameAs.includes(node.url), `${relative}: ${node.name} must not become a sameAs alias`);
+    }
+  }
+
+  // /composer states the same thing in prose, for a human reader.
+  for (const relative of ['composer.html', 'composer/index.html']) {
+    assert.match(read(relative), /not claims of affiliation, collaboration, or production credits/);
+    const page = nodesOf(read(relative)).find((node) => node['@type'] === 'WebPage');
+    assert.deepEqual(page.mentions, references, `${relative}: WebPage.mentions carries the references`);
+  }
 });
 
 test('prestige niches reach the graph from the pages studios actually read', () => {
@@ -186,5 +221,8 @@ test('the site-wide authority audit passes', () => {
     cwd: ROOT,
     encoding: 'utf8',
   });
-  assert.match(output, /PASS - \d+ genre\/knowsAbout values on \d+ pages resolve to \d+ Wikidata-anchored concepts/);
+  assert.match(
+    output,
+    /PASS - \d+ genre\/knowsAbout values on \d+ pages resolve to \d+ Wikidata-anchored concepts, \d+ topical reference nodes/,
+  );
 });

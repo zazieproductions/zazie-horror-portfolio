@@ -1,6 +1,6 @@
 /** Verified site-level identity nodes shared by the homepage and item pages. */
 
-import { knowsAboutNodes } from './authority.js';
+import { publishedKnowsAbout, referenceTopicNodes } from './authority.js';
 import { AUTHOR_NAME, ORG_ID, PERSON_ID, SITE_NAME, SITE_ORIGIN, WEBSITE_ID } from './site.js';
 
 export const VERIFIED_SAME_AS = [
@@ -17,6 +17,15 @@ export const VERIFIED_SAME_AS = [
   'https://www.linkedin.com/in/zazie-kanwar-torge-3b8a98373/',
   'https://credits.muso.ai/profile/4010f3b7-9a87-4961-8dfd-917de0ba787e',
 ] as const;
+
+/**
+ * Topical references only, never identity aliases or production credits.
+ *
+ * Built from REFERENCE_TOPICS so the labels and disclaimer sentences have one
+ * source of truth: each node gains a Wikidata @id and a Wikipedia cross-link
+ * without changing the published name or the disclaimer wording.
+ */
+export const HORROR_REFERENCE_TOPICS = referenceTopicNodes();
 
 export const person = {
   '@context': 'https://schema.org',
@@ -46,12 +55,15 @@ export const person = {
     },
   },
   /**
-   * Each term is a Wikidata-anchored DefinedTerm (see src/data/authority.ts),
-   * not bare text: the graph resolves "Folk Horror" to Q118141790 and its
-   * Wikipedia article, which is what links this person entity to the genre
-   * nodes a studio, festival, or answer engine already knows about.
+   * Craft vocabulary first, then topical references (see src/data/authority.ts).
+   *
+   * Each term is a Wikidata-anchored DefinedTerm, not bare text: the graph
+   * resolves "Folk Horror" to Q118141790 and its Wikipedia article, which is
+   * what links this person entity to the genre nodes a studio, festival, or
+   * answer engine already knows about. The reference topics after it keep the
+   * disclaimer sentence that says they are study, not affiliation.
    */
-  knowsAbout: knowsAboutNodes(),
+  knowsAbout: publishedKnowsAbout(),
   subjectOf: [
     {
       '@type': 'Article',

@@ -130,6 +130,23 @@ held ready for the next page that does.
 Every `@id` is `https://www.wikidata.org/entity/` + the QID; every Wikipedia
 link is `https://en.wikipedia.org/wiki/` + the slug.
 
+### Topical reference topics (appended after the craft vocabulary)
+
+These are things the archive *studies or points at*, not expertise it claims.
+They are published as their own linked nodes after the craft list, and each one
+carries the disclaimer sentence that says so, verbatim:
+
+| Topic | Wikidata | Wikipedia article | Published disclaimer |
+| --- | --- | --- | --- |
+| A24 film aesthetic | Q16248298 | A24 | "A reference topic in prestige horror scoring; not an affiliation or production credit." |
+| Mica Levi scoring techniques | Q926078 | Mica_Levi | "A reference topic in experimental film scoring; not a collaboration or credit." |
+| Folk Horror tropes | Q118141790 | Folk_horror | "Genre conventions used as reference topics for horror scoring." |
+
+They appear in `Person.knowsAbout` after the twenty-seven craft terms, and on
+`/composer` also in `WebPage.mentions` (where a page-level reference belongs).
+`tools/authority.mjs` enforces the order and the wording, and refuses any
+reference topic in `genre` or `sameAs`.
+
 ### The composer's canonical list, in order
 
 Psychological Horror · Folk Horror · Body Horror · Cosmic Horror · Supernatural
@@ -157,8 +174,9 @@ then the craft and instrumentation that make the claim creditable.
 | `/store/*` — `MusicAlbum`/`Product` | the release's genre list |
 | `/` — `CreativeWork` + `MusicPlaylist` | the portfolio genre line and every cue |
 
-Current totals: **345 linked values on 103 pages**, resolving to **45 distinct
-Wikidata-anchored concepts**. `node tools/authority.mjs --check --verbose` prints
+Current totals: **354 linked values on 103 pages** (339 craft/vocabulary terms
+plus 15 reference-topic nodes), resolving to **45 distinct Wikidata-anchored
+concepts**. `node tools/authority.mjs --check --verbose` prints
 the per-concept hit count.
 
 ### What a label becomes
@@ -204,6 +222,10 @@ text is exactly the state this record exists to prevent.
    every page that declares a `Person`;
 6. `/` and `/composer` agree term for term.
 
+`knowsAbout` and `mentions` have exactly one published form each, so `--sync`
+rewrites those two fields whole from the registry — a page cannot half-adopt the
+vocabulary. `genre` values are still mapped span by span.
+
 The `--sync` mode edits only the linked value spans inside each JSON-LD block,
 so a page that is already correct stays byte-identical — which is what keeps the
 hub twins (`composer.html` / `composer/index.html`, `reel.html` /
@@ -227,12 +249,23 @@ slug or keyword; a plausible-looking but empty IMDb URL is worse than none.
 
 ## 6. Decisions, trade-offs, refusals
 
-**No studio entities.** A24, NEON, and IFC Midnight are the *audience*, not an
-affiliation. Putting them in `about`, `sameAs`, or `knowsAbout` would assert a
-relationship that does not exist and would be the first thing a music supervisor
-checks. The link to that lane is made with genre and movement entities — Art
-Horror, Art Film, Slow Cinema, Experimental Film, Musique Concrète — which is
-both true and exactly how a supervisor searches.
+**No studio entities as identity.** A24, NEON, and IFC Midnight are the
+*audience*, not an affiliation. None of them appear in `sameAs` or `about`, and
+nothing claims a collaboration. The lane itself is reached with genre and
+movement entities — Art Horror, Art Film, Slow Cinema, Experimental Film,
+Musique Concrète — which is both true and exactly how a supervisor searches.
+
+**Reference topics, reconciled.** A parallel change on `main` (PR #128) added
+three topical references — the A24 film aesthetic, Mica Levi's scoring
+techniques, folk horror tropes — to `knowsAbout` as unlinked `Thing` nodes with
+a Wikipedia `url`. The intent is right (say what you study, disclaim the
+affiliation) but a bare `Thing` in an expertise list reads as a claim and cannot
+be resolved. They are kept, not deleted: each now has a Wikidata `@id` and a
+Wikipedia cross-link, they sit *after* the craft vocabulary, they repeat on
+`/composer` in `WebPage.mentions` where a page-level reference belongs, and
+`--check` fails the build if any of the three disclaimer sentences is reworded
+or dropped. `HORROR_REFERENCE_TOPICS` in `src/data/entities.ts` is now derived
+from the registry, so its export keeps working with ids added.
 
 **IMDb keywords, not invented IMDb genres.** IMDb's genre list is 27 items; it
 has no "folk horror" genre. Where IMDb indexes the term as a *keyword*
@@ -279,6 +312,9 @@ All authority targets were read live on **2026-10-25**, not recalled:
   design)`).
 - **Wikidata** — `www.wikidata.org/w/api.php?action=wbgetentities&props=labels`
   for every QID; each English label matches the concept it anchors.
+- **Reference topics** — `A24` → Q16248298 ("American independent entertainment
+  company"), `Mica Levi` → Q926078 ("English singer, songwriter and composer"),
+  both read from the same APIs; `A24 (company)` redirects to `A24`.
 - **IMDb** — `imdb.com/search/title/?genres=horror&explore=genres` returns
   *Top 50 Horror Movies and TV Shows* with the genre filter applied;
   `imdb.com/search/title/?keywords=folk-horror&explore=keywords` returns
@@ -287,8 +323,9 @@ All authority targets were read live on **2026-10-25**, not recalled:
   index pages.
 
 Build state at the end of the pass: `npm run build` green (including the new
-authority check), `npm test` 66/66 green, `node tools/authority.mjs --check`
-reporting 345 values / 103 pages / 45 concepts.
+authority check), `npm test` 68/68 green, `node tools/authority.mjs --check`
+reporting 354 values / 103 pages / 45 concepts / 15 reference nodes. The merge
+with `main` (PR #128) was resolved in this branch and re-verified.
 
 ---
 

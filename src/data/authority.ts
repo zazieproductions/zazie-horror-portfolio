@@ -32,6 +32,10 @@
  * the published pages and `node tools/authority.mjs --check` to prove the site
  * is clean. `npm run build` runs the check and fails on any unmapped label.
  *
+ * Two families live here: the craft/genre vocabulary (CONCEPTS) and the topical
+ * reference topics (REFERENCE_TOPICS) that are published after it with an
+ * explicit not-an-affiliation disclaimer.
+ *
  * The full record, including the A24/NEON positioning rationale and the
  * trade-offs, is AUTHORITY-GRAPH.md.
  */
@@ -418,16 +422,97 @@ export function conceptKeyForUrl(value: string): ConceptKey | undefined {
   return keys.find((key) => conceptUrl(key) === value);
 }
 
-/** Every URL this registry publishes: Wikidata ids, Wikipedia articles, IMDb links. */
-export const AUTHORITY_URLS: readonly string[] = (Object.keys(CONCEPTS) as ConceptKey[]).flatMap((key) => {
-  const node = conceptNode(key) as { sameAs: string[] };
-  return [conceptUrl(key), ...node.sameAs];
-});
-
 /** A URL may only appear as an authority link if this registry published it. */
 export function isRegisteredAuthorityUrl(value: string): boolean {
   return AUTHORITY_URLS.includes(value);
 }
+
+/* ------------------------------------------------ topical reference topics */
+
+/**
+ * Reference topics are *topical*, never identity: things this archive studies
+ * or points at, published so a reader can follow them, never as `sameAs` (an
+ * alias) or `about`/`affiliation`. They are deliberately excluded from the
+ * craft vocabulary above: "knows about the A24 film aesthetic" is a different
+ * kind of claim from "knows about folk horror", and mixing the two makes the
+ * entity harder to read, not easier.
+ *
+ * Every node keeps the disclaimer sentence that says exactly that, and both
+ * `url` and `sameAs` point at the Wikipedia article while `@id` is the Wikidata
+ * item - the same three-way anchoring as the genre vocabulary.
+ */
+export interface ReferenceTopic {
+  /** Published label. */
+  readonly name: string;
+  /** Wikidata item id, without the entity prefix. */
+  readonly wikidata: string;
+  /** English Wikipedia article slug. */
+  readonly wikipedia: string;
+  /** The "not an affiliation / not a credit" sentence, published verbatim. */
+  readonly disclaimer: string;
+}
+
+const REFERENCE_TOPIC_DEFS = {
+  a24Aesthetic: {
+    name: 'A24 film aesthetic',
+    wikidata: 'Q16248298',
+    wikipedia: 'A24',
+    disclaimer: 'A reference topic in prestige horror scoring; not an affiliation or production credit.',
+  },
+  micaLeviTechnique: {
+    name: 'Mica Levi scoring techniques',
+    wikidata: 'Q926078',
+    wikipedia: 'Mica_Levi',
+    disclaimer: 'A reference topic in experimental film scoring; not a collaboration or credit.',
+  },
+  folkHorrorTropes: {
+    name: 'Folk Horror tropes',
+    wikidata: 'Q118141790',
+    wikipedia: 'Folk_horror',
+    disclaimer: 'Genre conventions used as reference topics for horror scoring.',
+  },
+} as const satisfies Record<string, ReferenceTopic>;
+
+export type ReferenceTopicKey = keyof typeof REFERENCE_TOPIC_DEFS;
+
+export const REFERENCE_TOPICS: Record<ReferenceTopicKey, ReferenceTopic> = REFERENCE_TOPIC_DEFS;
+
+export const REFERENCE_TOPIC_KEYS = Object.keys(REFERENCE_TOPICS) as ReferenceTopicKey[];
+
+export function referenceTopicNode(key: ReferenceTopicKey): Json {
+  const topic = REFERENCE_TOPICS[key];
+  const article = `${WIKIPEDIA_ARTICLE}${topic.wikipedia}`;
+  return {
+    '@type': 'DefinedTerm',
+    '@id': `${WIKIDATA_ENTITY}${topic.wikidata}`,
+    name: topic.name,
+    description: topic.disclaimer,
+    url: article,
+    sameAs: [article],
+  };
+}
+
+/** In registry order: the order they are published in `knowsAbout` and `mentions`. */
+export function referenceTopicNodes(): Json[] {
+  return REFERENCE_TOPIC_KEYS.map(referenceTopicNode);
+}
+
+/** Name -> key, for validating a published node against its registry entry. */
+export function referenceTopicKeyForName(value: string): ReferenceTopicKey | undefined {
+  return REFERENCE_TOPIC_KEYS.find((key) => REFERENCE_TOPICS[key].name === value);
+}
+
+/** Every URL this registry publishes: Wikidata ids, Wikipedia articles, IMDb links. */
+export const AUTHORITY_URLS: readonly string[] = [
+  ...(Object.keys(CONCEPTS) as ConceptKey[]).flatMap((key) => {
+    const node = conceptNode(key) as { sameAs: string[] };
+    return [conceptUrl(key), ...node.sameAs];
+  }),
+  ...REFERENCE_TOPIC_KEYS.flatMap((key) => {
+    const node = referenceTopicNode(key) as { '@id': string; sameAs: string[] };
+    return [node['@id'], ...node.sameAs];
+  }),
+];
 
 const normalize = (value: string): string => value.trim().toLowerCase().replace(/\s+/g, ' ');
 
@@ -583,4 +668,13 @@ export const KNOWS_ABOUT: readonly ConceptKey[] = [
 /** Fresh copies, so a caller can never mutate the shared graph. */
 export function knowsAboutNodes(): Json[] {
   return conceptNodes(KNOWS_ABOUT);
+}
+
+/**
+ * What a `Person` actually publishes: the craft vocabulary in canonical order,
+ * then the topical reference topics (each carrying its own disclaimer). The
+ * split is enforced by tools/authority.mjs, so no page can interleave them.
+ */
+export function publishedKnowsAbout(): Json[] {
+  return [...knowsAboutNodes(), ...referenceTopicNodes()];
 }
