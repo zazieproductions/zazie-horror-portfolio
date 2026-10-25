@@ -47,7 +47,7 @@ const PLAY_ICON =
 /** The cover is the player's front door: play sits on the art, the player opens beneath it. */
 function stage(item: CompilationItem): string {
   const img =
-    `<img src="${coverUrl(item)}" alt="Cover art for ${esc(item.album)}" width="700" height="700" loading="lazy" decoding="async" referrerpolicy="no-referrer">`;
+    `<img src="${coverUrl(item)}" alt="${esc(item.title)} — cover art for ${esc(item.album)}" width="700" height="700" loading="lazy" decoding="async" referrerpolicy="no-referrer">`;
   const label = `Play ${item.title} from ${item.album}, ${item.duration}. Opens the Bandcamp player.`;
   return (
     `<div class="zp-stage">` +
@@ -71,7 +71,7 @@ function card(item: CompilationItem): string {
   const title = `${item.title} - ${item.duration} - Bandcamp player`;
   return (
     `<li class="zp-comp-card" id="${slug}">` +
-    `<article class="zp-comp-article"${articleIdAttr} aria-labelledby="${slug}-title">` +
+    `<article class="zp-comp-article"${articleIdAttr} aria-label="${esc(item.title)} from ${esc(item.album)}">` +
     `<div class="zp-bc" data-bc-src="${playerUrl(item)}" data-bc-title="${esc(title)}">` +
     stage(item) +
     `<div class="zp-slot"><div class="zp-slot-inner"></div></div>` +
@@ -100,6 +100,7 @@ export function compilationsInnerHtml(): string {
     `<h2 class="font-display text-3xl leading-[1.05] tracking-tight text-bone sm:text-4xl md:text-5xl">Tracks and releases</h2>` +
     `<p class="mt-4 text-base leading-relaxed text-mist">Selected compilation tracks and two Bandcamp releases. Select a cover to play; Bandcamp loads only when you do.</p>` +
     `</div>` +
+    `<noscript><style>.zp-comp-body{display:flex}</style></noscript>` +
     `<ul class="zp-comp-grid">${compilations.map(card).join('')}</ul>` +
     `<p class="mt-6 text-base tracking-wide text-mist">Playback runs in Bandcamp&rsquo;s own player. Full catalogue on <a href="https://zazieproductions.bandcamp.com" target="_blank" rel="noopener" class="text-blood underline underline-offset-4 hover:text-bone">Bandcamp</a>, in the <a href="/reel#compilations" class="text-blood underline underline-offset-4 hover:text-bone">showreel compilation archive</a>, and in the <a href="/store" class="text-blood underline underline-offset-4 hover:text-bone">store</a>.</p>`
   );
@@ -143,6 +144,10 @@ export const COMPILATIONS_CSS = `
   .zp-slot iframe.zp-ready{opacity:1}
   @keyframes zp-shimmer{to{background-position:-200% 0}}
   .zp-comp-body{display:flex;flex:1;flex-direction:column;gap:.55rem;padding:1.15rem 1.35rem 1.35rem}
+  /* Keep the gallery artwork-only; reveal details with the requested player. */
+  .zp-comp-body{display:none}
+  .zp-open .zp-comp-body{display:flex}
+  .zp-comp-card:has(.zp-bc-load:focus-visible){outline-offset:3px}
   .zp-comp-meta{margin:0;font-size:.875rem;letter-spacing:.16em;text-transform:uppercase;color:#e65650}
   .zp-comp-card h3{margin:0;font-family:var(--font-display,'Cormorant Garamond',serif);font-weight:400;font-size:1.65rem;line-height:1.15;color:#f0ebe3;overflow-wrap:anywhere}
   .zp-comp-title-link{color:inherit;text-decoration:none;transition:color .2s}
