@@ -31,6 +31,11 @@ test('The Beautiful Wrongness is first in the 30-cue default player queue', () =
     { title: tracks[0].title, src: tracks[0].src, duration: tracks[0].duration },
     { title: 'The Beautiful Wrongness', src: '/audio/track-30.mp3', duration: 65.411 },
   );
+  assert.deepEqual(
+    { title: tracks[1].title, src: tracks[1].src },
+    { title: 'The Fatal Overdose', src: '/audio/track-12.mp3' },
+    'main’s promoted cue stays next in the merged queue',
+  );
   assert.equal(new Set(tracks.map((track) => track.id)).size, tracks.length, 'React keys remain unique');
   assert.ok(source.includes('String(s+1).padStart(2,"0")'), 'visible numbers follow queue order, not stable audio IDs');
   for (const title of retiredTitles) assert.equal(source.includes(title), false, `${title} is absent from the player bundle`);

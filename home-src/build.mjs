@@ -18,6 +18,13 @@
  *      is replaced by static markup generated from src/data/pricing.ts. Its
  *      live behaviour comes from estimator-<hash>.js, which delegates events on
  *      the document, so it works inside the React island.
+ *   3. The testimonial section is deleted outright (2026-10-24): there are no
+ *      attributable, permissioned quotes to publish, and a "5.0 collaborator
+ *      rating" badge pointing at placeholder reviews reads as fabricated.
+ *      The hero badge + its divider and the App render call come out as
+ *      pairs; the section component (`cj`), the now-unreferenced StarRating
+ *      pair (`zi`, `t1`) and the quotes data (`s1`) are cut with the parser,
+ *      like step 2. The static copy loses the same badge and section.
  *
  * Every pair must match exactly once in the pristine bundle, or the build
  * fails. In index.html, a pair that is already applied is skipped, so the
@@ -83,9 +90,10 @@ const PAIRS = [
   // and spilled left past the panel that carried its gradients: the scrimmed
   // band and the unscrimmed band met in a hard vertical seam, and the cropped
   // side panels of the artwork read as a torn image. The plate now derives its
-  // width from the artwork's own ratio (see .zp-hero-art-plate), so the whole
-  // poster is shown, and it is feathered instead of cut. Alt text and the lazy
-  // attribute ride along here; the portrait is display:none below 1024px.
+  // width from the artwork's own ratio and is framed at full opacity (see the
+  // .zp-hero-art* rules in index.html), so the whole poster is shown without
+  // masks or a bottom fade. Alt text and the lazy attribute ride along here;
+  // the portrait is display:none below 1024px.
   [
     'className:"pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] lg:block","aria-hidden":!0,"data-source-loc":"src/components/Hero.tsx:56:6",children:u.jsxs("div",{className:"absolute bottom-0 right-0 h-[92%] w-full","data-source-loc":"src/components/Hero.tsx:63:8",children:[u.jsxs("picture",{children:[u.jsx("source",{srcSet:"/images/hero-portrait.avif",type:"image/avif"}),u.jsx("img",{src:It.images.hero,alt:"",width:896,height:1152,decoding:"async",className:"absolute bottom-0 right-0 h-full w-auto max-w-none object-cover object-top opacity-80","data-source-loc":"src/components/Hero.tsx:64:10"})]}),u.jsx("div",{className:"absolute inset-0 bg-gradient-to-l from-transparent via-void/20 to-void","data-source-loc":"src/components/Hero.tsx:69:10"}),u.jsx("div",{className:"absolute inset-0 bg-gradient-to-t from-void via-transparent to-void/40","data-source-loc":"src/components/Hero.tsx:70:10"}),u.jsx("div",{className:"absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-void","data-source-loc":"src/components/Hero.tsx:71:10"}),u.jsx("div",{className:"absolute inset-y-[15%] right-0 w-px bg-gradient-to-b from-transparent via-blood/50 to-transparent","data-source-loc":"src/components/Hero.tsx:73:10"})]})',
     'className:"pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] lg:block","aria-hidden":!0,"data-source-loc":"src/components/Hero.tsx:56:6",children:u.jsxs("div",{className:"zp-hero-art","data-source-loc":"src/components/Hero.tsx:63:8",children:[u.jsx("div",{className:"zp-hero-art-plate",children:u.jsxs("picture",{children:[u.jsx("source",{srcSet:"/images/hero-portrait.avif",type:"image/avif"}),u.jsx("img",{src:It.images.hero,alt:"Zazie Kanwar-Torge, horror composer and founder of Zazie Productions",width:896,height:1152,loading:"lazy",decoding:"async",className:"absolute inset-0 h-full w-full object-contain","data-source-loc":"src/components/Hero.tsx:64:10"})]})}),u.jsx("div",{className:"zp-hero-art-scrim","aria-hidden":!0})]})',
@@ -117,6 +125,7 @@ const PAIRS = [
   [',{id:9,title:"Dark Thriller Cinematic Cue",src:"/audio/track-09.mp3",duration:65.109,tag:"Thriller"}', '', BUNDLE],
   [',{id:23,title:"Screams of The Damned",src:"/audio/track-23.mp3",duration:200.072,tag:"Body Horror"}', '', BUNDLE],
   ['String(t.id+1).padStart(2,"0")', 'String(s+1).padStart(2,"0")', BUNDLE],
+  ['32-cue showreel', '30-cue showreel', HTML],
   // Showreel rows: 30 rows x 3 decorative nodes became 30 x 1. The duration moves
   // into the mood line (it was hidden below 640px, so phones lost it entirely) and
   // the play/pause glyph becomes a pseudo-element keyed off data-row-playing.
@@ -155,6 +164,18 @@ const PAIRS = [
     '_.useEffect(function(){let c=zpCard.current;if(!e){if(c){const trigger=c.querySelector(".zp-poster");if(trigger)trigger.focus()}zpCard.current=null;return}if(!c)c=document.querySelector(".zp-vcard.is-playing");if(!c)return;zpCard.current=c;const close=c.querySelector(".zp-player-close");if(close)close.focus();try{const reduce=',
     BUNDLE,
   ],
+  // Testimonials removed (2026-10-24): no attributable, permissioned quotes to
+  // publish, so the "5.0 collaborator rating" hero badge and its divider come
+  // out with the section itself. The unreferenced statements (cj, zi, t1, s1)
+  // are cut in patchBundle; the matching static markup comes out in
+  // patchStatic. Without the badge pair, the zi/t1 cut below would leave the
+  // hero pointing at a component that no longer exists.
+  [
+    'u.jsxs("a",{href:"#reviews",className:"inline-flex items-center gap-2.5 transition-colors hover:text-bone","data-source-loc":"src/components/Hero.tsx:175:12",children:[u.jsx(zi,{rating:5,size:"sm","data-source-loc":"src/components/Hero.tsx:179:14"}),u.jsxs("span",{className:"text-[11px] text-mist","data-source-loc":"src/components/Hero.tsx:180:14",children:[u.jsx("span",{className:"font-semibold text-[#F5C518]","data-source-loc":"src/components/Hero.tsx:181:16",children:"5.0"})," collaborator rating"]})]}),u.jsx("span",{className:"hidden h-4 w-px bg-white/10 sm:block","aria-hidden":!0,"data-source-loc":"src/components/Hero.tsx:184:12"}),',
+    '',
+    BUNDLE,
+  ],
+  ['u.jsx(cj,{"data-source-loc":"src/App.tsx:46:10"}),', '', BUNDLE],
   // Services heading
   ['04 · Scope and budget', '04 · Scoring services', BOTH],
   ['Build a scope and estimate', 'Rates & estimates', BUNDLE],
@@ -186,9 +207,9 @@ const BUNDLE_BUDGET_DEFAULT_OLD = 'useState(xu[1])';
 
 /**
  * The hero's right-hand artwork panel: one plate (the poster, whole, at its own
- * aspect ratio), one scrim. All geometry and feathering lives in the
- * .zp-hero-art* rules in index.html so the prerendered and React renders cannot
- * drift; this markup only has to match the bundle's output.
+ * aspect ratio) plus the legacy scrim node, hidden by CSS. All geometry and
+ * framing lives in the .zp-hero-art* rules in index.html so the prerendered and
+ * React renders cannot drift; this markup only has to match the bundle's output.
  */
 const HERO_ART_HTML =
   '<div class="pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] lg:block" aria-hidden="true"><div class="zp-hero-art"><div class="zp-hero-art-plate"><picture><source srcset="/images/hero-portrait.avif" type="image/avif"><img alt="Zazie Kanwar-Torge, horror composer and founder of Zazie Productions" class="absolute inset-0 h-full w-full object-contain" src="/images/hero-portrait.jpg" width="896" height="1152" loading="lazy" decoding="async"></picture></div><div class="zp-hero-art-scrim" aria-hidden="true"></div></div></div>';
@@ -236,6 +257,18 @@ function findTopLevelFunction(source, name) {
   return { start: hits[0].getStart(sf), end: hits[0].getEnd() };
 }
 
+/** Same lookup for a `const name = ...;` statement (the testimonials data). */
+function findTopLevelVariable(source, name) {
+  const sf = ts.createSourceFile('bundle.js', source, ts.ScriptTarget.ES2020, true, ts.ScriptKind.JS);
+  const hits = sf.statements.filter(
+    (s) =>
+      ts.isVariableStatement(s) &&
+      s.declarationList.declarations.some((d) => ts.isIdentifier(d.name) && d.name.text === name),
+  );
+  if (hits.length !== 1) throw new Error(`expected exactly one top-level variable ${name}, found ${hits.length}`);
+  return { start: hits[0].getStart(sf), end: hits[0].getEnd() };
+}
+
 function countOf(text, needle) {
   return text.split(needle).length - 1;
 }
@@ -259,6 +292,7 @@ function readShowreelTracks(source) {
   }
   if (tracks.length !== 30) throw new Error(`bundle: expected 30 showreel tracks after patching, found ${tracks.length}`);
   if (tracks[0].title !== 'The Beautiful Wrongness') throw new Error('bundle: The Beautiful Wrongness must be the default first track');
+  if (tracks[1].title !== 'The Fatal Overdose') throw new Error('bundle: The Fatal Overdose must be the second track');
   if (new Set(tracks.map((track) => track.id)).size !== tracks.length) throw new Error('bundle: duplicate showreel track IDs');
   for (const retired of ['Dark Thriller Cinematic Cue', 'Screams of The Damned']) {
     if (tracks.some((track) => track.title === retired)) throw new Error(`bundle: retired track remains: ${retired}`);
@@ -346,10 +380,43 @@ function patchBundle(orig) {
     if (n !== 1) throw new Error(`bundle: "${oldText.slice(0, 60)}" matched ${n} times, expected 1`);
     out = out.replace(oldText, () => newText);
   }
+  // The Beautiful Wrongness is the default; retain main's promotion of The
+  // Fatal Overdose immediately after it. IDs remain stable audio-file mappings;
+  // visible row numbers already come from each track's queue index.
+  const tracksMatch = out.match(/tracks:\[([\s\S]*?)\],projects:/);
+  if (!tracksMatch) throw new Error('bundle: homepage player track list not found');
+  const tracks = tracksMatch[1].split('},{').map((track) =>
+    `{${track.replace(/^\{/, '').replace(/\}$/, '')}}`
+  );
+  const fatalIndex = tracks.findIndex((track) => track.includes('title:"The Fatal Overdose"'));
+  if (tracks.length !== 30 || fatalIndex < 0) throw new Error('bundle: expected 30 tracks including The Fatal Overdose');
+  if (!tracks[0].includes('title:"The Beautiful Wrongness"')) throw new Error('bundle: The Beautiful Wrongness must remain first');
+  const [fatal] = tracks.splice(fatalIndex, 1);
+  tracks.splice(1, 0, fatal);
+  out = out.replace(tracksMatch[0], `tracks:[${tracks.join(',')}],projects:`);
+
   for (const [oldText, newText] of [[BUNDLE_BUDGET_OLD, `xu=${JSON.stringify(budgetOptions())}`], [BUNDLE_BUDGET_DEFAULT_OLD, 'useState(xu[0])']]) {
     const n = countOf(out, oldText);
     if (n !== 1) throw new Error(`bundle: "${oldText}" matched ${n} times, expected 1`);
     out = out.replace(oldText, () => newText);
+  }
+  // Testimonials excision, part two. The pairs above removed the render call
+  // and the hero badge, so the section component (cj), the StarRating widget
+  // only it and the badge used (zi + its star glyph t1), and the quotes data
+  // (s1) are unreferenced. Statement-level cuts keep the minified neighbours
+  // intact; each finder re-parses the current text and demands exactly one
+  // top-level hit, so a future minifier rename fails the build here instead
+  // of shipping a half-removed section.
+  for (const name of ['cj', 'zi', 't1']) {
+    const cut = findTopLevelFunction(out, name);
+    out = out.slice(0, cut.start) + out.slice(cut.end);
+  }
+  {
+    const cut = findTopLevelVariable(out, 's1');
+    out = out.slice(0, cut.start) + out.slice(cut.end);
+    if (/\bs1\b/.test(out)) {
+      throw new Error('bundle: testimonials data s1 is still referenced after removal');
+    }
   }
   const { start, end } = findTopLevelFunction(out, 'lj');
   const servicesMarkup = SERVICES_HEADER + islandHtml(false);
@@ -388,6 +455,37 @@ function patchStatic(html, tracks) {
     if (next !== out) {
       out = next;
       applied.push('hero artwork panel rebuilt');
+    }
+  }
+
+  // Testimonials removed in the bundle too, so the static copy must drop the
+  // same two pieces or first paint would resurrect them: the hero "5.0
+  // collaborator rating" badge (plus the divider that only separated the
+  // badge from the IMDb note) and the complete #reviews section. The section
+  // contains no nested <section> and the badge no nested <a>, so the first
+  // closer is the right one. Idempotent - once both are gone, nothing runs.
+  {
+    const badgeOpen = '<a href="#reviews" class="inline-flex items-center gap-2.5 transition-colors hover:text-bone">';
+    const badgeStart = out.indexOf(badgeOpen);
+    if (badgeStart >= 0) {
+      const anchorEnd = out.indexOf('</a>', badgeStart);
+      if (anchorEnd < 0) throw new Error('index.html: hero rating badge never closes');
+      let badgeEnd = anchorEnd + '</a>'.length;
+      const divider = '<span class="hidden h-4 w-px bg-white/10 sm:block" aria-hidden="true"></span>';
+      if (out.startsWith(divider, badgeEnd)) badgeEnd += divider.length;
+      out = out.slice(0, badgeStart) + out.slice(badgeEnd);
+      applied.push('hero rating badge removed');
+    } else if (out.includes('href="#reviews"')) {
+      throw new Error('index.html: a #reviews link exists in an unexpected shape');
+    }
+    const reviewsStart = out.indexOf('<section id="reviews"');
+    if (reviewsStart >= 0) {
+      const reviewsEnd = out.indexOf('</section>', reviewsStart);
+      if (reviewsEnd < 0) throw new Error('index.html: #reviews section never closes');
+      out = out.slice(0, reviewsStart) + out.slice(reviewsEnd + '</section>'.length);
+      applied.push('reviews section removed');
+    } else if (out.includes('id="reviews"')) {
+      throw new Error('index.html: a #reviews target exists in an unexpected shape');
     }
   }
 

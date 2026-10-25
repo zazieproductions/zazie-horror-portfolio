@@ -92,9 +92,11 @@
 // 896x1152 ratio, is feathered into the UI, and fades into the fold under one
 // bottom scrim. The document (precached as '/') and the home bundle
 // index-b29b75e2.js both change, so the cache name moves with them.
-// v41: The Beautiful Wrongness leads the 30-cue showreel; the two retired cues
-// and their direct audio/page routes are removed. The home bundle is re-hashed.
-const CACHE_NAME = 'zazie-v41';
+// v41: seamless hero artwork blend — screen-blended dark-point-aligned <img>,
+// wide cosine-eased intersected top/left/bottom masks, and radial void scrim.
+// v42: merge the 30-cue showreel with the latest homepage updates. The Beautiful
+// Wrongness is the default, The Fatal Overdose follows, and two cues are retired.
+const CACHE_NAME = 'zazie-v42';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -103,12 +105,12 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-e5dac783.css',
-  '/index-4258fc28.js',
-  '/store-c22a1a44.css',
+  '/index-14ec3b4a.js',
+  '/store-1e13177a.css',
   '/store-3fc01be0.js',
-  '/legal-817a8ca2.css',
+  '/legal-00909f42.css',
   '/legal-ab598df8.js',
-  '/estimator-43a25eec.css',
+  '/estimator-44035344.css',
   '/estimator-0ca1de83.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',
