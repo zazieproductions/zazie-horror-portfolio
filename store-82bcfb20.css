@@ -15,7 +15,7 @@
 /* --- Tokens (mirrors the portfolio theme) -------------------------------- */
 :root{
   --void:#030303; --ink:#080808; --smoke:#121212; --ash:#1e1e1e;
-  --mist:#9a9590; --bone:#f0ebe3; --blood:#c41e1e; --ember:#ff2a2a;
+  --mist:#9a9590; --mist-dim:#847f79; --bone:#f0ebe3; --blood:#c41e1e; --ember:#ff2a2a;
   --sans:"Inter","Inter Fallback",ui-sans-serif,system-ui,sans-serif;
   --display:"Cormorant Garamond","Cormorant Garamond Fallback",Georgia,"Times New Roman",serif;
   --edge:rgba(255,255,255,.06);
@@ -127,7 +127,7 @@ i{font-style:italic}
 .brand-name{display:none;line-height:1}
 @media (min-width:400px){.brand-name{display:block}}
 .brand-name b{display:block;font-family:var(--display);font-size:1.0625rem;font-weight:400;letter-spacing:.12em}
-.brand-name span{display:block;margin-top:.2rem;font-size:9px;letter-spacing:.32em;text-transform:uppercase;color:var(--mist)}
+.brand-name span{display:block;margin-top:.2rem;font-size:.75rem;line-height:1.15;letter-spacing:.2em;text-transform:uppercase;color:var(--mist)}
 .tabs{display:flex;align-items:center;gap:.15rem;margin-left:auto;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
 .tabs::-webkit-scrollbar{display:none}
 .tabs a{flex:none;padding:.55rem .7rem;white-space:nowrap;font-size:.625rem;letter-spacing:.24em;text-transform:uppercase;color:var(--mist);transition:color .2s}
@@ -248,7 +248,7 @@ i{font-style:italic}
 .filter-group{display:none;align-items:center;gap:.4rem;flex:none}
 .has-js .filter-group{display:flex}
 .filter-group + .filter-group{margin-left:.5rem;padding-left:1.25rem;border-left:1px solid var(--edge)}
-.filter-label{flex:none;margin-right:.25rem;font-size:.5625rem;letter-spacing:.26em;text-transform:uppercase;color:rgba(154,149,144,.75)}
+.filter-label{flex:none;margin-right:.35rem;font-size:.75rem;letter-spacing:.18em;text-transform:uppercase;color:#a39f99}
 .chip{flex:none;cursor:pointer;background:transparent;border:1px solid var(--ash);padding:.5rem .85rem;font-size:.625rem;letter-spacing:.2em;text-transform:uppercase;color:var(--mist);transition:border-color .2s,color .2s,background .2s,box-shadow .2s}
 .chip:hover{border-color:rgba(196,30,30,.55);color:var(--bone)}
 .chip[aria-pressed="true"]{background:var(--blood);border-color:var(--blood);color:var(--bone);box-shadow:none}
@@ -273,9 +273,11 @@ i{font-style:italic}
 .group-head h2{margin:0;font-family:var(--display);font-weight:400;font-size:clamp(1.6rem,3vw,2.2rem);line-height:1.05}
 .group-head .count{display:block;margin:.6rem 0 0;font-size:.5625rem;letter-spacing:.28em;text-transform:uppercase;color:var(--mist)}
 .group-head p{margin:1rem 0 0;max-width:30ch;font-size:.8125rem;line-height:1.7;color:rgba(240,235,227,.62)}
-.group-head .plat{margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--edge);font-size:.5625rem;letter-spacing:.24em;text-transform:uppercase;color:var(--mist)}
-.group-head .plat a{color:var(--bone)}
-.group-head .plat a:hover{color:var(--blood)}
+.group-head .plat{margin-top:1.25rem;padding-top:1rem;border-top:1px solid var(--edge);font-size:.5625rem;letter-spacing:.24em;text-transform:uppercase;color:var(--mist-dim)}
+/* Links in .plat carry an underline so the affordance never rests on colour
+   alone (WCAG 1.4.1); --bone on --mist-dim is 3.34:1 (WCAG 1.4.11). */
+.group-head .plat a{color:var(--bone);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.24em;text-decoration-color:rgba(240,235,227,.55);transition:color .2s,text-decoration-color .2s}
+.group-head .plat a:hover,.group-head .plat a:focus-visible{color:var(--ember);text-decoration-color:currentColor}
 
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,255px),1fr));gap:clamp(.85rem,2vw,1.35rem);margin:0;padding:0;list-style:none;perspective:1200px}
 .grid > li{display:flex}
@@ -411,15 +413,18 @@ i{font-style:italic}
 .foot-top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1.75rem;align-items:flex-end}
 .foot-brand p{margin:0}
 .foot-brand .name{font-family:var(--display);font-size:clamp(1.75rem,4.4vw,2.75rem);line-height:1}
-.foot-brand .tagline{margin-top:.65rem;font-size:.625rem;letter-spacing:.32em;text-transform:uppercase;color:var(--mist)}
+.foot-brand .tagline{margin-top:.65rem;font-size:.75rem;line-height:1.6;letter-spacing:.2em;text-transform:uppercase;color:#a39f99}
 .foot-links{display:flex;flex-wrap:wrap;gap:.65rem 1.25rem;max-width:34rem}
-.foot-links a{font-size:.625rem;letter-spacing:.24em;text-transform:uppercase;color:var(--mist);transition:color .2s}
-.foot-links a:hover{color:var(--blood)}
+.foot-links a{font-size:.75rem;line-height:1.5;letter-spacing:.2em;text-transform:uppercase;color:#a39f99;transition:color .2s}
+.foot-links a:hover{color:var(--ember)}
 .foot-law{margin:1.75rem 0 0;padding-top:1.25rem;border-top:1px solid var(--edge);display:flex;flex-wrap:wrap;gap:.6rem 1.15rem}
-.foot-law .lbl{font-size:.5625rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(154,149,144,.6)}
-.foot-law a{font-size:.625rem;letter-spacing:.22em;text-transform:uppercase;color:var(--mist);transition:color .2s}
-.foot-law a:hover{color:var(--blood)}
-.foot-legal{margin:1.25rem 0 0;padding-top:1.5rem;border-top:1px solid var(--edge);display:flex;flex-wrap:wrap;gap:.5rem 1rem;justify-content:space-between;font-size:.625rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(154,149,144,.6)}
+.foot-law .lbl{font-size:.75rem;line-height:1.5;letter-spacing:.24em;text-transform:uppercase;color:#a39f99}
+.foot-law a{font-size:.75rem;line-height:1.5;letter-spacing:.2em;text-transform:uppercase;color:#a39f99;transition:color .2s}
+.foot-law a:hover{color:var(--ember)}
+.foot-legal{margin:1.25rem 0 0;padding-top:1.5rem;border-top:1px solid var(--edge);display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;justify-content:space-between;font-size:.75rem;line-height:1.6;letter-spacing:.14em;text-transform:uppercase}
+/* The legal line is the smallest copy on the page: solid #a39f99 on --ink is
+   7.6:1, where the old rgba(154,149,144,.6) measured 3.1:1. */
+.foot-legal > span{color:#a39f99}
 
 /* --- Motion / print ------------------------------------------------------ */
 @media (prefers-reduced-motion:reduce){
@@ -434,6 +439,9 @@ i{font-style:italic}
 @media print{
   .grain,.vignette,.scanlines,.frame,.torch,.vhs-tracking,.cursor,.cursor-ring,.masthead,.filters,.closing,.ticker,.preview,.amb{display:none}
   body{background:#fff;color:#000}
+  /* The print sheet has no dark footer to sit on, so the light greys used
+     on screen (--mist, #a39f99, --mist-dim) drop below 4.5:1 on white. */
+  .site-foot,.site-foot a,.foot-brand .tagline,.foot-law .lbl,.foot-legal > span{color:#000}
   .card{border-color:#999;transform:none}
   .has-js .reveal{opacity:1;transform:none}
 }

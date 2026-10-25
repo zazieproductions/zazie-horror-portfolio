@@ -106,7 +106,7 @@ const PRECACHE_ASSETS = [
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-63bc4dcc.css',
   '/index-676ce3d5.js',
-  '/store-1e13177a.css',
+  '/store-82bcfb20.css',
   '/store-3fc01be0.js',
   '/legal-f4e3a5fb.css',
   '/legal-2fe7a6e6.js',
