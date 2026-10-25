@@ -40,8 +40,12 @@ homepage's `email_off` markers):
    regions instead — the full contact `mailto:` anchor (href plus visible
    address) and the entire contact form (placeholder, footer address and any
    future `mailto` action) — collapsing the two narrow wraps so HTML comments
-   never nest. The two JSON-LD addresses are untouched: the obfuscator skips
-   `<script>` blocks. With no obfuscatable address left in the HTML, the
+   never nest. Each region has its own marked-form guard — a bare element
+   string is also a substring of an already-marked one, so a bare-substring
+   check would double-prefix the marker — and any doubled marker left by a
+   partial merge is collapsed on the next build, so the step converges from
+   every wrapping state. The two JSON-LD addresses are untouched: the
+   obfuscator skips `<script>` blocks. With no obfuscatable address left in the HTML, the
    decoder is not injected on `/`. The wrapper comments live inside `#root`,
    where marker comments already coexist with `hydrateRoot`
    (`<!--HOME-POSTERS:*-->`, `<!--/zp:estimator-->`).
