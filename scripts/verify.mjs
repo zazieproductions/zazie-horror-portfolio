@@ -131,10 +131,10 @@ if (homeMetaTitle.length < 30 || homeMetaTitle.length > 60) fail(`homepage title
 if (homeMetaDescription.length < 120 || homeMetaDescription.length > 160) fail(`homepage description is ${homeMetaDescription.length} characters; keep it between 120 and 160`);
 const homeNodes = jsonLdBlocks(home, '/');
 const homeTypes = allTypes(homeNodes);
-for (const required of ['Person', 'Organization', 'WebSite', 'WebPage']) {
+for (const required of ['Person', 'Organization', 'WebSite', 'WebPage', 'CreativeWork', 'MusicPlaylist']) {
   if (homeTypes.filter((type) => type === required).length !== 1) fail(`homepage JSON-LD must contain exactly one ${required} node`);
 }
-if (homeNodes.length !== 4) fail(`homepage JSON-LD should contain only Person, Organization, WebSite and WebPage; found ${homeNodes.length} nodes`);
+if (homeNodes.length !== 6) fail(`homepage JSON-LD should contain Person, Organization, WebSite, WebPage, CreativeWork and MusicPlaylist; found ${homeNodes.length} nodes`);
 // This is a portfolio page with multiple supplementary samples, not a video
 // watch page. Keep VideoObject markup off the homepage; Google otherwise
 // selects one sample from the portfolio and rejects it as non-primary content.
@@ -172,7 +172,7 @@ for (const item of additionalHomePosters) {
     if (!fs.existsSync(path.join(root, reference.slice(1)))) fail(`homepage poster asset is missing: ${reference}`);
   }
 }
-for (const className of ['zp-mobile-quote', 'zp-menu-button', 'zp-poster-dialog', 'zp-poster-close', 'zp-poster-contain', 'zp-est-advanced', 'zp-result-details']) {
+for (const className of ['zp-mobile-quote', 'zp-menu-button', 'zp-poster-dialog', 'zp-poster-close', 'zp-poster-contain', 'zp-est-advanced', 'zp-result-details', 'zp-poster-meta-box', 'zp-sample-meta', 'zp-comp-article']) {
   if (!home.includes(className)) fail(`homepage mobile stylesheet/markup is missing ${className}`);
   if (!homeBundle.includes(className)) fail(`homepage React bundle is missing ${className}`);
 }
@@ -181,6 +181,20 @@ if (!homeBundle.includes('"aria-expanded":n') || !homeBundle.includes('"aria-con
 }
 if (!home.includes('<section id="services"') || !homeBundle.includes('id:"services"') || !homeBundle.includes('Rates &amp; estimates')) {
   fail('React must preserve the homepage Rates section, its #services anchor and its heading');
+}
+if (/<div id="root"[^>]*>\s*<div class="relative min-h-\[100svh\]/.test(home)) {
+  fail('homepage #root must not nest a redundant div.relative wrapper around <main>');
+}
+if (!home.includes('<main id="main-content"') || !homeBundle.includes('id:"main-content"')) {
+  fail('homepage <main> must carry id="main-content" in both SSR HTML and the React bundle');
+}
+for (const anchorId of ['the-undead', 'vlad-the-impaler', 'poster-expire', 'sample-eclipsed']) {
+  if (!home.includes(`id="${anchorId}"`)) fail(`homepage is missing crawlable anchor target #${anchorId}`);
+}
+for (const imgMatch of home.matchAll(/<img\b[^>]*>/gi)) {
+  const tag = imgMatch[0];
+  if (tag.includes('/images/atmosphere-bg.jpg')) continue;
+  if (!/\bloading="lazy"/i.test(tag)) fail(`below-fold homepage image is missing loading="lazy": ${tag}`);
 }
 
 /**
