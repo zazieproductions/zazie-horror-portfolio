@@ -172,7 +172,7 @@ for (const item of additionalHomePosters) {
     if (!fs.existsSync(path.join(root, reference.slice(1)))) fail(`homepage poster asset is missing: ${reference}`);
   }
 }
-for (const className of ['zp-mobile-quote', 'zp-menu-button', 'zp-poster-dialog', 'zp-poster-close', 'zp-poster-contain', 'zp-est-advanced', 'zp-result-details', 'zp-sample-meta', 'zp-comp-article']) {
+for (const className of ['zp-mobile-quote', 'zp-menu-button', 'zp-poster-dialog', 'zp-poster-close', 'zp-poster-contain', 'zp-est-advanced', 'zp-result-details', 'zp-comp-article']) {
   if (!home.includes(className)) fail(`homepage mobile stylesheet/markup is missing ${className}`);
   if (!homeBundle.includes(className)) fail(`homepage React bundle is missing ${className}`);
 }
@@ -433,4 +433,10 @@ console.log('  missing-file report: none');
 // Poster descriptions belong in the lightbox, never underneath gallery artwork.
 if (home.includes('class="zp-poster-meta-box') || homeBundle.includes('className:"zp-poster-meta-box')) {
   fail('homepage poster wall must not render below-poster text panels');
+}
+
+// Film sample cards are video + title only: no music-description text or
+// permalink block underneath (removed 2026-10-25).
+if (home.includes('zp-sample-meta') || homeBundle.includes('zp-sample-meta')) {
+  fail('homepage film samples must not render below-sample text blocks');
 }
