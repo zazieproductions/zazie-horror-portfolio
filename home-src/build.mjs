@@ -602,6 +602,24 @@ function patchBundle(orig) {
   const replacement = `function lj(){return u.jsx("section",{id:"services",className:"relative bg-ink py-14 sm:py-20 md:py-28",children:u.jsx("div",{className:"mx-auto max-w-7xl px-4 sm:px-6 md:px-8",dangerouslySetInnerHTML:{__html:${JSON.stringify(servicesMarkup)}}})})}`;
   out = out.slice(0, start) + replacement + out.slice(end);
   out = addCompilationsSection(out);
+  // Remove unneeded explanatory paragraph under red \"Send scoring inquiry\" button
+  // Pristine bundle renders: <button>Send scoring inquiry</button><p>Opens your email → ...</p>
+  // That text is redundant next to the button and clutters the contact form.
+  // Removal is idempotent: if already gone, no change.
+  {
+    const marker = ',u.jsxs(\"p\",{className:\"text-[10px] leading-relaxed text-mist\",\"data-source-loc\":\"src/components/Contact.tsx:371:1\",children:[\"Opens your email';
+    const idx = out.indexOf(marker);
+    if (idx !== -1) {
+      // Find the matching \".\"]}) that closes this p's children array
+      // The p node ends with \".\"]}) — after that comes the form wrapper close.
+      // We take the nearest \".\"]}) after the marker and cut to right after it.
+      const endMarker = '\".\"]})';
+      const endIdx = out.indexOf(endMarker, idx);
+      if (endIdx === -1) throw new Error('bundle: contact helper paragraph end not found');
+      const cutEnd = endIdx + endMarker.length;
+      out = out.slice(0, idx) + out.slice(cutEnd);
+    }
+  }
   assertBundleParses(out);
   return out;
 }
@@ -640,9 +658,23 @@ function patchStatic(html, tracks) {
       applied.push(oldText.slice(0, 40));
     } else if (n === 0 && countOf(out, newText) >= 1) {
       continue; // already applied
+    } else if (n === 0 && countOf(out, newText) === 0 && oldText === '32-cue showreel') {
+      // This string lives only inside the helper paragraph removed below.
+      // If the paragraph was already deleted (e.g., manual edit before a rebuild),
+      // there is no copy left to transform — skip rather than fail.
+      continue;
     } else {
       throw new Error(`index.html: "${oldText.slice(0, 60)}" matched ${n} times, expected 1`);
     }
+  }
+  // Remove unneeded explanatory paragraph under red \"Send scoring inquiry\" button
+  // Static snapshot carries: <p class=\"text-[10px] leading-relaxed text-mist\">Opens your email → ...</p>
+  // This must run AFTER the PAIRS above, because the pristine snapshot has
+  // \"32-cue showreel\" inside this paragraph and PAIRS converts it to \"30-cue\"
+  // before we delete the whole node. Idempotent: if already gone, no change.
+  if (out.includes('Opens your email →')) {
+    out = out.replace(/<p class="text-\[10px\] leading-relaxed text-mist">Opens your email →[\s\S]*?<\/p>/, '');
+    applied.push('removed contact helper paragraph under Send scoring inquiry button');
   }
 
   // Hero artwork panel. Structural rather than a text pair: the panel is
