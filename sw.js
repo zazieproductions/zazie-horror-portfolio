@@ -104,18 +104,17 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-normal.woff2',
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
-  '/index-e5dac783.css',
-  '/index-007b3466.js',
+  '/index-63bc4dcc.css',
+  '/index-101b5d40.js',
   '/store-1e13177a.css',
   '/store-3fc01be0.js',
   '/legal-f4e3a5fb.css',
   '/legal-2fe7a6e6.js',
-  '/estimator-44035344.css',
-  '/estimator-0ca1de83.js',
+  '/estimator-fc4ddfe0.css',
+  '/estimator-2b081a5e.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',
-  '/images/hero-portrait.avif',
-  '/images/hero-portrait.jpg'
+  '/images/hero-portrait.avif'
 ];
 
 self.addEventListener('install', (event) => {
@@ -125,7 +124,7 @@ self.addEventListener('install', (event) => {
       // Use allSettled to ensure installation succeeds even if an asset is temporarily delayed
       const fetchPromises = PRECACHE_ASSETS.map(async (url) => {
         try {
-          const res = await fetch(url, { cache: 'reload' });
+          const res = await fetch(url, { cache: 'force-cache' });
           if (res.ok) {
             await cache.put(url, res);
           }

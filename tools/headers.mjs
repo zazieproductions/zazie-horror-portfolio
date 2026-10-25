@@ -35,6 +35,9 @@ export const SECURITY_HEADERS = {
     "default-src 'self'",
     // The app is a prerendered React bundle plus small inline bootstraps and
     // JSON-LD blocks, so inline script is allowed; no eval, no remote script.
+    // Read that literally: no remote script. Cloudflare's Web Analytics beacon
+    // is the one script that tries to run here and is supposed to fail - see
+    // POLICY_BLOCKED_ORIGINS below.
     "script-src 'self' 'unsafe-inline'",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: https:",
@@ -52,6 +55,33 @@ export const SECURITY_HEADERS = {
   ].join('; '),
   'X-DNS-Prefetch-Control': 'on',
 };
+
+/**
+ * Third-party origins this site refuses on purpose, with the directive that has
+ * to keep refusing them.
+ *
+ * Cloudflare injects its Web Analytics beacon (`static.cloudflareinsights.com/
+ * beacon.min.js`) into the HTML it serves. The tag is not in this repository,
+ * no file here asks for it, and it cannot be removed by a build step - the
+ * rewrite happens at the edge, after the upload. That matters because the site
+ * publishes a zero-tracking notice (/privacy section 1 and 6: "No analytics
+ * package", "No third party script runs on this site"), and a Lighthouse run
+ * that reports the beacon as blocked is the policy working, not a defect.
+ *
+ * So the CSP is the enforcement point: neither host is in the allowlist, and
+ * tools/check-headers.mjs fails the build if either one is added without this
+ * list changing too. If the block is ever meant to stop being a console error -
+ * or the analytics are meant to start being collected - the sanctioned fix is
+ * the Cloudflare dashboard (Analytics & Logs -> Web Analytics -> Manage site ->
+ * Advanced options -> JS snippet injection), not a wider CSP. Choosing to allow
+ * it makes /privacy and the footer claim false, so that is a copy change first:
+ * script-src would need https://static.cloudflareinsights.com (the beacon itself
+ * posts same-origin to /cdn-cgi/rum, which 'self' already covers).
+ */
+export const POLICY_BLOCKED_ORIGINS = [
+  { origin: 'https://static.cloudflareinsights.com', directive: 'script-src' },
+  { origin: 'https://cloudflareinsights.com', directive: 'connect-src' },
+];
 
 /** Headers that are HTTPS-only and therefore not sent by the HTTP local mirror. */
 export const HTTPS_ONLY = new Set(['Strict-Transport-Security']);

@@ -27,6 +27,16 @@
 # The security policy lives in tools/headers.mjs; that module and this block are
 # checked against each other on every build.
 #
+# Cloudflare injects its Web Analytics beacon (static.cloudflareinsights.com/
+# beacon.min.js) into HTML at the edge. Nothing in this repository asks for it,
+# and /privacy promises no analytics and no third-party script, so the beacon is
+# deliberately absent from script-src: the CSP is the only place that promise can
+# be enforced after upload. A Lighthouse run reporting the beacon as blocked by
+# CSP is therefore the policy working, not a defect. To stop the request itself,
+# turn off Analytics & Logs -> Web Analytics -> Manage site -> Advanced options
+# -> JS snippet injection in the Cloudflare dashboard. tools/check-headers.mjs
+# fails the build if either beacon host is ever added below.
+#
 # Cloudflare Pages limit: 100 header rules, 2,000 characters per line.
 
 /*

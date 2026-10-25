@@ -119,7 +119,7 @@ All artwork © the respective productions. See the [live site](https://horror.za
 | Film samples | `Projects.tsx` data + prerendered covers | 6 YouTube-nocookie iframes get a real `src` only when lazy-loaded; 1 Google Drive embed; `preconnect` to YouTube deferred off the critical path. |
 | Boot overlay | legacy inline markup in `index.html` | Disabled by default; never covers the readable homepage content. |
 | Store previews & room tone | `store-src/store.js` | Per-card audio previews (`data-preview`); a looping room tone (`data-ambience`) crossfades down while previews play. `preload="none"`. |
-| Compilation players | Homepage `#compilations` (data in `src/data/compilations.ts`, markup/CSS/JS in `src/lib/compilations-markup.ts`, wired into the bundle and `index.html` by `home-src/build.mjs`); `/reel#compilations` (hand-written in `reel/index.html`, click handler in `legal-src/legal.js` — keep the two lists in step) | Eleven Bandcamp embeds, the same set and order as the ReelCrafter reel: nine compilation tracks (e.g. Sounds for the Soul *The Undead* and *Vampires*, Inner Demons *Experiments on the Witch House*) and two own releases (*Opaline Lament*, *Constrained Capacity*). Click-to-load: the Bandcamp iframe is created only when the visitor presses the button, so the page makes no Bandcamp request on load (privacy notice §6–7). `https://bandcamp.com` is in CSP `frame-src`. To add one, copy a `.comp-card` and use the album/track ids from Bandcamp's embed code. |
+| Compilation players | Homepage `#compilations` (data in `src/data/compilations.ts`, markup/CSS/JS in `src/lib/compilations-markup.ts`, wired into the bundle and `index.html` by `home-src/build.mjs`); `/reel#compilations` (hand-written in `reel/index.html`, click handler in `legal-src/legal.js` — keep the two lists in step) | Nine Bandcamp embeds, the same set and order as the ReelCrafter reel: seven compilation tracks (e.g. Sounds for the Soul *The Undead* and *Vampires*, Inner Demons *Experiments on the Witch House*) and two own releases (*Opaline Lament*, *Constrained Capacity*). Click-to-load: the Bandcamp iframe is created only when the visitor presses the button, so the page makes no Bandcamp request on load (privacy notice §6–7). `https://bandcamp.com` is in CSP `frame-src`. To add one, copy a `.comp-card` and use the album/track ids from Bandcamp's embed code. |
 | External score player | Reelcrafter | Referenced as a `significantLink` in JSON-LD and linked from the homepage and `/reel`; not embedded. Its host is **not** in CSP `frame-src`, so an embed would need `https://play.reelcrafter.com` added to `tools/headers.mjs` and `_headers`. |
 
 ## Architecture
@@ -343,10 +343,13 @@ or if any internal link or `#fragment` stops resolving:
 ```
 npm run check:headers
 npm run check:links
+npm run check:forms
 node tools/live-route-audit.mjs https://horror.zazieproductions.com
 ```
 
 The zero-tracking privacy claim is structural: adding an analytics script or a cookie would invalidate `/privacy`, the footer statement on every page, and the device inspector on `/privacy`. Don't.
+
+One third party tries anyway, and the Content Security Policy is what stops it. Cloudflare injects its Web Analytics beacon (`https://static.cloudflareinsights.com/beacon.min.js`) into the HTML it serves at the edge — it is in no file here, it is not in the upload, and no build step can delete it. Because `/privacy` states that no analytics package and no third-party script run on this site, the beacon's host is deliberately absent from `script-src` (and `cloudflareinsights.com` from `connect-src`), so every page refuses it. A Lighthouse report naming it is the policy working, not a regression; `tools/check-headers.mjs` fails the build if either host is ever allowlisted. To stop the request rather than just block it, switch off **Analytics & Logs → Web Analytics → Manage site → Advanced options → JS snippet injection** in the Cloudflare dashboard. Allowlisting it instead would make the notice false, so that is a copy change before it is a header change.
 
 ## Media & asset pipeline
 
@@ -398,6 +401,7 @@ Target: **WCAG 2.2 Level AA, partially conformant** — stated precisely on [`/a
 - Progressive enhancement everywhere: every document clause, FAQ answer, catalogue card and link works with JavaScript off.
 - `prefers-reduced-motion` stops the ken-burns hero, ambient orbs and wave animation; the archive boot never plays for a reduced-motion visitor, is `aria-hidden`, skippable by any input and never gates page text.
 - Semantic headings, single H1 per page, skip links, `aria-pressed`/`aria-label` on controls, breadcrumbs in schema and (on document pages) visibly.
+- **Every form control carries an `id` or a `name`.** A field with neither cannot be autofilled and is not reachable through `form.elements`; `tools/check-forms.mjs` reads the served pages — not the sources — and fails the build on any unnamed `<input>`, `<select>` or `<textarea>`. The homepage is the hard case, because the React bundle and the prerendered snapshot in `index.html` both render the inquiry form and the two media scrubs. `home-src/build.mjs` derives each name from the control's own accessible label (`fieldName`, folded to a slug and applied by both render paths), so a renamed field cannot leave one copy anonymous, and the checker proves the result landed.
 - Document pages keep a legibility red (`--blood-text #e65650`, 5.71:1 on void) where small text needs it.
 - **Named gaps** (see `/accessibility` §4): the portfolio and catalogue still use darker red `#c41e1e` (3.49:1) for small labels, and atmosphere effects create exceptions on the portfolio pages. These are recorded deliberately — fix them in the open, don't quietly restyle the identity either way.
 
