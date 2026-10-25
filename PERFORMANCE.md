@@ -44,8 +44,11 @@ homepage's `email_off` markers):
    string is also a substring of an already-marked one, so a bare-substring
    check would double-prefix the marker — and any doubled marker left by a
    partial merge is collapsed on the next build, so the step converges from
-   every wrapping state. The two JSON-LD addresses are untouched: the
-   obfuscator skips `<script>` blocks. With no obfuscatable address left in the HTML, the
+   every wrapping state. Open and close markers are repaired independently
+   (the form close keys off the structural section/main/footer chain, not the
+   form's last child), so a copy edit inside a wrapped element can never leave
+   an unclosed pair. The two JSON-LD addresses are untouched: the obfuscator
+   skips `<script>` blocks. With no obfuscatable address left in the HTML, the
    decoder is not injected on `/`. The wrapper comments live inside `#root`,
    where marker comments already coexist with `hydrateRoot`
    (`<!--HOME-POSTERS:*-->`, `<!--/zp:estimator-->`).
