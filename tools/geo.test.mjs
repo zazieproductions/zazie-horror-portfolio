@@ -125,3 +125,24 @@ test('robots.txt welcomes AI search crawlers and llms.txt + llms-full.txt stay s
     assert.doesNotMatch(content, /\bundefined\b|\bNaN\b|\bnull\b/);
   }
 });
+
+test('horror reference topics link identity knowledge and biography mentions without affiliation claims', () => {
+  const names = ['A24 film aesthetic', 'Mica Levi scoring techniques', 'Folk Horror tropes'];
+  for (const file of ['index.html', 'composer.html', 'composer/index.html']) {
+    const html = fs.readFileSync(path.join(ROOT, file), 'utf8');
+    const nodes = parseJsonLd(html, file);
+    const person = nodes.find(n => n['@type'] === 'Person' && n.knowsAbout);
+    for (const name of names) {
+      const topic = person.knowsAbout.find(t => t.name === name);
+      assert.ok(topic, `${file}: knowsAbout ${name}`);
+      assert.match(topic.url, /^https:\/\/en.wikipedia.org\/wiki\//);
+      assert.ok(!person.sameAs.includes(topic.url), 'references must not become identity aliases');
+    }
+    if (file.startsWith('composer')) {
+      const page = nodes.find(n => n['@type'] === 'WebPage');
+      assert.equal(page.about['@id'], person['@id']);
+      assert.deepEqual(page.mentions.map(t => t.name), names);
+      assert.match(html, /not claims of affiliation, collaboration, or production credits/);
+    }
+  }
+});

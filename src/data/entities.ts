@@ -17,6 +17,28 @@ export const VERIFIED_SAME_AS = [
   'https://credits.muso.ai/profile/4010f3b7-9a87-4961-8dfd-917de0ba787e',
 ] as const;
 
+/** Topical references only, never identity aliases or production credits. */
+export const HORROR_REFERENCE_TOPICS = [
+  {
+    "@type": "Thing",
+    "name": "A24 film aesthetic",
+    "description": "A reference topic in prestige horror scoring; not an affiliation or production credit.",
+    "url": "https://en.wikipedia.org/wiki/A24"
+  },
+  {
+    "@type": "Thing",
+    "name": "Mica Levi scoring techniques",
+    "description": "A reference topic in experimental film scoring; not a collaboration or credit.",
+    "url": "https://en.wikipedia.org/wiki/Mica_Levi"
+  },
+  {
+    "@type": "Thing",
+    "name": "Folk Horror tropes",
+    "description": "Genre conventions used as reference topics for horror scoring.",
+    "url": "https://en.wikipedia.org/wiki/Folk_horror"
+  }
+] as const;
+
 export const person = {
   '@context': 'https://schema.org',
   '@type': 'Person',
@@ -45,6 +67,7 @@ export const person = {
     },
   },
   knowsAbout: [
+    ...HORROR_REFERENCE_TOPICS,
     'Psychological horror film scoring',
     'Folk horror original music',
     'Body horror sound worlds',
