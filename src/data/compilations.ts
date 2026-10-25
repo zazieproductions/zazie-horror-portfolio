@@ -4,7 +4,7 @@
  * Same set and order as the Bandcamp embeds on the ReelCrafter reel
  * (https://play.reelcrafter.com/xUXGBP_5Sui1_2ve23fyLg). Album and track ids
  * come from each Bandcamp embed; durations are as Bandcamp displays them.
- * `/reel#compilations` carries the same eleven players as hand-written markup
+ * `/reel#compilations` carries the same nine players as hand-written markup
  * (reel/index.html), so a change here needs the same change there.
  */
 
@@ -70,18 +70,6 @@ export const compilations: CompilationItem[] = [
     note: 'A string-driven single between chamber music and spectral cinema, released by Zazie Productions on Bandcamp. A same-titled cue is on the showreel.',
     trackId: '3208522807',
     trackUrl: 'https://zazieproductions.bandcamp.com/track/opaline-lament-life-from-the-beyond-2',
-  },
-  {
-    kind: 'Compilation', album: 'Shadowlands 4', artId: '0360036853', title: 'Seroquel Coma', duration: '4:28',
-    note: 'Track 3 of 20 on the Various Artists compilation Shadowlands 4.',
-    albumId: '3918029207', trackId: '331658805',
-    albumUrl: 'https://owlripperrecordings.bandcamp.com/album/shadowlands-4',
-  },
-  {
-    kind: 'Compilation', album: 'INDUSTRIAL HALLOWEEN 2025', artId: '3466807953', title: 'Anti-Sanity Phase (Digital Bonus)', duration: '5:16',
-    note: 'The digital bonus closing the 34-track Various Artists compilation INDUSTRIAL HALLOWEEN 2025.',
-    albumId: '1674582402', trackId: '648173123',
-    albumUrl: 'https://dsbp.bandcamp.com/album/industrial-halloween-2025',
   },
   {
     kind: 'Own release', album: 'Constrained Capacity', artId: '0935502895', title: 'Soundscape of 0/11/2022 (Bonus Track)', duration: '1:55',

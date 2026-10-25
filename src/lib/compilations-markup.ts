@@ -97,8 +97,8 @@ export function compilationsInnerHtml(): string {
   return (
     `<div class="mb-10 max-w-2xl sm:mb-12">` +
     `<p class="mb-3 inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.4em] text-blood sm:text-[11px]"><span class="h-px w-8 bg-blood/60" aria-hidden="true"></span>Compilations</p>` +
-    `<h2 class="font-display text-3xl leading-[1.05] tracking-tight text-bone sm:text-4xl md:text-5xl">Heard on compilations. <span class="mt-1 block italic text-mist">Tracks and releases on Bandcamp.</span></h2>` +
-    `<p class="mt-4 text-base leading-relaxed text-mist">Pieces contributed to label compilations, plus two releases of my own. Press play on a cover and the Bandcamp player opens right underneath it. The player is not requested from Bandcamp until you do.</p>` +
+    `<h2 class="font-display text-3xl leading-[1.05] tracking-tight text-bone sm:text-4xl md:text-5xl">Tracks and releases</h2>` +
+    `<p class="mt-4 text-base leading-relaxed text-mist">Selected compilation tracks and two Bandcamp releases. Select a cover to play; Bandcamp loads only when you do.</p>` +
     `</div>` +
     `<ul class="zp-comp-grid">${compilations.map(card).join('')}</ul>` +
     `<p class="mt-6 text-base tracking-wide text-mist">Playback runs in Bandcamp&rsquo;s own player. Full catalogue on <a href="https://zazieproductions.bandcamp.com" target="_blank" rel="noopener" class="text-blood underline underline-offset-4 hover:text-bone">Bandcamp</a>, in the <a href="/reel#compilations" class="text-blood underline underline-offset-4 hover:text-bone">showreel compilation archive</a>, and in the <a href="/store" class="text-blood underline underline-offset-4 hover:text-bone">store</a>.</p>`
