@@ -14,6 +14,7 @@ import {
   oneLine,
   url,
 } from '../data/site.js';
+import { genreTerms } from '../data/authority.js';
 import { stripMarkup } from '../data/routes.js';
 import type { Cue, Credit, Image, Json, Production, Release } from '../data/types.js';
 
@@ -156,7 +157,7 @@ export function productionNodes(production: Production, path: string): Json[] {
     url: url(path),
     name: production.title,
     description: production.summary,
-    genre: production.genres,
+    genre: genreTerms(production.genres),
     inLanguage: 'en',
     image: {
       '@type': 'ImageObject',
@@ -210,7 +211,7 @@ export function cueNodes(cue: Cue, path: string): Json[] {
     url: url(path),
     name: cue.title,
     description,
-    genre: cue.category,
+    genre: genreTerms(cue.category),
     composer: { '@id': PERSON_ID },
     creator: { '@id': PERSON_ID },
     duration: isoDuration(cue.durationSeconds),
@@ -228,7 +229,7 @@ export function cueNodes(cue: Cue, path: string): Json[] {
     contentUrl: url(cue.audioPath),
     encodingFormat: 'audio/mpeg',
     duration: isoDuration(cue.durationSeconds),
-    genre: cue.category,
+    genre: genreTerms(cue.category),
     creator: { '@id': PERSON_ID },
     isPartOf: { '@id': WEBSITE_ID },
     mainEntityOfPage: { '@id': `${url(path)}#webpage` },
@@ -261,7 +262,7 @@ export function releaseNodes(release: Release, path: string): Json[] {
     ...(release.releaseDate ? { datePublished: release.releaseDate } : {}),
     ...(release.durationSeconds ? { duration: isoDuration(release.durationSeconds) } : {}),
     ...(release.trackCount ? { numTracks: release.trackCount } : {}),
-    ...(release.genre?.length ? { genre: release.genre } : {}),
+    ...(release.genre?.length ? { genre: genreTerms(release.genre) } : {}),
     offers: { '@id': offerId },
     isPartOf: { '@id': WEBSITE_ID },
     mainEntityOfPage: { '@id': `${url(path)}#webpage` },

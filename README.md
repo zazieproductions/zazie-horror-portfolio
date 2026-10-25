@@ -227,10 +227,12 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 │   └── index.html              # Documents + HTML site map — GENERATED, do not hand-edit
 ├── legal-src/                  # Document sources, shared partials, CSS/JS, build.sh
 ├── src/data/{hubs,productions,cues,releases,routes}.ts # Data-driven hub/item URLs and metadata
+├── src/data/authority.ts       # Wikidata/Wikipedia/IMDb vocabulary for genre + knowsAbout
 ├── src/lib/{head,page,home}.ts # Source-rendered SEO heads and item-page layouts
 ├── scripts/{generate-sitemap,prerender,verify}.mjs # 84-URL build and structural verification
 ├── tools/check-sitemap.mjs     # Sitemap, file, canonical, robot and hub-link audit
 ├── tools/route-aliases.mjs     # Checks 18 hub twins and flat item routes for slash twins
+├── tools/authority.mjs         # Audits (and can repair) every published authority link
 ├── tools/index-coverage.mjs    # Per-URL words / in-body inbound links / duplicate ratio
 ├── tools/indexnow.mjs          # Post-deploy IndexNow ping (Bing, Yandex, Seznam, Naver, Yep...)
 ├── Eclipsed.png                # Raw cover upload: source of images/eclipsed-cover-1280.jpg
@@ -252,6 +254,7 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 | Hub pages | Existing directory `index.html` plus byte-identical root `.html` twins; item routes are flat `.html` files with no slash twin |
 | Catalogue / documents | `store-src/` and `legal-src/` build sources |
 | Metadata / SEO | Route-specific source HTML heads; generated `sitemap.xml`; `robots.txt`; canonical `Link:` headers in `_headers` |
+| Schema vocabulary | `src/data/authority.ts` (Wikidata/Wikipedia/IMDb terms); enforced by `tools/authority.mjs` |
 | Configuration | `package.json`, `tsconfig.json`, `vite.config.ts`, `_headers`, `_redirects`, `sw.js` |
 | Utilities | `scripts/`, `tools/check-sitemap.mjs`, `tools/check-links.mjs`, `tools/check-headers.mjs`, `tools/route-aliases.mjs`, `server.mjs` |
 | Public/static assets | root + `/audio` + `/fonts` + `/images` |
@@ -263,6 +266,7 @@ Item content is data-first and routes are generated from the title-owned slug in
 - **Production record:** add or update `src/data/productions.ts`; verify role-by-role credits, source links, poster, paragraphs, and `updatedAt`.
 - **Showreel cue:** add or update `src/data/cues.ts`; the slug must derive from the cue title, and the record must identify its MP3, duration, category, unique paragraphs, and related catalogue records.
 - **Catalogue item:** add or update `src/data/releases.ts`; keep marketplace terms and prices out of structured data, include only verified source facts/artwork, and omit unavailable metadata.
+- **New genre or knowsAbout label:** every label must resolve through `LABEL_CONCEPTS` in `src/data/authority.ts`. Run `npx tsc && node tools/authority.mjs --sync`, then `node tools/authority.mjs --check`; the build fails rather than ship an unlinked genre.
 - **Existing hub:** update its source where one exists (`store-src/` or `legal-src/`); manually maintained hub pages keep their current layout and canonical URL. Run `node tools/route-aliases.mjs` after editing a hub directory page.
 
 The build fails on duplicate/malformed paths, missing titles or descriptions, non-real `lastmod`, broken data relationships, unsubstantial or duplicated item copy, missing local media, missing internal sibling links, or a sitemap URL without a prerendered file. Keep the human `/sitemap` page hub-only; do not add item hrefs there or to the homepage/navbar.
@@ -411,6 +415,7 @@ The site serves source-rendered SEO metadata and structured data (the repo's `SE
 
 - **Homepage schema:** `Person`, `Organization`, `WebSite`, and `WebPage` with shared IDs.
 - **Item-page schema:** production `Movie`/`TVSeries`/`CreativeWork` plus verified `VideoObject` where supplied; cue `MusicComposition` + `AudioObject`; catalogue `Product`/`MusicAlbum` + `Offer`; all include `WebPage` and `BreadcrumbList`. Mutable price/stock claims are omitted.
+- **Knowledge graph:** every `genre` and `knowsAbout` value is a `DefinedTerm` whose `@id` is a Wikidata concept URI, cross-referenced to its Wikipedia article and, where IMDb indexes the term, an IMDb genre or keyword deep link. The vocabulary lives in `src/data/authority.ts`; `tools/authority.mjs --check` fails the build on any unmapped label or invented link, and `--sync` is the repair. Rationale and trade-offs: `AUTHORITY-GRAPH.md`.
 - `sitemap.xml` (85 URLs: 20 hubs including home + 65 item routes; current build has 79 artwork and 12 video entries) is checked by `tools/check-sitemap.mjs`, `tools/route-aliases.mjs`, and `scripts/verify.mjs`. The build verifies canonical paths, static files, structured data, links, media, and a real unknown-route 404. **Run `npm run build` before deploys that touch routes, links, media, or schema.**
 - **Sitelinks and crawl structure:** `/` links the 19 original hub routes and only those; each hub (`/work`, `/reel`, `/store`) links every one of its own item pages; each item page links its hub and at least three siblings. That is what keeps the 65 generated URLs out of the "sitemap-only orphan" state Google reports as *Discovered - currently not indexed*. `scripts/verify.mjs` and `tools/check-sitemap.mjs` fail the build if a hub stops linking an item, and `tools/index-coverage.mjs --check` fails it if any submitted URL loses its contextual internal link, drops below 300 words of `<main>` text, or becomes a near-duplicate of a hub sibling.
 - **Site name**: one `WebSite` node on `/` (`name` "Zazie Productions", `alternateName` "Zazie Productions Horror", "ZKT Productions"), matched by `og:site_name` on every page. No `SearchAction` (Google retired the sitelinks search box in November 2024) and no home-page `BreadcrumbList` (the home page is the root of the trail, not a trail).
@@ -525,5 +530,6 @@ The root `*.md` files are dated implementation records — the repo's developmen
 | `LEGAL.md` | The trust/legal layer: how the documents were built and deploy |
 | `RATIFY.md` | Open facts a human must confirm (entity, law, rights) |
 | `SEO-DOSSIER.md` | The technical SEO programme: IA silos, schema matrix, crawl policy |
+| `AUTHORITY-GRAPH.md` | Knowledge-graph linking of `genre`/`knowsAbout` to Wikidata, Wikipedia and IMDb (2026-10-25) |
 | `SITEMAP.md` | Sitemap fixes and the validator contract |
 | `STORE.md` | Catalogue build, data model, deployment lessons (the redirect loop) |

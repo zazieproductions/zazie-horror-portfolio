@@ -1,5 +1,6 @@
 /** Homepage fragments generated from the same content modules as item pages. */
 
+import { genreTerms } from '../data/authority.js';
 import { additionalHomePosters, featuredPosterSlugs } from '../data/home.js';
 import { compilations } from '../data/compilations.js';
 import { cues } from '../data/cues.js';
@@ -114,7 +115,7 @@ export const homeJsonLd: Json[] = [
     author: { '@id': PERSON_ID },
     publisher: { '@id': ORG_ID },
     inLanguage: 'en',
-    genre: ['Psychological Horror', 'Folk Horror', 'Body Horror', 'Supernatural Thriller', 'Dark Ambient'],
+    genre: genreTerms(['Psychological Horror', 'Folk Horror', 'Body Horror', 'Supernatural Thriller', 'Dark Ambient']),
     hasPart: productionPosters.map((prod) => ({
       '@type': 'CreativeWork',
       name: prod.title,
@@ -140,7 +141,7 @@ export const homeJsonLd: Json[] = [
         position: idx + 1,
         name: cue.title,
         duration: isoDuration(cue.durationSeconds),
-        genre: cue.category,
+        genre: genreTerms(cue.category),
         url: url(`/reel/${cue.slug}`),
         byArtist: { '@id': PERSON_ID },
       })),

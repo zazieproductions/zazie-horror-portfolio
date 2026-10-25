@@ -1,5 +1,6 @@
 /** Verified site-level identity nodes shared by the homepage and item pages. */
 
+import { knowsAboutNodes } from './authority.js';
 import { AUTHOR_NAME, ORG_ID, PERSON_ID, SITE_NAME, SITE_ORIGIN, WEBSITE_ID } from './site.js';
 
 export const VERIFIED_SAME_AS = [
@@ -44,17 +45,13 @@ export const person = {
       addressCountry: 'US',
     },
   },
-  knowsAbout: [
-    'Psychological horror film scoring',
-    'Folk horror original music',
-    'Body horror sound worlds',
-    'Experimental cinema composition',
-    'Adaptive horror video game music',
-    'Electroacoustic and musique concrète scoring',
-    'Waterphone and bowed metal instrumentation',
-    'Hybrid orchestral synthesis',
-    'Multichannel spatial audio composition',
-  ],
+  /**
+   * Each term is a Wikidata-anchored DefinedTerm (see src/data/authority.ts),
+   * not bare text: the graph resolves "Folk Horror" to Q118141790 and its
+   * Wikipedia article, which is what links this person entity to the genre
+   * nodes a studio, festival, or answer engine already knows about.
+   */
+  knowsAbout: knowsAboutNodes(),
   subjectOf: [
     {
       '@type': 'Article',
