@@ -14,6 +14,7 @@ import {
   HTML_CACHE,
   IMMUTABLE_CACHE,
   MEDIA_CACHE,
+  POLICY_BLOCKED_ORIGINS,
   cacheControlFor,
   effectiveHeaders,
   headersFor,
@@ -117,4 +118,30 @@ test('headersFor drops HSTS on plain HTTP so localhost keeps working', () => {
   assert.equal(http['Strict-Transport-Security'], undefined);
   assert.equal(http['Content-Security-Policy'], https['Content-Security-Policy']);
   assert.equal(http['Cache-Control'], HTML_CACHE);
+});
+
+test('the CSP refuses Cloudflare Web Analytics, as /privacy promises', () => {
+  const csp = headersFor('/', { https: true, html: true })['Content-Security-Policy'];
+  const directives = new Map(
+    csp
+      .split(';')
+      .map((part) => part.trim())
+      .filter(Boolean)
+      .map((part) => {
+        const [name, ...values] = part.split(/\s+/);
+        return [name, values.join(' ')];
+      }),
+  );
+
+  // The beacon is injected at the edge, so the policy is the only thing that can
+  // refuse it. Both hosts - the script and the reporting endpoint - stay out.
+  for (const { origin } of POLICY_BLOCKED_ORIGINS) {
+    assert.ok(!csp.includes(new URL(origin).host), `${origin} must not be allowlisted by the CSP`);
+  }
+
+  // No remote script at all: the app's own bundle plus the inline bootstraps.
+  assert.equal(directives.get('script-src'), "'self' 'unsafe-inline'");
+  // An auto-injected beacon reports same-origin to /cdn-cgi/rum, so keeping
+  // connect-src at 'self' costs nothing and still refuses the cross-origin form.
+  assert.equal(directives.get('connect-src'), "'self'");
 });

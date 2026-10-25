@@ -95,6 +95,30 @@ const BOTH = 'both';
 const BUNDLE = 'bundle';
 const HTML = 'html';
 
+/**
+ * Form controls need an id or a name. A field with neither is not associated
+ * with any data: the browser will not offer to autofill it, `form.elements`
+ * cannot find it, and Lighthouse reports "A form field element should have an
+ * id or name attribute" for every one of them.
+ *
+ * The homepage has two render paths for the same fields - the React bundle and
+ * the prerendered snapshot in index.html - so they have to agree on the name or
+ * a hydration-free first paint and the app would describe the same control two
+ * ways. One rule, used by both: the name is the accessible label, lowercased,
+ * with every run of non-alphanumerics folded to a single hyphen. The bundle
+ * runs FIELD_NAME_FN at render time (its labels are only known then);
+ * addFieldNames() applies the identical slug to the static copy.
+ */
+function fieldName(label) {
+  return label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
+/** The same slug as a JS expression, spliced into the bundle. */
+const FIELD_NAME_FN = '(label=>label.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,""))';
+
+/** A bundle JSX attribute that names a control after a literal label. */
+const nameAttr = (label) => `name:${JSON.stringify(fieldName(label))},`;
+
 /** [old, new, targets]. Text is matched exactly; see the header note. */
 const PAIRS = [
   // Hero
@@ -257,6 +281,37 @@ const PAIRS = [
   ['>Runtime<', '>Scored minutes (music, not film length)<', HTML],
   ['placeholder="e.g. 12 min / 90 min"', 'placeholder="e.g. 3 scored minutes"', HTML],
   ['aria-label="Runtime"', 'aria-label="Scored minutes (music, not film length)"', HTML],
+
+  // Form controls (see fieldName above). The two Contact field components are
+  // patched once each and derive their name from the label they already render
+  // as the accessible name, so every input and select in the form is covered -
+  // and stays covered when a label is edited. The three media scrubs are single
+  // instances with no label prop, so their names are literals.
+  [
+    'u.jsx("input",{type:r,value:t,onChange:e=>n(e.target.value),required:s,placeholder:o,className:',
+    `u.jsx("input",{type:r,value:t,onChange:e=>n(e.target.value),required:s,placeholder:o,name:(${FIELD_NAME_FN})(e),className:`,
+    BUNDLE,
+  ],
+  [
+    'u.jsx("select",{value:t,onChange:e=>n(e.target.value),className:',
+    `u.jsx("select",{value:t,onChange:e=>n(e.target.value),name:(${FIELD_NAME_FN})(e),className:`,
+    BUNDLE,
+  ],
+  [
+    'u.jsx("input",{type:"range",className:"seek min-h-[28px] flex-1",min:0,max:o||1,step:.1,value:s,onChange:e=>p(Number(e.target.value)),"aria-label":"Seek through current track"',
+    `u.jsx("input",{type:"range",className:"seek min-h-[28px] flex-1",min:0,max:o||1,step:.1,value:s,onChange:e=>p(Number(e.target.value)),${nameAttr('Seek through current track')}"aria-label":"Seek through current track"`,
+    BUNDLE,
+  ],
+  [
+    'u.jsx("input",{type:"range",className:"seek min-h-[28px] flex-1",min:0,max:1,step:.01,value:a,onChange:e=>m(Number(e.target.value)),"aria-label":"Volume"',
+    `u.jsx("input",{type:"range",className:"seek min-h-[28px] flex-1",min:0,max:1,step:.01,value:a,onChange:e=>m(Number(e.target.value)),${nameAttr('Volume')}"aria-label":"Volume"`,
+    BUNDLE,
+  ],
+  [
+    'u.jsx("input",{type:"range",className:"seek min-h-[28px] flex-1",min:0,max:r||1,step:.1,value:n,onChange:e=>i(Number(e.target.value)),"aria-label":"Seek"',
+    `u.jsx("input",{type:"range",className:"seek min-h-[28px] flex-1",min:0,max:r||1,step:.1,value:n,onChange:e=>i(Number(e.target.value)),${nameAttr('Seek')}"aria-label":"Seek"`,
+    BUNDLE,
+  ],
 ];
 
 /** Budget options come from the package list; the bundle reads xu[]. */
@@ -360,6 +415,61 @@ function readShowreelTracks(source) {
 
 function escapeStaticText(value) {
   return String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/** Apply `transform` to the markup only, never to script/style/template bodies. */
+function mapMarkup(html, transform) {
+  return html
+    .split(/(<(?:script|style|template)\b[\s\S]*?<\/(?:script|style|template)>)/i)
+    .map((part, index) => (index % 2 === 1 ? part : transform(part)))
+    .join('');
+}
+
+/** The name addFieldNames gives a control with this accessible name. */
+function derivedFieldName(attrs) {
+  const label = /aria-label\s*=\s*"([^"]*)"/i.exec(attrs)?.[1];
+  return label === undefined ? null : fieldName(label.replace(/&amp;/g, '&'));
+}
+
+/**
+ * Give every control in the prerendered snapshot the name the bundle derives at
+ * render time (fieldName). Idempotent - a control that already carries an id or
+ * a name is left alone - and a control with no accessible name to derive from is
+ * left untouched rather than guessed at, which tools/check-forms.mjs then fails
+ * on by name.
+ */
+function addFieldNames(html) {
+  let count = 0;
+  const named = mapMarkup(html, (markup) =>
+    markup.replace(/<(input|select|textarea)\b([^>]*)>/gi, (tag, control, attrs) => {
+      if (/\b(?:id|name)\s*=/i.test(attrs)) return tag;
+      const value = derivedFieldName(attrs);
+      if (value === null) return tag;
+      count += 1;
+      return `<${control}${attrs} name="${value}">`;
+    }),
+  );
+  return { html: named, count };
+}
+
+/**
+ * The inverse of addFieldNames, run at the top of patchStatic. The PAIRS table
+ * matches markup by exact text and several entries span the closing `>` of a
+ * select or input, so the names this script wrote on the previous build would
+ * stop those pairs matching on the next one. Removing exactly the attributes
+ * this script derives (and nothing else) lets a rebuild read the snapshot as if
+ * the names were never there, then put them back at the end.
+ */
+function stripDerivedFieldNames(html) {
+  return mapMarkup(html, (markup) =>
+    markup.replace(/<(input|select|textarea)\b([^>]*)>/gi, (tag, control, attrs) => {
+      const current = /\sname="([^"]*)"/i.exec(attrs)?.[1];
+      if (current === undefined) return tag;
+      if (/\sid\s*=/i.test(attrs)) return tag;
+      if (current !== derivedFieldName(attrs)) return tag;
+      return `<${control}${attrs.replace(/\sname="[^"]*"/i, '')}>`;
+    }),
+  );
 }
 
 function formatTrackDuration(seconds) {
@@ -552,7 +662,7 @@ function addCompilationsSection(source) {
 /* ------------------------------------------------------ static copy patch */
 
 function patchStatic(html, tracks) {
-  let out = html;
+  let out = stripDerivedFieldNames(html);
   const applied = [];
   for (const [oldText, newText, target] of PAIRS) {
     if (target === BUNDLE) continue;
@@ -771,6 +881,14 @@ function patchStatic(html, tracks) {
       '-webkit-text-fill-color:#e65650;\n  color:#e65650;',
     );
     applied.push('updated #zp-atelier h1 span contrast to #e65650');
+  }
+
+  // Form controls: the React bundle names these fields at render time, so the
+  // snapshot has to carry the same names or first paint has anonymous fields.
+  {
+    const named = addFieldNames(out);
+    if (named.html !== out) applied.push(`form controls named (${named.count})`);
+    out = named.html;
   }
 
   return { html: out, applied };

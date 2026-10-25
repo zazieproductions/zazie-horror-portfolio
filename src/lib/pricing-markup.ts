@@ -434,7 +434,12 @@ export function inquiryFormHtml(): string {
     `<div class="zp-inq-preview" data-zp-preview hidden>`,
     `<p class="zp-eyebrow">Your inquiry is ready</p>`,
     `<p class="zp-help">Your email app should open with this message to ${ESTIMATOR_EMAIL}. If it does not, copy the text below and send it from your own address.</p>`,
-    `<textarea class="zp-input zp-preview-text" data-zp-text rows="12" readonly aria-label="Inquiry text"></textarea>`,
+    // The preview is a form control inside the inquiry form, so it needs an id
+    // (or a name) of its own: without one, browser autofill and every "form
+    // field has a name" audit treat it as an anonymous field. It is read-only
+    // and its value is set from script, so an id is the right attribute here --
+    // a name would suggest it is submitted, which it never is.
+    `<textarea class="zp-input zp-preview-text" id="zp-inquiry-preview" data-zp-text rows="12" readonly aria-label="Inquiry text"></textarea>`,
     `<p><button class="zp-cta zp-cta-ghost" type="button" data-zp-copy>Copy inquiry text</button> <span class="zp-help" data-zp-copied role="status"></span></p>`,
     `</div>`,
     `</form>`,
