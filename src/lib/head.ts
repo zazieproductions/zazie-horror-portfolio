@@ -49,6 +49,7 @@ export function seoBlock(head: PageHead): string {
   const lines = [
     `<title>${title}</title>`,
     `<meta name="description" content="${description}"/>`,
+    '<meta name="color-scheme" content="dark"/>',
     `<link rel="canonical" href="${canonical}"/>`,
     `<link rel="alternate" type="text/plain" href="${SITE_ORIGIN}/llms.txt" title="LLMs.txt summary"/>`,
     `<meta name="robots" content="${escapeHtml(head.robots)}"/>`,
@@ -135,7 +136,11 @@ function credited(production: Production, role: RegExp): Json[] {
 }
 
 export function productionNodes(production: Production, path: string): Json[] {
-  const composers = credited(production, /composer/i);
+  const composers: Json[] = production.credits
+    .filter((credit) => /composer/i.test(credit.role))
+    .map((credit): Json => credit.name === AUTHOR_NAME
+      ? { '@id': PERSON_ID }
+      : { '@type': 'Person', name: credit.name });
   const directors = credited(production, /^director$/i);
   const creators = credited(production, /^(creator|writer)$/i);
   const productionCompanies = production.credits
@@ -153,7 +158,13 @@ export function productionNodes(production: Production, path: string): Json[] {
     description: production.summary,
     genre: production.genres,
     inLanguage: 'en',
-    image: [url(production.poster.src)],
+    image: {
+      '@type': 'ImageObject',
+      contentUrl: url(production.poster.src),
+      caption: `${production.title} poster artwork`,
+      width: production.poster.width,
+      height: production.poster.height,
+    },
     ...(published ? { datePublished: published } : {}),
     ...(production.expectedReleaseDate ? { startDate: production.expectedReleaseDate } : {}),
     ...(production.runtimeSeconds ? { duration: isoDuration(production.runtimeSeconds) } : {}),
