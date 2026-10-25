@@ -30,7 +30,7 @@ export const hubs: Hub[] = [
     // sentence. Both are what the WebPage JSON-LD and sitemap reuse.
     title: "Horror Composer for Hire — Film, TV & Game Scores",
     description: `IMDb-credited horror composer Zazie Kanwar-Torge scores psychological and folk films, TV, and games. Custom scores from $${MINIMUM_FEE} USD.`,
-    lastmod: "2026-10-22",
+    lastmod: "2026-10-24",
     images: [
       { loc: "https://horror.zazieproductions.com/images/hero-portrait.jpg", caption: "Portfolio portrait for Zazie Productions, a composer and sound-design studio working across screen and experimental media.", title: "Zazie Kanwar-Torge: Psychological Horror Composer - Dark Atmospheric Scores" },
       { loc: "https://horror.zazieproductions.com/images/headshot.jpg", caption: "Zazie Kanwar-Torge, composer and sound designer associated with Zazie Productions LLC.", title: "Zazie Kanwar-Torge headshot - horror film composer, Zazie Productions LLC" },
@@ -141,8 +141,8 @@ export const hubs: Hub[] = [
   {
     path: "/reel",
     name: "Showreel",
-    title: "Horror Composer Showreel: 32 Original Dark Cinematic Cues | Zazie Productions",
-    description: "Stream 32 original horror showreel cues by Zazie Kanwar-Torge: psychological dread beds, tension stingers, dark ambient textures, body horror, and thriller themes.",
+    title: "Horror Composer Showreel: 30 Original Dark Cinematic Cues | Zazie Productions",
+    description: "Stream 30 original horror showreel cues by Zazie Kanwar-Torge: psychological dread beds, tension stingers, dark ambient textures, body horror, and thriller themes.",
     lastmod: "2026-10-24",
     images: [],
     videos: [],

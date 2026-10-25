@@ -18,6 +18,13 @@
  *      is replaced by static markup generated from src/data/pricing.ts. Its
  *      live behaviour comes from estimator-<hash>.js, which delegates events on
  *      the document, so it works inside the React island.
+ *   3. The testimonial section is deleted outright (2026-10-24): there are no
+ *      attributable, permissioned quotes to publish, and a "5.0 collaborator
+ *      rating" badge pointing at placeholder reviews reads as fabricated.
+ *      The hero badge + its divider and the App render call come out as
+ *      pairs; the section component (`cj`), the now-unreferenced StarRating
+ *      pair (`zi`, `t1`) and the quotes data (`s1`) are cut with the parser,
+ *      like step 2. The static copy loses the same badge and section.
  *
  * Every pair must match exactly once in the pristine bundle, or the build
  * fails. In index.html, a pair that is already applied is skipped, so the
@@ -85,9 +92,10 @@ const PAIRS = [
   // and spilled left past the panel that carried its gradients: the scrimmed
   // band and the unscrimmed band met in a hard vertical seam, and the cropped
   // side panels of the artwork read as a torn image. The plate now derives its
-  // width from the artwork's own ratio (see .zp-hero-art-plate), so the whole
-  // poster is shown, and it is feathered instead of cut. Alt text and the lazy
-  // attribute ride along here; the portrait is display:none below 1024px.
+  // width from the artwork's own ratio and is framed at full opacity (see the
+  // .zp-hero-art* rules in index.html), so the whole poster is shown without
+  // masks or a bottom fade. Alt text and the lazy attribute ride along here;
+  // the portrait is display:none below 1024px.
   [
     'className:"pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] lg:block","aria-hidden":!0,"data-source-loc":"src/components/Hero.tsx:56:6",children:u.jsxs("div",{className:"absolute bottom-0 right-0 h-[92%] w-full","data-source-loc":"src/components/Hero.tsx:63:8",children:[u.jsxs("picture",{children:[u.jsx("source",{srcSet:"/images/hero-portrait.avif",type:"image/avif"}),u.jsx("img",{src:It.images.hero,alt:"",width:896,height:1152,decoding:"async",className:"absolute bottom-0 right-0 h-full w-auto max-w-none object-cover object-top opacity-80","data-source-loc":"src/components/Hero.tsx:64:10"})]}),u.jsx("div",{className:"absolute inset-0 bg-gradient-to-l from-transparent via-void/20 to-void","data-source-loc":"src/components/Hero.tsx:69:10"}),u.jsx("div",{className:"absolute inset-0 bg-gradient-to-t from-void via-transparent to-void/40","data-source-loc":"src/components/Hero.tsx:70:10"}),u.jsx("div",{className:"absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-void","data-source-loc":"src/components/Hero.tsx:71:10"}),u.jsx("div",{className:"absolute inset-y-[15%] right-0 w-px bg-gradient-to-b from-transparent via-blood/50 to-transparent","data-source-loc":"src/components/Hero.tsx:73:10"})]})',
     'className:"pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] lg:block","aria-hidden":!0,"data-source-loc":"src/components/Hero.tsx:56:6",children:u.jsxs("div",{className:"zp-hero-art","data-source-loc":"src/components/Hero.tsx:63:8",children:[u.jsx("div",{className:"zp-hero-art-plate",children:u.jsxs("picture",{children:[u.jsx("source",{srcSet:"/images/hero-portrait.avif",type:"image/avif"}),u.jsx("img",{src:It.images.hero,alt:"Zazie Kanwar-Torge, horror composer and founder of Zazie Productions",width:896,height:1152,loading:"lazy",decoding:"async",className:"absolute inset-0 h-full w-full object-contain","data-source-loc":"src/components/Hero.tsx:64:10"})]})}),u.jsx("div",{className:"zp-hero-art-scrim","aria-hidden":!0})]})',
@@ -107,7 +115,20 @@ const PAIRS = [
   ['function Q5(){const[e,t]=_.useState(null);return', 'function Q5(){const[e,t]=_.useState(null);_.useEffect(()=>{if(!e)return;const n=document.body.style.overflow,r=e=>{e.key==="Escape"&&t(null)};return document.body.style.overflow="hidden",document.addEventListener("keydown",r),()=>{document.body.style.overflow=n,document.removeEventListener("keydown",r)}},[e]);return', BUNDLE],
   ['className:"relative grid max-h-[90svh] w-full max-w-3xl overflow-hidden border border-blood/30 bg-ink shadow-[0_0_80px_rgba(196,30,30,0.2)] md:grid-cols-2"', 'className:"zp-poster-dialog relative grid max-h-[90svh] w-full max-w-3xl overflow-hidden border border-blood/30 bg-ink shadow-[0_0_80px_rgba(196,30,30,0.2)] md:grid-cols-2"', BUNDLE],
   ['type:"button",onClick:()=>t(null),className:"absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center border border-ash bg-void/90 text-bone hover:border-blood hover:text-blood","aria-label":"Close"', 'type:"button",autoFocus:!0,onClick:()=>t(null),className:"zp-poster-close absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center border border-ash bg-void/90 text-bone hover:border-blood hover:text-blood","aria-label":"Close "+e.title+" poster"', BUNDLE],
-  // Showreel rows: 32 rows x 3 decorative nodes became 32 x 1. The duration moves
+  // Showreel catalogue: The Beautiful Wrongness leads the queue, while the two
+  // retired cues are removed. Track IDs stay tied to their original audio files;
+  // the visible row number comes from the current array index instead.
+  [
+    'tracks:[{id:0,title:"Needle in The Nerve",src:"/audio/track-00.mp3",duration:72.363,tag:"Psychological Orchestral"}',
+    'tracks:[{id:30,title:"The Beautiful Wrongness",src:"/audio/track-30.mp3",duration:65.411,tag:"Psychological Orchestral"},{id:0,title:"Needle in The Nerve",src:"/audio/track-00.mp3",duration:72.363,tag:"Psychological Orchestral"}',
+    BUNDLE,
+  ],
+  [',{id:30,title:"The Beautiful Wrongness",src:"/audio/track-30.mp3",duration:65.411,tag:"Psychological Orchestral"}', '', BUNDLE],
+  [',{id:9,title:"Dark Thriller Cinematic Cue",src:"/audio/track-09.mp3",duration:65.109,tag:"Thriller"}', '', BUNDLE],
+  [',{id:23,title:"Screams of The Damned",src:"/audio/track-23.mp3",duration:200.072,tag:"Body Horror"}', '', BUNDLE],
+  ['String(t.id+1).padStart(2,"0")', 'String(s+1).padStart(2,"0")', BUNDLE],
+  ['32-cue showreel', '30-cue showreel', HTML],
+  // Showreel rows: 30 rows x 3 decorative nodes became 30 x 1. The duration moves
   // into the mood line (it was hidden below 640px, so phones lost it entirely) and
   // the play/pause glyph becomes a pseudo-element keyed off data-row-playing.
   [
@@ -145,6 +166,18 @@ const PAIRS = [
     '_.useEffect(function(){let c=zpCard.current;if(!e){if(c){const trigger=c.querySelector(".zp-poster");if(trigger)trigger.focus()}zpCard.current=null;return}if(!c)c=document.querySelector(".zp-vcard.is-playing");if(!c)return;zpCard.current=c;const close=c.querySelector(".zp-player-close");if(close)close.focus();try{const reduce=',
     BUNDLE,
   ],
+  // Testimonials removed (2026-10-24): no attributable, permissioned quotes to
+  // publish, so the "5.0 collaborator rating" hero badge and its divider come
+  // out with the section itself. The unreferenced statements (cj, zi, t1, s1)
+  // are cut in patchBundle; the matching static markup comes out in
+  // patchStatic. Without the badge pair, the zi/t1 cut below would leave the
+  // hero pointing at a component that no longer exists.
+  [
+    'u.jsxs("a",{href:"#reviews",className:"inline-flex items-center gap-2.5 transition-colors hover:text-bone","data-source-loc":"src/components/Hero.tsx:175:12",children:[u.jsx(zi,{rating:5,size:"sm","data-source-loc":"src/components/Hero.tsx:179:14"}),u.jsxs("span",{className:"text-[11px] text-mist","data-source-loc":"src/components/Hero.tsx:180:14",children:[u.jsx("span",{className:"font-semibold text-[#F5C518]","data-source-loc":"src/components/Hero.tsx:181:16",children:"5.0"})," collaborator rating"]})]}),u.jsx("span",{className:"hidden h-4 w-px bg-white/10 sm:block","aria-hidden":!0,"data-source-loc":"src/components/Hero.tsx:184:12"}),',
+    '',
+    BUNDLE,
+  ],
+  ['u.jsx(cj,{"data-source-loc":"src/App.tsx:46:10"}),', '', BUNDLE],
   // Services heading
   ['04 · Scope and budget', '04 · Scoring services', BOTH],
   ['Build a scope and estimate', 'Rates & estimates', BUNDLE],
@@ -176,9 +209,9 @@ const BUNDLE_BUDGET_DEFAULT_OLD = 'useState(xu[1])';
 
 /**
  * The hero's right-hand artwork panel: one plate (the poster, whole, at its own
- * aspect ratio), one scrim. All geometry and feathering lives in the
- * .zp-hero-art* rules in index.html so the prerendered and React renders cannot
- * drift; this markup only has to match the bundle's output.
+ * aspect ratio) plus the legacy scrim node, hidden by CSS. All geometry and
+ * framing lives in the .zp-hero-art* rules in index.html so the prerendered and
+ * React renders cannot drift; this markup only has to match the bundle's output.
  */
 const HERO_ART_HTML =
   '<div class="pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] lg:block" aria-hidden="true"><div class="zp-hero-art"><div class="zp-hero-art-plate"><picture><source srcset="/images/hero-portrait.avif" type="image/avif"><img alt="Zazie Kanwar-Torge, horror composer and founder of Zazie Productions" class="absolute inset-0 h-full w-full object-contain" src="/images/hero-portrait.jpg" width="896" height="1152" loading="lazy" decoding="async"></picture></div><div class="zp-hero-art-scrim" aria-hidden="true"></div></div></div>';
@@ -226,8 +259,98 @@ function findTopLevelFunction(source, name) {
   return { start: hits[0].getStart(sf), end: hits[0].getEnd() };
 }
 
+/** Same lookup for a `const name = ...;` statement (the testimonials data). */
+function findTopLevelVariable(source, name) {
+  const sf = ts.createSourceFile('bundle.js', source, ts.ScriptTarget.ES2020, true, ts.ScriptKind.JS);
+  const hits = sf.statements.filter(
+    (s) =>
+      ts.isVariableStatement(s) &&
+      s.declarationList.declarations.some((d) => ts.isIdentifier(d.name) && d.name.text === name),
+  );
+  if (hits.length !== 1) throw new Error(`expected exactly one top-level variable ${name}, found ${hits.length}`);
+  return { start: hits[0].getStart(sf), end: hits[0].getEnd() };
+}
+
 function countOf(text, needle) {
   return text.split(needle).length - 1;
+}
+
+/** Read the patched player catalogue so the static first paint uses the same queue. */
+function readShowreelTracks(source) {
+  const start = source.indexOf('tracks:[');
+  const end = source.indexOf('],projects:[', start);
+  if (start < 0 || end < 0) throw new Error('bundle: showreel track array not found');
+  const body = source.slice(start + 'tracks:['.length, end);
+  const pattern = /\{id:(\d+),title:"([^"]*)",src:"([^"]*)",duration:([\d.]+),tag:"([^"]*)"\}/g;
+  const tracks = [];
+  for (const match of body.matchAll(pattern)) {
+    tracks.push({
+      id: Number(match[1]),
+      title: match[2].replace(/\\'/g, "'"),
+      src: match[3],
+      duration: Number(match[4]),
+      tag: match[5],
+    });
+  }
+  if (tracks.length !== 30) throw new Error(`bundle: expected 30 showreel tracks after patching, found ${tracks.length}`);
+  if (tracks[0].title !== 'The Beautiful Wrongness') throw new Error('bundle: The Beautiful Wrongness must be the default first track');
+  if (tracks[1].title !== 'The Fatal Overdose') throw new Error('bundle: The Fatal Overdose must be the second track');
+  if (new Set(tracks.map((track) => track.id)).size !== tracks.length) throw new Error('bundle: duplicate showreel track IDs');
+  for (const retired of ['Dark Thriller Cinematic Cue', 'Screams of The Damned']) {
+    if (tracks.some((track) => track.title === retired)) throw new Error(`bundle: retired track remains: ${retired}`);
+  }
+  return tracks;
+}
+
+function escapeStaticText(value) {
+  return String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function formatTrackDuration(seconds) {
+  return `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
+}
+
+/** Keep the prerendered homepage player byte-for-byte aligned with its new queue. */
+function patchStaticShowreel(html, tracks) {
+  const sectionStart = html.indexOf('<section id="showreel"');
+  const sectionEnd = html.indexOf('</section>', sectionStart);
+  if (sectionStart < 0 || sectionEnd < 0) throw new Error('index.html: #showreel section not found');
+  let section = html.slice(sectionStart, sectionEnd);
+  const first = tracks[0];
+
+  section = section.replace(
+    /(<p class="font-display text-5xl leading-none text-blood sm:text-6xl">)\d+(<\/p><p class="pb-1 text-\[10px\] uppercase tracking-\[0.3em\] text-mist">Curated cues<\/p>)/,
+    (_match, open, close) => `${open}${tracks.length}${close}`,
+  );
+  section = section.replace(
+    /(<h3 class="mb-1 truncate font-display text-xl text-bone sm:text-2xl md:text-4xl">)[^<]*(<\/h3>)/,
+    (_match, open, close) => `${open}${escapeStaticText(first.title)}${close}`,
+  );
+  section = section.replace(
+    /(<p class="text-\[10px\] uppercase tracking-\[0.2em\] text-blood sm:text-xs">)[^<]*(<\/p>)/,
+    (_match, open, close) => `${open}${escapeStaticText(first.tag)}${close}`,
+  );
+  section = section.replace(
+    /(<input class="seek[^>]*? max=")[^"]+("[^>]*aria-label="Seek through current track")/,
+    (_match, open, close) => `${open}${first.duration}${close}`,
+  );
+  section = section.replace(
+    /(<input class="seek[^>]*aria-label="Seek through current track"[^>]*><span class="w-9 shrink-0 text-right text-\[10px\] tabular-nums text-mist">)[^<]+/,
+    (_match, open) => `${open}${formatTrackDuration(first.duration)}`,
+  );
+
+  const listStart = section.indexOf('<div class="max-h-[min(60svh,480px)]');
+  const listOpenEnd = section.indexOf('>', listStart) + 1;
+  const listEnd = section.indexOf('</div><p class="mt-5 px-1', listOpenEnd);
+  if (listStart < 0 || listOpenEnd <= 0 || listEnd < 0) throw new Error('index.html: showreel row container not found');
+  const rows = tracks.map((track, index) => {
+    const number = String(index + 1).padStart(2, '0');
+    const stateClass = index === 0 ? 'bg-blood/10' : 'hover:bg-smoke';
+    const titleClass = index === 0 ? 'text-blood' : 'text-bone';
+    return `<button class="flex min-h-[56px] w-full items-center gap-3 px-3 py-3 text-left transition-colors sm:gap-4 sm:px-4 sm:py-4 md:px-6 ${stateClass} zp-track" data-row-playing="false"><span class="w-7 shrink-0 text-[11px] tabular-nums text-mist sm:w-8">${number}</span><div class="min-w-0 flex-1"><p class="truncate font-display text-base sm:text-lg md:text-xl ${titleClass}">${escapeStaticText(track.title)}</p><p class="mt-0.5 truncate text-[10px] uppercase tracking-[0.2em] text-mist">${escapeStaticText(track.tag)} · ${formatTrackDuration(track.duration)}</p></div></button>`;
+  }).join('');
+  section = section.slice(0, listOpenEnd) + rows + section.slice(listEnd);
+  return html.slice(0, sectionStart) + section + html.slice(sectionEnd);
 }
 
 /**
@@ -236,7 +359,7 @@ function countOf(text, needle) {
  * double-quoted literal into two literals and the whole homepage bundle dies at
  * parse time - which is exactly what shipped before 2026-10-22: the file was
  * served, threw `SyntaxError`, and none of the React behaviour (poster lightbox,
- * film player, 32-cue audio player, sticky player) ever ran while every other
+ * film player, 30-cue audio player, sticky player) ever ran while every other
  * check still passed. Parsing the patched text here makes that a build failure
  * instead of a silent runtime failure.
  */
@@ -259,25 +382,43 @@ function patchBundle(orig) {
     if (n !== 1) throw new Error(`bundle: "${oldText.slice(0, 60)}" matched ${n} times, expected 1`);
     out = out.replace(oldText, () => newText);
   }
-  // The homepage player starts at playlist index zero. Promote The Fatal
-  // Overdose without changing any audio-file mappings, and keep playlist IDs
-  // aligned with their new displayed positions.
+  // The Beautiful Wrongness is the default; retain main's promotion of The
+  // Fatal Overdose immediately after it. IDs remain stable audio-file mappings;
+  // visible row numbers already come from each track's queue index.
   const tracksMatch = out.match(/tracks:\[([\s\S]*?)\],projects:/);
   if (!tracksMatch) throw new Error('bundle: homepage player track list not found');
   const tracks = tracksMatch[1].split('},{').map((track) =>
     `{${track.replace(/^\{/, '').replace(/\}$/, '')}}`
   );
   const fatalIndex = tracks.findIndex((track) => track.includes('title:"The Fatal Overdose"'));
-  if (tracks.length !== 32 || fatalIndex < 0) throw new Error('bundle: expected 32 tracks including The Fatal Overdose');
+  if (tracks.length !== 30 || fatalIndex < 0) throw new Error('bundle: expected 30 tracks including The Fatal Overdose');
+  if (!tracks[0].includes('title:"The Beautiful Wrongness"')) throw new Error('bundle: The Beautiful Wrongness must remain first');
   const [fatal] = tracks.splice(fatalIndex, 1);
-  tracks.unshift(fatal);
-  const orderedTracks = tracks.map((track, index) => track.replace(/^\{id:\d+/, `{id:${index}`)).join(',');
-  out = out.replace(tracksMatch[0], `tracks:[${orderedTracks}],projects:`);
+  tracks.splice(1, 0, fatal);
+  out = out.replace(tracksMatch[0], `tracks:[${tracks.join(',')}],projects:`);
 
   for (const [oldText, newText] of [[BUNDLE_BUDGET_OLD, `xu=${JSON.stringify(budgetOptions())}`], [BUNDLE_BUDGET_DEFAULT_OLD, 'useState(xu[0])']]) {
     const n = countOf(out, oldText);
     if (n !== 1) throw new Error(`bundle: "${oldText}" matched ${n} times, expected 1`);
     out = out.replace(oldText, () => newText);
+  }
+  // Testimonials excision, part two. The pairs above removed the render call
+  // and the hero badge, so the section component (cj), the StarRating widget
+  // only it and the badge used (zi + its star glyph t1), and the quotes data
+  // (s1) are unreferenced. Statement-level cuts keep the minified neighbours
+  // intact; each finder re-parses the current text and demands exactly one
+  // top-level hit, so a future minifier rename fails the build here instead
+  // of shipping a half-removed section.
+  for (const name of ['cj', 'zi', 't1']) {
+    const cut = findTopLevelFunction(out, name);
+    out = out.slice(0, cut.start) + out.slice(cut.end);
+  }
+  {
+    const cut = findTopLevelVariable(out, 's1');
+    out = out.slice(0, cut.start) + out.slice(cut.end);
+    if (/\bs1\b/.test(out)) {
+      throw new Error('bundle: testimonials data s1 is still referenced after removal');
+    }
   }
   const { start, end } = findTopLevelFunction(out, 'lj');
   const servicesMarkup = SERVICES_HEADER + islandHtml(false);
@@ -311,7 +452,7 @@ function addCompilationsSection(source) {
 
 /* ------------------------------------------------------ static copy patch */
 
-function patchStatic(html) {
+function patchStatic(html, tracks) {
   let out = html;
   const applied = [];
   for (const [oldText, newText, target] of PAIRS) {
@@ -341,6 +482,37 @@ function patchStatic(html) {
     }
   }
 
+  // Testimonials removed in the bundle too, so the static copy must drop the
+  // same two pieces or first paint would resurrect them: the hero "5.0
+  // collaborator rating" badge (plus the divider that only separated the
+  // badge from the IMDb note) and the complete #reviews section. The section
+  // contains no nested <section> and the badge no nested <a>, so the first
+  // closer is the right one. Idempotent - once both are gone, nothing runs.
+  {
+    const badgeOpen = '<a href="#reviews" class="inline-flex items-center gap-2.5 transition-colors hover:text-bone">';
+    const badgeStart = out.indexOf(badgeOpen);
+    if (badgeStart >= 0) {
+      const anchorEnd = out.indexOf('</a>', badgeStart);
+      if (anchorEnd < 0) throw new Error('index.html: hero rating badge never closes');
+      let badgeEnd = anchorEnd + '</a>'.length;
+      const divider = '<span class="hidden h-4 w-px bg-white/10 sm:block" aria-hidden="true"></span>';
+      if (out.startsWith(divider, badgeEnd)) badgeEnd += divider.length;
+      out = out.slice(0, badgeStart) + out.slice(badgeEnd);
+      applied.push('hero rating badge removed');
+    } else if (out.includes('href="#reviews"')) {
+      throw new Error('index.html: a #reviews link exists in an unexpected shape');
+    }
+    const reviewsStart = out.indexOf('<section id="reviews"');
+    if (reviewsStart >= 0) {
+      const reviewsEnd = out.indexOf('</section>', reviewsStart);
+      if (reviewsEnd < 0) throw new Error('index.html: #reviews section never closes');
+      out = out.slice(0, reviewsStart) + out.slice(reviewsEnd + '</section>'.length);
+      applied.push('reviews section removed');
+    } else if (out.includes('id="reviews"')) {
+      throw new Error('index.html: a #reviews target exists in an unexpected shape');
+    }
+  }
+
   // Showreel rows in the static snapshot must match the patched React rows, so
   // the same three nodes come out of both render paths. Idempotent: once a row
   // has zp-track + the merged duration line, the pattern no longer matches.
@@ -353,36 +525,9 @@ function patchStatic(html) {
   });
   if (trimmedRows) applied.push(`showreel rows trimmed (${trimmedRows})`);
 
-  // Keep the prerendered playlist in sync with the client bundle: the Fatal
-  // Overdose is the first cue and the default, paused selection.
-  const showreelStart = out.indexOf('<section id="showreel"');
-  const showreelEnd = out.indexOf('</section>', showreelStart);
-  if (showreelStart < 0 || showreelEnd < 0) throw new Error('index.html: no #showreel section');
-  let showreel = out.slice(showreelStart, showreelEnd);
-  const rowRe = /<button class="([^"]*\bzp-track\b[^"]*)"[^>]*>[\s\S]*?<\/button>/g;
-  const rows = [...showreel.matchAll(rowRe)].map((match) => match[0]);
-  const fatalRowIndex = rows.findIndex((row) => row.includes('>The Fatal Overdose</p>'));
-  if (rows.length !== 32 || fatalRowIndex < 0) throw new Error(`index.html: expected 32 showreel rows including The Fatal Overdose; found ${rows.length}`);
-  const [fatalRow] = rows.splice(fatalRowIndex, 1);
-  rows.unshift(fatalRow);
-  const orderedRows = rows.map((row, index) => {
-    let next = row.replace(/(<span class="w-7[^"]*">)[\s\S]*?(<\/span>)/, `$1${String(index + 1).padStart(2, '0')}$2`);
-    next = next.replace(/<button class="([^"]*)"/, (_match, className) => {
-      const classes = className.split(/\s+/).filter((name) => name && name !== 'bg-blood/10');
-      if (index === 0) classes.push('bg-blood/10');
-      return `<button class="${classes.join(' ')}"`;
-    });
-    next = next.replace(/(<p class="[^"]*font-display[^"]*)text-(?:bone|blood)([^"]*">)/, (_match, before, after) =>
-      `${before}text-${index === 0 ? 'blood' : 'bone'}${after}`
-    );
-    return next;
-  });
-  let rowIndex = 0;
-  showreel = showreel.replace(rowRe, () => orderedRows[rowIndex++]);
-  showreel = showreel.replace('<h3 class="mb-1 truncate font-display text-xl text-bone sm:text-2xl md:text-4xl">Needle in The Nerve</h3>', '<h3 class="mb-1 truncate font-display text-xl text-bone sm:text-2xl md:text-4xl">The Fatal Overdose</h3>');
-  showreel = showreel.replace('<p class="text-[10px] uppercase tracking-[0.2em] text-blood sm:text-xs">Psychological Orchestral</p>', '<p class="text-[10px] uppercase tracking-[0.2em] text-blood sm:text-xs">Body Horror</p>');
-  out = out.slice(0, showreelStart) + showreel + out.slice(showreelEnd);
-  applied.push('showreel player reordered with The Fatal Overdose first');
+  const previousShowreel = out;
+  out = patchStaticShowreel(out, tracks);
+  if (out !== previousShowreel) applied.push(`showreel queue synced (${tracks.length} cues; ${tracks[0].title} first)`);
 
   // Compilations: the section sits straight after the showreel. Idempotent -
   // an existing copy is replaced, so a change to the data reaches index.html.
@@ -486,6 +631,7 @@ const origHash = crypto.createHash('sha256').update(orig).digest('hex');
 if (!origHash.startsWith('2afd4ec8')) throw new Error(`bundle.orig.js is not the shipped bundle (sha256 ${origHash})`);
 
 const patched = patchBundle(orig);
+const showreelTracks = readShowreelTracks(patched);
 const hash = crypto.createHash('sha256').update(patched).digest('hex').slice(0, 8);
 const name = `index-${hash}.js`;
 
@@ -495,7 +641,7 @@ for (const f of fs.readdirSync(root)) {
 fs.writeFileSync(path.join(root, name), patched, 'utf8');
 
 const indexFile = path.join(root, 'index.html');
-const { html, applied } = patchStatic(fs.readFileSync(indexFile, 'utf8'));
+const { html, applied } = patchStatic(fs.readFileSync(indexFile, 'utf8'), showreelTracks);
 let nextHtml = html.replace(/\/?index-[0-9a-f]{8}\.js/g, (m) => (m.startsWith('/') ? `/${name}` : name));
 nextHtml = ensureEstimatorAssets(nextHtml);
 nextHtml = ensureCompilationsAssets(nextHtml);

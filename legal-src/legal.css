@@ -118,13 +118,13 @@ button{font:inherit;color:inherit}
   min-height:48px;padding:.85rem 1.6rem;border:1px solid transparent;cursor:pointer;
   font-size:.6875rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;
   background:var(--blood);color:var(--bone);
-  box-shadow:0 0 34px rgba(196,30,30,.3);
+  box-shadow:none;
   transition:background .25s,box-shadow .25s,border-color .25s,color .25s,transform .25s;
 }
-.btn:hover{background:var(--ember);box-shadow:0 0 48px rgba(255,42,42,.42)}
+.btn:hover{background:var(--ember);box-shadow:0 12px 28px rgba(0,0,0,.4)}
 .btn:active{transform:translateY(1px)}
 .btn-ghost{background:transparent;border-color:var(--ash);box-shadow:none;color:var(--bone)}
-.btn-ghost:hover{background:transparent;border-color:var(--blood);box-shadow:0 0 32px rgba(196,30,30,.22)}
+.btn-ghost:hover{background:transparent;border-color:var(--blood);box-shadow:none}
 .btn-sm{min-height:40px;padding:.55rem 1.1rem;font-size:.625rem}
 
 /* --- Document plate ------------------------------------------------------ */

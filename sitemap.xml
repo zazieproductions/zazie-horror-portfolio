@@ -2,7 +2,7 @@
 <!--
   Generated https://horror.zazieproductions.com/sitemap.xml from src/data/{hubs,productions,cues,releases,routes}.ts.
   Do not edit by hand. Each URL is a canonical, extensionless route.
-  Route count: 85 (20 original hubs + 9 productions + 32 cues + 24 catalogue items).
+  Route count: 83 (20 original hubs + 9 productions + 30 cues + 24 catalogue items).
   Sitemap priority and changefreq are intentionally omitted.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -11,7 +11,7 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/</loc>
-    <lastmod>2026-10-22</lastmod>
+    <lastmod>2026-10-24</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/hero-portrait.jpg</image:loc>
       <image:caption>Portfolio portrait for Zazie Productions, a composer and sound-design studio working across screen and experimental media.</image:caption>
@@ -415,7 +415,7 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/work/expire</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg</image:loc>
       <image:caption>Poster artwork for EXPIRE</image:caption>
@@ -533,163 +533,153 @@
   </url>
 
   <url>
+    <loc>https://horror.zazieproductions.com/reel/the-beautiful-wrongness</loc>
+    <lastmod>2026-10-24</lastmod>
+  </url>
+
+  <url>
     <loc>https://horror.zazieproductions.com/reel/needle-in-the-nerve</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/dissociative-amnesia</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/brutalist-tension-stinger</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/scraping-psychophonic-bed</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/hidden-intentions-serene-purgatory</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/variations-on-a-vanishing-body</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/the-silence-began-crawling</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/timeless-retro-splurge</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/quarter-eater-poltergeist</loc>
-    <lastmod>2026-10-04</lastmod>
-  </url>
-
-  <url>
-    <loc>https://horror.zazieproductions.com/reel/dark-thriller-cinematic-cue</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/opaline-lament-life-from-the-beyond</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/ominous-drone</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/the-fatal-overdose</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/bone-colored-air</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/obsidian-hall</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/rlyehs-xenolith</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/deep-dystopian-synth-cue</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/panic-threshold</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/waterphone-shower-scene</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/the-room-forgets-you</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/dark-ambient-soundscape-no-1</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/subdued-drone-sensory-deprivation</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/dark-ambient-soundscape-no-2</loc>
-    <lastmod>2026-10-04</lastmod>
-  </url>
-
-  <url>
-    <loc>https://horror.zazieproductions.com/reel/screams-of-the-damned</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/narrow-pulse</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/dissonant-decay-soundscape-sampler</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/time-shifting-into-daylight</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/stinger-cello-cue</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/smell-of-bleach</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/fractured-requiem</loc>
-    <lastmod>2026-10-04</lastmod>
-  </url>
-
-  <url>
-    <loc>https://horror.zazieproductions.com/reel/the-beautiful-wrongness</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/earthpulse-protocol</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
