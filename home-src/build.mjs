@@ -48,47 +48,18 @@ const { compilationsSectionHtml, compilationsInnerHtml, SECTION_CLASS, CONTAINER
   await import('../build/lib/compilations-markup.js');
 const { homePosterClientData } = await import('../build/lib/home.js');
 
+// Film sample cards are video + title only: no music-description text or
+// permalink block underneath (removed 2026-10-25). The slug survives solely
+// so each card keeps its semantic `sample-${slug}` anchor.
 const FILM_SAMPLES_META = [
-  {
-    title: 'Mike Has A Visitor',
-    slug: 'mike-has-a-visitor',
-    desc: 'Original score to picture — domestic dread, breath-held silence and harmonic pressure timed to the cut.',
-  },
-  {
-    title: 'Eclipsed',
-    slug: 'eclipsed',
-    desc: 'Original score and sound design for the award-winning horror short; bowed metal and low voice locked to the edit.',
-  },
-  {
-    title: 'GOODBYE, BROTHER',
-    slug: 'goodbye-brother',
-    desc: 'Original score — slow harmonic weight and unresolved chamber lines under family fracture.',
-  },
-  {
-    title: 'Home Intruder',
-    slug: 'home-intruder',
-    desc: 'Chase and intrusion cue — close-miked percussion, rising pulse and sudden negative space.',
-  },
-  {
-    title: 'The Haunted',
-    slug: 'the-haunted',
-    desc: 'Original score — room-tone drones, prepared strings and distant modal fragments.',
-  },
-  {
-    title: 'AQUAPHOBIA',
-    slug: 'aquaphobia',
-    desc: 'Original score — sub-bass pressure, filtered resonance and submerged metallic textures.',
-  },
-  {
-    title: 'Whispers In The Dark',
-    slug: 'whispers-in-the-dark',
-    desc: 'Original score — close-voice textures, fragile harmonics and encroaching low-end.',
-  },
-  {
-    title: 'Phantom Requiem',
-    slug: 'phantom-requiem',
-    desc: 'Original score — liturgical intervals bent into slow, decayed orchestral mass.',
-  },
+  { title: 'Mike Has A Visitor', slug: 'mike-has-a-visitor' },
+  { title: 'Eclipsed', slug: 'eclipsed' },
+  { title: 'GOODBYE, BROTHER', slug: 'goodbye-brother' },
+  { title: 'Home Intruder', slug: 'home-intruder' },
+  { title: 'The Haunted', slug: 'the-haunted' },
+  { title: 'AQUAPHOBIA', slug: 'aquaphobia' },
+  { title: 'Whispers In The Dark', slug: 'whispers-in-the-dark' },
+  { title: 'Phantom Requiem', slug: 'phantom-requiem' },
 ];
 
 const BOTH = 'both';
@@ -159,13 +130,10 @@ const PAIRS = [
   ['className:"h-full w-full object-cover object-top","data-source-loc":"src/components/PosterWall.tsx:96:1"', 'loading:"lazy",decoding:"async",className:"h-full w-full "+(e.contain?"zp-poster-contain":"object-cover object-top"),"data-source-loc":"src/components/PosterWall.tsx:96:1"', BUNDLE],
   ['e.tagline&&u.jsxs("p",{className:"mt-5 font-display text-lg italic leading-snug text-bone/90","data-source-loc":"src/components/PosterWall.tsx:114:1",children:["“",e.tagline,"”"]})', 'e.tagline&&u.jsxs("p",{className:"mt-5 font-display text-lg italic leading-snug text-bone/90","data-source-loc":"src/components/PosterWall.tsx:114:1",children:["“",e.tagline,"”"]}),e.summary&&u.jsx("p",{className:"mt-4 text-base leading-relaxed text-mist",children:e.summary})', BUNDLE],
   ['linkcol=c41e1e', 'linkcol=e65650', BUNDLE],
-  // Film sample cards carry semantic IDs, descriptions and archive permalinks.
+  // Film sample cards carry a semantic ID only — no music-description text or
+  // permalink block under the video (the pristine bundle renders none, and
+  // patchStatic strips any that an older snapshot still carries).
   ['return u.jsxs(Bt.article,{initial:{opacity:0,y:14}', 'return u.jsxs(Bt.article,{id:n.slug?"sample-"+n.slug:void 0,initial:{opacity:0,y:14}', BUNDLE],
-  [
-    '"data-source-loc":"src/components/Projects.tsx:53:16",children:u.jsx(Tl,{size:16,"data-source-loc":"src/components/Projects.tsx:61:18"})})]})]})]},s)',
-    '"data-source-loc":"src/components/Projects.tsx:53:16",children:u.jsx(Tl,{size:16,"data-source-loc":"src/components/Projects.tsx:61:18"})})]})]}),n.desc?u.jsxs("div",{className:"zp-sample-meta border-t border-ash/70 px-4 py-3 sm:px-5",children:[u.jsx("p",{className:"text-base leading-relaxed text-mist",children:n.desc}),n.slug?u.jsxs("p",{className:"mt-2 text-base text-mist",children:[u.jsx("a",{href:"#sample-"+n.slug,className:"text-blood underline underline-offset-4 hover:text-bone",children:"Permalink"})," · ",u.jsx("a",{href:"/work#samples",className:"text-blood underline underline-offset-4 hover:text-bone",children:"Film samples archive"})]}):null]}):null]},s)',
-    BUNDLE,
-  ],
   // Hero artwork. The shipped markup sized the portrait off its *height*
   // (`h-full w-auto`) inside a 46%-wide, 92%-tall panel and then clipped the
   // result with `object-cover`, so the poster art (896x1152) was centred-cropped
@@ -563,7 +531,7 @@ function patchBundle(orig) {
   tracks.splice(1, 0, fatal);
   out = out.replace(tracksMatch[0], `tracks:[${tracks.join(',')}],projects:`);
 
-  // Enrich It.projects with slug + desc so K5 renders descriptions and permalinks.
+  // Enrich It.projects with slug so K5 renders the semantic `sample-${slug}` anchor.
   {
     const projStart = out.indexOf('projects:[');
     const projEnd = out.indexOf('],images:{', projStart);
@@ -574,7 +542,7 @@ function patchBundle(orig) {
       if (countOf(projSlice, marker) !== 1) throw new Error(`bundle: It.projects entry not found for ${sample.title}`);
       projSlice = projSlice.replace(
         marker,
-        () => `{title:${JSON.stringify(sample.title)},slug:${JSON.stringify(sample.slug)},desc:${JSON.stringify(sample.desc)},`,
+        () => `{title:${JSON.stringify(sample.title)},slug:${JSON.stringify(sample.slug)},`,
       );
     }
     out = out.slice(0, projStart) + projSlice + out.slice(projEnd);
@@ -832,7 +800,10 @@ function patchStatic(html, tracks) {
     }
   }
 
-  // Enrich the 8 film sample <article> cards in #work with id="sample-${slug}", SSR description, and crawlable links.
+  // The 8 film sample <article> cards in #work keep id="sample-${slug}" but
+  // carry no text block under the video: strip the former zp-sample-meta
+  // (music description + permalink line) if an older snapshot still has it.
+  // Idempotent — once the block is gone, nothing runs.
   for (const sample of FILM_SAMPLES_META) {
     const dataAttr = `data-title="${sample.title}"`;
     const pos = out.indexOf(dataAttr);
@@ -844,19 +815,12 @@ function patchStatic(html, tracks) {
     if (!cardHtml.includes(`id="sample-${sample.slug}"`)) {
       cardHtml = cardHtml.replace('<article ', `<article id="sample-${sample.slug}" `);
     }
-    const metaBlock =
-      `<div class="zp-sample-meta border-t border-ash/70 px-4 py-3 sm:px-5">` +
-      `<p class="text-base leading-relaxed text-mist">${escapeStaticText(sample.desc)}</p>` +
-      `<p class="mt-2 text-base text-mist"><a href="#sample-${sample.slug}" class="text-blood underline underline-offset-4 hover:text-bone">Permalink</a> · <a href="/work#samples" class="text-blood underline underline-offset-4 hover:text-bone">Film samples archive</a></p>` +
-      `</div>`;
     if (cardHtml.includes('<div class="zp-sample-meta')) {
-      cardHtml = cardHtml.replace(/<div class="zp-sample-meta[\s\S]*?<\/div>(?=<\/article>)/, () => metaBlock);
-    } else {
-      cardHtml = cardHtml.replace(/<\/article>$/, () => `${metaBlock}</article>`);
+      cardHtml = cardHtml.replace(/<div class="zp-sample-meta[\s\S]*?<\/div>(?=<\/article>)/, '');
     }
     if (cardHtml !== out.slice(articleStart, articleEnd + '</article>'.length)) {
       out = out.slice(0, articleStart) + cardHtml + out.slice(articleEnd + '</article>'.length);
-      applied.push(`film sample ${sample.slug} enriched`);
+      applied.push(`film sample ${sample.slug} meta block removed`);
     }
   }
 
