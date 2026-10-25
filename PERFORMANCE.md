@@ -4,6 +4,66 @@ Date: 2026-09-25 · Branch: `arena/01a0d613-zazie-horror-portfolio`
 Scope: horror.zazieproductions.com (static prerendered React build on an edge host with `_headers`/`_redirects` semantics, i.e. Netlify/Cloudflare-Pages style).
 
 
+## Critical request chain shortened: 2026-10-25
+
+Lighthouse's network dependency tree for `/` reported a depth-3 chain —
+document → `index-007b3466.js` (128.75 KiB) → the italic Cormorant woff2
+(24.07 KiB), `index-e5dac783.css` (16.73 KiB) and Cloudflare's
+`email-decode.min.js` (1.03 KiB) — with 433 ms maximum critical-path latency.
+Three changes, all confined to `index.html`:
+
+1. **Italic Cormorant face preloaded.** The face was deliberately left on
+   `font-display: swap` only, but it styles the LCP `<h1>` line
+   *"written to your picture."* (class `italic`), so font matching could not
+   fetch it until text rendered. It now has the same
+   `<link rel="preload" as="font" crossorigin fetchpriority="high">` as the
+   normal face; the browser discovers both at parse time, in parallel with the
+   hero image. Document preloads go 4 → 5 (image + three fonts, plus the
+   separate estimator style preload, unchanged).
+2. **Stylesheet link moved ahead of the inline module.** The render-blocking
+   `index-e5dac783.css` link sat *after* the ~15 KB inline player/boot module,
+   so over the wire its bytes were discovered late and the trace parented it to
+   the JS bundle. It now sits immediately before that module — every `<style>`
+   block keeps its relative order, so cascade precedence is byte-identical — and
+   the parser dispatches it in the first head bytes, as a direct child of the
+   document request.
+3. **Cloudflare email-decode script removed from the homepage.** The edge
+   injects `/cdn-cgi/scripts/.../email-decode.min.js` only when Email
+   Obfuscation rewrites an address on the response. The two body email clusters
+   (the contact `mailto:` anchor and the whole contact form, including its
+   `action="mailto:"`, preview text and the `you@production.com` placeholder)
+   are now wrapped in the documented `<!--email_off--> … <!--/email_off-->`
+   markers. The two JSON-LD addresses are untouched: the obfuscator skips
+   `<script>` blocks. With no obfuscatable address left in the HTML, the
+   decoder is not injected on `/`. The wrapper comments live inside `#root`,
+   where marker comments already coexist with `hydrateRoot`
+   (`<!--HOME-POSTERS:*-->`, `<!--/zp:estimator-->`).
+
+Expected trace: the stylesheet and all three fonts hang directly off the
+document and fetch from the earliest parse point, which also prunes the
+idle-loaded React bundle from the render-critical chain (it is still
+dynamically `import()`-ed on `requestIdleCallback` after `load`; it was never
+render-blocking, it only inherited critical children).
+
+Deliberately not done:
+
+- **Preconnect.** The audit itself reports no candidate origins — everything
+  critical is same-origin, and YouTube/Drive/Bandcamp stay intent-connected by
+  design (see the 2026-09 pass). Adding hints would just burn the 4-hint budget.
+- **Bundle slimming.** The 128.75 KiB React bundle remains one idle-loaded
+  chunk; splitting it cannot help first paint while it is off the critical path,
+  and the patched-bundle pipeline makes churn there high-risk.
+- **Site-wide email obfuscation.** Other routes still carry plaintext
+  addresses and will still receive the decoder. The clean zone-wide fix is
+  operational — Cloudflare → Scrape Shield → Email Obfuscation off, or a
+  Configuration Rule disabling it — since the addresses are already public in
+  `mailto:` links and JSON-LD and the obfuscation adds a request to every page.
+
+Verification: full `npm run build` (prerender rewrote the `<head>` and kept
+every new tag in place; no other tracked file changed), all 54 node:test
+checks pass, and a local server smoke test returns 200 for the document, the
+stylesheet and all three fonts with the new head ordering in the served bytes.
+
 ## Archive boot restored: 2026-10-22
 
 The terminal loading screen is back in `index.html`. This records what was
