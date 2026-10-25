@@ -357,45 +357,54 @@ td code,th code{white-space:nowrap}
 .hub-card a.stretch:focus-visible{outline:1px solid var(--ember);outline-offset:3px}
 
 /* --- Compilation appearances (/reel) -------------------------------------- */
-/* Each card holds a click-to-load Bandcamp player. The iframe is created by
-   legal.js only when the visitor presses the button, so the page itself makes
-   no Bandcamp request (see the privacy notice, sections 6 and 7). */
-.comp-grid{display:grid;gap:1rem;margin:1.25rem 0 0;padding:0;list-style:none}
-@media (min-width:900px){.comp-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-.comp-card{
-  display:flex;flex-direction:column;gap:.65rem;min-width:0;
-  padding:1.25rem;border:1px solid var(--ash);background:var(--ink);
-  transition:border-color .3s;
-}
-.comp-card:hover,.comp-card:focus-within{border-color:rgba(196,30,30,.55)}
-.comp-cover{display:block;margin:-1.25rem -1.25rem .35rem;background:var(--smoke);aspect-ratio:1/1;overflow:hidden}
-.comp-cover img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
-.comp-cover:hover img{transform:scale(1.03)}
-.comp-cover:focus-visible{outline:2px solid var(--ember);outline-offset:-2px}
-@media (prefers-reduced-motion:reduce){.comp-cover img{transition:none}.comp-cover:hover img{transform:none}}
-.comp-meta{display:flex;flex-direction:column;gap:.15rem;margin:0;font-size:.625rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(154,149,144,.8)}
-.comp-meta span:first-child{color:var(--blood)}
-.comp-card h3{margin:0;font-family:var(--display);font-weight:400;font-size:1.5rem;line-height:1.15;color:var(--bone);overflow-wrap:anywhere}
-.comp-card > p{margin:0;font-size:.8125rem;line-height:1.75;color:var(--body-dim)}
-.bc-embed{margin-top:auto;min-height:120px;display:flex;flex-direction:column;justify-content:center}
-.bc-embed iframe{display:block;width:100%;height:120px;border:0;background:var(--smoke)}
-.bc-load{
-  display:none;align-items:center;justify-content:center;gap:.6rem;width:100%;min-height:120px;
-  padding:.75rem 1rem;border:1px solid var(--ash);background:var(--smoke);color:var(--bone);
-  font:inherit;font-size:.6875rem;letter-spacing:.2em;text-transform:uppercase;cursor:pointer;
-  transition:border-color .25s,background .25s;
-}
+/* Each card has a cover with a play button. The iframe is created by legal.js
+   only when the visitor presses play, so the page itself makes no Bandcamp
+   player request (see the privacy notice, sections 6 and 7). */
+.comp-grid{display:grid;gap:1.25rem;margin:1.25rem 0 0;padding:0;list-style:none}
+@media (min-width:560px){.comp-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.comp-card{position:relative;display:flex;flex-direction:column;min-width:0;overflow:hidden;border:1px solid #1e1e1e;background:linear-gradient(180deg,#0b0b0b,#030303);transition:transform .45s cubic-bezier(.2,.7,.2,1),border-color .3s,box-shadow .45s}
+.comp-card:hover,.comp-card:focus-within,.comp-card.is-open{border-color:rgba(196,30,30,.55);box-shadow:0 22px 44px -22px rgba(196,30,30,.45),0 0 0 1px rgba(196,30,30,.12)}
+.comp-card:hover{transform:translateY(-3px)}
+.bc-embed{display:block}
+.comp-stage{position:relative;aspect-ratio:1/1;overflow:hidden;background:#121212}
+.comp-stage img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .9s cubic-bezier(.2,.7,.2,1),filter .5s}
+.comp-card:hover .comp-stage img{transform:scale(1.05)}
+.comp-stage::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(3,3,3,.5) 0,rgba(3,3,3,0) 28%,rgba(3,3,3,0) 55%,rgba(3,3,3,.82) 100%)}
+.comp-badge,.comp-dur{position:absolute;z-index:2;padding:.3rem .6rem;border:1px solid rgba(240,235,227,.14);background:rgba(3,3,3,.62);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#f0ebe3;font-size:.5875rem;line-height:1;letter-spacing:.22em;text-transform:uppercase}
+.comp-badge{top:.8rem;left:.8rem}
+.comp-dur{right:.8rem;bottom:.8rem;font-variant-numeric:tabular-nums;letter-spacing:.12em}
+.bc-load{position:absolute;inset:0;z-index:3;display:none;align-items:center;justify-content:center;margin:0;padding:0;border:0;background:transparent;cursor:pointer;transition:opacity .35s}
 .has-js .bc-load{display:flex}
-.bc-load:hover{border-color:rgba(196,30,30,.7);background:#171717}
-.bc-load:focus-visible{outline:1px solid var(--ember);outline-offset:3px}
-.bc-load span{color:var(--blood)}
-.bc-nojs{margin:0;font-size:.75rem;line-height:1.7;color:var(--body-dim)}
+.comp-play{position:relative;display:grid;place-items:center;width:4.25rem;height:4.25rem;border-radius:50%;background:rgba(196,30,30,.94);color:#f0ebe3;box-shadow:0 0 0 1px rgba(255,255,255,.14),0 12px 32px rgba(0,0,0,.6);transition:transform .35s cubic-bezier(.2,.7,.2,1),background .3s}
+.comp-play svg{display:block;width:1.55rem;height:1.55rem;margin-left:.18rem;fill:currentColor}
+.comp-play::before{content:"";position:absolute;inset:-.55rem;border-radius:50%;border:1px solid rgba(255,42,42,.5);opacity:0;animation:comp-ring 2.8s ease-out infinite}
+@keyframes comp-ring{0%{opacity:.7;transform:scale(.85)}70%,100%{opacity:0;transform:scale(1.35)}}
+.bc-load:hover .comp-play,.bc-load:focus-visible .comp-play{transform:scale(1.1);background:#e02a2a}
+.bc-load:focus-visible{outline:2px solid #ff2a2a;outline-offset:-5px}
+.is-open .bc-load{opacity:0;pointer-events:none}
+.comp-slot{display:grid;grid-template-rows:0fr;background:#121212;transition:grid-template-rows .5s cubic-bezier(.2,.7,.2,1)}
+.is-open .comp-slot{grid-template-rows:1fr}
+.comp-slot-inner{min-height:0;overflow:hidden;background:linear-gradient(100deg,#121212 30%,#1b1b1b 50%,#121212 70%) 0 0/200% 100%;animation:comp-shimmer 1.6s linear infinite}
+.comp-slot iframe{display:block;width:100%;height:120px;border:0;opacity:0;transition:opacity .45s .1s}
+.comp-slot iframe.is-ready{opacity:1}
+@keyframes comp-shimmer{to{background-position:-200% 0}}
+.comp-body{display:flex;flex:1;flex-direction:column;gap:.55rem;padding:1.15rem 1.35rem 1.35rem}
+.comp-card .comp-meta{margin:0;font-size:.625rem;letter-spacing:.24em;text-transform:uppercase;color:#c41e1e}
+.comp-card h3{margin:0;font-family:var(--display);font-weight:400;font-size:1.65rem;line-height:1.1;color:#f0ebe3;overflow-wrap:anywhere}
+.comp-card .comp-note{margin:0;font-size:.8125rem;line-height:1.75;color:#9a9590}
+.comp-card .bc-nojs{margin:0;font-size:.75rem;line-height:1.7;color:#9a9590}
 .has-js .bc-nojs{display:none}
-.comp-links{margin:0;font-size:.75rem;letter-spacing:.04em;color:var(--body-dim)}
-.comp-links a{color:var(--bone);text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(196,30,30,.6)}
-.comp-links a:hover{text-decoration-color:var(--ember)}
+.comp-links{display:flex;flex-wrap:wrap;gap:.5rem;margin:auto 0 0;padding-top:.5rem}
+.comp-links a{padding:.45rem .8rem;border:1px solid #262626;color:#f0ebe3;font-size:.625rem;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;transition:border-color .25s,color .25s,background .25s}
+.comp-links a::after{content:" \2197";color:#c41e1e}
+.comp-links a:hover,.comp-links a:focus-visible{border-color:rgba(196,30,30,.7);background:rgba(196,30,30,.08)}
+@media (prefers-reduced-motion:reduce){
+  .comp-card,.comp-stage img,.comp-play,.comp-slot,.comp-slot iframe{transition:none}
+  .comp-card:hover{transform:none}.comp-card:hover .comp-stage img{transform:none}
+  .comp-play::before,.comp-slot-inner{animation:none}
+}
 .comp-grid + .sidenote{margin-top:1.25rem}
-@media print{.bc-embed{display:none}}
+@media print{.comp-play,.comp-slot{display:none}}
 
 /* --- Site map (/sitemap) ------------------------------------------------- */
 /* Page entries are h3 + one-line summary + a list of that page's sections.
