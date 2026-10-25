@@ -172,7 +172,7 @@ for (const item of additionalHomePosters) {
     if (!fs.existsSync(path.join(root, reference.slice(1)))) fail(`homepage poster asset is missing: ${reference}`);
   }
 }
-for (const className of ['zp-mobile-quote', 'zp-menu-button', 'zp-poster-dialog', 'zp-poster-close', 'zp-poster-contain', 'zp-est-advanced', 'zp-result-details', 'zp-poster-meta-box', 'zp-sample-meta', 'zp-comp-article']) {
+for (const className of ['zp-mobile-quote', 'zp-menu-button', 'zp-poster-dialog', 'zp-poster-close', 'zp-poster-contain', 'zp-est-advanced', 'zp-result-details', 'zp-sample-meta', 'zp-comp-article']) {
   if (!home.includes(className)) fail(`homepage mobile stylesheet/markup is missing ${className}`);
   if (!homeBundle.includes(className)) fail(`homepage React bundle is missing ${className}`);
 }
@@ -429,3 +429,8 @@ console.log(`  media audit: ${cues.length} MP3 URLs, production samples only whe
 console.log('  404 audit: /work/does-not-exist has no static page and Cloudflare fallback serves 404.html with noindex, follow');
 console.log(`  title length audit: / is ${homeTitleLength}/${TITLE_LIMIT} characters (not truncated); ${overLongTitles.length} other route(s) still run long and are listed here rather than failing the build`);
 console.log('  missing-file report: none');
+
+// Poster descriptions belong in the lightbox, never underneath gallery artwork.
+if (home.includes('class="zp-poster-meta-box') || homeBundle.includes('className:"zp-poster-meta-box')) {
+  fail('homepage poster wall must not render below-poster text panels');
+}

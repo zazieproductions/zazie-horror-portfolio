@@ -40,6 +40,7 @@ function posterMetaLine(homePoster: (typeof homePosters)[number]): string {
 export const homePosterClientData = homePosters.map((homePoster) => ({
   slug: homePoster.slug,
   title: homePoster.title,
+  alt: homePoster.poster.alt,
   meta: posterMetaLine(homePoster),
   summary: homePoster.summary,
 }));
@@ -58,14 +59,13 @@ export function renderHomePosterCards(): string {
         : '';
       const contain = 'fit' in homePoster && homePoster.fit === 'contain';
       const fitClass = contain ? 'zp-poster-contain' : 'object-cover object-top group-hover:scale-105';
-      const metaLine = posterMetaLine(homePoster);
       const slug = escapeHtml(homePoster.slug);
       return `<article id="poster-${slug}" class="zp-poster-card flex flex-col border border-ash bg-smoke transition-all duration-500 hover:border-blood/60 hover:shadow-[0_12px_40px_rgba(80,0,0,0.35)]">
 <button type="button" class="group relative w-full overflow-hidden bg-smoke text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blood" aria-label="View ${escapeHtml(homePoster.title)} poster" data-home-poster="${slug}">
 <div class="relative aspect-[2/3] overflow-hidden bg-void">
 <picture>
 ${source}
-<img alt="${escapeHtml(homePoster.title)} poster artwork" class="h-full w-full ${fitClass} opacity-95 transition-transform duration-700 ease-out group-hover:opacity-100" loading="lazy" decoding="async" src="${escapeHtml(poster.src)}" width="${poster.width}" height="${poster.height}"${srcset}>
+<img alt="${escapeHtml(poster.alt)}" class="h-full w-full ${fitClass} opacity-95 transition-transform duration-700 ease-out group-hover:opacity-100" loading="lazy" decoding="async" src="${escapeHtml(poster.src)}" width="${poster.width}" height="${poster.height}"${srcset}>
 </picture>
 <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-void via-void/5 to-transparent opacity-80"></div>
 <div class="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"><div class="absolute inset-0 bg-blood/10 mix-blend-multiply"></div></div>
@@ -74,13 +74,6 @@ ${source}
 </div>
 </div>
 </button>
-<div class="zp-poster-meta-box flex flex-1 flex-col justify-between gap-2 border-t border-ash bg-ink p-3 sm:p-4">
-<div>
-<p class="text-[11px] uppercase tracking-[0.18em] text-blood">${escapeHtml(metaLine)}</p>
-<p class="mt-1.5 text-base leading-relaxed text-mist">${escapeHtml(homePoster.summary)}</p>
-</div>
-<p class="pt-1 text-base text-mist"><a href="#poster-${slug}" class="text-blood underline underline-offset-4 hover:text-bone">Permalink</a> · <a href="/work#productions" class="text-blood underline underline-offset-4 hover:text-bone">Production archive</a></p>
-</div>
 </article>`;
     })
     .join('\n');
