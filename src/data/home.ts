@@ -36,6 +36,10 @@ export const additionalHomePosters = [
   {
     slug: 'uncle-freds-monster-problem',
     title: "UNCLE FRED'S MONSTER PROBLEM",
+    workType: 'Horror film',
+    roleLabel: 'Featured production artwork',
+    summary:
+      "Featured production poster for Uncle Fred's Monster Problem — 'His problem is now your problem.' Presented in the selected horror and genre productions gallery.",
     fit: 'contain',
     poster: {
       src: '/images/posters/uncle-freds-monster-problem-640.jpg',
