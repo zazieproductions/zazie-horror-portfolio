@@ -1,5 +1,6 @@
 /** Verified site-level identity nodes shared by the homepage and item pages. */
 
+import { publishedKnowsAbout, referenceTopicNodes } from './authority.js';
 import { AUTHOR_NAME, ORG_ID, PERSON_ID, SITE_NAME, SITE_ORIGIN, WEBSITE_ID } from './site.js';
 
 export const VERIFIED_SAME_AS = [
@@ -17,27 +18,14 @@ export const VERIFIED_SAME_AS = [
   'https://credits.muso.ai/profile/4010f3b7-9a87-4961-8dfd-917de0ba787e',
 ] as const;
 
-/** Topical references only, never identity aliases or production credits. */
-export const HORROR_REFERENCE_TOPICS = [
-  {
-    "@type": "Thing",
-    "name": "A24 film aesthetic",
-    "description": "A reference topic in prestige horror scoring; not an affiliation or production credit.",
-    "url": "https://en.wikipedia.org/wiki/A24"
-  },
-  {
-    "@type": "Thing",
-    "name": "Mica Levi scoring techniques",
-    "description": "A reference topic in experimental film scoring; not a collaboration or credit.",
-    "url": "https://en.wikipedia.org/wiki/Mica_Levi"
-  },
-  {
-    "@type": "Thing",
-    "name": "Folk Horror tropes",
-    "description": "Genre conventions used as reference topics for horror scoring.",
-    "url": "https://en.wikipedia.org/wiki/Folk_horror"
-  }
-] as const;
+/**
+ * Topical references only, never identity aliases or production credits.
+ *
+ * Built from REFERENCE_TOPICS so the labels and disclaimer sentences have one
+ * source of truth: each node gains a Wikidata @id and a Wikipedia cross-link
+ * without changing the published name or the disclaimer wording.
+ */
+export const HORROR_REFERENCE_TOPICS = referenceTopicNodes();
 
 export const person = {
   '@context': 'https://schema.org',
@@ -66,18 +54,16 @@ export const person = {
       addressCountry: 'US',
     },
   },
-  knowsAbout: [
-    ...HORROR_REFERENCE_TOPICS,
-    'Psychological horror film scoring',
-    'Folk horror original music',
-    'Body horror sound worlds',
-    'Experimental cinema composition',
-    'Adaptive horror video game music',
-    'Electroacoustic and musique concrète scoring',
-    'Waterphone and bowed metal instrumentation',
-    'Hybrid orchestral synthesis',
-    'Multichannel spatial audio composition',
-  ],
+  /**
+   * Craft vocabulary first, then topical references (see src/data/authority.ts).
+   *
+   * Each term is a Wikidata-anchored DefinedTerm, not bare text: the graph
+   * resolves "Folk Horror" to Q118141790 and its Wikipedia article, which is
+   * what links this person entity to the genre nodes a studio, festival, or
+   * answer engine already knows about. The reference topics after it keep the
+   * disclaimer sentence that says they are study, not affiliation.
+   */
+  knowsAbout: publishedKnowsAbout(),
   subjectOf: [
     {
       '@type': 'Article',
