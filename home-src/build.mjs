@@ -46,6 +46,50 @@ const { budgetOptions, budgetSelectOptions, estimatorHtml, packagesHtml, inclusi
 const { MICROBUDGET_STATEMENT } = await import('../build/data/pricing.js');
 const { compilationsSectionHtml, compilationsInnerHtml, SECTION_CLASS, CONTAINER_CLASS, COMPILATIONS_CSS, COMPILATIONS_JS } =
   await import('../build/lib/compilations-markup.js');
+const { homePosterClientData } = await import('../build/lib/home.js');
+
+const FILM_SAMPLES_META = [
+  {
+    title: 'Mike Has A Visitor',
+    slug: 'mike-has-a-visitor',
+    desc: 'Original score to picture — domestic dread, breath-held silence and harmonic pressure timed to the cut.',
+  },
+  {
+    title: 'Eclipsed',
+    slug: 'eclipsed',
+    desc: 'Original score and sound design for the award-winning horror short; bowed metal and low voice locked to the edit.',
+  },
+  {
+    title: 'GOODBYE, BROTHER',
+    slug: 'goodbye-brother',
+    desc: 'Original score — slow harmonic weight and unresolved chamber lines under family fracture.',
+  },
+  {
+    title: 'Home Intruder',
+    slug: 'home-intruder',
+    desc: 'Chase and intrusion cue — close-miked percussion, rising pulse and sudden negative space.',
+  },
+  {
+    title: 'The Haunted',
+    slug: 'the-haunted',
+    desc: 'Original score — room-tone drones, prepared strings and distant modal fragments.',
+  },
+  {
+    title: 'AQUAPHOBIA',
+    slug: 'aquaphobia',
+    desc: 'Original score — sub-bass pressure, filtered resonance and submerged metallic textures.',
+  },
+  {
+    title: 'Whispers In The Dark',
+    slug: 'whispers-in-the-dark',
+    desc: 'Original score — close-voice textures, fragile harmonics and encroaching low-end.',
+  },
+  {
+    title: 'Phantom Requiem',
+    slug: 'phantom-requiem',
+    desc: 'Original score — liturgical intervals bent into slow, decayed orchestral mass.',
+  },
+];
 
 const BOTH = 'both';
 const BUNDLE = 'bundle';
@@ -94,7 +138,10 @@ const PAIRS = [
   // remains available beside it. aria-expanded follows the React menu state.
   [']}),u.jsx("button",{className:"border border-white/10 p-2.5 text-bone transition-colors hover:border-blood/50 xl:hidden",onClick:()=>r(e=>!e),"aria-label":n?"Close menu":"Open menu",', ']}),u.jsx("a",{href:"/contact",className:"zp-mobile-quote",children:"Get a quote"}),u.jsx("button",{type:"button",className:"zp-menu-button xl:hidden",onClick:()=>r(e=>!e),"aria-expanded":n,"aria-controls":"mobile-navigation","aria-label":n?"Close menu":"Open menu",', BUNDLE],
   ['<button class="border border-white/10 p-2.5 text-bone transition-colors hover:border-blood/50 xl:hidden" aria-label="Open menu">', '<a href="/contact" class="zp-mobile-quote">Get a quote</a><button type="button" class="zp-menu-button xl:hidden" aria-expanded="false" aria-controls="mobile-navigation" aria-label="Open menu">', HTML],
-  ['className:"overflow-hidden border-t border-white/5 bg-void/95 backdrop-blur-xl xl:hidden",', 'id:"mobile-navigation",className:"overflow-hidden border-t border-white/5 bg-void/95 backdrop-blur-xl xl:hidden",', BUNDLE],
+  ['u.jsxs("nav",{className:"hidden items-center gap-1 xl:flex",', 'u.jsxs("nav",{"aria-label":"Primary navigation",className:"hidden items-center gap-1 xl:flex",', BUNDLE],
+  ['n&&u.jsx(Bt.div,{initial:{opacity:0,height:0},animate:{opacity:1,height:"auto"},exit:{opacity:0,height:0},className:"overflow-hidden border-t border-white/5 bg-void/95 backdrop-blur-xl xl:hidden",', 'n&&u.jsx(Bt.nav,{initial:{opacity:0,height:0},animate:{opacity:1,height:"auto"},exit:{opacity:0,height:0},id:"mobile-navigation","aria-label":"Mobile navigation",className:"overflow-hidden border-t border-white/5 bg-void/95 backdrop-blur-xl xl:hidden",', BUNDLE],
+  ['tj.map((e,t)=>u.jsxs(Bt.div,{initial:{opacity:0,y:16},whileInView:{opacity:1,y:0}', 'tj.map((e,t)=>u.jsxs(Bt.article,{initial:{opacity:0,y:16},whileInView:{opacity:1,y:0}', BUNDLE],
+  ['u.jsxs("div",{className:"relative min-h-[100svh] bg-void text-bone","data-source-loc":"src/App.tsx:26:6",children:[u.jsx("div",{className:"grain","aria-hidden":!0,"data-source-loc":"src/App.tsx:27:8"}),u.jsx("div",{className:"vignette opacity-80","aria-hidden":!0,"data-source-loc":"src/App.tsx:28:8"}),u.jsx(zv,{"data-source-loc":"src/App.tsx:29:8"}),u.jsx(H5,{"data-source-loc":"src/App.tsx:30:8"}),u.jsxs("main",{className:"relative z-[2] overflow-x-hidden pb-[max(1.5rem,env(safe-area-inset-bottom))]","data-source-loc":"src/App.tsx:31:8"', 'u.jsxs(u.Fragment,{children:[u.jsx("div",{className:"grain","aria-hidden":!0,"data-source-loc":"src/App.tsx:27:8"}),u.jsx("div",{className:"vignette opacity-80","aria-hidden":!0,"data-source-loc":"src/App.tsx:28:8"}),u.jsx(zv,{"data-source-loc":"src/App.tsx:29:8"}),u.jsx(H5,{"data-source-loc":"src/App.tsx:30:8"}),u.jsxs("main",{id:"main-content",className:"relative z-[2] overflow-x-hidden pb-[max(1.5rem,env(safe-area-inset-bottom))]","data-source-loc":"src/App.tsx:31:8"', BUNDLE],
   ["children:It.bio}", "dangerouslySetInnerHTML:{__html:It.bio}}", "bundle"],
   ["u.jsx(\"p\",{className:\"text-mist leading-relaxed mb-8 text-sm sm:text-base\",\"data-source-loc\":\"src/components/About.tsx:43:1\",children:It.bio2})", "u.jsx(\"div\",{className:\"text-mist leading-relaxed mb-8 text-sm sm:text-base space-y-5\",\"data-source-loc\":\"src/components/About.tsx:43:1\",dangerouslySetInnerHTML:{__html:\"<p>\"+It.bio2+\"</p>\"}})", "bundle"],
   // User-supplied standalone poster. It joins the wall and lightbox without
@@ -109,7 +156,16 @@ const PAIRS = [
   // decoration, so they carry the artwork's own name. (The atmosphere plate and
   // the press photo stay alt="" - they are backgrounds behind live copy.)
   ['width:640,height:960,alt:"",className:"h-full w-full object-cover object-top opacity-95 transition-transform duration-700 ease-out group-hover:scale-105 group-hover:opacity-100"', 'width:e.width||640,height:e.height||960,alt:e.title+" poster artwork",className:"h-full w-full "+(e.contain?"zp-poster-contain":"object-cover object-top group-hover:scale-105")+" opacity-95 transition-transform duration-700 ease-out group-hover:opacity-100"', BUNDLE],
-  ['className:"h-full w-full object-cover object-top","data-source-loc":"src/components/PosterWall.tsx:96:1"', 'className:"h-full w-full "+(e.contain?"zp-poster-contain":"object-cover object-top"),"data-source-loc":"src/components/PosterWall.tsx:96:1"', BUNDLE],
+  ['className:"h-full w-full object-cover object-top","data-source-loc":"src/components/PosterWall.tsx:96:1"', 'loading:"lazy",decoding:"async",className:"h-full w-full "+(e.contain?"zp-poster-contain":"object-cover object-top"),"data-source-loc":"src/components/PosterWall.tsx:96:1"', BUNDLE],
+  ['e.tagline&&u.jsxs("p",{className:"mt-5 font-display text-lg italic leading-snug text-bone/90","data-source-loc":"src/components/PosterWall.tsx:114:1",children:["“",e.tagline,"”"]})', 'e.tagline&&u.jsxs("p",{className:"mt-5 font-display text-lg italic leading-snug text-bone/90","data-source-loc":"src/components/PosterWall.tsx:114:1",children:["“",e.tagline,"”"]}),e.summary&&u.jsx("p",{className:"mt-4 text-base leading-relaxed text-mist",children:e.summary})', BUNDLE],
+  ['linkcol=c41e1e', 'linkcol=e65650', BUNDLE],
+  // Film sample cards carry semantic IDs, descriptions and archive permalinks.
+  ['return u.jsxs(Bt.article,{initial:{opacity:0,y:14}', 'return u.jsxs(Bt.article,{id:n.slug?"sample-"+n.slug:void 0,initial:{opacity:0,y:14}', BUNDLE],
+  [
+    '"data-source-loc":"src/components/Projects.tsx:53:16",children:u.jsx(Tl,{size:16,"data-source-loc":"src/components/Projects.tsx:61:18"})})]})]})]},s)',
+    '"data-source-loc":"src/components/Projects.tsx:53:16",children:u.jsx(Tl,{size:16,"data-source-loc":"src/components/Projects.tsx:61:18"})})]})]}),n.desc?u.jsxs("div",{className:"zp-sample-meta border-t border-ash/70 px-4 py-3 sm:px-5",children:[u.jsx("p",{className:"text-base leading-relaxed text-mist",children:n.desc}),n.slug?u.jsxs("p",{className:"mt-2 text-base text-mist",children:[u.jsx("a",{href:"#sample-"+n.slug,className:"text-blood underline underline-offset-4 hover:text-bone",children:"Permalink"})," · ",u.jsx("a",{href:"/work#samples",className:"text-blood underline underline-offset-4 hover:text-bone",children:"Film samples archive"})]}):null]}):null]},s)',
+    BUNDLE,
+  ],
   // Hero artwork. The shipped markup sized the portrait off its *height*
   // (`h-full w-auto`) inside a 46%-wide, 92%-tall panel and then clipped the
   // result with `object-cover`, so the poster art (896x1152) was centred-cropped
@@ -507,6 +563,49 @@ function patchBundle(orig) {
   tracks.splice(1, 0, fatal);
   out = out.replace(tracksMatch[0], `tracks:[${tracks.join(',')}],projects:`);
 
+  // Enrich It.projects with slug + desc so K5 renders descriptions and permalinks.
+  {
+    const projStart = out.indexOf('projects:[');
+    const projEnd = out.indexOf('],images:{', projStart);
+    if (projStart < 0 || projEnd < 0) throw new Error('bundle: It.projects block not found');
+    let projSlice = out.slice(projStart, projEnd);
+    for (const sample of FILM_SAMPLES_META) {
+      const marker = `{title:${JSON.stringify(sample.title)},`;
+      if (countOf(projSlice, marker) !== 1) throw new Error(`bundle: It.projects entry not found for ${sample.title}`);
+      projSlice = projSlice.replace(
+        marker,
+        () => `{title:${JSON.stringify(sample.title)},slug:${JSON.stringify(sample.slug)},desc:${JSON.stringify(sample.desc)},`,
+      );
+    }
+    out = out.slice(0, projStart) + projSlice + out.slice(projEnd);
+  }
+
+  // Enrich PosterWall data (n1) with slug, meta, and summary from homePosterClientData.
+  {
+    const n1Cut = findTopLevelVariable(out, 'n1');
+    let n1Slice = out.slice(n1Cut.start, n1Cut.end);
+    for (const posterMeta of homePosterClientData) {
+      const escapedTitle = posterMeta.title.replace(/'/g, "\\'");
+      const candidates = [`{title:"${posterMeta.title}",`, `{title:"${escapedTitle}",`];
+      const marker = candidates.find((c) => n1Slice.includes(c));
+      if (!marker) throw new Error(`bundle: n1 entry not found for ${posterMeta.title}`);
+      n1Slice = n1Slice.replace(
+        marker,
+        () =>
+          `${marker}slug:${JSON.stringify(posterMeta.slug)},meta:${JSON.stringify(posterMeta.meta)},summary:${JSON.stringify(posterMeta.summary)},`,
+      );
+    }
+    out = out.slice(0, n1Cut.start) + n1Slice + out.slice(n1Cut.end);
+  }
+
+  // Replace F5 so PosterWall cards render as <article id="poster-${slug}"> with visible summary + links.
+  {
+    const cut = findTopLevelFunction(out, 'F5');
+    const f5Replacement =
+      'function F5({film:e,delay:t=0,onOpen:n}){return u.jsxs("article",{id:e.slug?"poster-"+e.slug:void 0,className:"zp-poster-card flex flex-col border border-ash bg-smoke transition-all duration-500 hover:border-blood/60 hover:shadow-[0_12px_40px_rgba(80,0,0,0.35)]",children:[u.jsx(Bt.button,{type:"button",initial:!1,animate:{opacity:1,y:0},onClick:n,className:"group relative w-full overflow-hidden bg-smoke text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blood","aria-label":`View ${e.title} poster`,"data-home-poster":e.slug,"data-source-loc":"src/components/PosterWall.tsx:166:1",children:u.jsxs("div",{className:"relative aspect-[2/3] overflow-hidden bg-void","data-source-loc":"src/components/PosterWall.tsx:177:1",children:[u.jsxs("picture",{children:[u.jsx("source",{srcSet:e.thumbA.replace("-640.avif","-400.avif")+" 400w, "+e.thumbA.replace("-640.avif","-480.avif")+" 480w, "+e.thumbA+" 640w",sizes:"(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 46vw",type:"image/avif"}),u.jsx("img",{src:e.thumb,srcSet:e.thumb+" 640w, "+e.poster+" 1200w",sizes:"(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 46vw",width:e.width||640,height:e.height||960,alt:e.title+" poster artwork",className:"h-full w-full "+(e.contain?"zp-poster-contain":"object-cover object-top group-hover:scale-105")+" opacity-95 transition-transform duration-700 ease-out group-hover:opacity-100",loading:"lazy",decoding:"async","data-source-loc":"src/components/PosterWall.tsx:178:1"})]}),u.jsx("div",{className:"pointer-events-none absolute inset-0 bg-gradient-to-t from-void via-void/5 to-transparent opacity-80","data-source-loc":"src/components/PosterWall.tsx:184:1"}),u.jsx("div",{className:"pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100","data-source-loc":"src/components/PosterWall.tsx:185:1",children:u.jsx("div",{className:"absolute inset-0 bg-blood/10 mix-blend-multiply","data-source-loc":"src/components/PosterWall.tsx:186:1"})}),u.jsxs("div",{className:"absolute inset-x-0 bottom-0 z-10 p-3 sm:p-4 md:p-5","data-source-loc":"src/components/PosterWall.tsx:189:1",children:[u.jsx("h3",{className:"font-display text-base leading-tight text-bone transition-colors group-hover:text-blood sm:text-xl md:text-2xl","data-source-loc":"src/components/PosterWall.tsx:190:1",children:e.title})]})]})}),e.summary?u.jsxs("div",{className:"zp-poster-meta-box flex flex-1 flex-col justify-between gap-2 border-t border-ash bg-ink p-3 sm:p-4",children:[u.jsxs("div",{children:[u.jsx("p",{className:"text-[11px] uppercase tracking-[0.18em] text-blood",children:e.meta||e.year}),u.jsx("p",{className:"mt-1.5 text-base leading-relaxed text-mist",children:e.summary})]}),u.jsxs("p",{className:"pt-1 text-base text-mist",children:[u.jsx("a",{href:"#poster-"+e.slug,className:"text-blood underline underline-offset-4 hover:text-bone",children:"Permalink"})," · ",u.jsx("a",{href:"/work#productions",className:"text-blood underline underline-offset-4 hover:text-bone",children:"Production archive"})]})]}):null]})}';
+    out = out.slice(0, cut.start) + f5Replacement + out.slice(cut.end);
+  }
+
   for (const [oldText, newText] of [[BUNDLE_BUDGET_OLD, `xu=${JSON.stringify(budgetOptions())}`], [BUNDLE_BUDGET_DEFAULT_OLD, 'useState(xu[0])']]) {
     const n = countOf(out, oldText);
     if (n !== 1) throw new Error(`bundle: "${oldText}" matched ${n} times, expected 1`);
@@ -693,6 +792,97 @@ function patchStatic(html, tracks) {
   if (!budgetRe.test(out)) throw new Error('index.html: budget select not found');
   out = out.replace(budgetRe, (_m, open, close) => `${open}${budgetSelectOptions()}${close}`);
 
+  // Flatten div#root > div.relative > main.relative into semantic direct children of #root.
+  if (out.includes('<div id="root" tabindex="-1">\n<div class="relative min-h-[100svh] bg-void text-bone">')) {
+    out = out.replace(
+      '<div id="root" tabindex="-1">\n<div class="relative min-h-[100svh] bg-void text-bone">',
+      '<div id="root" class="relative min-h-[100svh] bg-void text-bone" tabindex="-1">',
+    );
+    out = out.replace('</footer></div>\n</div>', '</footer>\n</div>');
+    applied.push('flattened #root outer div wrapper');
+  }
+
+  // Ensure <main> carries id="main-content" and <nav> in <header> carries aria-label="Primary navigation".
+  if (out.includes('<main class="relative z-[2]')) {
+    out = out.replace('<main class="relative z-[2]', '<main id="main-content" class="relative z-[2]');
+    applied.push('added id="main-content" to <main>');
+  }
+  if (out.includes('<nav class="hidden items-center gap-1 xl:flex">')) {
+    out = out.replace(
+      '<nav class="hidden items-center gap-1 xl:flex">',
+      '<nav aria-label="Primary navigation" class="hidden items-center gap-1 xl:flex">',
+    );
+    applied.push('added aria-label="Primary navigation" to header <nav>');
+  }
+
+  // Convert the 3 Approach cards in #method from generic <div> to semantic <article>.
+  {
+    const methodStart = out.indexOf('<section id="method"');
+    const methodEnd = out.indexOf('</section>', methodStart);
+    if (methodStart >= 0 && methodEnd > methodStart) {
+      const beforeMethod = out.slice(methodStart, methodEnd);
+      const afterMethod = beforeMethod.replace(
+        /<div class="(group border border-ash bg-ink\/70 p-5 transition-colors hover:border-blood\/40 sm:p-7)">([\s\S]*?<p class="text-sm leading-relaxed text-mist">[\s\S]*?<\/p>)<\/div>/g,
+        '<article class="$1">$2</article>',
+      );
+      if (afterMethod !== beforeMethod) {
+        out = out.slice(0, methodStart) + afterMethod + out.slice(methodEnd);
+        applied.push('converted #method cards to <article>');
+      }
+    }
+  }
+
+  // Enrich the 8 film sample <article> cards in #work with id="sample-${slug}", SSR description, and crawlable links.
+  for (const sample of FILM_SAMPLES_META) {
+    const dataAttr = `data-title="${sample.title}"`;
+    const pos = out.indexOf(dataAttr);
+    if (pos < 0) throw new Error(`index.html: film sample card not found for ${sample.title}`);
+    const articleStart = out.lastIndexOf('<article ', pos);
+    const articleEnd = out.indexOf('</article>', pos);
+    if (articleStart < 0 || articleEnd < 0) throw new Error(`index.html: malformed <article> for ${sample.title}`);
+    let cardHtml = out.slice(articleStart, articleEnd + '</article>'.length);
+    if (!cardHtml.includes(`id="sample-${sample.slug}"`)) {
+      cardHtml = cardHtml.replace('<article ', `<article id="sample-${sample.slug}" `);
+    }
+    const metaBlock =
+      `<div class="zp-sample-meta border-t border-ash/70 px-4 py-3 sm:px-5">` +
+      `<p class="text-base leading-relaxed text-mist">${escapeStaticText(sample.desc)}</p>` +
+      `<p class="mt-2 text-base text-mist"><a href="#sample-${sample.slug}" class="text-blood underline underline-offset-4 hover:text-bone">Permalink</a> · <a href="/work#samples" class="text-blood underline underline-offset-4 hover:text-bone">Film samples archive</a></p>` +
+      `</div>`;
+    if (cardHtml.includes('<div class="zp-sample-meta')) {
+      cardHtml = cardHtml.replace(/<div class="zp-sample-meta[\s\S]*?<\/div>(?=<\/article>)/, () => metaBlock);
+    } else {
+      cardHtml = cardHtml.replace(/<\/article>$/, () => `${metaBlock}</article>`);
+    }
+    if (cardHtml !== out.slice(articleStart, articleEnd + '</article>'.length)) {
+      out = out.slice(0, articleStart) + cardHtml + out.slice(articleEnd + '</article>'.length);
+      applied.push(`film sample ${sample.slug} enriched`);
+    }
+  }
+
+  // Wrap raw email display in <!--email_off-->...<!--/email_off--> so Cloudflare
+  // Email Obfuscation does not rewrite mailto: or inject email-decode.min.js.
+  if (!out.includes('<!--email_off-->')) {
+    out = out.replace(
+      '<span class="break-all text-sm">zaziediya@gmail.com</span>',
+      '<!--email_off--><span class="break-all text-sm">zaziediya@gmail.com</span><!--/email_off-->',
+    );
+    out = out.replace(
+      '<strong class="text-bone">zaziediya@gmail.com</strong>',
+      '<!--email_off--><strong class="text-bone">zaziediya@gmail.com</strong><!--/email_off-->',
+    );
+    applied.push('wrapped visible email in <!--email_off-->');
+  }
+
+  // Ensure #top h1 span in #zp-atelier uses #e65650 (>=4.5:1 AA contrast).
+  if (out.includes('-webkit-text-fill-color:#c41e1e;\n  color:#c41e1e;')) {
+    out = out.replace(
+      '-webkit-text-fill-color:#c41e1e;\n  color:#c41e1e;',
+      '-webkit-text-fill-color:#e65650;\n  color:#e65650;',
+    );
+    applied.push('updated #zp-atelier h1 span contrast to #e65650');
+  }
+
   // Form controls: the React bundle names these fields at render time, so the
   // snapshot has to carry the same names or first paint has anonymous fields.
   {
@@ -760,7 +950,24 @@ fs.writeFileSync(path.join(root, name), patched, 'utf8');
 
 const indexFile = path.join(root, 'index.html');
 const { html, applied } = patchStatic(fs.readFileSync(indexFile, 'utf8'), showreelTracks);
-let nextHtml = html.replace(/\/?index-[0-9a-f]{8}\.js/g, (m) => (m.startsWith('/') ? `/${name}` : name));
+
+// Content-hash index-*.css so any stylesheet edit automatically renames the file
+// and updates index.html + sw.js (verified by tools/film-player.test.mjs).
+const currentCssFile = fs.readdirSync(root).find((f) => /^index-[0-9a-f]{8}\.css$/.test(f));
+if (!currentCssFile) throw new Error('index-*.css missing in repository root');
+const cssContent = fs.readFileSync(path.join(root, currentCssFile), 'utf8');
+const cssHash = crypto.createHash('sha256').update(cssContent).digest('hex').slice(0, 8);
+const cssName = `index-${cssHash}.css`;
+if (currentCssFile !== cssName) {
+  fs.writeFileSync(path.join(root, cssName), cssContent, 'utf8');
+  for (const f of fs.readdirSync(root)) {
+    if (/^index-[0-9a-f]{8}\.css$/.test(f) && f !== cssName) fs.rmSync(path.join(root, f));
+  }
+}
+
+let nextHtml = html
+  .replace(/\/?index-[0-9a-f]{8}\.js/g, (m) => (m.startsWith('/') ? `/${name}` : name))
+  .replace(/\/?index-[0-9a-f]{8}\.css/g, (m) => (m.startsWith('/') ? `/${cssName}` : cssName));
 nextHtml = ensureEstimatorAssets(nextHtml);
 nextHtml = ensureCompilationsAssets(nextHtml);
 fs.writeFileSync(indexFile, nextHtml, 'utf8');
@@ -768,9 +975,11 @@ fs.writeFileSync(indexFile, nextHtml, 'utf8');
 const swFile = path.join(root, 'sw.js');
 if (fs.existsSync(swFile)) {
   const sw = fs.readFileSync(swFile, 'utf8');
-  const nextSw = sw.replace(/\/index-[0-9a-f]{8}\.js/g, `/${name}`);
+  const nextSw = sw
+    .replace(/\/index-[0-9a-f]{8}\.js/g, `/${name}`)
+    .replace(/\/index-[0-9a-f]{8}\.css/g, `/${cssName}`);
   if (nextSw !== sw) fs.writeFileSync(swFile, nextSw, 'utf8');
 }
 
-console.log(`home-src: wrote ${name} (${patched.length} bytes)`);
+console.log(`home-src: wrote ${name} (${patched.length} bytes), css ${cssName}`);
 console.log(`home-src: index.html updated (${applied.length} static edits)`);

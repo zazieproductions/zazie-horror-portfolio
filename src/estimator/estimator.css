@@ -263,3 +263,24 @@ textarea.zp-input { resize:vertical; }
   .zp-list-block { padding:1rem; }
   .zp-input { font-size:16px; }
 }
+
+.zp-home-section p a {
+  color:#e65650;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+
+@media (max-width: 767px) {
+  .zp-pkg-copy,
+  .zp-pkg-best,
+  .zp-pkg-list,
+  .zp-inclusions,
+  .zp-factors-list dd,
+  .zp-list-block p,
+  .zp-list-block li,
+  .zp-fine {
+    font-size: 1rem;
+    line-height: 1.65;
+  }
+}
+

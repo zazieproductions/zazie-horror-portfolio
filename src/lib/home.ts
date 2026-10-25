@@ -1,10 +1,12 @@
 /** Homepage fragments generated from the same content modules as item pages. */
 
 import { additionalHomePosters, featuredPosterSlugs } from '../data/home.js';
+import { compilations } from '../data/compilations.js';
+import { cues } from '../data/cues.js';
 import { person, organization, website } from '../data/entities.js';
 import { hubs } from '../data/hubs.js';
 import { productions } from '../data/productions.js';
-import { INDEXABLE_ROBOTS, ORG_ID, PERSON_ID, SITE_ORIGIN, WEBSITE_ID, escapeHtml, url } from '../data/site.js';
+import { INDEXABLE_ROBOTS, ORG_ID, PERSON_ID, SITE_ORIGIN, WEBSITE_ID, escapeHtml, isoDuration, url } from '../data/site.js';
 import type { Json, Production } from '../data/types.js';
 import { OG_TYPES, ogImageFor, seoBlock } from './head.js';
 import type { PageHead } from './head.js';
@@ -24,7 +26,25 @@ if (new Set(posterSlugs).size !== posterSlugs.length) {
   throw new Error('src/data/home.ts has a duplicate poster-wall slug');
 }
 
-/** Exact button markup used by the existing poster wall and lightbox. */
+function posterMetaLine(homePoster: (typeof homePosters)[number]): string {
+  if ('credits' in homePoster) {
+    const zazieRole = homePoster.credits.find((credit) => /zazie/i.test(credit.name))?.role;
+    const parts = [homePoster.workType];
+    if (homePoster.releaseYear) parts.push(String(homePoster.releaseYear));
+    if (zazieRole) parts.push(zazieRole);
+    return parts.join(' · ');
+  }
+  return `${homePoster.workType} · ${homePoster.roleLabel}`;
+}
+
+export const homePosterClientData = homePosters.map((homePoster) => ({
+  slug: homePoster.slug,
+  title: homePoster.title,
+  meta: posterMetaLine(homePoster),
+  summary: homePoster.summary,
+}));
+
+/** Exact semantic article + button markup used by the poster wall and lightbox. */
 export function renderHomePosterCards(): string {
   return homePosters
     .map((homePoster) => {
@@ -38,7 +58,10 @@ export function renderHomePosterCards(): string {
         : '';
       const contain = 'fit' in homePoster && homePoster.fit === 'contain';
       const fitClass = contain ? 'zp-poster-contain' : 'object-cover object-top group-hover:scale-105';
-      return `<button type="button" class="group relative w-full overflow-hidden border border-ash bg-smoke text-left transition-all duration-500 hover:border-blood/60 hover:shadow-[0_12px_40px_rgba(80,0,0,0.35)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blood" aria-label="View ${escapeHtml(homePoster.title)} poster" data-home-poster="${escapeHtml(homePoster.slug)}">
+      const metaLine = posterMetaLine(homePoster);
+      const slug = escapeHtml(homePoster.slug);
+      return `<article id="poster-${slug}" class="zp-poster-card flex flex-col border border-ash bg-smoke transition-all duration-500 hover:border-blood/60 hover:shadow-[0_12px_40px_rgba(80,0,0,0.35)]">
+<button type="button" class="group relative w-full overflow-hidden bg-smoke text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blood" aria-label="View ${escapeHtml(homePoster.title)} poster" data-home-poster="${slug}">
 <div class="relative aspect-[2/3] overflow-hidden bg-void">
 <picture>
 ${source}
@@ -50,15 +73,22 @@ ${source}
 <h3 class="font-display text-base leading-tight text-bone transition-colors group-hover:text-blood sm:text-xl md:text-2xl">${escapeHtml(homePoster.title)}</h3>
 </div>
 </div>
-</button>`;
+</button>
+<div class="zp-poster-meta-box flex flex-1 flex-col justify-between gap-2 border-t border-ash bg-ink p-3 sm:p-4">
+<div>
+<p class="text-[11px] uppercase tracking-[0.18em] text-blood">${escapeHtml(metaLine)}</p>
+<p class="mt-1.5 text-base leading-relaxed text-mist">${escapeHtml(homePoster.summary)}</p>
+</div>
+<p class="pt-1 text-base text-mist"><a href="#poster-${slug}" class="text-blood underline underline-offset-4 hover:text-bone">Permalink</a> · <a href="/work#productions" class="text-blood underline underline-offset-4 hover:text-bone">Production archive</a></p>
+</div>
+</article>`;
     })
     .join('\n');
 }
 
 /**
- * Homepage schema stays deliberately small: the verified shared identities and
- * the current home WebPage only. No inherited reviews, awards, pricing, or FAQ
- * and video graphs from the historical markup are copied forward.
+ * Homepage schema includes the verified shared identities, the home WebPage,
+ * the CreativeWork portfolio graph, and the MusicPlaylist showreel/compilations graph.
  */
 export const homeJsonLd: Json[] = [
   person as unknown as Json,
@@ -73,10 +103,67 @@ export const homeJsonLd: Json[] = [
     description: homeRoute.description,
     isPartOf: { '@id': WEBSITE_ID },
     mainEntity: { '@id': PERSON_ID },
+    hasPart: [{ '@id': `${SITE_ORIGIN}/#creative-work` }, { '@id': `${SITE_ORIGIN}/#playlist` }],
     author: { '@id': PERSON_ID },
     publisher: { '@id': ORG_ID },
     inLanguage: 'en',
     dateModified: homeRoute.lastmod,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    '@id': `${SITE_ORIGIN}/#creative-work`,
+    name: 'Zazie Productions — Selected Horror Film Scores & Sound Design Portfolio',
+    description:
+      'Original horror film scores, dark ambient compositions, and experimental cinema sound design by Zazie Kanwar-Torge (Zazie Productions LLC).',
+    url: `${SITE_ORIGIN}/#posters`,
+    creator: { '@id': PERSON_ID },
+    author: { '@id': PERSON_ID },
+    publisher: { '@id': ORG_ID },
+    inLanguage: 'en',
+    genre: ['Psychological Horror', 'Folk Horror', 'Body Horror', 'Supernatural Thriller', 'Dark Ambient'],
+    hasPart: productionPosters.map((prod) => ({
+      '@type': 'CreativeWork',
+      name: prod.title,
+      description: prod.summary,
+      url: url(`/work/${prod.slug}`),
+      ...(prod.releaseYear ? { datePublished: String(prod.releaseYear) } : {}),
+    })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'MusicPlaylist',
+    '@id': `${SITE_ORIGIN}/#playlist`,
+    name: 'Zazie Kanwar-Torge — Original Horror Score Showreel & Compilations',
+    description:
+      '30 original horror film score cues and 11 Bandcamp compilation and standalone releases by Zazie Kanwar-Torge.',
+    url: `${SITE_ORIGIN}/#showreel`,
+    creator: { '@id': PERSON_ID },
+    author: { '@id': PERSON_ID },
+    numTracks: cues.length + compilations.length,
+    track: [
+      ...cues.map((cue, idx) => ({
+        '@type': 'MusicRecording',
+        position: idx + 1,
+        name: cue.title,
+        duration: isoDuration(cue.durationSeconds),
+        genre: cue.category,
+        url: url(`/reel/${cue.slug}`),
+        byArtist: { '@id': PERSON_ID },
+      })),
+      ...compilations.map((item, idx) => ({
+        '@type': 'MusicRecording',
+        position: cues.length + idx + 1,
+        name: item.title,
+        inAlbum: {
+          '@type': 'MusicAlbum',
+          name: item.album,
+          ...(item.albumUrl ? { url: item.albumUrl } : {}),
+        },
+        ...(item.trackUrl ? { url: item.trackUrl } : item.albumUrl ? { url: item.albumUrl } : {}),
+        byArtist: { '@id': PERSON_ID },
+      })),
+    ],
   },
 ];
 
