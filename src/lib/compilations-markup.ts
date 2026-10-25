@@ -22,6 +22,18 @@ export function playerUrl(item: CompilationItem): string {
   return `${BANDCAMP_EMBED_PREFIX}${album}${trackOnly}size=large/bgcol=121212/linkcol=c41e1e/tracklist=false/artwork=small${track}/transparent=true/`;
 }
 
+/** Bandcamp's 700px square cover for an artwork id. */
+export function coverUrl(item: CompilationItem): string {
+  return `https://f4.bcbits.com/img/a${item.artId}_16.jpg`;
+}
+
+function cover(item: CompilationItem): string {
+  const href = item.albumUrl ?? item.trackUrl ?? '';
+  const img =
+    `<img src="${coverUrl(item)}" alt="Cover art for ${esc(item.album)}" width="700" height="700" loading="lazy" decoding="async" referrerpolicy="no-referrer">`;
+  return `<a class="zp-comp-cover" href="${href}" target="_blank" rel="noopener">${img}</a>`;
+}
+
 function card(item: CompilationItem): string {
   const links: string[] = [];
   if (item.trackUrl) links.push(`<a href="${item.trackUrl}" target="_blank" rel="noopener">Track on Bandcamp</a>`);
@@ -31,6 +43,7 @@ function card(item: CompilationItem): string {
   const title = `${item.title} - ${item.duration} - Bandcamp player`;
   return (
     `<li class="zp-comp-card">` +
+    cover(item) +
     `<p class="zp-comp-meta"><span>${item.kind}</span> <span>${esc(item.album)}</span></p>` +
     `<h3>${esc(item.title)}</h3>` +
     `<p class="zp-comp-note">${esc(item.note)}</p>` +
@@ -53,7 +66,7 @@ export function compilationsInnerHtml(): string {
     `<div class="mb-10 max-w-2xl sm:mb-12">` +
     `<p class="mb-3 inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.4em] text-blood sm:text-[11px]"><span class="h-px w-8 bg-blood/60" aria-hidden="true"></span>Compilations</p>` +
     `<h2 class="font-display text-3xl leading-[1.05] tracking-tight text-bone sm:text-4xl md:text-5xl">Heard on compilations. <span class="mt-1 block italic text-mist">Tracks and releases on Bandcamp.</span></h2>` +
-    `<p class="mt-4 text-sm leading-relaxed text-mist sm:text-base">Pieces contributed to label compilations, plus two releases of my own. Press a button to load the Bandcamp player; nothing is requested from Bandcamp until you do.</p>` +
+    `<p class="mt-4 text-sm leading-relaxed text-mist sm:text-base">Pieces contributed to label compilations, plus two releases of my own. Press a button to load the Bandcamp player; the player itself is not requested from Bandcamp until you do.</p>` +
     `</div>` +
     `<ul class="zp-comp-grid">${compilations.map(card).join('')}</ul>` +
     `<p class="mt-6 text-[11px] tracking-wide text-mist">Playback runs in Bandcamp&rsquo;s own player. Full catalogue on <a href="https://zazieproductions.bandcamp.com" target="_blank" rel="noopener" class="text-blood hover:underline">Bandcamp</a> and in the <a href="/store" class="text-blood hover:underline">store</a>.</p>`
@@ -72,6 +85,11 @@ export const COMPILATIONS_CSS = `
   @media (min-width:1024px){.zp-comp-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
   .zp-comp-card{display:flex;flex-direction:column;gap:.65rem;min-width:0;padding:1.25rem;border:1px solid #1e1e1e;background:#030303;transition:border-color .3s}
   .zp-comp-card:hover,.zp-comp-card:focus-within{border-color:rgba(196,30,30,.55)}
+  .zp-comp-cover{display:block;margin:-1.25rem -1.25rem .35rem;background:#121212;aspect-ratio:1/1;overflow:hidden}
+  .zp-comp-cover img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s ease,opacity .3s}
+  .zp-comp-cover:hover img{transform:scale(1.03)}
+  .zp-comp-cover:focus-visible{outline:2px solid #ff2a2a;outline-offset:-2px}
+  @media (prefers-reduced-motion:reduce){.zp-comp-cover img{transition:none}.zp-comp-cover:hover img{transform:none}}
   .zp-comp-meta{display:flex;flex-direction:column;gap:.15rem;margin:0;font-size:.625rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(154,149,144,.8)}
   .zp-comp-meta span:first-child{color:#c41e1e}
   .zp-comp-card h3{margin:0;font-family:var(--font-display,'Cormorant Garamond',serif);font-weight:400;font-size:1.5rem;line-height:1.15;color:#f0ebe3;overflow-wrap:anywhere}
