@@ -343,10 +343,13 @@ or if any internal link or `#fragment` stops resolving:
 ```
 npm run check:headers
 npm run check:links
+npm run check:forms
 node tools/live-route-audit.mjs https://horror.zazieproductions.com
 ```
 
 The zero-tracking privacy claim is structural: adding an analytics script or a cookie would invalidate `/privacy`, the footer statement on every page, and the device inspector on `/privacy`. Don't.
+
+One third party tries anyway, and the Content Security Policy is what stops it. Cloudflare injects its Web Analytics beacon (`https://static.cloudflareinsights.com/beacon.min.js`) into the HTML it serves at the edge — it is in no file here, it is not in the upload, and no build step can delete it. Because `/privacy` states that no analytics package and no third-party script run on this site, the beacon's host is deliberately absent from `script-src` (and `cloudflareinsights.com` from `connect-src`), so every page refuses it. A Lighthouse report naming it is the policy working, not a regression; `tools/check-headers.mjs` fails the build if either host is ever allowlisted. To stop the request rather than just block it, switch off **Analytics & Logs → Web Analytics → Manage site → Advanced options → JS snippet injection** in the Cloudflare dashboard. Allowlisting it instead would make the notice false, so that is a copy change before it is a header change.
 
 ## Media & asset pipeline
 
@@ -398,6 +401,7 @@ Target: **WCAG 2.2 Level AA, partially conformant** — stated precisely on [`/a
 - Progressive enhancement everywhere: every document clause, FAQ answer, catalogue card and link works with JavaScript off.
 - `prefers-reduced-motion` stops the ken-burns hero, ambient orbs and wave animation; the archive boot never plays for a reduced-motion visitor, is `aria-hidden`, skippable by any input and never gates page text.
 - Semantic headings, single H1 per page, skip links, `aria-pressed`/`aria-label` on controls, breadcrumbs in schema and (on document pages) visibly.
+- **Every form control carries an `id` or a `name`.** A field with neither cannot be autofilled and is not reachable through `form.elements`; `tools/check-forms.mjs` reads the served pages — not the sources — and fails the build on any unnamed `<input>`, `<select>` or `<textarea>`. The homepage is the hard case, because the React bundle and the prerendered snapshot in `index.html` both render the inquiry form and the two media scrubs. `home-src/build.mjs` derives each name from the control's own accessible label (`fieldName`, folded to a slug and applied by both render paths), so a renamed field cannot leave one copy anonymous, and the checker proves the result landed.
 - Document pages keep a legibility red (`--blood-text #e65650`, 5.71:1 on void) where small text needs it.
 - **Named gaps** (see `/accessibility` §4): the portfolio and catalogue still use darker red `#c41e1e` (3.49:1) for small labels, and atmosphere effects create exceptions on the portfolio pages. These are recorded deliberately — fix them in the open, don't quietly restyle the identity either way.
 
