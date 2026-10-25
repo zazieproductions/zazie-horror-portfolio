@@ -40,7 +40,7 @@ export const SECURITY_HEADERS = {
     "img-src 'self' data: https:",
     "media-src 'self' https:",
     "font-src 'self'",
-    'frame-src https://www.youtube.com https://www.youtube-nocookie.com https://drive.google.com https://docs.google.com',
+    'frame-src https://www.youtube.com https://www.youtube-nocookie.com https://drive.google.com https://docs.google.com https://bandcamp.com',
     "connect-src 'self'",
     "object-src 'none'",
     "base-uri 'self'",

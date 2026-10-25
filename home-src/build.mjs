@@ -44,6 +44,8 @@ const here = path.join(root, 'home-src');
 const pricing = await import('../build/lib/pricing-markup.js');
 const { budgetOptions, budgetSelectOptions, estimatorHtml, packagesHtml, inclusionsHtml } = pricing;
 const { MICROBUDGET_STATEMENT } = await import('../build/data/pricing.js');
+const { compilationsSectionHtml, compilationsInnerHtml, SECTION_CLASS, CONTAINER_CLASS, COMPILATIONS_CSS, COMPILATIONS_JS } =
+  await import('../build/lib/compilations-markup.js');
 
 const BOTH = 'both';
 const BUNDLE = 'bundle';
@@ -422,7 +424,29 @@ function patchBundle(orig) {
   const servicesMarkup = SERVICES_HEADER + islandHtml(false);
   const replacement = `function lj(){return u.jsx("section",{id:"services",className:"relative bg-ink py-14 sm:py-20 md:py-28",children:u.jsx("div",{className:"mx-auto max-w-7xl px-4 sm:px-6 md:px-8",dangerouslySetInnerHTML:{__html:${JSON.stringify(servicesMarkup)}}})})}`;
   out = out.slice(0, start) + replacement + out.slice(end);
+  out = addCompilationsSection(out);
   assertBundleParses(out);
+  return out;
+}
+
+/**
+ * Homepage "Compilations" section (src/lib/compilations-markup.ts). It is a
+ * static-markup component placed between the showreel (G5) and the press kit
+ * (I5) in App; index.html carries the identical markup (patchStatic).
+ */
+function addCompilationsSection(source) {
+  let out = source;
+  const component =
+    `function zpCompilations(){return u.jsx("section",{id:"compilations",className:${JSON.stringify(SECTION_CLASS)},` +
+    `children:u.jsx("div",{className:${JSON.stringify(CONTAINER_CLASS)},dangerouslySetInnerHTML:{__html:${JSON.stringify(compilationsInnerHtml())}}})})}`;
+  for (const [oldText, newText] of [
+    ['function I5(){return u.jsx("section",{id:"press"', `${component}function I5(){return u.jsx("section",{id:"press"`],
+    ['u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"}),u.jsx(I5,', 'u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"}),u.jsx(zpCompilations,{}),u.jsx(I5,'],
+  ]) {
+    const n = countOf(out, oldText);
+    if (n !== 1) throw new Error(`bundle: "${oldText.slice(0, 60)}" matched ${n} times, expected 1`);
+    out = out.replace(oldText, () => newText);
+  }
   return out;
 }
 
@@ -505,6 +529,20 @@ function patchStatic(html, tracks) {
   out = patchStaticShowreel(out, tracks);
   if (out !== previousShowreel) applied.push(`showreel queue synced (${tracks.length} cues; ${tracks[0].title} first)`);
 
+  // Compilations: the section sits straight after the showreel. Idempotent -
+  // an existing copy is replaced, so a change to the data reaches index.html.
+  {
+    const section = compilationsSectionHtml();
+    const existing = /<section id="compilations"[\s\S]*?<\/section>/;
+    if (existing.test(out)) {
+      out = out.replace(existing, () => section);
+    } else {
+      const at = out.indexOf('</section>', out.indexOf('<section id="showreel"')) + '</section>'.length;
+      out = out.slice(0, at) + section + out.slice(at);
+    }
+    applied.push('compilations section placed after the showreel');
+  }
+
   // Services: replace the old React estimator snapshot with the static island.
   // The header paragraph is followed by its wrapper's </div>, then the grid
   // that holds the old "Scope builder". We replace the grid, matched by depth.
@@ -546,6 +584,18 @@ function patchStatic(html, tracks) {
   out = out.replace(budgetRe, (_m, open, close) => `${open}${budgetSelectOptions()}${close}`);
 
   return { html: out, applied };
+}
+
+/** Inline style and click-to-load script for the compilations section. */
+function ensureCompilationsAssets(html) {
+  let out = html;
+  const style = `<style id="zp-comp-style">${COMPILATIONS_CSS}</style>`;
+  const script = `<script id="zp-comp-script">${COMPILATIONS_JS}</script>`;
+  for (const [id, tag, block] of [['zp-comp-style', 'style', style], ['zp-comp-script', 'script', script]]) {
+    const existing = new RegExp(`<${tag} id="${id}">[\\s\\S]*?</${tag}>`);
+    out = existing.test(out) ? out.replace(existing, () => block) : out.replace('</head>', () => `${block}\n</head>`);
+  }
+  return out;
 }
 
 /** The estimator stylesheet and script used by the homepage island. */
@@ -594,6 +644,7 @@ const indexFile = path.join(root, 'index.html');
 const { html, applied } = patchStatic(fs.readFileSync(indexFile, 'utf8'), showreelTracks);
 let nextHtml = html.replace(/\/?index-[0-9a-f]{8}\.js/g, (m) => (m.startsWith('/') ? `/${name}` : name));
 nextHtml = ensureEstimatorAssets(nextHtml);
+nextHtml = ensureCompilationsAssets(nextHtml);
 fs.writeFileSync(indexFile, nextHtml, 'utf8');
 
 const swFile = path.join(root, 'sw.js');

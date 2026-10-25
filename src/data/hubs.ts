@@ -259,7 +259,7 @@ export const hubs: Hub[] = [
     name: "Privacy notice",
     title: "Privacy Notice: No Trackers, No Cookies | Zazie Productions",
     description: "Privacy notice for horror.zazieproductions.com: zero advertising trackers, zero analytics cookies, local storage inventory, third-party media embeds, and NDA inquiry handling.",
-    lastmod: "2026-10-13",
+    lastmod: "2026-10-24",
     images: [],
     videos: [],
   },

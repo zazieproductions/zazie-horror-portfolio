@@ -119,7 +119,8 @@ All artwork © the respective productions. See the [live site](https://horror.za
 | Film samples | `Projects.tsx` data + prerendered covers | 6 YouTube-nocookie iframes get a real `src` only when lazy-loaded; 1 Google Drive embed; `preconnect` to YouTube deferred off the critical path. |
 | Boot overlay | legacy inline markup in `index.html` | Disabled by default; never covers the readable homepage content. |
 | Store previews & room tone | `store-src/store.js` | Per-card audio previews (`data-preview`); a looping room tone (`data-ambience`) crossfades down while previews play. `preload="none"`. |
-| External score player | Reelcrafter | Allowlisted in CSP (`frame-src`) and referenced as a `significantLink` in JSON-LD; currently linked, not embedded. |
+| Compilation players | Homepage `#compilations` (data in `src/data/compilations.ts`, markup/CSS/JS in `src/lib/compilations-markup.ts`, wired into the bundle and `index.html` by `home-src/build.mjs`); `/reel#compilations` (hand-written in `reel/index.html`, click handler in `legal-src/legal.js` — keep the two lists in step) | Eleven Bandcamp embeds, the same set and order as the ReelCrafter reel: nine compilation tracks (e.g. Sounds for the Soul *The Undead* and *Vampires*, Inner Demons *Experiments on the Witch House*) and two own releases (*Opaline Lament*, *Constrained Capacity*). Click-to-load: the Bandcamp iframe is created only when the visitor presses the button, so the page makes no Bandcamp request on load (privacy notice §6–7). `https://bandcamp.com` is in CSP `frame-src`. To add one, copy a `.comp-card` and use the album/track ids from Bandcamp's embed code. |
+| External score player | Reelcrafter | Referenced as a `significantLink` in JSON-LD and linked from the homepage and `/reel`; not embedded. Its host is **not** in CSP `frame-src`, so an embed would need `https://play.reelcrafter.com` added to `tools/headers.mjs` and `_headers`. |
 
 ## Architecture
 
@@ -490,7 +491,7 @@ For future AI-assisted development sessions. **Before changing anything:**
 
 - Bring the React/Vite source tree into this repository and regenerate the prerendered HTML from the app (`createRoot` → `hydrateRoot`), closing debts #1, #2 and the three-footer sync cost
 - External storage or LFS for the audio library as it grows (debt #4)
-- Reelcrafter score player: allowlisted and linked; a deeper embed is possible within the existing CSP
+- Reelcrafter score player: linked only; embedding it needs `https://play.reelcrafter.com` added to the CSP `frame-src`
 
 Nothing on this list should be described as shipped until it is in the tree.
 

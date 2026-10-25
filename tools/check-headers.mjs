@@ -136,8 +136,8 @@ if (/'unsafe-eval'/.test(csp)) fail("Content-Security-Policy must not allow 'uns
 if (/default-src [^;]*\*/.test(csp)) fail('Content-Security-Policy default-src must not contain a wildcard');
 
 const cspFrames = cspDirectives.get('frame-src') || '';
-for (const origin of ['https://www.youtube.com', 'https://www.youtube-nocookie.com']) {
-  if (!cspFrames.includes(origin)) fail(`Content-Security-Policy frame-src must allow ${origin} for embedded reels`);
+for (const origin of ['https://www.youtube.com', 'https://www.youtube-nocookie.com', 'https://bandcamp.com']) {
+  if (!cspFrames.includes(origin)) fail(`Content-Security-Policy frame-src must allow ${origin} for embedded players`);
 }
 
 /* --------------------------------------------------- 3. no comma-joined cache */
