@@ -856,19 +856,72 @@ function patchStatic(html, tracks) {
     }
   }
 
-  // Wrap raw email display in <!--email_off-->...<!--/email_off--> so Cloudflare
-  // Email Obfuscation does not rewrite mailto: or inject email-decode.min.js.
-  if (!out.includes('<!--email_off-->')) {
-    out = out.replace(
-      '<span class="break-all text-sm">zaziediya@gmail.com</span>',
-      '<!--email_off--><span class="break-all text-sm">zaziediya@gmail.com</span><!--/email_off-->',
-    );
-    out = out.replace(
-      '<strong class="text-bone">zaziediya@gmail.com</strong>',
-      '<!--email_off--><strong class="text-bone">zaziediya@gmail.com</strong><!--/email_off-->',
-    );
-    applied.push('wrapped visible email in <!--email_off-->');
+  // Cloudflare Email Obfuscation rewrites any plaintext address or mailto:
+  // link and, on pages where it rewrites something, injects
+  // /cdn-cgi/.../email-decode.min.js into the response. Mark the two homepage
+  // regions that carry addresses — the contact mailto anchor (href + visible
+  // address) and the whole contact form (the you@production.com placeholder,
+  // the footer address and any future mailto action) — with the documented
+  // email_off markers so the edge leaves the page untouched. JSON-LD
+  // addresses live in <script> blocks, which the obfuscator skips. The
+  // markers wrap whole elements; they must never nest (HTML comments cannot).
+  const mailtoAnchor =
+    '<a href="mailto:zaziediya@gmail.com?subject=Scoring%20Inquiry" class="flex items-center gap-3 text-bone transition-colors hover:text-blood">';
+  const contactForm =
+    '<form class="space-y-4 border border-ash bg-ink/70 p-4 sm:space-y-5 sm:p-6 md:p-8">';
+  // Collapse the earlier narrow, text-only wraps so the broad ones do not nest.
+  // These replace() calls are no-ops once the broad wraps own the regions.
+  out = out.replace(
+    '<!--email_off--><span class="break-all text-sm">zaziediya@gmail.com</span><!--/email_off-->',
+    '<span class="break-all text-sm">zaziediya@gmail.com</span>',
+  );
+  out = out.replace(
+    '<!--email_off--><strong class="text-bone">zaziediya@gmail.com</strong><!--/email_off-->',
+    '<strong class="text-bone">zaziediya@gmail.com</strong>',
+  );
+  // Self-heal a doubled marker left by an older partial run (HTML comments
+  // cannot nest). Each region is then guarded by its own MARKED-form check:
+  // a bare element string is also a substring of an already-marked one, so
+  // testing the bare string alone would prefix the marker twice.
+  out = out.split('<!--email_off--><!--email_off-->').join('<!--email_off-->');
+  out = out.split('<!--/email_off--><!--/email_off-->').join('<!--/email_off-->');
+  let emailRegionsWrapped = false;
+  // 1. The whole contact mailto anchor, href attribute included. Open and
+  // close are repaired independently (same reason as the form below).
+  if (out.includes(mailtoAnchor) && !out.includes('<!--email_off-->' + mailtoAnchor)) {
+    out = out.replace(mailtoAnchor, '<!--email_off-->' + mailtoAnchor);
+    emailRegionsWrapped = true;
   }
+  const anchorCloseTarget = '</a><a href="tel:+18644300606"';
+  if (
+    out.includes('<!--email_off-->' + mailtoAnchor) &&
+    !out.includes('</a><!--/email_off--><a href="tel:+18644300606"') &&
+    out.includes(anchorCloseTarget)
+  ) {
+    out = out.replace(anchorCloseTarget, '</a><!--/email_off--><a href="tel:+18644300606"');
+    emailRegionsWrapped = true;
+  }
+  // 2. The whole contact form: placeholder, visible address and submit copy.
+  // The close marker keys off the structural section/main/footer chain, not
+  // the form's last child element, so copy edits inside the form don't break it.
+  if (out.includes(contactForm) && !out.includes('<!--email_off-->' + contactForm)) {
+    out = out.replace(contactForm, '<!--email_off-->' + contactForm);
+    emailRegionsWrapped = true;
+  }
+  // Repair the close independently of the opener: a build whose opener already
+  // existed but whose close target changed (a copy edit removed the form's last
+  // child element) must still complete the pair, so open and close are checked
+  // separately rather than behind one guard.
+  const formCloseTarget = '</form></div></div></div></section></main><footer';
+  if (
+    out.includes('<!--email_off-->' + contactForm) &&
+    !out.includes('</form><!--/email_off-->') &&
+    out.includes(formCloseTarget)
+  ) {
+    out = out.replace(formCloseTarget, '</form><!--/email_off--></div></div></div></section></main><footer>');
+    emailRegionsWrapped = true;
+  }
+  if (emailRegionsWrapped) applied.push('wrapped contact email regions in <!--email_off-->');
 
   // Ensure #top h1 span in #zp-atelier uses #e65650 (>=4.5:1 AA contrast).
   if (out.includes('-webkit-text-fill-color:#c41e1e;\n  color:#c41e1e;')) {
