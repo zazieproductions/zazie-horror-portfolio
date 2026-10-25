@@ -61,8 +61,8 @@ export const productions: Production[] = [
       { label: 'EXPIRE on IMDb', href: 'https://www.imdb.com/title/tt19369318/', kind: 'imdb', external: true },
       { label: 'Official first-look clip', href: 'https://www.youtube.com/watch?v=lWm4Ies7edI', kind: 'youtube', external: true },
     ],
-    relatedCueSlugs: ['needle-in-the-nerve', 'dissociative-amnesia', 'dark-thriller-cinematic-cue'],
-    updatedAt,
+    relatedCueSlugs: ['needle-in-the-nerve', 'dissociative-amnesia'],
+    updatedAt: '2026-10-24',
   },
   {
     slug: 'unseen',

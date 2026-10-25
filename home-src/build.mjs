@@ -113,7 +113,20 @@ const PAIRS = [
   ['function Q5(){const[e,t]=_.useState(null);return', 'function Q5(){const[e,t]=_.useState(null);_.useEffect(()=>{if(!e)return;const n=document.body.style.overflow,r=e=>{e.key==="Escape"&&t(null)};return document.body.style.overflow="hidden",document.addEventListener("keydown",r),()=>{document.body.style.overflow=n,document.removeEventListener("keydown",r)}},[e]);return', BUNDLE],
   ['className:"relative grid max-h-[90svh] w-full max-w-3xl overflow-hidden border border-blood/30 bg-ink shadow-[0_0_80px_rgba(196,30,30,0.2)] md:grid-cols-2"', 'className:"zp-poster-dialog relative grid max-h-[90svh] w-full max-w-3xl overflow-hidden border border-blood/30 bg-ink shadow-[0_0_80px_rgba(196,30,30,0.2)] md:grid-cols-2"', BUNDLE],
   ['type:"button",onClick:()=>t(null),className:"absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center border border-ash bg-void/90 text-bone hover:border-blood hover:text-blood","aria-label":"Close"', 'type:"button",autoFocus:!0,onClick:()=>t(null),className:"zp-poster-close absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center border border-ash bg-void/90 text-bone hover:border-blood hover:text-blood","aria-label":"Close "+e.title+" poster"', BUNDLE],
-  // Showreel rows: 32 rows x 3 decorative nodes became 32 x 1. The duration moves
+  // Showreel catalogue: The Beautiful Wrongness leads the queue, while the two
+  // retired cues are removed. Track IDs stay tied to their original audio files;
+  // the visible row number comes from the current array index instead.
+  [
+    'tracks:[{id:0,title:"Needle in The Nerve",src:"/audio/track-00.mp3",duration:72.363,tag:"Psychological Orchestral"}',
+    'tracks:[{id:30,title:"The Beautiful Wrongness",src:"/audio/track-30.mp3",duration:65.411,tag:"Psychological Orchestral"},{id:0,title:"Needle in The Nerve",src:"/audio/track-00.mp3",duration:72.363,tag:"Psychological Orchestral"}',
+    BUNDLE,
+  ],
+  [',{id:30,title:"The Beautiful Wrongness",src:"/audio/track-30.mp3",duration:65.411,tag:"Psychological Orchestral"}', '', BUNDLE],
+  [',{id:9,title:"Dark Thriller Cinematic Cue",src:"/audio/track-09.mp3",duration:65.109,tag:"Thriller"}', '', BUNDLE],
+  [',{id:23,title:"Screams of The Damned",src:"/audio/track-23.mp3",duration:200.072,tag:"Body Horror"}', '', BUNDLE],
+  ['String(t.id+1).padStart(2,"0")', 'String(s+1).padStart(2,"0")', BUNDLE],
+  ['32-cue showreel', '30-cue showreel', HTML],
+  // Showreel rows: 30 rows x 3 decorative nodes became 30 x 1. The duration moves
   // into the mood line (it was hidden below 640px, so phones lost it entirely) and
   // the play/pause glyph becomes a pseudo-element keyed off data-row-playing.
   [
@@ -260,13 +273,91 @@ function countOf(text, needle) {
   return text.split(needle).length - 1;
 }
 
+/** Read the patched player catalogue so the static first paint uses the same queue. */
+function readShowreelTracks(source) {
+  const start = source.indexOf('tracks:[');
+  const end = source.indexOf('],projects:[', start);
+  if (start < 0 || end < 0) throw new Error('bundle: showreel track array not found');
+  const body = source.slice(start + 'tracks:['.length, end);
+  const pattern = /\{id:(\d+),title:"([^"]*)",src:"([^"]*)",duration:([\d.]+),tag:"([^"]*)"\}/g;
+  const tracks = [];
+  for (const match of body.matchAll(pattern)) {
+    tracks.push({
+      id: Number(match[1]),
+      title: match[2].replace(/\\'/g, "'"),
+      src: match[3],
+      duration: Number(match[4]),
+      tag: match[5],
+    });
+  }
+  if (tracks.length !== 30) throw new Error(`bundle: expected 30 showreel tracks after patching, found ${tracks.length}`);
+  if (tracks[0].title !== 'The Beautiful Wrongness') throw new Error('bundle: The Beautiful Wrongness must be the default first track');
+  if (tracks[1].title !== 'The Fatal Overdose') throw new Error('bundle: The Fatal Overdose must be the second track');
+  if (new Set(tracks.map((track) => track.id)).size !== tracks.length) throw new Error('bundle: duplicate showreel track IDs');
+  for (const retired of ['Dark Thriller Cinematic Cue', 'Screams of The Damned']) {
+    if (tracks.some((track) => track.title === retired)) throw new Error(`bundle: retired track remains: ${retired}`);
+  }
+  return tracks;
+}
+
+function escapeStaticText(value) {
+  return String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function formatTrackDuration(seconds) {
+  return `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
+}
+
+/** Keep the prerendered homepage player byte-for-byte aligned with its new queue. */
+function patchStaticShowreel(html, tracks) {
+  const sectionStart = html.indexOf('<section id="showreel"');
+  const sectionEnd = html.indexOf('</section>', sectionStart);
+  if (sectionStart < 0 || sectionEnd < 0) throw new Error('index.html: #showreel section not found');
+  let section = html.slice(sectionStart, sectionEnd);
+  const first = tracks[0];
+
+  section = section.replace(
+    /(<p class="font-display text-5xl leading-none text-blood sm:text-6xl">)\d+(<\/p><p class="pb-1 text-\[10px\] uppercase tracking-\[0.3em\] text-mist">Curated cues<\/p>)/,
+    (_match, open, close) => `${open}${tracks.length}${close}`,
+  );
+  section = section.replace(
+    /(<h3 class="mb-1 truncate font-display text-xl text-bone sm:text-2xl md:text-4xl">)[^<]*(<\/h3>)/,
+    (_match, open, close) => `${open}${escapeStaticText(first.title)}${close}`,
+  );
+  section = section.replace(
+    /(<p class="text-\[10px\] uppercase tracking-\[0.2em\] text-blood sm:text-xs">)[^<]*(<\/p>)/,
+    (_match, open, close) => `${open}${escapeStaticText(first.tag)}${close}`,
+  );
+  section = section.replace(
+    /(<input class="seek[^>]*? max=")[^"]+("[^>]*aria-label="Seek through current track")/,
+    (_match, open, close) => `${open}${first.duration}${close}`,
+  );
+  section = section.replace(
+    /(<input class="seek[^>]*aria-label="Seek through current track"[^>]*><span class="w-9 shrink-0 text-right text-\[10px\] tabular-nums text-mist">)[^<]+/,
+    (_match, open) => `${open}${formatTrackDuration(first.duration)}`,
+  );
+
+  const listStart = section.indexOf('<div class="max-h-[min(60svh,480px)]');
+  const listOpenEnd = section.indexOf('>', listStart) + 1;
+  const listEnd = section.indexOf('</div><p class="mt-5 px-1', listOpenEnd);
+  if (listStart < 0 || listOpenEnd <= 0 || listEnd < 0) throw new Error('index.html: showreel row container not found');
+  const rows = tracks.map((track, index) => {
+    const number = String(index + 1).padStart(2, '0');
+    const stateClass = index === 0 ? 'bg-blood/10' : 'hover:bg-smoke';
+    const titleClass = index === 0 ? 'text-blood' : 'text-bone';
+    return `<button class="flex min-h-[56px] w-full items-center gap-3 px-3 py-3 text-left transition-colors sm:gap-4 sm:px-4 sm:py-4 md:px-6 ${stateClass} zp-track" data-row-playing="false"><span class="w-7 shrink-0 text-[11px] tabular-nums text-mist sm:w-8">${number}</span><div class="min-w-0 flex-1"><p class="truncate font-display text-base sm:text-lg md:text-xl ${titleClass}">${escapeStaticText(track.title)}</p><p class="mt-0.5 truncate text-[10px] uppercase tracking-[0.2em] text-mist">${escapeStaticText(track.tag)} · ${formatTrackDuration(track.duration)}</p></div></button>`;
+  }).join('');
+  section = section.slice(0, listOpenEnd) + rows + section.slice(listEnd);
+  return html.slice(0, sectionStart) + section + html.slice(sectionEnd);
+}
+
 /**
  * A replacement string is spliced into the bundle's own JavaScript source, not
  * into HTML. A pair whose new text carries an unescaped `"` turns the enclosing
  * double-quoted literal into two literals and the whole homepage bundle dies at
  * parse time - which is exactly what shipped before 2026-10-22: the file was
  * served, threw `SyntaxError`, and none of the React behaviour (poster lightbox,
- * film player, 32-cue audio player, sticky player) ever ran while every other
+ * film player, 30-cue audio player, sticky player) ever ran while every other
  * check still passed. Parsing the patched text here makes that a build failure
  * instead of a silent runtime failure.
  */
@@ -289,20 +380,20 @@ function patchBundle(orig) {
     if (n !== 1) throw new Error(`bundle: "${oldText.slice(0, 60)}" matched ${n} times, expected 1`);
     out = out.replace(oldText, () => newText);
   }
-  // The homepage player starts at playlist index zero. Promote The Fatal
-  // Overdose without changing any audio-file mappings, and keep playlist IDs
-  // aligned with their new displayed positions.
+  // The Beautiful Wrongness is the default; retain main's promotion of The
+  // Fatal Overdose immediately after it. IDs remain stable audio-file mappings;
+  // visible row numbers already come from each track's queue index.
   const tracksMatch = out.match(/tracks:\[([\s\S]*?)\],projects:/);
   if (!tracksMatch) throw new Error('bundle: homepage player track list not found');
   const tracks = tracksMatch[1].split('},{').map((track) =>
     `{${track.replace(/^\{/, '').replace(/\}$/, '')}}`
   );
   const fatalIndex = tracks.findIndex((track) => track.includes('title:"The Fatal Overdose"'));
-  if (tracks.length !== 32 || fatalIndex < 0) throw new Error('bundle: expected 32 tracks including The Fatal Overdose');
+  if (tracks.length !== 30 || fatalIndex < 0) throw new Error('bundle: expected 30 tracks including The Fatal Overdose');
+  if (!tracks[0].includes('title:"The Beautiful Wrongness"')) throw new Error('bundle: The Beautiful Wrongness must remain first');
   const [fatal] = tracks.splice(fatalIndex, 1);
-  tracks.unshift(fatal);
-  const orderedTracks = tracks.map((track, index) => track.replace(/^\{id:\d+/, `{id:${index}`)).join(',');
-  out = out.replace(tracksMatch[0], `tracks:[${orderedTracks}],projects:`);
+  tracks.splice(1, 0, fatal);
+  out = out.replace(tracksMatch[0], `tracks:[${tracks.join(',')}],projects:`);
 
   for (const [oldText, newText] of [[BUNDLE_BUDGET_OLD, `xu=${JSON.stringify(budgetOptions())}`], [BUNDLE_BUDGET_DEFAULT_OLD, 'useState(xu[0])']]) {
     const n = countOf(out, oldText);
@@ -337,7 +428,7 @@ function patchBundle(orig) {
 
 /* ------------------------------------------------------ static copy patch */
 
-function patchStatic(html) {
+function patchStatic(html, tracks) {
   let out = html;
   const applied = [];
   for (const [oldText, newText, target] of PAIRS) {
@@ -410,36 +501,9 @@ function patchStatic(html) {
   });
   if (trimmedRows) applied.push(`showreel rows trimmed (${trimmedRows})`);
 
-  // Keep the prerendered playlist in sync with the client bundle: the Fatal
-  // Overdose is the first cue and the default, paused selection.
-  const showreelStart = out.indexOf('<section id="showreel"');
-  const showreelEnd = out.indexOf('</section>', showreelStart);
-  if (showreelStart < 0 || showreelEnd < 0) throw new Error('index.html: no #showreel section');
-  let showreel = out.slice(showreelStart, showreelEnd);
-  const rowRe = /<button class="([^"]*\bzp-track\b[^"]*)"[^>]*>[\s\S]*?<\/button>/g;
-  const rows = [...showreel.matchAll(rowRe)].map((match) => match[0]);
-  const fatalRowIndex = rows.findIndex((row) => row.includes('>The Fatal Overdose</p>'));
-  if (rows.length !== 32 || fatalRowIndex < 0) throw new Error(`index.html: expected 32 showreel rows including The Fatal Overdose; found ${rows.length}`);
-  const [fatalRow] = rows.splice(fatalRowIndex, 1);
-  rows.unshift(fatalRow);
-  const orderedRows = rows.map((row, index) => {
-    let next = row.replace(/(<span class="w-7[^"]*">)[\s\S]*?(<\/span>)/, `$1${String(index + 1).padStart(2, '0')}$2`);
-    next = next.replace(/<button class="([^"]*)"/, (_match, className) => {
-      const classes = className.split(/\s+/).filter((name) => name && name !== 'bg-blood/10');
-      if (index === 0) classes.push('bg-blood/10');
-      return `<button class="${classes.join(' ')}"`;
-    });
-    next = next.replace(/(<p class="[^"]*font-display[^"]*)text-(?:bone|blood)([^"]*">)/, (_match, before, after) =>
-      `${before}text-${index === 0 ? 'blood' : 'bone'}${after}`
-    );
-    return next;
-  });
-  let rowIndex = 0;
-  showreel = showreel.replace(rowRe, () => orderedRows[rowIndex++]);
-  showreel = showreel.replace('<h3 class="mb-1 truncate font-display text-xl text-bone sm:text-2xl md:text-4xl">Needle in The Nerve</h3>', '<h3 class="mb-1 truncate font-display text-xl text-bone sm:text-2xl md:text-4xl">The Fatal Overdose</h3>');
-  showreel = showreel.replace('<p class="text-[10px] uppercase tracking-[0.2em] text-blood sm:text-xs">Psychological Orchestral</p>', '<p class="text-[10px] uppercase tracking-[0.2em] text-blood sm:text-xs">Body Horror</p>');
-  out = out.slice(0, showreelStart) + showreel + out.slice(showreelEnd);
-  applied.push('showreel player reordered with The Fatal Overdose first');
+  const previousShowreel = out;
+  out = patchStaticShowreel(out, tracks);
+  if (out !== previousShowreel) applied.push(`showreel queue synced (${tracks.length} cues; ${tracks[0].title} first)`);
 
   // Services: replace the old React estimator snapshot with the static island.
   // The header paragraph is followed by its wrapper's </div>, then the grid
@@ -517,6 +581,7 @@ const origHash = crypto.createHash('sha256').update(orig).digest('hex');
 if (!origHash.startsWith('2afd4ec8')) throw new Error(`bundle.orig.js is not the shipped bundle (sha256 ${origHash})`);
 
 const patched = patchBundle(orig);
+const showreelTracks = readShowreelTracks(patched);
 const hash = crypto.createHash('sha256').update(patched).digest('hex').slice(0, 8);
 const name = `index-${hash}.js`;
 
@@ -526,7 +591,7 @@ for (const f of fs.readdirSync(root)) {
 fs.writeFileSync(path.join(root, name), patched, 'utf8');
 
 const indexFile = path.join(root, 'index.html');
-const { html, applied } = patchStatic(fs.readFileSync(indexFile, 'utf8'));
+const { html, applied } = patchStatic(fs.readFileSync(indexFile, 'utf8'), showreelTracks);
 let nextHtml = html.replace(/\/?index-[0-9a-f]{8}\.js/g, (m) => (m.startsWith('/') ? `/${name}` : name));
 nextHtml = ensureEstimatorAssets(nextHtml);
 fs.writeFileSync(indexFile, nextHtml, 'utf8');

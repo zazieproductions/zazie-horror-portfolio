@@ -7,7 +7,7 @@
  *
  *   /llms.txt       Concise structured studio summary + categorized canonical links
  *   /llms-full.txt  Complete reference dossier (packages, pricing rules, all 9
- *                   verified production records, all 32 playable MP3 showreel cues,
+ *                   verified production records, all 30 playable MP3 showreel cues,
  *                   all 24 catalogue releases, press features, and hiring FAQs)
  *
  * Run after `tsc` in the build pipeline so neither prices nor credits can ever
@@ -116,8 +116,8 @@ ${productions
 
 ${cues
   .map(
-    (c) =>
-      `- [${String(c.track + 1).padStart(2, '0')}. ${c.title}](${SITE_ORIGIN}/reel/${c.slug}) ([MP3](${SITE_ORIGIN}${c.audioPath})): ${c.category} · ${c.duration} — ${c.description}`,
+    (c, index) =>
+      `- [${String(index + 1).padStart(2, '0')}. ${c.title}](${SITE_ORIGIN}/reel/${c.slug}) ([MP3](${SITE_ORIGIN}${c.audioPath})): ${c.category} · ${c.duration} — ${c.description}`,
   )
   .join('\n')}
 
@@ -190,11 +190,11 @@ ${p.paragraphs.map((para) => `- ${para}`).join('\n')}`,
   )
   .join('\n\n')}
 
-## Full 32-Cue Horror Showreel Notes (${SITE_ORIGIN}/reel)
+## Full ${cues.length}-Cue Horror Showreel Notes (${SITE_ORIGIN}/reel)
 
 ${cues
   .map(
-    (c) => `### ${String(c.track + 1).padStart(2, '0')}. ${c.title} (${c.category} · ${c.duration})
+    (c, index) => `### ${String(index + 1).padStart(2, '0')}. ${c.title} (${c.category} · ${c.duration})
 - **Page:** ${SITE_ORIGIN}/reel/${c.slug}
 - **Direct MP3:** ${SITE_ORIGIN}${c.audioPath}
 - **Description:** ${c.description}`,

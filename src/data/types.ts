@@ -101,7 +101,7 @@ export interface Production {
 }
 
 export interface Cue {
-  /** Position in the existing showreel and matching /audio/track-NN.mp3 file. */
+  /** Stable source-audio number in /audio/track-NN.mp3; display order follows the cues array. */
   track: number;
   slug: string;
   title: string;

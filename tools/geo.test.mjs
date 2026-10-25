@@ -35,7 +35,7 @@ function parseJsonLd(html, label) {
 }
 
 test('every indexable route places <h1> inside <main> and separates numeral spans cleanly', () => {
-  assert.ok(allRoutes.length >= 85, `expected at least 85 indexable routes, found ${allRoutes.length}`);
+  assert.ok(allRoutes.length >= 83, `expected at least 83 indexable routes, found ${allRoutes.length}`);
   for (const route of allRoutes) {
     const html = fs.readFileSync(fileForRoute(route.path), 'utf8');
     const mainMatch = /<main\b[^>]*>([\s\S]*?)<\/main>/i.exec(html);
