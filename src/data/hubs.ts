@@ -29,7 +29,7 @@ export const hubs: Hub[] = [
     // one the PageSpeed/SEO audit asked for (100-130), not the earlier 220-char
     // sentence. Both are what the WebPage JSON-LD and sitemap reuse.
     title: "Horror Composer for Hire — Film, TV & Game Scores",
-    description: `IMDb-credited horror composer Zazie Kanwar-Torge scores psychological and folk films, TV, and games. Custom scores from $${MINIMUM_FEE} USD.`,
+    description: `IMDb-credited composer Zazie Kanwar-Torge scores psychological, folk & body horror and experimental art house film, TV & games. Custom scores from $${MINIMUM_FEE} USD.`,
     lastmod: "2026-10-24",
     images: [
       { loc: "https://horror.zazieproductions.com/images/hero-portrait.jpg", caption: "Portfolio portrait for Zazie Productions, a composer and sound-design studio working across screen and experimental media.", title: "Zazie Kanwar-Torge: Psychological Horror Composer - Dark Atmospheric Scores" },
@@ -310,7 +310,7 @@ export const hubs: Hub[] = [
     description: "Cinematic sound design by Zazie Kanwar-Torge: designed dread, atmospheres, transitions and stingers for horror and experimental film, delivered as mix-ready stems.",
     lastmod: "2026-10-17",
     images: [
-      { loc: "https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg", caption: "EXPIRE horror short - sound design and score by Zazie Kanwar-Torge, from the cinematic sound design page.", title: "Cinematic Sound Design for Horror Film - Zazie Productions" },
+      { loc: "https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg", caption: "EXPIRE sci-fi horror short - sound design by Zazie Kanwar-Torge, from the cinematic sound design page.", title: "Cinematic Sound Design for Horror Film - Zazie Productions" },
     ],
     videos: [],
   },

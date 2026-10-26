@@ -3,7 +3,7 @@
 import { additionalHomePosters, featuredPosterSlugs } from '../data/home.js';
 import { compilations } from '../data/compilations.js';
 import { cues } from '../data/cues.js';
-import { person, organization, website } from '../data/entities.js';
+import { PORTFOLIO_GENRES_DEEP_LINKED, deepLinkGenres, person, organization, website } from '../data/entities.js';
 import { hubs } from '../data/hubs.js';
 import { productions } from '../data/productions.js';
 import { INDEXABLE_ROBOTS, ORG_ID, PERSON_ID, SITE_ORIGIN, WEBSITE_ID, escapeHtml, isoDuration, url } from '../data/site.js';
@@ -106,19 +106,20 @@ export const homeJsonLd: Json[] = [
     '@context': 'https://schema.org',
     '@type': 'CreativeWork',
     '@id': `${SITE_ORIGIN}/#creative-work`,
-    name: 'Zazie Productions — Selected Horror Film Scores & Sound Design Portfolio',
+    name: 'Zazie Productions — Experimental Art House, Psychological, Folk & Body Horror Film Scores Portfolio',
     description:
-      'Original horror film scores, dark ambient compositions, and experimental cinema sound design by Zazie Kanwar-Torge (Zazie Productions LLC).',
+      'Original psychological horror, folk horror, body horror, and experimental art house film scores, dark ambient compositions, and cinema sound design by Zazie Kanwar-Torge (Zazie Productions LLC).',
     url: `${SITE_ORIGIN}/#posters`,
     creator: { '@id': PERSON_ID },
     author: { '@id': PERSON_ID },
     publisher: { '@id': ORG_ID },
     inLanguage: 'en',
-    genre: ['Psychological Horror', 'Folk Horror', 'Body Horror', 'Supernatural Thriller', 'Dark Ambient'],
+    genre: PORTFOLIO_GENRES_DEEP_LINKED,
     hasPart: productionPosters.map((prod) => ({
       '@type': 'CreativeWork',
       name: prod.title,
       description: prod.summary,
+      genre: deepLinkGenres(prod.genres),
       url: url(`/work/${prod.slug}`),
       ...(prod.releaseYear ? { datePublished: String(prod.releaseYear) } : {}),
     })),
@@ -127,12 +128,13 @@ export const homeJsonLd: Json[] = [
     '@context': 'https://schema.org',
     '@type': 'MusicPlaylist',
     '@id': `${SITE_ORIGIN}/#playlist`,
-    name: 'Zazie Kanwar-Torge — Original Horror Score Showreel & Compilations',
+    name: 'Zazie Kanwar-Torge — Experimental Art House, Psychological, Folk & Body Horror Showreel & Compilations',
     description:
-      '30 original horror film score cues and 11 Bandcamp compilation and standalone releases by Zazie Kanwar-Torge.',
+      '30 original horror film score cues and 9 Bandcamp compilation and standalone releases by Zazie Kanwar-Torge.',
     url: `${SITE_ORIGIN}/#showreel`,
     creator: { '@id': PERSON_ID },
     author: { '@id': PERSON_ID },
+    genre: PORTFOLIO_GENRES_DEEP_LINKED,
     numTracks: cues.length + compilations.length,
     track: [
       ...cues.map((cue, idx) => ({
@@ -140,7 +142,7 @@ export const homeJsonLd: Json[] = [
         position: idx + 1,
         name: cue.title,
         duration: isoDuration(cue.durationSeconds),
-        genre: cue.category,
+        genre: deepLinkGenres([cue.category]),
         url: url(`/reel/${cue.slug}`),
         byArtist: { '@id': PERSON_ID },
       })),
@@ -148,6 +150,7 @@ export const homeJsonLd: Json[] = [
         '@type': 'MusicRecording',
         position: cues.length + idx + 1,
         name: item.title,
+        ...(item.genres?.length ? { genre: deepLinkGenres(item.genres) } : {}),
         inAlbum: {
           '@type': 'MusicAlbum',
           name: item.album,
@@ -162,7 +165,7 @@ export const homeJsonLd: Json[] = [
 
 const homeImage = {
   src: '/images/hero-portrait.jpg',
-  alt: 'Portrait artwork for Zazie Productions',
+  alt: 'Zazie Productions: Experimental art house, psychological, folk, and body horror film scores by Zazie Kanwar-Torge featuring bowed metal and experimental synthesis.',
   width: 896,
   height: 1152,
 };

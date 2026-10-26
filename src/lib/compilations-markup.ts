@@ -47,7 +47,7 @@ const PLAY_ICON =
 /** The cover is the player's front door: play sits on the art, the player opens beneath it. */
 function stage(item: CompilationItem): string {
   const img =
-    `<img src="${coverUrl(item)}" alt="${esc(item.title)} — cover art for ${esc(item.album)}" width="700" height="700" loading="lazy" decoding="async" referrerpolicy="no-referrer">`;
+    `<img src="${coverUrl(item)}" alt="${esc(item.alt)}" width="700" height="700" loading="lazy" decoding="async" referrerpolicy="no-referrer">`;
   const label = `Play ${item.title} from ${item.album}, ${item.duration}. Opens the Bandcamp player.`;
   return (
     `<div class="zp-stage">` +

@@ -46,7 +46,7 @@ export const additionalHomePosters = [
       avif: '/images/posters/uncle-freds-monster-problem-640.avif',
       avifSet: '/images/posters/uncle-freds-monster-problem-400.avif 400w, /images/posters/uncle-freds-monster-problem-480.avif 480w, /images/posters/uncle-freds-monster-problem-640.avif 640w',
       srcset: '/images/posters/uncle-freds-monster-problem-640.jpg 640w, /images/posters/uncle-freds-monster-problem-1200.jpg 1200w',
-      alt: "Poster artwork for UNCLE FRED'S MONSTER PROBLEM",
+      alt: "UNCLE FRED'S MONSTER PROBLEM: Creature horror film poster featured in the Zazie Productions archive.",
       width: 640,
       height: 854,
     },
