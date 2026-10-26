@@ -24,9 +24,13 @@ export const hubs: Hub[] = [
   {
     path: "/",
     name: "Portfolio",
-    title: "Horror Composer for Hire — Film, TV & Game Scores | Zazie Productions",
-    description: `Hire IMDb-credited horror composer Zazie Kanwar-Torge (Zazie Productions) for psychological, folk, body, and experimental scores across film, TV, and games. 32 playable cues, 9 screen productions, packages from $${MINIMUM_FEE} USD.`,
-    lastmod: "2026-10-18",
+    // Main's shorter title (no "| Zazie Productions" suffix) keeps the SERP
+    // title well inside the pixel budget; the description is the 129-character
+    // one the PageSpeed/SEO audit asked for (100-130), not the earlier 220-char
+    // sentence. Both are what the WebPage JSON-LD and sitemap reuse.
+    title: "Horror Composer for Hire — Film, TV & Game Scores",
+    description: `IMDb-credited composer Zazie Kanwar-Torge scores psychological, folk & body horror and experimental art house film, TV & games. Custom scores from $${MINIMUM_FEE} USD.`,
+    lastmod: "2026-10-24",
     images: [
       { loc: "https://horror.zazieproductions.com/images/hero-portrait.jpg", caption: "Portfolio portrait for Zazie Productions, a composer and sound-design studio working across screen and experimental media.", title: "Zazie Kanwar-Torge: Psychological Horror Composer - Dark Atmospheric Scores" },
       { loc: "https://horror.zazieproductions.com/images/headshot.jpg", caption: "Zazie Kanwar-Torge, composer and sound designer associated with Zazie Productions LLC.", title: "Zazie Kanwar-Torge headshot - horror film composer, Zazie Productions LLC" },
@@ -40,6 +44,7 @@ export const hubs: Hub[] = [
       { loc: "https://horror.zazieproductions.com/images/posters/choleric-1200.jpg", caption: "Poster artwork for CHOLERIC. IMDb credits Zazie Kanwar-Torge as co-producer.", title: "CHOLERIC - Short Film; Co-Producer Credit" },
       { loc: "https://horror.zazieproductions.com/images/posters/mike-has-a-visitor-1200.jpg", caption: "Poster artwork for MIKE HAS A VISITOR; IMDb credits Zazie Kanwar-Torge as composer.", title: "MIKE HAS A VISITOR - Horror Short; Composer Credit" },
       { loc: "https://horror.zazieproductions.com/images/posters/the-dark-awaits-1200.jpg", caption: "Poster artwork for THE DARK AWAITS, a paranormal reality-TV series; IMDb credits Zazie Kanwar-Torge as composer.", title: "THE DARK AWAITS - Paranormal Reality-TV Series" },
+      { loc: "https://horror.zazieproductions.com/images/posters/uncle-freds-monster-problem-1200.jpg", caption: "Poster artwork for UNCLE FRED'S MONSTER PROBLEM.", title: "UNCLE FRED'S MONSTER PROBLEM - Film Poster" },
     ],
     videos: [
       {
@@ -111,7 +116,7 @@ export const hubs: Hub[] = [
     name: "Selected productions",
     title: "Selected Production Records: Film, Television and Experimental Work | Zazie Productions",
     description: "Nine selected production records across films, television, and experimental work. Project notes distinguish verified composing, co-composing, sound-design, and production credits.",
-    lastmod: "2026-10-18",
+    lastmod: "2026-10-21",
     images: [
       { loc: "https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg", caption: "EXPIRE (2025) - IMDb credits Zazie Kanwar-Torge for sound design; other composers are listed separately.", title: "EXPIRE - Production Record and Sound-Design Credit" },
       { loc: "https://horror.zazieproductions.com/images/posters/unseen-640.jpg", caption: "UNSEEN feature; IMDb lists Steve Merlo as composer.", title: "UNSEEN - Feature Film Record" },
@@ -136,9 +141,9 @@ export const hubs: Hub[] = [
   {
     path: "/reel",
     name: "Showreel",
-    title: "Horror Composer Showreel: 32 Original Dark Cinematic Cues | Zazie Productions",
-    description: "Stream 32 original horror showreel cues by Zazie Kanwar-Torge: psychological dread beds, tension stingers, dark ambient textures, body horror, and thriller themes.",
-    lastmod: "2026-10-17",
+    title: "Horror Composer Showreel: 30 Original Dark Cinematic Cues | Zazie Productions",
+    description: "Stream 30 original horror showreel cues by Zazie Kanwar-Torge: psychological dread beds, tension stingers, dark ambient textures, body horror, and thriller themes.",
+    lastmod: "2026-10-24",
     images: [],
     videos: [],
   },
@@ -147,7 +152,7 @@ export const hubs: Hub[] = [
     name: "Composer biography",
     title: "Zazie Kanwar-Torge: Psychological Horror Composer Biography | Zazie Productions",
     description: "Biography of psychological horror composer Zazie Kanwar-Torge, founder of Zazie Productions LLC in Asheville, NC, scoring dark atmospheric films, series, and games.",
-    lastmod: "2026-10-18",
+    lastmod: "2026-10-21",
     images: [
       { loc: "https://horror.zazieproductions.com/images/headshot.jpg", caption: "Zazie Kanwar-Torge, psychological horror composer and founder of Zazie Productions LLC, Asheville NC.", title: "Zazie Kanwar-Torge - Psychological Horror Composer Biography" },
     ],
@@ -169,7 +174,7 @@ export const hubs: Hub[] = [
     name: "Rate card",
     title: "Horror Score Packages and Quotes | Zazie Productions",
     description: `Original music for psychological horror and experimental cinema. ${pricingSummary()}`,
-    lastmod: "2026-10-18",
+    lastmod: "2026-10-21",
     images: [
       { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Productions horror film scoring suite Asheville, NC", title: "Horror Film Scoring Suite - Rates" },
     ],
@@ -180,7 +185,7 @@ export const hubs: Hub[] = [
     name: "Catalogue",
     title: "Catalogue: Experimental Music, Sound Libraries, Tools and Objects | Zazie Productions",
     description: "Twenty-four catalogue entries across Bandcamp, itch.io, Gumroad, and eBay, including experimental music, sound libraries, software and visual assets, and physical objects. Current terms and availability remain with each source platform.",
-    lastmod: "2026-10-18",
+    lastmod: "2026-10-21",
     images: [
       { loc: "https://f4.bcbits.com/img/a4087485987_16.jpg", caption: "Anesthesia for the Signal Age - ten-track experimental electronic album, released May 7, 2026.", title: "Anesthesia for the Signal Age - Zazie Productions" },
       { loc: "https://f4.bcbits.com/img/a4110701137_16.jpg", caption: "Opaline Lament (Life From The Beyond) - a haunting, string-driven meditation between chamber music and spectral cinema.", title: "Opaline Lament (Life From The Beyond) - Zazie Productions" },
@@ -198,7 +203,7 @@ export const hubs: Hub[] = [
     name: "Contact",
     title: "Scoring Inquiry: Request a Score Quote | Zazie Productions",
     description: "Request a scoring quote for psychological horror, folk horror, supernatural or experimental film. Share what you know; scored minutes, format, timing and references can be added when available.",
-    lastmod: "2026-10-18",
+    lastmod: "2026-10-21",
     images: [
       { loc: "https://horror.zazieproductions.com/images/hero-portrait.jpg", caption: "Zazie Kanwar-Torge, psychological horror composer available for commission", title: "Scoring Inquiry - Request a Score Quote" },
     ],
@@ -252,9 +257,9 @@ export const hubs: Hub[] = [
   {
     path: "/privacy",
     name: "Privacy notice",
-    title: "Privacy Notice: No Trackers, No Cookies | Zazie Productions",
-    description: "Privacy notice for horror.zazieproductions.com: zero advertising trackers, zero analytics cookies, local storage inventory, third-party media embeds, and NDA inquiry handling.",
-    lastmod: "2026-10-13",
+    title: "Privacy Notice: Cookieless Analytics, No Cookies | Zazie Productions",
+    description: "Privacy notice for horror.zazieproductions.com: cookieless Cloudflare Web Analytics disclosed, zero advertising trackers, zero cookies, local storage inventory, third-party media embeds, and NDA inquiry handling.",
+    lastmod: "2026-10-26",
     images: [],
     videos: [],
   },
@@ -305,7 +310,7 @@ export const hubs: Hub[] = [
     description: "Cinematic sound design by Zazie Kanwar-Torge: designed dread, atmospheres, transitions and stingers for horror and experimental film, delivered as mix-ready stems.",
     lastmod: "2026-10-17",
     images: [
-      { loc: "https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg", caption: "EXPIRE horror short - sound design and score by Zazie Kanwar-Torge, from the cinematic sound design page.", title: "Cinematic Sound Design for Horror Film - Zazie Productions" },
+      { loc: "https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg", caption: "EXPIRE sci-fi horror short - sound design by Zazie Kanwar-Torge, from the cinematic sound design page.", title: "Cinematic Sound Design for Horror Film - Zazie Productions" },
     ],
     videos: [],
   },

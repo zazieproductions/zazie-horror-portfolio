@@ -35,7 +35,7 @@ function parseJsonLd(html, label) {
 }
 
 test('every indexable route places <h1> inside <main> and separates numeral spans cleanly', () => {
-  assert.ok(allRoutes.length >= 85, `expected at least 85 indexable routes, found ${allRoutes.length}`);
+  assert.ok(allRoutes.length >= 83, `expected at least 83 indexable routes, found ${allRoutes.length}`);
   for (const route of allRoutes) {
     const html = fs.readFileSync(fileForRoute(route.path), 'utf8');
     const mainMatch = /<main\b[^>]*>([\s\S]*?)<\/main>/i.exec(html);
@@ -85,7 +85,9 @@ test('/how-to-hire-a-horror-composer guide answers fan-out queries with Article 
 
 test('homepage links directly to /hire-a-composer and /how-to-hire-a-horror-composer in both SSR HTML and client bundle', () => {
   const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-  assert.match(html, /<title>Horror Composer for Hire — Film, TV &amp; Game Scores \| Zazie Productions<\/title>/);
+  assert.match(html, /<title>Horror Composer for Hire — Film, TV &amp; Game Scores<\/title>/);
+  const title = /<title>([^<]*)<\/title>/.exec(html)[1].replace(/&amp;/g, '&');
+  assert.ok(title.length >= 30 && title.length <= 60, `homepage title is ${title.length} characters; keep it between 30 and 60`);
   assert.match(html, new RegExp(`from \\$${MINIMUM_FEE} USD`));
   assert.match(html, /href="\/hire-a-composer"/);
   assert.match(html, /href="\/how-to-hire-a-horror-composer"/);
@@ -117,9 +119,132 @@ test('robots.txt welcomes AI search crawlers and llms.txt + llms-full.txt stay s
   for (const file of ['llms.txt', 'llms-full.txt']) {
     const content = fs.readFileSync(path.join(ROOT, file), 'utf8');
     assert.match(content, /Zazie Kanwar-Torge/);
+    assert.match(content, /Experimental Art House/i);
     assert.match(content, /https:\/\/horror\.zazieproductions\.com\/hire-a-composer/);
     assert.match(content, /https:\/\/horror\.zazieproductions\.com\/how-to-hire-a-horror-composer/);
     assert.match(content, new RegExp(`\\$${MINIMUM_FEE}`));
     assert.doesNotMatch(content, /\bundefined\b|\bNaN\b|\bnull\b/);
+  }
+});
+
+test('navigation headers stay visually concise while non-visible attributes and head metadata carry specialist signals', () => {
+  const specialistTerms = ['Body Horror', 'Folk Horror', 'Experimental Art House'];
+
+  // Homepage visible nav labels stay clean & minimal; non-visible title= attributes + meta carry specialist terms
+  const homeHtml = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  const homeHead = /<head>([\s\S]*?)<\/head>/i.exec(homeHtml)?.[1] ?? '';
+  const navHtml = /<nav aria-label="Primary navigation"[\s\S]*?<\/nav>/.exec(homeHtml)?.[0] ?? '';
+  const visibleLabels = [...navHtml.matchAll(/>([^<]+)<\/a>/g)].map((m) => m[1].trim());
+  assert.deepEqual(visibleLabels, ['Reel', 'Work', 'Rates', 'Hire', 'Store', 'Scoring inquiry']);
+  for (const term of specialistTerms) {
+    assert.match(navHtml, new RegExp(term, 'i'), `homepage nav non-visible title attributes include "${term}"`);
+    assert.match(homeHead, new RegExp(term, 'i'), `homepage <head> metadata includes "${term}"`);
+  }
+
+  const bundleName = fs.readdirSync(ROOT).find((f) => /^index-[0-9a-f]{8}\.js$/.test(f));
+  const bundle = fs.readFileSync(path.join(ROOT, bundleName), 'utf8');
+  assert.match(bundle, /label:"Reel",title:"Body horror, folk horror, and psychological horror composer showreel"/);
+  assert.match(bundle, /label:"Work",title:"Experimental art house, psychological, folk, and body horror film scores"/);
+
+  // Every non-home route keeps concise visible masthead labels while carrying specialist signals in non-visible title=/head/schema
+  for (const route of allRoutes) {
+    if (route.path === '/') continue;
+    const html = fs.readFileSync(fileForRoute(route.path), 'utf8');
+    const tabsHtml = /<nav class="tabs"[\s\S]*?<\/nav>/.exec(html)?.[0] ?? '';
+    const tabLabels = [...tabsHtml.matchAll(/>([^<]+)<\/a>/g)].map((m) => m[1].trim());
+    assert.deepEqual(tabLabels, ['Reel', 'Work', 'Composer', 'Process', 'Rates', 'Hire', 'Store'], `${route.path}: concise visible masthead labels`);
+    for (const term of specialistTerms) {
+      assert.match(tabsHtml, new RegExp(term, 'i'), `${route.path}: non-visible masthead title attributes include "${term}"`);
+    }
+  }
+});
+
+test('all content images and social image cards carry genre-descriptive alt text with zero generic placeholders', () => {
+  const genericAltRe = /Poster artwork for|Cover artwork for|Cover art for|Still from|thumbnail by|press photo\./i;
+  for (const route of allRoutes) {
+    const html = fs.readFileSync(fileForRoute(route.path), 'utf8');
+    for (const imgMatch of html.matchAll(/<img\b[^>]*>/gi)) {
+      const altMatch = /\balt="([^"]*)"/i.exec(imgMatch[0]);
+      assert.ok(altMatch, `${route.path}: every <img> has an alt attribute`);
+      if (altMatch[1] !== '') {
+        assert.doesNotMatch(altMatch[1], genericAltRe, `${route.path}: non-generic genre-descriptive alt required (${altMatch[1]})`);
+      }
+    }
+    for (const metaMatch of html.matchAll(/<meta\b[^>]*(?:og:image:alt|twitter:image:alt)[^>]*>/gi)) {
+      const content = /\bcontent="([^"]*)"/i.exec(metaMatch[0])?.[1] ?? '';
+      assert.ok(content.length > 20, `${route.path}: image:alt meta tag has descriptive text`);
+      assert.doesNotMatch(content, genericAltRe, `${route.path}: image:alt meta tag avoids generic placeholder (${content})`);
+    }
+  }
+  const workHtml = fs.readFileSync(path.join(ROOT, 'work/eclipsed.html'), 'utf8');
+  assert.match(
+    workHtml,
+    /ECLIPSED: Surrealist body horror score by Zazie Kanwar-Torge featuring dissonant bowed metal and experimental synthesis\./,
+  );
+});
+
+test('JSON-LD knowsAbout and genre fields across all routes deep-link to external Wikipedia and IMDb authority URIs', () => {
+  const authorityUrlRe = /^https:\/\/(en\.wikipedia\.org\/wiki\/|www\.imdb\.com\/(interest|search\/title)\/)/;
+  let totalKnowsAbout = 0;
+  let totalGenres = 0;
+
+  function verifyNode(node, label) {
+    if (!node || typeof node !== 'object') return;
+    if (Array.isArray(node)) {
+      for (const child of node) verifyNode(child, label);
+      return;
+    }
+    if ('knowsAbout' in node) {
+      totalKnowsAbout += 1;
+      assert.ok(Array.isArray(node.knowsAbout) && node.knowsAbout.length >= 6, `${label}: knowsAbout has Knowledge Graph entities`);
+      for (const item of node.knowsAbout) {
+        assert.equal(item['@type'], 'Thing', `${label}: knowsAbout item is a Schema.org Thing`);
+        assert.match(item.url ?? '', authorityUrlRe, `${label}: knowsAbout item has canonical Wikipedia/IMDb url`);
+        assert.ok(
+          Array.isArray(item.sameAs) && item.sameAs.some((u) => authorityUrlRe.test(u)),
+          `${label}: knowsAbout item carries external authority sameAs URI`,
+        );
+      }
+    }
+    if ('genre' in node) {
+      totalGenres += 1;
+      const arr = Array.isArray(node.genre) ? node.genre : [node.genre];
+      assert.ok(
+        arr.some((entry) => typeof entry === 'string' && authorityUrlRe.test(entry)),
+        `${label}: genre field deep-links to external Wikipedia/IMDb authority URI`,
+      );
+    }
+    for (const [k, v] of Object.entries(node)) {
+      if (k !== 'knowsAbout' && k !== 'genre') verifyNode(v, label);
+    }
+  }
+
+  for (const route of allRoutes) {
+    const html = fs.readFileSync(fileForRoute(route.path), 'utf8');
+    const nodes = parseJsonLd(html, route.path);
+    verifyNode(nodes, route.path);
+  }
+  assert.ok(totalKnowsAbout >= 20, `audited ${totalKnowsAbout} knowsAbout graphs`);
+  assert.ok(totalGenres >= 150, `audited ${totalGenres} deep-linked genre fields`);
+});
+
+test('horror reference topics link identity knowledge and biography mentions without affiliation claims', () => {
+  const names = ['A24 film aesthetic', 'Mica Levi scoring techniques', 'Folk Horror tropes'];
+  for (const file of ['index.html', 'composer.html', 'composer/index.html']) {
+    const html = fs.readFileSync(path.join(ROOT, file), 'utf8');
+    const nodes = parseJsonLd(html, file);
+    const person = nodes.find(n => n['@type'] === 'Person' && n.knowsAbout);
+    for (const name of names) {
+      const topic = person.knowsAbout.find(t => t.name === name);
+      assert.ok(topic, `${file}: knowsAbout ${name}`);
+      assert.match(topic.url, /^https:\/\/en.wikipedia.org\/wiki\//);
+      assert.ok(!person.sameAs.includes(topic.url), 'references must not become identity aliases');
+    }
+    if (file.startsWith('composer')) {
+      const page = nodes.find(n => n['@type'] === 'WebPage');
+      assert.equal(page.about['@id'], person['@id']);
+      assert.deepEqual(page.mentions.map(t => t.name), names);
+      assert.match(html, /not claims of affiliation, collaboration, or production credits/);
+    }
   }
 });

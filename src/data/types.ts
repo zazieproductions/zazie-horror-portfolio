@@ -51,6 +51,8 @@ export interface Image {
   width: number;
   height: number;
   avif?: string;
+  /** Candidate list for the AVIF <source>, e.g. "a-400.avif 400w, a-640.avif 640w". */
+  avifSet?: string;
   srcset?: string;
 }
 
@@ -99,7 +101,7 @@ export interface Production {
 }
 
 export interface Cue {
-  /** Position in the existing showreel and matching /audio/track-NN.mp3 file. */
+  /** Stable source-audio number in /audio/track-NN.mp3; display order follows the cues array. */
   track: number;
   slug: string;
   title: string;

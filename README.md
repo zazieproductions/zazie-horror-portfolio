@@ -77,9 +77,9 @@ Zazie Productions scores psychological horror: dread, tension, possession, cosmi
 The site is built to *demonstrate* rather than describe that identity:
 
 - **A restrained dark system, not decoration.** One palette (`void #030303`, `ink`, `smoke`, `ash`, `mist #9a9590`, `bone #f0ebe3`, `blood #c41e1e`, `ember #ff2a2a`), one serif voice (Cormorant Garamond) against one workhorse sans (Inter variable), and a fixed atmosphere layer (film grain, vignette, drifting ambient orbs, ken-burns hero) that is part of the first painted frame, not an after-effect of JavaScript.
-- **"The Archive" frame.** The 404 is an archive-entry error; the dormant boot markup is a hidden tape-deck treatment, while the copy speaks in catalogue and signal language. The metaphor is consistent and quiet.
+- **"The Archive" frame.** The 404 is an archive-entry error; the homepage opens on a tape-deck boot transmission, while the copy speaks in catalogue and signal language. The metaphor is consistent and quiet.
 - **Listen first.** The showreel — 32 original cues, playable inline, organised by mood — is the centre of gravity of the whole site. Film samples embed the scores *in context*. Commerce points outward to marketplaces rather than building a parallel shop.
-- **No backend, no tracking.** The inquiry form composes an email in the visitor's own mail client. No cookies, no analytics, no accounts, no newsletter. The privacy notice inventories every third party the site can touch, and a device inspector lets the visitor verify the claims themselves.
+- **No backend, no behavioural tracking.** The inquiry form composes an email in the visitor's own mail client. No cookies set by this site, no accounts, no newsletter. The one analytics service is Cloudflare Web Analytics (cookieless, no fingerprinting, disclosed in `/privacy`), and the privacy notice inventories every third party the site can touch; a device inspector lets the visitor verify the claims themselves.
 
 Unconventional choices exist for artistic or experiential reasons and are documented where they do. Do not flatten them into generic SaaS patterns.
 
@@ -93,11 +93,11 @@ Unconventional choices exist for artistic or experiential reasons and are docume
 - **Press kit** — features and coverage (Visual Container award-winners press release PDF, Grammy Weekly, Limitless Magazine, Billboard Wire).
 - **Approach / Rates / Composer / Reviews / Inquiry** — scoring method, scope-and-estimate bands (packages priced by scored minutes of music, as published on `/services`), biography, 5.0 collaborator rating with 3 featured reviews, and a structured inquiry form that builds a `mailto:` handoff.
 
-**Boot overlay** — legacy overlay markup and its hidden-by-default CSS remain in `index.html`; no script adds `zp-boot-on`. Portfolio text is not gated behind an overlay, audio, or JavaScript.
+**Archive boot** — the terminal loading screen plays at first paint on the homepage only: a silent, ~3 s analog-signal intro (wordmark, typed console lines, oscilloscope, progress deck) that any click, key or tap skips and that removes itself afterwards. A synchronous head gate keeps it away from no-JS visitors, crawlers, bots, Lighthouse and `prefers-reduced-motion`; `?boot=0` / `#noboot` disables it and `?boot=1` / `#boot` forces it. It makes no network requests and writes no storage key. Portfolio text is never gated behind it.
 
 **The Catalogue (`/store`)** — the existing hub plus 24 individual catalogue records. Item pages link to verified listings when available, omit mutable price/stock schema, and keep the source platform authoritative for current terms.
 
-**The documents** — `/legal`, `/faq` (35 questions), `/terms` (25 clauses), `/privacy` (15 sections), `/licensing`, `/purchases`, `/accessibility`. Share one stylesheet, one script and two partials; ship fully open without JavaScript; served **network-first** through the service worker because their effective dates matter. The same pipeline builds the human-readable **`/sitemap`** overview (`legal-src/pages/sitemap.html`), which links the original portfolio hubs and their sections. The XML sitemap includes all 19 original hub URLs plus 65 item URLs; item pages link to their hub and related siblings without adding item links to the home or hub navigation.
+**The documents** — `/legal`, `/faq` (35 questions), `/terms` (25 clauses), `/privacy` (15 sections), `/licensing`, `/purchases`, `/accessibility`. Share one stylesheet, one script and two partials; ship fully open without JavaScript; served **network-first** through the service worker because their effective dates matter. The same pipeline builds the human-readable **`/sitemap`** overview (`legal-src/pages/sitemap.html`), which links the original portfolio hubs and their sections. The XML sitemap includes all 19 original hub URLs plus 65 item URLs. Discovery runs `/` → hub → item: every hub links to each of its own item pages, every item page links back to its hub and to siblings, and the home page deliberately stays a hub index. No submitted URL is discoverable from `sitemap.xml` alone.
 
 ## Visual preview
 
@@ -119,7 +119,8 @@ All artwork © the respective productions. See the [live site](https://horror.za
 | Film samples | `Projects.tsx` data + prerendered covers | 6 YouTube-nocookie iframes get a real `src` only when lazy-loaded; 1 Google Drive embed; `preconnect` to YouTube deferred off the critical path. |
 | Boot overlay | legacy inline markup in `index.html` | Disabled by default; never covers the readable homepage content. |
 | Store previews & room tone | `store-src/store.js` | Per-card audio previews (`data-preview`); a looping room tone (`data-ambience`) crossfades down while previews play. `preload="none"`. |
-| External score player | Reelcrafter | Allowlisted in CSP (`frame-src`) and referenced as a `significantLink` in JSON-LD; currently linked, not embedded. |
+| Compilation players | Homepage `#compilations` (data in `src/data/compilations.ts`, markup/CSS/JS in `src/lib/compilations-markup.ts`, wired into the bundle and `index.html` by `home-src/build.mjs`); `/reel#compilations` (hand-written in `reel/index.html`, click handler in `legal-src/legal.js` — keep the two lists in step) | Nine Bandcamp embeds, the same set and order as the ReelCrafter reel: seven compilation tracks (e.g. Sounds for the Soul *The Undead* and *Vampires*, Inner Demons *Experiments on the Witch House*) and two own releases (*Opaline Lament*, *Constrained Capacity*). Click-to-load: the Bandcamp iframe is created only when the visitor presses the button, so the page makes no Bandcamp request on load (privacy notice §6–7). `https://bandcamp.com` is in CSP `frame-src`. To add one, copy a `.comp-card` and use the album/track ids from Bandcamp's embed code. |
+| External score player | Reelcrafter | Referenced as a `significantLink` in JSON-LD and linked from the homepage and `/reel`; not embedded. Its host is **not** in CSP `frame-src`, so an embed would need `https://play.reelcrafter.com` added to `tools/headers.mjs` and `_headers`. |
 
 ## Architecture
 
@@ -194,18 +195,18 @@ As shipped (verified from the artifacts):
 - **Bash + Python 3** — the two build scripts
 - **Node.js 20.19+** — item build, static server, sitemap generation and validators
 
-No analytics, no tracking, no cookies, no fonts CDN, no external JS.
+No cookies set by this site, no fonts CDN, and exactly one external JS: the Cloudflare Web Analytics beacon (see below). No other analytics, tracking or external script.
 
 ## Repository map
 
 ```
 .
-├── index.html                  # Home: prerendered DOM + inactive boot markup + 4 generated JSON-LD blocks
+├── index.html                  # Home: prerendered DOM + archive boot (gate, overlay, driver) + 4 generated JSON-LD blocks
 ├── index-<hash>.js / .css      # Retained legacy homepage assets (not rebuilt here)
 ├── 404.html                    # "Signal Lost" — served with real 404 status
 ├── sw.js                       # Service worker (CACHE_NAME zazie-v29; bump it on any precache change)
-├── server.mjs                  # Local static server, clean routes + 404 fallback
-├── _headers                    # CSP, canonical Link headers, cache policy
+├── server.mjs                  # Local static server: clean routes + 404 fallback, Brotli/Gzip, ETag/304
+├── _headers                    # CSP, canonical Link headers, per-path cache policy (read the top comment)
 ├── _redirects                  # Legacy aliases + explicit real-404 fallback
 ├── robots.txt / sitemap.xml    # Crawl control; 84 URLs / 79 images / 12 videos
 ├── <32-hex>.txt                # IndexNow key file (public by design; see tools/indexnow.mjs)
@@ -230,6 +231,7 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 ├── scripts/{generate-sitemap,prerender,verify}.mjs # 84-URL build and structural verification
 ├── tools/check-sitemap.mjs     # Sitemap, file, canonical, robot and hub-link audit
 ├── tools/route-aliases.mjs     # Checks 18 hub twins and flat item routes for slash twins
+├── tools/index-coverage.mjs    # Per-URL words / in-body inbound links / duplicate ratio
 ├── tools/indexnow.mjs          # Post-deploy IndexNow ping (Bing, Yandex, Seznam, Naver, Yep...)
 ├── Eclipsed.png                # Raw cover upload: source of images/eclipsed-cover-1280.jpg
 ├── The Dark Awaits.png         # Raw poster upload kept for provenance (unreferenced)
@@ -251,7 +253,7 @@ No analytics, no tracking, no cookies, no fonts CDN, no external JS.
 | Catalogue / documents | `store-src/` and `legal-src/` build sources |
 | Metadata / SEO | Route-specific source HTML heads; generated `sitemap.xml`; `robots.txt`; canonical `Link:` headers in `_headers` |
 | Configuration | `package.json`, `tsconfig.json`, `vite.config.ts`, `_headers`, `_redirects`, `sw.js` |
-| Utilities | `scripts/`, `tools/check-sitemap.mjs`, `tools/route-aliases.mjs`, `server.mjs` |
+| Utilities | `scripts/`, `tools/check-sitemap.mjs`, `tools/check-links.mjs`, `tools/check-headers.mjs`, `tools/route-aliases.mjs`, `server.mjs` |
 | Public/static assets | root + `/audio` + `/fonts` + `/images` |
 
 ## Where to add new work
@@ -306,13 +308,48 @@ There are **no environment variables and no secrets**. The `.gitignore` pre-empt
 
 | File | Controls |
 | --- | --- |
-| `_headers` | CSP allowlist, `X-Robots-Tag`, canonical `Link:` headers, per-path `Cache-Control` |
+| `_headers` | Security policy (HSTS, CSP, X-Frame-Options), `X-Robots-Tag`, canonical `Link:` headers, per-path `Cache-Control` |
+| `tools/headers.mjs` | The same security/cache policy as data: `server.mjs` serves it, `tools/check-headers.mjs` validates `_headers` against it |
 | `_redirects` | Legacy `.html` aliases plus `/* /404.html 404` fallback |
 | `robots.txt` | Default crawl policy and sitemap declaration |
 | `sw.js` | Offline strategy; `CACHE_NAME` + precache manifest |
-| `server.mjs` | `PORT` (local dev only) |
+| `server.mjs` | `PORT` (local dev only), `LOCAL_HTTPS=1` to also send HSTS when testing over TLS |
 
-The zero-tracking privacy claim is structural: adding an analytics script or a cookie would invalidate `/privacy`, the footer statement on every page, and the device inspector on `/privacy`. Don't.
+### Response headers, caching and compression
+
+`_headers` is not a cascade: **every** rule whose pattern matches contributes,
+and a header set twice is joined with a comma (`/*` first, then `/fonts/*`
+produced `max-age=0, must-revalidate, …, max-age=31536000` — and RFC 9111 reads
+the *first* `max-age`, so nothing was cacheable). The file's top comment states
+the rule that follows from it: `/*` is the only default, and every narrower
+`Cache-Control` detaches it first with `! Cache-Control`.
+
+| Path | `Cache-Control` |
+| --- | --- |
+| HTML documents (`/`, `/work`, `/work/`, `/<slug>`) | `public, max-age=0, must-revalidate` |
+| `/index-*`, `/store-*`, `/legal-*`, `/estimator-*`, `/item-*` CSS/JS, `/*.css`, `/fonts/*` | `public, max-age=31536000, immutable` |
+| `/images/*`, `/audio/*`, `/favicon.svg` | `public, max-age=2592000, stale-while-revalidate=86400` |
+| `/sitemap.xml`, `/robots.txt`, `/llms.txt`, `/llms-full.txt` | `public, max-age=3600` |
+| `/404.html` | `no-store` |
+| `/sw.js` | `no-cache, no-store, must-revalidate` |
+
+Compression is negotiated per request. Cloudflare Pages Brotli/Gzip-compresses
+static text at the edge; `server.mjs` does the same locally (Brotli q11 when
+`Accept-Encoding` offers it, Gzip next, `Vary: Accept-Encoding`, nothing below
+1 KB) so the behaviour is testable before it ships. `npm run build` fails if
+`_headers` drifts from the policy, if any path would serve two cache lifetimes,
+or if any internal link or `#fragment` stops resolving:
+
+```
+npm run check:headers
+npm run check:links
+npm run check:forms
+node tools/live-route-audit.mjs https://horror.zazieproductions.com
+```
+
+The no-behavioural-tracking privacy claim is structural: adding any *other* analytics, an advertising pixel, or a cookie would invalidate `/privacy`, the footer statement on every page, and the device inspector on `/privacy`. Don't.
+
+The one exception is deliberate and disclosed. Cloudflare injects its Web Analytics beacon (`https://static.cloudflareinsights.com/beacon.min.js`) into the HTML it serves at the edge — it is in no file here, it is not in the upload, and no build step can add or delete it. Since 26 October 2026 `script-src` allowlists that host exactly (the injected URL carries a version path, so a path-scoped source would not match) and `connect-src` allowlists `cloudflareinsights.com` for its `/cdn-cgi/rum` reporting endpoint; the same-origin report form is covered by `'self'`. `/privacy` (sections 1, 3, 4, 6, 8, 9 and 13), the FAQ tracking answer and the privacy summaries on `/legal` and `/sitemap` describe the beacon — cookieless, no client-side storage, no fingerprinting — and `tools/check-headers.mjs` fails the build if either host is dropped or any other remote script/connect origin is added. To stop collecting, switch off **Analytics & Logs → Web Analytics** in the Cloudflare dashboard *and* remove both hosts from `tools/headers.mjs` + `_headers` in the same change.
 
 ## Media & asset pipeline
 
@@ -362,19 +399,21 @@ Not yet measured in a real browser: field LCP/CLS/CrUX data. The audit was verif
 Target: **WCAG 2.2 Level AA, partially conformant** — stated precisely on [`/accessibility`](https://horror.zazieproductions.com/accessibility), which implements the pattern this repo expects: *implemented features and measured gaps are named, not hand-waved*.
 
 - Progressive enhancement everywhere: every document clause, FAQ answer, catalogue card and link works with JavaScript off.
-- `prefers-reduced-motion` stops the ken-burns hero, ambient orbs and wave animation; dormant boot markup is hidden by default and never gates page text.
+- `prefers-reduced-motion` stops the ken-burns hero, ambient orbs and wave animation; the archive boot never plays for a reduced-motion visitor, is `aria-hidden`, skippable by any input and never gates page text.
 - Semantic headings, single H1 per page, skip links, `aria-pressed`/`aria-label` on controls, breadcrumbs in schema and (on document pages) visibly.
+- **Every form control carries an `id` or a `name`.** A field with neither cannot be autofilled and is not reachable through `form.elements`; `tools/check-forms.mjs` reads the served pages — not the sources — and fails the build on any unnamed `<input>`, `<select>` or `<textarea>`. The homepage is the hard case, because the React bundle and the prerendered snapshot in `index.html` both render the inquiry form and the two media scrubs. `home-src/build.mjs` derives each name from the control's own accessible label (`fieldName`, folded to a slug and applied by both render paths), so a renamed field cannot leave one copy anonymous, and the checker proves the result landed.
 - Document pages keep a legibility red (`--blood-text #e65650`, 5.71:1 on void) where small text needs it.
-- **Named gaps** (see `/accessibility` §4): the portfolio and catalogue still use darker red `#c41e1e` (3.49:1) for small labels, and atmosphere effects create exceptions on the portfolio pages. These are recorded deliberately — fix them in the open, don't quietly restyle the identity either way.
+- The homepage stylesheet uses AA red `#e65650` (4.61–5.71:1 across its dark surfaces) for every text-blood foreground, with persistent underlines on prose links; microtype utilities are floored at 12px and mobile body copy renders at 16px. Brand red `#c41e1e` stays on fills, rules, icons and 24px+ display type, where the 3:1 large-text/non-text threshold applies.
+- **Named gaps** (see `/accessibility` §4): the catalogue (`/store`) still uses darker red `#c41e1e` (3.49:1) for small labels, and atmosphere effects create exceptions on the portfolio pages. These are recorded deliberately — fix them in the open, don't quietly restyle the identity either way.
 
 ## SEO & structured data
 
 The site serves source-rendered SEO metadata and structured data (the repo's `SEO-DOSSIER.md` and `SITEMAP.md` retain the historical programme):
 
-- **Homepage schema:** `Person`, `Organization`, `WebSite`, and `WebPage` with shared IDs.
+- **Homepage schema:** `Person`, `Organization`, `WebSite`, and `WebPage` with shared IDs, a `CreativeWork` portfolio graph and a `MusicPlaylist` showreel graph, plus one `ItemList` of curated cue pages rendered as `MusicComposition` nodes (each with an `AudioObject` and the same `#composition`/`#audio` `@id`s the `/reel/<slug>` pages use, so the graphs merge).
 - **Item-page schema:** production `Movie`/`TVSeries`/`CreativeWork` plus verified `VideoObject` where supplied; cue `MusicComposition` + `AudioObject`; catalogue `Product`/`MusicAlbum` + `Offer`; all include `WebPage` and `BreadcrumbList`. Mutable price/stock claims are omitted.
-- `sitemap.xml` (84 URLs: 19 original hubs including home + 65 item routes; current build has 79 artwork and 12 video entries) is checked by `tools/check-sitemap.mjs`, `tools/route-aliases.mjs`, and `scripts/verify.mjs`. The build verifies canonical paths, static files, structured data, links, media, and a real unknown-route 404. **Run `npm run build` before deploys that touch routes, links, media, or schema.**
-- **Sitelinks structure:** only the 19 original hub routes are reachable from `/`; the 65 data-generated item routes are intentionally not added to the homepage, hub navigation, or human sitemap. Each item page links to its own hub and at least three siblings. `scripts/verify.mjs` checks those relationships, and `tools/check-sitemap.mjs` audits hub reachability and section fragments.
+- `sitemap.xml` (85 URLs: 20 hubs including home + 65 item routes; current build has 79 artwork and 12 video entries) is checked by `tools/check-sitemap.mjs`, `tools/route-aliases.mjs`, and `scripts/verify.mjs`. The build verifies canonical paths, static files, structured data, links, media, and a real unknown-route 404. **Run `npm run build` before deploys that touch routes, links, media, or schema.**
+- **Sitelinks and crawl structure:** `/` links the 19 original hub routes and only those; each hub (`/work`, `/reel`, `/store`) links every one of its own item pages; each item page links its hub and at least three siblings. That is what keeps the 65 generated URLs out of the "sitemap-only orphan" state Google reports as *Discovered - currently not indexed*. `scripts/verify.mjs` and `tools/check-sitemap.mjs` fail the build if a hub stops linking an item, and `tools/index-coverage.mjs --check` fails it if any submitted URL loses its contextual internal link, drops below 300 words of `<main>` text, or becomes a near-duplicate of a hub sibling.
 - **Site name**: one `WebSite` node on `/` (`name` "Zazie Productions", `alternateName` "Zazie Productions Horror", "ZKT Productions"), matched by `og:site_name` on every page. No `SearchAction` (Google retired the sitelinks search box in November 2024) and no home-page `BreadcrumbList` (the home page is the root of the trail, not a trail).
 - **Beyond Google**: `sitemap.xml` is advertised in `robots.txt` for every engine; `tools/indexnow.mjs` pushes changed URLs to the IndexNow engines after a deploy.
 - Canonical `Link:` headers at the edge for original hub variants; legacy `.html` redirects; a real 404 (no soft-404 SPA fallback); robots.txt advertises the 84-URL sitemap and does not block public item pages.
@@ -429,7 +468,7 @@ For future AI-assisted development sessions. **Before changing anything:**
 **Explicitly do not:**
 
 - Create duplicate components, alternate implementations, or an abandoned rewrite of an existing system.
-- Introduce unnecessary frameworks, UI libraries, analytics, or third-party scripts (the zero-tracking claim is load-bearing).
+- Introduce unnecessary frameworks, UI libraries, analytics, or third-party scripts (the only allowed third-party script is the disclosed Cloudflare Web Analytics beacon; anything else breaks `/privacy`).
 - Invent placeholder portfolio material — **no fictional films, fake credits, invented reviews, or dummy scores.** Real productions, real cues, real catalogue items only; if a link or credit is unknown (e.g. THE DARK AWAITS title links), ship without it and record that, exactly as the existing entries do.
 - Make undocumented architectural changes, hand-edit generated files, reintroduce SPA rewrites, or ship a changed hash without bumping `CACHE_NAME` and updating every reference.
 - Describe aspirational features as existing — in docs, schema, or copy.
@@ -439,7 +478,7 @@ For future AI-assisted development sessions. **Before changing anything:**
 **Implemented** (all verifiable in this tree):
 
 - Full portfolio experience: poster wall + lightbox (9 productions), 32-cue showreel with mood clusters and sticky player, 7 film samples, press kit, scope-and-estimate, reviews, `mailto:` inquiry
-- Legacy terminal boot markup retained but inactive by default; no overlay blocks text on the homepage
+- Archive boot restored 2026-10-22: the terminal loading screen the prerender pass had silently disabled plays again on the homepage, now gated in the head so it can never become inert unnoticed (`PERFORMANCE.md`)
 - 19 original hub routes + 65 data-generated production/cue/catalogue pages, seven legal/operating documents with generated FAQ schema, and a hub-only human sitemap
 - Service worker (SWR / network-first / cache-first tiers), CSP + canonical headers, 301 map, real 404
 - 84-URL sitemap with verified image/video extensions; per-type item JSON-LD; route, alias, link, media, and 404 verifiers
@@ -457,7 +496,7 @@ For future AI-assisted development sessions. **Before changing anything:**
 
 - Bring the React/Vite source tree into this repository and regenerate the prerendered HTML from the app (`createRoot` → `hydrateRoot`), closing debts #1, #2 and the three-footer sync cost
 - External storage or LFS for the audio library as it grows (debt #4)
-- Reelcrafter score player: allowlisted and linked; a deeper embed is possible within the existing CSP
+- Reelcrafter score player: linked only; embedding it needs `https://play.reelcrafter.com` added to the CSP `frame-src`
 
 Nothing on this list should be described as shipped until it is in the tree.
 

@@ -164,8 +164,12 @@ for page in sorted((src / "pages").glob("*.html")):
         script, n = faq_schema(markup, canonical.group(1))
         markup = markup.replace("<!--FAQ_SCHEMA-->", script)
 
+    page_masthead = masthead
+    if slug == "hire-a-composer":
+        page_masthead = page_masthead.replace('<a href="/hire-a-composer"', '<a href="/hire-a-composer" aria-current="page"', 1)
+
     markup = (markup
-              .replace("__MASTHEAD__", masthead)
+              .replace("__MASTHEAD__", page_masthead)
               .replace("__FOOTER__", footer)
               .replace("__CSS__", css)
               .replace("__JS__", js))
@@ -183,19 +187,15 @@ for page in sorted((src / "pages").glob("*.html")):
 
 # Keep shared legal-<hash>.css and legal-<hash>.js references in sync across
 # the portfolio hub pages, 404.html, and sw.js.
-shared_consumers = [
-    root / "404.html",
-    root / "sw.js",
-    root / "composer" / "index.html",
-    root / "contact" / "index.html",
-    root / "process" / "index.html",
-    root / "reel" / "index.html",
-    root / "work" / "index.html",
-    root / "services" / "index.html",
-    root / "hire-a-composer" / "index.html",
-    root / "sound-design" / "index.html",
-    root / "game-scoring" / "index.html",
-]
+#
+# Each hub is served twice - <hub>/index.html and the byte-identical root twin
+# <hub>.html - so both copies have to be rewritten. Updating only the directory
+# copy silently desynchronises the pair: the twin keeps serving the retired
+# stylesheet (a 404) and tools/route-aliases.mjs --check fails the build.
+shared_consumers = [root / "404.html", root / "sw.js"]
+for slug in ["composer", "contact", "process", "reel", "work", "services", "hire-a-composer", "sound-design", "game-scoring"]:
+    shared_consumers.append(root / slug / "index.html")
+    shared_consumers.append(root / (slug + ".html"))
 for target in shared_consumers:
     if not target.exists():
         continue

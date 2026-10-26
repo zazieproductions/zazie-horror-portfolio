@@ -76,7 +76,37 @@
 // added /how-to-hire-a-horror-composer hub, /llms.txt + /llms-full.txt,
 // <main>-wrapped document headers and spaced numeral headings across all 85 routes,
 // clean JSON-LD schema graphs, and re-hashed home bundle index-4d715571.js.
-const CACHE_NAME = 'zazie-v34';
+// v36: 2026-10-22 mobile-audit pass — 12px type floor and 44px targets in the
+// home/estimator CSS, WCAG AA label colours, styled skip link, poster AVIF
+// 400/480/640 ladder, and re-hashed home bundle index-9e03d452.js.
+// v37: the archive-boot intro is back in index.html (the gate script that had
+// been dropped in the prerender pass is restored, so the overlay actually
+// plays again). The document is precached as '/', so the cache name moves with
+// it: without the bump a returning visitor could keep the boot-less document.
+// v38: adds a prominent high-contrast "Skip intro" button (#zp-boot-skip) in
+// the archive-boot deck above the CRT vignette layer, with 160ms fast teardown,
+// accessible keyboard Tab/Enter/Space/Escape support, and mobile safe-area sizing.
+// v39: native film-play buttons, accessible close control, and focus restoration.
+// v40: hero artwork plate — the poster is no longer centre-cropped by a
+// 46%-wide panel and no longer stops on a hard vertical edge; it keeps its own
+// 896x1152 ratio, is feathered into the UI, and fades into the fold under one
+// bottom scrim. The document (precached as '/') and the home bundle
+// index-b29b75e2.js both change, so the cache name moves with them.
+// v41: seamless hero artwork blend — screen-blended dark-point-aligned <img>,
+// wide cosine-eased intersected top/left/bottom masks, and radial void scrim.
+// v42: merge the 30-cue showreel with the latest homepage updates. The Beautiful
+// Wrongness is the default, The Fatal Overdose follows, and two cues are retired.
+// v43: homepage rendering/SEO pass — (1) precache install uses
+// cache:'force-cache' instead of the old cache:'reload', which forced a second
+// network download of every precached asset (hero image, CSS, JS, fonts) even
+// though the page had just fetched them; hashed assets are immutable so the
+// HTTP cache is authoritative, and '/' is network-first at fetch time anyway.
+// (2) The React bundle no longer mounts for crawlers, and the homepage
+// stylesheet carries the AA link-contrast and prose-underline rules under a
+// fresh content hash below. The 2026-10-25 blanket type floors were reverted
+// on 2026-10-26, so the design's original 8-12px label scale is back and the
+// hash plus this cache version (v43 -> v44) move together.
+const CACHE_NAME = 'zazie-v44';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -84,28 +114,32 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-normal.woff2',
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
-  '/index-f509fde0.css',
-  '/index-e23af91f.js',
-  '/store-eed3eeee.css',
+  '/index-3465aa44.css',
+  '/index-787f323e.js',
+  '/store-1e13177a.css',
   '/store-3fc01be0.js',
-  '/legal-886033c7.css',
-  '/legal-ab598df8.js',
-  '/estimator-c0d6291c.css',
-  '/estimator-e20a6c5d.js',
+  '/legal-f4e3a5fb.css',
+  '/legal-2fe7a6e6.js',
+  '/estimator-fc4ddfe0.css',
+  '/estimator-2b081a5e.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',
-  '/images/hero-portrait.avif',
-  '/images/hero-portrait.jpg'
+  '/images/hero-portrait.avif'
 ];
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then(async (cache) => {
-      // Use allSettled to ensure installation succeeds even if an asset is temporarily delayed
+      // Use allSettled to ensure installation succeeds even if an asset is temporarily delayed.
+      // force-cache on purpose: the old cache:'reload' bypassed the browser HTTP cache and
+      // re-downloaded every precached asset on every install/SW update, duplicating the page's
+      // own requests for the hero image, stylesheet, bundle and fonts. Content-hashed assets
+      // are served immutable (see _headers), so an HTTP-cache hit is byte-identical; the '/'
+      // document revalidates per its own Cache-Control and stays network-first at fetch time.
       const fetchPromises = PRECACHE_ASSETS.map(async (url) => {
         try {
-          const res = await fetch(url, { cache: 'reload' });
+          const res = await fetch(url, { cache: 'force-cache' });
           if (res.ok) {
             await cache.put(url, res);
           }

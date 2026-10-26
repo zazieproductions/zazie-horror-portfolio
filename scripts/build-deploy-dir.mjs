@@ -24,7 +24,7 @@
  *
  *   - a tree missing any of index.html, 404.html, sw.js, sitemap.xml,
  *     robots.txt, or the IndexNow key file
- *   - a tree where any of the 84 sitemap URLs does not resolve to a file
+ *   - a tree where any of the 83 sitemap URLs does not resolve to a file
  *   - a tree whose sw.js precaches a store-<hash>.css/js that is not there
  *     (the hash-drift warning store-src/build.sh only prints)
  *   - more than 20,000 files, or any single file over 25 MB -- Cloudflare's
@@ -96,7 +96,9 @@ const files = [];
 })(OUT);
 
 /* 1. the files a static deploy cannot work without */
-for (const required of ['index.html', '404.html', 'sw.js', 'sitemap.xml', 'robots.txt', 'llms.txt', 'llms-full.txt']) {
+// _headers and _redirects are part of the deploy: without them the edge serves
+// no security policy, no cache lifetimes and no legacy-alias redirects.
+for (const required of ['index.html', '404.html', 'sw.js', 'sitemap.xml', 'robots.txt', 'llms.txt', 'llms-full.txt', '_headers', '_redirects']) {
   if (!files.some((f) => f.relPath === required)) fail(`missing ${required}`);
 }
 const keys = files.filter((f) => /^[a-f0-9]{32}\.txt$/.test(f.relPath));

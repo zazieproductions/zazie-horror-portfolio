@@ -3,7 +3,7 @@
 **Sitemap:** [`sitemap.xml`](https://horror.zazieproductions.com/sitemap.xml)
 **Generator:** `scripts/generate-sitemap.mjs`, backed by the typed records in `src/data/`
 **Validator:** `node tools/check-sitemap.mjs`
-**Scope:** 84 canonical URLs — 19 original hub URLs + 65 item URLs (9 productions, 32 cues, 24 catalogue entries). The current XML contains 79 image entries and 12 video entries.
+**Scope:** 85 canonical URLs — 20 hub URLs (home + 19) + 65 item URLs (9 productions, 32 cues, 24 catalogue entries). The current XML contains 79 image entries and 12 video entries.
 
 The sitemap describes the intended committed static tree. A successful local build is not evidence that the production host has deployed it; the live URL audit is run separately by GitHub Actions after a production deploy.
 

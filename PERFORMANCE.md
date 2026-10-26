@@ -4,6 +4,237 @@ Date: 2026-09-25 · Branch: `arena/01a0d613-zazie-horror-portfolio`
 Scope: horror.zazieproductions.com (static prerendered React build on an edge host with `_headers`/`_redirects` semantics, i.e. Netlify/Cloudflare-Pages style).
 
 
+## Crawler render path, MusicComposition schema and AA link contrast: 2026-10-25
+
+An external SEO/quality audit flagged three things: a JavaScript
+"double-loading" render path, no `MusicComposition` structured data on the
+homepage, and link/type contrast below WCAG AA. The same audit was
+independently implemented on `main` in parallel (the `#e65650` link-contrast,
+prose-underline and mobile 16px rules, plus `CreativeWork`/`MusicPlaylist`
+homepage schema and a `force-cache` precache); this branch rebases onto that
+work and adds the pieces it did not cover. All of it works without touching
+the React source (this repo only carries the shipped, patched bundle) and is
+covered by `tools/home-mount.test.mjs`.
+
+### 1. The double-paint is removed from the crawler render path
+
+- **Root cause, confirmed in the bundle:** the home entry is
+  `createRoot(document.getElementById("root")).render(...)`, never
+  `hydrateRoot`. After the page's static HTML had already painted, the
+  idle-scheduled bundle tore the whole `#root` subtree down and rebuilt it.
+  Markup is mirrored and every asset URL is cache-identical, so human-visible
+  flicker was already minimal, but the DOM work and asset re-resolution were
+  real.
+- **Crawler gate added to the inline mount module in `index.html`**
+  (`ZP_RUNTIME_BOT`, the same UA list the service-worker registration and the
+  archive-boot gate already use): bots, spiders, headless clients and
+  Lighthouse return before the dynamic `import("/index-<hash>.js")`, so the
+  indexed render is exactly the prerendered document — complete copy, 30
+  showreel rows, menus and the vanilla film player — with no teardown and no
+  bundle request. Human visitors keep every React behaviour (showreel audio,
+  poster lightbox, mobile menu) at `load` + idle, exactly as before.
+  `tools/home-mount.test.mjs` drives the gate in a VM harness for
+  Googlebot, Bingbot, Yandex, DuckDuckBot, Lighthouse and Headless Chrome
+  (no import) vs. desktop/mobile Chrome, Safari and Firefox (import
+  scheduled).
+- **Service-worker precache no longer double-downloads the first view.**
+  `sw.js` install used `fetch(url, { cache: "reload" })` for every precache
+  entry, which bypasses the browser HTTP cache and re-fetches the hero image,
+  stylesheet, bundle and fonts that the page itself had just downloaded — the
+  duplicate request chain the audit's waterfall showed. The merged
+  implementation pins `fetch(url, { cache: "force-cache" })`: hashed assets
+  are immutable (`_headers`), so the HTTP-cache bytes are identical and
+  authoritative, and the `/` document still revalidates per its own
+  `Cache-Control` and stays network-first at fetch time. Cache name moved
+  `zazie-v42` → `zazie-v43`.
+- **Not done, still the documented end-state:** converting
+  `createRoot` → `hydrateRoot` needs the React source repo and a real-browser
+  hydration diff (the static snapshot and the client tree have known
+  structural differences); see the residual-risks entry below. The gate makes
+  that polish irrelevant to indexing and removes the duplicate network
+  transfers, so the remaining cost is idle main-thread DOM work for humans.
+
+### 2. `MusicComposition` structured data on the homepage
+
+- `src/lib/home.ts` emits an `ItemList` (`/#cue-catalog`) of six curated
+  `MusicComposition` works — spanning Psychological Orchestral, Body Horror,
+  Horror Stinger and Dark Ambient and including both queue-promoted cues —
+  each with genre, ISO-8601 duration, the verified `#person` composer/creator
+  reference and an embedded `AudioObject` pointing at the playable
+  same-origin MP3. It joins the `CreativeWork` portfolio and `MusicPlaylist`
+  showreel graphs that landed on `main` in the same audit cycle, giving the
+  homepage a seven-node graph.
+- Every node reuses the exact `#composition`/`#audio` `@id` of its
+  `/reel/<slug>` page, so the homepage and item graphs merge instead of
+  defining competing works. The curation is data-owned in
+  `src/data/home.ts` (`featuredCueSlugs`, throwing lookup against `cues.ts`),
+  and `scripts/verify.mjs` validates positions, `@id`s, durations, genres,
+  composer references and the on-disk MP3 for every entry; the homepage
+  schema count check is now seven nodes and the `VideoObject` ban is
+  unchanged.
+
+### 3. AA link contrast (type-floor experiment reverted)
+
+- Brand red `#c41e1e` measures 3.49:1 on void and 2.82:1 on ash — under the
+  4.5:1 AA threshold for text (the gap already named on `/accessibility`).
+  The merged stylesheet applies the document-page token `#e65650`
+  (4.61–5.71:1 across void/ink/smoke/ash) to every `.text-blood` foreground,
+  including hover and group-hover states; `.bg-blood` fills keep `#c41e1e`
+  with bone text, which passes at 4.98:1. A `p a` rule gives every prose link
+  a persistent underline, so color is no longer a link's sole affordance
+  (the Lighthouse "links rely on color" failure), and the mist secondary
+  colors are brightened (`#b5b0a8`, `#9a9590`).
+- Type: the blanket type floors added on 2026-10-25 (every 8–11px bracket
+  utility forced to 12px at all viewports, and all mobile prose forced to
+  16px) were **reverted on 2026-10-26**. They overrode the design's 8–12px
+  uppercase label scale site-wide, which read as a typographic regression on
+  the homepage: labels, nav and footer rows grew out of their column widths.
+  The stylesheet now keeps exactly the original type scale, including the
+  mobile prose size; only the AA red, the prose-link underlines and the
+  brightened mist tints are carried over from that pass. The narrower
+  `max-width:639px` 12px label floor from 2026-10-22 is untouched.
+- The stylesheet content changed, so it was renamed
+  `index-688fefff.css` → `index-3465aa44.css` (sha256 of the file bytes, the
+  convention the film-player hash test enforces) and the `index.html` link and
+  `sw.js` precache entry moved with it; the SW cache name moves
+  `zazie-v43` → `zazie-v44` so returning visitors pick the reverted type up.
+  `/accessibility` now names `/store` as the only remaining small-label red
+  gap and no longer claims the removed type floors.
+
+
+## Archive boot restored: 2026-10-22
+
+The terminal loading screen is back in `index.html`. This records what was
+actually broken, what version was restored, and what it costs.
+
+### What happened
+
+The boot was built in `b4a04c0`, deepened in `edddb48`, pared back in
+`9e79fc2` and redesigned as the analog "archive transmission" in `09baad1`
+(the version documented below as *ZP Archive Boot, minimal terminal intro*,
+plus the tape-deck chrome, oscilloscope and interference beat). It then stopped
+displaying: `16f90be` (prerendered item pages) rewrote the homepage `<head>`
+and dropped the synchronous gate script that adds `html.zp-boot-on`. With no
+gate the overlay stayed `display:none`, so the following mobile-audit pass
+(`3ece5f7`) read it as dead weight — 14 KB of CSS, 4 KB of script and 45
+nodes — and deleted it. The markup was never the problem; the gate was.
+
+### What was restored
+
+- The overlay markup, stylesheet and sequence driver from `09baad1`, unchanged
+  in design: shell/HUD frame, wordmark, console typing, oscilloscope, progress
+  deck, grain, scanlines, roll bar, interference tear, power-down teardown.
+- The gate, rebuilt in the head where `16f90be` removed it. It is the only
+  thing that decides whether the overlay is ever displayed.
+- Copy counts moved with the data: `001 / 032` and `32 CUES / ARCHIVE MOUNTED`
+  (the restored source still said 29; the showreel has 32 cues, and README
+  guardrail "counts move together" applies to the loader too).
+- Teardown clears both `zp-boot-on` and `zp-boot-force` from `<html>` and the
+  session-storage write the later revision had re-added is gone, so the loader
+  writes no storage key (matching the `/privacy` and `LEGAL.md` claims).
+- The two `.zp-skip` rules that travelled with the old stylesheet are **not**
+  restored: the site now ships its own skip-link styles.
+
+### Cost & guardrails (unchanged from the original design)
+
+- **Zero network requests**: ~22 KB raw / ~7 KB gzip of inline CSS + markup +
+  JS on `index.html` only (measured on the served document). No fonts (`ui-monospace` stack), no images, no audio.
+- **Nothing paints when off**: the overlay is `display:none` until the gate
+  adds the class, so no-JS, crawlers, bots, Lighthouse runs and
+  `prefers-reduced-motion` visitors pay only the bytes, never a frame.
+- **Timing**: progress reaches 100 % at ≈2.8 s, the overlay is removed at
+  ≈4 s (700 ms hold + 450 ms power-down). A high-contrast `Skip intro` button
+  (`#zp-boot-skip`, `z-index: 8` above the scanline/vignette glass, ≥44 px
+  target, 12 px type, AAA contrast, `[ESC]` hint on fine pointers, full-width
+  on mobile portrait) skips via a snappy 160 ms dissolve (`zp-fast`), and any
+  click, swipe, wheel or non-modifier key skips immediately too; a 6.5 s JS
+  cap, a 7 s CSS force-hide and `pageshow.persisted` cover error and bfcache
+  paths. The node removes itself, and any `zp:bootdone` listener is dispatched
+  after teardown.
+- **Accessibility & HUD isolation**: decorative HUD chrome inside `#zp-boot`
+  carries `aria-hidden="true"` so the 8–10 px tape telemetry stays exempt from
+  the 12 px page-copy floor and screen-reader announcements, while
+  `#zp-boot-skip` sits outside any `aria-hidden` ancestor so keyboard `Tab`,
+  `Enter`/`Space`, and assistive technology reach it cleanly (`zazie-v38`).
+- **Bypass**: `?boot=0` / `#noboot` disables it, `?boot=1` / `#boot` forces it
+  past the reduced-motion gate.
+
+### Verification
+
+`npm run build` green (85 URLs, 77 images, 12 videos), `npm test` 44/44, and a
+jsdom run of the built `index.html` exercising the real gate and driver:
+plays on default and `?boot=0`-free production/preview hosts, stays hidden for
+`?boot=0`, `#noboot`, `prefers-reduced-motion` and bot/Lighthouse user agents,
+plays for `?boot=1` under reduced motion, types all four console lines,
+reaches 100 %, removes the overlay and leaves `<html>` class-free. The same
+pass confirms the restored head survives `scripts/prerender.mjs`'s head rebuild
+(the boot `<style>` and gate `<script>` are non-SEO resources and are kept).
+
+`sw.js` moves to `zazie-v37`: `/` is precached, so a returning visitor would
+otherwise keep the boot-less document.
+
+## Mobile audit remediation: 2026-10-22
+
+An external PageSpeed/SEO audit of the live site raised five items: input delay
+(INP), mobile friendliness (tiny text, hard-to-tap controls), missing image alt
+text, an over-long meta description, and an unobtainable DOM-size reading. This
+section records what changed and what was measured in the sandbox browser.
+
+### Measured, before → after (Lighthouse 12, mobile, local server)
+
+| Signal | Before | After |
+| --- | --- | --- |
+| Performance | 77 | **79** |
+| Accessibility | 97 | **100** |
+| Best practices | 96 | **100** |
+| SEO | 100 | **100** |
+| Total blocking time | 130 ms | **20 ms** |
+| DOM elements | 1,386 | **1,213** |
+| `uses-responsive-images` estimate | 374 KiB | **114 KiB** |
+
+Merging `main`'s Brotli/Gzip negotiation (`server.mjs`) and the edge cache-header
+fix on top of this pass moves the same local run to **87** performance:
+FCP 1.4 s, LCP 3.9 s, TBT 30 ms, CLS 0.034 — accessibility, best practices and
+SEO stay at 100.
+
+LCP is left at 5.0 s *simulated*: Lantern charges the hero plate a multi-second
+"render delay" that does not reproduce in the browser (observed LCP 274 ms,
+puppeteer 301–306 ms, with the bundle allowed or blocked). Chasing that number
+by re-ordering the bundle load made the score worse, so it was not done.
+
+### Changes
+
+1. **Meta description** — `src/data/hubs.ts` home description 220 → 129
+   characters; the hub descriptions for the other pages were already in range.
+2. **Alt text** — the poster wall and the hero portrait now carry
+   `${title} poster artwork` / a named portrait alt in both renders: the
+   prerendered HTML (`src/lib/home.ts`, `src/lib/page.ts`) and the React bundle
+   (`home-src/build.mjs` pairs). The atmosphere plate and the press photo stay
+   `alt=""` (decorative).
+3. **DOM size** — the `zp-boot` archive-intro overlay was inert (nothing ever
+   added `html.zp-boot-on`), so its 14 KB stylesheet, 4 KB script and 45 nodes
+   were deleted: 1,429 → 1,256 nodes in the browser, 1,213 per Lighthouse.
+4. **Mobile readability** — a 12 px floor for small type: `11px/10px/9px`
+   Tailwind labels and the estimator island's `zp-*` micro-labels (`kicker`,
+   package metadata, factor list, legends, help text, CTAs) now set 12 px with
+   relaxed tracking below 640 px. Small red labels moved to `#e34b4b`
+   (5.1:1) and `mist/60` to `#8b8681` (5.2:1) so AA contrast passes; display
+   type keeps the brand `#c41e1e`.
+5. **Tap targets** — prose links get invisible vertical padding (≈28 px), the
+   header wordmark and the contact rows are 44 px, and `.zp-skip` — which
+   shipped with **no styles at all**, rendering a raw "Skip to content" link
+   over the header on every page — is now off-screen until focused.
+6. **Responsive images** — the poster wall serves a 400/480/640 AVIF ladder
+   from `src/data/productions.ts` (`avifSet`) instead of a single 640 w
+   candidate, so DPR 2 devices fetch 400 w and DPR 2.6 devices 480 w.
+
+### Verification
+
+`npm run build` green (`sync-pricing --check` PASS, `verify` PASS — 85 URLs,
+77 images, 12 videos), `npm test` 37/37, and a 412×915 browser pass: zero text
+nodes under 12 px, zero tap targets under 24 px, poster dialog opens, showreel
+row plays, no page errors.
+
 ## 0. Mobile loading follow-up: 2026-09-25
 
 This section supersedes the older entries below for the current `main`-derived
@@ -144,7 +375,7 @@ not claim a Core Web Vital improvement without a real mobile run.
 
 ## 4. Residual risks & decisions for humans
 
-- **Hydration upgrade (recommended, not shipped)**: the correct end-state is regenerating the static HTML from the app and switching `createRoot`→`hydrateRoot` (eliminates the DOM teardown entirely and lets the flicker `<style>` hacks in head be deleted). Not shipped because it requires a real-browser hydration diff to prove; with JS deferred to idle the teardown cost is now off the critical path, so this is polish, not a bottleneck. Owner: engineering, with source repo.
+- **Hydration upgrade (recommended, not shipped; indexing impact already removed)**: the correct end-state is regenerating the static HTML from the app and switching `createRoot`→`hydrateRoot` (eliminates the DOM teardown entirely and lets the flicker `<style>` hacks in head be deleted). Not shipped because it requires a real-browser hydration diff to prove; with JS deferred to idle the teardown cost is now off the critical path, so this is polish, not a bottleneck. As of 2026-10-25 the mount is also UA-gated (`ZP_RUNTIME_BOT`): crawlers, headless clients and Lighthouse never load the bundle, so no indexing agent experiences the teardown or the redundant asset chain — only human visitors do, at idle. Owner: engineering, with source repo.
 - **AVIF preload on non-AVIF desktop browsers** (<2% by 2026): the `media="(min-width:1024px)"` preload fetches the AVIF which `<picture>` then doesn't use (console warning only). Accepted.
 - **JS-gated interactivity**: play buttons / sticky player appear at `load`+idle instead of at parse. Static showreel list and CTAs are fully usable before that. Accepted; measure INP/engagement and revisit if support inquiries drop.
 - **Audio re-encode** (12.5 MB longest track at ~256 kbps): left untouched deliberately, streaming is progressive and bitrate is a brand-quality call. If mobile data matters more than master fidelity, re-encode to 160 kbps CBR (+ update immutable cache via filename change). Owner: composer.
@@ -751,3 +982,95 @@ bundle-only one.
 - `tools/film-player.test.mjs` re-derives the bundle name from `index.html`
   and checks precache membership, so the three-way rename cannot drift
   silently; it passes with the merged tree.
+
+## Response headers: the comma that switched caching off (2026-10-22)
+
+A header audit reported "add `Cache-Control` to leverage browser caching" against
+a site that had been shipping `Cache-Control` for a year. The rules were fine;
+the host's semantics were not being honoured.
+
+**What the edge actually served.** Cloudflare Pages does not merge rules with
+"most specific wins". Every rule whose pattern matches a request contributes its
+headers, and a header set twice is joined with a comma. So:
+
+```
+/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+```
+
+answered `/fonts/inter-latin-wght-normal.woff2` with
+
+```
+Cache-Control: public, max-age=0, must-revalidate, public, max-age=31536000, immutable
+```
+
+and RFC 9111 says a repeated directive is read from its **first** instance. The
+effective lifetime of every font, every image and every content-hashed CSS/JS
+bundle was `max-age=0, must-revalidate`. The same join applied to
+`/index-*.js`, `/store-*.js`, `/legal-*.js`, `/estimator-*.js`, `/item-*.js`,
+`/*.css`, `/images/*` and `/audio/*` — i.e. to all of the caching, none of the
+pages.
+
+**Fix.** `/*` is now the only rule that sets `Cache-Control` as a default, and
+every narrower rule detaches it before setting its own value, which is the
+documented way to express an override in `_headers`:
+
+```
+/fonts/*
+  ! Cache-Control
+  Cache-Control: public, max-age=31536000, immutable
+```
+
+Detach is order-sensitive — it only removes what earlier rules added — so `/*`
+stays first in the file. Measured effect on a repeat visit: 3 woff2 (95 KB),
+8 hashed bundles (~600 KB raw) and every poster/hero image stop revalidating and
+are served from the browser cache for 1 year (fonts, bundles) or 30 days with
+`stale-while-revalidate=86400` (images, audio). Only HTML still revalidates.
+
+**Compression.** Cloudflare Pages Brotli-compresses static text at the edge; the
+local mirror never did, so the claim was untestable. `server.mjs` now negotiates
+per request — Brotli q11 when offered, Gzip otherwise, `Vary: Accept-Encoding`
+always, nothing under 1 KB compressed — and adds strong `ETag`s with `304`
+handling. Measured locally (`curl -H 'accept-encoding: br, gzip'`):
+
+| Asset | identity | gzip | brotli |
+| --- | ---: | ---: | ---: |
+| `/` (HTML) | 190.5 KB | 32.4 KB | 25.9 KB |
+| `/index-f509fde0.css` | 76.8 KB | 13.9 KB | 11.4 KB |
+
+Brotli is ~15 % smaller than gzip on the two files that gate first paint.
+
+**Security headers** were already present (`Strict-Transport-Security`,
+`Content-Security-Policy`, `X-Frame-Options: SAMEORIGIN`, `nosniff`,
+`Referrer-Policy`, `Permissions-Policy`). They are now enforced rather than
+merely asserted: the policy lives in `tools/headers.mjs`, `_headers` is checked
+against it, and the CSP also carries `frame-ancestors 'self'` (the modern
+clickjacking control, alongside the legacy `X-Frame-Options`).
+
+**Guards added, all in `npm run build`:**
+
+- `tools/check-headers.mjs` — parses `_headers`, simulates the host's comma-join,
+  and fails if any path would receive two `max-age` values, if a narrower rule
+  forgets `! Cache-Control`, if the `/*` policy drifts from `tools/headers.mjs`,
+  or if a sitemap route is not HTML-revalidated and indexable. 220 path
+  expectations, including every sitemap route and its `.html` and `/` forms.
+- `tools/check-links.mjs` — resolves every internal `href`/`src`/`srcset` in the
+  published tree the way the host does, plus every `#fragment` against the
+  destination's `id`s. 9,564 links / 105 documents (including `srcset` and
+  stylesheet `url()` references), 0 broken.
+- `tools/live-route-audit.mjs` — now also probes delivery on the live host: HSTS,
+  CSP `frame-ancestors`, `X-Frame-Options: SAMEORIGIN`, `nosniff`, referrer
+  policy, one `max-age` per path, `immutable` on hashed bundles and fonts, and a
+  Brotli/Gzip `content-encoding` on the document and the CSS.
+
+**Home title.** `Horror Composer for Hire — Film, TV & Game Scores | Zazie
+Productions` was 69 characters (73 as rendered by the auditor, counting the
+entity); Google truncates around 65, which cut the brand. It is now
+`Horror Composer for Hire — Film, TV & Game Scores` (49 characters), with
+`og:site_name: Zazie Productions` carrying the brand into the card and SERP
+sitename. `scripts/verify.mjs` holds `/` to 65 characters and reports the 54
+other routes that still run long, so the remaining editorial pass has a queue
+without blocking the build.

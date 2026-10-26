@@ -2,7 +2,7 @@
 <!--
   Generated https://horror.zazieproductions.com/sitemap.xml from src/data/{hubs,productions,cues,releases,routes}.ts.
   Do not edit by hand. Each URL is a canonical, extensionless route.
-  Route count: 85 (20 original hubs + 9 productions + 32 cues + 24 catalogue items).
+  Route count: 83 (20 original hubs + 9 productions + 30 cues + 24 catalogue items).
   Sitemap priority and changefreq are intentionally omitted.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -11,7 +11,7 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/</loc>
-    <lastmod>2026-10-18</lastmod>
+    <lastmod>2026-10-24</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/hero-portrait.jpg</image:loc>
       <image:caption>Portfolio portrait for Zazie Productions, a composer and sound-design studio working across screen and experimental media.</image:caption>
@@ -71,6 +71,11 @@
       <image:loc>https://horror.zazieproductions.com/images/posters/the-dark-awaits-1200.jpg</image:loc>
       <image:caption>Poster artwork for THE DARK AWAITS, a paranormal reality-TV series; IMDb credits Zazie Kanwar-Torge as composer.</image:caption>
       <image:title>THE DARK AWAITS - Paranormal Reality-TV Series</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://horror.zazieproductions.com/images/posters/uncle-freds-monster-problem-1200.jpg</image:loc>
+      <image:caption>Poster artwork for UNCLE FRED&apos;S MONSTER PROBLEM.</image:caption>
+      <image:title>UNCLE FRED&apos;S MONSTER PROBLEM - Film Poster</image:title>
     </image:image>
     <video:video>
       <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-HaVJP08j77U.jpg</video:thumbnail_loc>
@@ -150,7 +155,7 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/work</loc>
-    <lastmod>2026-10-18</lastmod>
+    <lastmod>2026-10-21</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg</image:loc>
       <image:caption>EXPIRE (2025) - IMDb credits Zazie Kanwar-Torge for sound design; other composers are listed separately.</image:caption>
@@ -240,12 +245,12 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/reel</loc>
-    <lastmod>2026-10-17</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/composer</loc>
-    <lastmod>2026-10-18</lastmod>
+    <lastmod>2026-10-21</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/headshot.jpg</image:loc>
       <image:caption>Zazie Kanwar-Torge, psychological horror composer and founder of Zazie Productions LLC, Asheville NC.</image:caption>
@@ -265,7 +270,7 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/services</loc>
-    <lastmod>2026-10-18</lastmod>
+    <lastmod>2026-10-21</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
       <image:caption>Zazie Productions horror film scoring suite Asheville, NC</image:caption>
@@ -275,7 +280,7 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/store</loc>
-    <lastmod>2026-10-18</lastmod>
+    <lastmod>2026-10-21</lastmod>
     <image:image>
       <image:loc>https://f4.bcbits.com/img/a4087485987_16.jpg</image:loc>
       <image:caption>Anesthesia for the Signal Age - ten-track experimental electronic album, released May 7, 2026.</image:caption>
@@ -320,7 +325,7 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/contact</loc>
-    <lastmod>2026-10-18</lastmod>
+    <lastmod>2026-10-21</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/hero-portrait.jpg</image:loc>
       <image:caption>Zazie Kanwar-Torge, psychological horror composer available for commission</image:caption>
@@ -355,7 +360,7 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/privacy</loc>
-    <lastmod>2026-10-13</lastmod>
+    <lastmod>2026-10-26</lastmod>
   </url>
 
   <url>
@@ -393,7 +398,7 @@
     <lastmod>2026-10-17</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg</image:loc>
-      <image:caption>EXPIRE horror short - sound design and score by Zazie Kanwar-Torge, from the cinematic sound design page.</image:caption>
+      <image:caption>EXPIRE sci-fi horror short - sound design by Zazie Kanwar-Torge, from the cinematic sound design page.</image:caption>
       <image:title>Cinematic Sound Design for Horror Film - Zazie Productions</image:title>
     </image:image>
   </url>
@@ -410,10 +415,10 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/work/expire</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg</image:loc>
-      <image:caption>Poster artwork for EXPIRE</image:caption>
+      <image:caption>EXPIRE: Dystopian sci-fi horror sound design by Zazie Kanwar-Torge featuring distressed mechanical foley, bowed metal resonance, and granular synthesis.</image:caption>
       <image:title>EXPIRE</image:title>
     </image:image>
     <video:video>
@@ -429,7 +434,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/unseen-640.jpg</image:loc>
-      <image:caption>Poster artwork for UNSEEN</image:caption>
+      <image:caption>UNSEEN: Psychological horror-thriller feature film poster (archival record; music composed by Steve Merlo).</image:caption>
       <image:title>UNSEEN</image:title>
     </image:image>
   </url>
@@ -439,7 +444,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/peregrinus-640.jpg</image:loc>
-      <image:caption>Poster artwork for PEREGRINUS</image:caption>
+      <image:caption>PEREGRINUS: Sci-fi psychological thriller TV series co-score by Zazie Kanwar-Torge featuring dystopian analog synth pulses and sub-bass tension.</image:caption>
       <image:title>PEREGRINUS</image:title>
     </image:image>
   </url>
@@ -449,7 +454,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/phantom-requiem-640.jpg</image:loc>
-      <image:caption>Poster artwork for Phantom Requiem</image:caption>
+      <image:caption>Phantom Requiem: Experimental art house horror score by Zazie Kanwar-Torge featuring spectral synthesis and electroacoustic sound design.</image:caption>
       <image:title>Phantom Requiem</image:title>
     </image:image>
     <video:video>
@@ -467,7 +472,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/eclipsed-640.jpg</image:loc>
-      <image:caption>Poster artwork for ECLIPSED</image:caption>
+      <image:caption>ECLIPSED: Surrealist body horror score by Zazie Kanwar-Torge featuring dissonant bowed metal and experimental synthesis.</image:caption>
       <image:title>ECLIPSED</image:title>
     </image:image>
   </url>
@@ -477,7 +482,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/the-haunted-640.jpg</image:loc>
-      <image:caption>Poster artwork for THE HAUNTED</image:caption>
+      <image:caption>THE HAUNTED: Sci-fi psychological horror co-score by Zazie Kanwar-Torge featuring psychophonic scraping beds and dark ambient drones.</image:caption>
       <image:title>THE HAUNTED</image:title>
     </image:image>
     <video:video>
@@ -494,7 +499,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/choleric-640.jpg</image:loc>
-      <image:caption>Poster artwork for CHOLERIC</image:caption>
+      <image:caption>CHOLERIC: Psychological mystery-horror short film co-produced by Zazie Kanwar-Torge (post-production poster artwork).</image:caption>
       <image:title>CHOLERIC</image:title>
     </image:image>
   </url>
@@ -504,7 +509,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/mike-has-a-visitor-640.jpg</image:loc>
-      <image:caption>Poster artwork for MIKE HAS A VISITOR</image:caption>
+      <image:caption>MIKE HAS A VISITOR: Sleep-paralysis psychological horror score by Zazie Kanwar-Torge featuring nerve-scraping strings and sub-audible room tone.</image:caption>
       <image:title>MIKE HAS A VISITOR</image:title>
     </image:image>
     <video:video>
@@ -522,169 +527,159 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/the-dark-awaits-640.jpg</image:loc>
-      <image:caption>Poster artwork for THE DARK AWAITS</image:caption>
+      <image:caption>THE DARK AWAITS: Paranormal television series score by Zazie Kanwar-Torge featuring ominous low-end drones and bowed metallic textures.</image:caption>
       <image:title>THE DARK AWAITS</image:title>
     </image:image>
   </url>
 
   <url>
+    <loc>https://horror.zazieproductions.com/reel/the-beautiful-wrongness</loc>
+    <lastmod>2026-10-24</lastmod>
+  </url>
+
+  <url>
     <loc>https://horror.zazieproductions.com/reel/needle-in-the-nerve</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/dissociative-amnesia</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/brutalist-tension-stinger</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/scraping-psychophonic-bed</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/hidden-intentions-serene-purgatory</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/variations-on-a-vanishing-body</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/the-silence-began-crawling</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/timeless-retro-splurge</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/quarter-eater-poltergeist</loc>
-    <lastmod>2026-10-04</lastmod>
-  </url>
-
-  <url>
-    <loc>https://horror.zazieproductions.com/reel/dark-thriller-cinematic-cue</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/opaline-lament-life-from-the-beyond</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/ominous-drone</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/the-fatal-overdose</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/bone-colored-air</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/obsidian-hall</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/rlyehs-xenolith</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/deep-dystopian-synth-cue</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/panic-threshold</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/waterphone-shower-scene</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/the-room-forgets-you</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/dark-ambient-soundscape-no-1</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/subdued-drone-sensory-deprivation</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/dark-ambient-soundscape-no-2</loc>
-    <lastmod>2026-10-04</lastmod>
-  </url>
-
-  <url>
-    <loc>https://horror.zazieproductions.com/reel/screams-of-the-damned</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/narrow-pulse</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/dissonant-decay-soundscape-sampler</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/time-shifting-into-daylight</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/stinger-cello-cue</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/smell-of-bleach</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/fractured-requiem</loc>
-    <lastmod>2026-10-04</lastmod>
-  </url>
-
-  <url>
-    <loc>https://horror.zazieproductions.com/reel/the-beautiful-wrongness</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/earthpulse-protocol</loc>
-    <lastmod>2026-10-04</lastmod>
+    <lastmod>2026-10-24</lastmod>
   </url>
 
   <url>
@@ -692,7 +687,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://f4.bcbits.com/img/a4087485987_16.jpg</image:loc>
-      <image:caption>Cover artwork for Anesthesia for the Signal Age</image:caption>
+      <image:caption>Anesthesia for the Signal Age: Experimental body-horror and acousmatic album by Zazie Kanwar-Torge featuring surgical steel foley, CRT hum, and modular percussion.</image:caption>
       <image:title>Anesthesia for the Signal Age</image:title>
     </image:image>
   </url>
@@ -702,7 +697,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://f4.bcbits.com/img/a4110701137_16.jpg</image:loc>
-      <image:caption>Cover artwork for Opaline Lament (Life From The Beyond)</image:caption>
+      <image:caption>Opaline Lament (Life From The Beyond): Experimental art house chamber-horror composition by Zazie Kanwar-Torge featuring mournful solo strings and spectral orchestration.</image:caption>
       <image:title>Opaline Lament (Life From The Beyond)</image:title>
     </image:image>
   </url>
@@ -712,7 +707,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://f4.bcbits.com/img/a3756749177_16.jpg</image:loc>
-      <image:caption>Cover artwork for Spectral Ode to Synesthesia</image:caption>
+      <image:caption>Spectral Ode to Synesthesia: Experimental electroacoustic horror composition by Zazie Kanwar-Torge featuring stretched rubber, electromagnetic field recordings, and 3D binaural granular synthesis.</image:caption>
       <image:title>Spectral Ode to Synesthesia</image:title>
     </image:image>
   </url>
@@ -722,7 +717,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://f4.bcbits.com/img/a0612904516_16.jpg</image:loc>
-      <image:caption>Cover artwork for To Halt Space Adrift</image:caption>
+      <image:caption>To Halt Space Adrift: Avant-garde experimental album by Zazie Kanwar-Torge featuring fractured synthesis and surrealist electroacoustic textures.</image:caption>
       <image:title>To Halt Space Adrift</image:title>
     </image:image>
   </url>
@@ -732,7 +727,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://f4.bcbits.com/img/a0050695008_16.jpg</image:loc>
-      <image:caption>Cover artwork for Vermiform</image:caption>
+      <image:caption>Vermiform: Surrealist avant-garde horror album by Zazie Kanwar-Torge featuring dissonant experimental textures and uncanny outsider instrumentation.</image:caption>
       <image:title>Vermiform</image:title>
     </image:image>
   </url>
@@ -742,7 +737,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://f4.bcbits.com/img/a0935502895_16.jpg</image:loc>
-      <image:caption>Cover artwork for Constrained Capacity</image:caption>
+      <image:caption>Constrained Capacity: Industrial dark ambient and psychological horror album by Zazie Kanwar-Torge featuring musique concrète foley and noise-rock distortion.</image:caption>
       <image:title>Constrained Capacity</image:title>
     </image:image>
   </url>
@@ -752,7 +747,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://f4.bcbits.com/img/a0281727228_16.jpg</image:loc>
-      <image:caption>Cover artwork for Interference Archive 01010101</image:caption>
+      <image:caption>Interference Archive 01010101: Cyberpunk industrial synth album by Zazie Kanwar-Torge featuring analog-modeled sequencers and digital signal decay.</image:caption>
       <image:title>Interference Archive 01010101</image:title>
     </image:image>
   </url>
@@ -762,7 +757,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://f4.bcbits.com/img/a1008810016_16.jpg</image:loc>
-      <image:caption>Cover artwork for Stutter to stammer</image:caption>
+      <image:caption>Stutter to stammer: Experimental paranoia single by Zazie Kanwar-Torge featuring rhythmic tape-stutter manipulation and tense electronic textures.</image:caption>
       <image:title>Stutter to stammer</image:title>
     </image:image>
   </url>
@@ -772,7 +767,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://img.itch.zone/aW1nLzI5MTYyOTA5LnBuZw==/347x500/%2F%2Bsnt7.png</image:loc>
-      <image:caption>Cover art for UNHOLY ANATOMY</image:caption>
+      <image:caption>UNHOLY ANATOMY: Body horror and supernatural sound effects library by Zazie Kanwar-Torge featuring visceral bone impacts, organic flesh foley, and demonic vocalizations.</image:caption>
       <image:title>UNHOLY ANATOMY</image:title>
     </image:image>
   </url>
@@ -782,7 +777,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://img.itch.zone/aW1nLzI4NjA5NjM4LnBuZw==/347x500/xUrAIl.png</image:loc>
-      <image:caption>Cover art for FAULT CODES</image:caption>
+      <image:caption>FAULT CODES: Sci-fi horror UI sound library by Zazie Kanwar-Torge featuring minimal system-failure synthesis, clinical error tones, and terminal warning signals.</image:caption>
       <image:title>FAULT CODES</image:title>
     </image:image>
   </url>
@@ -792,7 +787,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://public-files.gumroad.com/kxisasmtty6rugi2h6wyhz29lvb4</image:loc>
-      <image:caption>Cover artwork for Galactic Requiem</image:caption>
+      <image:caption>Galactic Requiem: Cosmic sci-fi horror 3D soundscape by Zazie Kanwar-Torge featuring metallic hull impacts, alien vocal processing, and glitch synthesis.</image:caption>
       <image:title>Galactic Requiem</image:title>
     </image:image>
   </url>
@@ -802,7 +797,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://public-files.gumroad.com/gxx8r6nvhvokuqz8ktnou29qlm7c</image:loc>
-      <image:caption>Cover artwork for Plug-in Mega-Vault</image:caption>
+      <image:caption>Plug-in Mega-Vault: Experimental audio software archive curated by Zazie Productions featuring VST synthesizers, granular loop slicers, and distortion processors.</image:caption>
       <image:title>Plug-in Mega-Vault</image:title>
     </image:image>
   </url>
@@ -812,7 +807,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://public-files.gumroad.com/ggkcnd8qzh2wnynjbinyw2b54l0b</image:loc>
-      <image:caption>Cover artwork for the Micro-Rupture Collection</image:caption>
+      <image:caption>Micro-Rupture Collection: Experimental horror visual pack by Zazie Productions featuring analog signal-loss transitions, data corruption, and cyber-static cuts.</image:caption>
       <image:title>Micro-Rupture Collection</image:title>
     </image:image>
   </url>
@@ -822,7 +817,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://public-files.gumroad.com/h4mkhyng4g2dq47w82bof8aa1xa0</image:loc>
-      <image:caption>Cover artwork for The Forbidden Canticles</image:caption>
+      <image:caption>The Forbidden Canticles: Archival gothic and liturgical score-facsimile PDF collection curated by Zazie Productions featuring historical musical engravings.</image:caption>
       <image:title>The Forbidden Canticles</image:title>
     </image:image>
   </url>
@@ -832,7 +827,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://img.itch.zone/aW1hZ2UvMzQ1Njk3Mi8yMDYyMDc4NC5qcGVn/347x500/bUXLKJ.jpeg</image:loc>
-      <image:caption>Cover artwork for Room 7G: The Hygiene Loop</image:caption>
+      <image:caption>Room 7G: The Hygiene Loop: Liminal psychological horror environment asset by Zazie Productions featuring uncanny fluorescent flicker in an abandoned concrete room.</image:caption>
       <image:title>Room 7G: The Hygiene Loop</image:title>
     </image:image>
   </url>
@@ -842,7 +837,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://img.itch.zone/aW1nLzIwNzcyOTUyLnBuZw==/347x500/3Ub2Qv.png</image:loc>
-      <image:caption>Cover art for CRYPTOTYPE-9</image:caption>
+      <image:caption>CRYPTOTYPE-9: Retro-occult horror game UI asset pack by Zazie Productions featuring modular pixel-art card frames and arcane lost-console icons.</image:caption>
       <image:title>CRYPTOTYPE-9</image:title>
     </image:image>
   </url>
@@ -852,7 +847,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://i.ebayimg.com/images/g/v5cAAeSwYHhqrDTs/s-l500.webp</image:loc>
-      <image:caption>Skull-shaped Aztec death whistle shown in the eBay listing</image:caption>
+      <image:caption>Aztec Death Whistle: Skull-shaped acoustic shriek instrument listed by Zazie Productions for ritual folk horror foley and practical sound design.</image:caption>
       <image:title>Aztec Death Whistle</image:title>
     </image:image>
   </url>
@@ -872,7 +867,7 @@
     <lastmod>2026-10-04</lastmod>
     <image:image>
       <image:loc>https://i.ebayimg.com/images/g/c-cAAeSwjBpqrDDB/s-l500.webp</image:loc>
-      <image:caption>Creepy Cricket Noise Generator module shown in the eBay listing</image:caption>
+      <image:caption>Creepy Cricket Noise Generator: Compact high-frequency electronic sound-effect module listed by Zazie Productions on eBay.</image:caption>
       <image:title>Creepy Cricket Noise Generator</image:title>
     </image:image>
   </url>

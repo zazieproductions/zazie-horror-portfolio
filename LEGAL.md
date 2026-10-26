@@ -144,9 +144,13 @@ Never hand edit a generated `<slug>/index.html`; the next build overwrites it.
 * **Legibility red.** `#c41e1e` measures 3.49:1 on `#030303`, short of the
   4.5:1 needed for small text. These pages add `--blood-text:#e65650`
   (5.71:1) for labels and keep the darker red for rules, marks and display
-  type. The portfolio and `/store` still use the darker red for small labels;
-  that is listed as an open gap in the accessibility statement rather than
-  quietly fixed or ignored.
+  type. The portfolio homepage now applies the same `#e65650` token
+  (4.61–5.71:1 across its dark surfaces) to every text-blood foreground,
+  with persistent underlines on prose links (the short-lived 12px/16px type
+  floors were reverted on 2026-10-26, so the original type scale stands);
+  `/store` still uses the darker red for small
+  labels, which remains listed as an open gap in the accessibility
+  statement rather than quietly fixed or ignored.
 * **Legal pages bypass the stale cache.** `sw.js` serves navigations
   stale-while-revalidate, which is right for a portfolio and wrong for a
   document whose effective date matters. The seven legal paths are now

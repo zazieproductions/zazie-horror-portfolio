@@ -1,4 +1,4 @@
-/** Verified site-level identity nodes shared by the homepage and item pages. */
+/** Verified site-level identity nodes and Knowledge Graph authority mappings shared across the site. */
 
 import { AUTHOR_NAME, ORG_ID, PERSON_ID, SITE_NAME, SITE_ORIGIN, WEBSITE_ID } from './site.js';
 
@@ -17,6 +17,221 @@ export const VERIFIED_SAME_AS = [
   'https://credits.muso.ai/profile/4010f3b7-9a87-4961-8dfd-917de0ba787e',
 ] as const;
 
+/** Topical references only, never identity aliases or production credits. */
+export const HORROR_REFERENCE_TOPICS = [
+  {
+    '@type': 'Thing',
+    name: 'A24 film aesthetic',
+    description: 'A reference topic in prestige horror scoring; not an affiliation or production credit.',
+    url: 'https://en.wikipedia.org/wiki/A24',
+    sameAs: ['https://en.wikipedia.org/wiki/Art_film'],
+  },
+  {
+    '@type': 'Thing',
+    name: 'Mica Levi scoring techniques',
+    description: 'A reference topic in experimental film scoring; not a collaboration or credit.',
+    url: 'https://en.wikipedia.org/wiki/Mica_Levi',
+    sameAs: ['https://en.wikipedia.org/wiki/Film_score'],
+  },
+  {
+    '@type': 'Thing',
+    name: 'Folk Horror tropes',
+    description: 'Genre conventions used as reference topics for horror scoring.',
+    url: 'https://en.wikipedia.org/wiki/Folk_horror',
+    sameAs: ['https://www.imdb.com/search/title/?genres=horror&keywords=folk-horror'],
+  },
+] as const;
+
+/**
+ * External Knowledge Graph authority entities linking Zazie Kanwar-Torge's
+ * core compositional specialties to canonical Wikipedia and IMDb genre/keyword nodes.
+ */
+export const KNOWS_ABOUT_ENTITIES = [
+  ...HORROR_REFERENCE_TOPICS,
+  {
+    '@type': 'Thing',
+    name: 'Experimental Art House Cinema Scoring',
+    url: 'https://en.wikipedia.org/wiki/Art_film',
+    sameAs: [
+      'https://en.wikipedia.org/wiki/Experimental_film',
+      'https://www.imdb.com/search/title/?genres=horror&keywords=art-house',
+    ],
+  },
+  {
+    '@type': 'Thing',
+    name: 'Psychological Horror Film Scoring',
+    url: 'https://en.wikipedia.org/wiki/Psychological_horror',
+    sameAs: ['https://www.imdb.com/search/title/?genres=horror&keywords=psychological-horror'],
+  },
+  {
+    '@type': 'Thing',
+    name: 'Folk Horror Original Music',
+    url: 'https://en.wikipedia.org/wiki/Folk_horror',
+    sameAs: ['https://www.imdb.com/search/title/?genres=horror&keywords=folk-horror'],
+  },
+  {
+    '@type': 'Thing',
+    name: 'Body Horror Sound Worlds',
+    url: 'https://en.wikipedia.org/wiki/Body_horror',
+    sameAs: ['https://www.imdb.com/search/title/?genres=horror&keywords=body-horror'],
+  },
+  {
+    '@type': 'Thing',
+    name: 'Supernatural & Cosmic Horror Composition',
+    url: 'https://en.wikipedia.org/wiki/Lovecraftian_horror',
+    sameAs: [
+      'https://en.wikipedia.org/wiki/Supernatural_horror_film',
+      'https://www.imdb.com/search/title/?genres=horror,thriller',
+    ],
+  },
+  {
+    '@type': 'Thing',
+    name: 'Electroacoustic & Musique Concrète Scoring',
+    url: 'https://en.wikipedia.org/wiki/Musique_concr%C3%A8te',
+    sameAs: ['https://en.wikipedia.org/wiki/Electroacoustic_music'],
+  },
+  {
+    '@type': 'Thing',
+    name: 'Waterphone & Bowed Metal Instrumentation',
+    url: 'https://en.wikipedia.org/wiki/Waterphone',
+    sameAs: ['https://en.wikipedia.org/wiki/Extended_technique'],
+  },
+  {
+    '@type': 'Thing',
+    name: 'Dark Ambient & Hybrid Orchestral Synthesis',
+    url: 'https://en.wikipedia.org/wiki/Dark_ambient',
+    sameAs: ['https://en.wikipedia.org/wiki/Film_score'],
+  },
+  {
+    '@type': 'Thing',
+    name: 'Adaptive Horror Video Game Music',
+    url: 'https://en.wikipedia.org/wiki/Adaptive_music',
+    sameAs: ['https://en.wikipedia.org/wiki/Video_game_music'],
+  },
+  {
+    '@type': 'Thing',
+    name: 'Multichannel Spatial Audio Composition',
+    url: 'https://en.wikipedia.org/wiki/3D_audio_effect',
+    sameAs: ['https://en.wikipedia.org/wiki/Sound_design'],
+  },
+] as const;
+
+const GENRE_AUTHORITY_MAP: Record<string, readonly string[]> = {
+  'experimental art house': [
+    'https://en.wikipedia.org/wiki/Art_film',
+    'https://en.wikipedia.org/wiki/Experimental_film',
+    'https://www.imdb.com/search/title/?genres=horror&keywords=art-house',
+  ],
+  'experimental film': [
+    'https://en.wikipedia.org/wiki/Experimental_film',
+    'https://en.wikipedia.org/wiki/Art_film',
+    'https://www.imdb.com/search/title/?keywords=experimental-film',
+  ],
+  experimental: [
+    'https://en.wikipedia.org/wiki/Experimental_music',
+    'https://en.wikipedia.org/wiki/Art_film',
+  ],
+  'avant-garde': ['https://en.wikipedia.org/wiki/Avant-garde_music'],
+  'outsider music': ['https://en.wikipedia.org/wiki/Outsider_music'],
+  'psychological horror': [
+    'https://en.wikipedia.org/wiki/Psychological_horror',
+    'https://www.imdb.com/search/title/?genres=horror&keywords=psychological-horror',
+  ],
+  'psychological orchestral': [
+    'https://en.wikipedia.org/wiki/Psychological_horror',
+    'https://en.wikipedia.org/wiki/Film_score',
+    'https://www.imdb.com/search/title/?genres=horror&keywords=psychological-horror',
+  ],
+  'folk horror': [
+    'https://en.wikipedia.org/wiki/Folk_horror',
+    'https://www.imdb.com/search/title/?genres=horror&keywords=folk-horror',
+  ],
+  'body horror': [
+    'https://en.wikipedia.org/wiki/Body_horror',
+    'https://www.imdb.com/search/title/?genres=horror&keywords=body-horror',
+  ],
+  'supernatural thriller': [
+    'https://en.wikipedia.org/wiki/Supernatural_horror_film',
+    'https://www.imdb.com/search/title/?genres=horror,thriller',
+  ],
+  paranormal: [
+    'https://en.wikipedia.org/wiki/Supernatural_horror_film',
+    'https://www.imdb.com/search/title/?genres=horror&keywords=paranormal',
+  ],
+  'cosmic horror': [
+    'https://en.wikipedia.org/wiki/Lovecraftian_horror',
+    'https://www.imdb.com/search/title/?genres=horror&keywords=lovecraftian',
+  ],
+  'ambient horror': [
+    'https://en.wikipedia.org/wiki/Dark_ambient',
+    'https://en.wikipedia.org/wiki/Horror_film',
+  ],
+  'dark ambient': ['https://en.wikipedia.org/wiki/Dark_ambient'],
+  'horror stinger': [
+    'https://en.wikipedia.org/wiki/Film_score',
+    'https://en.wikipedia.org/wiki/Horror_film',
+    'https://www.imdb.com/search/title/?genres=horror',
+  ],
+  horror: [
+    'https://en.wikipedia.org/wiki/Horror_film',
+    'https://www.imdb.com/search/title/?genres=horror',
+  ],
+  thriller: [
+    'https://en.wikipedia.org/wiki/Thriller_film',
+    'https://www.imdb.com/search/title/?genres=thriller',
+  ],
+  'science fiction': [
+    'https://en.wikipedia.org/wiki/Science_fiction_film',
+    'https://www.imdb.com/search/title/?genres=sci-fi',
+  ],
+  crime: ['https://www.imdb.com/search/title/?genres=crime'],
+  drama: ['https://www.imdb.com/search/title/?genres=drama'],
+  mystery: ['https://www.imdb.com/search/title/?genres=mystery'],
+  'short film': [
+    'https://en.wikipedia.org/wiki/Short_film',
+    'https://www.imdb.com/search/title/?title_type=short',
+  ],
+  'reality television': ['https://en.wikipedia.org/wiki/Reality_television'],
+  idm: ['https://en.wikipedia.org/wiki/Intelligent_dance_music'],
+  electronic: ['https://en.wikipedia.org/wiki/Electronic_music'],
+  acousmatic: ['https://en.wikipedia.org/wiki/Acousmatic_music'],
+  industrial: ['https://en.wikipedia.org/wiki/Industrial_music'],
+  'chamber music': ['https://en.wikipedia.org/wiki/Chamber_music'],
+  'film score': ['https://en.wikipedia.org/wiki/Film_score'],
+  'sound effects': [
+    'https://en.wikipedia.org/wiki/Sound_effect',
+    'https://en.wikipedia.org/wiki/Sound_design',
+  ],
+};
+
+/**
+ * Preserves human-readable genre labels and appends deduplicated external
+ * authority URIs (Wikipedia + IMDb) conforming to Schema.org `genre` (Text | URL).
+ */
+export function deepLinkGenres(labels: readonly string[]): string[] {
+  const result = new Set<string>();
+  for (const label of labels) {
+    result.add(label);
+  }
+  for (const label of labels) {
+    const key = label.trim().toLowerCase();
+    const links = GENRE_AUTHORITY_MAP[key];
+    if (links) {
+      for (const link of links) result.add(link);
+    }
+  }
+  return [...result];
+}
+
+export const PORTFOLIO_GENRES_DEEP_LINKED = deepLinkGenres([
+  'Experimental Art House',
+  'Psychological Horror',
+  'Folk Horror',
+  'Body Horror',
+  'Supernatural Thriller',
+  'Dark Ambient',
+]);
+
 export const person = {
   '@context': 'https://schema.org',
   '@type': 'Person',
@@ -24,11 +239,12 @@ export const person = {
   name: AUTHOR_NAME,
   alternateName: SITE_NAME,
   description:
-    'IMDb-credited horror film composer, experimental producer, sound designer, and multi-instrumentalist based in Asheville, North Carolina. Founder of Zazie Productions LLC, composing custom psychological, folk, body, supernatural, and experimental scores for film, television, and games worldwide.',
+    'IMDb-credited horror film composer, experimental producer, sound designer, and multi-instrumentalist based in Asheville, North Carolina. Founder of Zazie Productions LLC, composing bespoke psychological horror, folk horror, body horror, and experimental art house scores for independent film, television, and games worldwide.',
   url: `${SITE_ORIGIN}/composer`,
   image: `${SITE_ORIGIN}/images/headshot.jpg`,
   jobTitle: [
-    'Horror Film Composer',
+    'Experimental Art House & Psychological Horror Film Composer',
+    'Folk Horror & Body Horror Composer',
     'Film, TV & Game Composer',
     'Experimental Sound Designer',
     'Multi-Instrumentalist',
@@ -44,17 +260,7 @@ export const person = {
       addressCountry: 'US',
     },
   },
-  knowsAbout: [
-    'Psychological horror film scoring',
-    'Folk horror original music',
-    'Body horror sound worlds',
-    'Experimental cinema composition',
-    'Adaptive horror video game music',
-    'Electroacoustic and musique concrète scoring',
-    'Waterphone and bowed metal instrumentation',
-    'Hybrid orchestral synthesis',
-    'Multichannel spatial audio composition',
-  ],
+  knowsAbout: KNOWS_ABOUT_ENTITIES,
   subjectOf: [
     {
       '@type': 'Article',
@@ -92,7 +298,7 @@ export const organization = {
   legalName: 'Zazie Productions LLC',
   alternateName: SITE_NAME,
   description:
-    'Independent horror scoring and cinematic sound-design studio led by composer Zazie Kanwar-Torge, writing original scores to picture for independent feature films, short films, series, and horror video games.',
+    'Boutique horror scoring and experimental sound-design atelier led by composer Zazie Kanwar-Torge, writing original psychological horror, folk horror, body horror, and experimental art house scores to picture for independent feature films, short films, series, and horror video games.',
   url: SITE_ORIGIN,
   logo: `${SITE_ORIGIN}/images/hero-portrait.jpg`,
   founder: { '@id': PERSON_ID },
@@ -130,7 +336,7 @@ export const website = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   '@id': WEBSITE_ID,
-  name: `${SITE_NAME} — Horror Film, TV & Game Composer Zazie Kanwar-Torge`,
+  name: `${SITE_NAME} — Experimental Art House & Psychological Horror Composer Zazie Kanwar-Torge`,
   alternateName: SITE_NAME,
   url: `${SITE_ORIGIN}/`,
   publisher: { '@id': ORG_ID },
