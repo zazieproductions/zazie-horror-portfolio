@@ -8,9 +8,10 @@
  *   2. The service worker precache no longer bypasses the HTTP cache
  *      (cache:'reload' forced a second download of every precached asset;
  *      the merged implementation pins cache:'force-cache').
- *   3. The homepage stylesheet carries the AA link-contrast red (#e65650),
- *      persistent paragraph-link underlines, the mobile 16px body-text rule
- *      and the 12px microtype legibility floor.
+ *   3. The homepage stylesheet carries the AA link-contrast red (#e65650) and
+ *      persistent paragraph-link underlines, while the designed type scale
+ *      (the 8-12px uppercase labels and the mobile prose size) is left alone:
+ *      the 2026-10-25 blanket 12px/16px floors are deliberately absent.
  *
  * Run: node --test tools/home-mount.test.mjs
  */
@@ -85,7 +86,7 @@ test('precached homepage stylesheet is the same hashed file the document links',
   assert.deepEqual(sheets, [cssName]);
 });
 
-test('homepage CSS carries AA link red, persistent underlines and the type floors', () => {
+test('homepage CSS carries AA link red and persistent underlines without type floors', () => {
   const cssName = /href="(index-[0-9a-f]{8}\.css)"/.exec(html)[1];
   const css = read(cssName);
   // AA red (4.61-5.71:1 across the dark surfaces) replaces the 3.49:1 brand red for foreground text.
@@ -93,12 +94,12 @@ test('homepage CSS carries AA link red, persistent underlines and the type floor
   assert.doesNotMatch(css, /#ff4d4d/, 'the superseded #ff4d4d experiment is not carried into the merged stylesheet');
   // Persistent underline for every link inside prose, so color is not the sole affordance.
   assert.match(css, /p a \{ text-decoration:underline;/, 'paragraph links carry a persistent underline');
-  // 12px floor for the sub-12px bracket utilities, including the responsive sm: variants.
-  assert.match(css, /\.text-\\\[8px\\\],[\s\S]*?\.text-\\\[11px\\\] \{ font-size:\.75rem; \}/, 'sub-12px utility classes are floored at 12px');
-  assert.match(css, /@media\(min-width:40rem\)\{[\s\S]*?\.sm\\:text-\\\[11px\\\] \{ font-size:\.75rem; \}/, 'responsive sm: microtype variants get the same floor');
-  // Running prose holds 16px on phones (upstream media-query approach).
-  assert.match(css, /@media \(max-width:767px\) \{[\s\S]*?main p[^}]*font-size:1rem !important/, 'mobile body prose renders at 16px');
-  assert.match(css, /body \.zp-player-close \{ font-size:12px; \}/, 'the cinema close label reaches the 12px floor without editing the mirrored block');
+  // The designed type scale is untouched: no global floor on the sub-12px
+  // bracket utilities, no forced 16px mobile prose, no rewritten close label.
+  assert.doesNotMatch(css, /\.text-\\\[11px\\\] \{ font-size:\.75rem; \}/, 'the blanket 12px microtype floor stays reverted');
+  assert.doesNotMatch(css, /\.sm\\:text-\\\[11px\\\] \{ font-size:\.75rem; \}/, 'the responsive sm: floor stays reverted');
+  assert.doesNotMatch(css, /font-size:1rem !important/, 'the forced 16px mobile prose rule stays reverted');
+  assert.doesNotMatch(css, /body \.zp-player-close \{ font-size:12px; \}/, 'the cinema close label keeps its designed size');
   // The mirrored cinema-player block must remain the tail of the stylesheet.
   const marker = '/* Cinema players stay upright';
   assert.ok(css.indexOf(marker) > css.indexOf('#e65650'), 'accessibility rules stay before the byte-identical cinema-player marker');

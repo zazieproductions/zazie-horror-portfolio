@@ -146,8 +146,9 @@ Never hand edit a generated `<slug>/index.html`; the next build overwrites it.
   (5.71:1) for labels and keep the darker red for rules, marks and display
   type. The portfolio homepage now applies the same `#e65650` token
   (4.61–5.71:1 across its dark surfaces) to every text-blood foreground,
-  with persistent underlines on prose links, a 12px floor on utility labels
-  and 16px body text on mobile; `/store` still uses the darker red for small
+  with persistent underlines on prose links (the short-lived 12px/16px type
+  floors were reverted on 2026-10-26, so the original type scale stands);
+  `/store` still uses the darker red for small
   labels, which remains listed as an open gap in the accessibility
   statement rather than quietly fixed or ignored.
 * **Legal pages bypass the stale cache.** `sw.js` serves navigations
