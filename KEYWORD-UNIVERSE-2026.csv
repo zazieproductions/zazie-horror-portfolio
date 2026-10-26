@@ -1,0 +1,154 @@
+query,cluster,intent,target_url,priority,serp_shape,notes
+psychological horror composer,psychological,transactional,/psychological-horror,P0,marketplaces + listicles; no specialist service page,head term of the niche; own via pillar + /composer
+psychological horror film composer,psychological,transactional,/psychological-horror,P0,marketplaces; thin independent results,exact phrase in title/H1/answer capsule
+composer for psychological horror film,psychological,transactional,/psychological-horror,P0,forums + Fiverr; winnable mid-tail,question-shaped H2 on pillar
+psychological horror score,psychological,commercial,/psychological-horror,P0,listicles + soundtrack editorials,commercial + editorial hybrid page
+psychological horror soundtrack composer,psychological,transactional,/psychological-horror,P1,editorial dominates; low commercial competition,use in meta + FAQ
+psychological horror music,psychological,informational,/journal/what-is-psychological-horror-music,P0,educational blogs + Wikipedia-class pages,AEO/GEO answer target; answer capsule
+what is psychological horror music,psychological,informational,/journal/what-is-psychological-horror-music,P0,definitional SERPs; PAA heavy,40-60 word definition; quote-ready
+how to score psychological horror,psychological,informational,/journal/how-to-score-psychological-horror,P0,craft blogs + YouTube; no authoritative composer page,author by practitioner = E-E-A-T win
+psychological horror scoring techniques,psychological,informational,/journal/psychological-horror-scoring-techniques,P1,craft blogs; music theory sites,statistics/citations lift GEO
+slow burn horror music composer,psychological,transactional,/psychological-horror,P1,no purpose-built page; forum posts,aligns with A24 slow-burn vocabulary
+dread music for film,psychological,commercial,/psychological-horror,P1,sound libraries + generic composer sites,/reel dread beds as proof
+uncanny film score composer,psychological,transactional,/psychological-horror,P1,editorial (Mica Levi pieces); zero service pages,art-house crossover term
+dissociative horror music,psychological,commercial,/reel/dissociative-amnesia,P2,near-zero competition; cue page owns it,existing cue page can capture long tail
+psychological thriller composer,psychological,transactional,/psychological-horror,P1,SoundBetter/Upwork faceted pages,thriller-adjacent; cross-link from /hire-a-composer
+horror composer for psychological drama,psychological,transactional,/psychological-horror,P2,thin; scattered freelancer profiles,long-tail buyer phrasing
+hire psychological horror composer,psychological,transactional,/hire-a-composer,P0,marketplace dominated; no independent page,CTA anchor from pillar to /hire-a-composer
+best psychological horror composers,psychological,informational,/journal/best-psychological-horror-scores,P1,listicles (Rolling Stone, uDiscover),cite-curation article; entity co-occurrence play
+folk horror composer,folk,transactional,/folk-horror,P0,editorial + Bandcamp; no service page owns it,head folk term; biggest open gap after art house
+folk horror film composer,folk,transactional,/folk-horror,P0,thin; Weary Pines adjacent only,exact-match pillar title candidate
+folk horror music,folk,informational,/journal/folk-horror-music-guide,P0,Bandcamp Daily + hobby blogs,editorial pillar article; outbound citations
+folk horror soundtrack,folk,commercial,/folk-horror,P0,Wikipedia + OST retailers; no specialist,commercial section on pillar
+pagan horror music composer,folk,transactional,/folk-horror,P1,near-zero commercial results,Wicker Man/Midsommar vocabulary
+ritual horror score,folk,commercial,/folk-horror,P1,library music; no composer page,use as H3 + cue cluster label
+Appalachian folk horror composer,folk,transactional,/folk-horror,P1,zero dedicated results; regional angle,Asheville NC location is a real differentiator
+rural horror film music,folk,commercial,/folk-horror,P2,thin; editorial only,long-tail; journal subsection
+nyckelharpa horror score,folk,informational,/journal/folk-horror-instruments,P2,craft/editorial; Mark Korven coverage,instrument article cluster; honest about own palette
+hurdy gurdy horror music,folk,informational,/journal/folk-horror-instruments,P2,educational; low competition,GEO question target
+waterphone horror composer,folk,informational,/journal/waterphone-bowed-metal-horror,P1,YouTube + seller pages; no practitioner page,Zazie performs waterphone; own this
+how to compose folk horror music,folk,informational,/journal/folk-horror-music-guide,P1,craft blogs; Melodigring-style guides,answer-first article with tables
+folk horror scoring guide,folk,informational,/journal/folk-horror-music-guide,P1,guides; no practitioner-authored one,pillar + journal internal link loop
+hire folk horror composer,folk,transactional,/hire-a-composer,P1,marketplaces only,CTA on /folk-horror
+best folk horror soundtracks,folk,informational,/journal/best-folk-horror-soundtracks,P1,listicles (Witch, Midsommar, Wicker Man),curation article; name appears alongside authorities
+body horror composer,body,transactional,/body-horror,P0,no service page; editorial (Cronenberg/Shore) only,head body term; 4 existing body-horror cues prove fit
+body horror film composer,body,transactional,/body-horror,P0,zero commercial matches,exact-match title candidate
+body horror music,body,informational,/journal/body-horror-sound-design,P0,Scientific American + craft blogs,AEO target; definition + techniques
+body horror soundtrack,body,commercial,/body-horror,P1,OST editorial; Videodrome/Shore references,commercial + lineage section
+visceral film score composer,body,transactional,/body-horror,P1,editorial; no freelancer owns it,THOOLIE/Vulture vocabulary
+medical horror music,body,commercial,/body-horror,P1,thin; library cues,Smell of Bleach / Fatal Overdose cue proof
+cosmic body horror sound design,body,commercial,/sound-design,P2,niche; Reddit + forums,cross-link cosmic cues (R'lyeh's Xenolith)
+biological horror sound design,body,transactional,/sound-design,P1,game-audio dominated; film side open,Cronenberg vocabulary; film-specific angle wins
+transformation scene music composer,body,transactional,/body-horror,P2,no dedicated page; NFS Grafted-type editorial,scene-specific long tail
+how to score body horror,body,informational,/journal/body-horror-sound-design,P0,No Film School + Vulture interviews,practitioner guide; stats + named scores
+body horror sound effects,body,commercial,/store,P1,sound library marketplaces,/store body-horror SFX libraries capture lower funnel
+organic horror textures,body,commercial,/body-horror,P2,production music sites,descriptor term for meta/alt text
+hire body horror composer,body,transactional,/hire-a-composer,P1,marketplaces; no specialist,CTA on pillar
+Cronenberg horror composer,body,informational,/journal/body-horror-sound-design,P2,editorial on Howard Shore,lineage/citation content; no affiliation claim
+experimental film composer,experimental,transactional,/experimental-art-house,P0,BFI/Pitchfork editorial; zero service pages,head experimental term
+art house horror composer,experimental,transactional,/experimental-art-house,P0,Wikipedia art-horror + editorial; no commercial page,canonical wiki term 'art horror / arthouse horror'
+arthouse horror score,experimental,commercial,/experimental-art-house,P0,editorial listicles only,exact-variant; cover both spellings
+art horror composer,experimental,transactional,/experimental-art-house,P1,Wikipedia 'Art horror' is the entity title,wikidata/Wikipedia entity alignment
+elevated horror composer,experimental,transactional,/experimental-art-house,P1,high-volume contested term; A24-coded,address term honestly; note filmmaker debate
+experimental cinema composer,experimental,transactional,/experimental-art-house,P1,artist sites; no specialist service page,matches existing package name 'Feature Film & Experimental Cinema'
+avant garde film music composer,experimental,transactional,/experimental-art-house,P1,BFI + museum programs; thin commercial,festival-facing vocabulary
+experimental sound design for film,experimental,transactional,/sound-design,P1,agency/artist mix; open niche,Ars Electronica credential is the proof
+microtonal film score,experimental,informational,/journal/experimental-scoring-techniques,P2,craft/academic; Mica Levi coverage,GEO technique article
+musique concrete film scoring,experimental,informational,/journal/experimental-scoring-techniques,P1,academic; no practitioner service page,core documented palette term
+electroacoustic film composer,experimental,transactional,/experimental-art-house,P1,university/ensemble sites; zero commercial,BMC + Ars Electronica adjacency
+spatial audio film composer,experimental,transactional,/experimental-art-house,P2,emerging; immersive audio vendors,20.4-channel Ars Electronica work = rare proof point
+installation sound artist,experimental,transactional,/experimental-art-house,P2,gallery/museum pages; gallery circuit,festival/gallery lead lane
+hire experimental film composer,experimental,transactional,/hire-a-composer,P1,forums + SoundBetter,CTA on pillar
+best experimental horror scores,experimental,informational,/journal/best-experimental-horror-scores,P1,Pitchfork/BFI/Vinyl Factory listicles,curation article for entity co-occurrence
+under the skin style score,experimental,commercial,/experimental-art-house,P2,reference/editorial; temp-track language,buyers describe wants via temp scores; capture honestly
+hire a horror composer,hire,transactional,/hire-a-composer,P0,Weary Pines + marketplaces; thin SERP,existing pillar; defend and deepen
+horror composer for hire,hire,transactional,/hire-a-composer,P0,marketplaces; no strong independent,home title currently targets this
+hire film composer,hire,transactional,/hire-a-composer,P1,SoundBetter/Fiverr faceted,generic; use as internal anchor only
+composer for horror short film,hire,transactional,/hire-a-composer,P1,SoundBetter/Guru; intent-explicit,format spoke cross-link
+composer for indie horror feature,hire,transactional,/hire-a-composer,P1,forums + guild sites,A24/NEON-indie adjacency
+independent horror composer,hire,transactional,/hire-a-composer,P2,thin; portfolio sites,positioning vocabulary
+horror music composer for film and tv,hire,transactional,/hire-a-composer,P2,directory pages,long-tail title variant
+custom horror score,hire,transactional,/hire-a-composer,P1,libraries vs custom debate content,stock-vs-custom article supports
+bespoke horror film score,hire,transactional,/hire-a-composer,P2,near-zero competition,premium positioning term
+original horror music commission,hire,transactional,/hire-a-composer,P2,thin; commission phrasing,arts/festival buyer language
+horror composer showreel,hire,informational,/reel,P0,video platforms; portfolio pages,/reel is the asset; add curation captions
+composer reel for music supervisors,hire,informational,/press,P1,industry blogs; supervisor advice,supervisor-pack landing target
+horror film scoring services,hire,transactional,/services,P1,B2B directory style,Service schema already present
+remote film composer,hire,transactional,/hire-a-composer,P2,post-COVID common; location-independent,worldwide areaServed supports
+horror film scoring rates,cost,commercial,/services,P0,cost guides (Twine/Tunereel); no practitioner floor published,existing rate transparency is differentiator
+how much does a horror composer cost,cost,commercial,/services,P0,PAA-heavy cost question,answer capsule with real USD numbers
+film composer cost per minute,cost,informational,/services,P1,producer blogs; cost calculators,estimator tool is unique interactive proof
+indie film score budget,cost,commercial,/services,P1,producer guides; Reddit r/Filmmakers,funding-based honesty; numbers in tables
+short film score cost,cost,commercial,/services,P1,freelancer marketplaces,$650 focused short anchor
+feature film composer budget,cost,commercial,/services,P1,industry ranges $2k-20k cited externally,$2,500 indicative minimum context
+custom score vs stock music,cost,informational,/how-to-hire-a-horror-composer,P1,guide content; existing page touches it,expand dedicated section; GEO comparison table
+horror music licensing cost,cost,commercial,/licensing,P2,library sites; sync guides,/licensing owns lower-funnel
+what to pay a composer for a short,cost,informational,/services,P2,Reddit/forums; PAA,FAQ capture
+composer fees vs sync license,cost,informational,/how-to-hire-a-horror-composer,P2,legal/music biz blogs,decision content near CTA
+micro budget horror score,cost,commercial,/services,P2,filmmaker forums; student film terms,entry package landing; avoid premium-brand dilution
+grants for film music composition,cost,informational,/journal/film-scoring-budget-guide,P2,arts council/festival pages,editorial goodwill; supports indie directors
+what does a music supervisor do,craft,informational,/journal/music-supervisor-reel-guide,P1,industry blogs; Quora; PAA,A24 JD evidence cited; attracts supervisor-adjacent traffic
+how do music supervisors find composers,craft,informational,/journal/music-supervisor-reel-guide,P0,industry advice; sparse authoritative answers,directly serves the A24/NEON strategy
+how to get a composer for an indie film,craft,informational,/how-to-hire-a-horror-composer,P1,guides; John Wiater-class content,existing guide; add internal pillar links
+spotting session film music,craft,informational,/process,P1,educational; composer sites,/process HowTo schema exists
+what are stems in film scoring,craft,informational,/process,P1,PAA; production glossary,supervisor-critical answer; glossary content
+what is a cue sheet,craft,informational,/licensing,P1,PAA; PRO sites (ASCAP/BMI),E&O/chain-of-title trust content
+temp music vs original score,craft,informational,/how-to-hire-a-horror-composer,P1,filmmaker blogs,objection-handling content
+how horror music affects the brain,craft,informational,/journal/psychoacoustics-of-horror-music,P0,Scientific American + university studies,stats/citation GEO jackpot; Zurich study reference
+psychoacoustics of fear in film music,craft,informational,/journal/psychoacoustics-of-horror-music,P1,academic; ScienceInsights,authoritative long-form; cite real studies
+tritone devil's interval horror,craft,informational,/journal/psychoacoustics-of-horror-music,P2,educational evergreen,PAA/featured snippet target
+dissonance in horror scores,craft,informational,/journal/psychological-horror-scoring-techniques,P1,music theory sites,technique cluster
+sub bass dread sound design,craft,informational,/journal/experimental-scoring-techniques,P2,production blogs,practitioner detail content
+how to write a horror motif,craft,informational,/journal/psychological-horror-scoring-techniques,P2,YouTube + blogs,craft article; embed cue examples
+silence and negative space in horror scores,craft,informational,/journal/psychological-horror-scoring-techniques,P2,craft interviews (Vulture),differentiation angle; art-house directors value this
+short film horror composer,format,transactional,/hire-a-composer,P1,SoundBetter; student film boards,format spoke (blueprinted in prior audit)
+feature film horror composer,format,transactional,/hire-a-composer,P1,agency rosters; thin indie,feature package anchor
+tv series horror composer,format,transactional,/hire-a-composer,P2,agency dominated; PEREGRINUS proof,credential-backed
+trailer music composer horror,format,transactional,/hire-a-composer,P2,trailer libraries dominate,speak only when trailer credits exist (guardrail)
+horror game music composer,format,transactional,/game-scoring,P1,itch.io + AudioGaming forums,existing spoke; adaptive/Wwise terms
+adaptive horror music Wwise FMOD,format,informational,/game-scoring,P1,game audio blogs; middleware docs,existing page covers
+documentary horror composer,format,transactional,/hire-a-composer,P2,Weary Pines claims it; open,P1 spoke when case material exists
+installation and gallery sound composer,format,transactional,/experimental-art-house,P2,museum/arts council pages,Ars Electronica/BMC proof
+podcast horror music composer,format,transactional,/hire-a-composer,P2,podcast networks; library sites,lower-priority spoke
+music video dark atmospheric composer,format,transactional,/hire-a-composer,P2,freelancer platforms,lowest-priority format
+bowed metal horror instrument,instruments,informational,/journal/waterphone-bowed-metal-horror,P1,seller/YouTube; no practitioner article,signature instrument ownership
+prepared piano horror sounds,instruments,informational,/journal/experimental-scoring-techniques,P2,avant-garde music pages,technique article
+custom synth instruments film score,instruments,informational,/journal/experimental-scoring-techniques,P2,synth blogs; maker content,instrument-builder narrative
+apprehension engine alternative,instruments,informational,/journal/folk-horror-instruments,P2,Korven coverage dominates; gap for alternatives,honest comparison; no disparagement
+daxophone horror,instruments,informational,/journal/experimental-scoring-techniques,P2,Variety Smile coverage; niche,GEO entity-rich article
+granular synthesis cinematic dread,instruments,informational,/journal/experimental-scoring-techniques,P2,production tutorials,palette documentation
+field recording musique concrete,instruments,informational,/journal/experimental-scoring-techniques,P2,academic/field-recording community,documented method term
+A24 style horror music,prestige,commercial,/experimental-art-house,P1,editorial + temp-track language; no service page,reference-topic discipline; no affiliation claim
+A24 horror composer style,prestige,informational,/experimental-art-house,P1,listicles; Korven/Stetson/Krlic coverage,positioning vocabulary; cite lineage honestly
+NEON horror soundtrack style,prestige,informational,/experimental-art-house,P2,editorial (Titane, Lodge, In the Earth),distributor-context section
+IFC Midnight music,prestige,informational,/experimental-art-house,P2,thin; title-specific coverage,zero current site mentions; add context section
+elevated horror music characteristics,prestige,informational,/journal/what-is-elevated-horror-music,P1,critical essays; contested term,define with nuance; quote filmmakers' debate
+sundance horror composer,prestige,commercial,/press,P2,festival coverage; agency rosters,festival strategy page/press room
+cannes critics week horror score,prestige,informational,/press,P2,trade press; festival editorial,credibility via festival language
+festival ready horror score,prestige,commercial,/services,P2,post-production blogs,deliverables/stems readiness angle
+zazie productions,brand,navigational,/,P0,branded; trivial to defend,entity consolidation; GSC sitelinks
+zazie kanwar-torge,brand,navigational,/composer,P0,IMDb + press entities,Person entity; Knowledge Panel goal
+zazie kanwar-torge composer,brand,navigational,/composer,P0,IMDb; streaming profiles,exact name + role
+zazie horror composer,brand,navigational,/,P1,branded long tail,site name variant coverage
+zazie productions bandcamp,brand,navigational,https://zazieproductions.bandcamp.com/,P2,marketplace; outbound,entity sameAs already linked
+zazie productions imdb,brand,navigational,https://www.imdb.com/name/nm17333332/,P1,IMDb entity,third-party verification backbone
+zazie productions asheville,brand,navigational,/composer,P2,local; directory potential,local entity; no doorway pages
+zazie productions ars electronica,brand,navigational,/composer,P1,festival + press co-occurrence,press release anchor; entity association
+who are the best horror composers for psychological films,ai_prompts,informational,/journal/best-psychological-horror-scores,P0,AI answer engines synthesize listicles,ChatGPT/Perplexity prompt; curation article
+recommend a composer for an art house horror film,ai_prompts,commercial,/experimental-art-house,P0,AI recommendation queries; supplier discovery,GEO priority; answer capsule + llms.txt
+find me a folk horror composer for a short,ai_prompts,commercial,/folk-horror,P1,agentic discovery; marketplaces,llms.txt structured hire pages
+what does a psychological horror score cost,ai_prompts,commercial,/services,P1,AI cost questions; guide sites,numbers-first content; tables
+which composers use waterphone and bowed metal,ai_prompts,informational,/journal/waterphone-bowed-metal-horror,P1,AI synthesis of editorial,entity-rich instrument article
+how do i prepare music for a music supervisor,ai_prompts,informational,/journal/music-supervisor-reel-guide,P1,industry advice AI answers,supervisor guide; quote-ready steps
+what makes a score sound like A24 horror,ai_prompts,informational,/journal/what-is-elevated-horror-music,P1,explainer AI queries; critical essays,reference discipline; analytical not aspirational claim
+experimental horror composers to watch,ai_prompts,informational,/journal/best-experimental-horror-scores,P1,listicles power AI answers,inclusion campaign target
+body horror sound design techniques,ai_prompts,informational,/journal/body-horror-sound-design,P1,practitioner guides; academic,definition + technique + examples structure
+horror composer with transparent pricing,ai_prompts,commercial,/services,P2,rare; most sites hide rates,trust differentiator; AI cites specifics
+horror sound design services,sounddesign,transactional,/sound-design,P0,agencies + freelancers; few horror-specific,existing spoke; deepen film focus
+cinematic dread sound design,sounddesign,transactional,/sound-design,P1,production libraries; thin service,signature vocabulary
+horror stinger sound design,sounddesign,commercial,/sound-design,P2,library marketplaces,cue examples (stinger category exists)
+dark ambient composer for film,sounddesign,transactional,/sound-design,P1,artist sites; licensing,5 dark-ambient cue categories as proof
+supernatural horror sound design,sounddesign,transactional,/sound-design,P1,game-audio heavy; film open,film-specific framing wins
+horror foley and texture design,sounddesign,commercial,/sound-design,P2,post houses; freelancers,sound library cross-sell via /store
+atmospheric horror soundscapes,sounddesign,commercial,/sound-design,P2,libraries; generic composer pages,/reel ambient beds support
+film sound design Asheville NC,sounddesign,transactional,/sound-design,P2,local directories only,citation play; no doorway pages
