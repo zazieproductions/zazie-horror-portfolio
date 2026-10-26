@@ -74,6 +74,8 @@ This repository is simultaneously:
 
 Zazie Productions scores psychological horror: dread, tension, possession, cosmic and body horror — for film, TV and games, alongside sound-design libraries and experimental records released under the same name.
 
+**Primary search identity:** *Experimental psychological horror film composer for independent and arthouse cinema.* One sentence, stated the same way in the homepage title, H1, meta description, entity graph, biography, commission page, inquiry page, sitemap and both LLM manifests. It is defined once in [`src/data/positioning.ts`](src/data/positioning.ts) and guarded by [`tools/positioning.test.mjs`](tools/positioning.test.mjs); the reasoning, the qualification rules and what the programme deliberately refuses to do are in [`SEARCH-IDENTITY-2026.md`](SEARCH-IDENTITY-2026.md). The goal is qualified directing and producing inquiries, not traffic.
+
 The site is built to *demonstrate* rather than describe that identity:
 
 - **A restrained dark system, not decoration.** One palette (`void #030303`, `ink`, `smoke`, `ash`, `mist #9a9590`, `bone #f0ebe3`, `blood #c41e1e`, `ember #ff2a2a`), one serif voice (Cormorant Garamond) against one workhorse sans (Inter variable), and a fixed atmosphere layer (film grain, vignette, drifting ambient orbs, ken-burns hero) that is part of the first painted frame, not an after-effect of JavaScript.
@@ -527,4 +529,5 @@ The root `*.md` files are dated implementation records — the repo's developmen
 | `RATIFY.md` | Open facts a human must confirm (entity, law, rights) |
 | `SEO-DOSSIER.md` | The technical SEO programme: IA silos, schema matrix, crawl policy |
 | `SITEMAP.md` | Sitemap fixes and the validator contract |
+| `SEARCH-IDENTITY-2026.md` | The one-sentence search identity: where it is stated, who the studio qualifies for, what it refuses to do, and how the guard test verifies it |
 | `STORE.md` | Catalogue build, data model, deployment lessons (the redirect loop) |

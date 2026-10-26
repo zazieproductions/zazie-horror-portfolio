@@ -12,6 +12,7 @@ import { test } from 'node:test';
 import { hubs } from '../build/data/hubs.js';
 import { allRoutes } from '../build/data/routes.js';
 import { MINIMUM_FEE, PACKAGES, priceLabel } from '../build/data/pricing.js';
+import { IDENTITY_ROLE_TITLE, IDENTITY_STATEMENT } from '../build/data/positioning.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -50,9 +51,10 @@ test('every indexable route places <h1> inside <main> and separates numeral span
 
 test('/hire-a-composer commercial pillar has exact head intent, comparison matrix, Service + Offer + FAQPage schema', () => {
   const html = fs.readFileSync(path.join(ROOT, 'hire-a-composer/index.html'), 'utf8');
-  assert.match(html, /<title>Hire a Horror Composer — Original Film, TV &amp; Game Scores \| Zazie Productions<\/title>/);
+  // The commission page leads with the primary search identity (SEARCH-IDENTITY-2026.md).
+  assert.match(html, /<title>Hire an Experimental Psychological Horror Film Composer<\/title>/);
   const main = /<main\b[^>]*>([\s\S]*?)<\/main>/i.exec(html)?.[1] ?? '';
-  assert.match(main, /<h1>Hire a <em>Horror Composer<\/em> for Film, TV, and Games<\/h1>/);
+  assert.match(main, /<h1>Hire an <em>experimental psychological horror<\/em> film composer<\/h1>/);
   assert.match(main, /Zazie Kanwar-Torge/);
   assert.match(main, /Zazie Productions LLC/);
   assert.match(main, /Comparing Horror Music Options by Subgenre, Workflow &amp; Budget/);
@@ -85,7 +87,7 @@ test('/how-to-hire-a-horror-composer guide answers fan-out queries with Article 
 
 test('homepage links directly to /hire-a-composer and /how-to-hire-a-horror-composer in both SSR HTML and client bundle', () => {
   const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-  assert.match(html, /<title>Horror Composer for Hire — Film, TV &amp; Game Scores<\/title>/);
+  assert.match(html, new RegExp(`<title>${IDENTITY_ROLE_TITLE}</title>`));
   const title = /<title>([^<]*)<\/title>/.exec(html)[1].replace(/&amp;/g, '&');
   assert.ok(title.length >= 30 && title.length <= 60, `homepage title is ${title.length} characters; keep it between 30 and 60`);
   assert.match(html, new RegExp(`from \\$${MINIMUM_FEE} USD`));
@@ -119,7 +121,7 @@ test('robots.txt welcomes AI search crawlers and llms.txt + llms-full.txt stay s
   for (const file of ['llms.txt', 'llms-full.txt']) {
     const content = fs.readFileSync(path.join(ROOT, file), 'utf8');
     assert.match(content, /Zazie Kanwar-Torge/);
-    assert.match(content, /Experimental Art House/i);
+    assert.ok(content.includes(IDENTITY_STATEMENT), `${file} carries the primary search identity`);
     assert.match(content, /https:\/\/horror\.zazieproductions\.com\/hire-a-composer/);
     assert.match(content, /https:\/\/horror\.zazieproductions\.com\/how-to-hire-a-horror-composer/);
     assert.match(content, new RegExp(`\\$${MINIMUM_FEE}`));

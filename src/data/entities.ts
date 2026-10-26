@@ -1,5 +1,6 @@
 /** Verified site-level identity nodes and Knowledge Graph authority mappings shared across the site. */
 
+import { IDENTITY_ROLE_TITLE, IDENTITY_STATEMENT, IDENTITY_STATEMENT_LC } from './positioning.js';
 import { AUTHOR_NAME, ORG_ID, PERSON_ID, SITE_NAME, SITE_ORIGIN, WEBSITE_ID } from './site.js';
 
 export const VERIFIED_SAME_AS = [
@@ -238,12 +239,12 @@ export const person = {
   '@id': PERSON_ID,
   name: AUTHOR_NAME,
   alternateName: SITE_NAME,
-  description:
-    'IMDb-credited horror film composer, experimental producer, sound designer, and multi-instrumentalist based in Asheville, North Carolina. Founder of Zazie Productions LLC, composing bespoke psychological horror, folk horror, body horror, and experimental art house scores for independent film, television, and games worldwide.',
+  description: `${IDENTITY_STATEMENT} IMDb-credited, based in Asheville, North Carolina, and working remotely worldwide as founder of Zazie Productions LLC. Scores are built to picture with bowed metal, prepared strings and custom synthesis, alongside folk horror, body horror and dark ambient work for the same catalogue.`,
   url: `${SITE_ORIGIN}/composer`,
   image: `${SITE_ORIGIN}/images/headshot.jpg`,
   jobTitle: [
-    'Experimental Art House & Psychological Horror Film Composer',
+    IDENTITY_ROLE_TITLE,
+    'Composer for Independent & Arthouse Film',
     'Folk Horror & Body Horror Composer',
     'Film, TV & Game Composer',
     'Experimental Sound Designer',
@@ -297,8 +298,7 @@ export const organization = {
   name: 'Zazie Productions LLC',
   legalName: 'Zazie Productions LLC',
   alternateName: SITE_NAME,
-  description:
-    'Boutique horror scoring and experimental sound-design atelier led by composer Zazie Kanwar-Torge, writing original psychological horror, folk horror, body horror, and experimental art house scores to picture for independent feature films, short films, series, and horror video games.',
+  description: `Boutique scoring and sound-design atelier led by ${AUTHOR_NAME} — ${IDENTITY_STATEMENT_LC} Original scores are written to picture for independent features, festival shorts and experimental work, alongside folk horror, body horror and dark ambient catalogue releases.`,
   url: SITE_ORIGIN,
   logo: `${SITE_ORIGIN}/images/hero-portrait.jpg`,
   founder: { '@id': PERSON_ID },
@@ -336,7 +336,7 @@ export const website = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   '@id': WEBSITE_ID,
-  name: `${SITE_NAME} — Experimental Art House & Psychological Horror Composer Zazie Kanwar-Torge`,
+  name: `${AUTHOR_NAME} — ${IDENTITY_ROLE_TITLE} | ${SITE_NAME}`,
   alternateName: SITE_NAME,
   url: `${SITE_ORIGIN}/`,
   publisher: { '@id': ORG_ID },

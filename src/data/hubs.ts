@@ -17,6 +17,12 @@
  * src/data/routes.ts.
  */
 
+import {
+  COMMISSION_DESCRIPTION_LEAD,
+  COMPOSER_DESCRIPTION,
+  HOME_DESCRIPTION,
+  IDENTITY_ROLE_TITLE,
+} from './positioning.js';
 import { MINIMUM_FEE, pricingSummary } from './pricing.js';
 import type { Hub } from './types.js';
 
@@ -24,15 +30,15 @@ export const hubs: Hub[] = [
   {
     path: "/",
     name: "Portfolio",
-    // Main's shorter title (no "| Zazie Productions" suffix) keeps the SERP
-    // title well inside the pixel budget; the description is the 129-character
-    // one the PageSpeed/SEO audit asked for (100-130), not the earlier 220-char
-    // sentence. Both are what the WebPage JSON-LD and sitemap reuse.
-    title: "Horror Composer for Hire — Film, TV & Game Scores",
-    description: `IMDb-credited composer Zazie Kanwar-Torge scores psychological, folk & body horror and experimental art house film, TV & games. Custom scores from $${MINIMUM_FEE} USD.`,
-    lastmod: "2026-10-24",
+    // The one page where the identity owns the whole title: no brand suffix, no
+    // price, no format list. Google renders the domain beside it anyway, and the
+    // 47-character title survives the 60-character cap verify.mjs enforces.
+    // Description: identity sentence first, name second, action third (156 chars).
+    title: IDENTITY_ROLE_TITLE,
+    description: HOME_DESCRIPTION,
+    lastmod: "2026-10-26",
     images: [
-      { loc: "https://horror.zazieproductions.com/images/hero-portrait.jpg", caption: "Portfolio portrait for Zazie Productions, a composer and sound-design studio working across screen and experimental media.", title: "Zazie Kanwar-Torge: Psychological Horror Composer - Dark Atmospheric Scores" },
+      { loc: "https://horror.zazieproductions.com/images/hero-portrait.jpg", caption: "Portfolio portrait for Zazie Productions, a composer and sound-design studio working across screen and experimental media.", title: "Zazie Kanwar-Torge — Experimental Psychological Horror Film Composer" },
       { loc: "https://horror.zazieproductions.com/images/headshot.jpg", caption: "Zazie Kanwar-Torge, composer and sound designer associated with Zazie Productions LLC.", title: "Zazie Kanwar-Torge headshot - horror film composer, Zazie Productions LLC" },
       { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Press photo for Zazie Productions horror composer portfolio. Original dark atmospheric scores for film, TV, and games.", title: "Zazie Productions press photo - horror composer portfolio, dark cinematic scores" },
       { loc: "https://horror.zazieproductions.com/images/posters/expire-red-check-1200.jpg", caption: "EXPIRE poster artwork. IMDb credits Zazie Kanwar-Torge for sound design; the listed composers are Patricia Chaylade, Jorayo, and Brennan Mack.", title: "EXPIRE (2025) - Short Film; Sound Design Credit" },
@@ -150,11 +156,11 @@ export const hubs: Hub[] = [
   {
     path: "/composer",
     name: "Composer biography",
-    title: "Zazie Kanwar-Torge: Psychological Horror Composer Biography | Zazie Productions",
-    description: "Biography of psychological horror composer Zazie Kanwar-Torge, founder of Zazie Productions LLC in Asheville, NC, scoring dark atmospheric films, series, and games.",
-    lastmod: "2026-10-21",
+    title: "Zazie Kanwar-Torge — Experimental Psychological Horror Composer",
+    description: COMPOSER_DESCRIPTION,
+    lastmod: "2026-10-26",
     images: [
-      { loc: "https://horror.zazieproductions.com/images/headshot.jpg", caption: "Zazie Kanwar-Torge, psychological horror composer and founder of Zazie Productions LLC, Asheville NC.", title: "Zazie Kanwar-Torge - Psychological Horror Composer Biography" },
+      { loc: "https://horror.zazieproductions.com/images/headshot.jpg", caption: "Zazie Kanwar-Torge, experimental psychological horror film composer and founder of Zazie Productions LLC, Asheville NC.", title: "Zazie Kanwar-Torge — Experimental Psychological Horror Film Composer" },
     ],
     videos: [],
   },
@@ -201,11 +207,11 @@ export const hubs: Hub[] = [
   {
     path: "/contact",
     name: "Contact",
-    title: "Scoring Inquiry: Request a Score Quote | Zazie Productions",
-    description: "Request a scoring quote for psychological horror, folk horror, supernatural or experimental film. Share what you know; scored minutes, format, timing and references can be added when available.",
-    lastmod: "2026-10-21",
+    title: "Scoring Inquiry — Experimental Psychological Horror Film Composer",
+    description: "Experimental psychological horror film composer for independent and arthouse cinema. Tell me about the film; a written, nonbinding quote follows review.",
+    lastmod: "2026-10-26",
     images: [
-      { loc: "https://horror.zazieproductions.com/images/hero-portrait.jpg", caption: "Zazie Kanwar-Torge, psychological horror composer available for commission", title: "Scoring Inquiry - Request a Score Quote" },
+      { loc: "https://horror.zazieproductions.com/images/hero-portrait.jpg", caption: "Zazie Kanwar-Torge, psychological horror composer available for commission", title: "Scoring Inquiry — Experimental Psychological Horror Film Composer" },
     ],
     videos: [],
   },
@@ -284,11 +290,14 @@ export const hubs: Hub[] = [
   {
     path: "/hire-a-composer",
     name: "Hire a horror composer",
-    title: "Hire a Horror Composer — Original Film, TV & Game Scores | Zazie Productions",
-    description: `Hire horror composer Zazie Kanwar-Torge (Zazie Productions): IMDb-credited custom psychological, folk, body, and experimental scores for film, TV, and games. ${pricingSummary()}`,
-    lastmod: "2026-10-21",
+    // The commission page leads with the identity and only then with money: the
+    // published rate card is a trust asset, not the opening line (see
+    // SEARCH-IDENTITY-2026.md §4).
+    title: "Hire an Experimental Psychological Horror Film Composer",
+    description: `${COMMISSION_DESCRIPTION_LEAD} ${pricingSummary()}`,
+    lastmod: "2026-10-26",
     images: [
-      { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Kanwar-Torge, IMDb-credited horror composer and sound designer for hire at Zazie Productions LLC.", title: "Hire a Horror Composer — Zazie Kanwar-Torge | Zazie Productions" },
+      { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Kanwar-Torge, IMDb-credited horror composer and sound designer for hire at Zazie Productions LLC.", title: "Hire an Experimental Psychological Horror Film Composer — Zazie Kanwar-Torge" },
     ],
     videos: [],
   },

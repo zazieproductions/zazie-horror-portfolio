@@ -44,6 +44,13 @@ const here = path.join(root, 'home-src');
 const pricing = await import('../build/lib/pricing-markup.js');
 const { budgetOptions, budgetSelectOptions, estimatorHtml, packagesHtml, inclusionsHtml } = pricing;
 const { MICROBUDGET_STATEMENT } = await import('../build/data/pricing.js');
+// The primary search identity. The hero copy below is built from these strings
+// instead of being typed here, so the sentence a visitor reads and the sentence
+// the <head>, sitemap and llms.txt carry cannot drift apart. See
+// SEARCH-IDENTITY-2026.md and tools/positioning.test.mjs.
+const { FIT_STATEMENT_SHORT, IDENTITY_CRAFT_CLOSE, IDENTITY_CRAFT_OPEN, IDENTITY_H1_ACCENT, IDENTITY_H1_PRIMARY } =
+  await import('../build/data/positioning.js');
+const CONTACT_INTRO = `Only your name and email are needed to start. ${FIT_STATEMENT_SHORT} Project details are optional; the form prepares an email for you to review and send.`;
 const { compilationsSectionHtml, compilationsInnerHtml, SECTION_CLASS, CONTAINER_CLASS, COMPILATIONS_CSS, COMPILATIONS_JS } =
   await import('../build/lib/compilations-markup.js');
 const { homePosterClientData } = await import('../build/lib/home.js');
@@ -156,16 +163,43 @@ const PAIRS = [
     BUNDLE,
   ],
   // Hero (keep visible copy clean & uncrowded)
+  // The H1 is the positioning sentence, not a mood line: "Experimental
+  // psychological horror film composer / for independent and arthouse cinema."
+  // The atmosphere is carried by the page around it and by the craft line below.
   [
-    '<h1 class="font-display text-[2.35rem] leading-[1.02] tracking-tight text-bone sm:text-4xl md:text-5xl">Experimental Art House &amp; Psychological Horror <span class="mt-1 block bg-gradient-to-r from-blood via-ember to-blood bg-clip-text italic text-transparent">Scores for Folk Horror &amp; Body Horror.</span></h1>',
-    '<h1 class="font-display text-[2.35rem] leading-[1.02] tracking-tight text-bone sm:text-5xl md:text-6xl lg:text-[3.75rem]">Dark, atmospheric horror scores, <span class="mt-1 block bg-gradient-to-r from-blood via-ember to-blood bg-clip-text italic text-transparent">written to your picture.</span></h1>',
+    // Reads the snapshot left by the positioning pass (identity text at display
+    // size) and re-sets it one step down the scale. If a future edit reverts the
+    // snapshot to the pre-identity H1, this pair matches nothing and the build
+    // stops - the hero is not allowed to drift back quietly.
+    `<h1 class="font-display text-[2.35rem] leading-[1.02] tracking-tight text-bone sm:text-5xl md:text-6xl lg:text-[3.75rem]">${IDENTITY_H1_PRIMARY} <span class="mt-1 block bg-gradient-to-r from-blood via-ember to-blood bg-clip-text italic text-transparent">${IDENTITY_H1_ACCENT}</span></h1>`,
+    `<h1 class="font-display text-[1.85rem] leading-[1.06] tracking-tight text-bone sm:text-[2.2rem] md:text-[2.6rem] lg:text-[2.9rem]">${IDENTITY_H1_PRIMARY} <span class="mt-1 block bg-gradient-to-r from-blood via-ember to-blood bg-clip-text italic text-transparent">${IDENTITY_H1_ACCENT}</span></h1>`,
     HTML,
   ],
   [
-    '<p class="mt-5 max-w-lg font-display text-xl leading-snug text-bone/90 sm:mt-6 sm:text-2xl">Bespoke Body Horror, Folk Horror, and Experimental Art House film scores — <span class="text-mist">bowed metal, prepared strings, and psychological dread composed to picture for prestige cinema, TV, and games.</span></p>',
-    '<p class="mt-5 max-w-md font-display text-xl leading-snug text-bone/90 sm:mt-6 sm:text-2xl">Original music for psychological horror, thrillers, and dark sci-fi, <span class="text-mist">composed for film, TV, and games.</span></p>',
+    // Reads the snapshot left by the previous hero pass and shortens the line.
+    '<p class="mt-5 max-w-md font-display text-xl leading-snug text-bone/90 sm:mt-6 sm:text-2xl">Original scores built from bowed metal, prepared strings and custom synthesis, <span class="text-mist">written to picture for features, festival shorts and hybrid form.</span></p>',
+    `<p class="mt-5 max-w-md font-display text-xl leading-snug text-bone/90 sm:mt-6 sm:text-2xl">${IDENTITY_CRAFT_OPEN} <span class="text-mist">${IDENTITY_CRAFT_CLOSE}</span></p>`,
     HTML,
   ],
+  // The identity sentence is longer than the poster line it replaced, so the H1
+  // drops one step on the display scale: roughly three lines at 1280px instead
+  // of two at a size that would have pushed the CTAs below the fold. The class
+  // string is patched in the bundle as well as the snapshot - otherwise React
+  // re-renders the hero back to the old 3.75rem and the layout jumps on load.
+  [
+    'className:"font-display text-[2.35rem] leading-[1.02] tracking-tight text-bone sm:text-5xl md:text-6xl lg:text-[3.75rem]"',
+    'className:"font-display text-[1.85rem] leading-[1.06] tracking-tight text-bone sm:text-[2.2rem] md:text-[2.6rem] lg:text-[2.9rem]"',
+    BUNDLE,
+  ],
+  // Same two strings inside the React hero, which re-renders #root on load.
+  ['children:["Dark, atmospheric horror scores, "', `children:[${JSON.stringify(`${IDENTITY_H1_PRIMARY} `)}`, BUNDLE],
+  ['children:"written to your picture."', `children:${JSON.stringify(IDENTITY_H1_ACCENT)}`, BUNDLE],
+  [
+    '["Original music for psychological horror, thrillers, and dark sci-fi,"',
+    `[${JSON.stringify(IDENTITY_CRAFT_OPEN)}`,
+    BUNDLE,
+  ],
+  ['children:"composed for film, TV, and games."', `children:${JSON.stringify(IDENTITY_CRAFT_CLOSE)}`, BUNDLE],
   ['Start an inquiry', 'Request a scoring quote', BOTH],
   // User-provided biography; HTML emphasis is shared with the static snapshot.
   ["Zazie Kanwar-Torge is an award-winning composer, experimental producer, and multi-instrumentalist. Under Zazie Productions, he writes and performs original scores for psychological, folk, and body horror, supernatural thrillers, and dark sci-fi.", "<strong>Zazie Kanwar-Torge</strong> is an award-winning film composer, experimental producer, and multi-instrumentalist specializing in <strong>psychological horror, folk horror, body horror, supernatural thrillers, and dark science fiction</strong>. Through Zazie Productions, he creates original film scores and immersive sonic atmospheres that explore dread, dissonance, isolation, and the uncanny.", "bundle"],
@@ -329,10 +363,17 @@ const PAIRS = [
   ["Estimates scale with your project's funding.", 'Preliminary estimate — final quotation subject to creative scope and written agreement.', BUNDLE],
   ['Packages are priced by scored music minutes, not film length. Estimates are indicative and nonbinding.', 'Packages are priced by scored music minutes, not film length. Preliminary estimate — final quotation subject to creative scope and written agreement.', HTML],
   // Contact
-  ['Share your format, runtime, timeline, and budget. The form prepares an email for you to review and send.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', BUNDLE],
-  ['Share your format, scored minutes, timeline, and budget.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', HTML],
+  // The inquiry copy qualifies as it invites: one sentence on who commissions
+  // this studio, so a stock-library or trailer request can rule itself out before
+  // it reaches the inbox. Wording lives in src/data/positioning.ts.
+  ['Share your format, runtime, timeline, and budget. The form prepares an email for you to review and send.', CONTACT_INTRO, BUNDLE],
+  [
+    'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.',
+    CONTACT_INTRO,
+    HTML,
+  ],
   // Repair the duplicate sentence present in the latest static homepage snapshot.
-  ['Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send. The form prepares an email for you to review and send.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', HTML],
+  ['Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send. The form prepares an email for you to review and send.', CONTACT_INTRO, HTML],
   ['gu=["Short film","Feature","Series episode","Game / interactive","Installation / art"]', 'gu=["Not sure yet","Short film","Feature","Series episode","Game / interactive","Installation / art"]', BUNDLE],
   ['a1=["Psychological / atmospheric horror","Supernatural dread","Body horror (musical atmosphere)","Folk horror","Techno-thriller","Cosmic dread","Dark drama / thriller","Game adaptive score","Other / hybrid cinematic"]', 'a1=["Not sure yet","Psychological / atmospheric horror","Supernatural dread","Body horror (musical atmosphere)","Folk horror","Techno-thriller","Cosmic dread","Dark drama / thriller","Game adaptive score","Other / hybrid cinematic"]', BUNDLE],
   ['<select class="w-full border border-ash bg-void px-4 py-3 text-sm text-bone outline-none focus:border-blood" aria-label="Theme / tone"><option value="Not sure yet" selected>Not sure yet</option><option value="Experimental art house">Experimental art house</option><option value="Psychological / atmospheric horror">Psychological / atmospheric horror</option>', '<select class="w-full border border-ash bg-void px-4 py-3 text-sm text-bone outline-none focus:border-blood" aria-label="Theme / tone"><option value="Not sure yet" selected>Not sure yet</option><option value="Psychological / atmospheric horror">Psychological / atmospheric horror</option>', HTML],

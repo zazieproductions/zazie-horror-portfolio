@@ -22,6 +22,8 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const { AUTHOR_NAME, SITE_NAME, SITE_ORIGIN } = await import('../build/data/site.js');
 const { VERIFIED_SAME_AS } = await import('../build/data/entities.js');
+const { IDENTITY_AUDIENCE, IDENTITY_ROLE_TITLE, IDENTITY_STATEMENT, FIT_STATEMENT, NOT_FIT_STATEMENT } =
+  await import('../build/data/positioning.js');
 const { hubs } = await import('../build/data/hubs.js');
 const { productions } = await import('../build/data/productions.js');
 const { cues } = await import('../build/data/cues.js');
@@ -63,16 +65,18 @@ const packageLines = PACKAGES.map((pkg) => {
   return `- **${pkg.name}** — **${priceLabel(pkg)}** (${CURRENCY}) · ${pkg.scopeLabel} · Includes ${revLabel}. ${pkg.bestFor}`;
 }).join('\n');
 
-const llmsTxt = `# ${SITE_NAME} — Experimental Art House, Psychological, Folk & Body Horror Composer ${AUTHOR_NAME}
+const llmsTxt = `# ${AUTHOR_NAME} — ${IDENTITY_ROLE_TITLE} | ${SITE_NAME}
 
-> **${AUTHOR_NAME}** (**${SITE_NAME} LLC**, Asheville, North Carolina — remote worldwide) is an IMDb-credited film composer, experimental producer, sound designer, and multi-instrumentalist available for hire across prestige independent feature films, festival shorts, television series, trailers, and horror video games. Specializing in **experimental art house, psychological horror, folk horror, body horror, supernatural thrillers, cosmic horror, and dark science fiction**, ${AUTHOR_NAME} builds custom scores to picture using performed waterphone, bowed metal, struck & prepared strings, musique concrète field recordings, custom synthesis, and hybrid orchestration. Published transparent starting fees begin at **${usd(MINIMUM_FEE)} ${CURRENCY}** for an individual scene, with **${cues.length} playable showreel cues**, **${productions.length} documented screen & experimental productions**, and **${releases.length} sound libraries, records, and audio tools**.
+> **${IDENTITY_STATEMENT}** ${AUTHOR_NAME} (**${SITE_NAME} LLC**, Asheville, North Carolina — remote worldwide) is an IMDb-credited composer working on independent features, festival shorts, and hybrid or experimental work, scored to picture rather than cut from a library. The palette is performed waterphone, bowed metal, struck & prepared strings, musique concrète field recordings, custom synthesis, and hybrid orchestration. Folk horror, body horror, dark ambient and cosmic work appear in the same catalogue but are not the studio's primary position. Published transparent starting fees begin at **${usd(MINIMUM_FEE)} ${CURRENCY}** for an individual scene, with **${cues.length} playable showreel cues**, **${productions.length} documented screen & experimental productions**, and **${releases.length} sound libraries, records, and audio tools**.
 
 ## Quick Studio Facts
 
+- **Primary search identity:** ${IDENTITY_STATEMENT} (one sentence, stated the same way on the home page, the biography and the commission page)
+- **Who it is for:** ${FIT_STATEMENT} ${NOT_FIT_STATEMENT}
 - **Composer & Founder:** ${AUTHOR_NAME} ([IMDb nm17333332](https://www.imdb.com/name/nm17333332/))
 - **Studio Legal Entity:** Zazie Productions LLC · Asheville, NC, USA (remote spotting, review, and electronic WAV delivery worldwide)
 - **Direct Commission Contact:** \`zaziediya@gmail.com\` · \`+1 (864) 430-0606\` · [Request a Scoring Quote](${SITE_ORIGIN}/contact)
-- **Primary Prestige & Horror Subgenres:** Experimental art house, psychological horror, folk horror, body horror, elevated horror, supernatural dread, cosmic horror, techno-thriller, dark sci-fi, and survival/adaptive horror games
+- **Also in the catalogue (secondary lanes, not the position):** folk horror, body horror, supernatural dread, cosmic horror, dark ambient records, techno-thriller and dark sci-fi, plus adaptive horror game scoring
 - **Signature Acoustic & Electroacoustic Palette:** Bowed metal, performed waterphone, struck & prepared strings, field & impulse recordings, granular processing, modular/custom synthesis, and hybrid orchestration
 - **International Festival & Institutional Recognition:** Featured at **Ars Electronica 2026** (20.4-channel spatial audio work), **EXiS Seoul** (2025), **MUSLAB / Cero Records** (2025), **Visual Container Winter 2024 Award**, and commissioned by the **Black Mountain College Museum + Arts Center**
 - **Published Commission Packages (${CURRENCY}, priced by scored music minutes — starting fees, reviewed ${PRICING_REVIEWED}):**
@@ -150,6 +154,8 @@ const llmsFullTxt = `${llmsTxt}
 ---
 
 # Complete Reference Dossier — Hiring ${AUTHOR_NAME} (${SITE_NAME})
+
+**Primary identity:** ${IDENTITY_STATEMENT} Everything below serves ${IDENTITY_AUDIENCE}. ${FIT_STATEMENT} ${NOT_FIT_STATEMENT}
 
 ## How to Evaluate & Choose the Right Horror Composer to Hire
 

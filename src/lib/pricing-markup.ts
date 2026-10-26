@@ -53,6 +53,7 @@ import {
   type Quote,
   type QuoteInput,
 } from '../data/pricing.js';
+import { IDENTITY_STATEMENT } from '../data/positioning.js';
 
 export const ESTIMATOR_EMAIL = 'zaziediya@gmail.com';
 export const SITE_ORIGIN = 'https://horror.zazieproductions.com';
@@ -170,9 +171,15 @@ export function packagesHtml(): string {
   ].join('');
 }
 
-/** Metadata summary generated from pricing.ts without comment markers in attributes. */
+/**
+ * Meta description for the two pages that carry the rate card. It used to open
+ * with the cheapest figure ("Horror scoring (USD): scene from $250"), which
+ * advertised the floor to a search engine and attracted exactly the inquiries
+ * the studio does not want. The identity sentence leads; the published rates
+ * follow in the same description, so price transparency survives the change.
+ */
 export function pricingMetaHtml(): string {
-  const description = pricingSummary();
+  const description = `${IDENTITY_STATEMENT} ${pricingSummary()}`;
   return [
     `<meta name="description" content="${esc(description)}" />`,
     `<meta property="og:description" content="${esc(description)}" />`,
