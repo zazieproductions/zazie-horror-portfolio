@@ -14,7 +14,7 @@ import {
   HTML_CACHE,
   IMMUTABLE_CACHE,
   MEDIA_CACHE,
-  POLICY_BLOCKED_ORIGINS,
+  ANALYTICS_ORIGINS,
   cacheControlFor,
   effectiveHeaders,
   headersFor,
@@ -120,7 +120,7 @@ test('headersFor drops HSTS on plain HTTP so localhost keeps working', () => {
   assert.equal(http['Cache-Control'], HTML_CACHE);
 });
 
-test('the CSP refuses Cloudflare Web Analytics, as /privacy promises', () => {
+test('the CSP allows exactly Cloudflare Web Analytics, as /privacy discloses', () => {
   const csp = headersFor('/', { https: true, html: true })['Content-Security-Policy'];
   const directives = new Map(
     csp
@@ -133,15 +133,20 @@ test('the CSP refuses Cloudflare Web Analytics, as /privacy promises', () => {
       }),
   );
 
-  // The beacon is injected at the edge, so the policy is the only thing that can
-  // refuse it. Both hosts - the script and the reporting endpoint - stay out.
-  for (const { origin } of POLICY_BLOCKED_ORIGINS) {
-    assert.ok(!csp.includes(new URL(origin).host), `${origin} must not be allowlisted by the CSP`);
+  // The beacon is injected at the edge, so the policy is the only thing that
+  // can let it run. Both origins - the script and the reporting endpoint -
+  // are allowlisted, each in the directive ANALYTICS_ORIGINS names.
+  for (const { origin, directive } of ANALYTICS_ORIGINS) {
+    assert.ok(
+      (directives.get(directive) || '').split(/\s+/).includes(origin),
+      `${origin} must be allowlisted in ${directive}`,
+    );
   }
 
-  // No remote script at all: the app's own bundle plus the inline bootstraps.
-  assert.equal(directives.get('script-src'), "'self' 'unsafe-inline'");
-  // An auto-injected beacon reports same-origin to /cdn-cgi/rum, so keeping
-  // connect-src at 'self' costs nothing and still refuses the cross-origin form.
-  assert.equal(directives.get('connect-src'), "'self'");
+  // Exactly one remote script (the beacon, by host: its injected URL carries
+  // a version path) and exactly one remote connection (its reporting
+  // endpoint; the same-origin /cdn-cgi/rum form is covered by 'self').
+  assert.equal(directives.get('script-src'), "'self' 'unsafe-inline' https://static.cloudflareinsights.com");
+  assert.equal(directives.get('connect-src'), "'self' https://cloudflareinsights.com");
+  assert.ok(!csp.includes('*'), 'the CSP must not contain a wildcard');
 });

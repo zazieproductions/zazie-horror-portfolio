@@ -34,17 +34,20 @@ export const SECURITY_HEADERS = {
   'Content-Security-Policy': [
     "default-src 'self'",
     // The app is a prerendered React bundle plus small inline bootstraps and
-    // JSON-LD blocks, so inline script is allowed; no eval, no remote script.
-    // Read that literally: no remote script. Cloudflare's Web Analytics beacon
-    // is the one script that tries to run here and is supposed to fail - see
-    // POLICY_BLOCKED_ORIGINS below.
-    "script-src 'self' 'unsafe-inline'",
+    // JSON-LD blocks, so inline script is allowed; no eval. Exactly one remote
+    // script is allowed: Cloudflare's Web Analytics beacon, allowlisted by
+    // host (its injected URL carries a version path, /beacon.min.js/v..., so
+    // a path-scoped source would not match it) - see ANALYTICS_ORIGINS below.
+    "script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: https:",
     "media-src 'self' https:",
     "font-src 'self'",
     'frame-src https://www.youtube.com https://www.youtube-nocookie.com https://drive.google.com https://docs.google.com https://bandcamp.com',
-    "connect-src 'self'",
+    // 'self' covers the auto-injected beacon's same-origin report to
+    // /cdn-cgi/rum; cloudflareinsights.com covers the cross-origin form of
+    // the same endpoint. Those are the only remote connections allowed.
+    "connect-src 'self' https://cloudflareinsights.com",
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self' mailto:",
@@ -57,28 +60,29 @@ export const SECURITY_HEADERS = {
 };
 
 /**
- * Third-party origins this site refuses on purpose, with the directive that has
- * to keep refusing them.
+ * The one third-party service this site allows on purpose, with the directive
+ * that has to keep allowing each origin - and no other remote origin.
  *
  * Cloudflare injects its Web Analytics beacon (`static.cloudflareinsights.com/
- * beacon.min.js`) into the HTML it serves. The tag is not in this repository,
- * no file here asks for it, and it cannot be removed by a build step - the
- * rewrite happens at the edge, after the upload. That matters because the site
- * publishes a zero-tracking notice (/privacy section 1 and 6: "No analytics
- * package", "No third party script runs on this site"), and a Lighthouse run
- * that reports the beacon as blocked is the policy working, not a defect.
+ * beacon.min.js`) into the HTML it serves. The tag is not in this repository
+ * and cannot be added or removed by a build step - the rewrite happens at the
+ * edge, after the upload. Since 26 October 2026 the site lets it run instead
+ * of refusing it: the beacon is cookieless, stores nothing in the browser and
+ * does not fingerprint visitors (per Cloudflare's RUM beacon documentation);
+ * it reports page-load timing and Core Web Vitals, same-origin to
+ * /cdn-cgi/rum for proxied sites ('self' already covers that) or to
+ * https://cloudflareinsights.com/cdn-cgi/rum in its cross-origin form.
  *
- * So the CSP is the enforcement point: neither host is in the allowlist, and
- * tools/check-headers.mjs fails the build if either one is added without this
- * list changing too. If the block is ever meant to stop being a console error -
- * or the analytics are meant to start being collected - the sanctioned fix is
- * the Cloudflare dashboard (Analytics & Logs -> Web Analytics -> Manage site ->
- * Advanced options -> JS snippet injection), not a wider CSP. Choosing to allow
- * it makes /privacy and the footer claim false, so that is a copy change first:
- * script-src would need https://static.cloudflareinsights.com (the beacon itself
- * posts same-origin to /cdn-cgi/rum, which 'self' already covers).
+ * Allowing it was a copy change first: /privacy sections 1, 3, 4, 6, 8, 9 and
+ * 13, the FAQ tracking answer and the privacy summaries on /legal and /sitemap
+ * now disclose the beacon instead of claiming no analytics and no third-party
+ * script. tools/check-headers.mjs fails the build if either origin below is
+ * dropped (the console CSP error and the dead analytics return) or if any
+ * other remote script-src / connect-src origin is added without this list
+ * changing too. To stop collecting entirely, turn off Web Analytics in the
+ * Cloudflare dashboard AND remove both origins here in the same change.
  */
-export const POLICY_BLOCKED_ORIGINS = [
+export const ANALYTICS_ORIGINS = [
   { origin: 'https://static.cloudflareinsights.com', directive: 'script-src' },
   { origin: 'https://cloudflareinsights.com', directive: 'connect-src' },
 ];
