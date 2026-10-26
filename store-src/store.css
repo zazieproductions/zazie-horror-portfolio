@@ -460,3 +460,112 @@ i{font-style:italic}
 .card-record{margin:.55rem 0 0;font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase}
 .card-record a{color:rgba(240,235,227,.6);text-decoration:underline;text-decoration-color:rgba(255,0,60,.45);text-underline-offset:3px;transition:color .2s}
 .card-record a:hover,.card-record a:focus-visible{color:#f0ebe3;text-decoration-color:#ff003c}
+
+/* ==========================================================================
+   MOBILE PASS - 2026-10-26
+   The catalogue at phone widths. Desktop is untouched: every rule below sits
+   inside max-width:639px.
+
+   The catalogue is 24 entries, and a single column of square covers plus a
+   description, three spec rows and a price row came to roughly 15,000px of
+   scroll for one page - more than twice the rest of the site put together.
+   The card becomes a horizontal row on phones (cover on the left, text on the
+   right), so an entry reads in one glance instead of one screen; the copy is
+   clamped to three lines with the full text one tap away on the record page.
+   ========================================================================== */
+@media (max-width:639px) {
+  /* -- Hero --------------------------------------------------------------- */
+  .hero-inner{padding:2.1rem 0 2rem;gap:1.75rem}
+  .hero h1{font-size:clamp(2.4rem,11.5vw,3rem);line-height:1}
+  .hero-meta{margin-bottom:1.15rem;gap:.35rem 1rem;font-size:.5625rem;letter-spacing:.2em}
+  .hero-meta li{gap:.45rem}
+  .hero-lead{margin-top:1.05rem;font-size:.9375rem;line-height:1.65}
+  .hero-actions{margin-top:1.4rem;gap:.6rem}
+  .hero-actions .btn{flex:1 1 auto;min-height:46px;padding:.75rem 1rem;font-size:.625rem;letter-spacing:.14em}
+  .hero-index{margin-top:1.4rem;padding-top:.9rem;gap:.1rem 1.25rem}
+  .hero-index a{min-height:38px;align-items:center;font-size:.625rem;letter-spacing:.12em}
+  .vitrine{max-width:15rem;margin-top:.25rem}
+  .vitrine-cap{display:none}
+  .ticker{padding:.6rem 0}
+
+  /* -- Filter bar --------------------------------------------------------- */
+  .filters-inner{gap:.9rem;padding-block:.7rem}
+  .filter-label{display:none}
+  .chip{padding:.45rem .7rem;font-size:.5625rem;letter-spacing:.16em}
+
+  /* -- Shelf + group headings -------------------------------------------- */
+  .shelf-intro{padding:1.9rem 0 1.1rem;gap:.75rem}
+  .shelf-intro h2{font-size:clamp(1.65rem,8vw,2.1rem)}
+  .shelf-intro p{font-size:.8125rem;line-height:1.65}
+  .stamp{text-align:left;font-size:.5rem}
+  .group{padding:1.6rem 0;gap:.9rem}
+  .group-head .numeral{font-size:1.6rem;margin-bottom:.4rem}
+  .group-head h2{font-size:clamp(1.4rem,6.5vw,1.8rem)}
+  .group-head .count{margin-top:.4rem}
+  .group-head p{margin-top:.65rem;max-width:none;font-size:.78rem;line-height:1.6}
+  .group-head .plat{margin-top:.75rem;padding-top:.65rem;font-size:.5rem}
+
+  /* -- Card: cover left, facts right -------------------------------------- */
+  .grid{gap:.7rem}
+  .card{flex-direction:row;align-items:stretch}
+  .card-media{
+    flex:0 0 42%;aspect-ratio:auto;min-height:100%;padding:.5rem;
+    border-bottom:0;border-right:1px solid var(--ash);
+  }
+  [data-collection="records"] .card-media img{height:100%}
+  .card-glyph{font-size:1.4rem}
+  .no,.tag{top:.4rem;font-size:.5rem;padding:.3rem .35rem;letter-spacing:.16em}
+  .no{left:.4rem}
+  .tag{right:.4rem}
+  .tag::before{width:3px;height:3px}
+  .preview{right:.4rem;bottom:.4rem;padding:.25rem;gap:0}
+  .preview-label{display:none}
+  .preview-icon{width:1.35rem;height:1.35rem}
+
+  .card-body{gap:.4rem;padding:.75rem .8rem .8rem}
+  .card-kicker{font-size:.5rem;letter-spacing:.2em}
+  .card-title{font-size:1.1rem;line-height:1.15}
+  .card-record{margin-top:-.15rem;font-size:.5rem;letter-spacing:.1em}
+  .card-copy{
+    display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;
+    font-size:.75rem;line-height:1.55;
+  }
+  .spec{gap:.15rem .6rem;margin-top:.15rem;padding-top:.5rem;font-size:.625rem;line-height:1.45}
+  .spec dt{font-size:.5rem;letter-spacing:.1em;padding-top:.1rem}
+  .card-foot{padding-top:.6rem;gap:.5rem;align-items:center}
+  .price{font-size:1.15rem}
+  .price small{margin-top:.2rem;font-size:.5rem;letter-spacing:.1em}
+  .cta{font-size:.5rem;letter-spacing:.14em}
+  .shelf-note{font-size:.625rem;line-height:1.7;padding:1.25rem 0 1.75rem}
+
+  /* -- Bands -------------------------------------------------------------- */
+  .vault-inner{padding:2.1rem 0;gap:1.5rem}
+  .vault h2{font-size:clamp(1.55rem,7vw,2.1rem)}
+  .vault p{font-size:.8125rem;line-height:1.65}
+  .vault-sleeves{gap:.3rem;padding:.3rem}
+  .vault-offer{gap:.9rem 1.25rem;margin-top:1.25rem}
+  .vault-price{font-size:1.75rem}
+  .how{padding:2.1rem 0}
+  .how-lead{margin-bottom:1.35rem;font-size:.8125rem;line-height:1.65}
+  .how li{padding:1.15rem 1.1rem}
+  .how i{margin-bottom:.6rem;font-size:.5rem}
+  .how h3{font-size:1.2rem}
+  .how p{font-size:.78rem}
+  .closing{padding:2.1rem 0}
+  .closing h2{font-size:clamp(1.55rem,7vw,2.1rem)}
+  .closing p{font-size:.8125rem}
+  .closing .hero-actions{width:100%}
+  .closing .btn{flex:1 1 auto;min-height:46px}
+
+  /* -- Footer ------------------------------------------------------------- */
+  .site-foot{padding:2rem 0 1.75rem}
+  .foot-top{gap:1.35rem;align-items:flex-start}
+  .foot-brand .name{font-size:2rem}
+  .foot-brand .tagline{font-size:.5625rem;letter-spacing:.22em;line-height:1.7}
+  .foot-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.1rem 1rem;max-width:none;width:100%}
+  .foot-links a{display:flex;align-items:center;min-height:40px;letter-spacing:.16em}
+  .foot-law{gap:.1rem .75rem;margin-top:1.25rem;padding-top:1rem}
+  .foot-law .lbl{width:100%;margin-bottom:.35rem}
+  .foot-law a{display:inline-flex;align-items:center;min-height:40px;letter-spacing:.16em}
+  .foot-legal{margin-top:1rem;padding-top:1.15rem;gap:.4rem;font-size:.5625rem;letter-spacing:.14em}
+}

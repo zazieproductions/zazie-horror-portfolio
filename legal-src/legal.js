@@ -71,7 +71,11 @@
       });
       indexLinks.forEach(function (a) { a.removeAttribute("aria-current"); });
       if (best && byId[best]) byId[best].setAttribute("aria-current", "true");
-    }, { rootMargin: "-6rem 0px -60% 0px", threshold: [0, 0.1, 0.25, 0.5, 1] });
+    /* rootMargin only accepts px or % units. "-6rem" threw InvalidModificationError,
+       which aborted the rest of this file on every page that loads it (FAQ
+       accordion, counters, filters, device inspector, copy buttons). 96px is the
+       6rem masthead offset expressed in a unit the API accepts. */
+    }, { rootMargin: "-96px 0px -60% 0px", threshold: [0, 0.1, 0.25, 0.5, 1] });
     Object.keys(byId).forEach(function (id) {
       var el = document.getElementById(id);
       if (el) spy.observe(el);

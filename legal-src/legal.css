@@ -162,6 +162,12 @@ button{font:inherit;color:inherit}
 .doc{position:relative;background:var(--void);padding-block:clamp(2.25rem,5vw,4rem) clamp(3rem,7vw,5.5rem)}
 .doc-layout{display:grid;gap:clamp(2rem,4vw,3.5rem);align-items:start}
 @media (min-width:1000px){.doc-layout{grid-template-columns:minmax(0,13rem) minmax(0,1fr)}}
+/* Grid items default to min-width:auto, so a wide table inside .doc-body pushed
+   the whole page wider than the phone (390px viewport -> 756px document on
+   /hire-a-composer and 562px on item pages). The column must be allowed to be
+   narrower than its widest descendant; .table-wrap then scrolls the table
+   inside the column instead of scrolling the page. */
+.doc-layout > *{min-width:0}
 .doc-index{display:none}
 @media (min-width:1000px){
   .doc-index{display:block;position:sticky;top:6.5rem;max-height:calc(100svh - 9rem);overflow-y:auto;padding-right:.5rem}
@@ -620,3 +626,89 @@ td code,th code{white-space:nowrap}
    stacking order to stay clickable. */
 .inline-link{position:relative;z-index:1;color:var(--mist);text-decoration:underline;text-decoration-color:rgba(196,30,30,.55);text-underline-offset:3px;transition:color .2s}
 .inline-link:hover,.inline-link:focus-visible{color:var(--bone);text-decoration-color:var(--ember)}
+
+/* ==========================================================================
+   MOBILE PASS - 2026-10-26
+   The document layout and the item pages at phone widths. Nothing here
+   changes the desktop composition: every rule is inside max-width:767px.
+
+   What it fixes and why:
+
+   1. Tables. A five-column comparison table has a min-content width of about
+      1100px. With the grid containment fix above the page no longer widens,
+      but the table still needed ~720px of sideways scrolling inside a 358px
+      column. At phone width the header cells are therefore allowed to wrap
+      and the cells lose their wide padding, so most tables fit without any
+      horizontal scrolling at all; the ones that do not still scroll inside
+      .table-wrap, never the page.
+   2. The mobile section jump (".doc-jump") was a wrapped block of ten chips -
+      roughly a third of the first screen spent on navigation. It is now one
+      horizontally scrollable strip, the same pattern the site uses for the
+      showreel mood chips.
+   3. Reading rhythm: the lead, clause spacing and callout padding are pulled
+      in so a phone screen shows a heading and its first paragraph together.
+   4. The footer repeated three link ribbons of 9-10 items each. On phones the
+      two long lists become two columns, the entity line and the legal row drop
+      a step in size, and every link keeps a 40px tap row.
+   ========================================================================== */
+@media (max-width:767px) {
+  /* -- 1. Tables ---------------------------------------------------------- */
+  .table-wrap{-webkit-overflow-scrolling:touch;scrollbar-width:thin}
+  table{min-width:0;font-size:.78rem;line-height:1.6}
+  thead th,tbody th{white-space:normal}
+  th,td{padding:.55rem .7rem}
+  thead th{font-size:.5625rem;letter-spacing:.16em}
+  caption{padding:.7rem .7rem;font-size:.5625rem;letter-spacing:.2em}
+
+  /* -- 2. Section jump ---------------------------------------------------- */
+  .doc-jump{padding:.85rem .9rem;margin-bottom:1.5rem}
+  .doc-jump p{margin-bottom:.5rem}
+  .doc-jump ul{
+    flex-wrap:nowrap;overflow-x:auto;margin-inline:-.9rem;padding-inline:.9rem;
+    scrollbar-width:none;-ms-overflow-style:none;overscroll-behavior-x:contain;
+    -webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;
+  }
+  .doc-jump ul::-webkit-scrollbar{display:none}
+  .doc-jump a{flex:none;white-space:nowrap;scroll-snap-align:start;padding:.5rem .7rem}
+
+  /* -- 3. Reading rhythm -------------------------------------------------- */
+  .doc{padding-block:1.75rem 3rem}
+  .doc-head-inner{padding:2rem 0 1.5rem}
+  .doc-head h1{font-size:clamp(1.95rem,9vw,2.6rem);line-height:1.05}
+  .doc-lead{margin-top:1rem;font-size:.9375rem;line-height:1.7}
+  .doc-meta{gap:.35rem 1.1rem;margin-top:1.25rem;padding-top:.9rem}
+  .doc-meta li{font-size:.5625rem;letter-spacing:.16em}
+  .doc-body > * + *{margin-top:1.05rem}
+  .doc-body p,.doc-body ul,.doc-body ol{font-size:.9375rem;line-height:1.75}
+  .clause{padding-top:1.15rem;scroll-margin-top:5rem}
+  .clause + .clause{margin-top:2rem}
+  .clause > h2{font-size:clamp(1.35rem,6vw,1.75rem);margin-bottom:.8rem}
+  .clause > h2 .no{margin-bottom:.35rem}
+  .note,.flag,.fact,.warn{margin:1.15rem 0;padding:.9rem 1rem 1rem}
+  .note > p,.flag > p,.fact > p,.warn > p,.doc-body p{font-size:.875rem;line-height:1.75}
+  .pullquote{margin:1.5rem 0;padding-left:1rem}
+  .copy-plate pre{font-size:.75rem;padding:.9rem 1rem}
+  .device-out li{padding:.6rem .85rem}
+  .device-head,.device-note,.device-empty{padding:.75rem .85rem}
+  .hub-card{padding:1.15rem}
+  .poster-figure{margin-block:1.25rem}
+  .closing-inner{padding:2.25rem 0;gap:1.15rem}
+  .closing h2{font-size:clamp(1.5rem,7vw,2rem)}
+  .closing-actions .btn{flex:1 1 auto}
+
+  /* -- 4. Footer ---------------------------------------------------------- */
+  .site-foot{padding:2rem 0 1.75rem}
+  .foot-top{gap:1.35rem;align-items:flex-start}
+  .foot-brand .name{font-size:2rem}
+  .foot-brand .tagline{font-size:.5625rem;letter-spacing:.22em;line-height:1.7}
+  .foot-links{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:.1rem 1rem;max-width:none;width:100%;
+  }
+  .foot-links a{display:flex;align-items:center;min-height:40px;letter-spacing:.16em}
+  .foot-entity{font-size:.75rem;line-height:1.7;margin-top:1.25rem;padding-top:1rem}
+  .foot-law{gap:.1rem .75rem;margin-top:1.25rem;padding-top:1rem}
+  .foot-law span.lbl{width:100%;margin-bottom:.35rem}
+  .foot-law a{display:inline-flex;align-items:center;min-height:40px;letter-spacing:.16em}
+  .foot-legal{margin-top:1rem;padding-top:1.15rem;gap:.4rem;font-size:.5625rem;letter-spacing:.14em}
+}

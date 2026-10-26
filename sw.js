@@ -106,7 +106,11 @@
 // fresh content hash below. The 2026-10-25 blanket type floors were reverted
 // on 2026-10-26, so the design's original 8-12px label scale is back and the
 // hash plus this cache version (v43 -> v44) move together.
-const CACHE_NAME = 'zazie-v44';
+// v45 (2026-10-26): the mobile layout pass changed legal-<hash>.css and
+// store-<hash>.css (phone tables, catalogue cards, footers), so both names
+// moved. Bumping the version makes returning visitors pick them up instead
+// of serving the previous stylesheets from cache.
+const CACHE_NAME = 'zazie-v45';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -116,10 +120,10 @@ const PRECACHE_ASSETS = [
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-3465aa44.css',
   '/index-4c5bfc24.js',
-  '/store-1e13177a.css',
+  '/store-1ec60fa2.css',
   '/store-3fc01be0.js',
-  '/legal-f4e3a5fb.css',
-  '/legal-2fe7a6e6.js',
+  '/legal-f5b73db7.css',
+  '/legal-707b2345.js',
   '/estimator-fc4ddfe0.css',
   '/estimator-2b081a5e.js',
   // Hero & Atmosphere

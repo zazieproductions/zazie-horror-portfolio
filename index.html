@@ -507,6 +507,66 @@ document.addEventListener("pointerenter", (e) => {
   }
 }, true);
 
+// 3b. Mobile menu, before React owns it
+//    The hamburger's panel is rendered by the React bundle, which is mounted
+//    late on purpose (idle after load). On a phone that left the primary
+//    navigation a button that did nothing for the first seconds of a visit -
+//    aria-controls pointed at an element that did not exist yet - and dead for
+//    good if the bundle never arrived. This builds the panel from the header's
+//    own desktop nav links (cloned from the DOM, not a second copy in source)
+//    and steps aside the moment React replaces the prerendered header.
+(function () {
+  var shell = null;
+  var panel = null;
+  document.addEventListener("DOMContentLoaded", function () {
+    shell = document.querySelector("header.fixed");
+  });
+  var setOpen = function (next) {
+    var btn = shell && shell.querySelector(".zp-menu-button");
+    if (!panel || !btn) return;
+    panel.hidden = !next;
+    btn.setAttribute("aria-expanded", next ? "true" : "false");
+    btn.setAttribute("aria-label", next ? "Close menu" : "Open menu");
+  };
+  var build = function () {
+    var source = shell.querySelector('nav[aria-label="Primary navigation"]');
+    if (!source) return false;
+    panel = document.createElement("nav");
+    panel.id = "mobile-navigation";
+    panel.className = "zp-mobile-fallback";
+    panel.setAttribute("aria-label", "Mobile navigation");
+    panel.hidden = true;
+    var links = source.querySelectorAll("a");
+    for (var i = 0; i < links.length; i++) {
+      var link = document.createElement("a");
+      link.setAttribute("href", links[i].getAttribute("href"));
+      link.textContent = links[i].textContent;
+      panel.appendChild(link);
+    }
+    panel.addEventListener("click", function (e) {
+      if (e.target && e.target.tagName === "A") setOpen(false);
+    });
+    shell.appendChild(panel);
+    return true;
+  };
+  document.addEventListener("click", function (e) {
+    if (!e.target || !e.target.closest) return;
+    var button = e.target.closest(".zp-menu-button");
+    if (!button) {
+      if (panel && !panel.hidden && !panel.contains(e.target)) setOpen(false);
+      return;
+    }
+    // React has replaced the prerendered header: the bundle's own menu owns it.
+    if (!shell || !document.contains(shell) || !shell.contains(button)) return;
+    if (!panel && !build()) return;
+    setOpen(panel.hidden);
+  });
+  // No document-level keydown handler here: the film-player test asserts that
+  // the early script never re-introduces global keyboard interception over the
+  // native poster buttons. The fallback closes on the button, on a link, or on
+  // a tap anywhere else.
+})();
+
 // 4. React Bundle Mount
 //    The prerendered DOM is the complete document (copy, media, menus, the
 //    vanilla film player), so crawlers and automated clients must never run
@@ -650,6 +710,107 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
   @media (max-width:639px){
     #contact input,#contact select,#contact textarea{font-size:16px}
     #contact input,#contact select{min-height:48px}
+  }
+</style>
+
+<style id="zp-mobile-pass">
+  /* ══════════════════════════════════════════════════════════════════
+     MOBILE LAYOUT PASS — 2026-10-26
+     The homepage was 19,900px tall at 390px wide: ten full-bleed
+     sections at 64–96px of vertical padding each, nine full-width
+     square compilation covers, and three footer link ribbons. The page
+     read as one long wall on a phone. Everything here is inside a
+     max-width:639px query, so the desktop composition — and the React
+     bundle, which re-renders the same class names — is unchanged.
+
+     Rules of the pass, in order of effect:
+       1. Vertical rhythm: section padding and header margins halve.
+       2. Compilations become a two-up cover grid; the cover you open
+          spans the full row so the Bandcamp player still has width.
+       3. The play affordance and its badges shrink to cover scale, so
+          the artwork leads instead of the chrome.
+       4. The footer's Archive and Documents ribbons become two
+          columns of 40px tap rows.
+       5. Contact's raw email preview stops dominating the section.
+     ══════════════════════════════════════════════════════════════════ */
+  @media (max-width:639px){
+    /* -- 1. Rhythm -------------------------------------------------- */
+    /* #top is the full-height hero and keeps its own padding contract. */
+    main > section:not(#top){padding-top:3.25rem;padding-bottom:3.25rem}
+    #about{padding-top:3.25rem;padding-bottom:3.25rem}
+    main section .mb-10{margin-bottom:1.75rem}
+    main section h2.font-display{text-wrap:balance}
+
+    /* Header: same CTA, calmer weight. 40px keeps the target. */
+    .zp-mobile-quote{
+      min-height:40px;margin-right:.5rem;padding:.5rem .8rem;
+      font-size:.625rem;letter-spacing:.12em;
+    }
+    .zp-menu-button{width:42px;height:42px}
+
+    /* -- 2. Compilations: two abreast ------------------------------- */
+    .zp-comp-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:.7rem}
+    .zp-comp-card:hover{transform:none}
+    .zp-comp-card.zp-open{grid-column:1/-1}
+    .zp-comp-card.zp-open .zp-stage{aspect-ratio:16/10}
+
+    /* -- 3. Cover chrome at cover scale ----------------------------- */
+    .zp-play{width:3rem;height:3rem}
+    .zp-play svg{width:1.05rem;height:1.05rem;margin-left:.12rem}
+    .zp-play::before{inset:-.35rem}
+    .zp-badge{padding:.2rem .4rem;font-size:.5625rem;letter-spacing:.14em;top:.45rem;left:.45rem}
+    .zp-dur{padding:.2rem .4rem;font-size:.5625rem;letter-spacing:.08em;right:.45rem;bottom:.45rem}
+    .zp-stage::after{background:linear-gradient(180deg,rgba(3,3,3,.42) 0,rgba(3,3,3,0) 26%,rgba(3,3,3,0) 62%,rgba(3,3,3,.72) 100%)}
+
+    /* Film samples: the caption block was as tall as the still. */
+    .zp-vcard > div:last-child{padding:.75rem .85rem}
+    .zp-vcard h3{font-size:1.0625rem}
+    .zp-vactions a{padding:.5rem}
+
+    /* Showreel: the mood strip is a scroller, not a wall. */
+    .chip-scroll{gap:.4rem;padding-bottom:.15rem}
+    .chip-scroll button{padding:.5rem .7rem;letter-spacing:.14em}
+
+    /* -- 4. Footer link ribbons ------------------------------------- */
+    footer nav[aria-label="Archive pages"],
+    footer nav[aria-label="Legal and operating documents"]{margin-top:2rem;gap:.5rem}
+    footer nav[aria-label="Archive pages"] > div,
+    footer nav[aria-label="Legal and operating documents"] > div{
+      display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:.05rem 1rem;width:100%;
+    }
+    footer nav a{min-height:40px;letter-spacing:.14em}
+    footer > div > div:first-child p.font-display{font-size:1.75rem}
+    footer .flex.max-w-md{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.05rem 1rem;width:100%;max-width:none}
+
+    /* -- 5. Contact: the email preview is a reference, not the page -- */
+    #contact pre{max-height:6.5rem}
+    #contact form{padding:1rem}
+  }
+
+  /* Mobile menu fallback panel (see the inline script, step 3b). It exists
+     only until the React bundle replaces the prerendered header. */
+  @media (max-width:1279px){
+    .zp-mobile-fallback{
+      position:absolute;left:0;right:0;top:100%;
+      display:flex;flex-direction:column;
+      max-height:calc(100svh - 3.5rem);overflow-y:auto;
+      padding:.35rem 1rem 1rem;
+      border-top:1px solid rgba(255,255,255,.06);
+      border-bottom:1px solid rgba(255,255,255,.08);
+      background:rgba(3,3,3,.97);
+      box-shadow:0 24px 60px rgba(0,0,0,.7);
+      overscroll-behavior:contain;
+    }
+    .zp-mobile-fallback[hidden]{display:none}
+    .zp-mobile-fallback a{
+      display:flex;align-items:center;min-height:52px;
+      border-bottom:1px solid rgba(255,255,255,.05);
+      font-family:"Cormorant Garamond",Georgia,serif;
+      font-size:1.5rem;line-height:1.2;color:#f0ebe3;
+      text-decoration:none;
+    }
+    .zp-mobile-fallback a:last-child{border-bottom:0;color:#e65650}
   }
 </style>
 
