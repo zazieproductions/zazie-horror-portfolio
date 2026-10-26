@@ -1132,16 +1132,16 @@
     "overflowing": [
       "a [w=43 right=404]",
       "a [w=55 right=458]",
-      "div.ticker-track [w=13036 right=11792]",
-      "span [w=379 right=479]",
-      "span [w=279 right=759]",
-      "b [w=10 right=490]",
-      "em [w=154 right=664]",
-      "span [w=311 right=1069]",
-      "b [w=9 right=768]",
-      "em [w=129 right=917]",
-      "span [w=326 right=1395]",
-      "b [w=13 right=1083]"
+      "div.ticker-track [w=13036 right=11795]",
+      "span [w=379 right=482]",
+      "span [w=279 right=761]",
+      "b [w=10 right=492]",
+      "em [w=154 right=666]",
+      "span [w=311 right=1072]",
+      "b [w=9 right=770]",
+      "em [w=129 right=920]",
+      "span [w=326 right=1398]",
+      "b [w=13 right=1085]"
     ],
     "tinyText": [
       "span 9px \"Productions\"",

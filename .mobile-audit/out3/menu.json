@@ -18,7 +18,26 @@
         "Store",
         "Scoring inquiry"
       ],
-      "firstLink": "#showreel"
+      "firstLink": "#showreel",
+      "inHeader": true,
+      "style": {
+        "background": "rgb(5, 5, 5)",
+        "z": "60",
+        "position": "absolute",
+        "opacity": "1"
+      },
+      "stackAt100": [
+        "A.",
+        "NAV.zp-mobile-fallback",
+        "DIV.relative.z-10",
+        "DIV.absolute.inset-0"
+      ],
+      "stackAt300": [
+        "A.",
+        "NAV.zp-mobile-fallback",
+        "H1.font-display.text-[2.35rem]",
+        "DIV.w-full.max-w-xl"
+      ]
     },
     "closedByLink": true,
     "errors": [
@@ -44,7 +63,26 @@
         "Store",
         "Scoring inquiry"
       ],
-      "firstLink": "#showreel"
+      "firstLink": "#showreel",
+      "inHeader": true,
+      "style": {
+        "background": "oklab(0.0969252 0.00000440329 0.00000193715 / 0.95)",
+        "z": "auto",
+        "position": "static",
+        "opacity": "1"
+      },
+      "stackAt100": [
+        "A.min-h-[52px].border-b",
+        "DIV.flex.flex-col",
+        "NAV.overflow-hidden.border-t",
+        "HEADER.fixed.inset-x-0"
+      ],
+      "stackAt300": [
+        "A.min-h-[52px].border-b",
+        "DIV.flex.flex-col",
+        "NAV.overflow-hidden.border-t",
+        "HEADER.fixed.inset-x-0"
+      ]
     },
     "closedByLink": false,
     "errors": []
