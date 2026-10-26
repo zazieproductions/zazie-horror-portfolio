@@ -14,6 +14,7 @@ import {
   oneLine,
   url,
 } from '../data/site.js';
+import { deepLinkGenres } from '../data/entities.js';
 import { stripMarkup } from '../data/routes.js';
 import type { Cue, Credit, Image, Json, Production, Release } from '../data/types.js';
 
@@ -156,12 +157,12 @@ export function productionNodes(production: Production, path: string): Json[] {
     url: url(path),
     name: production.title,
     description: production.summary,
-    genre: production.genres,
+    genre: deepLinkGenres(production.genres),
     inLanguage: 'en',
     image: {
       '@type': 'ImageObject',
       contentUrl: url(production.poster.src),
-      caption: `${production.title} poster artwork`,
+      caption: production.poster.alt,
       width: production.poster.width,
       height: production.poster.height,
     },
@@ -203,6 +204,7 @@ export function cueNodes(cue: Cue, path: string): Json[] {
   const compositionId = `${url(path)}#composition`;
   const audioId = `${url(path)}#audio`;
   const description = oneLine(`${cue.description} ${cue.paragraphs[0]}`);
+  const cueGenre = deepLinkGenres([cue.category]);
   const composition: Json = {
     '@context': 'https://schema.org',
     '@type': 'MusicComposition',
@@ -210,7 +212,7 @@ export function cueNodes(cue: Cue, path: string): Json[] {
     url: url(path),
     name: cue.title,
     description,
-    genre: cue.category,
+    genre: cueGenre,
     composer: { '@id': PERSON_ID },
     creator: { '@id': PERSON_ID },
     duration: isoDuration(cue.durationSeconds),
@@ -228,7 +230,7 @@ export function cueNodes(cue: Cue, path: string): Json[] {
     contentUrl: url(cue.audioPath),
     encodingFormat: 'audio/mpeg',
     duration: isoDuration(cue.durationSeconds),
-    genre: cue.category,
+    genre: cueGenre,
     creator: { '@id': PERSON_ID },
     isPartOf: { '@id': WEBSITE_ID },
     mainEntityOfPage: { '@id': `${url(path)}#webpage` },
@@ -261,7 +263,7 @@ export function releaseNodes(release: Release, path: string): Json[] {
     ...(release.releaseDate ? { datePublished: release.releaseDate } : {}),
     ...(release.durationSeconds ? { duration: isoDuration(release.durationSeconds) } : {}),
     ...(release.trackCount ? { numTracks: release.trackCount } : {}),
-    ...(release.genre?.length ? { genre: release.genre } : {}),
+    ...(release.genre?.length ? { genre: deepLinkGenres(release.genre) } : {}),
     offers: { '@id': offerId },
     isPartOf: { '@id': WEBSITE_ID },
     mainEntityOfPage: { '@id': `${url(path)}#webpage` },

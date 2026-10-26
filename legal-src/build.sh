@@ -164,8 +164,12 @@ for page in sorted((src / "pages").glob("*.html")):
         script, n = faq_schema(markup, canonical.group(1))
         markup = markup.replace("<!--FAQ_SCHEMA-->", script)
 
+    page_masthead = masthead
+    if slug == "hire-a-composer":
+        page_masthead = page_masthead.replace('<a href="/hire-a-composer"', '<a href="/hire-a-composer" aria-current="page"', 1)
+
     markup = (markup
-              .replace("__MASTHEAD__", masthead)
+              .replace("__MASTHEAD__", page_masthead)
               .replace("__FOOTER__", footer)
               .replace("__CSS__", css)
               .replace("__JS__", js))
