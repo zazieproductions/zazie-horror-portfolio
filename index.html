@@ -798,12 +798,18 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
       padding:.35rem 1rem 1rem;
       border-top:1px solid rgba(255,255,255,.06);
       border-bottom:1px solid rgba(255,255,255,.08);
-      /* Opaque plate, not a translucent one: the hero's full-bleed artwork
-         below it was legible through rgba(3,3,3,.97) on some phone renders. */
       background:#050505;
       isolation:isolate;
       box-shadow:0 24px 60px rgba(0,0,0,.7);
       overscroll-behavior:contain;
+    }
+    /* Full-viewport scrim behind the panel. The plate alone left the hero's
+       headline legible underneath on a phone render (the header sits in a
+       stacking context of its own, so "opaque" on the panel was not enough
+       over full-bleed artwork); this dims the page instead of fighting it. */
+    .zp-mobile-fallback::before{
+      content:"";position:fixed;inset:0;z-index:-1;
+      background:rgba(3,3,3,.88);
     }
     .zp-mobile-fallback[hidden]{display:none}
     .zp-mobile-fallback a{
