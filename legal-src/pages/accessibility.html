@@ -244,14 +244,14 @@ __MASTHEAD__
             </tbody>
           </table>
         </div>
-        <p>That last row is why these pages define a second red. The accent red is kept for rules, marks and large display type where 3 : 1 is sufficient, and small uppercase labels use <code>#e65650</code> at 5.71 : 1 instead. The portfolio and the catalogue still use the darker red for small labels, which is listed as an open gap below rather than quietly ignored.</p>
+        <p>That last row is why these pages define a second red. The accent red is kept for rules, marks and large display type where 3 : 1 is sufficient, and small uppercase labels use <code>#e65650</code> at 5.71 : 1 instead. The portfolio homepage (<code>/</code>) now applies the same token to every <code>.text-blood</code> foreground, measured at 4.61–5.71 : 1 across its dark surfaces, with persistent underlines on prose links, a 12px minimum type size for utility labels and 16px body text on mobile; the catalogue (<code>/store</code>) still uses the darker red for small labels and is listed as an open gap below rather than quietly ignored.</p>
       </section>
 
       <section class="clause" id="gaps">
         <h2><span class="no">4</span> Known gaps</h2>
         <p>These are the exceptions behind "partially conformant", with the page each one lives on.</p>
         <ul>
-          <li><strong>Small label contrast on the portfolio and catalogue.</strong> The darker accent red sits at 3.49 : 1 against the background, below the 4.5 : 1 needed for small text. Fixed on the document pages, open on <code>/</code> and <code>/store</code>.</li>
+          <li><strong>Small label contrast on the catalogue.</strong> The darker accent red sits at 3.49 : 1 against the background, below the 4.5 : 1 needed for small text. Fixed on the document pages and on the portfolio homepage <code>/</code> (AA red <code>#e65650</code> at 4.61–5.71 : 1, underlined prose links, 12px utility-label floor and 16px mobile body text); still open on <code>/store</code>.</li>
           <li><strong>Custom cursor and pointer torch on the catalogue.</strong> On fine pointers the page hides the system cursor and draws its own. It is disabled for coarse pointers, for reduced motion and without scripting, but it is still a non standard pointer for anyone who relies on cursor shape or position cues.</li>
           <li><strong>Atmosphere layers.</strong> Grain, vignette, scanlines and a hairline frame sit above the page as fixed overlays. They are decorative, marked <code>aria-hidden</code>, kept at low opacity and switched off in print, but they reduce effective contrast slightly for anyone with low vision and cannot be turned off by the visitor.</li>
           <li><strong>The portfolio's opening sequence.</strong> A full screen animation on first visit. It is decorative, hidden from assistive technology, dismissed by a click or keypress, suppressed under reduced motion and for automated clients, and never shown twice in the same tab. It is still an interruption, and it does not exist on any document page.</li>
