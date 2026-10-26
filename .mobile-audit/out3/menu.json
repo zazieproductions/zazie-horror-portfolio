@@ -1,0 +1,52 @@
+{
+  "prerendered-no-bundle": {
+    "blockBundle": true,
+    "before": {
+      "expanded": "false",
+      "panel": false
+    },
+    "opened": {
+      "expanded": "true",
+      "label": "Close menu",
+      "panelVisible": true,
+      "panelHeight": 336,
+      "items": [
+        "Reel",
+        "Work",
+        "Rates",
+        "Hire",
+        "Store",
+        "Scoring inquiry"
+      ],
+      "firstLink": "#showreel"
+    },
+    "closedByLink": true,
+    "errors": [
+      "TypeError: Failed to fetch dynamically imported module: http://127.0.0.1:8080/index-4c5bfc24.js"
+    ]
+  },
+  "after-bundle": {
+    "blockBundle": false,
+    "before": {
+      "expanded": "false",
+      "panel": false
+    },
+    "opened": {
+      "expanded": "true",
+      "label": "Close menu",
+      "panelVisible": true,
+      "panelHeight": 406,
+      "items": [
+        "Reel",
+        "Work",
+        "Rates",
+        "Hire",
+        "Store",
+        "Scoring inquiry"
+      ],
+      "firstLink": "#showreel"
+    },
+    "closedByLink": false,
+    "errors": []
+  }
+}

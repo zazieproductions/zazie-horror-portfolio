@@ -156,19 +156,18 @@
       }
     ],
     "overflowing": [
-      "a [w=64 right=443]",
-      "a [w=54 right=499]",
-      "a [w=66 right=568]"
+      "a [w=43 right=404]",
+      "a [w=55 right=458]"
     ],
     "tinyText": [
       "span 9px \"Productions\"",
-      "a 10px \"Reel\"",
-      "a 10px \"Work\"",
-      "a 10px \"Composer\"",
-      "a 10px \"Process\"",
-      "a 10px \"Rates\"",
-      "a 10px \"Hire\"",
-      "a 10px \"Store\"",
+      "a 9px \"Reel\"",
+      "a 9px \"Work\"",
+      "a 9px \"Composer\"",
+      "a 9px \"Process\"",
+      "a 9px \"Rates\"",
+      "a 9px \"Hire\"",
+      "a 9px \"Store\"",
       "span 11px \"Portfolio\"",
       "li.crumb-sep 11px \"/\"",
       "span 11px \"Selected Productions\"",
@@ -184,14 +183,8 @@
     ],
     "smallTargets": [
       "a.skip 236x42 \"Skip to the document\"",
-      "a.brand 36x36 \"Z\n      ZKTProductions\"",
-      "a 56x33 \"Reel\"",
-      "a 63x38 \"Work\"",
-      "a 98x33 \"Composer\"",
-      "a 84x33 \"Process\"",
-      "a 64x33 \"Rates\"",
-      "a 54x33 \"Hire\"",
-      "a 66x33 \"Store\"",
+      "a.brand 32x32 \"Z\n      ZKTProductions\"",
+      "a 43x44 \"Hire\"",
       "a 83x17 \"Portfolio\"",
       "a 198x19 \"licensing, rights and \"",
       "a 122x19 \"30-cue showreel\"",
@@ -212,7 +205,13 @@
       "a 143x11 \"Watch on portfolio\"",
       "a 143x11 \"Watch on portfolio\"",
       "a 143x11 \"Watch on portfolio\"",
-      "a 143x11 \"Watch on portfolio\""
+      "a 143x11 \"Watch on portfolio\"",
+      "a 143x11 \"Watch on portfolio\"",
+      "a 143x11 \"Watch on portfolio\"",
+      "a 187x17 \"horror.zazieproduction\"",
+      "a.stretch 255x29 \"Horror composer showre\"",
+      "a.stretch 268x29 \"Scoring process and de\"",
+      "a.stretch 242x29 \"Scoring services and r\""
     ],
     "links": 100,
     "words": 1192,
@@ -243,10 +242,10 @@
     ]
   },
   "store-390": {
-    "scrollW": 472,
+    "scrollW": 390,
     "clientW": 390,
-    "scrollH": 11963,
-    "screenfuls": 11.7,
+    "scrollH": 12041,
+    "screenfuls": 14.3,
     "sections": [
       {
         "id": "?",
@@ -254,19 +253,19 @@
       },
       {
         "id": "records",
-        "h": 2769
+        "h": 2756
       },
       {
         "id": "gear",
-        "h": 2665
+        "h": 2744
       },
       {
         "id": "sfx",
-        "h": 1097
+        "h": 1104
       },
       {
         "id": "tools",
-        "h": 1792
+        "h": 1796
       },
       {
         "id": "discography",
@@ -282,28 +281,28 @@
       }
     ],
     "overflowing": [
-      "a [w=54 right=499]",
-      "a [w=66 right=568]",
-      "div.ticker-track [w=13036 right=12398]",
-      "span [w=310 right=707]",
-      "em [w=144 right=571]",
-      "span [w=379 right=1085]",
-      "b [w=12 right=719]",
-      "em [w=218 right=957]",
-      "span [w=279 right=1365]",
-      "b [w=10 right=1096]",
-      "em [w=154 right=1269]",
-      "span [w=311 right=1675]"
+      "a [w=43 right=404]",
+      "a [w=55 right=458]",
+      "div.ticker-track [w=13036 right=12397]",
+      "span [w=281 right=395]",
+      "span [w=310 right=706]",
+      "b [w=10 right=405]",
+      "em [w=144 right=570]",
+      "span [w=379 right=1084]",
+      "b [w=12 right=718]",
+      "em [w=218 right=956]",
+      "span [w=279 right=1363]",
+      "b [w=10 right=1094]"
     ],
     "tinyText": [
       "span 9px \"Productions\"",
-      "a 10px \"Reel\"",
-      "a 10px \"Work\"",
-      "a 10px \"Composer\"",
-      "a 10px \"Process\"",
-      "a 10px \"Rates\"",
-      "a 10px \"Hire\"",
-      "a 10px \"Store\"",
+      "a 9px \"Reel\"",
+      "a 9px \"Work\"",
+      "a 9px \"Composer\"",
+      "a 9px \"Process\"",
+      "a 9px \"Rates\"",
+      "a 9px \"Hire\"",
+      "a 9px \"Store\"",
       "li 9px \"Zazie Productions\"",
       "li 9px \"Catalogue No. 1\"",
       "li 9px \"Asheville, NC\"",
@@ -319,14 +318,8 @@
     ],
     "smallTargets": [
       "a.skip 239x42 \"Skip to the catalogue\"",
-      "a.brand 36x36 \"Z\n      ZKTProductions\"",
-      "a 56x33 \"Reel\"",
-      "a 63x33 \"Work\"",
-      "a 98x33 \"Composer\"",
-      "a 84x33 \"Process\"",
-      "a 64x33 \"Rates\"",
-      "a 54x33 \"Hire\"",
-      "a 66x38 \"Store\"",
+      "a.brand 32x32 \"Z\n      ZKTProductions\"",
+      "a 43x44 \"Hire\"",
       "button.amb 35x40 \"Room tone\"",
       "a 185x38 \"Records I\"",
       "a 185x38 \"Objects II\"",
@@ -347,7 +340,13 @@
       "button.chip 59x30 \"Ships\"",
       "a 62x10 \"Bandcamp\"",
       "button.preview 32x32 \"Listen\"",
-      "a.card-link 181x21 \"Anesthesia for the Sig\""
+      "a.card-link 175x21 \"Anesthesia for the Sig\"",
+      "a 169x22 \"Catalogue page: Anesth\"",
+      "button.preview 32x32 \"Listen\"",
+      "a.card-link 175x21 \"Opaline Lament (Life F\"",
+      "a 170x22 \"Catalogue page: Opalin\"",
+      "a.card-link 175x21 \"Spectral Ode to Synest\"",
+      "a 175x22 \"Catalogue page: Spectr\""
     ],
     "links": 106,
     "words": 2125,
@@ -375,7 +374,7 @@
   "hire-390": {
     "scrollW": 390,
     "clientW": 390,
-    "scrollH": 16715,
+    "scrollH": 16719,
     "screenfuls": 19.8,
     "sections": [
       {
@@ -420,28 +419,28 @@
       }
     ],
     "overflowing": [
-      "a [w=64 right=443]",
-      "a [w=54 right=499]",
-      "a [w=66 right=568]",
-      "li [w=106 right=496]",
-      "a [w=106 right=496]",
-      "li [w=105 right=607]",
-      "a [w=105 right=607]",
-      "li [w=105 right=719]",
-      "a [w=105 right=719]",
-      "li [w=123 right=848]",
-      "a [w=123 right=848]",
-      "li [w=128 right=982]"
+      "a [w=43 right=404]",
+      "a [w=55 right=458]",
+      "li [w=141 right=393]",
+      "a [w=141 right=393]",
+      "li [w=109 right=509]",
+      "a [w=109 right=509]",
+      "li [w=108 right=624]",
+      "a [w=108 right=624]",
+      "li [w=108 right=738]",
+      "a [w=108 right=738]",
+      "li [w=126 right=870]",
+      "a [w=126 right=870]"
     ],
     "tinyText": [
       "span 9px \"Productions\"",
-      "a 10px \"Reel\"",
-      "a 10px \"Work\"",
-      "a 10px \"Composer\"",
-      "a 10px \"Process\"",
-      "a 10px \"Rates\"",
-      "a 10px \"Hire\"",
-      "a 10px \"Store\"",
+      "a 9px \"Reel\"",
+      "a 9px \"Work\"",
+      "a 9px \"Composer\"",
+      "a 9px \"Process\"",
+      "a 9px \"Rates\"",
+      "a 9px \"Hire\"",
+      "a 9px \"Store\"",
       "span 11px \"Portfolio\"",
       "li.crumb-sep 11px \"/\"",
       "span 11px \"Hire a horror compos\"",
@@ -457,25 +456,19 @@
     ],
     "smallTargets": [
       "a.skip 236x42 \"Skip to the document\"",
-      "a.brand 36x36 \"Z\n      ZKTProductions\"",
-      "a 56x33 \"Reel\"",
-      "a 63x33 \"Work\"",
-      "a 98x33 \"Composer\"",
-      "a 84x33 \"Process\"",
-      "a 64x33 \"Rates\"",
-      "a 54x38 \"Hire\"",
-      "a 66x33 \"Store\"",
+      "a.brand 32x32 \"Z\n      ZKTProductions\"",
+      "a 43x44 \"Hire\"",
       "a 83x17 \"Portfolio\"",
-      "a 107x36 \"I · Summary\"",
-      "a 108x36 \"II · Formats\"",
-      "a 138x36 \"III · Comparison\"",
-      "a 106x36 \"IV · Credits\"",
-      "a 105x36 \"V · Process\"",
-      "a 105x36 \"VI · Pricing\"",
-      "a 123x36 \"VII · Included\"",
-      "a 128x36 \"VIII · Libraries\"",
-      "a 78x36 \"IX · FAQ\"",
-      "a 102x36 \"X · Inquiry\"",
+      "a 110x40 \"I · Summary\"",
+      "a 111x40 \"II · Formats\"",
+      "a 141x40 \"III · Comparison\"",
+      "a 109x40 \"IV · Credits\"",
+      "a 108x40 \"V · Process\"",
+      "a 108x40 \"VI · Pricing\"",
+      "a 126x40 \"VII · Included\"",
+      "a 131x40 \"VIII · Libraries\"",
+      "a 81x40 \"IX · FAQ\"",
+      "a 105x40 \"X · Inquiry\"",
       "a 211x35 \"full composer biograph\"",
       "a 113x15 \"IMDb nm17333332\"",
       "a 83x15 \"Billboard Wire\"",
@@ -485,7 +478,13 @@
       "a 192x35 \"+1 (864) 430-0606\"",
       "a 203x35 \"Online scoring inquiry\"",
       "a.stretch 295x29 \"Cinematic horror sound\"",
-      "a 61x35 \"Zazie Catalogue\""
+      "a 61x35 \"Zazie Catalogue\"",
+      "a 187x19 \"production archive rec\"",
+      "a 141x19 \"IMDb (nm17333332)\"",
+      "a 258x19 \"30 full-length horror \"",
+      "a 144x19 \"portfolio home page\"",
+      "a 89x19 \"SoundBetter\"",
+      "a 90x19 \"FilmFreeway\""
     ],
     "links": 118,
     "words": 2624,
@@ -520,7 +519,7 @@
   "faq-390": {
     "scrollW": 390,
     "clientW": 390,
-    "scrollH": 17667,
+    "scrollH": 17671,
     "screenfuls": 20.9,
     "sections": [
       {
@@ -561,27 +560,26 @@
       }
     ],
     "overflowing": [
-      "a [w=64 right=443]",
-      "a [w=54 right=499]",
-      "a [w=66 right=568]",
-      "li [w=68 right=452]",
-      "a [w=68 right=452]",
-      "li [w=100 right=558]",
-      "a [w=100 right=558]",
-      "li [w=86 right=650]",
-      "a [w=86 right=650]",
-      "li [w=87 right=743]",
-      "a [w=87 right=743]"
+      "a [w=43 right=404]",
+      "a [w=55 right=458]",
+      "li [w=72 right=468]",
+      "a [w=72 right=468]",
+      "li [w=103 right=577]",
+      "a [w=103 right=577]",
+      "li [w=89 right=673]",
+      "a [w=89 right=673]",
+      "li [w=90 right=769]",
+      "a [w=90 right=769]"
     ],
     "tinyText": [
       "span 9px \"Productions\"",
-      "a 10px \"Reel\"",
-      "a 10px \"Work\"",
-      "a 10px \"Composer\"",
-      "a 10px \"Process\"",
-      "a 10px \"Rates\"",
-      "a 10px \"Hire\"",
-      "a 10px \"Store\"",
+      "a 9px \"Reel\"",
+      "a 9px \"Work\"",
+      "a 9px \"Composer\"",
+      "a 9px \"Process\"",
+      "a 9px \"Rates\"",
+      "a 9px \"Hire\"",
+      "a 9px \"Store\"",
       "p.eyebrow 10px \"Document 01 · Questi\"",
       "span 11px \"Portfolio\"",
       "li.crumb-sep 11px \"/\"",
@@ -597,35 +595,35 @@
     ],
     "smallTargets": [
       "a.skip 236x42 \"Skip to the document\"",
-      "a.brand 36x36 \"Z\n      ZKTProductions\"",
-      "a 56x33 \"Reel\"",
-      "a 63x33 \"Work\"",
-      "a 98x33 \"Composer\"",
-      "a 84x33 \"Process\"",
-      "a 64x33 \"Rates\"",
-      "a 54x33 \"Hire\"",
-      "a 66x33 \"Store\"",
+      "a.brand 32x32 \"Z\n      ZKTProductions\"",
+      "a 43x44 \"Hire\"",
       "a 83x17 \"Portfolio\"",
       "a 93x17 \"Documents\"",
       "a 164x19 \"hire a horror composer\"",
       "a 143x19 \"horror scoring rates\"",
       "a 116x19 \"scoring process\"",
       "a 201x19 \"selected horror produc\"",
-      "a 133x36 \"Commissioning\"",
-      "a 56x36 \"Fees\"",
-      "a 82x36 \"Process\"",
-      "a 70x36 \"Rights\"",
-      "a 68x36 \"Games\"",
-      "a 100x36 \"Catalogue\"",
-      "a 86x36 \"Working\"",
-      "a 87x36 \"This site\"",
+      "a 136x40 \"Commissioning\"",
+      "a 59x40 \"Fees\"",
+      "a 85x40 \"Process\"",
+      "a 73x40 \"Rights\"",
+      "a 72x40 \"Games\"",
+      "a 103x40 \"Catalogue\"",
+      "a 89x40 \"Working\"",
+      "a 90x40 \"This site\"",
       "button.btn.btn-ghost.btn-sm 135x40 \"Collapse all\"",
       "a 124x17 \"scoring quote form\"",
       "a 144x17 \"zaziediya@gmail.com\"",
       "a 242x42 \"The full list is on th\"",
       "a 95x17 \"See the full list\"",
       "a 332x39 \"licensing, rights and \"",
-      "a 95x17 \"licensing page\""
+      "a 95x17 \"licensing page\"",
+      "a 116x17 \"see game scoring\"",
+      "a 198x16 \"purchases, delivery an\"",
+      "a 65x17 \"catalogue\"",
+      "a 144x17 \"zaziediya@gmail.com\"",
+      "a 93x17 \"privacy notice\"",
+      "a 37x17 \"terms\""
     ],
     "links": 92,
     "words": 3272,
@@ -678,19 +676,18 @@
       }
     ],
     "overflowing": [
-      "a [w=64 right=443]",
-      "a [w=54 right=499]",
-      "a [w=66 right=568]"
+      "a [w=43 right=404]",
+      "a [w=55 right=458]"
     ],
     "tinyText": [
       "span 9px \"Productions\"",
-      "a 10px \"Reel\"",
-      "a 10px \"Work\"",
-      "a 10px \"Composer\"",
-      "a 10px \"Process\"",
-      "a 10px \"Rates\"",
-      "a 10px \"Hire\"",
-      "a 10px \"Store\"",
+      "a 9px \"Reel\"",
+      "a 9px \"Work\"",
+      "a 9px \"Composer\"",
+      "a 9px \"Process\"",
+      "a 9px \"Rates\"",
+      "a 9px \"Hire\"",
+      "a 9px \"Store\"",
       "span 11px \"Portfolio\"",
       "li.crumb-sep 11px \"/\"",
       "span 11px \"Scoring Inquiry\"",
@@ -706,14 +703,8 @@
     ],
     "smallTargets": [
       "a.skip 236x42 \"Skip to the document\"",
-      "a.brand 36x36 \"Z\n      ZKTProductions\"",
-      "a 56x33 \"Reel\"",
-      "a 63x33 \"Work\"",
-      "a 98x33 \"Composer\"",
-      "a 84x33 \"Process\"",
-      "a 64x33 \"Rates\"",
-      "a 54x33 \"Hire\"",
-      "a 66x33 \"Store\"",
+      "a.brand 32x32 \"Z\n      ZKTProductions\"",
+      "a 43x44 \"Hire\"",
       "a 83x17 \"Portfolio\"",
       "a 93x17 \"privacy notice\"",
       "a 150x17 \"accessibility statemen\"",
@@ -734,7 +725,13 @@
       "a 171x40 \"Sound design\"",
       "a 171x40 \"Game scoring\"",
       "a 171x40 \"Full showreel\"",
-      "a 171x40 \"Selected productions\""
+      "a 171x40 \"Selected productions\"",
+      "a 171x40 \"Composer biography\"",
+      "a 171x40 \"Scoring process\"",
+      "a 171x40 \"Rate card\"",
+      "a 171x40 \"Contact\"",
+      "a 171x40 \"Catalogue\"",
+      "a 171x40 \"Press kit\""
     ],
     "links": 67,
     "words": 857,
@@ -776,19 +773,18 @@
       }
     ],
     "overflowing": [
-      "a [w=64 right=443]",
-      "a [w=54 right=499]",
-      "a [w=66 right=568]"
+      "a [w=43 right=404]",
+      "a [w=55 right=458]"
     ],
     "tinyText": [
       "span 9px \"Productions\"",
-      "a 10px \"Reel\"",
-      "a 10px \"Work\"",
-      "a 10px \"Composer\"",
-      "a 10px \"Process\"",
-      "a 10px \"Rates\"",
-      "a 10px \"Hire\"",
-      "a 10px \"Store\"",
+      "a 9px \"Reel\"",
+      "a 9px \"Work\"",
+      "a 9px \"Composer\"",
+      "a 9px \"Process\"",
+      "a 9px \"Rates\"",
+      "a 9px \"Hire\"",
+      "a 9px \"Store\"",
       "span 11px \"Portfolio\"",
       "li.crumb-sep 11px \"/\"",
       "span 11px \"Horror Composer Show\"",
@@ -804,14 +800,8 @@
     ],
     "smallTargets": [
       "a.skip 236x42 \"Skip to the document\"",
-      "a.brand 36x36 \"Z\n      ZKTProductions\"",
-      "a 56x38 \"Reel\"",
-      "a 63x33 \"Work\"",
-      "a 98x33 \"Composer\"",
-      "a 84x33 \"Process\"",
-      "a 64x33 \"Rates\"",
-      "a 54x33 \"Hire\"",
-      "a 66x33 \"Store\"",
+      "a.brand 32x32 \"Z\n      ZKTProductions\"",
+      "a 43x44 \"Hire\"",
       "a 83x17 \"Portfolio\"",
       "a 201x19 \"selected horror produc\"",
       "a 174x19 \"horror film scoring ra\"",
@@ -832,7 +822,13 @@
       "a.inline-link 237x42 \"Cue notes: Variations \"",
       "a 100x17 \"Direct MP3 link\"",
       "a.inline-link 257x17 \"Cue notes: The Silence\"",
-      "a 100x17 \"Direct MP3 link\""
+      "a 100x17 \"Direct MP3 link\"",
+      "a.inline-link 225x17 \"Cue notes: Timeless Re\"",
+      "a 100x17 \"Direct MP3 link\"",
+      "a.inline-link 237x17 \"Cue notes: Quarter-Eat\"",
+      "a 100x17 \"Direct MP3 link\"",
+      "a.inline-link 247x42 \"Cue notes: Opaline Lam\"",
+      "a 263x42 \"Direct MP3 link\""
     ],
     "links": 178,
     "words": 1219,
@@ -860,10 +856,10 @@
     ]
   },
   "item-390": {
-    "scrollW": 478,
+    "scrollW": 390,
     "clientW": 390,
-    "scrollH": 6944,
-    "screenfuls": 6.7,
+    "scrollH": 6942,
+    "screenfuls": 8.2,
     "sections": [
       {
         "id": "entry",
@@ -875,7 +871,7 @@
       },
       {
         "id": "sample",
-        "h": 518
+        "h": 515
       },
       {
         "id": "related",
@@ -883,18 +879,18 @@
       }
     ],
     "overflowing": [
-      "a [w=54 right=499]",
-      "a [w=66 right=568]"
+      "a [w=43 right=404]",
+      "a [w=55 right=458]"
     ],
     "tinyText": [
       "span 9px \"Productions\"",
-      "a 10px \"Reel\"",
-      "a 10px \"Work\"",
-      "a 10px \"Composer\"",
-      "a 10px \"Process\"",
-      "a 10px \"Rates\"",
-      "a 10px \"Hire\"",
-      "a 10px \"Store\"",
+      "a 9px \"Reel\"",
+      "a 9px \"Work\"",
+      "a 9px \"Composer\"",
+      "a 9px \"Process\"",
+      "a 9px \"Rates\"",
+      "a 9px \"Hire\"",
+      "a 9px \"Store\"",
       "span 11px \"Zazie Productions\"",
       "li.crumb-sep 11px \"/\"",
       "span 11px \"Selected productions\"",
@@ -910,14 +906,8 @@
     ],
     "smallTargets": [
       "a.skip 236x42 \"Skip to the document\"",
-      "a.brand 36x36 \"Z\n      ZKTProductions\"",
-      "a 56x33 \"Reel\"",
-      "a 63x33 \"Work\"",
-      "a 98x33 \"Composer\"",
-      "a 84x33 \"Process\"",
-      "a 64x33 \"Rates\"",
-      "a 54x33 \"Hire\"",
-      "a 66x33 \"Store\"",
+      "a.brand 32x32 \"Z\n      ZKTProductions\"",
+      "a 43x44 \"Hire\"",
       "a 155x17 \"Zazie Productions\"",
       "a 187x17 \"Selected productions\"",
       "a 140x17 \"Selected productions\"",
@@ -938,7 +928,13 @@
       "a 148x17 \"The Room Forgets You\"",
       "a 104x17 \"scoring process\"",
       "a 50x17 \"contact\"",
-      "a 171x40 \"Portfolio\""
+      "a 171x40 \"Portfolio\"",
+      "a 171x40 \"Hire a horror composer\"",
+      "a 171x40 \"Hiring guide\"",
+      "a 171x40 \"Sound design\"",
+      "a 171x40 \"Game scoring\"",
+      "a 171x40 \"Full showreel\"",
+      "a 171x40 \"Selected productions\""
     ],
     "links": 75,
     "words": 529,
@@ -1095,10 +1091,10 @@
     ]
   },
   "store-360": {
-    "scrollW": 499,
+    "scrollW": 360,
     "clientW": 360,
-    "scrollH": 12354,
-    "screenfuls": 11.1,
+    "scrollH": 12486,
+    "screenfuls": 15.6,
     "sections": [
       {
         "id": "?",
@@ -1106,19 +1102,19 @@
       },
       {
         "id": "records",
-        "h": 2766
+        "h": 2842
       },
       {
         "id": "gear",
-        "h": 2854
+        "h": 2873
       },
       {
         "id": "sfx",
-        "h": 1168
+        "h": 1163
       },
       {
         "id": "tools",
-        "h": 1857
+        "h": 1899
       },
       {
         "id": "discography",
@@ -1134,28 +1130,28 @@
       }
     ],
     "overflowing": [
-      "a [w=66 right=568]",
-      "div.ticker-track [w=13036 right=12344]",
-      "span [w=310 right=652]",
-      "em [w=144 right=517]",
-      "span [w=379 right=1031]",
-      "b [w=12 right=665]",
-      "em [w=218 right=903]",
-      "span [w=279 right=1310]",
-      "b [w=10 right=1041]",
-      "em [w=154 right=1215]",
-      "span [w=311 right=1621]",
-      "b [w=9 right=1319]"
+      "a [w=43 right=404]",
+      "a [w=55 right=458]",
+      "div.ticker-track [w=13036 right=12340]",
+      "span [w=310 right=649]",
+      "em [w=144 right=513]",
+      "span [w=379 right=1027]",
+      "b [w=12 right=661]",
+      "em [w=218 right=899]",
+      "span [w=279 right=1307]",
+      "b [w=10 right=1038]",
+      "em [w=154 right=1212]",
+      "span [w=311 right=1617]"
     ],
     "tinyText": [
       "span 9px \"Productions\"",
-      "a 10px \"Reel\"",
-      "a 10px \"Work\"",
-      "a 10px \"Composer\"",
-      "a 10px \"Process\"",
-      "a 10px \"Rates\"",
-      "a 10px \"Hire\"",
-      "a 10px \"Store\"",
+      "a 9px \"Reel\"",
+      "a 9px \"Work\"",
+      "a 9px \"Composer\"",
+      "a 9px \"Process\"",
+      "a 9px \"Rates\"",
+      "a 9px \"Hire\"",
+      "a 9px \"Store\"",
       "li 9px \"Zazie Productions\"",
       "li 9px \"Catalogue No. 1\"",
       "li 9px \"Asheville, NC\"",
@@ -1171,14 +1167,8 @@
     ],
     "smallTargets": [
       "a.skip 239x42 \"Skip to the catalogue\"",
-      "a.brand 36x36 \"Z\n      ZKTProductions\"",
-      "a 56x33 \"Reel\"",
-      "a 63x33 \"Work\"",
-      "a 98x33 \"Composer\"",
-      "a 84x33 \"Process\"",
-      "a 64x33 \"Rates\"",
-      "a 54x33 \"Hire\"",
-      "a 66x38 \"Store\"",
+      "a.brand 32x32 \"Z\n      ZKTProductions\"",
+      "a 43x44 \"Hire\"",
       "button.amb 35x40 \"Room tone\"",
       "a 170x38 \"Records I\"",
       "a 170x38 \"Objects II\"",
@@ -1199,7 +1189,13 @@
       "button.chip 59x30 \"Ships\"",
       "a 62x10 \"Bandcamp\"",
       "button.preview 32x32 \"Listen\"",
-      "a.card-link 164x21 \"Anesthesia for the Sig\""
+      "a.card-link 159x21 \"Anesthesia for the Sig\"",
+      "a 148x22 \"Catalogue page: Anesth\"",
+      "button.preview 32x32 \"Listen\"",
+      "a.card-link 159x21 \"Opaline Lament (Life F\"",
+      "a 128x34 \"Catalogue page: Opalin\"",
+      "a.card-link 159x21 \"Spectral Ode to Synest\"",
+      "a 137x22 \"Catalogue page: Spectr\""
     ],
     "links": 106,
     "words": 2125,
