@@ -152,7 +152,7 @@ export const hubs: Hub[] = [
     name: "Composer biography",
     title: "Zazie Kanwar-Torge: Psychological Horror Composer Biography | Zazie Productions",
     description: "Biography of psychological horror composer Zazie Kanwar-Torge, founder of Zazie Productions LLC in Asheville, NC, scoring dark atmospheric films, series, and games.",
-    lastmod: "2026-10-21",
+    lastmod: "2026-10-26",
     images: [
       { loc: "https://horror.zazieproductions.com/images/headshot.jpg", caption: "Zazie Kanwar-Torge, psychological horror composer and founder of Zazie Productions LLC, Asheville NC.", title: "Zazie Kanwar-Torge - Psychological Horror Composer Biography" },
     ],
