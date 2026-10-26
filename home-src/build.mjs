@@ -163,15 +163,21 @@ const PAIRS = [
   ],
   [
     '<p class="mt-5 max-w-lg font-display text-xl leading-snug text-bone/90 sm:mt-6 sm:text-2xl">Bespoke Body Horror, Folk Horror, and Experimental Art House film scores — <span class="text-mist">bowed metal, prepared strings, and psychological dread composed to picture for prestige cinema, TV, and games.</span></p>',
-    '<p class="mt-5 max-w-md font-display text-xl leading-snug text-bone/90 sm:mt-6 sm:text-2xl">Original music for psychological horror, thrillers, and dark sci-fi, <span class="text-mist">composed for film, TV, and games.</span></p>',
+    '<p class="mt-5 max-w-md font-display text-xl leading-snug text-bone/90 sm:mt-6 sm:text-2xl">Experimental psychological horror film composer <span class="text-mist">for independent and arthouse cinema.</span></p>',
     HTML,
   ],
+  // Primary identity (2026-10-26): the hero subhead states the specialist
+  // positioning verbatim in the same two-tone slot. The bundle renders the
+  // subhead as two string children, so each half is its own pair; the H1
+  // above it ("Dark, atmospheric horror scores...") is deliberately kept.
+  ['Original music for psychological horror, thrillers, and dark sci-fi,', 'Experimental psychological horror film composer', BUNDLE],
+  ['composed for film, TV, and games.', 'for independent and arthouse cinema.', BUNDLE],
   ['Start an inquiry', 'Request a scoring quote', BOTH],
   // User-provided biography; HTML emphasis is shared with the static snapshot.
-  ["Zazie Kanwar-Torge is an award-winning composer, experimental producer, and multi-instrumentalist. Under Zazie Productions, he writes and performs original scores for psychological, folk, and body horror, supernatural thrillers, and dark sci-fi.", "<strong>Zazie Kanwar-Torge</strong> is an award-winning film composer, experimental producer, and multi-instrumentalist specializing in <strong>psychological horror, folk horror, body horror, supernatural thrillers, and dark science fiction</strong>. Through Zazie Productions, he creates original film scores and immersive sonic atmospheres that explore dread, dissonance, isolation, and the uncanny.", "bundle"],
+  ["Zazie Kanwar-Torge is an award-winning composer, experimental producer, and multi-instrumentalist. Under Zazie Productions, he writes and performs original scores for psychological, folk, and body horror, supernatural thrillers, and dark sci-fi.", "<strong>Zazie Kanwar-Torge</strong> is an award-winning film composer, experimental producer, and multi-instrumentalist specializing in <strong>experimental psychological horror for independent and arthouse cinema, folk horror, body horror, supernatural thrillers, and dark science fiction</strong>. Through Zazie Productions, he creates original film scores and immersive sonic atmospheres that explore dread, dissonance, isolation, and the uncanny.", "bundle"],
   [
     'specializing in <strong>experimental art house, psychological horror, folk horror, body horror, supernatural thrillers, and dark science fiction</strong>.',
-    'specializing in <strong>psychological horror, folk horror, body horror, supernatural thrillers, and dark science fiction</strong>.',
+    'specializing in <strong>experimental psychological horror for independent and arthouse cinema, folk horror, body horror, supernatural thrillers, and dark science fiction</strong>.',
     HTML,
   ],
   ["His palette combines struck strings, bowed metal, hybrid orchestration, and custom synths, shaped to picture for projects from shorts to features.", "Working at the intersection of cinematic scoring, musique concrète, and electroacoustic composition, his distinctive palette combines bowed metal, struck strings, experimental synthesis, and hybrid orchestration. His work has been featured at <strong>Ars Electronica 2026</strong>, performed in 20.4-channel spatial audio, and selected for international experimental music and film programs, including <strong>MUSLAB/Cero Records</strong> and <strong>EXiS in Seoul</strong>. Previously commissioned by the <strong>Black Mountain College Museum + Arts Center</strong>, he also develops original audio instruments and experimental sound libraries.</p><p>Drawing on a background in experimental film, sound art, and audiovisual composition, Zazie approaches each score as an extension of the film's psychological and emotional world, creating visceral, atmospheric music tailored to independent shorts, feature films, series, and horror video games.", "bundle"],
@@ -186,7 +192,8 @@ const PAIRS = [
     '<img alt="Zazie Kanwar-Torge: Experimental art house, psychological, folk, and body horror composer photographed with studio instrumentation." class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" src="/images/headshot.jpg"',
     HTML,
   ],
-  ['Zazie Productions LLC · Experimental Art House &amp; Psychological, Folk &amp; Body Horror Scores', 'Zazie Productions LLC · Atmospheric horror scores', HTML],
+  ['Zazie Productions LLC · Experimental Art House &amp; Psychological, Folk &amp; Body Horror Scores', 'Zazie Productions LLC · Psychological horror film scores', HTML],
+  [' · Atmospheric horror scores', ' · Psychological horror film scores', BUNDLE],
   ['[["/hire-a-composer","Hire a composer"],["/sound-design","Sound design"]', '[["/hire-a-composer","Hire a horror composer"],["/how-to-hire-a-horror-composer","Hiring guide"],["/sound-design","Sound design"]', BUNDLE],
   ['<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a composer</a><a href="/sound-design"', '<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a horror composer</a><a href="/how-to-hire-a-horror-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hiring guide</a><a href="/sound-design"', HTML],
   // Keep a direct, 44px quote action visible on phones; the full section menu
