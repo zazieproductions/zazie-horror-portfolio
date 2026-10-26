@@ -29,11 +29,11 @@ jobs:
           sleep 3
           curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:8080/
       - name: Capture
-        run: node .mobile-audit/shots.mjs
+        run: node .mobile-audit/shots.mjs && node .mobile-audit/probe.mjs
       - name: Commit captures back to the branch
         run: |
           git config user.name 'mobile audit'
           git config user.email 'audit@zazie.local'
-          git add -f .mobile-audit/out .mobile-audit/out2
+          git add -f .mobile-audit/out .mobile-audit/out2 .mobile-audit/probe.json
           git commit -m 'chore(audit): mobile captures [skip ci]' || echo 'nothing to commit'
           git push origin HEAD:${GITHUB_REF_NAME}

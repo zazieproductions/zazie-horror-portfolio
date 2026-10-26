@@ -1,6 +1,8 @@
+import fs from 'node:fs';
 import { chromium } from 'playwright';
 const BASE = process.env.BASE || 'http://127.0.0.1:8080';
 const targets = (process.env.TARGETS || '/hire-a-composer,/work/mike-has-a-visitor,/store,/').split(',');
+const results = {};
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true,
   userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1' });
@@ -36,8 +38,9 @@ for (const t of targets) {
     }
     return { W, scrollW: document.documentElement.scrollWidth, out: out.slice(0, 14) };
   });
-  console.log('\n===', t, 'clientW', res.W, 'scrollW', res.scrollW);
-  for (const o of res.out) console.log(' ', JSON.stringify(o));
+  results[t] = res;
   await page.close();
 }
 await browser.close();
+fs.writeFileSync('.mobile-audit/probe.json', JSON.stringify(results, null, 2));
+console.log(Object.keys(results).length, 'probed');
