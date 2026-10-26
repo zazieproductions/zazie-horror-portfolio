@@ -257,9 +257,9 @@ export const hubs: Hub[] = [
   {
     path: "/privacy",
     name: "Privacy notice",
-    title: "Privacy Notice: No Trackers, No Cookies | Zazie Productions",
-    description: "Privacy notice for horror.zazieproductions.com: zero advertising trackers, zero analytics cookies, local storage inventory, third-party media embeds, and NDA inquiry handling.",
-    lastmod: "2026-10-24",
+    title: "Privacy Notice: Cookieless Analytics, No Cookies | Zazie Productions",
+    description: "Privacy notice for horror.zazieproductions.com: cookieless Cloudflare Web Analytics disclosed, zero advertising trackers, zero cookies, local storage inventory, third-party media embeds, and NDA inquiry handling.",
+    lastmod: "2026-10-26",
     images: [],
     videos: [],
   },
