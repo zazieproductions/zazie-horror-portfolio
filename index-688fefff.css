@@ -173,6 +173,26 @@ p a { text-decoration:underline; text-underline-offset:3px; text-decoration-thic
   html, body { font-size:16px; }
   body, p, main p, main li, main dd, main blockquote, footer p, .text-sm, .text-xs, .zp-comp-note, .zp-bc-nojs { font-size:1rem !important; line-height:1.65 !important; }
 }
+
+/* 2026-10-25 desktop legibility floor (added on top of the mobile 16px rule
+   above). The bracket-utility label classes still ship at 8-11px at desktop
+   widths and on phones outside the body-text selector list; Lighthouse flags
+   anything under 12px as illegible. Floor them at 0.75rem (12px) at every
+   viewport while preserving the uppercase, tracked label design; the sm:
+   variants need the same floor inside their own media query. The mobile
+   16px body rule above still wins for running prose. The cinema close
+   control below is mirrored into index.html at 10px, so the body-element
+   prefix gives this override the specificity needed to win that later,
+   equal-class rule without touching the byte-identical mirrored block. */
+.text-\[8px\],
+.text-\[9px\],
+.text-\[10px\],
+.text-\[11px\] { font-size:.75rem; }
+@media(min-width:40rem){
+  .sm\:text-\[10px\],
+  .sm\:text-\[11px\] { font-size:.75rem; }
+}
+body .zp-player-close { font-size:12px; }
 /* Cinema players stay upright at their real size. The provider owns the
      playback bar; site actions live in the caption BELOW the iframe. */
   .zp-vcard{--zp-frame-w:100%}

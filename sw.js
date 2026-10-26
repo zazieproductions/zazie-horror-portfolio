@@ -96,7 +96,15 @@
 // wide cosine-eased intersected top/left/bottom masks, and radial void scrim.
 // v42: merge the 30-cue showreel with the latest homepage updates. The Beautiful
 // Wrongness is the default, The Fatal Overdose follows, and two cues are retired.
-const CACHE_NAME = 'zazie-v42';
+// v43: homepage rendering/SEO pass — (1) precache install uses
+// cache:'force-cache' instead of the old cache:'reload', which forced a second
+// network download of every precached asset (hero image, CSS, JS, fonts) even
+// though the page had just fetched them; hashed assets are immutable so the
+// HTTP cache is authoritative, and '/' is network-first at fetch time anyway.
+// (2) The React bundle no longer mounts for crawlers, and the homepage
+// stylesheet carries the new AA link-contrast/type-floor rules under a fresh
+// content hash below.
+const CACHE_NAME = 'zazie-v43';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -104,8 +112,8 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-normal.woff2',
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
-  '/index-63bc4dcc.css',
-  '/index-e3d8fe45.js',
+  '/index-688fefff.css',
+  '/index-4c5bfc24.js',
   '/store-1e13177a.css',
   '/store-3fc01be0.js',
   '/legal-f4e3a5fb.css',
@@ -121,7 +129,12 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then(async (cache) => {
-      // Use allSettled to ensure installation succeeds even if an asset is temporarily delayed
+      // Use allSettled to ensure installation succeeds even if an asset is temporarily delayed.
+      // force-cache on purpose: the old cache:'reload' bypassed the browser HTTP cache and
+      // re-downloaded every precached asset on every install/SW update, duplicating the page's
+      // own requests for the hero image, stylesheet, bundle and fonts. Content-hashed assets
+      // are served immutable (see _headers), so an HTTP-cache hit is byte-identical; the '/'
+      // document revalidates per its own Cache-Control and stays network-first at fetch time.
       const fetchPromises = PRECACHE_ASSETS.map(async (url) => {
         try {
           const res = await fetch(url, { cache: 'force-cache' });

@@ -17,11 +17,37 @@ export const VERIFIED_SAME_AS = [
   'https://credits.muso.ai/profile/4010f3b7-9a87-4961-8dfd-917de0ba787e',
 ] as const;
 
+/** Topical references only, never identity aliases or production credits. */
+export const HORROR_REFERENCE_TOPICS = [
+  {
+    '@type': 'Thing',
+    name: 'A24 film aesthetic',
+    description: 'A reference topic in prestige horror scoring; not an affiliation or production credit.',
+    url: 'https://en.wikipedia.org/wiki/A24',
+    sameAs: ['https://en.wikipedia.org/wiki/Art_film'],
+  },
+  {
+    '@type': 'Thing',
+    name: 'Mica Levi scoring techniques',
+    description: 'A reference topic in experimental film scoring; not a collaboration or credit.',
+    url: 'https://en.wikipedia.org/wiki/Mica_Levi',
+    sameAs: ['https://en.wikipedia.org/wiki/Film_score'],
+  },
+  {
+    '@type': 'Thing',
+    name: 'Folk Horror tropes',
+    description: 'Genre conventions used as reference topics for horror scoring.',
+    url: 'https://en.wikipedia.org/wiki/Folk_horror',
+    sameAs: ['https://www.imdb.com/search/title/?genres=horror&keywords=folk-horror'],
+  },
+] as const;
+
 /**
  * External Knowledge Graph authority entities linking Zazie Kanwar-Torge's
  * core compositional specialties to canonical Wikipedia and IMDb genre/keyword nodes.
  */
 export const KNOWS_ABOUT_ENTITIES = [
+  ...HORROR_REFERENCE_TOPICS,
   {
     '@type': 'Thing',
     name: 'Experimental Art House Cinema Scoring',

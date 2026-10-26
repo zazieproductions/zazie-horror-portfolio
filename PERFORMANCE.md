@@ -4,6 +4,100 @@ Date: 2026-09-25 · Branch: `arena/01a0d613-zazie-horror-portfolio`
 Scope: horror.zazieproductions.com (static prerendered React build on an edge host with `_headers`/`_redirects` semantics, i.e. Netlify/Cloudflare-Pages style).
 
 
+## Crawler render path, MusicComposition schema and AA link contrast: 2026-10-25
+
+An external SEO/quality audit flagged three things: a JavaScript
+"double-loading" render path, no `MusicComposition` structured data on the
+homepage, and link/type contrast below WCAG AA. The same audit was
+independently implemented on `main` in parallel (the `#e65650` link-contrast,
+prose-underline and mobile 16px rules, plus `CreativeWork`/`MusicPlaylist`
+homepage schema and a `force-cache` precache); this branch rebases onto that
+work and adds the pieces it did not cover. All of it works without touching
+the React source (this repo only carries the shipped, patched bundle) and is
+covered by `tools/home-mount.test.mjs`.
+
+### 1. The double-paint is removed from the crawler render path
+
+- **Root cause, confirmed in the bundle:** the home entry is
+  `createRoot(document.getElementById("root")).render(...)`, never
+  `hydrateRoot`. After the page's static HTML had already painted, the
+  idle-scheduled bundle tore the whole `#root` subtree down and rebuilt it.
+  Markup is mirrored and every asset URL is cache-identical, so human-visible
+  flicker was already minimal, but the DOM work and asset re-resolution were
+  real.
+- **Crawler gate added to the inline mount module in `index.html`**
+  (`ZP_RUNTIME_BOT`, the same UA list the service-worker registration and the
+  archive-boot gate already use): bots, spiders, headless clients and
+  Lighthouse return before the dynamic `import("/index-<hash>.js")`, so the
+  indexed render is exactly the prerendered document — complete copy, 30
+  showreel rows, menus and the vanilla film player — with no teardown and no
+  bundle request. Human visitors keep every React behaviour (showreel audio,
+  poster lightbox, mobile menu) at `load` + idle, exactly as before.
+  `tools/home-mount.test.mjs` drives the gate in a VM harness for
+  Googlebot, Bingbot, Yandex, DuckDuckBot, Lighthouse and Headless Chrome
+  (no import) vs. desktop/mobile Chrome, Safari and Firefox (import
+  scheduled).
+- **Service-worker precache no longer double-downloads the first view.**
+  `sw.js` install used `fetch(url, { cache: "reload" })` for every precache
+  entry, which bypasses the browser HTTP cache and re-fetches the hero image,
+  stylesheet, bundle and fonts that the page itself had just downloaded — the
+  duplicate request chain the audit's waterfall showed. The merged
+  implementation pins `fetch(url, { cache: "force-cache" })`: hashed assets
+  are immutable (`_headers`), so the HTTP-cache bytes are identical and
+  authoritative, and the `/` document still revalidates per its own
+  `Cache-Control` and stays network-first at fetch time. Cache name moved
+  `zazie-v42` → `zazie-v43`.
+- **Not done, still the documented end-state:** converting
+  `createRoot` → `hydrateRoot` needs the React source repo and a real-browser
+  hydration diff (the static snapshot and the client tree have known
+  structural differences); see the residual-risks entry below. The gate makes
+  that polish irrelevant to indexing and removes the duplicate network
+  transfers, so the remaining cost is idle main-thread DOM work for humans.
+
+### 2. `MusicComposition` structured data on the homepage
+
+- `src/lib/home.ts` emits an `ItemList` (`/#cue-catalog`) of six curated
+  `MusicComposition` works — spanning Psychological Orchestral, Body Horror,
+  Horror Stinger and Dark Ambient and including both queue-promoted cues —
+  each with genre, ISO-8601 duration, the verified `#person` composer/creator
+  reference and an embedded `AudioObject` pointing at the playable
+  same-origin MP3. It joins the `CreativeWork` portfolio and `MusicPlaylist`
+  showreel graphs that landed on `main` in the same audit cycle, giving the
+  homepage a seven-node graph.
+- Every node reuses the exact `#composition`/`#audio` `@id` of its
+  `/reel/<slug>` page, so the homepage and item graphs merge instead of
+  defining competing works. The curation is data-owned in
+  `src/data/home.ts` (`featuredCueSlugs`, throwing lookup against `cues.ts`),
+  and `scripts/verify.mjs` validates positions, `@id`s, durations, genres,
+  composer references and the on-disk MP3 for every entry; the homepage
+  schema count check is now seven nodes and the `VideoObject` ban is
+  unchanged.
+
+### 3. AA link contrast and the legibility floor
+
+- Brand red `#c41e1e` measures 3.49:1 on void and 2.82:1 on ash — under the
+  4.5:1 AA threshold for text (the gap already named on `/accessibility`).
+  The merged stylesheet applies the document-page token `#e65650`
+  (4.61–5.71:1 across void/ink/smoke/ash) to every `.text-blood` foreground,
+  including hover and group-hover states; `.bg-blood` fills keep `#c41e1e`
+  with bone text, which passes at 4.98:1. A `p a` rule gives every prose link
+  a persistent underline, so color is no longer a link's sole affordance
+  (the Lighthouse "links rely on color" failure), and the mist secondary
+  colors are brightened (`#b5b0a8`, `#9a9590`).
+- Type: `main`'s mobile media query renders body prose at 16px below 768px.
+  This branch adds the missing desktop legibility floor: the 8–11px bracket
+  utilities (174 homepage elements, including the `sm:` variants) now render
+  at 12px — Lighthouse's legible-size threshold — at every viewport while
+  keeping the uppercase/tracked label design, and the cinema close control
+  reaches 12px via a specificity-prefixed `body .zp-player-close` rule that
+  leaves the byte-identical mirrored cinema block untouched.
+- The stylesheet content changed, so it was renamed
+  `index-63bc4dcc.css` → `index-688fefff.css` (sha256 of the file bytes, the
+  convention the film-player hash test enforces) and the `index.html` link and
+  `sw.js` precache entry moved with it. `/accessibility` now names `/store`
+  as the only remaining small-label red gap.
+
+
 ## Archive boot restored: 2026-10-22
 
 The terminal loading screen is back in `index.html`. This records what was
@@ -277,7 +371,7 @@ not claim a Core Web Vital improvement without a real mobile run.
 
 ## 4. Residual risks & decisions for humans
 
-- **Hydration upgrade (recommended, not shipped)**: the correct end-state is regenerating the static HTML from the app and switching `createRoot`→`hydrateRoot` (eliminates the DOM teardown entirely and lets the flicker `<style>` hacks in head be deleted). Not shipped because it requires a real-browser hydration diff to prove; with JS deferred to idle the teardown cost is now off the critical path, so this is polish, not a bottleneck. Owner: engineering, with source repo.
+- **Hydration upgrade (recommended, not shipped; indexing impact already removed)**: the correct end-state is regenerating the static HTML from the app and switching `createRoot`→`hydrateRoot` (eliminates the DOM teardown entirely and lets the flicker `<style>` hacks in head be deleted). Not shipped because it requires a real-browser hydration diff to prove; with JS deferred to idle the teardown cost is now off the critical path, so this is polish, not a bottleneck. As of 2026-10-25 the mount is also UA-gated (`ZP_RUNTIME_BOT`): crawlers, headless clients and Lighthouse never load the bundle, so no indexing agent experiences the teardown or the redundant asset chain — only human visitors do, at idle. Owner: engineering, with source repo.
 - **AVIF preload on non-AVIF desktop browsers** (<2% by 2026): the `media="(min-width:1024px)"` preload fetches the AVIF which `<picture>` then doesn't use (console warning only). Accepted.
 - **JS-gated interactivity**: play buttons / sticky player appear at `load`+idle instead of at parse. Static showreel list and CTAs are fully usable before that. Accepted; measure INP/engagement and revisit if support inquiries drop.
 - **Audio re-encode** (12.5 MB longest track at ~256 kbps): left untouched deliberately, streaming is progressive and bitrate is a brand-quality call. If mobile data matters more than master fidelity, re-encode to 160 kbps CBR (+ update immutable cache via filename change). Owner: composer.

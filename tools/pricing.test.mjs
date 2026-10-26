@@ -318,6 +318,9 @@ test('homepage contact keeps a single neutral format and tone default', () => {
   const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8');
   const contactIntro = 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.';
   assert.equal(html.split(contactIntro).length - 1, 1, 'homepage contact copy is not duplicated');
+  const bundlePath = html.match(/"(\/index-[a-f0-9]{8}\.js)"/)[1];
+  const bundle = readFileSync(new URL(`..${bundlePath}`, import.meta.url), 'utf8');
+  assert.ok(!bundle.includes(contactIntro + ' The form prepares an email for you to review and send.'), 'hydrated contact copy does not repeat the email explanation');
   assert.match(html, /"dateModified": "2026-10-24"/);
   for (const label of ['Theme / tone', 'Format']) {
     const labelIndex = html.indexOf(`aria-label="${label}"`);

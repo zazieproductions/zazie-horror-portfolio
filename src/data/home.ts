@@ -28,6 +28,22 @@ export const featuredPosterSlugs = [
 ] as const;
 
 /**
+ * Cues surfaced as MusicComposition structured data on the homepage. Every
+ * slug must exist in cues.ts (home.ts builds a throwing lookup for them), and
+ * every entry is also visible in the homepage showreel queue, so the graph
+ * describes content actually on the page rather than inventing works. The
+ * set spans the mood taxonomy and keeps the two queue-promoted cues first.
+ */
+export const featuredCueSlugs = [
+  'the-beautiful-wrongness',
+  'needle-in-the-nerve',
+  'the-silence-began-crawling',
+  'the-fatal-overdose',
+  'dissociative-amnesia',
+  'ominous-drone',
+] as const;
+
+/**
  * User-supplied artwork, resized into the same responsive AVIF/JPEG ladder as
  * the production posters. `fit: "contain"` preserves the complete 3:4 artwork
  * inside the wall's 2:3 cards instead of cropping the title at the sides.
