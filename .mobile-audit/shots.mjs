@@ -53,7 +53,7 @@ for (const [vpName, viewport] of VIEWPORTS) {
     let i = 0;
     for (let y = 0; y < total && i < 26; y += step, i += 1) {
       await page.evaluate((sy) => window.scrollTo(0, sy), y);
-      await page.waitForTimeout(320);
+      await page.waitForTimeout(750);
       const file = `${name}-${vpName}-${String(i).padStart(2, '0')}.jpg`;
       await page.screenshot({ path: path.join(OUT, file), type: 'jpeg', quality: 68 });
       shots.push({ file, y });

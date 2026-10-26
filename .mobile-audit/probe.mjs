@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import { chromium } from 'playwright';
 const BASE = process.env.BASE || 'http://127.0.0.1:8080';
-const targets = (process.env.TARGETS || '/hire-a-composer,/work/mike-has-a-visitor,/store,/').split(',');
+const targets = (process.env.TARGETS || '/hire-a-composer,/work/mike-has-a-visitor,/store,/faq,/how-to-hire-a-horror-composer,/privacy,/licensing,/').split(',');
 const results = {};
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true,

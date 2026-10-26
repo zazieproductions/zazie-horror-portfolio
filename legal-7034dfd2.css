@@ -654,11 +654,23 @@ td code,th code{white-space:nowrap}
 @media (max-width:767px) {
   /* -- 1. Tables ---------------------------------------------------------- */
   .table-wrap{-webkit-overflow-scrolling:touch;scrollbar-width:thin}
-  table{min-width:0;font-size:.78rem;line-height:1.6}
+  table{font-size:.78rem;line-height:1.6}
   thead th,tbody th{white-space:normal}
   th,td{padding:.55rem .7rem}
   thead th{font-size:.5625rem;letter-spacing:.16em}
   caption{padding:.7rem .7rem;font-size:.5625rem;letter-spacing:.2em}
+
+  /* A two-column fact table (label + value, no <thead>) is a definition list
+     with borders: it must fit the phone. overflow-wrap:anywhere drops the
+     table's min-content width to a single character, so the table wraps
+     inside the reading column instead of forcing a 500px scroll area. */
+  table:not(:has(thead)){min-width:0;width:100%}
+  table:not(:has(thead)) th,
+  table:not(:has(thead)) td{overflow-wrap:anywhere;hyphens:auto}
+
+  /* A five-column comparison table cannot stack into 358px without becoming
+     unreadable, so it keeps a floor and scrolls inside .table-wrap. */
+  table:has(thead){min-width:30rem}
 
   /* -- 2. Section jump ---------------------------------------------------- */
   .doc-jump{padding:.85rem .9rem;margin-bottom:1.5rem}

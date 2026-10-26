@@ -122,7 +122,7 @@ const PRECACHE_ASSETS = [
   '/index-4c5bfc24.js',
   '/store-2d68d26d.css',
   '/store-3fc01be0.js',
-  '/legal-85812d2d.css',
+  '/legal-7034dfd2.css',
   '/legal-707b2345.js',
   '/estimator-fc4ddfe0.css',
   '/estimator-2b081a5e.js',
