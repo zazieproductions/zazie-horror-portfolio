@@ -102,9 +102,11 @@
 // though the page had just fetched them; hashed assets are immutable so the
 // HTTP cache is authoritative, and '/' is network-first at fetch time anyway.
 // (2) The React bundle no longer mounts for crawlers, and the homepage
-// stylesheet carries the new AA link-contrast/type-floor rules under a fresh
-// content hash below.
-const CACHE_NAME = 'zazie-v43';
+// stylesheet carries the AA link-contrast and prose-underline rules under a
+// fresh content hash below. The 2026-10-25 blanket type floors were reverted
+// on 2026-10-26, so the design's original 8-12px label scale is back and the
+// hash plus this cache version (v43 -> v44) move together.
+const CACHE_NAME = 'zazie-v44';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -112,7 +114,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-normal.woff2',
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
-  '/index-688fefff.css',
+  '/index-3465aa44.css',
   '/index-4c5bfc24.js',
   '/store-1e13177a.css',
   '/store-3fc01be0.js',

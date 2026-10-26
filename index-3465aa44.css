@@ -146,14 +146,16 @@ main p a, main li a, main dd a, main dt a { padding-block:.4em; }
 main a[href^="mailto:"], main a[href^="tel:"], main a[href="#reviews"] { min-height:44px; }
 @media (prefers-reduced-motion:reduce) { .zp-skip { transition:none; } }
 
-/* 2026-10-22 WCAG AA contrast + 2026-10-25 Link Contrast, Underline & Mobile 16px Body Text.
+/* 2026-10-22 WCAG AA contrast + 2026-10-25 Link Contrast and Underlines.
    The brand red #c41e1e is 3.4:1 on the ink background, failing WCAG AA 4.5:1
    for links and body copy. Foreground text/links using .text-blood now use
    #e65650 (5.71:1 on #030303, 5.54:1 on #080808, 5.18:1 on #121212, 4.61:1 on
    #1e1e1e), while .bg-blood buttons keep #c41e1e fill with #f0ebe3 text (4.98:1).
    Links inside <p> tags always carry text-decoration:underline so search engines
    and low-vision readers distinguish interactive links from surrounding prose.
-   On mobile viewports (max-width:767px), all body text renders at >=16px (1rem).
+   Type sizes stay as designed: the 2026-10-25 blanket 12px/16px floors are
+   reverted, so the 8-12px uppercase label scale and the mobile prose size are
+   exactly what they were on 2026-10-25 morning.
    Keep this before the "Cinema players stay upright" marker: the film-player
    test asserts that everything from the marker to EOF is byte-identical to the
    inline <style> in index.html. */
@@ -169,30 +171,7 @@ main a[href^="mailto:"], main a[href^="tel:"], main a[href="#reviews"] { min-hei
 .text-mist { color:#b5b0a8; }
 .text-mist\/60, .text-mist\/80 { color:#9a9590; }
 p a { text-decoration:underline; text-underline-offset:3px; text-decoration-thickness:1px; }
-@media (max-width:767px) {
-  html, body { font-size:16px; }
-  body, p, main p, main li, main dd, main blockquote, footer p, .text-sm, .text-xs, .zp-comp-note, .zp-bc-nojs { font-size:1rem !important; line-height:1.65 !important; }
-}
 
-/* 2026-10-25 desktop legibility floor (added on top of the mobile 16px rule
-   above). The bracket-utility label classes still ship at 8-11px at desktop
-   widths and on phones outside the body-text selector list; Lighthouse flags
-   anything under 12px as illegible. Floor them at 0.75rem (12px) at every
-   viewport while preserving the uppercase, tracked label design; the sm:
-   variants need the same floor inside their own media query. The mobile
-   16px body rule above still wins for running prose. The cinema close
-   control below is mirrored into index.html at 10px, so the body-element
-   prefix gives this override the specificity needed to win that later,
-   equal-class rule without touching the byte-identical mirrored block. */
-.text-\[8px\],
-.text-\[9px\],
-.text-\[10px\],
-.text-\[11px\] { font-size:.75rem; }
-@media(min-width:40rem){
-  .sm\:text-\[10px\],
-  .sm\:text-\[11px\] { font-size:.75rem; }
-}
-body .zp-player-close { font-size:12px; }
 /* Cinema players stay upright at their real size. The provider owns the
      playback bar; site actions live in the caption BELOW the iframe. */
   .zp-vcard{--zp-frame-w:100%}

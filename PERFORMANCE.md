@@ -73,7 +73,7 @@ covered by `tools/home-mount.test.mjs`.
   schema count check is now seven nodes and the `VideoObject` ban is
   unchanged.
 
-### 3. AA link contrast and the legibility floor
+### 3. AA link contrast (type-floor experiment reverted)
 
 - Brand red `#c41e1e` measures 3.49:1 on void and 2.82:1 on ash — under the
   4.5:1 AA threshold for text (the gap already named on `/accessibility`).
@@ -84,18 +84,22 @@ covered by `tools/home-mount.test.mjs`.
   a persistent underline, so color is no longer a link's sole affordance
   (the Lighthouse "links rely on color" failure), and the mist secondary
   colors are brightened (`#b5b0a8`, `#9a9590`).
-- Type: `main`'s mobile media query renders body prose at 16px below 768px.
-  This branch adds the missing desktop legibility floor: the 8–11px bracket
-  utilities (174 homepage elements, including the `sm:` variants) now render
-  at 12px — Lighthouse's legible-size threshold — at every viewport while
-  keeping the uppercase/tracked label design, and the cinema close control
-  reaches 12px via a specificity-prefixed `body .zp-player-close` rule that
-  leaves the byte-identical mirrored cinema block untouched.
+- Type: the blanket type floors added on 2026-10-25 (every 8–11px bracket
+  utility forced to 12px at all viewports, and all mobile prose forced to
+  16px) were **reverted on 2026-10-26**. They overrode the design's 8–12px
+  uppercase label scale site-wide, which read as a typographic regression on
+  the homepage: labels, nav and footer rows grew out of their column widths.
+  The stylesheet now keeps exactly the original type scale, including the
+  mobile prose size; only the AA red, the prose-link underlines and the
+  brightened mist tints are carried over from that pass. The narrower
+  `max-width:639px` 12px label floor from 2026-10-22 is untouched.
 - The stylesheet content changed, so it was renamed
-  `index-63bc4dcc.css` → `index-688fefff.css` (sha256 of the file bytes, the
+  `index-688fefff.css` → `index-3465aa44.css` (sha256 of the file bytes, the
   convention the film-player hash test enforces) and the `index.html` link and
-  `sw.js` precache entry moved with it. `/accessibility` now names `/store`
-  as the only remaining small-label red gap.
+  `sw.js` precache entry moved with it; the SW cache name moves
+  `zazie-v43` → `zazie-v44` so returning visitors pick the reverted type up.
+  `/accessibility` now names `/store` as the only remaining small-label red
+  gap and no longer claims the removed type floors.
 
 
 ## Archive boot restored: 2026-10-22
