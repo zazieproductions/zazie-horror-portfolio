@@ -10,6 +10,7 @@ const browser = await chromium.launch();
 const report = {};
 
 async function run(name, blockBundle) {
+  try {
   const ctx = await browser.newContext({
     viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true,
     userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1',
@@ -63,6 +64,10 @@ async function run(name, blockBundle) {
   }
   report[name] = { blockBundle, before, opened, closedByLink, errors };
   await ctx.close();
+  } catch (error) {
+    report[name] = { blockBundle, error: String(error) };
+  }
+  fs.writeFileSync(path.join(OUT, 'menu.json'), JSON.stringify(report, null, 2));
 }
 
 await run('prerendered-no-bundle', true);
