@@ -474,6 +474,15 @@ i{font-style:italic}
    clamped to three lines with the full text one tap away on the record page.
    ========================================================================== */
 @media (max-width:639px) {
+  /* -- Masthead ----------------------------------------------------------- */
+  /* The tabs are a horizontal scroller on phones. They were 33px tall - under
+     the 44px touch target - and the strip gave no sign that two more links sat
+     off-screen. Taller rows, tighter tracking, and a fade at the right edge. */
+  .masthead-inner{gap:.75rem;height:3.5rem}
+  .brand .mark{width:2rem;height:2rem;font-size:1rem}
+  .tabs{gap:0;-webkit-mask-image:linear-gradient(90deg,#000 84%,transparent 100%);mask-image:linear-gradient(90deg,#000 84%,transparent 100%)}
+  .tabs a{display:inline-flex;align-items:center;min-height:44px;padding:.5rem .55rem;font-size:.5625rem;letter-spacing:.16em}
+
   /* -- Hero --------------------------------------------------------------- */
   .hero-inner{padding:2.1rem 0 2rem;gap:1.75rem}
   .hero h1{font-size:clamp(2.4rem,11.5vw,3rem);line-height:1}
@@ -507,9 +516,12 @@ i{font-style:italic}
 
   /* -- Card: cover left, facts right -------------------------------------- */
   .grid{gap:.7rem}
-  .card{flex-direction:row;align-items:stretch}
+  /* min-width:0 on both halves: a flex item defaults to min-width:auto, so the
+     text column (long titles, spec values) kept its intrinsic width and pushed
+     the card - and the document - 80px past the viewport on /store. */
+  .card{flex-direction:row;align-items:stretch;min-width:0;overflow:hidden}
   .card-media{
-    flex:0 0 42%;aspect-ratio:auto;min-height:100%;padding:.5rem;
+    flex:0 0 44%;min-width:0;aspect-ratio:auto;min-height:100%;padding:.45rem;
     border-bottom:0;border-right:1px solid var(--ash);
   }
   [data-collection="records"] .card-media img{height:100%}
@@ -522,7 +534,7 @@ i{font-style:italic}
   .preview-label{display:none}
   .preview-icon{width:1.35rem;height:1.35rem}
 
-  .card-body{gap:.4rem;padding:.75rem .8rem .8rem}
+  .card-body{gap:.4rem;padding:.7rem .75rem .75rem;min-width:0}
   .card-kicker{font-size:.5rem;letter-spacing:.2em}
   .card-title{font-size:1.1rem;line-height:1.15}
   .card-record{margin-top:-.15rem;font-size:.5rem;letter-spacing:.1em}

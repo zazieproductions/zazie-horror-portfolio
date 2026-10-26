@@ -70,8 +70,20 @@
    volume/progress UI appear cramped or inverted. Give it room without
    cropping, scaling or rotating the film or its native controls. */
 @media (max-width: 767px) {
+  /* Give the film the width of the phone, not a width derived from a height.
+     The old rule set min-height:260px while the frame carries aspect-ratio
+     16/9, so the box resolved to 462px wide inside a 358px reading column and
+     the whole page scrolled sideways by 88px. A fixed height with width:100%
+     keeps the roomy frame (and Drive's toolbar) without the overflow. */
   .entry-embed {
-    min-height: 260px;
+    aspect-ratio: auto;
+    height: clamp(210px, 66vw, 300px);
+    min-height: 0;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .entry-embed iframe {
+    max-width: 100% !important;
   }
 }
 

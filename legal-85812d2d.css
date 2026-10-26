@@ -669,7 +669,20 @@ td code,th code{white-space:nowrap}
     -webkit-overflow-scrolling:touch;scroll-snap-type:x proximity;
   }
   .doc-jump ul::-webkit-scrollbar{display:none}
-  .doc-jump a{flex:none;white-space:nowrap;scroll-snap-align:start;padding:.5rem .7rem}
+  .doc-jump a{flex:none;white-space:nowrap;scroll-snap-align:start;padding:.6rem .8rem;min-height:40px;display:inline-flex;align-items:center}
+
+  /* -- Masthead ----------------------------------------------------------- */
+  /* Seven hub links scroll horizontally in a 358px strip. They were 33px tall
+     (under the 44px touch target) with no affordance that more sat off-screen:
+     taller rows, tighter tracking, and a fade at the right edge. */
+  .masthead-inner{gap:.75rem;height:3.5rem}
+  .brand .mark{width:2rem;height:2rem;font-size:1rem}
+  .tabs{gap:0;-webkit-mask-image:linear-gradient(90deg,#000 84%,transparent 100%);mask-image:linear-gradient(90deg,#000 84%,transparent 100%)}
+  .tabs a{display:inline-flex;align-items:center;min-height:44px;padding:.5rem .55rem;font-size:.5625rem;letter-spacing:.16em}
+  .masthead .progress{display:none}
+
+  /* Inline breadcrumbs and prose links stay inline by design; only the chrome
+     gets full-height touch rows. */
 
   /* -- 3. Reading rhythm -------------------------------------------------- */
   .doc{padding-block:1.75rem 3rem}
