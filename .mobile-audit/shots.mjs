@@ -124,15 +124,15 @@ for (const [vpName, viewport] of VIEWPORTS) {
       const key = `${Math.round(box.y)}-${Math.round(box.height)}`;
       if (seen.has(key)) continue;
       seen.add(key);
-      const file = `${name}-${vpName}-block${String(index).padStart(2, '0')}.png`;
-      const clipH = Math.min(box.height, 4000);
+      const file = `${name}-${vpName}-block${String(index).padStart(2, '0')}.jpg`;
+      const clipH = Math.min(box.height, 3600);
       await page.screenshot({
         path: path.join(OUT, file),
+        type: 'jpeg',
+        quality: 72,
         clip: { x: 0, y: Math.max(0, box.y), width: viewport.width, height: clipH },
         captureBeyondViewport: true,
-      }).catch(async () => {
-        await handle.screenshot({ path: path.join(OUT, file) }).catch(() => {});
-      });
+      }).catch(() => {});
       shots.push({ file, y: Math.round(box.y), h: Math.round(box.height) });
       index += 1;
     }
