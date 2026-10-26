@@ -39,6 +39,13 @@ async function run(name, blockBundle) {
       panelHeight: r ? Math.round(r.height) : 0,
       items: panel ? [...panel.querySelectorAll('a')].map((a) => a.textContent.trim()) : [],
       firstLink: panel ? panel.querySelector('a')?.getAttribute('href') : null,
+      inHeader: panel ? !!panel.closest('header') : null,
+      style: panel ? (() => {
+        const cs = getComputedStyle(panel);
+        return { background: cs.backgroundColor, z: cs.zIndex, position: cs.position, opacity: cs.opacity };
+      })() : null,
+      stackAt100: document.elementsFromPoint(195, 100).slice(0, 4).map((el) => el.tagName + '.' + (el.className || '').toString().split(' ').slice(0, 2).join('.')),
+      stackAt300: document.elementsFromPoint(195, 300).slice(0, 4).map((el) => el.tagName + '.' + (el.className || '').toString().split(' ').slice(0, 2).join('.')),
     };
   });
   await page.screenshot({ path: path.join(OUT, `menu-${name}-open.jpg`), type: 'jpeg', quality: 70 });

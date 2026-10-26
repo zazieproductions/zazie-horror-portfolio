@@ -792,13 +792,16 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
      only until the React bundle replaces the prerendered header. */
   @media (max-width:1279px){
     .zp-mobile-fallback{
-      position:absolute;left:0;right:0;top:100%;
+      position:absolute;left:0;right:0;top:100%;z-index:60;
       display:flex;flex-direction:column;
       max-height:calc(100svh - 3.5rem);overflow-y:auto;
       padding:.35rem 1rem 1rem;
       border-top:1px solid rgba(255,255,255,.06);
       border-bottom:1px solid rgba(255,255,255,.08);
-      background:rgba(3,3,3,.97);
+      /* Opaque plate, not a translucent one: the hero's full-bleed artwork
+         below it was legible through rgba(3,3,3,.97) on some phone renders. */
+      background:#050505;
+      isolation:isolate;
       box-shadow:0 24px 60px rgba(0,0,0,.7);
       overscroll-behavior:contain;
     }
