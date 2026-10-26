@@ -49,17 +49,49 @@ const { compilationsSectionHtml, compilationsInnerHtml, SECTION_CLASS, CONTAINER
 const { homePosterClientData } = await import('../build/lib/home.js');
 
 // Film sample cards are video + title only: no music-description text or
-// permalink block underneath (removed 2026-10-25). The slug survives solely
-// so each card keeps its semantic `sample-${slug}` anchor.
+// permalink block underneath (removed 2026-10-25). Each entry carries its
+// semantic `sample-${slug}` anchor and genre-descriptive alt text.
 const FILM_SAMPLES_META = [
-  { title: 'Mike Has A Visitor', slug: 'mike-has-a-visitor' },
-  { title: 'Eclipsed', slug: 'eclipsed' },
-  { title: 'GOODBYE, BROTHER', slug: 'goodbye-brother' },
-  { title: 'Home Intruder', slug: 'home-intruder' },
-  { title: 'The Haunted', slug: 'the-haunted' },
-  { title: 'AQUAPHOBIA', slug: 'aquaphobia' },
-  { title: 'Whispers In The Dark', slug: 'whispers-in-the-dark' },
-  { title: 'Phantom Requiem', slug: 'phantom-requiem' },
+  {
+    title: 'Mike Has A Visitor',
+    slug: 'mike-has-a-visitor',
+    alt: 'Mike Has A Visitor: Sleep-paralysis psychological horror score by Zazie Kanwar-Torge featuring nerve-scraping strings and sub-audible room tone.',
+  },
+  {
+    title: 'Eclipsed',
+    slug: 'eclipsed',
+    alt: 'Eclipsed: Surrealist body horror score by Zazie Kanwar-Torge featuring dissonant bowed metal and experimental synthesis.',
+  },
+  {
+    title: 'GOODBYE, BROTHER',
+    slug: 'goodbye-brother',
+    alt: 'GOODBYE, BROTHER: Psychological drama-horror score by Zazie Kanwar-Torge featuring intimate chamber strings and somber harmonic decay.',
+  },
+  {
+    title: 'Home Intruder',
+    slug: 'home-intruder',
+    alt: 'Home Intruder: Home-invasion thriller chase score by Zazie Kanwar-Torge featuring brutalist percussion pulses and struck-string tension.',
+  },
+  {
+    title: 'The Haunted',
+    slug: 'the-haunted',
+    alt: 'The Haunted: Sci-fi psychological horror score by Zazie Kanwar-Torge featuring psychophonic scraping beds and dark ambient drones.',
+  },
+  {
+    title: 'AQUAPHOBIA',
+    slug: 'aquaphobia',
+    alt: 'AQUAPHOBIA: Subterranean psychological horror score by Zazie Kanwar-Torge featuring performed waterphone resonance and suffocating sub-bass.',
+  },
+  {
+    title: 'Whispers In The Dark',
+    slug: 'whispers-in-the-dark',
+    alt: 'Whispers In The Dark: Supernatural psychological horror score by Zazie Kanwar-Torge featuring processed vocal whispers, glass harmonics, and dark ambient pads.',
+  },
+  {
+    title: 'Phantom Requiem',
+    slug: 'phantom-requiem',
+    alt: 'Phantom Requiem: Experimental art house horror score by Zazie Kanwar-Torge featuring electroacoustic synthesis and spectral sound design.',
+  },
 ];
 
 const BOTH = 'both';
@@ -92,17 +124,69 @@ const nameAttr = (label) => `name:${JSON.stringify(fieldName(label))},`;
 
 /** [old, new, targets]. Text is matched exactly; see the header note. */
 const PAIRS = [
-  // Hero
-  ['Original music for psychological horror ', 'Dark, atmospheric horror scores, ', HTML],
-  ['& experimental cinema.', 'written to your picture.', HTML],
-  ['Dissonance. Atmosphere. Emotional intensity.', 'Original music for psychological horror, thrillers, and dark sci-fi,', HTML],
-  ['Scores composed directly to picture.', 'composed for film, TV, and games.', HTML],
+  // Non-visible semantic title attributes on primary navigation (visible labels stay concise & uncrowded)
+  [
+    'Ix=[{href:"#showreel",label:"Reel"},{href:"#work",label:"Work"},{href:"#services",label:"Rates"},{href:"/hire-a-composer",label:"Hire"},{href:"/store",label:"Store"}]',
+    'Ix=[{href:"#showreel",label:"Reel",title:"Body horror, folk horror, and psychological horror composer showreel"},{href:"#work",label:"Work",title:"Experimental art house, psychological, folk, and body horror film scores"},{href:"#services",label:"Rates",title:"Horror and experimental art house film scoring rates"},{href:"/hire-a-composer",label:"Hire",title:"Hire a folk horror, body horror, and psychological horror composer"},{href:"/store",label:"Store",title:"Horror sound libraries, experimental art house records, and audio tools"}]',
+    BUNDLE,
+  ],
+  [
+    'Ix.map(e=>u.jsx("a",{href:e.href,className:"px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone"',
+    'Ix.map(e=>u.jsx("a",{href:e.href,title:e.title,className:"px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone"',
+    BUNDLE,
+  ],
+  [
+    'Ix.map((e,t)=>u.jsx(Bt.a,{href:e.href,',
+    'Ix.map((e,t)=>u.jsx(Bt.a,{href:e.href,title:e.title,',
+    BUNDLE,
+  ],
+  [
+    '<a href="#showreel" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Reel</a><a href="#work" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Work</a><a href="#services" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Rates</a><a href="/hire-a-composer" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Hire</a><a href="/store" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Store</a>',
+    '<a href="#showreel" title="Body horror, folk horror, and psychological horror composer showreel" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Reel</a><a href="#work" title="Experimental art house, psychological, folk, and body horror film scores" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Work</a><a href="#services" title="Horror and experimental art house film scoring rates" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Rates</a><a href="/hire-a-composer" title="Hire a folk horror, body horror, and psychological horror composer" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Hire</a><a href="/store" title="Horror sound libraries, experimental art house records, and audio tools" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Store</a>',
+    HTML,
+  ],
+  [
+    '<a href="#contact" class="ml-3 bg-blood px-5 py-2.5 text-[10px] uppercase tracking-[0.22em] text-bone shadow-[0_0_24px_rgba(196,30,30,0.25)] transition-all hover:bg-ember hover:shadow-[0_0_32px_rgba(255,42,42,0.35)]">Scoring inquiry</a>',
+    '<a href="#contact" title="Commission an experimental art house, psychological, folk, or body horror score" class="ml-3 bg-blood px-5 py-2.5 text-[10px] uppercase tracking-[0.22em] text-bone shadow-[0_0_24px_rgba(196,30,30,0.25)] transition-all hover:bg-ember hover:shadow-[0_0_32px_rgba(255,42,42,0.35)]">Scoring inquiry</a>',
+    HTML,
+  ],
+  [
+    'u.jsx("a",{href:"#contact",className:"ml-3 bg-blood px-5 py-2.5 text-[10px] uppercase tracking-[0.22em] text-bone shadow-[0_0_24px_rgba(196,30,30,0.25)] transition-all hover:bg-ember hover:shadow-[0_0_32px_rgba(255,42,42,0.35)]","data-source-loc":"src/components/Nav.tsx:55:10",children:"Scoring inquiry"})',
+    'u.jsx("a",{href:"#contact",title:"Commission an experimental art house, psychological, folk, or body horror score",className:"ml-3 bg-blood px-5 py-2.5 text-[10px] uppercase tracking-[0.22em] text-bone shadow-[0_0_24px_rgba(196,30,30,0.25)] transition-all hover:bg-ember hover:shadow-[0_0_32px_rgba(255,42,42,0.35)]","data-source-loc":"src/components/Nav.tsx:55:10",children:"Scoring inquiry"})',
+    BUNDLE,
+  ],
+  // Hero (keep visible copy clean & uncrowded)
+  [
+    '<h1 class="font-display text-[2.35rem] leading-[1.02] tracking-tight text-bone sm:text-4xl md:text-5xl">Experimental Art House &amp; Psychological Horror <span class="mt-1 block bg-gradient-to-r from-blood via-ember to-blood bg-clip-text italic text-transparent">Scores for Folk Horror &amp; Body Horror.</span></h1>',
+    '<h1 class="font-display text-[2.35rem] leading-[1.02] tracking-tight text-bone sm:text-5xl md:text-6xl lg:text-[3.75rem]">Dark, atmospheric horror scores, <span class="mt-1 block bg-gradient-to-r from-blood via-ember to-blood bg-clip-text italic text-transparent">written to your picture.</span></h1>',
+    HTML,
+  ],
+  [
+    '<p class="mt-5 max-w-lg font-display text-xl leading-snug text-bone/90 sm:mt-6 sm:text-2xl">Bespoke Body Horror, Folk Horror, and Experimental Art House film scores — <span class="text-mist">bowed metal, prepared strings, and psychological dread composed to picture for prestige cinema, TV, and games.</span></p>',
+    '<p class="mt-5 max-w-md font-display text-xl leading-snug text-bone/90 sm:mt-6 sm:text-2xl">Original music for psychological horror, thrillers, and dark sci-fi, <span class="text-mist">composed for film, TV, and games.</span></p>',
+    HTML,
+  ],
   ['Start an inquiry', 'Request a scoring quote', BOTH],
   // User-provided biography; HTML emphasis is shared with the static snapshot.
   ["Zazie Kanwar-Torge is an award-winning composer, experimental producer, and multi-instrumentalist. Under Zazie Productions, he writes and performs original scores for psychological, folk, and body horror, supernatural thrillers, and dark sci-fi.", "<strong>Zazie Kanwar-Torge</strong> is an award-winning film composer, experimental producer, and multi-instrumentalist specializing in <strong>psychological horror, folk horror, body horror, supernatural thrillers, and dark science fiction</strong>. Through Zazie Productions, he creates original film scores and immersive sonic atmospheres that explore dread, dissonance, isolation, and the uncanny.", "bundle"],
+  [
+    'specializing in <strong>experimental art house, psychological horror, folk horror, body horror, supernatural thrillers, and dark science fiction</strong>.',
+    'specializing in <strong>psychological horror, folk horror, body horror, supernatural thrillers, and dark science fiction</strong>.',
+    HTML,
+  ],
   ["His palette combines struck strings, bowed metal, hybrid orchestration, and custom synths, shaped to picture for projects from shorts to features.", "Working at the intersection of cinematic scoring, musique concrète, and electroacoustic composition, his distinctive palette combines bowed metal, struck strings, experimental synthesis, and hybrid orchestration. His work has been featured at <strong>Ars Electronica 2026</strong>, performed in 20.4-channel spatial audio, and selected for international experimental music and film programs, including <strong>MUSLAB/Cero Records</strong> and <strong>EXiS in Seoul</strong>. Previously commissioned by the <strong>Black Mountain College Museum + Arts Center</strong>, he also develops original audio instruments and experimental sound libraries.</p><p>Drawing on a background in experimental film, sound art, and audiovisual composition, Zazie approaches each score as an extension of the film's psychological and emotional world, creating visceral, atmospheric music tailored to independent shorts, feature films, series, and horror video games.", "bundle"],
   ['Drawing on a background in experimental film, sound art, and audiovisual composition, Zazie approaches each score as an extension of the film\'s psychological and emotional world, creating visceral, atmospheric music tailored to independent shorts, feature films, and unconventional genre cinema.', 'Drawing on a background in experimental film, sound art, and audiovisual composition, Zazie approaches each score as an extension of the film\'s psychological and emotional world, creating visceral, atmospheric music tailored to independent shorts, feature films, series, and horror video games.', HTML],
-  ['<a href="#services" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Rates</a><a href="/store"', '<a href="#services" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Rates</a><a href="/hire-a-composer" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Hire</a><a href="/store"', HTML],
+  [
+    'src:It.images.headshot,alt:It.composer,width:864,height:996',
+    'src:It.images.headshot,alt:"Zazie Kanwar-Torge: Experimental art house, psychological, folk, and body horror composer photographed with studio instrumentation.",width:864,height:996',
+    BUNDLE,
+  ],
+  [
+    '<img alt="Zazie Kanwar-Torge" class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" src="/images/headshot.jpg"',
+    '<img alt="Zazie Kanwar-Torge: Experimental art house, psychological, folk, and body horror composer photographed with studio instrumentation." class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" src="/images/headshot.jpg"',
+    HTML,
+  ],
+  ['Zazie Productions LLC · Experimental Art House &amp; Psychological, Folk &amp; Body Horror Scores', 'Zazie Productions LLC · Atmospheric horror scores', HTML],
   ['[["/hire-a-composer","Hire a composer"],["/sound-design","Sound design"]', '[["/hire-a-composer","Hire a horror composer"],["/how-to-hire-a-horror-composer","Hiring guide"],["/sound-design","Sound design"]', BUNDLE],
   ['<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a composer</a><a href="/sound-design"', '<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a horror composer</a><a href="/how-to-hire-a-horror-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hiring guide</a><a href="/sound-design"', HTML],
   // Keep a direct, 44px quote action visible on phones; the full section menu
@@ -127,7 +211,8 @@ const PAIRS = [
   // decoration, so they carry the artwork's own name. (The atmosphere plate and
   // the press photo stay alt="" - they are backgrounds behind live copy.)
   ['width:640,height:960,alt:"",className:"h-full w-full object-cover object-top opacity-95 transition-transform duration-700 ease-out group-hover:scale-105 group-hover:opacity-100"', 'width:e.width||640,height:e.height||960,alt:e.alt||e.title+" poster artwork",className:"h-full w-full "+(e.contain?"zp-poster-contain":"object-cover object-top group-hover:scale-105")+" opacity-95 transition-transform duration-700 ease-out group-hover:opacity-100"', BUNDLE],
-  ['className:"h-full w-full object-cover object-top","data-source-loc":"src/components/PosterWall.tsx:96:1"', 'loading:"lazy",decoding:"async",className:"h-full w-full "+(e.contain?"zp-poster-contain":"object-cover object-top"),"data-source-loc":"src/components/PosterWall.tsx:96:1"', BUNDLE],
+  ['alt:`${e.title} poster`,className:"h-full w-full object-cover object-top","data-source-loc":"src/components/PosterWall.tsx:96:1"', 'alt:e.alt||`${e.title} poster`,loading:"lazy",decoding:"async",className:"h-full w-full "+(e.contain?"zp-poster-contain":"object-cover object-top"),"data-source-loc":"src/components/PosterWall.tsx:96:1"', BUNDLE],
+  ['src:n.thumb,alt:`${n.title}: still from the film`,width:1280', 'src:n.thumb,alt:n.alt||`${n.title}: still from the film`,width:1280', BUNDLE],
   ['e.tagline&&u.jsxs("p",{className:"mt-5 font-display text-lg italic leading-snug text-bone/90","data-source-loc":"src/components/PosterWall.tsx:114:1",children:["“",e.tagline,"”"]})', 'e.tagline&&u.jsxs("p",{className:"mt-5 font-display text-lg italic leading-snug text-bone/90","data-source-loc":"src/components/PosterWall.tsx:114:1",children:["“",e.tagline,"”"]}),e.summary&&u.jsx("p",{className:"mt-4 text-base leading-relaxed text-mist",children:e.summary})', BUNDLE],
   ['linkcol=c41e1e', 'linkcol=e65650', BUNDLE],
   // Film sample cards carry a semantic ID only — no music-description text or
@@ -146,7 +231,7 @@ const PAIRS = [
   // the portrait is display:none below 1024px.
   [
     'className:"pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] lg:block","aria-hidden":!0,"data-source-loc":"src/components/Hero.tsx:56:6",children:u.jsxs("div",{className:"absolute bottom-0 right-0 h-[92%] w-full","data-source-loc":"src/components/Hero.tsx:63:8",children:[u.jsxs("picture",{children:[u.jsx("source",{srcSet:"/images/hero-portrait.avif",type:"image/avif"}),u.jsx("img",{src:It.images.hero,alt:"",width:896,height:1152,decoding:"async",className:"absolute bottom-0 right-0 h-full w-auto max-w-none object-cover object-top opacity-80","data-source-loc":"src/components/Hero.tsx:64:10"})]}),u.jsx("div",{className:"absolute inset-0 bg-gradient-to-l from-transparent via-void/20 to-void","data-source-loc":"src/components/Hero.tsx:69:10"}),u.jsx("div",{className:"absolute inset-0 bg-gradient-to-t from-void via-transparent to-void/40","data-source-loc":"src/components/Hero.tsx:70:10"}),u.jsx("div",{className:"absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-void","data-source-loc":"src/components/Hero.tsx:71:10"}),u.jsx("div",{className:"absolute inset-y-[15%] right-0 w-px bg-gradient-to-b from-transparent via-blood/50 to-transparent","data-source-loc":"src/components/Hero.tsx:73:10"})]})',
-    'className:"pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] lg:block","aria-hidden":!0,"data-source-loc":"src/components/Hero.tsx:56:6",children:u.jsxs("div",{className:"zp-hero-art","data-source-loc":"src/components/Hero.tsx:63:8",children:[u.jsx("div",{className:"zp-hero-art-plate",children:u.jsxs("picture",{children:[u.jsx("source",{srcSet:"/images/hero-portrait.avif",type:"image/avif"}),u.jsx("img",{src:It.images.hero,alt:"Zazie Kanwar-Torge, horror composer and founder of Zazie Productions",width:896,height:1152,loading:"lazy",decoding:"async",className:"absolute inset-0 h-full w-full object-contain","data-source-loc":"src/components/Hero.tsx:64:10"})]})}),u.jsx("div",{className:"zp-hero-art-scrim","aria-hidden":!0})]})',
+    'className:"pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] lg:block","data-source-loc":"src/components/Hero.tsx:56:6",children:u.jsxs("div",{className:"zp-hero-art","data-source-loc":"src/components/Hero.tsx:63:8",children:[u.jsx("div",{className:"zp-hero-art-plate",children:u.jsxs("picture",{children:[u.jsx("source",{srcSet:"/images/hero-portrait.avif",type:"image/avif"}),u.jsx("img",{src:It.images.hero,alt:"Zazie Productions: Experimental art house, psychological, folk, and body horror film scores by Zazie Kanwar-Torge featuring bowed metal and experimental synthesis.",width:896,height:1152,loading:"lazy",decoding:"async",className:"absolute inset-0 h-full w-full object-contain","data-source-loc":"src/components/Hero.tsx:64:10"})]})}),u.jsx("div",{className:"zp-hero-art-scrim","aria-hidden":!0})]})',
     BUNDLE,
   ],
   // Film cards: the close action has to be part of the React render too, not
@@ -240,7 +325,7 @@ const PAIRS = [
   ['Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send. The form prepares an email for you to review and send.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', HTML],
   ['gu=["Short film","Feature","Series episode","Game / interactive","Installation / art"]', 'gu=["Not sure yet","Short film","Feature","Series episode","Game / interactive","Installation / art"]', BUNDLE],
   ['a1=["Psychological / atmospheric horror","Supernatural dread","Body horror (musical atmosphere)","Folk horror","Techno-thriller","Cosmic dread","Dark drama / thriller","Game adaptive score","Other / hybrid cinematic"]', 'a1=["Not sure yet","Psychological / atmospheric horror","Supernatural dread","Body horror (musical atmosphere)","Folk horror","Techno-thriller","Cosmic dread","Dark drama / thriller","Game adaptive score","Other / hybrid cinematic"]', BUNDLE],
-  ['<select class="w-full border border-ash bg-void px-4 py-3 text-sm text-bone outline-none focus:border-blood" aria-label="Theme / tone"><option value="Psychological / atmospheric horror">Psychological / atmospheric horror</option>', '<select class="w-full border border-ash bg-void px-4 py-3 text-sm text-bone outline-none focus:border-blood" aria-label="Theme / tone"><option value="Not sure yet" selected>Not sure yet</option><option value="Psychological / atmospheric horror">Psychological / atmospheric horror</option>', HTML],
+  ['<select class="w-full border border-ash bg-void px-4 py-3 text-sm text-bone outline-none focus:border-blood" aria-label="Theme / tone"><option value="Not sure yet" selected>Not sure yet</option><option value="Experimental art house">Experimental art house</option><option value="Psychological / atmospheric horror">Psychological / atmospheric horror</option>', '<select class="w-full border border-ash bg-void px-4 py-3 text-sm text-bone outline-none focus:border-blood" aria-label="Theme / tone"><option value="Not sure yet" selected>Not sure yet</option><option value="Psychological / atmospheric horror">Psychological / atmospheric horror</option>', HTML],
   ['<select class="w-full border border-ash bg-void px-4 py-3 text-sm text-bone outline-none focus:border-blood" aria-label="Format"><option value="Short film">Short film</option>', '<select class="w-full border border-ash bg-void px-4 py-3 text-sm text-bone outline-none focus:border-blood" aria-label="Format"><option value="Not sure yet" selected>Not sure yet</option><option value="Short film">Short film</option>', HTML],
   ['I’ll reply within 48 hours.', 'A written quote follows review.', BOTH],
   ['label:"Runtime"', 'label:"Scored minutes (music, not film length)"', BUNDLE],
@@ -293,7 +378,7 @@ const BUNDLE_BUDGET_DEFAULT_OLD = 'useState(xu[1])';
  * React renders cannot drift; this markup only has to match the bundle's output.
  */
 const HERO_ART_HTML =
-  '<div class="pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] lg:block" aria-hidden="true"><div class="zp-hero-art"><div class="zp-hero-art-plate"><picture><source srcset="/images/hero-portrait.avif" type="image/avif"><img alt="Zazie Kanwar-Torge, horror composer and founder of Zazie Productions" class="absolute inset-0 h-full w-full object-contain" src="/images/hero-portrait.jpg" width="896" height="1152" loading="lazy" decoding="async"></picture></div><div class="zp-hero-art-scrim" aria-hidden="true"></div></div></div>';
+  '<div class="pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] lg:block"><div class="zp-hero-art"><div class="zp-hero-art-plate"><picture><source srcset="/images/hero-portrait.avif" type="image/avif"><img alt="Zazie Productions: Experimental art house, psychological, folk, and body horror film scores by Zazie Kanwar-Torge featuring bowed metal and experimental synthesis." class="absolute inset-0 h-full w-full object-contain" src="/images/hero-portrait.jpg" width="896" height="1152" loading="lazy" decoding="async"></picture></div><div class="zp-hero-art-scrim" aria-hidden="true"></div></div></div>';
 
 const ISLAND_OPEN = '<div class="zp-home-section zp-home-island" data-zp-island="estimator"><div class="zp-shell">';
 const ISLAND_CLOSE = '</div></div>';
@@ -542,7 +627,7 @@ function patchBundle(orig) {
       if (countOf(projSlice, marker) !== 1) throw new Error(`bundle: It.projects entry not found for ${sample.title}`);
       projSlice = projSlice.replace(
         marker,
-        () => `{title:${JSON.stringify(sample.title)},slug:${JSON.stringify(sample.slug)},`,
+        () => `{title:${JSON.stringify(sample.title)},slug:${JSON.stringify(sample.slug)},alt:${JSON.stringify(sample.alt)},`,
       );
     }
     out = out.slice(0, projStart) + projSlice + out.slice(projEnd);
@@ -850,9 +935,10 @@ function patchStatic(html, tracks) {
     if (cardHtml.includes('<div class="zp-sample-meta')) {
       cardHtml = cardHtml.replace(/<div class="zp-sample-meta[\s\S]*?<\/div>(?=<\/article>)/, '');
     }
+    cardHtml = cardHtml.replace(/(<img\b[^>]*?\balt=")[^"]*(")/, `$1${escapeStaticText(sample.alt)}$2`);
     if (cardHtml !== out.slice(articleStart, articleEnd + '</article>'.length)) {
       out = out.slice(0, articleStart) + cardHtml + out.slice(articleEnd + '</article>'.length);
-      applied.push(`film sample ${sample.slug} meta block removed`);
+      applied.push(`film sample ${sample.slug} synced`);
     }
   }
 

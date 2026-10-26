@@ -163,7 +163,8 @@ if (cueCatalog) {
     if (composition['@id'] !== `${url(cuePath)}#composition`) fail(`${where}: composition @id must match the ${cuePath} graph`);
     if (composition.url !== url(cuePath)) fail(`${where}: composition url must point at ${cuePath}`);
     if (composition.name !== cue.title) fail(`${where}: composition name does not match cues.ts`);
-    if (composition.genre !== cue.category) fail(`${where}: composition genre does not match cues.ts`);
+    const compGenres = Array.isArray(composition.genre) ? composition.genre : [composition.genre];
+    if (!compGenres.includes(cue.category)) fail(`${where}: composition genre does not match cues.ts`);
     if (composition.duration !== isoDuration(cue.durationSeconds)) fail(`${where}: composition duration is not the ISO-8601 cue duration`);
     if (composition.composer?.['@id'] !== `${SITE_ORIGIN}/#person`) fail(`${where}: composition must credit the verified Person entity`);
     const audio = composition.audio;
