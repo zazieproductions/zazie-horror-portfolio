@@ -311,8 +311,18 @@ const PAIRS = [
     BUNDLE,
   ],
   ['u.jsx(cj,{"data-source-loc":"src/App.tsx:46:10"}),', '', BUNDLE],
+  // Section order: the biography (#about, rj) now sits before the compilations
+  // section (see addCompilationsSection / patchStatic), so the numbered
+  // kickers renumber with it — Biography 05→03, Approach 03→04, Services
+  // 04→05; Contact stays 06. The HTML-only services pair migrates a snapshot
+  // already carrying the previous build's "04 · Scoring services"; it must run
+  // before the BOTH pair below, whose bundle source still reads "Scope and
+  // budget" and whose static side then sees the new text and skips.
+  ['03 · Approach', '04 · Approach', BOTH],
+  ['05 · Biography', '03 · Biography', BOTH],
+  ['04 · Scoring services', '05 · Scoring services', HTML],
   // Services heading
-  ['04 · Scope and budget', '04 · Scoring services', BOTH],
+  ['04 · Scope and budget', '05 · Scoring services', BOTH],
   ['Build a scope and estimate', 'Rates & estimates', BUNDLE],
   ['Build a scope and estimate', 'Rates &amp; estimates', HTML],
   ['Choose a project type, scored runtime, complexity, and delivery needs.', 'Packages are priced by scored music minutes, not film length.', BOTH],
@@ -384,7 +394,7 @@ const ISLAND_OPEN = '<div class="zp-home-section zp-home-island" data-zp-island=
 const ISLAND_CLOSE = '</div></div>';
 const SERVICES_HEADER = [
   '<div class="mb-10 max-w-2xl sm:mb-14">',
-  '<p class="mb-3 text-[10px] uppercase tracking-[0.35em] text-blood sm:text-[11px] sm:tracking-[0.4em]">04 · Scoring services</p>',
+  '<p class="mb-3 text-[10px] uppercase tracking-[0.35em] text-blood sm:text-[11px] sm:tracking-[0.4em]">05 · Scoring services</p>',
   '<h2 class="mb-4 font-display text-3xl leading-none text-bone sm:text-4xl md:text-6xl">Rates &amp; estimates</h2>',
   '<p class="text-sm leading-relaxed text-mist sm:text-base">Packages are priced by scored music minutes, not film length. Preliminary estimate — final quotation subject to creative scope and written agreement.</p>',
   '</div>',
@@ -711,8 +721,10 @@ function patchBundle(orig) {
 
 /**
  * Homepage "Compilations" section (src/lib/compilations-markup.ts). It is a
- * static-markup component placed between the showreel (G5) and the press kit
- * (I5) in App; index.html carries the identical markup (patchStatic).
+ * static-markup component placed between the biography (About, rj) and the
+ * press kit (I5) in App, with the biography itself moved up from its shipped
+ * slot between Services (lj) and Contact (dj) so the bio sits before the
+ * compilations; index.html carries the identical order (patchStatic).
  */
 function addCompilationsSection(source) {
   let out = source;
@@ -721,7 +733,10 @@ function addCompilationsSection(source) {
     `children:u.jsx("div",{className:${JSON.stringify(CONTAINER_CLASS)},dangerouslySetInnerHTML:{__html:${JSON.stringify(compilationsInnerHtml())}}})})}`;
   for (const [oldText, newText] of [
     ['function I5(){return u.jsx("section",{id:"press"', `${component}function I5(){return u.jsx("section",{id:"press"`],
-    ['u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"}),u.jsx(I5,', 'u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"}),u.jsx(zpCompilations,{}),u.jsx(I5,'],
+    // Biography before compilations, straight after the showreel (G5).
+    ['u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"}),u.jsx(I5,', 'u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"}),u.jsx(rj,{"data-source-loc":"src/App.tsx:45:10"}),u.jsx(zpCompilations,{}),u.jsx(I5,'],
+    // …and out of its shipped slot, so About renders exactly once.
+    ['u.jsx(lj,{"data-source-loc":"src/App.tsx:44:10"}),u.jsx(rj,{"data-source-loc":"src/App.tsx:45:10"}),', 'u.jsx(lj,{"data-source-loc":"src/App.tsx:44:10"}),'],
   ]) {
     const n = countOf(out, oldText);
     if (n !== 1) throw new Error(`bundle: "${oldText.slice(0, 60)}" matched ${n} times, expected 1`);
@@ -823,18 +838,25 @@ function patchStatic(html, tracks) {
   out = patchStaticShowreel(out, tracks);
   if (out !== previousShowreel) applied.push(`showreel queue synced (${tracks.length} cues; ${tracks[0].title} first)`);
 
-  // Compilations: the section sits straight after the showreel. Idempotent -
-  // an existing copy is replaced, so a change to the data reaches index.html.
+  // Biography before compilations: #about is lifted out of its shipped slot
+  // (between #services and #contact) and the two sections are placed together
+  // straight after the showreel, biography first — the same order the bundle
+  // renders (addCompilationsSection). Idempotent: both sections are extracted
+  // wherever they currently sit and re-inserted in this order, and the
+  // compilations markup is regenerated, so a change to the data still
+  // reaches index.html.
   {
     const section = compilationsSectionHtml();
-    const existing = /<section id="compilations"[\s\S]*?<\/section>/;
-    if (existing.test(out)) {
-      out = out.replace(existing, () => section);
-    } else {
-      const at = out.indexOf('</section>', out.indexOf('<section id="showreel"')) + '</section>'.length;
-      out = out.slice(0, at) + section + out.slice(at);
-    }
-    applied.push('compilations section placed after the showreel');
+    const aboutMatch = /<section id="about"[\s\S]*?<\/section>/.exec(out);
+    if (!aboutMatch) throw new Error('index.html: #about (biography) section not found');
+    const about = aboutMatch[0];
+    out = out.replace(about, () => '');
+    out = out.replace(/<section id="compilations"[\s\S]*?<\/section>/, () => '');
+    const showreelStart = out.indexOf('<section id="showreel"');
+    if (showreelStart < 0) throw new Error('index.html: #showreel section not found');
+    const at = out.indexOf('</section>', showreelStart) + '</section>'.length;
+    out = out.slice(0, at) + about + section + out.slice(at);
+    applied.push('biography placed before the compilations section, after the showreel');
   }
 
   // Services: replace the old React estimator snapshot with the static island.

@@ -12,6 +12,10 @@
  *      persistent paragraph-link underlines, while the designed type scale
  *      (the 8-12px uppercase labels and the mobile prose size) is left alone:
  *      the 2026-10-25 blanket 12px/16px floors are deliberately absent.
+ *   4. The biography (#about) sits before the compilations section, straight
+ *      after the showreel, in both the prerendered document and the React
+ *      bundle's render order, and the numbered section kickers run in
+ *      sequence (Biography is 03, not its shipped 05).
  *
  * Run: node --test tools/home-mount.test.mjs
  */
@@ -84,6 +88,33 @@ test('precached homepage stylesheet is the same hashed file the document links',
   // No stale index stylesheet left behind after the content-hash rename.
   const sheets = fs.readdirSync(ROOT).filter((name) => /^index-[0-9a-f]{8}\.css$/.test(name));
   assert.deepEqual(sheets, [cssName]);
+});
+
+test('the biography sits before the compilations in the static page and the bundle render', () => {
+  const jsFile = /import\("\/(index-[0-9a-f]{8}\.js)"\)/.exec(html)?.[1];
+  assert.ok(jsFile, 'index.html imports a content-hashed home bundle');
+  const bundle = read(jsFile);
+  // Static first paint: showreel, then biography, then compilations, then press.
+  const staticOrder = ['<section id="showreel"', '<section id="about"', '<section id="compilations"', '<section id="press"']
+    .map((marker) => html.indexOf(marker));
+  assert.ok(staticOrder.every((at) => at >= 0), 'all four sections exist in index.html');
+  assert.deepEqual([...staticOrder].sort((a, b) => a - b), staticOrder, 'index.html orders #about before #compilations, after #showreel');
+  // React render: About (rj) is invoked once, between the showreel (G5) and
+  // the compilations component, not in its shipped slot after Services (lj).
+  const renderOrder = [
+    'u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"})',
+    'u.jsx(rj,{"data-source-loc":"src/App.tsx:45:10"})',
+    'u.jsx(zpCompilations,{})',
+    'u.jsx(I5,',
+  ].map((marker) => bundle.indexOf(marker));
+  assert.ok(renderOrder.every((at) => at >= 0), 'bundle renders showreel, biography, compilations, press');
+  assert.deepEqual([...renderOrder].sort((a, b) => a - b), renderOrder, 'bundle orders the biography before the compilations');
+  assert.equal(bundle.match(/u\.jsx\(rj,/g)?.length, 1, 'the biography renders exactly once');
+  // The numbered kickers follow the new order without gaps or repeats.
+  const kickers = ['01 · On screen', '02 · Showreel', '03 · Biography', '04 · Approach', '05 · Scoring services', '06 · Contact']
+    .map((marker) => html.indexOf(marker));
+  assert.ok(kickers.every((at) => at >= 0), 'every numbered kicker is present');
+  assert.deepEqual([...kickers].sort((a, b) => a - b), kickers, 'section numbers run 01-06 in page order');
 });
 
 test('homepage CSS carries AA link red and persistent underlines without type floors', () => {
