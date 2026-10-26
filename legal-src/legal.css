@@ -434,6 +434,13 @@ td code,th code{white-space:nowrap}
 /* --- Media & figures --------------------------------------------------- */
 .poster-figure{margin:0 0 1rem;position:relative;border:1px solid var(--ash);background:var(--ink);overflow:hidden}
 .poster-figure picture, .poster-figure img{display:block;width:100%;height:auto;aspect-ratio:2/3;object-fit:cover}
+/* A studio photograph is not a film poster: it keeps its own proportions and
+   is never cropped. .poster-figure forces 2:3 for poster artwork, which sliced
+   the sides off the press photo on /hire-a-composer (and hid half the title
+   set into the image). */
+.press-figure{margin:1.75rem 0;border:1px solid var(--ash);background:var(--ink);padding:.5rem}
+.press-figure picture, .press-figure img{display:block;width:100%;height:auto;aspect-ratio:auto;object-fit:contain}
+.press-figure figcaption{padding:.55rem .25rem 0}
 .media-still{margin:0 0 1rem;position:relative;border:1px solid var(--ash);background:var(--ink);overflow:hidden}
 .media-still picture, .media-still img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
 .composer-portrait{margin:0 0 1.5rem;max-width:320px;border:1px solid var(--ash);background:var(--ink);padding:.5rem}
@@ -717,6 +724,8 @@ td code,th code{white-space:nowrap}
   .device-head,.device-note,.device-empty{padding:.75rem .85rem}
   .hub-card{padding:1.15rem}
   .poster-figure{margin-block:1.25rem}
+  .press-figure{margin:1.25rem 0;padding:.4rem}
+  .press-figure figcaption{font-size:.5625rem;letter-spacing:.14em;line-height:1.6}
   .closing-inner{padding:2.25rem 0;gap:1.15rem}
   .closing h2{font-size:clamp(1.5rem,7vw,2rem)}
   .closing-actions .btn{flex:1 1 auto}
