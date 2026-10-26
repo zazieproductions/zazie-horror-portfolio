@@ -1,0 +1,25 @@
+{
+ "/hire-a-composer": {
+  "media": [
+   {
+    "tag": "IMG",
+    "src": "/images/press-photo.jpg",
+    "w": 356,
+    "h": 534,
+    "cls": ""
+   }
+  ],
+  "wide": [
+   "table. w=497",
+   "caption. w=497",
+   "thead. w=497",
+   "tr. w=497",
+   "tbody. w=497",
+   "tr. w=497",
+   "tr. w=497",
+   "tr. w=497",
+   "tr. w=497"
+  ],
+  "externalRequests": []
+ }
+}
