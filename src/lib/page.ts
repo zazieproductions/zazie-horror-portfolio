@@ -294,7 +294,7 @@ ${tableRows(rows)}
       </section>
 
 ${sampleSection}`,
-    crossLinks: `The <a href="/work">selected productions archive</a> · <a href="/hire-a-composer">hire a horror composer</a> · adjacent cues: ${cueLinkList(production.relatedCueSlugs)} · <a href="/process">scoring process</a> · <a href="/contact">contact</a>.`,
+    crossLinks: `The <a href="/work">selected productions archive</a> · <a href="/hire-a-composer">hire a psychological horror composer</a> · adjacent cues: ${cueLinkList(production.relatedCueSlugs)} · <a href="/process">scoring process</a> · <a href="/contact">contact</a>.`,
   };
 }
 
@@ -343,7 +343,7 @@ ${cuePlayerList(cue)}
         <h2><span class="no">III</span> Cue facts</h2>
 ${tableRows(rows)}
       </section>`,
-    crossLinks: `Browse <a href="/reel">all ${cues.length} showreel cues</a> · <a href="/hire-a-composer">hire a horror composer</a> · related releases: ${releaseLinkList(cue.releaseSlugs)} · <a href="/contact">scoring inquiry</a>.`,
+    crossLinks: `Browse <a href="/reel">all ${cues.length} showreel cues</a> · <a href="/hire-a-composer">hire a psychological horror composer</a> · related releases: ${releaseLinkList(cue.releaseSlugs)} · <a href="/contact">scoring inquiry</a>.`,
   };
 }
 
@@ -414,7 +414,7 @@ ${tableRows(rows)}
       </section>
 
 ${listening ? `${listening}\n\n` : ''}${offerSection}`,
-    crossLinks: `The <a href="/store">full catalogue</a> · <a href="/hire-a-composer">hire a horror composer</a> · related cues: ${cueLinkList(release.relatedCueSlugs)} · <a href="/purchases">purchase information</a> · <a href="/contact">contact</a>.`,
+    crossLinks: `The <a href="/store">full catalogue</a> · <a href="/hire-a-composer">hire a psychological horror composer</a> · related cues: ${cueLinkList(release.relatedCueSlugs)} · <a href="/purchases">purchase information</a> · <a href="/contact">contact</a>.`,
   };
 }
 

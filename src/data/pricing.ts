@@ -397,7 +397,7 @@ export function pricingSummary(): string {
   const sceneFee = priceLabel(scene).replace(/^From /, 'from ');
   const focusedFee = priceLabel(focused).replace(/^From /, 'from ');
   const extendedFee = priceLabel(extended).replace(/^From /, 'from ');
-  return `Horror scoring (USD): scene ${sceneFee}; focused short ${focusedFee}; extended short ${extendedFee}. Feature/experimental scores are custom quoted; indicative ${usd(FEATURE_MINIMUM_ENGAGEMENT)} minimum only for substantial projects.`;
+  return `Psychological horror scoring (USD): scene ${sceneFee}; focused short ${focusedFee}; extended short ${extendedFee}. Feature/experimental scores are custom quoted; indicative ${usd(FEATURE_MINIMUM_ENGAGEMENT)} minimum only for substantial projects.`;
 }
 
 /** Whole-dollar formatting used everywhere a price appears. */
