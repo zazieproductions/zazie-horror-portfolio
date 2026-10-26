@@ -283,16 +283,16 @@
     "overflowing": [
       "a [w=43 right=404]",
       "a [w=55 right=458]",
-      "div.ticker-track [w=13036 right=11906]",
-      "span [w=379 right=593]",
-      "em [w=218 right=465]",
-      "span [w=279 right=872]",
-      "b [w=10 right=603]",
-      "em [w=154 right=777]",
-      "span [w=311 right=1183]",
-      "b [w=9 right=881]",
-      "em [w=129 right=1031]",
-      "span [w=326 right=1509]"
+      "div.ticker-track [w=13036 right=11912]",
+      "span [w=379 right=599]",
+      "em [w=218 right=471]",
+      "span [w=279 right=878]",
+      "b [w=10 right=609]",
+      "em [w=154 right=783]",
+      "span [w=311 right=1189]",
+      "b [w=9 right=887]",
+      "em [w=129 right=1037]",
+      "span [w=326 right=1515]"
     ],
     "tinyText": [
       "span 9px \"Productions\"",
@@ -1132,16 +1132,16 @@
     "overflowing": [
       "a [w=43 right=404]",
       "a [w=55 right=458]",
-      "div.ticker-track [w=13036 right=11795]",
-      "span [w=379 right=482]",
-      "span [w=279 right=761]",
-      "b [w=10 right=492]",
-      "em [w=154 right=666]",
-      "span [w=311 right=1072]",
-      "b [w=9 right=770]",
-      "em [w=129 right=920]",
-      "span [w=326 right=1398]",
-      "b [w=13 right=1085]"
+      "div.ticker-track [w=13036 right=11806]",
+      "span [w=379 right=493]",
+      "em [w=218 right=364]",
+      "span [w=279 right=772]",
+      "b [w=10 right=503]",
+      "em [w=154 right=677]",
+      "span [w=311 right=1083]",
+      "b [w=9 right=781]",
+      "em [w=129 right=931]",
+      "span [w=326 right=1409]"
     ],
     "tinyText": [
       "span 9px \"Productions\"",
