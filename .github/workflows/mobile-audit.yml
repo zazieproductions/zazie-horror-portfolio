@@ -34,6 +34,6 @@ jobs:
         run: |
           git config user.name 'mobile audit'
           git config user.email 'audit@zazie.local'
-          git add -f .mobile-audit/out .mobile-audit/out2 .mobile-audit/probe.json
+          git add -f .mobile-audit/out .mobile-audit/out2 .mobile-audit/out3 .mobile-audit/probe.json
           git commit -m 'chore(audit): mobile captures [skip ci]' || echo 'nothing to commit'
           git push origin HEAD:${GITHUB_REF_NAME}

@@ -7,7 +7,7 @@ import path from 'node:path';
 import { chromium } from 'playwright';
 
 const BASE = process.env.BASE || 'http://127.0.0.1:8080';
-const OUT = path.resolve('.mobile-audit/out2');
+const OUT = path.resolve(process.env.OUT || '.mobile-audit/out3');
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(OUT, { recursive: true });
 
