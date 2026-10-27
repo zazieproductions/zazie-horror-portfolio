@@ -49,7 +49,7 @@ Primary routes:
 
 | Route | Role |
 | --- | --- |
-| `/` | The portfolio: a single continuous React experience (productions, showreel, film samples, press, approach, rates, composer, reviews, inquiry) |
+| `/` | The portfolio: a single continuous React experience (productions, showreel, film samples, composer biography, psychoacoustic scoring story, compilations, press, approach, rates, inquiry) |
 | `/work` · `/reel` · `/composer` · `/process` · `/services` · `/contact` | Indexable hub pages mirroring the portfolio's content silos |
 | `/hire-a-composer` · `/sound-design` · `/game-scoring` | Commission pages: the commercial pillar and its first two format spokes |
 | `/store` | The Catalogue: records, sound libraries, tools and objects — 24 items, checkout delegated to Bandcamp, itch.io, Gumroad and eBay |
@@ -91,7 +91,7 @@ Unconventional choices exist for artistic or experiential reasons and are docume
 - **Showreel** — 32 title-derived cue pages plus the existing cue hub and MP3s (`/audio/track-00.mp3` … `track-31.mp3`). Each item page carries readable cue notes, duration/category, native optional playback, and sibling links.
 - **Film samples** — 8 embeds: 7 lazy `youtube-nocookie.com` players plus 1 Google Drive preview, with poster-`<picture>` covers.
 - **Press kit** — features and coverage (Visual Container award-winners press release PDF, Grammy Weekly, Limitless Magazine, Billboard Wire).
-- **Approach / Rates / Composer / Reviews / Inquiry** — scoring method, scope-and-estimate bands (packages priced by scored minutes of music, as published on `/services`), biography, 5.0 collaborator rating with 3 featured reviews, and a structured inquiry form that builds a `mailto:` handoff.
+- **Composer / Psychoacoustic scoring story / Approach / Rates / Inquiry** — biography and experimental credentials; a director-facing field-notes section on infrasound, dissonance and silence (with context caveats), five years of acoustic research, experience figures, and a scene-focused inquiry CTA; scoring method, scope-and-estimate bands, and a structured form that builds a `mailto:` handoff.
 
 **Archive boot** — the terminal loading screen plays at first paint on the homepage only: a silent, ~3 s analog-signal intro (wordmark, typed console lines, oscilloscope, progress deck) that any click, key or tap skips and that removes itself afterwards. A synchronous head gate keeps it away from no-JS visitors, crawlers, bots, Lighthouse and `prefers-reduced-motion`; `?boot=0` / `#noboot` disables it and `?boot=1` / `#boot` forces it. It makes no network requests and writes no storage key. Portfolio text is never gated behind it.
 

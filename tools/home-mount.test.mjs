@@ -12,10 +12,9 @@
  *      persistent paragraph-link underlines, while the designed type scale
  *      (the 8-12px uppercase labels and the mobile prose size) is left alone:
  *      the 2026-10-25 blanket 12px/16px floors are deliberately absent.
- *   4. The biography (#about) sits before the compilations section, straight
- *      after the showreel, in both the prerendered document and the React
- *      bundle's render order, and the numbered section kickers run in
- *      sequence (Biography is 03, not its shipped 05).
+ *   4. The biography (#about), psychoacoustic story, and compilations sit
+ *      together after the showreel in both the prerendered document and the
+ *      React bundle's render order, and numbered kickers remain in sequence.
  *
  * Run: node --test tools/home-mount.test.mjs
  */
@@ -90,31 +89,56 @@ test('precached homepage stylesheet is the same hashed file the document links',
   assert.deepEqual(sheets, [cssName]);
 });
 
-test('the biography sits before the compilations in the static page and the bundle render', () => {
+test('the biography, psychoacoustic story, and compilations stay in order in both render paths', () => {
   const jsFile = /import\("\/(index-[0-9a-f]{8}\.js)"\)/.exec(html)?.[1];
   assert.ok(jsFile, 'index.html imports a content-hashed home bundle');
   const bundle = read(jsFile);
-  // Static first paint: showreel, then biography, then compilations, then press.
-  const staticOrder = ['<section id="showreel"', '<section id="about"', '<section id="compilations"', '<section id="press"']
-    .map((marker) => html.indexOf(marker));
-  assert.ok(staticOrder.every((at) => at >= 0), 'all four sections exist in index.html');
-  assert.deepEqual([...staticOrder].sort((a, b) => a - b), staticOrder, 'index.html orders #about before #compilations, after #showreel');
-  // React render: About (rj) is invoked once, between the showreel (G5) and
-  // the compilations component, not in its shipped slot after Services (lj).
+  // Static first paint: showreel, biography, field notes, compilations, then press.
+  const staticOrder = [
+    '<section id="showreel"',
+    '<section id="about"',
+    '<section id="psychoacoustic-score"',
+    '<section id="compilations"',
+    '<section id="press"',
+  ].map((marker) => html.indexOf(marker));
+  assert.ok(staticOrder.every((at) => at >= 0), 'all five sections exist in index.html');
+  assert.deepEqual([...staticOrder].sort((a, b) => a - b), staticOrder, 'index.html keeps the story between biography and compilations');
+  // React render: About and its new story section follow the showreel (G5),
+  // before compilations and the press kit, not after Services (lj).
   const renderOrder = [
     'u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"})',
     'u.jsx(rj,{"data-source-loc":"src/App.tsx:45:10"})',
+    'u.jsx(zpPsychologicalScore,{})',
     'u.jsx(zpCompilations,{})',
     'u.jsx(I5,',
   ].map((marker) => bundle.indexOf(marker));
-  assert.ok(renderOrder.every((at) => at >= 0), 'bundle renders showreel, biography, compilations, press');
-  assert.deepEqual([...renderOrder].sort((a, b) => a - b), renderOrder, 'bundle orders the biography before the compilations');
+  assert.ok(renderOrder.every((at) => at >= 0), 'bundle renders showreel, biography, story, compilations, and press');
+  assert.deepEqual([...renderOrder].sort((a, b) => a - b), renderOrder, 'bundle keeps the story between biography and compilations');
   assert.equal(bundle.match(/u\.jsx\(rj,/g)?.length, 1, 'the biography renders exactly once');
-  // The numbered kickers follow the new order without gaps or repeats.
+  assert.equal(bundle.match(/u\.jsx\(zpPsychologicalScore,/g)?.length, 1, 'the story section renders exactly once');
+  // The numbered kickers follow the existing 01–06 sequence without gaps.
   const kickers = ['01 · On screen', '02 · Showreel', '03 · Biography', '04 · Approach', '05 · Scoring services', '06 · Contact']
     .map((marker) => html.indexOf(marker));
   assert.ok(kickers.every((at) => at >= 0), 'every numbered kicker is present');
-  assert.deepEqual([...kickers].sort((a, b) => a - b), kickers, 'section numbers run 01-06 in page order');
+  assert.deepEqual([...kickers].sort((a, b) => a - b), kickers, 'numbered sections remain in sequence');
+});
+
+test('the psychological-horror copy is vivid, conversion-focused, and avoids universal fear claims', () => {
+  const jsFile = /import\("\/(index-[0-9a-f]{8}\.js)"\)/.exec(html)?.[1];
+  assert.ok(jsFile, 'index.html imports a content-hashed home bundle');
+  const bundle = read(jsFile);
+  assert.match(html, /Why do certain frequencies make the body prepare to die\?/);
+  assert.match(html, /Infrasound · below 20 Hz/);
+  assert.match(html, /a minor second/);
+  assert.match(html, /0\.8 seconds/);
+  assert.match(html, /films &amp; game projects/);
+  assert.match(html, /five years of focused acoustic research/);
+  assert.match(html, /isn't a universal fear switch/);
+  assert.match(html, /Talk through a scene/);
+  assert.match(html, /Listen to the reel/);
+  assert.match(html, /id="zp-psycho-style"[\s\S]*?prefers-reduced-motion:reduce/);
+  assert.match(bundle, /Why do certain frequencies make the body prepare to die\?/);
+  assert.match(bundle, /function zpPsychologicalScore\(\)/);
 });
 
 test('homepage CSS carries AA link red and persistent underlines without type floors', () => {

@@ -38,6 +38,13 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
+import {
+  PSYCHOACOUSTIC_SECTION_CLASS,
+  PSYCHOACOUSTIC_SECTION_CSS,
+  PSYCHOACOUSTIC_SECTION_ID,
+  psychoacousticSectionHtml,
+  psychoacousticSectionInnerHtml,
+} from './psychoacoustic-section.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const here = path.join(root, 'home-src');
@@ -741,21 +748,25 @@ function patchBundle(orig) {
 }
 
 /**
- * Homepage "Compilations" section (src/lib/compilations-markup.ts). It is a
- * static-markup component placed between the biography (About, rj) and the
- * press kit (I5) in App, with the biography itself moved up from its shipped
- * slot between Services (lj) and Contact (dj) so the bio sits before the
- * compilations; index.html carries the identical order (patchStatic).
+ * Homepage supporting sections. The psychological-scoring field notes and
+ * the "Compilations" gallery are static-markup components placed after the
+ * biography (About, rj) and before the press kit (I5) in App. About is moved
+ * up from its shipped slot between Services (lj) and Contact (dj); index.html
+ * carries the identical order in patchStatic.
  */
 function addCompilationsSection(source) {
   let out = source;
   const component =
     `function zpCompilations(){return u.jsx("section",{id:"compilations",className:${JSON.stringify(SECTION_CLASS)},` +
     `children:u.jsx("div",{className:${JSON.stringify(CONTAINER_CLASS)},dangerouslySetInnerHTML:{__html:${JSON.stringify(compilationsInnerHtml())}}})})}`;
+  const psychologicalComponent =
+    `function zpPsychologicalScore(){return u.jsx("section",{id:${JSON.stringify(PSYCHOACOUSTIC_SECTION_ID)},` +
+    `"aria-labelledby":"psychoacoustics-title",className:${JSON.stringify(PSYCHOACOUSTIC_SECTION_CLASS)},` +
+    `dangerouslySetInnerHTML:{__html:${JSON.stringify(psychoacousticSectionInnerHtml())}}})}`;
   for (const [oldText, newText] of [
-    ['function I5(){return u.jsx("section",{id:"press"', `${component}function I5(){return u.jsx("section",{id:"press"`],
-    // Biography before compilations, straight after the showreel (G5).
-    ['u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"}),u.jsx(I5,', 'u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"}),u.jsx(rj,{"data-source-loc":"src/App.tsx:45:10"}),u.jsx(zpCompilations,{}),u.jsx(I5,'],
+    ['function I5(){return u.jsx("section",{id:"press"', `${psychologicalComponent}${component}function I5(){return u.jsx("section",{id:"press"`],
+    // Biography, then the psychological-scoring field notes, then compilations.
+    ['u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"}),u.jsx(I5,', 'u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"}),u.jsx(rj,{"data-source-loc":"src/App.tsx:45:10"}),u.jsx(zpPsychologicalScore,{}),u.jsx(zpCompilations,{}),u.jsx(I5,'],
     // …and out of its shipped slot, so About renders exactly once.
     ['u.jsx(lj,{"data-source-loc":"src/App.tsx:44:10"}),u.jsx(rj,{"data-source-loc":"src/App.tsx:45:10"}),', 'u.jsx(lj,{"data-source-loc":"src/App.tsx:44:10"}),'],
   ]) {
@@ -859,25 +870,26 @@ function patchStatic(html, tracks) {
   out = patchStaticShowreel(out, tracks);
   if (out !== previousShowreel) applied.push(`showreel queue synced (${tracks.length} cues; ${tracks[0].title} first)`);
 
-  // Biography before compilations: #about is lifted out of its shipped slot
-  // (between #services and #contact) and the two sections are placed together
-  // straight after the showreel, biography first — the same order the bundle
-  // renders (addCompilationsSection). Idempotent: both sections are extracted
-  // wherever they currently sit and re-inserted in this order, and the
-  // compilations markup is regenerated, so a change to the data still
-  // reaches index.html.
+  // Biography before the psychological-scoring field notes and compilations:
+  // #about is lifted out of its shipped slot (between #services and #contact)
+  // and the three sections are placed together after the showreel, in the same
+  // order as the client bundle. Idempotent: each section is extracted wherever
+  // it currently sits and re-inserted here; the two generated sections are
+  // regenerated so future copy/data edits reach the no-JS first paint too.
   {
     const section = compilationsSectionHtml();
+    const story = psychoacousticSectionHtml();
     const aboutMatch = /<section id="about"[\s\S]*?<\/section>/.exec(out);
     if (!aboutMatch) throw new Error('index.html: #about (biography) section not found');
     const about = aboutMatch[0];
     out = out.replace(about, () => '');
+    out = out.replace(/<section id="psychoacoustic-score"[\s\S]*?<\/section>/, () => '');
     out = out.replace(/<section id="compilations"[\s\S]*?<\/section>/, () => '');
     const showreelStart = out.indexOf('<section id="showreel"');
     if (showreelStart < 0) throw new Error('index.html: #showreel section not found');
     const at = out.indexOf('</section>', showreelStart) + '</section>'.length;
-    out = out.slice(0, at) + about + section + out.slice(at);
-    applied.push('biography placed before the compilations section, after the showreel');
+    out = out.slice(0, at) + about + story + section + out.slice(at);
+    applied.push('biography, psychological-scoring story, and compilations placed after the showreel');
   }
 
   // Services: replace the old React estimator snapshot with the static island.
@@ -1022,9 +1034,14 @@ function patchStatic(html, tracks) {
 /** Inline style and click-to-load script for the compilations section. */
 function ensureCompilationsAssets(html) {
   let out = html;
+  const psychoStyle = `<style id="zp-psycho-style">${PSYCHOACOUSTIC_SECTION_CSS}</style>`;
   const style = `<style id="zp-comp-style">${COMPILATIONS_CSS}</style>`;
   const script = `<script id="zp-comp-script">${COMPILATIONS_JS}</script>`;
-  for (const [id, tag, block] of [['zp-comp-style', 'style', style], ['zp-comp-script', 'script', script]]) {
+  for (const [id, tag, block] of [
+    ['zp-psycho-style', 'style', psychoStyle],
+    ['zp-comp-style', 'style', style],
+    ['zp-comp-script', 'script', script],
+  ]) {
     const existing = new RegExp(`<${tag} id="${id}">[\\s\\S]*?</${tag}>`);
     out = existing.test(out) ? out.replace(existing, () => block) : out.replace('</head>', () => `${block}\n</head>`);
   }
