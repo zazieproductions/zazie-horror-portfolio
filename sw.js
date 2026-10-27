@@ -111,7 +111,11 @@
 // the rebuilt legal script also restores Expand all for individual cue links.
 // v46: combine the download action with main's simplified navigation in a new
 // homepage bundle, clearing the older cached bundle and document.
-const CACHE_NAME = 'zazie-v46';
+// v47: the published rate card and cost estimator are removed (2026-10-27).
+// Commissions are quoted per project against the budget range and references
+// shared in the inquiry; estimator-<hash> assets are succeeded by
+// inquiry-<hash> ones, so the cache name moves with them.
+const CACHE_NAME = 'zazie-v47';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -120,13 +124,13 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-3465aa44.css',
-  '/index-e6806e5c.js',
+  '/index-c6653915.js',
   '/store-1e13177a.css',
   '/store-3fc01be0.js',
   '/legal-f4e3a5fb.css',
   '/legal-c623083a.js',
-  '/estimator-fc4ddfe0.css',
-  '/estimator-2b081a5e.js',
+  '/inquiry-1f1ff32f.css',
+  '/inquiry-bbe5560c.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',
   '/images/hero-portrait.avif'

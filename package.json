@@ -6,7 +6,7 @@
   "description": "Build pipeline for horror.zazieproductions.com - data-driven per-item routes, per-route <head>, generated sitemap.xml and robots.txt, item-page asset bundle.",
   "license": "UNLICENSED",
   "scripts": {
-    "build": "tsc && node scripts/sync-static-seo.mjs && ./store-src/build.sh && ./legal-src/build.sh && node scripts/build-estimator.mjs && node scripts/build-reel-download.mjs && node home-src/build.mjs && node scripts/sync-pricing.mjs && node tools/route-aliases.mjs && node scripts/sync-pricing.mjs --check && node scripts/generate-sitemap.mjs && node scripts/generate-llms.mjs && vite build && node scripts/prerender.mjs && node scripts/verify.mjs && node tools/check-headers.mjs && node tools/check-links.mjs && node tools/check-forms.mjs && node tools/route-aliases.mjs --check && node tools/check-sitemap.mjs && node tools/index-coverage.mjs --check",
+    "build": "tsc && node scripts/sync-static-seo.mjs && ./store-src/build.sh && ./legal-src/build.sh && node scripts/build-inquiry.mjs && node scripts/build-reel-download.mjs && node home-src/build.mjs && node scripts/sync-commission.mjs && node tools/route-aliases.mjs && node scripts/sync-commission.mjs --check && node scripts/generate-sitemap.mjs && node scripts/generate-llms.mjs && vite build && node scripts/prerender.mjs && node scripts/verify.mjs && node tools/check-headers.mjs && node tools/check-links.mjs && node tools/check-forms.mjs && node tools/route-aliases.mjs --check && node tools/check-sitemap.mjs && node tools/index-coverage.mjs --check",
     "build:deploy": "npm run build && node scripts/build-deploy-dir.mjs",
     "generate:sitemap": "node scripts/generate-sitemap.mjs",
     "generate:llms": "node scripts/generate-llms.mjs",
@@ -16,7 +16,7 @@
     "check:forms": "node tools/check-forms.mjs",
     "check:headers": "node tools/check-headers.mjs",
     "typecheck": "tsc --noEmit",
-    "test": "node --test tools/pricing.test.mjs tools/film-player.test.mjs tools/geo.test.mjs tools/headers.test.mjs tools/boot-skip.test.mjs tools/showreel.test.mjs tools/reel-download.test.mjs tools/semantic-pages.test.mjs tools/home-mount.test.mjs tools/external-links.test.mjs",
+    "test": "node --test tools/inquiry.test.mjs tools/film-player.test.mjs tools/geo.test.mjs tools/headers.test.mjs tools/boot-skip.test.mjs tools/showreel.test.mjs tools/reel-download.test.mjs tools/semantic-pages.test.mjs tools/home-mount.test.mjs tools/external-links.test.mjs",
     "serve": "node server.mjs",
     "seo:coverage": "node tools/index-coverage.mjs",
     "seo:coverage:json": "node tools/index-coverage.mjs --json"
