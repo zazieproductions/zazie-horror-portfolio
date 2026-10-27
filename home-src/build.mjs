@@ -53,9 +53,9 @@ const { homePosterClientData } = await import('../build/lib/home.js');
 // semantic `sample-${slug}` anchor and genre-descriptive alt text.
 const FILM_SAMPLES_META = [
   {
-    title: 'Mike Has A Visitor',
-    slug: 'mike-has-a-visitor',
-    alt: 'Mike Has A Visitor: Sleep-paralysis psychological horror score by Zazie Kanwar-Torge featuring nerve-scraping strings and sub-audible room tone.',
+    title: 'GOODBYE, BROTHER',
+    slug: 'goodbye-brother',
+    alt: 'GOODBYE, BROTHER: Psychological drama-horror score by Zazie Kanwar-Torge featuring intimate chamber strings and somber harmonic decay.',
   },
   {
     title: 'Eclipsed',
@@ -63,9 +63,9 @@ const FILM_SAMPLES_META = [
     alt: 'Eclipsed: Surrealist body horror score by Zazie Kanwar-Torge featuring dissonant bowed metal and experimental synthesis.',
   },
   {
-    title: 'GOODBYE, BROTHER',
-    slug: 'goodbye-brother',
-    alt: 'GOODBYE, BROTHER: Psychological drama-horror score by Zazie Kanwar-Torge featuring intimate chamber strings and somber harmonic decay.',
+    title: 'Mike Has A Visitor',
+    slug: 'mike-has-a-visitor',
+    alt: 'Mike Has A Visitor: Sleep-paralysis psychological horror score by Zazie Kanwar-Torge featuring nerve-scraping strings and sub-audible room tone.',
   },
   {
     title: 'Home Intruder',

@@ -49,6 +49,18 @@ export const hubs: Hub[] = [
     ],
     videos: [
       {
+        thumbnailLoc: "https://horror.zazieproductions.com/images/project-ItrrcilS0ro.jpg",
+        title: "GOODBYE, BROTHER: Original Dark Cinematic Film Score - Psychological Drama",
+        description: "Dramatic short film scored by Zazie Kanwar-Torge. Atmospheric cinematic composition for dark psychological storytelling. Original themes and tension cues.",
+        playerLoc: "https://www.youtube.com/embed/ItrrcilS0ro",
+        tags: ["horror composer", "dark cinematic score", "psychological drama score"],
+      },      {
+        thumbnailLoc: "https://horror.zazieproductions.com/images/eclipsed-cover-1280.jpg",
+        title: "ECLIPSED project sample",
+        description: "A Drive-hosted project sample associated with the ECLIPSED short. IMDb describes the surreal horror premise and credits Zazie Kanwar-Torge and Noah C. Castro as composers.",
+        playerLoc: "https://drive.google.com/file/d/1zKtAavEx-Yjd2To_troEYlxTTt62Y2OU/preview",
+        tags: ["ECLIPSED", "short film sample"],
+      },      {
         thumbnailLoc: "https://horror.zazieproductions.com/images/project-HaVJP08j77U.jpg",
         title: "MIKE HAS A VISITOR: sleep-paralysis horror short",
         description: "The 14:23 YouTube upload of MIKE HAS A VISITOR, published by director Marco Saikaley on June 30, 2025. IMDb separately credits Zazie Kanwar-Torge as composer.",
@@ -56,45 +68,33 @@ export const hubs: Hub[] = [
         duration: "863",
         publicationDate: "2025-06-30",
         tags: ["psychological horror composer", "horror film score", "sleep paralysis horror", "dark atmospheric score"],
-      },
-      {
-        thumbnailLoc: "https://horror.zazieproductions.com/images/project-ItrrcilS0ro.jpg",
-        title: "GOODBYE, BROTHER: Original Dark Cinematic Film Score - Psychological Drama",
-        description: "Dramatic short film scored by Zazie Kanwar-Torge. Atmospheric cinematic composition for dark psychological storytelling. Original themes and tension cues.",
-        playerLoc: "https://www.youtube.com/embed/ItrrcilS0ro",
-        tags: ["horror composer", "dark cinematic score", "psychological drama score"],
-      },
-      {
+      },      {
         thumbnailLoc: "https://horror.zazieproductions.com/images/project-riCvy2abhlc.jpg",
         title: "Home Intruder: Thriller Chase Cue - Tension-Driven Horror Composition",
         description: "Action thriller chase sequence scored by Zazie Kanwar-Torge. Tension-driven cinematic composition for thriller and horror. Dark, propulsive, dread-filled cue architecture.",
         playerLoc: "https://www.youtube.com/embed/riCvy2abhlc",
         tags: ["thriller chase music", "horror tension cue"],
-      },
-      {
+      },      {
         thumbnailLoc: "https://horror.zazieproductions.com/images/project-Ty8tPp59mDc.jpg",
         title: "THE HAUNTED: official trailer",
         description: "Official trailer for THE HAUNTED from Crystal Fox Films. IMDb credits Zazie Kanwar-Torge and Robert Mason Sandifer as co-composers; the trailer is promotional film media, not a separate score excerpt.",
         playerLoc: "https://www.youtube.com/embed/Ty8tPp59mDc",
         duration: "149",
         tags: ["supernatural horror score", "haunted house music"],
-      },
-      {
+      },      {
         thumbnailLoc: "https://horror.zazieproductions.com/images/project-rvCGO0BJ_2E.jpg",
         title: "AQUAPHOBIA: Short Horror Film Score - Folk and Body Horror",
         description: "Short horror film AQUAPHOBIA scored by Zazie Kanwar-Torge. Dark atmospheric composition for folk horror and psychological dread. Waterphone, bowed metal, hybrid orchestration.",
         playerLoc: "https://www.youtube.com/embed/rvCGO0BJ_2E",
         publicationDate: "2024-09-10",
         tags: ["folk horror music", "body horror score", "waterphone"],
-      },
-      {
+      },      {
         thumbnailLoc: "https://horror.zazieproductions.com/images/project-6qa3Uwj47fc.jpg",
         title: "Whispers In The Dark: Horror Short Score - Atmospheric Dread Composition",
         description: "Horror short Whispers In The Dark scored by Zazie Kanwar-Torge. Atmospheric dread composition for supernatural horror. Slow-burn tension beds and psychological horror architecture.",
         playerLoc: "https://www.youtube.com/embed/6qa3Uwj47fc",
         tags: ["atmospheric horror music", "dread soundscape"],
-      },
-      {
+      },      {
         thumbnailLoc: "https://horror.zazieproductions.com/images/project-UX2kv3G89Jw.jpg",
         title: "Phantom Requiem: experimental short film",
         description: "The complete 4:53 experimental short Phantom Requiem, published by Zazie Productions on June 20, 2024. The studio describes its visuals, sound, and music as part of the work.",
@@ -102,13 +102,6 @@ export const hubs: Hub[] = [
         duration: "293",
         publicationDate: "2024-06-20",
         tags: ["experimental short", "Phantom Requiem"],
-      },
-      {
-        thumbnailLoc: "https://horror.zazieproductions.com/images/eclipsed-cover-1280.jpg",
-        title: "ECLIPSED project sample",
-        description: "A Drive-hosted project sample associated with the ECLIPSED short. IMDb describes the surreal horror premise and credits Zazie Kanwar-Torge and Noah C. Castro as composers.",
-        playerLoc: "https://drive.google.com/file/d/1zKtAavEx-Yjd2To_troEYlxTTt62Y2OU/preview",
-        tags: ["ECLIPSED", "short film sample"],
       },
     ],
   },
