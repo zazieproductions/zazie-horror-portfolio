@@ -109,7 +109,9 @@
 // v45: add a reel-download entry point to the homepage and on-demand ZIP
 // preparation on /reel. The homepage bundle and cached document change too;
 // the rebuilt legal script also restores Expand all for individual cue links.
-const CACHE_NAME = 'zazie-v45';
+// v46: combine the download action with main's simplified navigation in a new
+// homepage bundle, clearing the older cached bundle and document.
+const CACHE_NAME = 'zazie-v46';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -118,7 +120,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-3465aa44.css',
-  '/index-966c7da0.js',
+  '/index-e6806e5c.js',
   '/store-1e13177a.css',
   '/store-3fc01be0.js',
   '/legal-f4e3a5fb.css',
