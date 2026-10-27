@@ -620,3 +620,265 @@ td code,th code{white-space:nowrap}
    stacking order to stay clickable. */
 .inline-link{position:relative;z-index:1;color:var(--mist);text-decoration:underline;text-decoration-color:rgba(196,30,30,.55);text-underline-offset:3px;transition:color .2s}
 .inline-link:hover,.inline-link:focus-visible{color:var(--bone);text-decoration-color:var(--ember)}
+
+/* ==========================================================================
+   Banded page architecture
+   --------------------------------------------------------------------------
+   Every interior page used to sit in one continuous "document plate": a 13rem
+   Contents rail beside a single 74ch column of roman-numeral clauses. That is
+   the right shape for a contract and the wrong shape for a studio site - it
+   flattens a sales page into a wall of prose at one visual weight.
+
+   This layer gives those pages the architecture the portfolio home already
+   has: full-bleed bands on alternating surfaces, a display-scale section
+   head, wide grids, and a closing call to action. It reuses the existing
+   tokens, faces and texture recipes - nothing here is a second design system.
+
+   Opt in per page by adding `.doc-banded` to the `.doc` element and wrapping
+   each section as `<section class="band">` with its own `.shell` inside.
+
+   Prose stays readable: only text-level children of `.doc-body` are held to
+   --measure, so a card grid, a table or a figure inside the same band can run
+   to the full shell width. That distinction is the whole point of the layer.
+   ========================================================================== */
+
+:root{
+  --band-pad:clamp(3.25rem,7.5vw,6rem);
+  --band-gap:clamp(1.5rem,3.5vw,2.5rem);
+}
+
+/* --- The banded document -------------------------------------------------- */
+.doc-banded{padding-block:0;background:var(--void)}
+.doc-banded .doc-body{max-width:none}
+
+/* Hold running text to a readable measure; leave grids and media wide. */
+.doc-banded .doc-body > p,
+.doc-banded .doc-body > ul,
+.doc-banded .doc-body > ol,
+.doc-banded .doc-body > dl,
+.doc-banded .doc-body > blockquote,
+.doc-banded .doc-body > aside,
+.doc-banded .doc-body > details,
+.doc-banded .doc-body > .table-wrap{max-width:var(--measure)}
+
+/* --- Bands ---------------------------------------------------------------- */
+.band{position:relative;isolation:isolate;padding-block:var(--band-pad);border-top:1px solid var(--edge)}
+.doc-head + .doc > .band:first-child,.doc-banded > .band:first-child{border-top:0}
+.band-inner{position:relative}
+.band + .band{margin-top:0}
+
+/* Surfaces mirror the home page's alternating void/ink rhythm. */
+.band-void{background:var(--void)}
+.band-ink{background:var(--ink)}
+.band-ink::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(ellipse 60% 55% at 92% 0%,rgba(140,10,10,.16),transparent 62%);
+}
+/* A band that should read as a delimiter - blood hairlines top and bottom. */
+.band-blood{border-block:1px solid rgba(196,30,30,.15);background:var(--ink)}
+
+/* --- Band head ------------------------------------------------------------ */
+.band-head{max-width:62ch;margin-bottom:var(--band-gap)}
+.band-head > h2{
+  margin:0;font-family:var(--display);font-weight:400;
+  font-size:clamp(1.85rem,4.4vw,3rem);line-height:1.08;letter-spacing:-.01em;color:var(--bone);
+}
+.band-head > h2 em{font-style:italic;color:var(--blood)}
+/* The archive numeral, promoted from clause label to band marker. */
+.band-head > h2 .no{
+  display:block;margin-bottom:.7rem;font-family:var(--display);font-weight:400;
+  font-size:.9375rem;line-height:1;letter-spacing:.2em;text-transform:none;color:var(--blood-text);
+}
+.band-head .eyebrow{margin-bottom:.85rem}
+.band-lead{margin:1rem 0 0;max-width:58ch;font-size:1rem;line-height:1.8;color:var(--body)}
+.band-head .band-lead + .band-lead{margin-top:.85rem}
+/* Head and content side by side on wide screens, when a band carries a rail. */
+@media (min-width:1000px){
+  .band-head-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,22rem);gap:clamp(2rem,5vw,4rem);align-items:end;max-width:none;margin-bottom:var(--band-gap)}
+  .band-head-split > .band-head{margin-bottom:0}
+}
+
+/* --- Section jump: the Contents rail, laid down horizontally -------------- */
+/* Sticky under the masthead at every width, so long pages stay navigable
+   without a two-column document layout. legal.js moves aria-current. */
+.section-jump{
+  /* top must equal the sticky masthead's height, or the bar slides under it
+     and stops being visible exactly when it is useful. .masthead-inner is
+     3.5rem, 4rem from 640px - both are matched below. */
+  position:sticky;top:3.5rem;z-index:65;border-bottom:1px solid var(--edge);
+  background:rgba(8,8,8,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+@media (min-width:640px){.section-jump{top:4rem}}
+.section-jump-inner{display:flex;align-items:center;gap:1rem;padding-block:.55rem;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.section-jump-inner::-webkit-scrollbar{display:none}
+.section-jump p{
+  flex:none;margin:0;font-size:.5625rem;font-weight:500;letter-spacing:.3em;
+  text-transform:uppercase;color:rgba(154,149,144,.7);
+}
+.section-jump ul{display:flex;align-items:center;gap:.3rem;margin:0;padding:0;list-style:none}
+.section-jump li{flex:none;margin:0}
+.section-jump a{
+  display:block;padding:.42rem .7rem;border:1px solid transparent;white-space:nowrap;
+  font-size:.625rem;letter-spacing:.18em;text-transform:uppercase;color:var(--mist);
+  transition:color .2s,border-color .2s,background .2s;
+}
+.section-jump a:hover{color:var(--bone);border-color:var(--ash)}
+.section-jump a[aria-current="true"]{color:var(--bone);border-color:rgba(196,30,30,.5);background:rgba(196,30,30,.08)}
+@media (max-width:639px){.section-jump p{display:none}}
+
+/* --- Stat rail ------------------------------------------------------------ */
+/* Verified counts only - these numbers appear in metadata, schema and copy
+   elsewhere on the site and must not drift (see README "Counts move together"). */
+.stat-rail{
+  display:grid;gap:1px;margin:0;padding:0;list-style:none;
+  border:1px solid var(--edge);background:var(--edge);
+}
+@media (min-width:560px){.stat-rail{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:900px){.stat-rail{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.stat-rail li{padding:1.35rem 1.4rem;background:var(--ink)}
+.band-void .stat-rail li{background:var(--void)}
+.stat-rail b{
+  display:block;font-family:var(--display);font-weight:400;
+  font-size:clamp(2rem,4.6vw,2.75rem);line-height:1;color:var(--bone);font-variant-numeric:tabular-nums;
+}
+.stat-rail b em{font-style:italic;color:var(--blood)}
+.stat-rail span{
+  display:block;margin-top:.6rem;font-size:.5625rem;font-weight:500;
+  letter-spacing:.26em;text-transform:uppercase;color:var(--mist);
+}
+.stat-rail small{display:block;margin-top:.45rem;font-size:.75rem;line-height:1.6;color:var(--body-dim)}
+
+/* --- Card grids ----------------------------------------------------------- */
+/* Extends the existing .hub-card rather than adding a second card component. */
+@media (min-width:760px){.hub-grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (min-width:1100px){.hub-grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.doc-banded .hub-grid{margin:0}
+.hub-card{padding:1.65rem 1.5rem 1.5rem;gap:.65rem}
+.hub-card > .no{
+  font-family:var(--display);font-size:.9375rem;letter-spacing:.18em;
+  color:var(--blood-text);margin-bottom:.15rem;
+}
+.hub-card::after{
+  content:"";position:absolute;left:0;bottom:0;height:1px;width:0;
+  background:linear-gradient(90deg,var(--blood),transparent);transition:width .45s cubic-bezier(.2,.7,.2,1);
+}
+.hub-card:hover::after{width:100%}
+.hub-card .go{
+  margin-top:.35rem;font-size:.5625rem;font-weight:500;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--blood-text);
+}
+.hub-card .go::after{content:" \2192";transition:margin-left .3s}
+.hub-card:hover .go::after{margin-left:.3rem}
+
+/* --- Split rows: media beside copy ---------------------------------------- */
+.split{display:grid;gap:clamp(1.5rem,4vw,3rem);align-items:center}
+@media (min-width:900px){.split{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+@media (min-width:900px){.split-flip > *:first-child{order:2}}
+.split > .split-media{margin:0;min-width:0}
+.split > .split-media img{width:100%;height:auto}
+.split-body{min-width:0}
+.split-body > * + *{margin-top:1rem}
+.split-body > p{margin:0;font-size:.9375rem;line-height:1.85;color:var(--body)}
+
+/* --- Link set: scattered links, grouped deliberately ---------------------- */
+/* Replaces runs of inline links separated by middle dots. Each link gets a
+   label, a target row and an affordance, so a page's outbound references read
+   as a curated list instead of confetti in the prose. */
+.link-set{display:grid;gap:.6rem;margin:0;padding:0;list-style:none}
+@media (min-width:620px){.link-set{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (min-width:1040px){.link-set-3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.link-set li{margin:0}
+.link-set a{
+  display:flex;align-items:baseline;justify-content:space-between;gap:1rem;
+  height:100%;padding:.95rem 1.1rem;border:1px solid var(--ash);background:rgba(255,255,255,.012);
+  font-size:.8125rem;line-height:1.5;color:var(--bone);
+  transition:border-color .25s,background .25s,transform .25s;
+}
+.link-set a:hover{border-color:rgba(196,30,30,.55);background:rgba(196,30,30,.05);transform:translateY(-2px)}
+.link-set a .mark{
+  flex:none;font-size:.6875rem;letter-spacing:.1em;color:var(--blood-text);
+}
+.link-set a[data-external] .mark::after{content:" \2197"}
+.link-set a:not([data-external]) .mark::after{content:" \2192"}
+.link-set small{display:block;margin-top:.3rem;font-size:.6875rem;line-height:1.6;color:var(--body-dim)}
+.link-set-title{
+  margin:0 0 .9rem;font-size:.5625rem;font-weight:500;letter-spacing:.3em;
+  text-transform:uppercase;color:rgba(154,149,144,.75);
+}
+
+/* --- Action row ----------------------------------------------------------- */
+.action-row{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:var(--band-gap)}
+.action-row .btn + .btn{margin-left:0}
+
+/* --- Definition rail: long <dl> runs, given structure --------------------- */
+/* The existing .zp-factors-list is a two-column term/definition rail. Inside a
+   band it gets a little more air and a hover state so a long list scans. */
+.doc-banded .zp-factors-list{max-width:none}
+.doc-banded .zp-factors-list > div{transition:background .25s}
+.doc-banded .zp-factors-list > div:hover{background:rgba(255,255,255,.015)}
+
+/* --- Reduced motion and print --------------------------------------------- */
+@media (prefers-reduced-motion:reduce){
+  .hub-card::after,.hub-card .go::after{transition:none}
+  .link-set a:hover{transform:none}
+  .section-jump{position:static}
+}
+@media print{
+  .section-jump{display:none!important}
+  .band{padding-block:1.5rem;border-top:1px solid #999;background:#fff}
+  .band-ink::before{display:none}
+  .band-head > h2{color:#000}
+  .stat-rail{border-color:#999;background:#999}
+  .stat-rail li{background:#fff}
+  .stat-rail b{color:#000}
+  .link-set a{border-color:#999;background:#fff}
+}
+
+/* --- Clauses and FAQ groups promoted to band heads ------------------------ */
+/* The transform keeps each section's own classes and its <h2> exactly where
+   they were, so every existing selector (.clause > h2, .faq-group > h2,
+   .site-map > ul, item.css's .doc-body .table-wrap ...) keeps matching. The
+   band supplies the full-bleed surface and the shell; these rules supply the
+   display-scale head. Nothing is moved, so nothing can silently break. */
+.doc-banded .clause,
+.doc-banded .faq-group{padding-top:0;scroll-margin-top:7.5rem}
+.doc-banded .clause + .clause,
+.doc-banded .faq-group + .faq-group{margin-top:0;border-top:0}
+
+.doc-banded .clause > h2,
+.doc-banded .faq-group > h2{
+  margin:0 0 var(--band-gap);max-width:22ch;
+  font-size:clamp(1.85rem,4.4vw,3rem);line-height:1.08;letter-spacing:-.01em;
+}
+.doc-banded .clause > h2 .no,
+.doc-banded .faq-group > h2 .no{
+  display:block;margin-bottom:.7rem;font-family:var(--display);font-weight:400;
+  font-size:.9375rem;line-height:1;letter-spacing:.2em;text-transform:none;color:var(--blood-text);
+}
+/* The FAQ group's kicker is its standfirst - give it the lead's measure. */
+.doc-banded .faq-group > .faq-kicker{
+  margin:calc(-1 * var(--band-gap) + .25rem) 0 var(--band-gap);
+  max-width:58ch;font-size:.9375rem;line-height:1.8;color:var(--body);
+}
+/* A clause whose first child is not a heading still gets comfortable rhythm. */
+.doc-banded .clause > :first-child:not(h2){margin-top:0}
+.doc-banded .faq-group > h2{border-bottom:0;padding-bottom:0}
+
+/* Long documents (terms: 25 sections, privacy: 15, licensing: 14) stay on one
+   surface with hairline dividers. Alternating void/ink that many times reads
+   as stripes, not as a band rhythm - and these are documents people rely on. */
+.doc-calm .band{background:var(--void)}
+.doc-calm .band-ink{background:var(--void)}
+.doc-calm .band-ink::before{display:none}
+
+/* --- Stat rail in the page hero ------------------------------------------- */
+/* On the hero the rail sits over the doc-head glow, so its cells go
+   translucent instead of taking a flat surface: the numbers read as part of
+   the plate rather than as a box dropped on top of it. */
+.doc-head .stat-rail{margin-top:1.9rem}
+.doc-head .stat-rail li{background:rgba(3,3,3,.5)}
+.doc-head .stat-rail b{font-size:clamp(1.75rem,3.6vw,2.25rem)}
+@media (max-width:559px){
+  .stat-rail{gap:1px}
+  .stat-rail li{padding:1.05rem 1.1rem}
+}

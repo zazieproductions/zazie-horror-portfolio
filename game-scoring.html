@@ -28,7 +28,7 @@
 <meta name="twitter:description" content="Adaptive horror scoring for games: states, seamless loops, layered stems, stingers and implementation notes for Wwise, FMOD, Unity and Unreal pipelines." />
 <meta name="twitter:image" content="https://horror.zazieproductions.com/images/press-photo.jpg"/>
 <meta name="twitter:image:alt" content="Zazie Productions Studio: Experimental art house, psychological, folk, and body horror scoring suite of Zazie Kanwar-Torge featuring bowed metal, prepared strings, and custom synthesis."/>
-<link href="/legal-f4e3a5fb.css" rel="stylesheet"/>
+<link href="/legal-e6f22dcd.css" rel="stylesheet"/>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -508,21 +508,26 @@
   </div>
 </header>
 
-<div class="doc">
-  <div class="shell doc-layout">
-    <nav class="doc-index" aria-label="On this page">
+<div class="doc doc-banded">
+
+  <nav class="section-jump" aria-label="On this page">
+    <div class="shell section-jump-inner">
       <p>Contents</p>
-      <ol>
+      <ul>
         <li><a href="#needs">I. What interactive horror scoring needs</a></li>
         <li><a href="#built">II. How it is built</a></li>
         <li><a href="#delivery">III. Deliverables</a></li>
         <li><a href="#proof">IV. Proof</a></li>
         <li><a href="#questions">V. Questions</a></li>
         <li><a href="#start">VI. Start an inquiry</a></li>
-      </ol>
-    </nav>
-    <div class="doc-body">
-      <section class="clause" id="needs">
+      </ul>
+    </div>
+  </nav>
+
+  <section class="band band-void" id="needs">
+    <div class="shell band-inner">
+      <div class="doc-body clause">
+
         <h2><span class="no">I</span> What interactive horror scoring needs</h2>
         <p class="standfirst">Music that behaves. In a game the score is a <em>system as much as a composition</em>.</p>
         <p>It has to survive being played with, looped, interrupted and layered by a player who does not follow the timeline you imagined.</p>
@@ -532,8 +537,14 @@
           <li class="hub-card" style="--i:2"><span class="no">03</span> <h3>Mix behaviour</h3><p>Dialogue-safe music, ducking notes and headroom defined so the audio lead is not reverse-engineering your mix.</p></li>
           <li class="hub-card" style="--i:3"><span class="no">04</span> <h3>Implementation notes</h3><p>File naming, tempo and key metadata, transition points and parameter ranges documented for the engine side.</p></li>
         </ul>
-      </section>
-      <section class="clause" id="built">
+      </div>
+    </div>
+  </section>
+
+  <section class="band band-ink" id="built">
+    <div class="shell band-inner">
+      <div class="doc-body clause">
+
         <h2><span class="no">II</span> How it is built</h2>
         <ol class="steps">
           <li><strong>Design conversation.</strong> What the player should feel at each stage, what triggers what, and which moments must land every single time.</li>
@@ -541,8 +552,14 @@
           <li><strong>Expansion.</strong> The same palette extended across biomes, chapters, menus and boss encounters, with reusable material rather than one-off cues.</li>
           <li><strong>Integration support.</strong> Delivery prepared for the engine and middleware the project already uses — including Wwise, FMOD, Unity or Unreal pipelines where that is the team's stack. <a href="/faq#games">Game scoring FAQ</a>.</li>
         </ol>
-      </section>
-      <section class="clause" id="delivery">
+      </div>
+    </div>
+  </section>
+
+  <section class="band band-void" id="delivery">
+    <div class="shell band-inner">
+      <div class="doc-body clause">
+
         <h2><span class="no">III</span> Deliverables</h2>
         <ul>
           <li><strong>Seamless loops</strong> with loop points and tempo documented, at production sample rate and bit depth.</li>
@@ -552,8 +569,14 @@
           <li><strong>Documentation</strong> describing parameters, recommended volumes and behaviours per state.</li>
         </ul>
         <p>If the project is early enough to define the sound before the systems are built, that is usually cheaper than fixing audio architecture later — <a href="/hire-a-composer">hire a composer</a> and the score can be designed alongside the game. Interactive scoring is custom-scoped apart from the short-film packages; <a href="/contact">request a game-scoring quote</a>.</p>
-      </section>
-      <section class="clause" id="proof">
+      </div>
+    </div>
+  </section>
+
+  <section class="band band-ink" id="proof">
+    <div class="shell band-inner">
+      <div class="doc-body clause">
+
         <h2><span class="no">IV</span> Proof</h2>
         <figure class="composer-portrait">
           <picture>
@@ -567,8 +590,14 @@
           <li class="hub-card" style="--i:1"><span class="no">02</span> <h3><a class="stretch" href="/work">Film work as tonal proof</a></h3><p>Nine productions scored for psychological, folk, supernatural and body horror: the tonal register horror games are built from.</p></li>
           <li class="hub-card" style="--i:2"><span class="no">03</span> <h3><a class="stretch" href="/store">Tools and libraries</a></h3><p>Released sound libraries and tools in the catalogue, including material designed for interactive use.</p></li>
         </ul>
-              </section>
-      <section class="clause" id="questions">
+      </div>
+    </div>
+  </section>
+
+  <section class="band band-void" id="questions">
+    <div class="shell band-inner">
+      <div class="doc-body clause">
+
         <h2><span class="no">V</span> Questions</h2>
         <div class="faq-list">
           <details class="faq-item" id="q-gs-mw" open>
@@ -590,16 +619,36 @@
             </div>
           </details>
         </div>
-      </section>
-      <section class="clause" id="start">
+      </div>
+    </div>
+  </section>
+
+  <section class="band band-ink" id="start">
+    <div class="shell band-inner">
+      <div class="doc-body clause">
+
         <h2><span class="no">VI</span> Start an inquiry</h2>
         <p>Send the engine, the scope, the feeling you want the player to have at the worst moment of the game, and your milestone timeline.</p>
         <p><a class="btn" href="/contact">Open a scoring inquiry →</a></p>
         <p class="stamp">Scoring a film instead? <a href="/hire-a-composer">Hire a composer</a> · Sound design only? <a href="/sound-design">Cinematic sound design</a></p>
-      </section>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<section class="closing">
+  <div class="shell closing-inner">
+    <div>
+      <h2>Score the <em>worst moment</em> first</h2>
+      <p>Send the build or a capture, the feeling you want the player to have at the worst moment of the game, and your milestone timeline. Adaptive implementation is quoted separately.</p>
+    </div>
+    <div class="closing-actions">
+      <a class="btn" href="/contact">Open a scoring inquiry</a>
+      <a class="btn btn-ghost" href="/services">See the rate card</a>
     </div>
   </div>
-</div>
+</section>
 </main>
 
 <footer class="site-foot">
@@ -658,6 +707,6 @@
 </footer>
 
 <script>if("serviceWorker" in navigator&&!/bot|crawl|spider|google|bing|yandex|slurp|duckduck|baidu|applebot|lighthouse|headless/i.test(navigator.userAgent)){window.addEventListener("load",()=>{navigator.serviceWorker.register("/sw.js",{updateViaCache:"none"}).catch(()=>{})},{once:true})}</script>
-<script src="/legal-c623083a.js" defer></script>
+<script src="/legal-c44e3ca1.js" defer></script>
 </body>
 </html>

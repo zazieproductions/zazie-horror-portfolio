@@ -52,8 +52,13 @@
     revealables.forEach(function (el) { el.classList.add("in"); });
   }
 
-  /* --- Section index: mark the clause you are reading --------------------- */
-  var indexLinks = $$('.doc-index a[href^="#"]');
+  /* --- Section index: mark the clause you are reading ---------------------
+     Two spellings of the same control: the sticky left rail (.doc-index) that
+     the retired document plate used, and the horizontal bar (.section-jump)
+     that the banded pages use. Both carry aria-current, so this keeps working
+     whichever one a page renders, and the rootMargin below now has to clear
+     the masthead *and* the jump bar rather than the masthead alone. */
+  var indexLinks = $$('.doc-index a[href^="#"], .section-jump a[href^="#"]');
   if (indexLinks.length && "IntersectionObserver" in window) {
     var byId = {};
     indexLinks.forEach(function (a) {
@@ -64,7 +69,13 @@
     var seen = {};
     // IntersectionObserver only accepts pixels or percentages, not rem. An
     // invalid margin stops the rest of this script, including Expand all on
-    // the reel's individual-download list. 96px matches the intended 6rem.
+    // the reel's individual-download list.
+    //
+    // 120px clears the sticky masthead (4rem) *and* the sticky .section-jump
+    // bar (~2.2rem) on banded pages, matching the 7.5rem scroll-margin-top
+    // those sections carry in legal.css. The old 96px assumed the masthead
+    // was the only fixed chrome, so on a banded page it marked the section
+    // *above* the one actually being read.
     var spy = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) { seen[entry.target.id] = entry.isIntersecting ? entry.intersectionRatio : 0; });
       var best = null;
@@ -74,7 +85,7 @@
       });
       indexLinks.forEach(function (a) { a.removeAttribute("aria-current"); });
       if (best && byId[best]) byId[best].setAttribute("aria-current", "true");
-    }, { rootMargin: "-96px 0px -60% 0px", threshold: [0, 0.1, 0.25, 0.5, 1] });
+    }, { rootMargin: "-120px 0px -60% 0px", threshold: [0, 0.1, 0.25, 0.5, 1] });
     Object.keys(byId).forEach(function (id) {
       var el = document.getElementById(id);
       if (el) spy.observe(el);

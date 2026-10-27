@@ -268,7 +268,11 @@ for (const item of items) {
   if (siblingLinks.length < 3) fail(`${item.path}: fewer than three internal sibling links`);
   if (siblingRoutes.some((sibling) => !pageLinks.has(sibling.path))) fail(`${item.path}: one or more selected sibling links are missing`);
 
-  const related = /<section class="clause" id="related">([\s\S]*?)<\/section>/i.exec(html)?.[1] ?? '';
+  // The related-entries block is matched by id, not by class: since the banded
+  // layout it is <section class="band ..." id="related"> wrapping a
+  // <div class="doc-body clause">, where it used to be <section class="clause"
+  // id="related">. Keying on the id survives either spelling.
+  const related = /<section[^>]*\bid="related"[^>]*>([\s\S]*?)<\/section>/i.exec(html)?.[1] ?? '';
   const cardCount = (related.match(/<li class="hub-card">/g) ?? []).length;
   if (cardCount < 3) fail(`${item.path}: related section has fewer than three sibling cards`);
   if (item.kind === 'production' && (related.match(/class="[^"]*\bsibling-figure\b[^"]*"/g) ?? []).length !== cardCount) {

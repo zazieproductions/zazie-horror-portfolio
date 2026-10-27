@@ -16,7 +16,7 @@
     "check:forms": "node tools/check-forms.mjs",
     "check:headers": "node tools/check-headers.mjs",
     "typecheck": "tsc --noEmit",
-    "test": "node --test tools/pricing.test.mjs tools/film-player.test.mjs tools/geo.test.mjs tools/headers.test.mjs tools/boot-skip.test.mjs tools/showreel.test.mjs tools/reel-download.test.mjs tools/semantic-pages.test.mjs tools/home-mount.test.mjs tools/external-links.test.mjs",
+    "test": "node --test tools/pricing.test.mjs tools/film-player.test.mjs tools/geo.test.mjs tools/headers.test.mjs tools/boot-skip.test.mjs tools/showreel.test.mjs tools/reel-download.test.mjs tools/semantic-pages.test.mjs tools/home-mount.test.mjs tools/external-links.test.mjs tools/banded-pages.test.mjs",
     "serve": "node server.mjs",
     "seo:coverage": "node tools/index-coverage.mjs",
     "seo:coverage:json": "node tools/index-coverage.mjs --json"

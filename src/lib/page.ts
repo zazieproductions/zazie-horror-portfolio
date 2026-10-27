@@ -18,6 +18,7 @@ import {
   webPageNode,
 } from './head.js';
 import type { Cue, Image, ItemRoute, Json, Production, Release } from '../data/types.js';
+import { bandifyDocument } from './bands.js';
 
 export interface PageChrome {
   masthead: string;
@@ -215,6 +216,59 @@ function releaseLinkList(slugs: string[]): string {
   return linked.map((release) => `<a href="/store/${esc(release.slug)}">${esc(release.title)}</a>`).join(' · ');
 }
 
+/* ------------------------------------------------------------------------
+   Cross-links as a link set.
+
+   Every item page used to close with one sentence of links separated by
+   middle dots - five to nine of them, in running prose, with no way to tell
+   an adjacent cue from a contact link. That is the "scattered links" problem
+   in its purest form, and because it lives here it was on all 65 item pages.
+
+   Each reference now gets its own tile with a note saying what it is. The
+   notes are drawn from the linked record (a cue's category, a release's
+   section) rather than repeated boilerplate, so they carry information and
+   do not add identical shingles to every page in a collection.
+   ------------------------------------------------------------------------ */
+
+interface LinkTile {
+  label: string;
+  note: string;
+  href: string;
+  external?: boolean;
+}
+
+function cueTiles(slugs: string[], empty: string): LinkTile[] {
+  const linked = slugs.map((slug) => cueBySlug.get(slug)).filter((cue): cue is Cue => Boolean(cue));
+  if (!linked.length) return [{ label: 'Showreel', note: empty, href: '/reel' }];
+  return linked.map((cue) => ({
+    label: cue.title,
+    note: `${cue.category} · ${cue.duration}`,
+    href: `/reel/${cue.slug}`,
+  }));
+}
+
+function releaseTiles(slugs: string[], empty: string): LinkTile[] {
+  const linked = slugs.map((slug) => releaseBySlug.get(slug)).filter((release): release is Release => Boolean(release));
+  if (!linked.length) return [{ label: 'Catalogue', note: empty, href: '/store' }];
+  return linked.map((release) => ({
+    label: release.title,
+    note: release.section,
+    href: `/store/${release.slug}`,
+  }));
+}
+
+function linkSet(title: string, tiles: LinkTile[]): string {
+  if (!tiles.length) return '';
+  const rows = tiles.map((tile) => {
+    const attrs = tile.external ? ' target="_blank" rel="noopener noreferrer" data-external' : '';
+    return `          <li><a href="${esc(tile.href)}"${attrs}><span>${esc(tile.label)}<small>${esc(tile.note)}</small></span><span class="mark" aria-hidden="true"></span></a></li>`;
+  });
+  return `        <p class="link-set-title">${esc(title)}</p>
+        <ul class="link-set">
+${rows.join('\n')}
+        </ul>`;
+}
+
 const ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI'];
 
 function indexList(entries: Array<[string, string]>): string {
@@ -294,7 +348,13 @@ ${tableRows(rows)}
       </section>
 
 ${sampleSection}`,
-    crossLinks: `The <a href="/work">selected productions archive</a> · <a href="/hire-a-composer">hire a psychological horror composer</a> · adjacent cues: ${cueLinkList(production.relatedCueSlugs)} · <a href="/process">scoring process</a> · <a href="/contact">contact</a>.`,
+    crossLinks: linkSet('Continue from this record', [
+      { label: 'Selected productions', note: 'The full production archive', href: '/work' },
+      ...cueTiles(production.relatedCueSlugs, 'Adjacent listening from the showreel'),
+      { label: 'Scoring process', note: 'Spotting, composition, revisions, delivery', href: '/process' },
+      { label: 'Hire a horror composer', note: 'Commissioning, scope and what to send', href: '/hire-a-composer' },
+      { label: 'Contact', note: 'Start a scoring inquiry', href: '/contact' },
+    ]),
   };
 }
 
@@ -343,7 +403,12 @@ ${cuePlayerList(cue)}
         <h2><span class="no">III</span> Cue facts</h2>
 ${tableRows(rows)}
       </section>`,
-    crossLinks: `Browse <a href="/reel">all ${cues.length} showreel cues</a> · <a href="/hire-a-composer">hire a psychological horror composer</a> · related releases: ${releaseLinkList(cue.releaseSlugs)} · <a href="/contact">scoring inquiry</a>.`,
+    crossLinks: linkSet('Continue from this cue', [
+      { label: `All ${cues.length} showreel cues`, note: 'The full showreel archive', href: '/reel' },
+      ...releaseTiles(cue.releaseSlugs, 'Related releases from the catalogue'),
+      { label: 'Hire a horror composer', note: 'Commissioning, scope and what to send', href: '/hire-a-composer' },
+      { label: 'Scoring inquiry', note: 'Tell me about your project', href: '/contact' },
+    ]),
   };
 }
 
@@ -414,7 +479,13 @@ ${tableRows(rows)}
       </section>
 
 ${listening ? `${listening}\n\n` : ''}${offerSection}`,
-    crossLinks: `The <a href="/store">full catalogue</a> · <a href="/hire-a-composer">hire a psychological horror composer</a> · related cues: ${cueLinkList(release.relatedCueSlugs)} · <a href="/purchases">purchase information</a> · <a href="/contact">contact</a>.`,
+    crossLinks: linkSet('Continue from this item', [
+      { label: 'Full catalogue', note: 'Records, libraries, tools and objects', href: '/store' },
+      ...cueTiles(release.relatedCueSlugs, 'Related listening from the showreel'),
+      { label: 'Purchases and returns', note: 'Orders, delivery and marketplace terms', href: '/purchases' },
+      { label: 'Hire a horror composer', note: 'Commissioning, scope and what to send', href: '/hire-a-composer' },
+      { label: 'Contact', note: 'Start a scoring inquiry', href: '/contact' },
+    ]),
   };
 }
 
@@ -538,7 +609,7 @@ ${meta.sections}
         <p>This archive gives the entry a direct page, keeps it connected to its original hub, and provides text links to other records in the same collection.</p>
         <p><a class="btn btn-ghost" href="${esc(item.hub)}">All ${esc((hub?.name ?? heading.label).toLowerCase())}</a></p>
 ${siblingCards(siblingsOf(item, 4), item.hub)}
-        <p style="margin-top:1.5rem">${meta.crossLinks}</p>
+${meta.crossLinks}
         <p class="stamp" style="margin-top:1rem">${esc(creditLine())} · Last updated <time datetime="${esc(item.lastmod)}">${esc(item.lastmod)}</time></p>
       </section>
     </div>
@@ -562,5 +633,11 @@ ${chrome.footer.trim()}
 </html>
 `;
 
-  return { path: item.path, kind: item.kind, html: pageHtml, title: item.title, description: item.description };
+  // The template above still writes the document plate (a Contents rail beside
+  // one narrow column). This converts it to the banded layout in exactly one
+  // place, so the 65 generated item pages match the 18 hub and document pages
+  // that were migrated with the same algorithm. See src/lib/bands.ts.
+  const html = bandifyDocument(pageHtml);
+
+  return { path: item.path, kind: item.kind, html, title: item.title, description: item.description };
 }

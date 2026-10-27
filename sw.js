@@ -111,7 +111,11 @@
 // the rebuilt legal script also restores Expand all for individual cue links.
 // v46: combine the download action with main's simplified navigation in a new
 // homepage bundle, clearing the older cached bundle and document.
-const CACHE_NAME = 'zazie-v46';
+// v47: banded interior pages. The legal stylesheet and script were rebuilt
+// (legal-e6f22dcd.css -> legal-e6f22dcd.css, legal-c44e3ca1.js ->
+// legal-c44e3ca1.js), and every interior document changed shape, so the cached
+// pages and their assets have to be evicted together. See BANDS.md.
+const CACHE_NAME = 'zazie-v47';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -123,8 +127,8 @@ const PRECACHE_ASSETS = [
   '/index-e6806e5c.js',
   '/store-1e13177a.css',
   '/store-3fc01be0.js',
-  '/legal-f4e3a5fb.css',
-  '/legal-c623083a.js',
+  '/legal-e6f22dcd.css',
+  '/legal-c44e3ca1.js',
   '/estimator-fc4ddfe0.css',
   '/estimator-2b081a5e.js',
   // Hero & Atmosphere

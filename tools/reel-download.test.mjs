@@ -118,7 +118,15 @@ test('the existing Expand all control works for the individual-download list', (
   const document = {
     documentElement: { classList: { add() {} }, scrollHeight: 1200 },
     querySelector: (selector) => ({ '[data-faq-all]': expand, '[data-faq-count]': count })[selector] ?? null,
-    querySelectorAll: (selector) => ({ '.faq-item': items, '.doc-index a[href^="#"]': [indexLink] })[selector] ?? [],
+    // legal.js asks for both spellings of the contents control in one query -
+    // the retired sticky rail and the banded pages' horizontal jump bar - so
+    // the stub has to answer that exact combined selector. Answering only the
+    // old one would leave indexLinks empty and silently stop this test from
+    // exercising the rootMargin guard below.
+    querySelectorAll: (selector) => ({
+      '.faq-item': items,
+      '.doc-index a[href^="#"], .section-jump a[href^="#"]': [indexLink],
+    })[selector] ?? [],
     getElementById: (id) => id === 'cues' ? section : null,
   };
   class IntersectionObserver {
