@@ -11,7 +11,7 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/</loc>
-    <lastmod>2026-10-26</lastmod>
+    <lastmod>2026-10-27</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/hero-portrait.jpg</image:loc>
       <image:caption>Portfolio portrait for Zazie Productions, a composer and sound-design studio working across screen and experimental media.</image:caption>
@@ -78,6 +78,23 @@
       <image:title>UNCLE FRED&apos;S MONSTER PROBLEM - Film Poster</image:title>
     </image:image>
     <video:video>
+      <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-ItrrcilS0ro.jpg</video:thumbnail_loc>
+      <video:title>GOODBYE, BROTHER: Original Dark Cinematic Film Score - Psychological Drama</video:title>
+      <video:description>Dramatic short film scored by Zazie Kanwar-Torge. Atmospheric cinematic composition for dark psychological storytelling. Original themes and tension cues.</video:description>
+      <video:player_loc>https://www.youtube.com/embed/ItrrcilS0ro</video:player_loc>
+      <video:tag>horror composer</video:tag>
+      <video:tag>dark cinematic score</video:tag>
+      <video:tag>psychological drama score</video:tag>
+    </video:video>
+    <video:video>
+      <video:thumbnail_loc>https://horror.zazieproductions.com/images/eclipsed-cover-1280.jpg</video:thumbnail_loc>
+      <video:title>ECLIPSED project sample</video:title>
+      <video:description>A Drive-hosted project sample associated with the ECLIPSED short. IMDb describes the surreal horror premise and credits Zazie Kanwar-Torge and Noah C. Castro as composers.</video:description>
+      <video:player_loc>https://drive.google.com/file/d/1zKtAavEx-Yjd2To_troEYlxTTt62Y2OU/preview</video:player_loc>
+      <video:tag>ECLIPSED</video:tag>
+      <video:tag>short film sample</video:tag>
+    </video:video>
+    <video:video>
       <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-HaVJP08j77U.jpg</video:thumbnail_loc>
       <video:title>MIKE HAS A VISITOR: sleep-paralysis horror short</video:title>
       <video:description>The 14:23 YouTube upload of MIKE HAS A VISITOR, published by director Marco Saikaley on June 30, 2025. IMDb separately credits Zazie Kanwar-Torge as composer.</video:description>
@@ -88,15 +105,6 @@
       <video:tag>horror film score</video:tag>
       <video:tag>sleep paralysis horror</video:tag>
       <video:tag>dark atmospheric score</video:tag>
-    </video:video>
-    <video:video>
-      <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-ItrrcilS0ro.jpg</video:thumbnail_loc>
-      <video:title>GOODBYE, BROTHER: Original Dark Cinematic Film Score - Psychological Drama</video:title>
-      <video:description>Dramatic short film scored by Zazie Kanwar-Torge. Atmospheric cinematic composition for dark psychological storytelling. Original themes and tension cues.</video:description>
-      <video:player_loc>https://www.youtube.com/embed/ItrrcilS0ro</video:player_loc>
-      <video:tag>horror composer</video:tag>
-      <video:tag>dark cinematic score</video:tag>
-      <video:tag>psychological drama score</video:tag>
     </video:video>
     <video:video>
       <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-riCvy2abhlc.jpg</video:thumbnail_loc>
@@ -142,14 +150,6 @@
       <video:publication_date>2024-06-20</video:publication_date>
       <video:tag>experimental short</video:tag>
       <video:tag>Phantom Requiem</video:tag>
-    </video:video>
-    <video:video>
-      <video:thumbnail_loc>https://horror.zazieproductions.com/images/eclipsed-cover-1280.jpg</video:thumbnail_loc>
-      <video:title>ECLIPSED project sample</video:title>
-      <video:description>A Drive-hosted project sample associated with the ECLIPSED short. IMDb describes the surreal horror premise and credits Zazie Kanwar-Torge and Noah C. Castro as composers.</video:description>
-      <video:player_loc>https://drive.google.com/file/d/1zKtAavEx-Yjd2To_troEYlxTTt62Y2OU/preview</video:player_loc>
-      <video:tag>ECLIPSED</video:tag>
-      <video:tag>short film sample</video:tag>
     </video:video>
   </url>
 
@@ -260,7 +260,7 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/process</loc>
-    <lastmod>2026-10-26</lastmod>
+    <lastmod>2026-10-27</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
       <image:caption>Zazie Kanwar-Torge at the scoring desk, Asheville, NC studio</image:caption>
@@ -270,11 +270,11 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/services</loc>
-    <lastmod>2026-10-26</lastmod>
+    <lastmod>2026-10-27</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
       <image:caption>Zazie Productions psychological horror film scoring suite, Asheville, NC</image:caption>
-      <image:title>Psychological Horror Scoring Suite - Rates</image:title>
+      <image:title>Psychological Horror Scoring Suite - Services</image:title>
     </image:image>
   </url>
 
@@ -325,7 +325,7 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/contact</loc>
-    <lastmod>2026-10-26</lastmod>
+    <lastmod>2026-10-27</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/hero-portrait.jpg</image:loc>
       <image:caption>Zazie Kanwar-Torge, experimental psychological horror composer available for commission</image:caption>
@@ -335,7 +335,7 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/faq</loc>
-    <lastmod>2026-10-26</lastmod>
+    <lastmod>2026-10-27</lastmod>
   </url>
 
   <url>
@@ -370,12 +370,12 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/sitemap</loc>
-    <lastmod>2026-10-18</lastmod>
+    <lastmod>2026-10-27</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/hire-a-composer</loc>
-    <lastmod>2026-10-26</lastmod>
+    <lastmod>2026-10-27</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
       <image:caption>Zazie Kanwar-Torge, IMDb-credited experimental psychological horror film composer for hire at Zazie Productions LLC.</image:caption>
@@ -385,11 +385,11 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/how-to-hire-a-horror-composer</loc>
-    <lastmod>2026-10-26</lastmod>
+    <lastmod>2026-10-27</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
       <image:caption>Guide to hiring a horror composer for independent films, series, and video games by Zazie Kanwar-Torge.</image:caption>
-      <image:title>How to Hire a Horror Composer: Rates, Subgenres &amp; Vetting Checklist</image:title>
+      <image:title>How to Hire a Horror Composer: Budgets, Subgenres &amp; Vetting Checklist</image:title>
     </image:image>
   </url>
 

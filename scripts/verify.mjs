@@ -206,15 +206,15 @@ for (const item of additionalHomePosters) {
     if (!fs.existsSync(path.join(root, reference.slice(1)))) fail(`homepage poster asset is missing: ${reference}`);
   }
 }
-for (const className of ['zp-mobile-quote', 'zp-menu-button', 'zp-poster-dialog', 'zp-poster-close', 'zp-poster-contain', 'zp-est-advanced', 'zp-result-details', 'zp-comp-article']) {
+for (const className of ['zp-mobile-quote', 'zp-menu-button', 'zp-poster-dialog', 'zp-poster-close', 'zp-poster-contain', 'zp-steps', 'zp-home-island', 'zp-comp-article']) {
   if (!home.includes(className)) fail(`homepage mobile stylesheet/markup is missing ${className}`);
   if (!homeBundle.includes(className)) fail(`homepage React bundle is missing ${className}`);
 }
 if (!homeBundle.includes('"aria-expanded":n') || !homeBundle.includes('"aria-controls":"mobile-navigation"')) {
   fail('mobile menu no longer exposes its expanded state and controlled navigation');
 }
-if (!home.includes('<section id="services"') || !homeBundle.includes('id:"services"') || !homeBundle.includes('Rates &amp; estimates')) {
-  fail('React must preserve the homepage Rates section, its #services anchor and its heading');
+if (!home.includes('<section id="services"') || !homeBundle.includes('id:"services"') || !homeBundle.includes('Commissioning a score')) {
+  fail('React must preserve the homepage Services section, its #services anchor and its heading');
 }
 if (/<div id="root"[^>]*>\s*<div class="relative min-h-\[100svh\]/.test(home)) {
   fail('homepage #root must not nest a redundant div.relative wrapper around <main>');
@@ -418,7 +418,7 @@ for (const route of allRoutes) {
   }
   for (const scriptMatch of html.matchAll(/<script\b[^>]*\btype=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
     if (/<!--v:|\{\{zp:/.test(scriptMatch[1])) {
-      fail(`${route.path}: contains uncleaned pricing comment/token inside JSON-LD`);
+      fail(`${route.path}: contains uncleaned commissioning comment/token inside JSON-LD`);
     }
   }
 }

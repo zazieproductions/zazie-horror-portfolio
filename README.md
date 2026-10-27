@@ -49,7 +49,7 @@ Primary routes:
 
 | Route | Role |
 | --- | --- |
-| `/` | The portfolio: a single continuous React experience (productions, showreel, film samples, press, approach, rates, composer, reviews, inquiry) |
+| `/` | The portfolio: a single continuous React experience (productions, showreel, film samples, press, approach, services, composer, reviews, inquiry) |
 | `/work` · `/reel` · `/composer` · `/process` · `/services` · `/contact` | Indexable hub pages mirroring the portfolio's content silos |
 | `/hire-a-composer` · `/sound-design` · `/game-scoring` | Commission pages: the commercial pillar and its first two format spokes |
 | `/store` | The Catalogue: records, sound libraries, tools and objects — 24 items, checkout delegated to Bandcamp, itch.io, Gumroad and eBay |
@@ -91,7 +91,7 @@ Unconventional choices exist for artistic or experiential reasons and are docume
 - **Showreel** — 32 title-derived cue pages plus the existing cue hub and MP3s (`/audio/track-00.mp3` … `track-31.mp3`). Each item page carries readable cue notes, duration/category, native optional playback, and sibling links.
 - **Film samples** — 8 embeds: 7 lazy `youtube-nocookie.com` players plus 1 Google Drive preview, with poster-`<picture>` covers.
 - **Press kit** — features and coverage (Visual Container award-winners press release PDF, Grammy Weekly, Limitless Magazine, Billboard Wire).
-- **Approach / Rates / Composer / Reviews / Inquiry** — scoring method, scope-and-estimate bands (packages priced by scored minutes of music, as published on `/services`), biography, 5.0 collaborator rating with 3 featured reviews, and a structured inquiry form that builds a `mailto:` handoff.
+- **Approach / Services / Composer / Reviews / Inquiry** — scoring method, how commissioning works (no published rate card: visitors state their music budget range and references via `src/data/commission.ts`, and every score is quoted per project in writing; details on `/services`), biography, 5.0 collaborator rating with 3 featured reviews, and a structured inquiry form that builds a `mailto:` handoff.
 
 **Archive boot** — the terminal loading screen plays at first paint on the homepage only: a silent, ~3 s analog-signal intro (wordmark, typed console lines, oscilloscope, progress deck) that any click, key or tap skips and that removes itself afterwards. A synchronous head gate keeps it away from no-JS visitors, crawlers, bots, Lighthouse and `prefers-reduced-motion`; `?boot=0` / `#noboot` disables it and `?boot=1` / `#boot` forces it. It makes no network requests and writes no storage key. Portfolio text is never gated behind it.
 
@@ -328,7 +328,7 @@ the rule that follows from it: `/*` is the only default, and every narrower
 | Path | `Cache-Control` |
 | --- | --- |
 | HTML documents (`/`, `/work`, `/work/`, `/<slug>`) | `public, max-age=0, must-revalidate` |
-| `/index-*`, `/store-*`, `/legal-*`, `/estimator-*`, `/item-*` CSS/JS, `/*.css`, `/fonts/*` | `public, max-age=31536000, immutable` |
+| `/index-*`, `/store-*`, `/legal-*`, `/inquiry-*`, `/item-*` CSS/JS, `/*.css`, `/fonts/*` | `public, max-age=31536000, immutable` |
 | `/images/*`, `/audio/*`, `/favicon.svg` | `public, max-age=2592000, stale-while-revalidate=86400` |
 | `/sitemap.xml`, `/robots.txt`, `/llms.txt`, `/llms-full.txt` | `public, max-age=3600` |
 | `/404.html` | `no-store` |
@@ -478,7 +478,7 @@ For future AI-assisted development sessions. **Before changing anything:**
 
 **Implemented** (all verifiable in this tree):
 
-- Full portfolio experience: poster wall + lightbox (9 productions), 32-cue showreel with mood clusters and sticky player, 7 film samples, press kit, scope-and-estimate, reviews, `mailto:` inquiry
+- Full portfolio experience: poster wall + lightbox (9 productions), 32-cue showreel with mood clusters and sticky player, 7 film samples, press kit, commissioning overview, reviews, `mailto:` inquiry
 - Archive boot restored 2026-10-22: the terminal loading screen the prerender pass had silently disabled plays again on the homepage, now gated in the head so it can never become inert unnoticed (`PERFORMANCE.md`)
 - 19 original hub routes + 65 data-generated production/cue/catalogue pages, seven legal/operating documents with generated FAQ schema, and a hub-only human sitemap
 - Service worker (SWR / network-first / cache-first tiers), CSP + canonical headers, 301 map, real 404

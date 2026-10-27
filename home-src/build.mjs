@@ -14,9 +14,11 @@
  *
  * Changes made to the bundle:
  *   1. Copy pairs (hero, bio, services heading, contact copy, budget list).
- *   2. The Services estimator component (`lj`, found with the TypeScript parser)
- *      is replaced by static markup generated from src/data/pricing.ts. Its
- *      live behaviour comes from estimator-<hash>.js, which delegates events on
+ *   2. The Services component (`lj`, found with the TypeScript parser) is
+ *      replaced by static commissioning markup generated from
+ *      src/data/commission.ts (it once rendered the published rate card and
+ *      cost estimator, removed 2026-10-27). Its live behaviour comes from
+ *      inquiry-<hash>.js, which delegates events on
  *      the document, so it works inside the React island.
  *   3. The testimonial section is deleted outright (2026-10-24): there are no
  *      attributable, permissioned quotes to publish, and a "5.0 collaborator
@@ -30,7 +32,7 @@
  * fails. In index.html, a pair that is already applied is skipped, so the
  * script can run again without damage.
  *
- *   node home-src/build.mjs        (run after `tsc -p .`, before sync-pricing)
+ *   node home-src/build.mjs        (run after `tsc -p .`, before sync-commission)
  */
 
 import crypto from 'node:crypto';
@@ -41,9 +43,9 @@ import ts from 'typescript';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const here = path.join(root, 'home-src');
-const pricing = await import('../build/lib/pricing-markup.js');
-const { budgetOptions, budgetSelectOptions, estimatorHtml, packagesHtml, inclusionsHtml } = pricing;
-const { MICROBUDGET_STATEMENT } = await import('../build/data/pricing.js');
+const commissionMarkup = await import('../build/lib/commission-markup.js');
+const { budgetSelectOptions, commissioningHtml, inclusionsHtml } = commissionMarkup;
+const { BUDGET_RANGES, MICROBUDGET_STATEMENT } = await import('../build/data/commission.js');
 const { compilationsSectionHtml, compilationsInnerHtml, SECTION_CLASS, CONTAINER_CLASS, COMPILATIONS_CSS, COMPILATIONS_JS } =
   await import('../build/lib/compilations-markup.js');
 const { homePosterClientData } = await import('../build/lib/home.js');
@@ -127,7 +129,7 @@ const PAIRS = [
   // Non-visible semantic title attributes on primary navigation (visible labels stay concise & uncrowded)
   [
     'Ix=[{href:"#showreel",label:"Reel"},{href:"#work",label:"Work"},{href:"#services",label:"Rates"},{href:"/hire-a-composer",label:"Hire"},{href:"/store",label:"Store"}]',
-    'Ix=[{href:"#showreel",label:"Reel",title:"Body horror, folk horror, and psychological horror composer showreel"},{href:"#work",label:"Work",title:"Experimental art house, psychological, folk, and body horror film scores"},{href:"#services",label:"Rates",title:"Horror and experimental art house film scoring rates"},{href:"/store",label:"Store",title:"Horror sound libraries, experimental art house records, and audio tools"}]',
+    'Ix=[{href:"#showreel",label:"Reel",title:"Body horror, folk horror, and psychological horror composer showreel"},{href:"#work",label:"Work",title:"Experimental art house, psychological, folk, and body horror film scores"},{href:"#services",label:"Services",title:"Commissioning horror and experimental art house film scores"},{href:"/store",label:"Store",title:"Horror sound libraries, experimental art house records, and audio tools"}]',
     BUNDLE,
   ],
   [
@@ -142,7 +144,12 @@ const PAIRS = [
   ],
   [
     '<a href="#showreel" title="Body horror, folk horror, and psychological horror composer showreel" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Reel</a><a href="#work" title="Experimental art house, psychological, folk, and body horror film scores" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Work</a><a href="#services" title="Horror and experimental art house film scoring rates" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Rates</a><a href="/hire-a-composer" title="Hire a folk horror, body horror, and psychological horror composer" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Hire</a><a href="/store" title="Horror sound libraries, experimental art house records, and audio tools" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Store</a>',
-    '<a href="#showreel" title="Body horror, folk horror, and psychological horror composer showreel" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Reel</a><a href="#work" title="Experimental art house, psychological, folk, and body horror film scores" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Work</a><a href="#services" title="Horror and experimental art house film scoring rates" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Rates</a><a href="/store" title="Horror sound libraries, experimental art house records, and audio tools" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Store</a>',
+    '<a href="#showreel" title="Body horror, folk horror, and psychological horror composer showreel" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Reel</a><a href="#work" title="Experimental art house, psychological, folk, and body horror film scores" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Work</a><a href="#services" title="Commissioning horror and experimental art house film scores" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Services</a><a href="/store" title="Horror sound libraries, experimental art house records, and audio tools" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Store</a>',
+    HTML,
+  ],
+  [
+    '<a href="#services" title="Horror and experimental art house film scoring rates" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Rates</a>',
+    '<a href="#services" title="Commissioning horror and experimental art house film scores" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Services</a>',
     HTML,
   ],
   [
@@ -196,6 +203,8 @@ const PAIRS = [
   [' · Atmospheric horror scores', ' · Psychological horror film scores', BUNDLE],
   ['[["/hire-a-composer","Hire a composer"],["/sound-design","Sound design"]', '[["/hire-a-composer","Hire a horror composer"],["/how-to-hire-a-horror-composer","Hiring guide"],["/sound-design","Sound design"]', BUNDLE],
   ['<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a composer</a><a href="/sound-design"', '<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a horror composer</a><a href="/how-to-hire-a-horror-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hiring guide</a><a href="/sound-design"', HTML],
+  ['["/services","Rate card"]', '["/services","Services"]', BUNDLE],
+  ['<a href="/services" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Rate card</a>', '<a href="/services" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Services</a>', HTML],
   // Keep a direct, 44px quote action visible on phones; the full section menu
   // remains available beside it. aria-expanded follows the React menu state.
   [']}),u.jsx("button",{className:"border border-white/10 p-2.5 text-bone transition-colors hover:border-blood/50 xl:hidden",onClick:()=>r(e=>!e),"aria-label":n?"Close menu":"Open menu",', ']}),u.jsx("a",{href:"/contact",className:"zp-mobile-quote",children:"Get a quote"}),u.jsx("button",{type:"button",className:"zp-menu-button xl:hidden",onClick:()=>r(e=>!e),"aria-expanded":n,"aria-controls":"mobile-navigation","aria-label":n?"Close menu":"Open menu",', BUNDLE],
@@ -343,11 +352,11 @@ const PAIRS = [
   ['04 · Scoring services', '05 · Scoring services', HTML],
   // Services heading
   ['04 · Scope and budget', '05 · Scoring services', BOTH],
-  ['Build a scope and estimate', 'Rates & estimates', BUNDLE],
-  ['Build a scope and estimate', 'Rates &amp; estimates', HTML],
-  ['Choose a project type, scored runtime, complexity, and delivery needs.', 'Packages are priced by scored music minutes, not film length.', BOTH],
-  ["Estimates scale with your project's funding.", 'Preliminary estimate — final quotation subject to creative scope and written agreement.', BUNDLE],
-  ['Packages are priced by scored music minutes, not film length. Estimates are indicative and nonbinding.', 'Packages are priced by scored music minutes, not film length. Preliminary estimate — final quotation subject to creative scope and written agreement.', HTML],
+  ['Build a scope and estimate', 'Commissioning a score', BUNDLE],
+  ['Rates &amp; estimates', 'Commissioning a score', HTML],
+  ['Choose a project type, scored runtime, complexity, and delivery needs.', 'Every score is quoted individually — there is no published rate card. Share your format, the music you need, your budget range and your references, and the quote is built around your project.', BUNDLE],
+  ["Estimates scale with your project's funding.", 'Every score is quoted individually — there is no published rate card.', BUNDLE],
+  ['Packages are priced by scored music minutes, not film length. Preliminary estimate — final quotation subject to creative scope and written agreement.', 'Every score is quoted individually — there is no published rate card. Share your format, the music you need, your budget range and your references, and the quote is built around your project.', HTML],
   // Contact
   ['Share your format, runtime, timeline, and budget. The form prepares an email for you to review and send.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', BUNDLE],
   ['Share your format, scored minutes, timeline, and budget.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', HTML],
@@ -364,6 +373,7 @@ const PAIRS = [
   ['>Runtime<', '>Scored minutes (music, not film length)<', HTML],
   ['placeholder="e.g. 12 min / 90 min"', 'placeholder="e.g. 3 scored minutes"', HTML],
   ['aria-label="Runtime"', 'aria-label="Scored minutes (music, not film length)"', HTML],
+  ['References, creative goals, rights, or other project details', 'Musical references (films, scores or tracks you love), creative goals, rights, or anything else', BOTH],
 
   // Form controls (see fieldName above). The two Contact field components are
   // patched once each and derive their name from the label they already render
@@ -397,7 +407,7 @@ const PAIRS = [
   ],
 ];
 
-/** Budget options come from the package list; the bundle reads xu[]. */
+/** Budget ranges come from commission.ts (client-stated, never a fee); the bundle reads xu[]. */
 const BUNDLE_BUDGET_OLD = 'xu=["Under $300","$300 - $500","$500 - $700","$700 - $900","$900+","Flexible / discuss"]';
 const BUNDLE_BUDGET_DEFAULT_OLD = 'useState(xu[1])';
 
@@ -410,36 +420,35 @@ const BUNDLE_BUDGET_DEFAULT_OLD = 'useState(xu[1])';
 const HERO_ART_HTML =
   '<div class="pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] lg:block"><div class="zp-hero-art"><div class="zp-hero-art-plate"><picture><source srcset="/images/hero-portrait.avif" type="image/avif"><img alt="Zazie Productions: Experimental art house, psychological, folk, and body horror film scores by Zazie Kanwar-Torge featuring bowed metal and experimental synthesis." class="absolute inset-0 h-full w-full object-contain" src="/images/hero-portrait.jpg" width="896" height="1152" loading="lazy" decoding="async"></picture></div><div class="zp-hero-art-scrim" aria-hidden="true"></div></div></div>';
 
-const ISLAND_OPEN = '<div class="zp-home-section zp-home-island" data-zp-island="estimator"><div class="zp-shell">';
+const ISLAND_OPEN = '<div class="zp-home-section zp-home-island" data-zp-island="commissioning"><div class="zp-shell">';
 const ISLAND_CLOSE = '</div></div>';
 const SERVICES_HEADER = [
   '<div class="mb-10 max-w-2xl sm:mb-14">',
   '<p class="mb-3 text-[10px] uppercase tracking-[0.35em] text-blood sm:text-[11px] sm:tracking-[0.4em]">05 · Scoring services</p>',
-  '<h2 class="mb-4 font-display text-3xl leading-none text-bone sm:text-4xl md:text-6xl">Rates &amp; estimates</h2>',
-  '<p class="text-sm leading-relaxed text-mist sm:text-base">Packages are priced by scored music minutes, not film length. Preliminary estimate — final quotation subject to creative scope and written agreement.</p>',
+  '<h2 class="mb-4 font-display text-3xl leading-none text-bone sm:text-4xl md:text-6xl">Commissioning a score</h2>',
+  '<p class="text-sm leading-relaxed text-mist sm:text-base">Every score is quoted individually — there is no published rate card. Share your format, the music you need, your budget range and your references, and the quote is built around your project.</p>',
   '</div>',
 ].join('');
 
 /**
  * Markup for the homepage island. The bundle renders the real markup; the
- * static copy in index.html carries sync-pricing marker blocks in the same
- * places, so sync-pricing fills it from pricing.ts and it never drifts.
+ * static copy in index.html carries sync-commission marker blocks in the same
+ * places, so sync-commission fills it from commission.ts and it never drifts.
  */
 function islandHtml(staticMarkers = false) {
   const block = (name, render) => (staticMarkers ? `<!--zp:${name}--><!--/zp:${name}-->` : render());
-  // The static copy carries a pricing token so sync-pricing keeps it in step;
-  // the bundle inlines the same statement from pricing.ts at build time.
+  // The static copy carries a commissioning token so sync-commission keeps it
+  // in step; the bundle inlines the same statement from commission.ts.
   const microbudget = staticMarkers
     ? '<p class="zp-microbudget">{{zp:microbudget}}</p>'
     : `<p class="zp-microbudget">${MICROBUDGET_STATEMENT}</p>`;
   return [
     ISLAND_OPEN,
-    '<p class="zp-kicker">Commission packages</p>',
-    block('packages', packagesHtml),
+    '<p class="zp-kicker">How commissioning works</p>',
+    block('commissioning', commissioningHtml),
     block('inclusions', inclusionsHtml),
     microbudget,
-    '<h3 class="zp-sub">Estimate your scope</h3>',
-    block('estimator', estimatorHtml),
+    '<p class="zp-cta-row"><a class="zp-cta" href="/contact">Start a scoring inquiry</a><a class="zp-cta zp-cta-ghost" href="/services">Services &amp; what’s included</a></p>',
     ISLAND_CLOSE,
   ].join('');
 }
@@ -690,7 +699,7 @@ function patchBundle(orig) {
     out = out.slice(0, cut.start) + f5Replacement + out.slice(cut.end);
   }
 
-  for (const [oldText, newText] of [[BUNDLE_BUDGET_OLD, `xu=${JSON.stringify(budgetOptions())}`], [BUNDLE_BUDGET_DEFAULT_OLD, 'useState(xu[0])']]) {
+  for (const [oldText, newText] of [[BUNDLE_BUDGET_OLD, `xu=${JSON.stringify([...BUDGET_RANGES])}`], [BUNDLE_BUDGET_DEFAULT_OLD, 'useState(xu[0])']]) {
     const n = countOf(out, oldText);
     if (n !== 1) throw new Error(`bundle: "${oldText}" matched ${n} times, expected 1`);
     out = out.replace(oldText, () => newText);
@@ -880,42 +889,36 @@ function patchStatic(html, tracks) {
     applied.push('biography placed before the compilations section, after the showreel');
   }
 
-  // Services: replace the old React estimator snapshot with the static island.
-  // The header paragraph is followed by its wrapper's </div>, then the grid
-  // that holds the old "Scope builder". We replace the grid, matched by depth.
+  // Services: regenerate the static commissioning island on every build so
+  // index.html and the bundle render the same generated markup. The island
+  // (or, on the very first build, the old "Scope builder" grid) is replaced
+  // whole, matched by div depth; sync-commission then fills its marker
+  // blocks from commission.ts, so the static copy can never drift.
   const sectionStart = out.indexOf('<section id="services"');
   const sectionEnd = out.indexOf('</section>', sectionStart);
   if (sectionStart < 0 || sectionEnd < 0) throw new Error('index.html: no #services section');
-  const previousPackageSubheading = '<h3 class="zp-sub" style="margin-top:0">Choose by scored music minutes</h3>';
-  if (out.includes(previousPackageSubheading)) {
-    out = out.replace(previousPackageSubheading, '');
-    applied.push('redundant package subheading removed');
-  }
-  const legacyIslandOpen = '<div class="zp-home-section"><div class="zp-shell">';
-  if (out.includes(legacyIslandOpen)) {
-    out = out.replace(legacyIslandOpen, ISLAND_OPEN);
-    applied.push('services island identity updated');
-  }
-  if (!out.slice(sectionStart, sectionEnd).includes('zp-home-section')) {
-    const header = out.indexOf('Packages are priced by scored music minutes, not film length.', sectionStart);
-    if (header < 0) throw new Error('index.html: services header paragraph not found');
+  {
+    const islandStart = out.indexOf('<div class="zp-home-section', sectionStart);
     const gridOpen = '<div class="grid gap-5 lg:grid-cols-12 lg:gap-6">';
-    const gridStart = out.indexOf(gridOpen, header);
-    if (gridStart < 0 || gridStart > sectionEnd) throw new Error('index.html: services grid not found');
+    const targetStart = islandStart >= 0 && islandStart < sectionEnd ? islandStart : out.indexOf(gridOpen, sectionStart);
+    if (targetStart < 0 || targetStart > sectionEnd) throw new Error('index.html: services island/grid not found');
     let depth = 0;
-    let gridEnd = -1;
+    let targetEnd = -1;
     const tag = /<div\b[^>]*>|<\/div>/g;
-    tag.lastIndex = gridStart;
+    tag.lastIndex = targetStart;
     for (let m = tag.exec(out); m; m = tag.exec(out)) {
       depth += m[0].startsWith('</') ? -1 : 1;
-      if (depth === 0) { gridEnd = m.index + m[0].length; break; }
+      if (depth === 0) { targetEnd = m.index + m[0].length; break; }
     }
-    if (gridEnd < 0 || gridEnd > sectionEnd) throw new Error('index.html: services grid did not close inside #services');
-    out = out.slice(0, gridStart) + islandHtml(true) + out.slice(gridEnd);
-    applied.push(`services grid replaced by island (${gridEnd - gridStart} chars)`);
+    if (targetEnd < 0 || targetEnd > sectionEnd) throw new Error('index.html: services island did not close inside #services');
+    const fresh = islandHtml(true);
+    if (out.slice(targetStart, targetEnd) !== fresh) {
+      applied.push(`services island regenerated (${targetEnd - targetStart} chars)`);
+    }
+    out = out.slice(0, targetStart) + fresh + out.slice(targetEnd);
   }
 
-  // Budget select: option list from the package list.
+  // Budget select: option list from the commission.ts budget ranges.
   const budgetRe = /(<select[^>]*aria-label="Budget">)[\s\S]*?(<\/select>)/;
   if (!budgetRe.test(out)) throw new Error('index.html: budget select not found');
   out = out.replace(budgetRe, (_m, open, close) => `${open}${budgetSelectOptions()}${close}`);
@@ -1031,15 +1034,19 @@ function ensureCompilationsAssets(html) {
   return out;
 }
 
-/** The estimator stylesheet and script used by the homepage island. */
-function ensureEstimatorAssets(html) {
-  const css = fs.readdirSync(root).find((f) => /^estimator-[0-9a-f]{8}\.css$/.test(f));
-  const js = fs.readdirSync(root).find((f) => /^estimator-[0-9a-f]{8}\.js$/.test(f));
-  if (!css || !js) throw new Error('estimator assets missing: run node scripts/build-estimator.mjs first');
+/** The inquiry stylesheet and script used by the homepage island and forms. */
+function ensureInquiryAssets(html) {
+  const css = fs.readdirSync(root).find((f) => /^inquiry-[0-9a-f]{8}\.css$/.test(f));
+  const js = fs.readdirSync(root).find((f) => /^inquiry-[0-9a-f]{8}\.js$/.test(f));
+  if (!css || !js) throw new Error('inquiry assets missing: run node scripts/build-inquiry.mjs first');
   let out = html;
-  if (!/\/estimator-[0-9a-f]{8}\.css/.test(out)) {
-    // Non-blocking: this sheet only paints the below-fold scope builder and the
-    // inquiry form, so it must never sit on the hero's render path.
+  // Migrate any retired estimator-<hash> references from pre-2026-10-27 builds.
+  out = out.replace(/\/estimator-[0-9a-f]{8}\.css/g, () => `/${css}`);
+  out = out.replace(/\/estimator-[0-9a-f]{8}\.js/g, () => `/${js}`);
+  if (!/\/inquiry-[0-9a-f]{8}\.css/.test(out)) {
+    // Non-blocking: this sheet only paints the below-fold commissioning
+    // island and the inquiry form, so it must never sit on the hero's
+    // render path.
     out = out.replace(
       '</head>',
       () =>
@@ -1047,12 +1054,14 @@ function ensureEstimatorAssets(html) {
         `<noscript><link href="/${css}" rel="stylesheet"/></noscript>\n</head>`,
     );
   } else {
-    // A rebuild that changes the estimator hash must not leave the preload
+    // A rebuild that changes the inquiry hash must not leave the preload
     // pointing at a file that no longer exists.
-    out = out.replace(/\/estimator-[0-9a-f]{8}\.css/g, () => `/${css}`);
+    out = out.replace(/\/inquiry-[0-9a-f]{8}\.css/g, () => `/${css}`);
   }
-  if (!/\/estimator-[0-9a-f]{8}\.js/.test(out)) {
+  if (!/\/inquiry-[0-9a-f]{8}\.js/.test(out)) {
     out = out.replace('</body>', () => `<script src="/${js}" defer></script>\n</body>`);
+  } else {
+    out = out.replace(/\/inquiry-[0-9a-f]{8}\.js/g, () => `/${js}`);
   }
   return out;
 }
@@ -1093,7 +1102,7 @@ if (currentCssFile !== cssName) {
 let nextHtml = html
   .replace(/\/?index-[0-9a-f]{8}\.js/g, (m) => (m.startsWith('/') ? `/${name}` : name))
   .replace(/\/?index-[0-9a-f]{8}\.css/g, (m) => (m.startsWith('/') ? `/${cssName}` : cssName));
-nextHtml = ensureEstimatorAssets(nextHtml);
+nextHtml = ensureInquiryAssets(nextHtml);
 nextHtml = ensureCompilationsAssets(nextHtml);
 fs.writeFileSync(indexFile, nextHtml, 'utf8');
 
