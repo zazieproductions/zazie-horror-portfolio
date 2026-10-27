@@ -97,6 +97,7 @@ test('cache lifetimes: HTML revalidates, hashed assets are immutable, media is l
   assert.equal(cacheControlFor('/work/expire.html'), HTML_CACHE);
   assert.equal(cacheControlFor('/index-f509fde0.css'), IMMUTABLE_CACHE);
   assert.equal(cacheControlFor('/store-3fc01be0.js'), IMMUTABLE_CACHE);
+  assert.equal(cacheControlFor('/reel-download-1234abcd.js'), IMMUTABLE_CACHE);
   assert.equal(cacheControlFor('/fonts/inter-latin-wght-normal.woff2'), IMMUTABLE_CACHE);
   assert.equal(cacheControlFor('/images/hero-portrait.jpg'), MEDIA_CACHE);
   assert.equal(cacheControlFor('/audio/track-00.mp3'), MEDIA_CACHE);

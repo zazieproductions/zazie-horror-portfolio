@@ -91,7 +91,7 @@ export const ANALYTICS_ORIGINS = [
 export const HTTPS_ONLY = new Set(['Strict-Transport-Security']);
 
 /** Immutable, content-hashed bundles emitted by the build (`name-<hash8>.css`). */
-const HASHED_ASSET = /\/(?:index|store|legal|estimator|item)-[0-9a-f]{8}\.(?:css|js)$/i;
+const HASHED_ASSET = /\/(?:index|store|legal|estimator|item|reel-download)-[0-9a-f]{8}\.(?:css|js)$/i;
 
 export const HTML_CACHE = 'public, max-age=0, must-revalidate';
 export const IMMUTABLE_CACHE = 'public, max-age=31536000, immutable';

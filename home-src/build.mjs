@@ -268,6 +268,19 @@ const PAIRS = [
   [',{id:23,title:"Screams of The Damned",src:"/audio/track-23.mp3",duration:200.072,tag:"Body Horror"}', '', BUNDLE],
   ['String(t.id+1).padStart(2,"0")', 'String(s+1).padStart(2,"0")', BUNDLE],
   ['32-cue showreel', '30-cue showreel', HTML],
+  // Give visitors a clear route to the downloadable reel in both the static
+  // first paint and React's replacement render. The ZIP itself is prepared on
+  // the archive page, where individual MP3 links also work without JavaScript.
+  [
+    'children:"Browse and play original horror cues by mood."})]})',
+    'children:"Browse and play original horror cues by mood."}),u.jsxs("a",{href:"/reel#download",className:"mt-5 inline-flex min-h-[48px] items-center gap-2 border border-ash px-5 py-3 text-xs uppercase tracking-[0.2em] text-bone transition-colors hover:border-blood",children:[u.jsx("span",{"aria-hidden":!0,children:"↓"}),"Download demo reel"]})]})',
+    BUNDLE,
+  ],
+  [
+    '<p class="mt-4 max-w-lg text-sm leading-relaxed text-mist md:text-base">Browse and play original horror cues by mood.</p></div>',
+    '<p class="mt-4 max-w-lg text-sm leading-relaxed text-mist md:text-base">Browse and play original horror cues by mood.</p><a href="/reel#download" class="mt-5 inline-flex min-h-[48px] items-center gap-2 border border-ash px-5 py-3 text-xs uppercase tracking-[0.2em] text-bone transition-colors hover:border-blood"><span aria-hidden="true">↓</span>Download demo reel</a></div>',
+    HTML,
+  ],
   // Showreel rows: 30 rows x 3 decorative nodes became 30 x 1. The duration moves
   // into the mood line (it was hidden below 640px, so phones lost it entirely) and
   // the play/pause glyph becomes a pseudo-element keyed off data-row-playing.

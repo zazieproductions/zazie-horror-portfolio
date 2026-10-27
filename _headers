@@ -135,6 +135,10 @@
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
+/reel-download-*.js
+  ! Cache-Control
+  Cache-Control: public, max-age=31536000, immutable
+
 # Canonical Link + explicit X-Robots-Tag headers on all indexable routes
 /
   X-Robots-Tag: index, follow, max-image-preview:large

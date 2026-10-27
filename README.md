@@ -113,7 +113,8 @@ All artwork © the respective productions. See the [live site](https://horror.za
 
 | System | Where it lives | Notes |
 | --- | --- | --- |
-| Showreel audio engine | `src/lib/audioContext.tsx` (in bundle), rendered by `Showreel.tsx` + `StickyPlayer.tsx` | One `<audio>` element for the whole site, shared through React context: `playTrack / toggle / next / prev / seek / setVolume`. Previous-track restarts if >3 s in. `preload="metadata"`; MP3s stream from `/audio/`, cached `immutable` at the edge. |
+| Showreel audio engine | `src/lib/audioContext.tsx` (in bundle), rendered by `Showreel.tsx` + `StickyPlayer.tsx` | One `<audio>` element for the whole site, shared through React context: `playTrack / toggle / next / prev / seek / setVolume`. Previous-track restarts if >3 s in. `preload="metadata"`; MP3s stream from `/audio/`. |
+| Reel downloads | `/reel#download`, `src/reel-download/`, `scripts/build-reel-download.mjs` | Visitors can save individual MP3s without JavaScript or prepare one ZIP of all 30 cues in their browser. The ZIP reads the published cue list and same-origin audio on demand, shows progress, and can be cancelled; it does not require a second 90 MB archive on the host. MP3s are stored in the ZIP without re-encoding. Downloads do not grant project-use or redistribution rights. |
 | Mood clusters | `tracks` array in the bundle (32 entries: `id, title, src, duration, tag`) | Each cue carries one mood tag; its dedicated item page uses `MusicComposition` + `AudioObject` schema. |
 | Sticky player | `StickyPlayer.tsx` | Hidden until first play; animated wave-bar visualisation; respects `prefers-reduced-motion`. |
 | Film samples | `Projects.tsx` data + prerendered covers | 6 YouTube-nocookie iframes get a real `src` only when lazy-loaded; 1 Google Drive embed; `preconnect` to YouTube deferred off the critical path. |

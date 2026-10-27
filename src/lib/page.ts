@@ -193,7 +193,7 @@ function audioPlayer(src: string, title: string): string {
 
 function cuePlayerList(cue: Cue): string {
   return `${audioPlayer(cue.audioPath, cue.title)}
-          <p class="small">Runtime ${esc(cue.duration)} · <a href="${esc(cue.audioPath)}">Open the MP3 directly</a>. Playback is optional; the written cue details are already on this page.</p>`;
+          <p class="small">Runtime ${esc(cue.duration)} · <a href="${esc(cue.audioPath)}">Open the MP3 directly</a> · <a href="${esc(cue.audioPath)}" download="${esc(cue.slug)}.mp3" aria-label="Download MP3: ${esc(cue.title)}">Download MP3</a> · <a href="/reel#download">Download the full reel</a>. Playback is optional; the written cue details are already on this page.</p>`;
 }
 
 function linkList(links: Array<{ label: string; href: string; external: boolean }>): string {
