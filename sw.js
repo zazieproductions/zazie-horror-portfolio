@@ -106,7 +106,10 @@
 // fresh content hash below. The 2026-10-25 blanket type floors were reverted
 // on 2026-10-26, so the design's original 8-12px label scale is back and the
 // hash plus this cache version (v43 -> v44) move together.
-const CACHE_NAME = 'zazie-v44';
+// v45: add a reel-download entry point to the homepage and on-demand ZIP
+// preparation on /reel. The homepage bundle and cached document change too;
+// the rebuilt legal script also restores Expand all for individual cue links.
+const CACHE_NAME = 'zazie-v45';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -115,11 +118,11 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-3465aa44.css',
-  '/index-10841ba3.js',
+  '/index-966c7da0.js',
   '/store-1e13177a.css',
   '/store-3fc01be0.js',
   '/legal-f4e3a5fb.css',
-  '/legal-2fe7a6e6.js',
+  '/legal-c623083a.js',
   '/estimator-fc4ddfe0.css',
   '/estimator-2b081a5e.js',
   // Hero & Atmosphere

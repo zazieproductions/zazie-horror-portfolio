@@ -205,7 +205,7 @@ if (!sitemapPaths.length) fail('sitemap.xml has no <loc> entries to check header
 
 const hashedAssets = fs
   .readdirSync(root)
-  .filter((name) => /^(?:index|store|legal|estimator|item)-[0-9a-f]{8}\.(?:css|js)$/.test(name))
+  .filter((name) => /^(?:index|store|legal|estimator|item|reel-download)-[0-9a-f]{8}\.(?:css|js)$/.test(name))
   .map((name) => `/${name}`);
 if (!hashedAssets.length) fail('no content-hashed CSS/JS bundles found at the repository root');
 
