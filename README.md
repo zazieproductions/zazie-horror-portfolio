@@ -229,6 +229,7 @@ No cookies set by this site, no fonts CDN, and exactly one external JS: the Clou
 ├── legal-src/                  # Document sources, shared partials, CSS/JS, build.sh
 ├── src/data/{hubs,productions,cues,releases,routes}.ts # Data-driven hub/item URLs and metadata
 ├── src/lib/{head,page,home}.ts # Source-rendered SEO heads and item-page layouts
+├── src/lib/bands.ts            # Document plate -> banded layout, applied to all 65 item pages
 ├── scripts/{generate-sitemap,prerender,verify}.mjs # 84-URL build and structural verification
 ├── tools/check-sitemap.mjs     # Sitemap, file, canonical, robot and hub-link audit
 ├── tools/route-aliases.mjs     # Checks 18 hub twins and flat item routes for slash twins
@@ -433,7 +434,7 @@ Two hard-won rules recorded in `STORE.md` / `LEGAL.md` / `SEO-DOSSIER.md`:
 Documented honestly, in priority order — these are real, verified in the tree:
 
 1. **Original homepage source is not in this repository.** Its legacy bundle remains committed, but this build keeps the homepage static and only regenerates its SEO head and poster wall from the item data.
-2. **Most legacy hub pages are manually maintained output.** `store-src/` and `legal-src/` have sources; other original hubs preserve their existing layout and are checked for canonical aliases, hub links, and item-link exclusion.
+2. **Most legacy hub pages are manually maintained output.** `store-src/` and `legal-src/` have sources; other original hubs are committed output and are checked for canonical aliases, hub links, and item-link exclusion. Since the banded pass (`BANDS.md`) they at least share one layout: the 8 hand-maintained hubs and the 65 generated item pages now render the same band architecture, produced by `src/lib/bands.ts` for the item pages and converted in place for the hubs. The debt that remains is *authorship*, not appearance — there is still no source file to edit for a hub, so a hub change means editing committed output and regenerating its twin.
 3. ~~**`sw.js` precache drift.**~~ Resolved: the manifest lists the store stylesheet that actually ships, and since 2026-09-25 `tools/check-sitemap.mjs` fails on any precached hashed asset that does not exist (check 22).
 4. **95 MB of MP3 in Git.** The audio library lives in the repo and grows with every cue. Fine at this scale; will eventually need Git LFS or external storage.
 5. **Two hash conventions.** `legal-src`/`store-src` hash `"$(cat file)"` (trailing newline stripped); the React bundle hash is `sha256` over raw bytes. Both are content-hashes; know which one you're reproducing.
@@ -479,6 +480,7 @@ For future AI-assisted development sessions. **Before changing anything:**
 **Implemented** (all verifiable in this tree):
 
 - Full portfolio experience: poster wall + lightbox (9 productions), 32-cue showreel with mood clusters and sticky player, 7 film samples, press kit, scope-and-estimate, reviews, `mailto:` inquiry
+- Banded interior layout, 2026-10-26: all 83 sitemap URLs except `/` and `/store` render as full-bleed bands instead of the document plate (a Contents rail beside one 74ch column). Closing CTA on every hub and document page, stat rails on `/composer`, `/services`, `/work`, `/reel`, item-page cross-links as labelled tiles, and a sticky `.section-jump` bar replacing two implementations of the contents control. `tools/banded-pages.test.mjs` locks it (`BANDS.md`)
 - Archive boot restored 2026-10-22: the terminal loading screen the prerender pass had silently disabled plays again on the homepage, now gated in the head so it can never become inert unnoticed (`PERFORMANCE.md`)
 - 19 original hub routes + 65 data-generated production/cue/catalogue pages, seven legal/operating documents with generated FAQ schema, and a hub-only human sitemap
 - Service worker (SWR / network-first / cache-first tiers), CSP + canonical headers, 301 map, real 404
@@ -529,3 +531,4 @@ The root `*.md` files are dated implementation records — the repo's developmen
 | `SEO-DOSSIER.md` | The technical SEO programme: IA silos, schema matrix, crawl policy |
 | `SITEMAP.md` | Sitemap fixes and the validator contract |
 | `STORE.md` | Catalogue build, data model, deployment lessons (the redirect loop) |
+| `BANDS.md` | The banded interior layout: why the document plate read as text walls, the migration invariants, and the counts that could not be verified |

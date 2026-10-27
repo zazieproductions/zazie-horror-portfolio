@@ -403,32 +403,25 @@ __MASTHEAD__
   </div>
 </header>
 
-<div class="doc">
-  <div class="shell doc-layout">
-    <nav class="doc-index" aria-label="On this page">
+<div class="doc doc-banded">
+
+  <nav class="section-jump" aria-label="On this page">
+    <div class="shell section-jump-inner">
       <p>Contents</p>
-      <ol>
-        <li><a href="#portfolio"><span class="idx">i</span> The portfolio</a></li>
-        <li><a href="#archive"><span class="idx">ii</span> Archive pages</a></li>
-        <li><a href="#catalogue"><span class="idx">iii</span> The catalogue</a></li>
-        <li><a href="#documents"><span class="idx">iv</span> Documents</a></li>
-        <li><a href="#machine-readable"><span class="idx">v</span> For search engines</a></li>
-      </ol>
-    </nav>
+      <ul>
+        <li><a href="#portfolio">The portfolio</a></li>
+        <li><a href="#archive">Archive pages</a></li>
+        <li><a href="#catalogue">The catalogue</a></li>
+        <li><a href="#documents">Documents</a></li>
+        <li><a href="#machine-readable">For search engines</a></li>
+      </ul>
+    </div>
+  </nav>
 
-    <div class="doc-body">
-      <nav class="doc-jump" aria-label="Sections">
-        <p>Sections</p>
-        <ul>
-          <li><a href="#portfolio">Portfolio</a></li>
-          <li><a href="#archive">Archive</a></li>
-          <li><a href="#catalogue">Catalogue</a></li>
-          <li><a href="#documents">Documents</a></li>
-          <li><a href="#machine-readable">Search engines</a></li>
-        </ul>
-      </nav>
+  <section class="band band-void" id="portfolio">
+    <div class="shell band-inner">
+      <div class="doc-body clause site-map">
 
-      <section class="clause site-map" id="portfolio">
         <h2><span class="no">i</span> The portfolio</h2>
         <p>The home page is one continuous piece, read top to bottom: productions, film samples, the playable showreel, press, approach, the scope builder, the composer and the inquiry form.</p>
         <h3><a href="/">Portfolio home</a></h3>
@@ -443,9 +436,14 @@ __MASTHEAD__
           <li><a href="/#about">The composer</a></li>
           <li><a href="/#contact">Inquiry</a></li>
         </ul>
-      </section>
+      </div>
+    </div>
+  </section>
 
-      <section class="clause site-map" id="archive">
+  <section class="band band-ink" id="archive">
+    <div class="shell band-inner">
+      <div class="doc-body clause site-map">
+
         <h2><span class="no">ii</span> Archive pages</h2>
         <p>Each part of the portfolio has a page of its own with the detail the home page leaves out: notes on every cue, credits for every production, the full rate card, and the scoring process step by step.</p>
         <h3><a href="/hire-a-composer">Hire a horror composer</a></h3>
@@ -538,9 +536,14 @@ __MASTHEAD__
           <li><a href="/contact#inquiry">Inquiry</a></li>
           <li><a href="/contact#send">What to send</a></li>
         </ul>
-      </section>
+      </div>
+    </div>
+  </section>
 
-      <section class="clause site-map" id="catalogue">
+  <section class="band band-void" id="catalogue">
+    <div class="shell band-inner">
+      <div class="doc-body clause site-map">
+
         <h2><span class="no">iii</span> The catalogue</h2>
         <h3><a href="/store">Catalogue</a></h3>
         <p>Twenty-four catalogue records span experimental music, sound libraries, software and visual assets, and physical objects. Listings link to Bandcamp, itch.io, Gumroad, or eBay when a source link is verified.</p>
@@ -551,9 +554,14 @@ __MASTHEAD__
           <li><a href="/store#tools">Tools and scores</a></li>
           <li><a href="/store#discography">The complete discography</a></li>
         </ul>
-      </section>
+      </div>
+    </div>
+  </section>
 
-      <section class="clause site-map" id="documents">
+  <section class="band band-ink" id="documents">
+    <div class="shell band-inner">
+      <div class="doc-body clause site-map">
+
         <h2><span class="no">iv</span> Documents</h2>
         <p>The paperwork for commissions, the catalogue and this site. Every document carries the date it took effect.</p>
         <h3><a href="/legal">All documents</a></h3>
@@ -670,14 +678,20 @@ __MASTHEAD__
           <li><a href="/accessibility#formats">Alternative formats</a></li>
           <li><a href="/accessibility#feedback">Feedback</a></li>
         </ul>
-      </section>
+      </div>
+    </div>
+  </section>
 
-      <section class="clause" id="machine-readable">
+  <section class="band band-void" id="machine-readable">
+    <div class="shell band-inner">
+      <div class="doc-body clause">
+
         <h2><span class="no">v</span> For search engines and AI systems</h2>
         <p>Search engines use <a href="/sitemap.xml">sitemap.xml</a>, which contains all clean canonical hub and item URLs across productions, showreel cues, and catalogue entries. Crawl rules welcoming search and generative answer engines are published in <a href="/robots.txt">robots.txt</a>. Structured plain-text entity and catalog indexes for AI systems and researchers are published at <a href="/llms.txt">llms.txt</a> and <a href="/llms-full.txt">llms-full.txt</a>.</p>
-      </section>
+      </div>
     </div>
-  </div>
+  </section>
+
 </div>
 </main>
 
