@@ -136,7 +136,7 @@ test('navigation headers stay visually concise while non-visible attributes and 
   const homeHead = /<head>([\s\S]*?)<\/head>/i.exec(homeHtml)?.[1] ?? '';
   const navHtml = /<nav aria-label="Primary navigation"[\s\S]*?<\/nav>/.exec(homeHtml)?.[0] ?? '';
   const visibleLabels = [...navHtml.matchAll(/>([^<]+)<\/a>/g)].map((m) => m[1].trim());
-  assert.deepEqual(visibleLabels, ['Reel', 'Work', 'Rates', 'Hire', 'Store', 'Scoring inquiry']);
+  assert.deepEqual(visibleLabels, ['Reel', 'Work', 'Rates', 'Store', 'Scoring inquiry']);
   for (const term of specialistTerms) {
     assert.match(navHtml, new RegExp(term, 'i'), `homepage nav non-visible title attributes include "${term}"`);
     assert.match(homeHead, new RegExp(term, 'i'), `homepage <head> metadata includes "${term}"`);
@@ -153,7 +153,7 @@ test('navigation headers stay visually concise while non-visible attributes and 
     const html = fs.readFileSync(fileForRoute(route.path), 'utf8');
     const tabsHtml = /<nav class="tabs"[\s\S]*?<\/nav>/.exec(html)?.[0] ?? '';
     const tabLabels = [...tabsHtml.matchAll(/>([^<]+)<\/a>/g)].map((m) => m[1].trim());
-    assert.deepEqual(tabLabels, ['Reel', 'Work', 'Composer', 'Process', 'Rates', 'Hire', 'Store'], `${route.path}: concise visible masthead labels`);
+    assert.deepEqual(tabLabels, ['Reel', 'Work', 'Composer', 'Rates', 'Store'], `${route.path}: concise visible masthead labels`);
     for (const term of specialistTerms) {
       assert.match(tabsHtml, new RegExp(term, 'i'), `${route.path}: non-visible masthead title attributes include "${term}"`);
     }
