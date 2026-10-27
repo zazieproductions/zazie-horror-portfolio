@@ -111,7 +111,9 @@
 // the rebuilt legal script also restores Expand all for individual cue links.
 // v46: combine the download action with main's simplified navigation in a new
 // homepage bundle, clearing the older cached bundle and document.
-const CACHE_NAME = 'zazie-v46';
+// v47: the hire-a-composer page gains its sonic-threshold story block and the
+// shared legal stylesheet is re-hashed; clear the prior precache so visits get it.
+const CACHE_NAME = 'zazie-v47';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -123,7 +125,7 @@ const PRECACHE_ASSETS = [
   '/index-e6806e5c.js',
   '/store-1e13177a.css',
   '/store-3fc01be0.js',
-  '/legal-f4e3a5fb.css',
+  '/legal-e7ea3e5e.css',
   '/legal-c623083a.js',
   '/estimator-fc4ddfe0.css',
   '/estimator-2b081a5e.js',

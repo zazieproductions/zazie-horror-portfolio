@@ -280,7 +280,7 @@ export const hubs: Hub[] = [
     name: "Hire a horror composer",
     title: "Hire an Experimental Psychological Horror Composer | Zazie Productions",
     description: `Hire experimental psychological horror film composer Zazie Kanwar-Torge (Zazie Productions) for independent and arthouse cinema: IMDb-credited custom scores to picture. ${pricingSummary()}`,
-    lastmod: "2026-10-26",
+    lastmod: "2026-10-27",
     images: [
       { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Kanwar-Torge, IMDb-credited experimental psychological horror film composer for hire at Zazie Productions LLC.", title: "Hire an Experimental Psychological Horror Composer — Zazie Kanwar-Torge" },
     ],

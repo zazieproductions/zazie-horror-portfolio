@@ -620,3 +620,105 @@ td code,th code{white-space:nowrap}
    stacking order to stay clickable. */
 .inline-link{position:relative;z-index:1;color:var(--mist);text-decoration:underline;text-decoration-color:rgba(196,30,30,.55);text-underline-offset:3px;transition:color .2s}
 .inline-link:hover,.inline-link:focus-visible{color:var(--bone);text-decoration-color:var(--ember)}
+
+/* --- Sonic-threshold story block (/hire-a-composer) ----------------------
+   A tactile, editorial conversion section: anticipation first, claims kept
+   carefully qualified, and one clear way to hear or discuss the work. */
+.sonic-threshold{
+  position:relative;isolation:isolate;overflow:hidden;scroll-margin-top:6rem;
+  margin:2rem 0 0;padding:clamp(1.15rem,4vw,2.1rem);
+  border:1px solid rgba(196,30,30,.3);
+  background:
+    radial-gradient(ellipse 75% 55% at 100% 0%,rgba(120,12,12,.22),transparent 68%),
+    linear-gradient(145deg,#0c0a0a,#070707 62%,#030303);
+}
+.sonic-threshold::before{
+  content:"";position:absolute;inset:0 0 auto;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(230,86,80,.8),transparent);
+}
+.sonic-threshold::after{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.2;
+  background-image:repeating-linear-gradient(180deg,rgba(240,235,227,.045) 0 1px,transparent 1px 5px);
+  -webkit-mask-image:linear-gradient(180deg,#000,transparent 80%);mask-image:linear-gradient(180deg,#000,transparent 80%);
+}
+.sonic-threshold-top{
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  padding-bottom:.9rem;border-bottom:1px solid var(--edge);
+}
+.doc-body .sonic-threshold .sonic-kicker{
+  margin:0;font-size:.625rem;line-height:1.35;font-weight:500;
+  letter-spacing:.25em;text-transform:uppercase;color:var(--blood-text);
+}
+.sonic-kicker span{display:block;margin-top:.35rem;font-size:.625rem;letter-spacing:.16em;color:var(--mist)}
+.sonic-wave{display:block;width:min(34%,9rem);height:auto;flex:none;opacity:.78}
+.sonic-wave path{fill:none;stroke:var(--blood-text);stroke-width:1.25;vector-effect:non-scaling-stroke}
+.doc-body .sonic-threshold > h3{
+  margin:1.35rem 0 .75rem;max-width:25ch;
+  font-family:var(--display);font-size:clamp(1.7rem,4vw,2.45rem);
+  font-weight:400;line-height:1.08;letter-spacing:-.01em;color:var(--bone);
+}
+.doc-body .sonic-threshold .sonic-lead{
+  margin:0;max-width:58ch;font-family:var(--display);
+  font-size:clamp(1.05rem,2.1vw,1.3rem);line-height:1.55;color:var(--bone);
+}
+.doc-body .sonic-threshold .sonic-lead strong{font-weight:400;color:var(--bone)}
+.doc-body .sonic-threshold .sonic-origin{
+  margin:.8rem 0 0;max-width:62ch;font-size:.875rem;line-height:1.8;color:var(--body-dim);
+}
+.doc-body ol.sonic-principles{
+  display:grid;grid-template-columns:1fr;gap:.7rem;
+  margin:1.35rem 0 0;padding:0;list-style:none;
+}
+.doc-body ol.sonic-principles > li{
+  min-width:0;margin:0;padding:.95rem;border:1px solid var(--edge);
+  background:linear-gradient(155deg,rgba(255,255,255,.025),rgba(255,255,255,.006));
+}
+.doc-body ol.sonic-principles > li + li{margin-top:0}
+.doc-body .sonic-principle-kicker{
+  display:flex;align-items:center;gap:.55rem;margin:0 0 .6rem;
+  font-size:.625rem;line-height:1.35;font-weight:500;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--mist);
+}
+.sonic-principle-kicker span{color:var(--blood-text);font-variant-numeric:tabular-nums}
+.doc-body ol.sonic-principles h4{
+  margin:0 0 .55rem;font-family:var(--display);font-size:1.375rem;
+  font-weight:400;line-height:1.05;color:var(--bone);
+}
+.doc-body ol.sonic-principles p:not(.sonic-principle-kicker){
+  margin:0;font-size:.75rem;line-height:1.75;color:var(--body-dim);
+}
+.doc-body .sonic-line{
+  margin:1.5rem 0 0;padding:.1rem 0 .1rem 1rem;border-left:2px solid var(--blood);
+}
+.doc-body .sonic-line p{
+  margin:0;font-family:var(--display);font-style:italic;font-weight:400;
+  font-size:clamp(1.25rem,2.8vw,1.65rem);line-height:1.32;color:var(--bone);
+}
+.sonic-resolution{
+  margin-top:1.2rem;padding:1rem 1.1rem;border-left:1px solid var(--blood);
+  background:rgba(255,255,255,.018);
+}
+.doc-body .sonic-resolution p{margin:0;font-size:.8125rem;line-height:1.8;color:var(--body)}
+.doc-body .sonic-resolution strong{color:var(--bone)}
+.sonic-cta{
+  display:grid;gap:1rem;margin-top:1.3rem;padding-top:1.15rem;
+  border-top:1px solid var(--edge);
+}
+.doc-body .sonic-cta > div:first-child > p:last-child{
+  margin:.45rem 0 0;font-size:.8125rem;line-height:1.75;color:var(--body-dim);
+}
+.sonic-actions{display:flex;flex-wrap:wrap;gap:.65rem;align-items:center}
+.sonic-actions .btn{min-height:48px;padding-inline:1rem;font-size:.625rem;letter-spacing:.14em}
+.doc-body .sonic-reassurance{
+  margin:1rem 0 0;font-size:.75rem;line-height:1.7;color:var(--body-dim);
+}
+@media (min-width:760px){
+  .doc-body ol.sonic-principles{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .sonic-cta{grid-template-columns:minmax(0,1fr) auto;align-items:center}
+  .sonic-actions{flex-direction:column;align-items:stretch}
+}
+@media (max-width:540px){
+  .sonic-actions{flex-direction:column;align-items:stretch}
+  .sonic-actions .btn{width:100%}
+}
+.doc-index li.sonic-entry a{padding-left:1.15rem;font-size:.75rem}
