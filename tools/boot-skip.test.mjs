@@ -290,9 +290,9 @@ test('skip button markup is accessible, free of aria-hidden ancestors, and style
   assert.match(bootCss, /#zp-boot\.zp-off\.zp-fast\{animation:zpFadeOut \.16s ease forwards\}/);
   // The document is precached as '/', so any change to index.html or its home
   // bundle has to move the cache name with it (v43: crawler mount gate,
-  // precache fetch mode and AA link-contrast stylesheet; v45: mobile layout
+  // precache fetch mode and AA link-contrast stylesheet; v47: mobile layout
   // pass - new legal/store stylesheet hashes and the pre-React menu panel).
-  assert.match(sw, /CACHE_NAME\s*=\s*'zazie-v45'/);
+  assert.match(sw, /CACHE_NAME\s*=\s*'zazie-v47'/);
 });
 
 test('clicking #zp-boot-skip immediately dismisses the intro in fast mode and removes the node', async () => {

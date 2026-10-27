@@ -53,9 +53,9 @@ const { homePosterClientData } = await import('../build/lib/home.js');
 // semantic `sample-${slug}` anchor and genre-descriptive alt text.
 const FILM_SAMPLES_META = [
   {
-    title: 'Mike Has A Visitor',
-    slug: 'mike-has-a-visitor',
-    alt: 'Mike Has A Visitor: Sleep-paralysis psychological horror score by Zazie Kanwar-Torge featuring nerve-scraping strings and sub-audible room tone.',
+    title: 'GOODBYE, BROTHER',
+    slug: 'goodbye-brother',
+    alt: 'GOODBYE, BROTHER: Psychological drama-horror score by Zazie Kanwar-Torge featuring intimate chamber strings and somber harmonic decay.',
   },
   {
     title: 'Eclipsed',
@@ -63,9 +63,9 @@ const FILM_SAMPLES_META = [
     alt: 'Eclipsed: Surrealist body horror score by Zazie Kanwar-Torge featuring dissonant bowed metal and experimental synthesis.',
   },
   {
-    title: 'GOODBYE, BROTHER',
-    slug: 'goodbye-brother',
-    alt: 'GOODBYE, BROTHER: Psychological drama-horror score by Zazie Kanwar-Torge featuring intimate chamber strings and somber harmonic decay.',
+    title: 'Mike Has A Visitor',
+    slug: 'mike-has-a-visitor',
+    alt: 'Mike Has A Visitor: Sleep-paralysis psychological horror score by Zazie Kanwar-Torge featuring nerve-scraping strings and sub-audible room tone.',
   },
   {
     title: 'Home Intruder',
@@ -127,7 +127,7 @@ const PAIRS = [
   // Non-visible semantic title attributes on primary navigation (visible labels stay concise & uncrowded)
   [
     'Ix=[{href:"#showreel",label:"Reel"},{href:"#work",label:"Work"},{href:"#services",label:"Rates"},{href:"/hire-a-composer",label:"Hire"},{href:"/store",label:"Store"}]',
-    'Ix=[{href:"#showreel",label:"Reel",title:"Body horror, folk horror, and psychological horror composer showreel"},{href:"#work",label:"Work",title:"Experimental art house, psychological, folk, and body horror film scores"},{href:"#services",label:"Rates",title:"Horror and experimental art house film scoring rates"},{href:"/hire-a-composer",label:"Hire",title:"Hire a folk horror, body horror, and psychological horror composer"},{href:"/store",label:"Store",title:"Horror sound libraries, experimental art house records, and audio tools"}]',
+    'Ix=[{href:"#showreel",label:"Reel",title:"Body horror, folk horror, and psychological horror composer showreel"},{href:"#work",label:"Work",title:"Experimental art house, psychological, folk, and body horror film scores"},{href:"#services",label:"Rates",title:"Horror and experimental art house film scoring rates"},{href:"/store",label:"Store",title:"Horror sound libraries, experimental art house records, and audio tools"}]',
     BUNDLE,
   ],
   [
@@ -141,8 +141,8 @@ const PAIRS = [
     BUNDLE,
   ],
   [
-    '<a href="#showreel" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Reel</a><a href="#work" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Work</a><a href="#services" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Rates</a><a href="/hire-a-composer" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Hire</a><a href="/store" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Store</a>',
     '<a href="#showreel" title="Body horror, folk horror, and psychological horror composer showreel" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Reel</a><a href="#work" title="Experimental art house, psychological, folk, and body horror film scores" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Work</a><a href="#services" title="Horror and experimental art house film scoring rates" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Rates</a><a href="/hire-a-composer" title="Hire a folk horror, body horror, and psychological horror composer" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Hire</a><a href="/store" title="Horror sound libraries, experimental art house records, and audio tools" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Store</a>',
+    '<a href="#showreel" title="Body horror, folk horror, and psychological horror composer showreel" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Reel</a><a href="#work" title="Experimental art house, psychological, folk, and body horror film scores" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Work</a><a href="#services" title="Horror and experimental art house film scoring rates" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Rates</a><a href="/store" title="Horror sound libraries, experimental art house records, and audio tools" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Store</a>',
     HTML,
   ],
   [
@@ -163,15 +163,21 @@ const PAIRS = [
   ],
   [
     '<p class="mt-5 max-w-lg font-display text-xl leading-snug text-bone/90 sm:mt-6 sm:text-2xl">Bespoke Body Horror, Folk Horror, and Experimental Art House film scores — <span class="text-mist">bowed metal, prepared strings, and psychological dread composed to picture for prestige cinema, TV, and games.</span></p>',
-    '<p class="mt-5 max-w-md font-display text-xl leading-snug text-bone/90 sm:mt-6 sm:text-2xl">Original music for psychological horror, thrillers, and dark sci-fi, <span class="text-mist">composed for film, TV, and games.</span></p>',
+    '<p class="mt-5 max-w-md font-display text-xl leading-snug text-bone/90 sm:mt-6 sm:text-2xl">Experimental psychological horror film composer <span class="text-mist">for independent and arthouse cinema.</span></p>',
     HTML,
   ],
+  // Primary identity (2026-10-26): the hero subhead states the specialist
+  // positioning verbatim in the same two-tone slot. The bundle renders the
+  // subhead as two string children, so each half is its own pair; the H1
+  // above it ("Dark, atmospheric horror scores...") is deliberately kept.
+  ['Original music for psychological horror, thrillers, and dark sci-fi,', 'Experimental psychological horror film composer', BUNDLE],
+  ['composed for film, TV, and games.', 'for independent and arthouse cinema.', BUNDLE],
   ['Start an inquiry', 'Request a scoring quote', BOTH],
   // User-provided biography; HTML emphasis is shared with the static snapshot.
-  ["Zazie Kanwar-Torge is an award-winning composer, experimental producer, and multi-instrumentalist. Under Zazie Productions, he writes and performs original scores for psychological, folk, and body horror, supernatural thrillers, and dark sci-fi.", "<strong>Zazie Kanwar-Torge</strong> is an award-winning film composer, experimental producer, and multi-instrumentalist specializing in <strong>psychological horror, folk horror, body horror, supernatural thrillers, and dark science fiction</strong>. Through Zazie Productions, he creates original film scores and immersive sonic atmospheres that explore dread, dissonance, isolation, and the uncanny.", "bundle"],
+  ["Zazie Kanwar-Torge is an award-winning composer, experimental producer, and multi-instrumentalist. Under Zazie Productions, he writes and performs original scores for psychological, folk, and body horror, supernatural thrillers, and dark sci-fi.", "<strong>Zazie Kanwar-Torge</strong> is an award-winning film composer, experimental producer, and multi-instrumentalist specializing in <strong>experimental psychological horror for independent and arthouse cinema, folk horror, body horror, supernatural thrillers, and dark science fiction</strong>. Through Zazie Productions, he creates original film scores and immersive sonic atmospheres that explore dread, dissonance, isolation, and the uncanny.", "bundle"],
   [
     'specializing in <strong>experimental art house, psychological horror, folk horror, body horror, supernatural thrillers, and dark science fiction</strong>.',
-    'specializing in <strong>psychological horror, folk horror, body horror, supernatural thrillers, and dark science fiction</strong>.',
+    'specializing in <strong>experimental psychological horror for independent and arthouse cinema, folk horror, body horror, supernatural thrillers, and dark science fiction</strong>.',
     HTML,
   ],
   ["His palette combines struck strings, bowed metal, hybrid orchestration, and custom synths, shaped to picture for projects from shorts to features.", "Working at the intersection of cinematic scoring, musique concrète, and electroacoustic composition, his distinctive palette combines bowed metal, struck strings, experimental synthesis, and hybrid orchestration. His work has been featured at <strong>Ars Electronica 2026</strong>, performed in 20.4-channel spatial audio, and selected for international experimental music and film programs, including <strong>MUSLAB/Cero Records</strong> and <strong>EXiS in Seoul</strong>. Previously commissioned by the <strong>Black Mountain College Museum + Arts Center</strong>, he also develops original audio instruments and experimental sound libraries.</p><p>Drawing on a background in experimental film, sound art, and audiovisual composition, Zazie approaches each score as an extension of the film's psychological and emotional world, creating visceral, atmospheric music tailored to independent shorts, feature films, series, and horror video games.", "bundle"],
@@ -186,7 +192,8 @@ const PAIRS = [
     '<img alt="Zazie Kanwar-Torge: Experimental art house, psychological, folk, and body horror composer photographed with studio instrumentation." class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" src="/images/headshot.jpg"',
     HTML,
   ],
-  ['Zazie Productions LLC · Experimental Art House &amp; Psychological, Folk &amp; Body Horror Scores', 'Zazie Productions LLC · Atmospheric horror scores', HTML],
+  ['Zazie Productions LLC · Experimental Art House &amp; Psychological, Folk &amp; Body Horror Scores', 'Zazie Productions LLC · Psychological horror film scores', HTML],
+  [' · Atmospheric horror scores', ' · Psychological horror film scores', BUNDLE],
   ['[["/hire-a-composer","Hire a composer"],["/sound-design","Sound design"]', '[["/hire-a-composer","Hire a horror composer"],["/how-to-hire-a-horror-composer","Hiring guide"],["/sound-design","Sound design"]', BUNDLE],
   ['<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a composer</a><a href="/sound-design"', '<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a horror composer</a><a href="/how-to-hire-a-horror-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hiring guide</a><a href="/sound-design"', HTML],
   // Keep a direct, 44px quote action visible on phones; the full section menu
@@ -261,6 +268,19 @@ const PAIRS = [
   [',{id:23,title:"Screams of The Damned",src:"/audio/track-23.mp3",duration:200.072,tag:"Body Horror"}', '', BUNDLE],
   ['String(t.id+1).padStart(2,"0")', 'String(s+1).padStart(2,"0")', BUNDLE],
   ['32-cue showreel', '30-cue showreel', HTML],
+  // Give visitors a clear route to the downloadable reel in both the static
+  // first paint and React's replacement render. The ZIP itself is prepared on
+  // the archive page, where individual MP3 links also work without JavaScript.
+  [
+    'children:"Browse and play original horror cues by mood."})]})',
+    'children:"Browse and play original horror cues by mood."}),u.jsxs("a",{href:"/reel#download",className:"mt-5 inline-flex min-h-[48px] items-center gap-2 border border-ash px-5 py-3 text-xs uppercase tracking-[0.2em] text-bone transition-colors hover:border-blood",children:[u.jsx("span",{"aria-hidden":!0,children:"↓"}),"Download demo reel"]})]})',
+    BUNDLE,
+  ],
+  [
+    '<p class="mt-4 max-w-lg text-sm leading-relaxed text-mist md:text-base">Browse and play original horror cues by mood.</p></div>',
+    '<p class="mt-4 max-w-lg text-sm leading-relaxed text-mist md:text-base">Browse and play original horror cues by mood.</p><a href="/reel#download" class="mt-5 inline-flex min-h-[48px] items-center gap-2 border border-ash px-5 py-3 text-xs uppercase tracking-[0.2em] text-bone transition-colors hover:border-blood"><span aria-hidden="true">↓</span>Download demo reel</a></div>',
+    HTML,
+  ],
   // Showreel rows: 30 rows x 3 decorative nodes became 30 x 1. The duration moves
   // into the mood line (it was hidden below 640px, so phones lost it entirely) and
   // the play/pause glyph becomes a pseudo-element keyed off data-row-playing.
@@ -311,8 +331,18 @@ const PAIRS = [
     BUNDLE,
   ],
   ['u.jsx(cj,{"data-source-loc":"src/App.tsx:46:10"}),', '', BUNDLE],
+  // Section order: the biography (#about, rj) now sits before the compilations
+  // section (see addCompilationsSection / patchStatic), so the numbered
+  // kickers renumber with it — Biography 05→03, Approach 03→04, Services
+  // 04→05; Contact stays 06. The HTML-only services pair migrates a snapshot
+  // already carrying the previous build's "04 · Scoring services"; it must run
+  // before the BOTH pair below, whose bundle source still reads "Scope and
+  // budget" and whose static side then sees the new text and skips.
+  ['03 · Approach', '04 · Approach', BOTH],
+  ['05 · Biography', '03 · Biography', BOTH],
+  ['04 · Scoring services', '05 · Scoring services', HTML],
   // Services heading
-  ['04 · Scope and budget', '04 · Scoring services', BOTH],
+  ['04 · Scope and budget', '05 · Scoring services', BOTH],
   ['Build a scope and estimate', 'Rates & estimates', BUNDLE],
   ['Build a scope and estimate', 'Rates &amp; estimates', HTML],
   ['Choose a project type, scored runtime, complexity, and delivery needs.', 'Packages are priced by scored music minutes, not film length.', BOTH],
@@ -384,7 +414,7 @@ const ISLAND_OPEN = '<div class="zp-home-section zp-home-island" data-zp-island=
 const ISLAND_CLOSE = '</div></div>';
 const SERVICES_HEADER = [
   '<div class="mb-10 max-w-2xl sm:mb-14">',
-  '<p class="mb-3 text-[10px] uppercase tracking-[0.35em] text-blood sm:text-[11px] sm:tracking-[0.4em]">04 · Scoring services</p>',
+  '<p class="mb-3 text-[10px] uppercase tracking-[0.35em] text-blood sm:text-[11px] sm:tracking-[0.4em]">05 · Scoring services</p>',
   '<h2 class="mb-4 font-display text-3xl leading-none text-bone sm:text-4xl md:text-6xl">Rates &amp; estimates</h2>',
   '<p class="text-sm leading-relaxed text-mist sm:text-base">Packages are priced by scored music minutes, not film length. Preliminary estimate — final quotation subject to creative scope and written agreement.</p>',
   '</div>',
@@ -594,7 +624,8 @@ function assertBundleParses(source) {
 }
 
 function patchBundle(orig) {
-  let out = orig;
+  // Keep explicit opener protection when React replaces the static homepage.
+  let out = orig.replaceAll('rel:"noreferrer"', 'rel:"noopener noreferrer"');
   for (const [oldText, newText, target] of PAIRS) {
     if (target === HTML) continue;
     const n = countOf(out, oldText);
@@ -711,8 +742,10 @@ function patchBundle(orig) {
 
 /**
  * Homepage "Compilations" section (src/lib/compilations-markup.ts). It is a
- * static-markup component placed between the showreel (G5) and the press kit
- * (I5) in App; index.html carries the identical markup (patchStatic).
+ * static-markup component placed between the biography (About, rj) and the
+ * press kit (I5) in App, with the biography itself moved up from its shipped
+ * slot between Services (lj) and Contact (dj) so the bio sits before the
+ * compilations; index.html carries the identical order (patchStatic).
  */
 function addCompilationsSection(source) {
   let out = source;
@@ -721,7 +754,10 @@ function addCompilationsSection(source) {
     `children:u.jsx("div",{className:${JSON.stringify(CONTAINER_CLASS)},dangerouslySetInnerHTML:{__html:${JSON.stringify(compilationsInnerHtml())}}})})}`;
   for (const [oldText, newText] of [
     ['function I5(){return u.jsx("section",{id:"press"', `${component}function I5(){return u.jsx("section",{id:"press"`],
-    ['u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"}),u.jsx(I5,', 'u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"}),u.jsx(zpCompilations,{}),u.jsx(I5,'],
+    // Biography before compilations, straight after the showreel (G5).
+    ['u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"}),u.jsx(I5,', 'u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"}),u.jsx(rj,{"data-source-loc":"src/App.tsx:45:10"}),u.jsx(zpCompilations,{}),u.jsx(I5,'],
+    // …and out of its shipped slot, so About renders exactly once.
+    ['u.jsx(lj,{"data-source-loc":"src/App.tsx:44:10"}),u.jsx(rj,{"data-source-loc":"src/App.tsx:45:10"}),', 'u.jsx(lj,{"data-source-loc":"src/App.tsx:44:10"}),'],
   ]) {
     const n = countOf(out, oldText);
     if (n !== 1) throw new Error(`bundle: "${oldText.slice(0, 60)}" matched ${n} times, expected 1`);
@@ -733,7 +769,7 @@ function addCompilationsSection(source) {
 /* ------------------------------------------------------ static copy patch */
 
 function patchStatic(html, tracks) {
-  let out = stripDerivedFieldNames(html);
+  let out = stripDerivedFieldNames(html).replaceAll('rel="noreferrer"', 'rel="noopener noreferrer"');
   const applied = [];
   for (const [oldText, newText, target] of PAIRS) {
     if (target === BUNDLE) continue;
@@ -823,18 +859,25 @@ function patchStatic(html, tracks) {
   out = patchStaticShowreel(out, tracks);
   if (out !== previousShowreel) applied.push(`showreel queue synced (${tracks.length} cues; ${tracks[0].title} first)`);
 
-  // Compilations: the section sits straight after the showreel. Idempotent -
-  // an existing copy is replaced, so a change to the data reaches index.html.
+  // Biography before compilations: #about is lifted out of its shipped slot
+  // (between #services and #contact) and the two sections are placed together
+  // straight after the showreel, biography first — the same order the bundle
+  // renders (addCompilationsSection). Idempotent: both sections are extracted
+  // wherever they currently sit and re-inserted in this order, and the
+  // compilations markup is regenerated, so a change to the data still
+  // reaches index.html.
   {
     const section = compilationsSectionHtml();
-    const existing = /<section id="compilations"[\s\S]*?<\/section>/;
-    if (existing.test(out)) {
-      out = out.replace(existing, () => section);
-    } else {
-      const at = out.indexOf('</section>', out.indexOf('<section id="showreel"')) + '</section>'.length;
-      out = out.slice(0, at) + section + out.slice(at);
-    }
-    applied.push('compilations section placed after the showreel');
+    const aboutMatch = /<section id="about"[\s\S]*?<\/section>/.exec(out);
+    if (!aboutMatch) throw new Error('index.html: #about (biography) section not found');
+    const about = aboutMatch[0];
+    out = out.replace(about, () => '');
+    out = out.replace(/<section id="compilations"[\s\S]*?<\/section>/, () => '');
+    const showreelStart = out.indexOf('<section id="showreel"');
+    if (showreelStart < 0) throw new Error('index.html: #showreel section not found');
+    const at = out.indexOf('</section>', showreelStart) + '</section>'.length;
+    out = out.slice(0, at) + about + section + out.slice(at);
+    applied.push('biography placed before the compilations section, after the showreel');
   }
 
   // Services: replace the old React estimator snapshot with the static island.

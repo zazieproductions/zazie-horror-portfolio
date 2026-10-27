@@ -50,9 +50,9 @@ test('every indexable route places <h1> inside <main> and separates numeral span
 
 test('/hire-a-composer commercial pillar has exact head intent, comparison matrix, Service + Offer + FAQPage schema', () => {
   const html = fs.readFileSync(path.join(ROOT, 'hire-a-composer/index.html'), 'utf8');
-  assert.match(html, /<title>Hire a Horror Composer — Original Film, TV &amp; Game Scores \| Zazie Productions<\/title>/);
+  assert.match(html, /<title>Hire an Experimental Psychological Horror Composer \| Zazie Productions<\/title>/);
   const main = /<main\b[^>]*>([\s\S]*?)<\/main>/i.exec(html)?.[1] ?? '';
-  assert.match(main, /<h1>Hire a <em>Horror Composer<\/em> for Film, TV, and Games<\/h1>/);
+  assert.match(main, /<h1>Hire an <em>Experimental Psychological Horror Composer<\/em> for Independent &amp; Arthouse Film<\/h1>/);
   assert.match(main, /Zazie Kanwar-Torge/);
   assert.match(main, /Zazie Productions LLC/);
   assert.match(main, /Comparing Horror Music Options by Subgenre, Workflow &amp; Budget/);
@@ -85,7 +85,7 @@ test('/how-to-hire-a-horror-composer guide answers fan-out queries with Article 
 
 test('homepage links directly to /hire-a-composer and /how-to-hire-a-horror-composer in both SSR HTML and client bundle', () => {
   const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-  assert.match(html, /<title>Horror Composer for Hire — Film, TV &amp; Game Scores<\/title>/);
+  assert.match(html, /<title>Experimental Psychological Horror Composer — Arthouse Film<\/title>/);
   const title = /<title>([^<]*)<\/title>/.exec(html)[1].replace(/&amp;/g, '&');
   assert.ok(title.length >= 30 && title.length <= 60, `homepage title is ${title.length} characters; keep it between 30 and 60`);
   assert.match(html, new RegExp(`from \\$${MINIMUM_FEE} USD`));
@@ -120,6 +120,7 @@ test('robots.txt welcomes AI search crawlers and llms.txt + llms-full.txt stay s
     const content = fs.readFileSync(path.join(ROOT, file), 'utf8');
     assert.match(content, /Zazie Kanwar-Torge/);
     assert.match(content, /Experimental Art House/i);
+    assert.match(content, /experimental psychological horror film composer for independent and arthouse cinema/i);
     assert.match(content, /https:\/\/horror\.zazieproductions\.com\/hire-a-composer/);
     assert.match(content, /https:\/\/horror\.zazieproductions\.com\/how-to-hire-a-horror-composer/);
     assert.match(content, new RegExp(`\\$${MINIMUM_FEE}`));
@@ -135,7 +136,7 @@ test('navigation headers stay visually concise while non-visible attributes and 
   const homeHead = /<head>([\s\S]*?)<\/head>/i.exec(homeHtml)?.[1] ?? '';
   const navHtml = /<nav aria-label="Primary navigation"[\s\S]*?<\/nav>/.exec(homeHtml)?.[0] ?? '';
   const visibleLabels = [...navHtml.matchAll(/>([^<]+)<\/a>/g)].map((m) => m[1].trim());
-  assert.deepEqual(visibleLabels, ['Reel', 'Work', 'Rates', 'Hire', 'Store', 'Scoring inquiry']);
+  assert.deepEqual(visibleLabels, ['Reel', 'Work', 'Rates', 'Store', 'Scoring inquiry']);
   for (const term of specialistTerms) {
     assert.match(navHtml, new RegExp(term, 'i'), `homepage nav non-visible title attributes include "${term}"`);
     assert.match(homeHead, new RegExp(term, 'i'), `homepage <head> metadata includes "${term}"`);
@@ -152,7 +153,7 @@ test('navigation headers stay visually concise while non-visible attributes and 
     const html = fs.readFileSync(fileForRoute(route.path), 'utf8');
     const tabsHtml = /<nav class="tabs"[\s\S]*?<\/nav>/.exec(html)?.[0] ?? '';
     const tabLabels = [...tabsHtml.matchAll(/>([^<]+)<\/a>/g)].map((m) => m[1].trim());
-    assert.deepEqual(tabLabels, ['Reel', 'Work', 'Composer', 'Process', 'Rates', 'Hire', 'Store'], `${route.path}: concise visible masthead labels`);
+    assert.deepEqual(tabLabels, ['Reel', 'Work', 'Composer', 'Rates', 'Store'], `${route.path}: concise visible masthead labels`);
     for (const term of specialistTerms) {
       assert.match(tabsHtml, new RegExp(term, 'i'), `${route.path}: non-visible masthead title attributes include "${term}"`);
     }

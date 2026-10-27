@@ -106,11 +106,15 @@
 // fresh content hash below. The 2026-10-25 blanket type floors were reverted
 // on 2026-10-26, so the design's original 8-12px label scale is back and the
 // hash plus this cache version (v43 -> v44) move together.
-// v45 (2026-10-26): the mobile layout pass changed legal-<hash>.css and
-// store-<hash>.css (phone tables, catalogue cards, footers), so both names
-// moved. Bumping the version makes returning visitors pick them up instead
-// of serving the previous stylesheets from cache.
-const CACHE_NAME = 'zazie-v45';
+// v45: add a reel-download entry point to the homepage and on-demand ZIP
+// preparation on /reel. The homepage bundle and cached document change too;
+// the rebuilt legal script also restores Expand all for individual cue links.
+// v46: combine the download action with main's simplified navigation in a new
+// homepage bundle, clearing the older cached bundle and document.
+// v47: mobile layout pass - phone-only rules for the homepage compilations and
+// footer ribbons, the pre-React menu panel, new legal/store stylesheet hashes
+// (document tables, catalogue cards), and the uncropped press figure.
+const CACHE_NAME = 'zazie-v47';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -119,11 +123,11 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-3465aa44.css',
-  '/index-4c5bfc24.js',
+  '/index-e6806e5c.js',
   '/store-2d68d26d.css',
   '/store-3fc01be0.js',
   '/legal-13cbe4fc.css',
-  '/legal-707b2345.js',
+  '/legal-c623083a.js',
   '/estimator-fc4ddfe0.css',
   '/estimator-2b081a5e.js',
   // Hero & Atmosphere

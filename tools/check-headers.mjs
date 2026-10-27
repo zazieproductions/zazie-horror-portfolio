@@ -28,9 +28,10 @@
  *   2. the `/*` block carries the full security policy (HSTS, CSP with
  *      frame-ancestors, X-Frame-Options: SAMEORIGIN, nosniff, referrer,
  *      permissions, no unsafe-eval, no object-src, base-uri, form-action) and
- *      refuses the third parties the privacy notice promises are not loaded
+ *      allows exactly the one third party the privacy notice discloses
  *      (Cloudflare's edge-injected Web Analytics beacon: see
- *      POLICY_BLOCKED_ORIGINS in tools/headers.mjs)
+ *      ANALYTICS_ORIGINS in tools/headers.mjs) and no other remote
+ *      script-src / connect-src origin
  *   3. only `/*` sets Cache-Control as a default, and every override detaches
  *      first -- otherwise the values join and the longer lifetime is ignored
  *   4. every sitemap route resolves to HTML that revalidates, and to an
@@ -51,7 +52,7 @@ import { fileURLToPath } from 'node:url';
 
 import {
   SECURITY_HEADERS,
-  POLICY_BLOCKED_ORIGINS,
+  ANALYTICS_ORIGINS,
   HTML_CACHE,
   IMMUTABLE_CACHE,
   MEDIA_CACHE,
@@ -145,29 +146,37 @@ for (const origin of ['https://www.youtube.com', 'https://www.youtube-nocookie.c
 }
 
 /**
- * A Lighthouse run reports the Cloudflare Web Analytics beacon as "blocked by
- * Content Security Policy". That is the intended result, not a defect: the
- * beacon is injected at the edge (nothing in this repo asks for it) and /privacy
- * states that no analytics and no third-party script run here. Allowing the host
- * to silence the report would make that notice false, so the policy refuses it
- * deliberately and this check keeps it refused.
+ * The Cloudflare Web Analytics beacon is injected at the edge (nothing in this
+ * repo asks for the tag). Since 26 October 2026 it is allowed on purpose and
+ * disclosed in /privacy, so both of its origins must be present in exactly the
+ * directives ANALYTICS_ORIGINS names - dropping one brings back the console
+ * CSP error (script) or silently dead reporting (connect). No other remote
+ * script-src / connect-src origin may appear: the beacon is the site's only
+ * third-party script and its only remote connection.
  */
-const allowedHosts = new Set();
-for (const source of csp.split(/[;\s]+/).filter(Boolean)) {
-  try {
-    allowedHosts.add(new URL(source).host);
-  } catch {
-    // 'self', data:, 'unsafe-inline' - not origins.
+for (const { origin, directive } of ANALYTICS_ORIGINS) {
+  const sources = (cspDirectives.get(directive) || '').split(/\s+/).filter(Boolean);
+  if (!sources.includes(origin)) {
+    fail(
+      `Content-Security-Policy ${directive} must allow ${origin} for the Cloudflare Web Analytics ` +
+        `beacon disclosed in /privacy; without it the beacon is blocked (or cannot report) and the ` +
+        `console CSP error returns. See ANALYTICS_ORIGINS in tools/headers.mjs.`,
+    );
   }
 }
-for (const { origin, directive } of POLICY_BLOCKED_ORIGINS) {
-  const host = new URL(origin).host;
-  if (allowedHosts.has(host) || allowedHosts.has(host.replace(/^static\./, ''))) {
-    fail(
-      `Content-Security-Policy allows ${host} (${directive}), but the site's privacy notice says no ` +
-        `analytics and no third-party script run here. Turn off Web Analytics JS snippet injection in the ` +
-        `Cloudflare dashboard instead; see POLICY_BLOCKED_ORIGINS in tools/headers.mjs.`,
-    );
+for (const directive of ['script-src', 'connect-src']) {
+  const allowed = new Set(
+    ANALYTICS_ORIGINS.filter((entry) => entry.directive === directive).map((entry) => entry.origin),
+  );
+  for (const source of (cspDirectives.get(directive) || '').split(/\s+/).filter(Boolean)) {
+    if (!source.startsWith('http://') && !source.startsWith('https://')) continue;
+    if (!allowed.has(source)) {
+      fail(
+        `Content-Security-Policy ${directive} allows unexpected remote origin ${source}; the only ` +
+          `remote origin allowed here is the Cloudflare Web Analytics beacon (ANALYTICS_ORIGINS in ` +
+          `tools/headers.mjs), and /privacy must disclose any addition before it ships.`,
+      );
+    }
   }
 }
 
@@ -196,7 +205,7 @@ if (!sitemapPaths.length) fail('sitemap.xml has no <loc> entries to check header
 
 const hashedAssets = fs
   .readdirSync(root)
-  .filter((name) => /^(?:index|store|legal|estimator|item)-[0-9a-f]{8}\.(?:css|js)$/.test(name))
+  .filter((name) => /^(?:index|store|legal|estimator|item|reel-download)-[0-9a-f]{8}\.(?:css|js)$/.test(name))
   .map((name) => `/${name}`);
 if (!hashedAssets.length) fail('no content-hashed CSS/JS bundles found at the repository root');
 

@@ -47,7 +47,6 @@ export const HORROR_REFERENCE_TOPICS = [
  * core compositional specialties to canonical Wikipedia and IMDb genre/keyword nodes.
  */
 export const KNOWS_ABOUT_ENTITIES = [
-  ...HORROR_REFERENCE_TOPICS,
   {
     '@type': 'Thing',
     name: 'Experimental Art House Cinema Scoring',
@@ -63,6 +62,13 @@ export const KNOWS_ABOUT_ENTITIES = [
     url: 'https://en.wikipedia.org/wiki/Psychological_horror',
     sameAs: ['https://www.imdb.com/search/title/?genres=horror&keywords=psychological-horror'],
   },
+  {
+    '@type': 'Thing',
+    name: 'Independent & Arthouse Cinema Scoring',
+    url: 'https://en.wikipedia.org/wiki/Independent_film',
+    sameAs: ['https://en.wikipedia.org/wiki/Art_film'],
+  },
+  ...HORROR_REFERENCE_TOPICS,
   {
     '@type': 'Thing',
     name: 'Folk Horror Original Music',
@@ -224,8 +230,8 @@ export function deepLinkGenres(labels: readonly string[]): string[] {
 }
 
 export const PORTFOLIO_GENRES_DEEP_LINKED = deepLinkGenres([
-  'Experimental Art House',
   'Psychological Horror',
+  'Experimental Art House',
   'Folk Horror',
   'Body Horror',
   'Supernatural Thriller',
@@ -239,13 +245,13 @@ export const person = {
   name: AUTHOR_NAME,
   alternateName: SITE_NAME,
   description:
-    'IMDb-credited horror film composer, experimental producer, sound designer, and multi-instrumentalist based in Asheville, North Carolina. Founder of Zazie Productions LLC, composing bespoke psychological horror, folk horror, body horror, and experimental art house scores for independent film, television, and games worldwide.',
+    'IMDb-credited experimental psychological horror film composer for independent and arthouse cinema, experimental producer, sound designer, and multi-instrumentalist based in Asheville, North Carolina. Founder of Zazie Productions LLC, composing bespoke psychological, folk and body horror scores for independent film, television, and games worldwide.',
   url: `${SITE_ORIGIN}/composer`,
   image: `${SITE_ORIGIN}/images/headshot.jpg`,
   jobTitle: [
-    'Experimental Art House & Psychological Horror Film Composer',
+    'Experimental Psychological Horror Film Composer',
+    'Film Composer for Independent and Arthouse Cinema',
     'Folk Horror & Body Horror Composer',
-    'Film, TV & Game Composer',
     'Experimental Sound Designer',
     'Multi-Instrumentalist',
   ],
@@ -298,7 +304,7 @@ export const organization = {
   legalName: 'Zazie Productions LLC',
   alternateName: SITE_NAME,
   description:
-    'Boutique horror scoring and experimental sound-design atelier led by composer Zazie Kanwar-Torge, writing original psychological horror, folk horror, body horror, and experimental art house scores to picture for independent feature films, short films, series, and horror video games.',
+    'Boutique scoring and experimental sound-design atelier led by composer Zazie Kanwar-Torge, writing original experimental psychological horror scores to picture for independent and arthouse cinema — feature films, festival shorts, series, and horror video games.',
   url: SITE_ORIGIN,
   logo: `${SITE_ORIGIN}/images/hero-portrait.jpg`,
   founder: { '@id': PERSON_ID },
@@ -336,7 +342,7 @@ export const website = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   '@id': WEBSITE_ID,
-  name: `${SITE_NAME} — Experimental Art House & Psychological Horror Composer Zazie Kanwar-Torge`,
+  name: `${SITE_NAME} — Experimental Psychological Horror Film Composer Zazie Kanwar-Torge`,
   alternateName: SITE_NAME,
   url: `${SITE_ORIGIN}/`,
   publisher: { '@id': ORG_ID },

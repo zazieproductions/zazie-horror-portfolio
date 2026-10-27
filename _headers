@@ -28,14 +28,17 @@
 # checked against each other on every build.
 #
 # Cloudflare injects its Web Analytics beacon (static.cloudflareinsights.com/
-# beacon.min.js) into HTML at the edge. Nothing in this repository asks for it,
-# and /privacy promises no analytics and no third-party script, so the beacon is
-# deliberately absent from script-src: the CSP is the only place that promise can
-# be enforced after upload. A Lighthouse run reporting the beacon as blocked by
-# CSP is therefore the policy working, not a defect. To stop the request itself,
-# turn off Analytics & Logs -> Web Analytics -> Manage site -> Advanced options
-# -> JS snippet injection in the Cloudflare dashboard. tools/check-headers.mjs
-# fails the build if either beacon host is ever added below.
+# beacon.min.js) into HTML at the edge; nothing in this repository asks for the
+# tag. Since 26 October 2026 the beacon is deliberately allowed: script-src
+# names its host exactly (the injected URL carries a version path, so a
+# path-scoped source would not match) and connect-src names
+# cloudflareinsights.com for its /cdn-cgi/rum reporting endpoint (the
+# same-origin form is already covered by 'self'). It is the only remote script
+# and the only remote connection allowed, it is cookieless, and /privacy
+# sections 1, 3, 4, 6, 8, 9 and 13 disclose it. tools/check-headers.mjs fails
+# the build if either host is dropped below or any other remote script/connect
+# origin is added. To stop collecting, disable Web Analytics in the Cloudflare
+# dashboard and remove both hosts here in the same change.
 #
 # Cloudflare Pages limit: 100 header rules, 2,000 characters per line.
 
@@ -45,7 +48,7 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self'; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://drive.google.com https://docs.google.com https://bandcamp.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; frame-ancestors 'self'; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self'; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://drive.google.com https://docs.google.com https://bandcamp.com; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; frame-ancestors 'self'; upgrade-insecure-requests
   X-DNS-Prefetch-Control: on
   Cache-Control: public, max-age=0, must-revalidate
 
@@ -129,6 +132,10 @@
   Cache-Control: public, max-age=31536000, immutable
 
 /item-*.js
+  ! Cache-Control
+  Cache-Control: public, max-age=31536000, immutable
+
+/reel-download-*.js
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 

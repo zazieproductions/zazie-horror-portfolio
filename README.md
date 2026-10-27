@@ -79,7 +79,7 @@ The site is built to *demonstrate* rather than describe that identity:
 - **A restrained dark system, not decoration.** One palette (`void #030303`, `ink`, `smoke`, `ash`, `mist #9a9590`, `bone #f0ebe3`, `blood #c41e1e`, `ember #ff2a2a`), one serif voice (Cormorant Garamond) against one workhorse sans (Inter variable), and a fixed atmosphere layer (film grain, vignette, drifting ambient orbs, ken-burns hero) that is part of the first painted frame, not an after-effect of JavaScript.
 - **"The Archive" frame.** The 404 is an archive-entry error; the homepage opens on a tape-deck boot transmission, while the copy speaks in catalogue and signal language. The metaphor is consistent and quiet.
 - **Listen first.** The showreel — 32 original cues, playable inline, organised by mood — is the centre of gravity of the whole site. Film samples embed the scores *in context*. Commerce points outward to marketplaces rather than building a parallel shop.
-- **No backend, no tracking.** The inquiry form composes an email in the visitor's own mail client. No cookies, no analytics, no accounts, no newsletter. The privacy notice inventories every third party the site can touch, and a device inspector lets the visitor verify the claims themselves.
+- **No backend, no behavioural tracking.** The inquiry form composes an email in the visitor's own mail client. No cookies set by this site, no accounts, no newsletter. The one analytics service is Cloudflare Web Analytics (cookieless, no fingerprinting, disclosed in `/privacy`), and the privacy notice inventories every third party the site can touch; a device inspector lets the visitor verify the claims themselves.
 
 Unconventional choices exist for artistic or experiential reasons and are documented where they do. Do not flatten them into generic SaaS patterns.
 
@@ -113,7 +113,8 @@ All artwork © the respective productions. See the [live site](https://horror.za
 
 | System | Where it lives | Notes |
 | --- | --- | --- |
-| Showreel audio engine | `src/lib/audioContext.tsx` (in bundle), rendered by `Showreel.tsx` + `StickyPlayer.tsx` | One `<audio>` element for the whole site, shared through React context: `playTrack / toggle / next / prev / seek / setVolume`. Previous-track restarts if >3 s in. `preload="metadata"`; MP3s stream from `/audio/`, cached `immutable` at the edge. |
+| Showreel audio engine | `src/lib/audioContext.tsx` (in bundle), rendered by `Showreel.tsx` + `StickyPlayer.tsx` | One `<audio>` element for the whole site, shared through React context: `playTrack / toggle / next / prev / seek / setVolume`. Previous-track restarts if >3 s in. `preload="metadata"`; MP3s stream from `/audio/`. |
+| Reel downloads | `/reel#download`, `src/reel-download/`, `scripts/build-reel-download.mjs` | Visitors can save individual MP3s without JavaScript or prepare one ZIP of all 30 cues in their browser. The ZIP reads the published cue list and same-origin audio on demand, shows progress, and can be cancelled; it does not require a second 90 MB archive on the host. MP3s are stored in the ZIP without re-encoding. Downloads do not grant project-use or redistribution rights. |
 | Mood clusters | `tracks` array in the bundle (32 entries: `id, title, src, duration, tag`) | Each cue carries one mood tag; its dedicated item page uses `MusicComposition` + `AudioObject` schema. |
 | Sticky player | `StickyPlayer.tsx` | Hidden until first play; animated wave-bar visualisation; respects `prefers-reduced-motion`. |
 | Film samples | `Projects.tsx` data + prerendered covers | 6 YouTube-nocookie iframes get a real `src` only when lazy-loaded; 1 Google Drive embed; `preconnect` to YouTube deferred off the critical path. |
@@ -195,7 +196,7 @@ As shipped (verified from the artifacts):
 - **Bash + Python 3** — the two build scripts
 - **Node.js 20.19+** — item build, static server, sitemap generation and validators
 
-No analytics, no tracking, no cookies, no fonts CDN, no external JS.
+No cookies set by this site, no fonts CDN, and exactly one external JS: the Cloudflare Web Analytics beacon (see below). No other analytics, tracking or external script.
 
 ## Repository map
 
@@ -347,9 +348,9 @@ npm run check:forms
 node tools/live-route-audit.mjs https://horror.zazieproductions.com
 ```
 
-The zero-tracking privacy claim is structural: adding an analytics script or a cookie would invalidate `/privacy`, the footer statement on every page, and the device inspector on `/privacy`. Don't.
+The no-behavioural-tracking privacy claim is structural: adding any *other* analytics, an advertising pixel, or a cookie would invalidate `/privacy`, the footer statement on every page, and the device inspector on `/privacy`. Don't.
 
-One third party tries anyway, and the Content Security Policy is what stops it. Cloudflare injects its Web Analytics beacon (`https://static.cloudflareinsights.com/beacon.min.js`) into the HTML it serves at the edge — it is in no file here, it is not in the upload, and no build step can delete it. Because `/privacy` states that no analytics package and no third-party script run on this site, the beacon's host is deliberately absent from `script-src` (and `cloudflareinsights.com` from `connect-src`), so every page refuses it. A Lighthouse report naming it is the policy working, not a regression; `tools/check-headers.mjs` fails the build if either host is ever allowlisted. To stop the request rather than just block it, switch off **Analytics & Logs → Web Analytics → Manage site → Advanced options → JS snippet injection** in the Cloudflare dashboard. Allowlisting it instead would make the notice false, so that is a copy change before it is a header change.
+The one exception is deliberate and disclosed. Cloudflare injects its Web Analytics beacon (`https://static.cloudflareinsights.com/beacon.min.js`) into the HTML it serves at the edge — it is in no file here, it is not in the upload, and no build step can add or delete it. Since 26 October 2026 `script-src` allowlists that host exactly (the injected URL carries a version path, so a path-scoped source would not match) and `connect-src` allowlists `cloudflareinsights.com` for its `/cdn-cgi/rum` reporting endpoint; the same-origin report form is covered by `'self'`. `/privacy` (sections 1, 3, 4, 6, 8, 9 and 13), the FAQ tracking answer and the privacy summaries on `/legal` and `/sitemap` describe the beacon — cookieless, no client-side storage, no fingerprinting — and `tools/check-headers.mjs` fails the build if either host is dropped or any other remote script/connect origin is added. To stop collecting, switch off **Analytics & Logs → Web Analytics** in the Cloudflare dashboard *and* remove both hosts from `tools/headers.mjs` + `_headers` in the same change.
 
 ## Media & asset pipeline
 
@@ -468,7 +469,7 @@ For future AI-assisted development sessions. **Before changing anything:**
 **Explicitly do not:**
 
 - Create duplicate components, alternate implementations, or an abandoned rewrite of an existing system.
-- Introduce unnecessary frameworks, UI libraries, analytics, or third-party scripts (the zero-tracking claim is load-bearing).
+- Introduce unnecessary frameworks, UI libraries, analytics, or third-party scripts (the only allowed third-party script is the disclosed Cloudflare Web Analytics beacon; anything else breaks `/privacy`).
 - Invent placeholder portfolio material — **no fictional films, fake credits, invented reviews, or dummy scores.** Real productions, real cues, real catalogue items only; if a link or credit is unknown (e.g. THE DARK AWAITS title links), ship without it and record that, exactly as the existing entries do.
 - Make undocumented architectural changes, hand-edit generated files, reintroduce SPA rewrites, or ship a changed hash without bumping `CACHE_NAME` and updating every reference.
 - Describe aspirational features as existing — in docs, schema, or copy.
