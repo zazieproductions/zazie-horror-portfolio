@@ -141,17 +141,6 @@ export const hubs: Hub[] = [
     videos: [],
   },
   {
-    path: "/composer",
-    name: "Composer biography",
-    title: "Zazie Kanwar-Torge: Experimental Psychological Horror Composer Biography | Zazie Productions",
-    description: "Biography of experimental psychological horror film composer Zazie Kanwar-Torge, founder of Zazie Productions LLC in Asheville, NC, scoring independent and arthouse cinema.",
-    lastmod: "2026-10-26",
-    images: [
-      { loc: "https://horror.zazieproductions.com/images/headshot.jpg", caption: "Zazie Kanwar-Torge, experimental psychological horror composer and founder of Zazie Productions LLC, Asheville NC.", title: "Zazie Kanwar-Torge - Experimental Psychological Horror Composer Biography" },
-    ],
-    videos: [],
-  },
-  {
     path: "/process",
     name: "Scoring process",
     title: "Psychological Horror Scoring Process: Spotting to Delivery | Zazie Productions",

@@ -35,7 +35,9 @@ function parseJsonLd(html, label) {
 }
 
 test('every indexable route places <h1> inside <main> and separates numeral spans cleanly', () => {
-  assert.ok(allRoutes.length >= 82, `expected at least 82 indexable routes, found ${allRoutes.length}`);
+  // 81 = 18 hubs + 9 productions + 30 cues + 24 catalogue items; /composer
+  // was retired (2026-10-29) and 301s to /#about, so it is no longer a route.
+  assert.ok(allRoutes.length >= 81, `expected at least 81 indexable routes, found ${allRoutes.length}`);
   for (const route of allRoutes) {
     const html = fs.readFileSync(fileForRoute(route.path), 'utf8');
     const mainMatch = /<main\b[^>]*>([\s\S]*?)<\/main>/i.exec(html);
@@ -234,21 +236,16 @@ test('JSON-LD knowsAbout and genre fields across all routes deep-link to externa
 
 test('horror reference topics link identity knowledge and biography mentions without affiliation claims', () => {
   const names = ['A24 film aesthetic', 'Mica Levi scoring techniques', 'Folk Horror tropes'];
-  for (const file of ['index.html', 'composer.html', 'composer/index.html']) {
-    const html = fs.readFileSync(path.join(ROOT, file), 'utf8');
-    const nodes = parseJsonLd(html, file);
-    const person = nodes.find(n => n['@type'] === 'Person' && n.knowsAbout);
-    for (const name of names) {
-      const topic = person.knowsAbout.find(t => t.name === name);
-      assert.ok(topic, `${file}: knowsAbout ${name}`);
-      assert.match(topic.url, /^https:\/\/en.wikipedia.org\/wiki\//);
-      assert.ok(!person.sameAs.includes(topic.url), 'references must not become identity aliases');
-    }
-    if (file.startsWith('composer')) {
-      const page = nodes.find(n => n['@type'] === 'WebPage');
-      assert.equal(page.about['@id'], person['@id']);
-      assert.deepEqual(page.mentions.map(t => t.name), names);
-      assert.match(html, /not claims of affiliation, collaboration, or production credits/);
-    }
+  // /composer was retired (2026-10-29) and 301s to /#about: the biography is
+  // section 01 on the homepage, whose Person graph carries these same
+  // reference topics. There is no standalone composer*.html to audit.
+  const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  const nodes = parseJsonLd(html, 'index.html');
+  const person = nodes.find(n => n['@type'] === 'Person' && n.knowsAbout);
+  for (const name of names) {
+    const topic = person.knowsAbout.find(t => t.name === name);
+    assert.ok(topic, `index.html: knowsAbout ${name}`);
+    assert.match(topic.url, /^https:\/\/en.wikipedia.org\/wiki\//);
+    assert.ok(!person.sameAs.includes(topic.url), 'references must not become identity aliases');
   }
 });
