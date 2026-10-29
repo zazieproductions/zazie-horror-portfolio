@@ -432,7 +432,7 @@ The site serves source-rendered SEO metadata and structured data (the repo's `SE
 
 **Cloudflare Pages**, served as a static asset tree. `.github/workflows/deploy.yml` runs on relevant pull requests and main-branch pushes: it runs `npm ci`, the full build, type and film-player tests, sitemap/route checks, and assembles the site-only upload. On main it also deploys with Wrangler and runs the live route audit when `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` are configured. Without those secrets, validation still runs and deployment is skipped; Cloudflare does not run the Node build itself.
 
-`.github/workflows/aislop.yml` is a separate, non-deploying gate (see [the aislop gate](#the-aislop-gate)): it scores the hand-written code and fails a PR that adds new findings.
+`.github/workflows/aislop.yml` is a separate, non-deploying gate (see [the aislop gate](#the-aislop-gate)): it scores the hand-written code and fails a PR that adds new findings. `.github/workflows/roast.yml` pairs it with a non-blocking AI code review on pull requests (see [PR roast review](#pr-roast-review)).
 
 Two hard-won rules recorded in `STORE.md` / `LEGAL.md` / `SEO-DOSSIER.md`:
 
@@ -483,6 +483,19 @@ npx aislop@0.19.1 baseline prune     # drop entries for findings that are gone
 ```
 
 Prefer the fix. `npx aislop@0.19.1 fix --dry-run` previews mechanical repairs (unused imports, narrative comments, dead code); `--safe` limits the run to changes that cannot alter behaviour. A single deliberate exception can be silenced in place — `// aislop-ignore-next-line <rule> -- why` — which stays visible in review, unlike an exclude.
+
+### PR roast review
+
+`.github/workflows/roast.yml` runs a native [RoastMyCode](https://github.com/marketplace/roastmycode-ai)-style AI pull-request review via `actions/ai-inference@v2` and GitHub Models (`models: read` on the built-in `GITHUB_TOKEN`; no secrets required):
+
+- **Explorer (`.github/roast/cli.mjs prepare`)** filters out committed minified bundles, lockfiles and binary media so token budget goes to hand-authored code, and prefixes diff hunks with exact target line numbers (`+L42:`).
+- **Roaster (`actions/ai-inference@v2`)** scores Security, Architecture, Bugs, Performance, Dependencies and Code Quality (0–100) at configurable heat (`gentle`, `medium-rare`, `inferno`, `nuclear`) with line-referenced burns and concrete fix snippets.
+- **Scorer & Verifier (`.github/roast/cli.mjs render`)** drops hallucinated file paths not in the PR diff, calibrates the overall `A+`–`F` grade (capping grades when high-severity bug or security issues are present), writes to the Actions job summary, and updates a single sticky PR comment (`<!-- pr-roast-comment -->`) in place.
+
+```bash
+node --test .github/roast/pr-roast.test.mjs         # local self-test
+gh workflow run roast.yml -f pr=172 -f heat=inferno # manual PR roast
+```
 
 ## AI-agent continuity
 
