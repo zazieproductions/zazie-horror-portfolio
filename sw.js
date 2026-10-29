@@ -152,7 +152,7 @@ const PRECACHE_ASSETS = [
   '/store-1e13177a.css',
   '/store-3fc01be0.js',
   '/legal-f4e3a5fb.css',
-  '/legal-c623083a.js',
+  '/legal-54feff84.js',
   '/inquiry-d8cba1f7.css',
   '/inquiry-f408888b.js',
   // Hero & Atmosphere
