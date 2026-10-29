@@ -1,0 +1,73 @@
+# This workflow uses an action that is not certified by GitHub.
+# It is provided by a third-party and is governed by separate terms of
+# service, privacy policy, and support documentation.
+#
+# Lighthouse audit for the published horror.zazieproductions.com site.
+# Uses jakejarvis/lighthouse-action (GitHub Marketplace: "Lighthouse Audit"),
+# which runs Google Lighthouse against a URL, prints the Performance,
+# Accessibility, Best Practices, SEO and PWA scores (out of 100) to the step
+# output, and uploads the HTML and JSON reports as workflow artifacts.
+#
+# Source: https://github.com/jakejarvis/lighthouse-action
+# Marketplace: https://github.com/marketplace/actions/lighthouse-audit
+# Latest release at authoring: v0.3.2
+#
+# The action installs Chrome and Lighthouse itself, so nothing needs to be
+# installed in the job. It audits a live, reachable URL -- this repo's
+# production site is not a PR preview, so unmerged changes are not audited
+# here; the deploy workflow (deploy.yml) already runs the live route audit
+# against whatever was just deployed.
+#
+# TRIGGERS
+#   push to main        audit the live production site after it ships
+#   schedule            weekly regression check (Sundays 06:00 UTC)
+#   workflow_dispatch   audit any URL, e.g. a deploy preview
+#
+#   gh workflow run lighthouse.yml
+#   gh workflow run lighthouse.yml -f url=https://<hash>.pages.dev
+
+name: Lighthouse audit
+
+on:
+  push:
+    branches: [ "main" ]
+  schedule:
+    - cron: '0 6 * * 0'
+  workflow_dispatch:
+    inputs:
+      url:
+        description: URL to audit (defaults to the production site)
+        required: false
+        default: https://horror.zazieproductions.com
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lighthouse-audit
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Lighthouse audit
+        id: lighthouse
+        # Pin to a release; bump after reviewing the action's releases:
+        # https://github.com/jakejarvis/lighthouse-action/releases
+        uses: jakejarvis/lighthouse-action@v0.3.2
+        with:
+          url: ${{ inputs.url || 'https://horror.zazieproductions.com' }}
+
+      - name: Upload Lighthouse report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: ./report
+          if-no-files-found: warn
