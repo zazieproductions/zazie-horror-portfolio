@@ -434,6 +434,8 @@ The site serves source-rendered SEO metadata and structured data (the repo's `SE
 
 `.github/workflows/aislop.yml` is a separate, non-deploying gate (see [the aislop gate](#the-aislop-gate)): it scores the hand-written code and fails a PR that adds new findings.
 
+`.github/workflows/release.yml` cuts the GitHub release: push a tag and the PRs merged since the previous tag become the release notes, built by [release-changelog-builder](https://github.com/marketplace/actions/release-changelog-builder) and categorized by this repository's labels. `gh workflow run release.yml` builds the notes without publishing; the workflow header has the details.
+
 Two hard-won rules recorded in `STORE.md` / `LEGAL.md` / `SEO-DOSSIER.md`:
 
 1. **Do not rewrite routes to `.html` targets.** Original hubs use `<hub>/index.html` plus a byte-identical root `.html` twin for slashless 200s. Generated item pages use one flat `<hub>/<slug>.html` file only, with no directory/slash twin. The `/* /index.html 200` SPA splat is forbidden; unknown paths resolve to a real 404.

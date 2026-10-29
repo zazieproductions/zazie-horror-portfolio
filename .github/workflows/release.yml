@@ -1,0 +1,123 @@
+name: Release
+
+# Cuts the GitHub release for a pushed tag, with notes built from the pull
+# requests that landed since the previous tag. Installed from the GitHub
+# Marketplace listing for mikepenz/release-changelog-builder-action --
+# "Release Changelog Builder".
+#
+# WHY THIS EXISTS
+#
+# Every change to this site lands through a PR, but nothing ever turned those
+# PRs into release notes: the tag was the only artifact. This workflow makes
+# the tag the single input -- push it, and the merged PRs between it and the
+# previous semver tag are fetched, sorted into categories keyed to this
+# repository's labels, and published as the release body. First tag in the
+# repo is the documented special case: the changelog runs back to the first
+# commit.
+#
+# HOW IT WORKS
+#
+# PR mode (the action default): merged pull requests, categorized by label.
+# A PR can match several categories or none; the ones that match none land in
+# the collapsed "Uncategorized" block at the bottom rather than being dropped.
+# Non-semver tags are ignored when resolving the previous tag, so tagging
+# something like "deploy-check" still builds notes since the last real
+# version.
+#
+# USAGE
+#
+#   git tag v1.0.0 && git push origin v1.0.0   # build notes, create release
+#   gh workflow run release.yml                # dry run: notes only, no
+#                                              # release -- read the job
+#                                              # summary for the result
+#   gh workflow run release.yml -f fromTag=v0.9.0 -f toTag=v1.0.0
+#
+# A re-run of the tag workflow refreshes the notes on the existing release, so
+# the changelog can be regenerated after a label is fixed. A tag containing a
+# hyphen (v1.0.0-rc1) is published as a pre-release.
+#
+# NO SETUP REQUIRED. The built-in GITHUB_TOKEN is enough (the `contents: write`
+# permission below); there are no repo secrets to configure. If releases must
+# be able to trigger other workflows, GITHUB_TOKEN events never do -- swap in a
+# PAT stored as a repo secret.
+
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+    inputs:
+      fromTag:
+        description: Start tag (blank = previous release tag)
+        required: false
+        default: ''
+      toTag:
+        description: End tag (blank = latest tag)
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Build Changelog
+        id: build_changelog
+        uses: mikepenz/release-changelog-builder-action@v6
+        with:
+          fromTag: ${{ inputs.fromTag }}
+          toTag: ${{ inputs.toTag }}
+          # Within this JSON, `${{ }}` placeholders must be spelled `#{{ }}`
+          # so GitHub does not expand them (see the action docs).
+          configurationJson: |
+            {
+              "template": "#{{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n#{{UNCATEGORIZED}}\n</details>",
+              "pr_template": "- #{{TITLE}} (#{{NUMBER}})",
+              "empty_template": "- No changes",
+              "categories": [
+                { "title": "## 🚀 Features", "labels": ["enhancement", "feature"] },
+                { "title": "## 🐛 Fixes", "labels": ["bug", "fix"] },
+                { "title": "## 📚 Documentation", "labels": ["documentation", "docs"] },
+                { "title": "## 📦 Dependencies", "labels": ["dependencies"], "collapsed": true }
+              ],
+              "ignore_labels": ["wontfix", "invalid", "duplicate"],
+              "sort": { "order": "ASC", "on_property": "mergedAt" }
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Write changelog
+        # The changelog is untrusted text (PR titles end up in it). It travels
+        # through the environment and a quoted printf, never shell
+        # interpolation.
+        env:
+          CHANGELOG: ${{ steps.build_changelog.outputs.changelog }}
+        run: |
+          printf '%s\n' "$CHANGELOG" > changelog.md
+          {
+            echo "## Release changelog"
+            echo
+            cat changelog.md
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Create Release
+        if: github.event_name == 'push'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            # Re-run of the tag workflow: refresh the notes on the release that
+            # already exists instead of failing on a duplicate.
+            gh release edit "$TAG" --notes-file changelog.md
+          else
+            flags=(--verify-tag --title "$TAG" --notes-file changelog.md)
+            case "$TAG" in
+              *-*) flags+=(--prerelease) ;;
+            esac
+            gh release create "$TAG" "${flags[@]}"
+          fi
