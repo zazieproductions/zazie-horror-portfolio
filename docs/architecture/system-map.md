@@ -63,6 +63,10 @@ flowchart TB
 
 ## Integration boundaries
 
+- **Homepage head ordering:** `home-src/build.mjs` patches the document first;
+  `scripts/prerender.mjs` then calls `home-src/document.mjs` to regenerate SEO
+  and posters and reinstall the mobile overrides last. That final render is
+  pure and byte-idempotent; CI proves it with two complete builds.
 - **Cloudflare Pages** serves `dist/` assembled by
   `scripts/build-deploy-dir.mjs` (root minus tooling/sources/markdown).
 - **Marketplaces** own price/stock/checkout; item pages link out and omit

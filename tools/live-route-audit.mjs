@@ -26,7 +26,9 @@
  *                                             hubs, 404 for flat item routes
  *                                             (there is no item slash twin)
  *   4. unknown paths and slash twins        -> HTML 404 with noindex
- *   5. delivery: on one HTML page, one content-hashed bundle, one font and
+ *   5. homepage release: .zp-hero-laurels above the headline, all four marks
+ *      in both the served HTML and the React bundle it imports
+ *   6. delivery: on one HTML page, one content-hashed bundle, one font and
  *      one image -- Strict-Transport-Security, a CSP with frame-ancestors,
  *      X-Frame-Options: SAMEORIGIN, nosniff, a Cache-Control with exactly one
  *      max-age (Cloudflare Pages joins matching rules with a comma, which is
@@ -44,6 +46,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { homeBundlePath, homepageReleaseProblems } from './homepage-release.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SITEMAP = path.join(ROOT, 'sitemap.xml');
@@ -101,6 +104,7 @@ async function probe(urlPath) {
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const res = await fetch(url, {
+        cache: 'no-store',
         redirect: 'manual',
         headers: { 'user-agent': UA, accept: 'text/html,application/xhtml+xml,*/*' },
         signal: AbortSignal.timeout(TIMEOUT_MS),
@@ -114,6 +118,7 @@ async function probe(urlPath) {
           ? (/\bhref=["']([^"']+)["']/i.exec(/<link\b[^>]*\brel=["']canonical["'][^>]*>/i.exec(body)[0]) || [])[1] || ''
           : '');
         out.title = (/<title\b[^>]*>([\s\S]*?)<\/title>/i.exec(body) || [])[1]?.trim() || '';
+        if (urlPath === '/') out.html = body;
         out.noindex = /<meta\b[^>]*\bname=["']robots["'][^>]*\bnoindex/i.test(body)
           || (res.headers.get('x-robots-tag') || '').toLowerCase().includes('noindex');
       }
@@ -282,6 +287,33 @@ async function run() {
     return !rowOk(r) || !r.title || r.noindex;
   });
 
+  /* The route table proves that / exists; this proves the intended hero ships.
+   * Reuse the document fetched above, then inspect the exact bundle it imports.
+   * A stale edge must not look green merely because its routes still resolve. */
+  const home = canonical.find((r) => r.url === '/');
+  const bundlePath = homeBundlePath(home?.html ?? '');
+  let homeBundle = '';
+  const releaseProblems = [];
+  if (home?.status !== 200 || !home.html) {
+    releaseProblems.push(`homepage did not return HTML 200 (${home?.error || home?.status || 'no response'})`);
+  } else if (!bundlePath) {
+    releaseProblems.push('homepage does not import its content-hashed React bundle');
+  } else {
+    try {
+      const response = await fetch(BASE + bundlePath, {
+        cache: 'no-store',
+        headers: { 'user-agent': UA, accept: 'application/javascript,*/*' },
+        signal: AbortSignal.timeout(TIMEOUT_MS),
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      homeBundle = await response.text();
+    } catch (error) {
+      releaseProblems.push(`could not fetch ${bundlePath}: ${error.message}`);
+    }
+  }
+  releaseProblems.push(...homepageReleaseProblems(home?.html ?? '', homeBundle));
+  const releaseFail = releaseProblems.map((note) => ({ url: '/', status: home?.status || 0, location: '', note: ` (${note})` }));
+
   /* 2 + 3. the alias forms of every URL */
   const aliasJobs = [];
   for (const p of SITEMAP_PATHS) {
@@ -384,7 +416,7 @@ async function run() {
 
   const deliveryFail = delivery.filter((row) => !row.ok);
 
-  const failures = [...canonFail, ...aliasFail, ...unknownFail, ...deliveryFail];
+  const failures = [...canonFail, ...aliasFail, ...unknownFail, ...releaseFail, ...deliveryFail];
 
   /* ------------------------------------------------------------- output */
 
@@ -415,6 +447,10 @@ async function run() {
     line('');
     line('```');
     line('');
+    line('## Homepage release');
+    line('');
+    line(releaseFail.length ? releaseProblems.map((problem) => `- FAIL: ${problem}`).join('\n') : 'PASS - .zp-hero-laurels precedes the headline; all four marks ship in HTML and the imported React bundle.');
+    line('');
     line('## Delivery: headers and compression');
     line('');
     line('| Check | Request | Value | Result |');
@@ -439,6 +475,7 @@ async function run() {
         ['.html alias (expected 308 to the canonical, or the 301 _redirects wrote)', aliasFail.filter((f) => f.kind === '.html')],
         ['trailing-slash alias (expected 200 for a hub directory index, 404 for an item)', aliasFail.filter((f) => f.kind !== '.html')],
         ['unknown path (expected 404 with noindex)', unknownFail],
+        ['homepage release (four laurels in HTML and React)', releaseFail],
         ['delivery (security headers, caching, compression)', deliveryFail.map((d) => ({ url: `${d.url} [${d.header}]`, status: d.ok ? 200 : 'FAIL', location: '', note: '' }))],
       ];
       const rank = (f) => (/^\/(work|reel|store)\/.+/.test(f.url) ? 1 : 0);
@@ -486,6 +523,13 @@ async function run() {
   line('### unknown paths');
   for (const r of unknown) line(`  ${String(r.status || 'ERR').padEnd(7)} ${r.url}`);
   line('');
+  line('### homepage release');
+  if (releaseFail.length) {
+    for (const problem of releaseProblems) line(`  FAIL  ${problem}`);
+  } else {
+    line('  PASS  .zp-hero-laurels above the headline; Golden Bloody Globes, Re:Fract Festival, PVTV Fringe Flicks and Pebbles Underground in HTML + React');
+  }
+  line('');
   line('### delivery (security headers, cache lifetimes, compression)');
   for (const d of delivery) {
     line(`  ${(d.ok ? 'PASS' : 'FAIL').padEnd(5)} ${d.header.padEnd(24)} ${String(d.value).slice(0, 70)}  <- ${d.url}`);
@@ -500,7 +544,7 @@ async function run() {
     }
     if (failures.length > 25) line(`  ... and ${failures.length - 25} more`);
   } else {
-    line(`### PASS — ${SITEMAP_URLS.length} sitemap URLs, ${alias.length} alias forms, ${unknown.length} unknown paths, ${delivery.length} delivery checks, all as expected`);
+    line(`### PASS — ${SITEMAP_URLS.length} sitemap URLs, ${alias.length} alias forms, ${unknown.length} unknown paths, four homepage laurels in HTML + React, ${delivery.length} delivery checks, all as expected`);
   }
   line('');
   line(`(${((Date.now() - started) / 1000).toFixed(1)}s, ${BASE})`);

@@ -167,8 +167,8 @@ Details: [local development](docs/development/local-development.md).
 
 > [!TIP]
 > Fresh clone: run `npm run build` **before** `npm test` — two test files
-> import compiled output from `build/`. Baseline results, including the one
-> environment-dependent failure observed 2026-10-29, are recorded honestly in
+> import compiled output from `build/`. CI runs the complete build twice and
+> rejects generated-output drift; the verified 2026-10-29 repair baseline is in
 > [testing](docs/development/testing.md).
 
 ## Build and verification
@@ -177,7 +177,7 @@ Details: [local development](docs/development/local-development.md).
 |---|---|
 | `npm run build` | Whole pipeline incl. verify/headers/links/forms/sitemap gates |
 | `npm run typecheck` | Strict TypeScript over `src/` |
-| `npm test` | 14 `node --test` suites in `tools/` |
+| `npm test` | 15 `node --test` suites in `tools/` |
 | `npm run verify` · `check:links` · `check:forms` · `check:headers` | Page structure · link integrity · form labelling · header policy |
 | `npm run check:docs` | Markdown links in this README + `docs/` resolve |
 | `npm run lint:slop` | aislop quality gate (`.aislop/` policy + baseline) |
@@ -236,8 +236,8 @@ bar is real.
 ## Maintenance and known limitations
 
 [Maintenance](docs/project/maintenance.md) · [known limitations](docs/project/known-limitations.md)
-(legacy bundle source absence, test/build ordering, observed hash
-non-reproducibility) · open human decisions in [RATIFY.md](RATIFY.md).
+(legacy bundle source absence, test/build ordering, generated-output
+release contract) · open human decisions in [RATIFY.md](RATIFY.md).
 
 ## Credits, copyright and licensing
 

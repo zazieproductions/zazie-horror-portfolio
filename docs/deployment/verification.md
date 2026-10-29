@@ -29,5 +29,11 @@ curl -sI https://horror.zazieproductions.com/work | head -5
 curl -s https://horror.zazieproductions.com/sitemap.xml | grep -c '<url>'   # expect 80
 ```
 
+The live audit also verifies the homepage release contract: one
+`.zp-hero-laurels` band before the `<h1>`, four `#press` laurel links (Golden
+Bloody Globes, Re:Fract Festival, PVTV Fringe Flicks, Pebbles Underground), and
+the same band/marks in the imported React bundle. A stale edge that still
+serves the old hero fails the deploy workflow even if every route returns 200.
+
 Plus: open `/`, one production, one cue, one catalogue item and `/store` in a
 fresh browser profile; confirm the showreel plays and no CSP errors appear.

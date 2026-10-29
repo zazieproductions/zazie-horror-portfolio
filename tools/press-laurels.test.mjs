@@ -31,6 +31,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { test } from 'node:test';
+import { homeBundlePath, homepageReleaseProblems } from './homepage-release.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = (relative) => fs.readFileSync(path.join(ROOT, relative), 'utf8');
@@ -152,4 +153,20 @@ test('the press kit below keeps the full laurel dossier', () => {
   for (const award of ['Festival Award Honoree', 'Special Jury Mention', 'Festival Winner', 'Jury Special Mention']) {
     assert.ok(pressSection.includes(award), `#press keeps the "${award}" award line`);
   }
+});
+
+test('the live-release checker accepts the complete static and React laurel band', () => {
+  assert.equal(homeBundlePath(html), `/${bundleName}`);
+  assert.deepEqual(homepageReleaseProblems(html, bundle), []);
+});
+
+test('the live-release checker rejects a missing laurel or a stale React bundle', () => {
+  const missingMark = html.replace('aria-label="Pebbles Underground', 'aria-label="Missing festival');
+  assert.ok(homepageReleaseProblems(missingMark, bundle).some((problem) => problem.includes('Pebbles Underground')));
+  assert.ok(homepageReleaseProblems(html, '/* old bundle */').some((problem) => problem.includes('React bundle')));
+});
+
+test('the live-release checker rejects laurels moved below the hero headline', () => {
+  const misplaced = html.replace(bandMatch[0], '').replace('</h1>', `</h1>${bandMatch[0]}`);
+  assert.ok(homepageReleaseProblems(misplaced, bundle).some((problem) => problem.includes('precede the hero headline')));
 });

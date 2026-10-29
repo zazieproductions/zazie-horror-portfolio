@@ -14,4 +14,7 @@
   flow above the eyebrow and `<h1>`, each linking to `#press`. It renders 2x2
   on phones and 4-up from 768px, and the emblem is eager + `fetchpriority="low"`
   with intrinsic dimensions. The full Electronic Press Kit remains below at
-  `#press`; `tools/press-laurels.test.mjs` keeps the two in sync.
+  `#press`; `tools/press-laurels.test.mjs` keeps the two in sync, and the live
+  route audit checks the same four marks in the served HTML and React bundle.
+  The final head/poster render lives in `home-src/document.mjs` so mobile CSS
+  stays after regenerated SEO without changing the hero markup or design.

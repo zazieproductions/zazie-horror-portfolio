@@ -17,7 +17,12 @@
   deploys nothing and warns — by design.
 - **Triggers:** push to `main`; PRs touching site/build paths (build +
   validate only, never deploy); manual `workflow_dispatch` (production only
-  from `main`; preview allowed).
+  from `main`; preview allowed). The build step runs the complete pipeline
+  twice, then typecheck/tests and the tracked/untracked stale-output gate.
+- **Live release gate:** after production upload, `tools/live-route-audit.mjs`
+  checks routes, delivery headers and `.zp-hero-laurels` above the headline:
+  all four festival marks must exist in both the served HTML and the exact
+  React bundle imported by that HTML.
 - **Edge config in-repo:** `_headers` (security + cache; policy source is
   `tools/headers.mjs`), `_redirects` (legacy aliases + real-404 fallback).
   `_headers` is **not** a cascade — read its top comment before editing.

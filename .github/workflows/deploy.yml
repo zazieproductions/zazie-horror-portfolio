@@ -123,8 +123,11 @@ jobs:
 
       # Generated files are committed; rebuild and reject stale output so a PR
       # or deploy cannot ship pages that differ from their checked-in sources.
+      # Run the complete pipeline twice: the second pass catches order-dependent
+      # head drift (homepage resources vs regenerated SEO), not just a stale tree.
       - name: Build and validate
         run: |
+          npm run build
           npm run build
           npm run typecheck
           npm test

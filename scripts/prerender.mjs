@@ -48,6 +48,7 @@ import { allRoutes, items } from '../build/data/routes.js';
 import * as site from '../build/data/site.js';
 import { renderHomePosterCards, renderHomeSeo } from '../build/lib/home.js';
 import { renderItemPage } from '../build/lib/page.js';
+import { renderHomeDocument } from '../home-src/document.mjs';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const { url, SITE_HOST } = site;
@@ -120,70 +121,15 @@ function namedAsset(prefix, source, extension) {
 
 /* ------------------------------------------------------------------ writing */
 
-const SEO_START = '<!--SEO:START-->';
-const SEO_END = '<!--SEO:END-->';
-const HOME_POSTERS_START = '<!--HOME-POSTERS:START-->';
-const HOME_POSTERS_END = '<!--HOME-POSTERS:END-->';
-
-function replaceMarkedContents(html, startMarker, endMarker, replacement, label) {
-  const start = html.indexOf(startMarker);
-  const end = html.indexOf(endMarker);
-  if (start === -1 || end === -1 || end < start) {
-    throw new Error(`index.html is missing a matching ${label} marker pair`);
-  }
-  const contentStart = start + startMarker.length;
-  return html.slice(0, contentStart) + '\n' + replacement + '\n' + html.slice(end);
-}
-
-/**
- * Replace the homepage's complete <head> element from the source template.
- * Keeping only non-SEO resources from the old head preserves the current boot
- * and player treatments; every title/description/canonical/robots/OG/Twitter
- * tag and every JSON-LD block is then rebuilt together from home data.
- */
+/** Write the final homepage head and poster snapshot; item rendering follows. */
 function buildHomeDocument() {
   const indexFile = path.join(repoRoot, 'index.html');
-  let html = fs.readFileSync(indexFile, 'utf8');
-  const start = html.indexOf(SEO_START);
-  const end = html.indexOf(SEO_END);
-  if (start === -1 || end === -1 || end < start) {
-    throw new Error('index.html must wrap its complete <head> with <!--SEO:START--> and <!--SEO:END-->');
-  }
-
-  const contentStart = start + SEO_START.length;
-  const markedHead = html.slice(contentStart, end).trim();
-  if (!/^<head\b/i.test(markedHead) || !/<\/head>\s*$/i.test(markedHead)) {
-    throw new Error('index.html SEO markers must enclose one complete <head>...</head>');
-  }
-
-  let templateHead = markedHead;
-  templateHead = templateHead.replace(/<title\b[^>]*>[\s\S]*?<\/title>/gi, '');
-  templateHead = templateHead.replace(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '');
-  // Every meta tag this function re-emits from seoBlock() has to be dropped
-  // from the carried-over template, not just the ones that "look like SEO".
-  // color-scheme was missing from this list, so each build kept the previous
-  // build's copy and added another one: index.html grew a duplicate meta per
-  // run and the workflow's "generated output is stale" diff could never pass.
-  templateHead = templateHead.replace(/<meta\b[^>]*>/gi, (tag) => {
-    const name = /\bname\s*=\s*(["'])(.*?)\1/i.exec(tag)?.[2]?.toLowerCase() ?? '';
-    const property = /\bproperty\s*=\s*(["'])(.*?)\1/i.exec(tag)?.[2]?.toLowerCase() ?? '';
-    if (name === 'description' || name === 'robots' || name === 'author' || name === 'color-scheme') return '';
-    if (name.startsWith('twitter:')) return '';
-    if (property.startsWith('og:')) return '';
-    return tag;
+  const html = fs.readFileSync(indexFile, 'utf8');
+  const nextHtml = renderHomeDocument(html, {
+    seo: renderHomeSeo(),
+    posters: renderHomePosterCards(),
   });
-  templateHead = templateHead.replace(/<link\b[^>]*>/gi, (tag) =>
-    /\brel\s*=\s*(["'])canonical\1/i.test(tag) || /\/llms\.txt\b/i.test(tag) ? '' : tag,
-  );
-  templateHead = templateHead.replace(/<!--[\s\S]*?-->/g, (comment) =>
-    /JSON-LD|STRUCTURED DATA/i.test(comment) ? '' : comment,
-  );
-  const close = templateHead.lastIndexOf('</head>');
-  if (close === -1) throw new Error('index.html source head lost its </head> while rebuilding');
-  const fullHead = `${templateHead.slice(0, close).trimEnd()}\n${renderHomeSeo()}\n</head>`;
-  html = replaceMarkedContents(html, SEO_START, SEO_END, fullHead, 'SEO');
-  html = replaceMarkedContents(html, HOME_POSTERS_START, HOME_POSTERS_END, renderHomePosterCards(), 'home-poster');
-  fs.writeFileSync(indexFile, html, 'utf8');
+  fs.writeFileSync(indexFile, nextHtml, 'utf8');
   console.log('prerender: replaced the complete homepage <head> from src/lib/home.ts + home entities');
   console.log('prerender: rendered curated poster-wall cards from src/data/home.ts + productions.ts');
 }
