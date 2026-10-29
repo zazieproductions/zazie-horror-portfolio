@@ -176,7 +176,11 @@ export const productions: Production[] = [
       publicationDate: '2024-06-20',
       creator: { name: 'Zazie Productions', type: 'Organization' },
     },
-    links: [{ label: 'Watch Phantom Requiem on YouTube', href: 'https://www.youtube.com/watch?v=UX2kv3G89Jw', kind: 'youtube', external: true }],
+    links: [
+      { label: 'Watch Phantom Requiem on YouTube', href: 'https://www.youtube.com/watch?v=UX2kv3G89Jw', kind: 'youtube', external: true },
+      { label: 'Read David Finkelstein review in Lake Ivan Film Journal', href: 'https://lakeivan.substack.com/p/spinning-in-the-wildness-phantom', kind: 'press', external: true },
+      { label: 'Visual Container Winter 2024 Award Winners Press Release (PDF)', href: 'https://www.visualcontainer.tv/wp-content/uploads/2025/01/Winter-2024-Award-Winners_Press-Release.pdf', kind: 'press', external: true },
+    ],
     relatedCueSlugs: ['fractured-requiem', 'opaline-lament-life-from-the-beyond', 'the-beautiful-wrongness'],
     updatedAt,
   },

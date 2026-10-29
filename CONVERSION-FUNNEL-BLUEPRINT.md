@@ -70,7 +70,8 @@ headline and art-house register, but now leads with an outcome claim:
 *"WE CORRUPT SILENCE TO SERVE THE FRAME."* Section headings
 keep the franchise voice — "How the dread actually gets built", "Themes that
 survive the trailer cut", "A palette that is not a preset" — while the press
-section is reframed as third-party validation: *"Not my opinion. Theirs."*
+section presents a formal **Press Kit** dossier with festival laurels, critical
+pull-quotes, and third-party coverage.
 
 ### Layer 2 — Problem-aware, outcome-term copy
 Every desire/trust section now speaks in producer outcomes instead of music
@@ -181,12 +182,15 @@ remains absent from both the prerendered HTML and the React bundle.
 - H2: **Selected Works**
 - The descriptive lead is removed; compilation cards and their players remain.
 
-### `#press` — Trust
-- H2: Press kit → **Not my opinion. Theirs.**
-- Lead: *"Independent features, interviews and award coverage — read what
-  other people heard before you decide."* (also fixes a pre-existing
-  bundle/HTML mismatch: the bundle said "Selected interviews, features, and
-  award coverage", the HTML said "Selected interviews and features".)
+### `#press` — Press Kit & Critical Recognition
+- H2: **Press Kit** (no redundant kicker or side dossier box)
+- Lead: *"Independent features, interviews and award coverage - read what
+  other people heard before you decide."*
+- Four-tier editorial press dossier (`src/lib/press-kit-markup.ts`):
+  1. **Festival Laurels & Jury Recognition:** Golden Bloody Globes, Re:Fract Festival (2025) Special Jury Mention, PVTV Fringe Flicks, and Pebbles Underground · VisualcontainerTV (2024).
+  2. **Critical Acclaim Spotlight:** Verbatim pull-quotes from David Finkelstein's review in *Lake Ivan Film Journal* (*"Spinning in the Wildness: Phantom Requiem"*).
+  3. **Selected Features, Interviews & Coverage:** Six monograph press cards (*Lake Ivan Film Journal*, *Billboard Wire*, *Grammy Weekly*, *Limitless Magazine*, *Black Mountain College Museum*, *Visual Container TV* PDF).
+  4. **Official Profiles, Credits & Streaming:** Verified industry directory (*IMDb*, *FilmFreeway*, *Bandcamp*, *Spotify*, *Apple Music*, *YouTube*, *SoundBetter*, *Muso.AI*).
 
 ### `#method` — Desire/differentiation
 - H2: A distinct point of view, built for the story. →

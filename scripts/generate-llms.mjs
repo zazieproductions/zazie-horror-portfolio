@@ -106,8 +106,10 @@ ${releases
   )
   .join('\n')}
 
-## Press Features & Verified External Profiles
+## Press Features, Festival Laurels & Verified External Profiles
 
+- **Festival Laurels & Jury Honors:** Golden Bloody Globes (Festival Award Honoree), Re:Fract Festival 2025 (Special Jury Mention), PVTV Fringe Flicks (Festival Winner), Pebbles Underground · VisualcontainerTV Winter 2024 (Jury Special Mention).
+- [Lake Ivan Film Journal: Spinning in the Wildness: Phantom Requiem (Critical Review by David Finkelstein)](https://lakeivan.substack.com/p/spinning-in-the-wildness-phantom)
 - [Billboard Wire: How an Underground Experimental Musician Became a Go-To Composer for Psychological Horror](https://billboardwire.com/how-an-underground-experimental-musician-became-a-go-to-composer-for-psychological-horror/)
 - [Grammy Weekly: Zazie Productions: The Underground Polymath Redefining Experimental Music](https://grammyweekly.com/zazie-productions-the-underground-polymath-redefining-experimental-music/)
 - [Limitless Magazine: Forget ASMR: Zazie Productions Will Rewire Your Whole Nervous System](https://limitless-magazine.com/2026/06/12/forget-asmr-zazie-productions-will-rewire-your-whole-nervous-system/)
