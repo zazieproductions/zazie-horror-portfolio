@@ -122,8 +122,8 @@
 // v49: /composer is retired (2026-10-29) and redirects to the homepage
 // biography section (/#about); the precached '/' document and bundle change
 // with the footer link, so the cache name moves again. This merge also folds
-// in main's simplified homepage contact copy ("Project inquiries"), which
-// changed the same precached document and bundle after v48.
+// in main's post-v48 homepage copy passes (simplified contact copy, FAQ
+// section removal), which changed the same precached document and bundle.
 const CACHE_NAME = 'zazie-v49';
 
 const PRECACHE_ASSETS = [
@@ -133,7 +133,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-3465aa44.css',
-  '/index-59c2f9a4.js',
+  '/index-d6413f15.js',
   '/store-1e13177a.css',
   '/store-3fc01be0.js',
   '/legal-f4e3a5fb.css',

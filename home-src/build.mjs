@@ -50,6 +50,8 @@ import {
   simplifyWorkHeaderBundle,
   simplifyWorkHeaderStatic,
   simplifyShowreelHeaderBundle,
+  removeShowreelCountBundle,
+  removeShowreelCountStatic,
   simplifyShowreelHeaderStatic,
   removeHeroBookingBundle,
   removeHeroBookingStatic,
@@ -724,6 +726,7 @@ function patchBundle(orig) {
   out = simplifyPosterHeaderBundle(out);
   out = simplifyWorkHeaderBundle(out);
   out = simplifyShowreelHeaderBundle(out);
+  out = removeShowreelCountBundle(out);
   out = removeHeroBookingBundle(out);
   out = removeHeroProofBundle(out);
   out = injectHeroLineageBundle(out);
@@ -1018,6 +1021,7 @@ function patchStatic(html, tracks) {
   out = injectStaticSections(out);
   out = simplifyPosterHeaderStatic(out);
   out = simplifyShowreelHeaderStatic(out);
+  out = removeShowreelCountStatic(out);
   out = removeHeroBookingStatic(out);
   out = removeHeroProofStatic(out);
   out = injectHeroLineageStatic(out);
