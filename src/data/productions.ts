@@ -48,7 +48,7 @@ export const productions: Production[] = [
       kind: 'youtube',
       embedUrl: 'https://www.youtube-nocookie.com/embed/lWm4Ies7edI',
       watchUrl: 'https://www.youtube.com/watch?v=lWm4Ies7edI',
-      title: 'EXPIRE — official first-look clip',
+      title: 'EXPIRE: official first-look clip',
       description: 'IMDb lists this YouTube video as the official first-look clip for the 2025 science-fiction short EXPIRE. It is a film clip, not represented here as a score excerpt.',
       thumbnail: {
         src: 'https://i.ytimg.com/vi/lWm4Ies7edI/hqdefault.jpg',
@@ -164,7 +164,7 @@ export const productions: Production[] = [
       kind: 'youtube',
       embedUrl: 'https://www.youtube-nocookie.com/embed/UX2kv3G89Jw',
       watchUrl: 'https://www.youtube.com/watch?v=UX2kv3G89Jw',
-      title: 'Phantom Requiem — experimental short film',
+      title: 'Phantom Requiem: experimental short film',
       description: 'The complete experimental short Phantom Requiem, published by Zazie Productions on June 20, 2024. The video runs 4 minutes 53 seconds.',
       thumbnail: {
         src: '/images/project-UX2kv3G89Jw.jpg',
@@ -262,7 +262,7 @@ export const productions: Production[] = [
       kind: 'youtube',
       embedUrl: 'https://www.youtube-nocookie.com/embed/Ty8tPp59mDc',
       watchUrl: 'https://www.youtube.com/watch?v=Ty8tPp59mDc',
-      title: 'THE HAUNTED — official trailer',
+      title: 'THE HAUNTED: official trailer',
       description: 'Official trailer for THE HAUNTED from Crystal Fox Films. The trailer is promotional film media, not presented as a separate score excerpt.',
       thumbnail: {
         src: '/images/project-Ty8tPp59mDc.jpg',
@@ -345,7 +345,7 @@ export const productions: Production[] = [
       kind: 'youtube',
       embedUrl: 'https://www.youtube-nocookie.com/embed/HaVJP08j77U',
       watchUrl: 'https://www.youtube.com/watch?v=HaVJP08j77U',
-      title: 'MIKE HAS A VISITOR — short film',
+      title: 'MIKE HAS A VISITOR: short film',
       description: 'The 14:23 YouTube upload of MIKE HAS A VISITOR, published by director Marco Saikaley on June 30, 2025. IMDb separately credits Zazie Kanwar-Torge as composer.',
       thumbnail: {
         src: '/images/project-HaVJP08j77U.jpg',

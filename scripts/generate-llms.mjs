@@ -43,9 +43,9 @@ const hubLine = (p) => {
   return `- [${h.title}](${hubUrl(h.path)}): ${h.description}`;
 };
 
-const llmsTxt = `# ${SITE_NAME} — Experimental Psychological Horror Film Composer for Independent and Arthouse Cinema: ${AUTHOR_NAME}
+const llmsTxt = `# ${SITE_NAME} | Experimental Psychological Horror Film Composer for Independent and Arthouse Cinema: ${AUTHOR_NAME}
 
-> **${AUTHOR_NAME}** (**${SITE_NAME} LLC**, Asheville, North Carolina — remote worldwide) is an IMDb-credited experimental psychological horror film composer for independent and arthouse cinema — also an experimental producer, sound designer, and multi-instrumentalist available for hire across independent features, festival shorts, television series, trailers, and horror video games. Specializing in **slow-burn psychological and experimental art house horror, with folk horror, body horror, supernatural thrillers, cosmic horror, and dark science fiction alongside**, ${AUTHOR_NAME} builds custom scores to picture using performed waterphone, bowed metal, struck & prepared strings, musique concrète field recordings, custom synthesis, and hybrid orchestration. Commissions are **quoted individually against the budget range and musical references shared in the inquiry** — deliberately no published rate card — with **${cues.length} playable showreel cues**, **${productions.length} documented screen & experimental productions**, and **${releases.length} sound libraries, records, and audio tools**.
+> **${AUTHOR_NAME}** (**${SITE_NAME} LLC**, Asheville, North Carolina: remote worldwide) is an IMDb-credited experimental psychological horror film composer for independent and arthouse cinema: also an experimental producer, sound designer, and multi-instrumentalist available for hire across independent features, festival shorts, television series, trailers, and horror video games. Specializing in **slow-burn psychological and experimental art house horror, with folk horror, body horror, supernatural thrillers, cosmic horror, and dark science fiction alongside**, ${AUTHOR_NAME} builds custom scores to picture using performed waterphone, bowed metal, struck & prepared strings, musique concrète field recordings, custom synthesis, and hybrid orchestration. Commissions are **quoted individually against the budget range and musical references shared in the inquiry** (deliberately no published rate card) with **${cues.length} playable showreel cues**, **${productions.length} documented screen & experimental productions**, and **${releases.length} sound libraries, records, and audio tools**.
 
 ## Quick Studio Facts
 
@@ -55,7 +55,7 @@ const llmsTxt = `# ${SITE_NAME} — Experimental Psychological Horror Film Compo
 - **Primary Specialism:** Experimental psychological horror for independent and arthouse cinema; also folk horror, body horror, experimental art house, elevated horror, supernatural dread, cosmic horror, techno-thriller, dark sci-fi, and survival/adaptive horror games
 - **Signature Acoustic & Electroacoustic Palette:** Bowed metal, performed waterphone, struck & prepared strings, field & impulse recordings, granular processing, modular/custom synthesis, and hybrid orchestration
 - **International Festival & Institutional Recognition:** Featured at **Ars Electronica 2026** (20.4-channel spatial audio work), **EXiS Seoul** (2025), **MUSLAB / Cero Records** (2025), **Visual Container Winter 2024 Award**, and commissioned by the **Black Mountain College Museum + Arts Center**
-- **How Quoting Works:** No published rate card. Inquiries state the music budget range set aside for the project (${BUDGET_RANGES.join('; ')}) plus musical references; every commission — a single scene, a short, or a substantial feature/experimental score — is then quoted individually, in writing, after review of the cut, cue list or scene notes. Quote scope follows scored minutes of music, never film runtime.
+- **How Quoting Works:** No published rate card. Inquiries state the music budget range set aside for the project (${BUDGET_RANGES.join('; ')}) plus musical references; every commission (a single scene, a short, or a substantial feature/experimental score) is then quoted individually, in writing, after review of the cut, cue list or scene notes. Quote scope follows scored minutes of music, never film runtime.
 
 ## Hire & Commission Pages
 
@@ -85,7 +85,7 @@ ${productions
       .filter((c) => c.name === AUTHOR_NAME)
       .map((c) => c.role)
       .join(', ');
-    const roleNote = roles ? ` — ${AUTHOR_NAME} credit: ${roles}` : ' — archival project record (see verified credits on page)';
+    const roleNote = roles ? `, ${AUTHOR_NAME} credit: ${roles}` : ' archival project record (see verified credits on page)';
     return `- [${p.title}${p.releaseYear ? ` (${p.releaseYear})` : ''}](${SITE_ORIGIN}/work/${p.slug}): ${p.workType}${roleNote}. ${p.summary}`;
   })
   .join('\n')}
@@ -95,7 +95,7 @@ ${productions
 ${cues
   .map(
     (c, index) =>
-      `- [${String(index + 1).padStart(2, '0')}. ${c.title}](${SITE_ORIGIN}/reel/${c.slug}) ([MP3](${SITE_ORIGIN}${c.audioPath})): ${c.category} · ${c.duration} — ${c.description}`,
+      `- [${String(index + 1).padStart(2, '0')}. ${c.title}](${SITE_ORIGIN}/reel/${c.slug}) ([MP3](${SITE_ORIGIN}${c.audioPath})): ${c.category} · ${c.duration}, ${c.description}`,
   )
   .join('\n')}
 
@@ -104,17 +104,17 @@ ${cues
 ${releases
   .map(
     (r) =>
-      `- [${r.title}](${SITE_ORIGIN}/store/${r.slug}): ${r.section} (${r.platform}) · ${r.kicker} — ${stripMarkup(r.summary)}`,
+      `- [${r.title}](${SITE_ORIGIN}/store/${r.slug}): ${r.section} (${r.platform}) · ${r.kicker}, ${stripMarkup(r.summary)}`,
   )
   .join('\n')}
 
 ## Press Features & Verified External Profiles
 
-- [Billboard Wire — How an Underground Experimental Musician Became a Go-To Composer for Psychological Horror](https://billboardwire.com/how-an-underground-experimental-musician-became-a-go-to-composer-for-psychological-horror/)
-- [Grammy Weekly — Zazie Productions: The Underground Polymath Redefining Experimental Music](https://grammyweekly.com/zazie-productions-the-underground-polymath-redefining-experimental-music/)
-- [Limitless Magazine — Forget ASMR: Zazie Productions Will Rewire Your Whole Nervous System](https://limitless-magazine.com/2026/06/12/forget-asmr-zazie-productions-will-rewire-your-whole-nervous-system/)
-- [Black Mountain College Museum + Arts Center — Broadcast: BMC Radio Artist Zazie Productions](https://www.blackmountaincollege.org/broadcast-bmc-radio-artist-zazie-productions/)
-- [Visual Container — Winter 2024 Award Winners Press Release (PDF)](https://www.visualcontainer.tv/wp-content/uploads/2025/01/Winter-2024-Award-Winners_Press-Release.pdf)
+- [Billboard Wire: How an Underground Experimental Musician Became a Go-To Composer for Psychological Horror](https://billboardwire.com/how-an-underground-experimental-musician-became-a-go-to-composer-for-psychological-horror/)
+- [Grammy Weekly: Zazie Productions: The Underground Polymath Redefining Experimental Music](https://grammyweekly.com/zazie-productions-the-underground-polymath-redefining-experimental-music/)
+- [Limitless Magazine: Forget ASMR: Zazie Productions Will Rewire Your Whole Nervous System](https://limitless-magazine.com/2026/06/12/forget-asmr-zazie-productions-will-rewire-your-whole-nervous-system/)
+- [Black Mountain College Museum + Arts Center: Broadcast: BMC Radio Artist Zazie Productions](https://www.blackmountaincollege.org/broadcast-bmc-radio-artist-zazie-productions/)
+- [Visual Container: Winter 2024 Award Winners Press Release (PDF)](https://www.visualcontainer.tv/wp-content/uploads/2025/01/Winter-2024-Award-Winners_Press-Release.pdf)
 ${VERIFIED_SAME_AS.map((href) => `- ${href}`).join('\n')}
 
 ## Licensing, Terms & Operating Documents
@@ -127,7 +127,7 @@ ${['/licensing', '/terms', '/purchases', '/privacy', '/accessibility', '/legal',
 const llmsFullTxt = `${llmsTxt}
 ---
 
-# Complete Reference Dossier — Hiring ${AUTHOR_NAME} (${SITE_NAME})
+# Complete Reference Dossier: Hiring ${AUTHOR_NAME} (${SITE_NAME})
 
 ## How to Evaluate & Choose the Right Horror Composer to Hire
 
@@ -156,7 +156,7 @@ ${SPECIALIST_DELIVERABLES.map((item) => `- ${item}`).join('\n')}
 
 ${productions
   .map(
-    (p) => `### ${p.title}${p.releaseYear ? ` (${p.releaseYear})` : ''} — ${SITE_ORIGIN}/work/${p.slug}
+    (p) => `### ${p.title}${p.releaseYear ? ` (${p.releaseYear})` : ''}: ${SITE_ORIGIN}/work/${p.slug}
 - **Format:** ${p.workType} · **Genres:** ${p.genres.join(', ')}${p.status ? ` · **Status:** ${p.status}` : ''}
 - **Verified Credits:** ${p.credits.map((c) => `${c.role}: ${c.name}`).join(' | ')}
 - **Summary:** ${p.summary}

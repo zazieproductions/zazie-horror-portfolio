@@ -288,7 +288,7 @@ export const person = {
     },
     {
       '@type': 'WebPage',
-      name: 'Broadcast: BMC Radio Artist Zazie Productions — Cheaper Impressions',
+      name: 'Broadcast: BMC Radio Artist Zazie Productions | Cheaper Impressions',
       url: 'https://www.blackmountaincollege.org/broadcast-bmc-radio-artist-zazie-productions/',
       publisher: { '@type': 'Organization', name: 'Black Mountain College Museum + Arts Center' },
     },
@@ -304,7 +304,7 @@ export const organization = {
   legalName: 'Zazie Productions LLC',
   alternateName: SITE_NAME,
   description:
-    'Boutique scoring and experimental sound-design atelier led by composer Zazie Kanwar-Torge, writing original experimental psychological horror scores to picture for independent and arthouse cinema — feature films, festival shorts, series, and horror video games.',
+    'Boutique scoring and experimental sound-design atelier led by composer Zazie Kanwar-Torge, writing original experimental psychological horror scores to picture for independent and arthouse cinema: feature films, festival shorts, series, and horror video games.',
   url: SITE_ORIGIN,
   logo: `${SITE_ORIGIN}/images/hero-portrait.jpg`,
   founder: { '@id': PERSON_ID },
@@ -342,7 +342,7 @@ export const website = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   '@id': WEBSITE_ID,
-  name: `${SITE_NAME} — Experimental Psychological Horror Film Composer Zazie Kanwar-Torge`,
+  name: `${SITE_NAME} | Experimental Psychological Horror Film Composer Zazie Kanwar-Torge`,
   alternateName: SITE_NAME,
   url: `${SITE_ORIGIN}/`,
   publisher: { '@id': ORG_ID },

@@ -86,7 +86,7 @@ test('/how-to-hire-a-horror-composer guide answers fan-out queries with Article 
 
 test('homepage links directly to /hire-a-composer and /how-to-hire-a-horror-composer in both SSR HTML and client bundle', () => {
   const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-  assert.match(html, /<title>Experimental Psychological Horror Composer — Arthouse Film<\/title>/);
+  assert.match(html, /<title>Experimental Psychological Horror Composer \| Arthouse Film<\/title>/);
   const title = /<title>([^<]*)<\/title>/.exec(html)[1].replace(/&amp;/g, '&');
   assert.ok(title.length >= 30 && title.length <= 60, `homepage title is ${title.length} characters; keep it between 30 and 60`);
   assert.match(html, /quoted per project/);

@@ -90,7 +90,7 @@ export function commissioningHtml(): string {
   return [
     `<ol class="zp-steps">`,
     COMMISSION_STEPS.map(
-      (step) => `<li><span><strong>${esc(step.title)}</strong> — ${esc(step.body)}</span></li>`,
+      (step) => `<li><span><strong>${esc(step.title)}</strong>: ${esc(step.body)}</span></li>`,
     ).join(''),
     `</ol>`,
   ].join('');
@@ -150,7 +150,7 @@ function selectOptions(values: readonly string[], selected?: string): string {
 export function inquiryFormHtml(): string {
   return [
     `<form class="zp-inq" data-zp-inquiry novalidate aria-label="Scoring inquiry" method="post" enctype="text/plain" action="mailto:${INQUIRY_EMAIL}?subject=Scoring%20inquiry">`,
-    `<p class="zp-help zp-inq-intro">Start with your name and email. Everything else is optional — but your budget range and musical references are what the quote is built from, so add them if you can. Submitting prepares an email for you to review and send; this site does not store or send your details.</p>`,
+    `<p class="zp-help zp-inq-intro">Start with your name and email. Everything else is optional, but your budget range and musical references are what the quote is built from, so add them if you can. Submitting prepares an email for you to review and send; this site does not store or send your details.</p>`,
     `<div class="zp-grid2">`,
     `<label class="zp-field"><span class="zp-label">Your name <em>required</em></span><input class="zp-input" name="name" autocomplete="name" required aria-required="true"></label>`,
     `<label class="zp-field"><span class="zp-label">Email <em>required</em></span><input class="zp-input" type="email" name="email" autocomplete="email" required aria-required="true"></label>`,
@@ -158,9 +158,9 @@ export function inquiryFormHtml(): string {
     `<label class="zp-field"><span class="zp-label">Project or working title <span class="zp-opt">(optional)</span></span><input class="zp-input" name="project" placeholder="A working title or a few words about the project"></label>`,
     `<div class="zp-grid2">`,
     `<label class="zp-field"><span class="zp-label">Format <span class="zp-opt">(optional)</span></span><select class="zp-input" name="format">${selectOptions(FORMATS, FORMATS[0])}</select></label>`,
-    `<label class="zp-field"><span class="zp-label">Your music budget (USD) <span class="zp-opt">(optional)</span></span><select class="zp-input" name="budget">${selectOptions(BUDGET_RANGES, BUDGET_RANGES[0])}</select><small class="zp-help">The range you have set aside for music. There is no published rate card — the scope is built around what you share here, and “not sure yet” is fine.</small></label>`,
+    `<label class="zp-field"><span class="zp-label">Your music budget (USD) <span class="zp-opt">(optional)</span></span><select class="zp-input" name="budget">${selectOptions(BUDGET_RANGES, BUDGET_RANGES[0])}</select><small class="zp-help">The range you have set aside for music. There is no published rate card; the scope is built around what you share here, and “not sure yet” is fine.</small></label>`,
     `</div>`,
-    `<label class="zp-field"><span class="zp-label">Musical references <span class="zp-opt">(optional)</span></span><textarea class="zp-input" name="tone" rows="3" placeholder="Films, scores or tracks you love — and what each one does for its scene. Links welcome."></textarea></label>`,
+    `<label class="zp-field"><span class="zp-label">Musical references <span class="zp-opt">(optional)</span></span><textarea class="zp-input" name="tone" rows="3" placeholder="Films, scores or tracks you love, and what each one does for its scene. Links welcome."></textarea></label>`,
     `<details class="zp-inq-details" data-zp-inquiry-details>`,
     `<summary>Optional project details <span>minutes, cues, timing, complexity, licence</span></summary>`,
     `<div class="zp-inq-more">`,

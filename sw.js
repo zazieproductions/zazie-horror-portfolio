@@ -124,13 +124,13 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-3465aa44.css',
-  '/index-c6653915.js',
+  '/index-07c23814.js',
   '/store-1e13177a.css',
   '/store-3fc01be0.js',
   '/legal-f4e3a5fb.css',
   '/legal-c623083a.js',
   '/inquiry-1f1ff32f.css',
-  '/inquiry-bbe5560c.js',
+  '/inquiry-92b33c28.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',
   '/images/hero-portrait.avif'

@@ -52,7 +52,7 @@ function featuredCueCatalog(): Json {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     '@id': `${SITE_ORIGIN}/#cue-catalog`,
-    name: 'Featured psychological horror cues — Zazie Productions showreel',
+    name: 'Featured psychological horror cues | Zazie Productions showreel',
     description:
       'Curated experimental psychological horror compositions for independent and arthouse cinema by Zazie Kanwar-Torge: psychological orchestral cues, body-horror textures, stingers and dark ambient drones.',
     url: `${SITE_ORIGIN}/#showreel`,
@@ -189,7 +189,7 @@ export const homeJsonLd: Json[] = [
     '@context': 'https://schema.org',
     '@type': 'CreativeWork',
     '@id': `${SITE_ORIGIN}/#creative-work`,
-    name: 'Zazie Productions — Experimental Psychological Horror Film Scores for Independent and Arthouse Cinema',
+    name: 'Zazie Productions | Experimental Psychological Horror Film Scores for Independent and Arthouse Cinema',
     description:
       'Original experimental psychological horror film scores for independent and arthouse cinema, with folk horror, body horror, dark ambient compositions, and cinema sound design by Zazie Kanwar-Torge (Zazie Productions LLC).',
     url: `${SITE_ORIGIN}/#posters`,
@@ -211,7 +211,7 @@ export const homeJsonLd: Json[] = [
     '@context': 'https://schema.org',
     '@type': 'MusicPlaylist',
     '@id': `${SITE_ORIGIN}/#playlist`,
-    name: 'Zazie Kanwar-Torge — Experimental Psychological Horror Showreel & Compilations',
+    name: 'Zazie Kanwar-Torge | Experimental Psychological Horror Showreel & Compilations',
     description:
       '30 original experimental psychological horror film score cues and 9 Bandcamp compilation and standalone releases by Zazie Kanwar-Torge.',
     url: `${SITE_ORIGIN}/#showreel`,
