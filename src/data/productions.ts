@@ -12,6 +12,7 @@ const updatedAt = '2026-10-04';
 export const productions: Production[] = [
   {
     slug: 'expire',
+    detailPage: false, // Keep the verified credit on /work; retire the thin standalone record page.
     title: 'EXPIRE',
     headline: 'EXPIRE: AI toys awaken in a ruined world',
     summary: 'EXPIRE is a 2025 science-fiction short about AI toys returning to life in a ruined world. IMDb credits Zazie Kanwar-Torge for sound design, not composition.',

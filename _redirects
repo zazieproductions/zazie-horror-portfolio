@@ -34,6 +34,12 @@
 /contact /#contact 301
 /contact/ /#contact 301
 /contact.html /#contact 301
+/sitemap / 301
+/sitemap/ / 301
+/sitemap.html / 301
+/work/expire /work#expire 301
+/work/expire/ /work#expire 301
+/work/expire.html /work#expire 301
 # /composer is retired (2026-10-29): the standalone biography page read as
 # bloat, so the route folds into section 01 on the homepage, like /contact.
 /composer /#about 301
@@ -50,7 +56,6 @@
 /licensing.html /licensing 301
 /purchases.html /purchases 301
 /accessibility.html /accessibility 301
-/sitemap.html /sitemap 301
 /hiring-a-horror-composer /how-to-hire-a-horror-composer 301
 /hiring-a-horror-composer/ /how-to-hire-a-horror-composer 301
 
@@ -112,11 +117,9 @@
 /store/voice-control-wifi-bulb.html /store/voice-control-wifi-bulb 308
 /work/choleric.html /work/choleric 308
 /work/eclipsed.html /work/eclipsed 308
-/work/expire.html /work/expire 308
 /work/mike-has-a-visitor.html /work/mike-has-a-visitor 308
 /work/peregrinus.html /work/peregrinus 308
 /work/phantom-requiem.html /work/phantom-requiem 308
 /work/the-dark-awaits.html /work/the-dark-awaits 308
 /work/the-haunted.html /work/the-haunted 308
 /work/unseen.html /work/unseen 308
-

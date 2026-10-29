@@ -552,7 +552,7 @@ ${chrome.footer.trim()}
   <div class="shell" style="padding:2.5rem 0 0">
     <p><strong>${esc(oneLine(pageTitle))}</strong></p>
     <p>${esc(oneLine(item.description))}</p>
-    <p><a href="${esc(item.hub)}">${esc(hub?.name ?? heading.label)}</a> · <a href="/">Zazie Productions home</a> · <a href="/sitemap">Site map</a></p>
+    <p><a href="${esc(item.hub)}">${esc(hub?.name ?? heading.label)}</a> · <a href="/">Zazie Productions home</a></p>
   </div>
 </noscript>
 

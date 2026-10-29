@@ -1,12 +1,14 @@
 /**
  * src/data/hubs.ts
  * ----------------------------------------------------------------------------
- * The 19 routes that already existed before the per-item archive (the home page
- * plus the 18 silo / commission / document pages). Each entry carries the values
+ * The original portfolio, commission and document routes. Each entry carries the values
  * its own static <head> already ships - title, meta description, lastmod and the
  * image / video metadata sitemap.xml has always attached to the URL - so
  * scripts/generate-sitemap.mjs can rebuild sitemap.xml without a single
  * hand-typed string.
+ *
+ * Migrated from the source pages and sitemap metadata. Non-indexable support routes
+ * remain available to visitors but are excluded from sitemap.xml.
  *
  * Migrated 2026-10-04 from sitemap.xml (19 URLs, 47 images, 8 videos) and each
  * route's own <head>. URLs are never stored here: they are derived from `path`
@@ -106,9 +108,9 @@ export const hubs: Hub[] = [
   {
     path: "/work",
     name: "Selected productions",
-    title: "Selected Production Records: Psychological Horror and Experimental Film | Zazie Productions",
-    description: "Nine selected production records across independent psychological horror film, television, and experimental work. Project notes distinguish verified composing, co-composing, sound-design, and production credits.",
-    lastmod: "2026-10-26",
+    title: 'Selected Productions | Zazie Productions',
+    description: 'A selected archive of film, television and experimental projects, with role-specific credits and public source links.',
+    lastmod: "2026-10-29",
     images: [
       { loc: "https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg", caption: "EXPIRE (2025) - IMDb credits Zazie Kanwar-Torge for sound design; other composers are listed separately.", title: "EXPIRE - Production Record and Sound-Design Credit" },
       { loc: "https://horror.zazieproductions.com/images/posters/unseen-640.jpg", caption: "UNSEEN feature; IMDb lists Steve Merlo as composer.", title: "UNSEEN - Feature Film Record" },
@@ -119,32 +121,25 @@ export const hubs: Hub[] = [
       { loc: "https://horror.zazieproductions.com/images/posters/choleric-640.jpg", caption: "CHOLERIC short; IMDb credits Zazie Kanwar-Torge as co-producer.", title: "CHOLERIC - Short Film; Co-Producer Credit" },
       { loc: "https://horror.zazieproductions.com/images/posters/mike-has-a-visitor-640.jpg", caption: "MIKE HAS A VISITOR short; IMDb credits Zazie Kanwar-Torge as composer.", title: "MIKE HAS A VISITOR - Horror Short; Composer Credit" },
       { loc: "https://horror.zazieproductions.com/images/posters/the-dark-awaits-640.jpg", caption: "THE DARK AWAITS paranormal reality-TV series; IMDb credits Zazie Kanwar-Torge as composer.", title: "THE DARK AWAITS - Paranormal Reality-TV Series" },
-      { loc: "https://horror.zazieproductions.com/images/project-HaVJP08j77U.jpg", caption: "Still from Mike Has A Visitor, sleep paralysis horror short scored by Zazie Kanwar-Torge", title: "Mike Has A Visitor - Film Still" },
-      { loc: "https://horror.zazieproductions.com/images/project-ItrrcilS0ro.jpg", caption: "Still from GOODBYE, BROTHER, dramatic short scored by Zazie Kanwar-Torge", title: "GOODBYE, BROTHER - Film Still" },
-      { loc: "https://horror.zazieproductions.com/images/project-riCvy2abhlc.jpg", caption: "Still from Home Intruder, action thriller chase sequence scored by Zazie Kanwar-Torge", title: "Home Intruder - Film Still" },
-      { loc: "https://horror.zazieproductions.com/images/project-Ty8tPp59mDc.jpg", caption: "Still from The Haunted teaser by Crystal Fox Films, scored by Zazie Kanwar-Torge", title: "The Haunted - Film Still" },
-      { loc: "https://horror.zazieproductions.com/images/project-rvCGO0BJ_2E.jpg", caption: "Still from AQUAPHOBIA, folk and body horror short scored by Zazie Kanwar-Torge", title: "AQUAPHOBIA - Film Still" },
-      { loc: "https://horror.zazieproductions.com/images/project-6qa3Uwj47fc.jpg", caption: "Still from Whispers In The Dark, horror short scored by Zazie Kanwar-Torge", title: "Whispers In The Dark - Film Still" },
-      { loc: "https://horror.zazieproductions.com/images/project-UX2kv3G89Jw.jpg", caption: "Still from Phantom Requiem, gothic horror short scored by Zazie Kanwar-Torge", title: "Phantom Requiem - Film Still" },
-      { loc: "https://horror.zazieproductions.com/images/eclipsed-cover-1280.jpg", caption: "Eclipsed film sample still - psychological thriller horror score by Zazie Kanwar-Torge", title: "Eclipsed - Psychological Thriller Film Sample" },
     ],
     videos: [],
   },
   {
     path: "/reel",
     name: "Showreel",
-    title: "Psychological Horror Showreel: 30 Original Dark Cinematic Cues | Zazie Productions",
-    description: "Stream 30 original experimental psychological horror cues by Zazie Kanwar-Torge: slow-burn dread beds, tension stingers, dark ambient textures, body horror, and thriller themes.",
-    lastmod: "2026-10-26",
+    title: 'Showreel · 30 Original Cues | Zazie Productions',
+    description: 'Listen to 30 original cues by Zazie Kanwar-Torge, from slow-burn tension and dark ambient textures to orchestral and thriller motifs.',
+    lastmod: "2026-10-29",
     images: [],
     videos: [],
   },
   {
     path: "/process",
+    indexable: false,
     name: "Scoring process",
-    title: "Psychological Horror Scoring Process: Spotting to Delivery | Zazie Productions",
-    description: "A clear psychological horror scoring process for independent and arthouse film: spotting, original themes and motifs, agreed revision rounds, and stereo WAV delivery.",
-    lastmod: "2026-10-27",
+    title: 'Scoring Process | Zazie Productions',
+    description: 'A concise overview of the scoring workflow, from an initial project inquiry through spotting, review and delivery.',
+    lastmod: "2026-10-29",
     images: [
       { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Kanwar-Torge at the scoring desk, Asheville, NC studio", title: "Psychological Horror Scoring Suite - Process" },
     ],
@@ -170,19 +165,21 @@ export const hubs: Hub[] = [
   },
   {
     path: "/faq",
+    indexable: false,
     name: "FAQ",
-    title: "Psychological Horror Scoring FAQ: Quotes, Process, Rights, Delivery - 35 Questions | Zazie Productions",
-    description: "35 answers on commissioning a psychological horror score for independent film from Zazie Kanwar-Torge: how quoting works, spotting to delivery, revisions, licensing and cue sheets.",
-    lastmod: "2026-10-27",
+    title: 'Project FAQ | Zazie Productions',
+    description: 'Practical answers about scoring inquiries, quotes, revisions, schedules and delivery.',
+    lastmod: "2026-10-29",
     images: [],
     videos: [],
   },
   {
     path: "/legal",
+    indexable: false,
     name: "All documents",
-    title: "Documents: Horror Scoring Terms, Privacy, Licensing, Purchases | Zazie Productions",
-    description: "Operating and legal documents for Zazie Productions LLC: commissioning terms, licensing and credits, privacy notice, catalogue purchases, accessibility, and 35-question FAQ.",
-    lastmod: "2026-10-18",
+    title: 'Policies and Documents | Zazie Productions',
+    description: 'Operating documents for scoring commissions, catalogue purchases, privacy and accessibility.',
+    lastmod: "2026-10-29",
     images: [],
     videos: [],
   },
@@ -206,19 +203,21 @@ export const hubs: Hub[] = [
   },
   {
     path: "/terms",
+    indexable: false,
     name: "Terms",
-    title: "Terms: Horror Film Scoring Commissioning, Quotes, Deposits | Zazie Productions",
-    description: "Commissioning terms and conditions for Zazie Productions LLC: written quotes, deposits, spotting to delivery, revisions, kill fees, clearances, and North Carolina law.",
-    lastmod: "2026-10-17",
+    title: 'Terms and Commissioning | Zazie Productions',
+    description: 'Terms for use of this site and standard clauses for commissioned work. Project-specific agreements and accepted written quotes govern as described in the document.',
+    lastmod: "2026-10-29",
     images: [],
     videos: [],
   },
   {
     path: "/privacy",
+    indexable: false,
     name: "Privacy notice",
-    title: "Privacy Notice: Cookieless Analytics, No Cookies | Zazie Productions",
-    description: "Privacy notice for horror.zazieproductions.com: cookieless Cloudflare Web Analytics disclosed, zero advertising trackers, zero cookies, local storage inventory, third-party media embeds, and NDA inquiry handling.",
-    lastmod: "2026-10-26",
+    title: 'Privacy Notice | Zazie Productions',
+    description: 'Privacy notice covering site analytics, storage, media providers, retention, privacy rights and the on-device browser inspector.',
+    lastmod: "2026-10-29",
     images: [],
     videos: [],
   },
@@ -228,15 +227,6 @@ export const hubs: Hub[] = [
     title: "Accessibility Statement: Horror Composer Portfolio | Zazie Productions",
     description: "WCAG 2.1 AA accessibility statement for horror.zazieproductions.com: contrast ratios, keyboard navigation, reduced-motion support, known gaps, and alternate-format requests.",
     lastmod: "2026-10-13",
-    images: [],
-    videos: [],
-  },
-  {
-    path: "/sitemap",
-    name: "Site map",
-    title: "Site Map: Portfolio Hubs and Item Archive | Zazie Productions",
-    description: "A human-readable overview of the portfolio hubs and operating documents. The XML sitemap separately lists all indexable production, cue, and catalogue item URLs.",
-    lastmod: "2026-10-27",
     images: [],
     videos: [],
   },

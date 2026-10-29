@@ -406,16 +406,6 @@ td code,th code{white-space:nowrap}
 .comp-grid + .sidenote{margin-top:1.25rem}
 @media print{.comp-play,.comp-slot{display:none}}
 
-/* --- Site map (/sitemap) ------------------------------------------------- */
-/* Page entries are h3 + one-line summary + a list of that page's sections.
-   Long section lists run in two columns on wide screens; padding instead of
-   margin keeps the column tops level. */
-.site-map > p + ul{margin-top:.75rem}
-.site-map > ul > li{padding-bottom:.5rem;break-inside:avoid}
-.doc-body .site-map > ul > li + li{margin-top:0}
-@media (min-width:760px){.site-map > ul{columns:2;column-gap:2.5rem}}
-
-
 /* --- Breadcrumbs -------------------------------------------------------- */
 .breadcrumbs{margin:0 0 .85rem;font-size:.6875rem;letter-spacing:.22em;text-transform:uppercase}
 .breadcrumbs ol{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;align-items:center;gap:.45rem}
@@ -534,6 +524,15 @@ td code,th code{white-space:nowrap}
 
 /* Read-more disclosure: long-form detail stays in the document, collapsed */
 .doc-more{margin:1.5rem 0;border:1px solid var(--edge);background:rgba(255,255,255,.012)}
+.doc-more.legal-clause{margin:0;border:0;border-top:1px solid var(--edge);background:transparent;scroll-margin-top:6rem}
+.doc-more.legal-clause > summary{display:flex;align-items:center;gap:1rem;padding:1.25rem 0;list-style:none;font-family:var(--display);font-size:clamp(1.35rem,3vw,1.85rem);font-weight:400;letter-spacing:normal;text-transform:none;color:var(--bone)}
+.doc-more.legal-clause > summary .no{flex:none;margin:0;font-family:var(--sans);font-size:.5625rem;font-weight:500;letter-spacing:.32em;text-transform:uppercase;color:var(--blood-text)}
+.doc-more.legal-clause > summary::before{content:"+";width:1.15rem;height:1.15rem}
+.doc-more.legal-clause[open] > summary{border-bottom:0}
+.doc-more.legal-clause .more-body{padding:.25rem 0 1.5rem}
+.doc-index > .doc-more{margin:0}
+.doc-index > .doc-more .more-body{padding:.5rem 1.15rem 1.2rem}
+.doc-index > .doc-more ol{margin:0;padding-left:1.2rem}
 .doc-more > summary{
   display:flex;align-items:center;gap:.75rem;padding:.85rem 1.1rem;cursor:pointer;
   list-style:none;font-size:.625rem;font-weight:500;letter-spacing:.26em;
@@ -591,6 +590,8 @@ td code,th code{white-space:nowrap}
   .faq-item{border-bottom:1px solid #999}
   .faq-item summary{color:#000}
   .faq-item .answer{padding-left:0;padding-right:0}
+  details.doc-more > :not(summary),details.faq-item > .answer{display:block!important}
+  details.doc-more > summary::before,details.faq-item > summary .qmark{display:none!important}
   .note,.flag,.fact,.warn{border:1px solid #999;background:#fff}
   .pullquote{border-left-color:#000}
   .pullquote p{color:#000}

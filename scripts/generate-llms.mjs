@@ -37,6 +37,7 @@ const {
 } = await import('../build/data/commission.js');
 
 const hubUrl = (p) => (p === '/' ? `${SITE_ORIGIN}/` : `${SITE_ORIGIN}${p}`);
+const productionUrl = (p) => `${SITE_ORIGIN}${p.detailPage === false ? '/work#expire' : `/work/${p.slug}`}`;
 const hubLine = (p) => {
   const h = hubs.find((item) => item.path === p);
   if (!h) throw new Error(`generate-llms: missing hub ${p}`);
@@ -83,7 +84,7 @@ ${productions
       .map((c) => c.role)
       .join(', ');
     const roleNote = roles ? `, ${AUTHOR_NAME} credit: ${roles}` : ' archival project record (see verified credits on page)';
-    return `- [${p.title}${p.releaseYear ? ` (${p.releaseYear})` : ''}](${SITE_ORIGIN}/work/${p.slug}): ${p.workType}${roleNote}. ${p.summary}`;
+    return `- [${p.title}${p.releaseYear ? ` (${p.releaseYear})` : ''}](${productionUrl(p)}): ${p.workType}${roleNote}. ${p.summary}`;
   })
   .join('\n')}
 
@@ -118,7 +119,7 @@ ${VERIFIED_SAME_AS.map((href) => `- ${href}`).join('\n')}
 
 ## Licensing, Terms & Operating Documents
 
-${['/licensing', '/terms', '/purchases', '/privacy', '/accessibility', '/legal', '/sitemap'].map(hubLine).join('\n')}
+${['/licensing', '/terms', '/purchases', '/privacy', '/accessibility', '/legal'].map(hubLine).join('\n')}
 - [Full Machine-Readable Reference Dossier (llms-full.txt)](${SITE_ORIGIN}/llms-full.txt)
 - [XML Sitemap (sitemap.xml)](${SITE_ORIGIN}/sitemap.xml)
 `;
@@ -155,7 +156,7 @@ ${SPECIALIST_DELIVERABLES.map((item) => `- ${item}`).join('\n')}
 
 ${productions
   .map(
-    (p) => `### ${p.title}${p.releaseYear ? ` (${p.releaseYear})` : ''}: ${SITE_ORIGIN}/work/${p.slug}
+    (p) => `### ${p.title}${p.releaseYear ? ` (${p.releaseYear})` : ''}: ${productionUrl(p)}
 - **Format:** ${p.workType} · **Genres:** ${p.genres.join(', ')}${p.status ? ` · **Status:** ${p.status}` : ''}
 - **Verified Credits:** ${p.credits.map((c) => `${c.role}: ${c.name}`).join(' | ')}
 - **Summary:** ${p.summary}

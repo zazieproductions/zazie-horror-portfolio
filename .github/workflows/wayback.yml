@@ -16,13 +16,13 @@ name: Wayback Machine
 #
 # WHEN IT RUNS (and what each run archives)
 #
-#   Deploy to Cloudflare Pages succeeds on main  -> the 17 core URLs
+#   Deploy to Cloudflare Pages succeeds on main  -> the 11 core URLs
 #     (homepage + every hub). Not on push: `workflow_run` fires only once
 #     deploy.yml has finished, so a capture can never snapshot the *previous*
 #     deploy. deploy.yml also runs the live route audit before completing,
 #     so the pages are verified live before they are archived.
 #   Weekly, Mondays 06:17 UTC                    -> every URL in sitemap.xml
-#     (currently 80). `ifNotArchivedWithin: 6d` makes archive.org skip any
+#     (currently 73). `ifNotArchivedWithin: 6d` makes archive.org skip any
 #     URL it already captured that week (e.g. by a post-deploy run), instead
 #     of piling up identical captures.
 #   Manually (Actions -> Wayback Machine)        -> scope of your choice:
@@ -31,7 +31,7 @@ name: Wayback Machine
 # The URL list is never hand-maintained here: tools/wayback-urls.mjs derives
 # it from the committed sitemap.xml (the same source tools/indexnow.mjs
 # submits to search engines), so a page added to the sitemap is archived
-# automatically. Core = homepage + single-segment routes; item pages are
+# automatically. Core = homepage + single-segment indexable routes; item pages are
 # two segments and only enter via scope `all` / `custom`.
 #
 # CAPTURE SETTINGS
@@ -45,7 +45,7 @@ name: Wayback Machine
 #                        host is archived. Flip it in a manual run only if
 #                        you accept archive.org crawling every outbound link.
 #   saveScreenshot       Off except when requested manually; one screenshot
-#                        per URL across 80 URLs is slow and mostly redundant.
+#                        per URL across 73 URLs is slow and mostly redundant.
 #   Action outputs       `wayback_url` (last capture), `wayback_urls` (one
 #                        per archived URL) and the screenshot equivalents are
 #                        surfaced in the job summary by the step below (the
@@ -63,8 +63,8 @@ name: Wayback Machine
 #
 # RUN IT BY HAND
 #
-#   gh workflow run wayback.yml                                   # 17 core URLs
-#   gh workflow run wayback.yml -f scope=all                      # all 80
+#   gh workflow run wayback.yml                                   # 11 core URLs
+#   gh workflow run wayback.yml -f scope=all                      # all 73
 #   gh workflow run wayback.yml -f scope=custom -f urls="/reel /faq"
 #   gh workflow run wayback.yml -f scope=custom -f urls="/reel" -f save_screenshot=true
 #
@@ -126,7 +126,7 @@ jobs:
     # A failed deploy must never be archived as if it were the site.
     if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
-    # Sequential captures with per-URL polling: 80 URLs cannot fit the
+    # Sequential captures with per-URL polling: 73 URLs cannot fit the
     # 10-minute budget the audit workflows use.
     timeout-minutes: 180
     steps:

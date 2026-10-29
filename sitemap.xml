@@ -2,7 +2,7 @@
 <!--
   Generated https://horror.zazieproductions.com/sitemap.xml from src/data/{hubs,productions,cues,releases,routes}.ts.
   Do not edit by hand. Each URL is a canonical, extensionless route.
-  Route count: 80 (17 original hubs + 9 productions + 30 cues + 24 catalogue items).
+  Route count: 73 indexable URLs (11 hubs + 8 productions + 30 cues + 24 catalogue items).
   Sitemap priority and changefreq are intentionally omitted.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -150,7 +150,7 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/work</loc>
-    <lastmod>2026-10-26</lastmod>
+    <lastmod>2026-10-29</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg</image:loc>
       <image:caption>EXPIRE (2025) - IMDb credits Zazie Kanwar-Torge for sound design; other composers are listed separately.</image:caption>
@@ -196,61 +196,11 @@
       <image:caption>THE DARK AWAITS paranormal reality-TV series; IMDb credits Zazie Kanwar-Torge as composer.</image:caption>
       <image:title>THE DARK AWAITS - Paranormal Reality-TV Series</image:title>
     </image:image>
-    <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/project-HaVJP08j77U.jpg</image:loc>
-      <image:caption>Still from Mike Has A Visitor, sleep paralysis horror short scored by Zazie Kanwar-Torge</image:caption>
-      <image:title>Mike Has A Visitor - Film Still</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/project-ItrrcilS0ro.jpg</image:loc>
-      <image:caption>Still from GOODBYE, BROTHER, dramatic short scored by Zazie Kanwar-Torge</image:caption>
-      <image:title>GOODBYE, BROTHER - Film Still</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/project-riCvy2abhlc.jpg</image:loc>
-      <image:caption>Still from Home Intruder, action thriller chase sequence scored by Zazie Kanwar-Torge</image:caption>
-      <image:title>Home Intruder - Film Still</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/project-Ty8tPp59mDc.jpg</image:loc>
-      <image:caption>Still from The Haunted teaser by Crystal Fox Films, scored by Zazie Kanwar-Torge</image:caption>
-      <image:title>The Haunted - Film Still</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/project-rvCGO0BJ_2E.jpg</image:loc>
-      <image:caption>Still from AQUAPHOBIA, folk and body horror short scored by Zazie Kanwar-Torge</image:caption>
-      <image:title>AQUAPHOBIA - Film Still</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/project-6qa3Uwj47fc.jpg</image:loc>
-      <image:caption>Still from Whispers In The Dark, horror short scored by Zazie Kanwar-Torge</image:caption>
-      <image:title>Whispers In The Dark - Film Still</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/project-UX2kv3G89Jw.jpg</image:loc>
-      <image:caption>Still from Phantom Requiem, gothic horror short scored by Zazie Kanwar-Torge</image:caption>
-      <image:title>Phantom Requiem - Film Still</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/eclipsed-cover-1280.jpg</image:loc>
-      <image:caption>Eclipsed film sample still - psychological thriller horror score by Zazie Kanwar-Torge</image:caption>
-      <image:title>Eclipsed - Psychological Thriller Film Sample</image:title>
-    </image:image>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/reel</loc>
-    <lastmod>2026-10-26</lastmod>
-  </url>
-
-  <url>
-    <loc>https://horror.zazieproductions.com/process</loc>
-    <lastmod>2026-10-27</lastmod>
-    <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
-      <image:caption>Zazie Kanwar-Torge at the scoring desk, Asheville, NC studio</image:caption>
-      <image:title>Psychological Horror Scoring Suite - Process</image:title>
-    </image:image>
+    <lastmod>2026-10-29</lastmod>
   </url>
 
   <url>
@@ -299,16 +249,6 @@
   </url>
 
   <url>
-    <loc>https://horror.zazieproductions.com/faq</loc>
-    <lastmod>2026-10-27</lastmod>
-  </url>
-
-  <url>
-    <loc>https://horror.zazieproductions.com/legal</loc>
-    <lastmod>2026-10-18</lastmod>
-  </url>
-
-  <url>
     <loc>https://horror.zazieproductions.com/licensing</loc>
     <lastmod>2026-10-13</lastmod>
   </url>
@@ -319,23 +259,8 @@
   </url>
 
   <url>
-    <loc>https://horror.zazieproductions.com/terms</loc>
-    <lastmod>2026-10-17</lastmod>
-  </url>
-
-  <url>
-    <loc>https://horror.zazieproductions.com/privacy</loc>
-    <lastmod>2026-10-26</lastmod>
-  </url>
-
-  <url>
     <loc>https://horror.zazieproductions.com/accessibility</loc>
     <lastmod>2026-10-13</lastmod>
-  </url>
-
-  <url>
-    <loc>https://horror.zazieproductions.com/sitemap</loc>
-    <lastmod>2026-10-27</lastmod>
   </url>
 
   <url>
@@ -376,22 +301,6 @@
       <image:caption>THE DARK AWAITS - the tonal register behind adaptive horror scoring for games, by Zazie Kanwar-Torge.</image:caption>
       <image:title>Adaptive Horror Game Scoring - Zazie Productions</image:title>
     </image:image>
-  </url>
-
-  <url>
-    <loc>https://horror.zazieproductions.com/work/expire</loc>
-    <lastmod>2026-10-24</lastmod>
-    <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg</image:loc>
-      <image:caption>EXPIRE: Dystopian sci-fi horror sound design by Zazie Kanwar-Torge featuring distressed mechanical foley, bowed metal resonance, and granular synthesis.</image:caption>
-      <image:title>EXPIRE</image:title>
-    </image:image>
-    <video:video>
-      <video:thumbnail_loc>https://i.ytimg.com/vi/lWm4Ies7edI/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>EXPIRE: official first-look clip</video:title>
-      <video:description>IMDb lists this YouTube video as the official first-look clip for the 2025 science-fiction short EXPIRE. It is a film clip, not represented here as a score excerpt.</video:description>
-      <video:player_loc>https://www.youtube-nocookie.com/embed/lWm4Ies7edI</video:player_loc>
-    </video:video>
   </url>
 
   <url>

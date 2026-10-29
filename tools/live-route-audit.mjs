@@ -432,7 +432,7 @@ async function run() {
     if (failures.length) {
       line('');
       line(`**${failures.length} failing request(s):**`);
-      // Group them: when the 65 item URLs are all missing, a flat list buries
+      // Group them: when the 62 item URLs are all missing, a flat list buries
       // the hub rows that say something real. Non-item paths sort first.
       const groups = [
         ['canonical URL (expected 200)', canonFail],

@@ -451,11 +451,11 @@ __MASTHEAD__
       <section class="clause" id="implemented">
         <h2><span class="no">2</span> What is implemented</h2>
         <h3>Content without scripting</h3>
-        <p>Every clause, every question and every answer is in the HTML. With JavaScript disabled, all FAQ answers are open, the section index is a plain list of links, and nothing on any document page disappears. The enhancement script collapses the answers into an accordion on load; it never gates content.</p>
+        <p>Every clause, question and answer remains in the HTML. FAQ answers and long-form clauses use native disclosure controls, which remain available to keyboard and assistive-technology users without JavaScript. The section index is a plain list of links; a linked clause can be opened at its destination.</p>
         <h3>Structure and landmarks</h3>
         <p>One <code>h1</code> per page, headings in sequence, banner, main, navigation and contentinfo landmarks, and a skip link as the first focusable element on every page including the portfolio. Section anchors are real fragments, so any clause can be linked and returned to.</p>
         <h3>More than one way to find a page</h3>
-        <p>Every page can be found in more than one way (WCAG 2.4.5, Multiple Ways). The primary navigation reaches the portfolio's main pages, the footer of every page links every document, and the <a href="/sitemap">site map</a> lists every page on the site and the sections inside each one, on one page that works without JavaScript. Long documents add a section index of their own, so any clause is one link from the top of its page.</p>
+        <p>Every page can be found in more than one way (WCAG 2.4.5, Multiple Ways). The primary navigation reaches the portfolio's main pages, the footer links the operating documents, and long documents provide a section index with direct links to each clause. The XML sitemap at <a href="/sitemap.xml">sitemap.xml</a> is maintained for crawlers; it is separate from site navigation.</p>
         <h3>Keyboard operation</h3>
         <p>Everything is reachable and operable by keyboard. FAQ items are native <code>details</code> elements, so they open and close with Enter and Space and their state is exposed to assistive technology by the browser rather than by a custom widget. Film sample cards on the portfolio are focusable buttons with a <code>Play</code> label and respond to Enter and Space.</p>
         <h3>Focus visibility</h3>

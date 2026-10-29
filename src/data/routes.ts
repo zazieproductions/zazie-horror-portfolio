@@ -60,6 +60,7 @@ function itemRoutes(): ItemRoute[] {
   const routes: ItemRoute[] = [];
 
   for (const production of productions) {
+    if (production.detailPage === false) continue;
     routes.push({
       kind: 'production',
       path: productionPath(production),
@@ -105,6 +106,7 @@ export const items: ItemRoute[] = itemRoutes();
 
 export const hubRoutes: Route[] = hubs.map((hub) => ({
   path: hub.path,
+  indexable: hub.indexable !== false,
   kind: hub.path === '/' ? 'home' : 'hub',
   title: hub.title,
   description: hub.description,
@@ -116,12 +118,16 @@ export const allRoutes: Route[] = [
   ...hubRoutes,
   ...items.map((item) => ({
     path: item.path,
+    indexable: true,
     kind: item.kind,
     title: item.title,
     description: item.description,
     lastmod: item.lastmod,
   })),
 ];
+
+/** Routes submitted to search engines; support/document routes can remain public without being indexed. */
+export const indexableRoutes: Route[] = allRoutes.filter((route) => route.indexable !== false);
 
 export const itemByPath = new Map(items.map((item) => [item.path, item]));
 export const hubByPath = new Map(hubs.map((hub) => [hub.path, hub]));
@@ -238,7 +244,7 @@ export function validateRoutes(): ValidationIssue[] {
 
   for (const production of productions) {
     const where = `production ${production.slug}`;
-    addPath(where, productionPath(production), `production:${production.slug}`);
+    if (production.detailPage !== false) addPath(where, productionPath(production), `production:${production.slug}`);
     if (production.slug !== slugify(production.title)) issues.push({ where, message: `slug must be ${slugify(production.title)}` });
     if (!production.summary.trim() || !production.logline.trim()) issues.push({ where, message: 'missing summary or logline' });
     if (!production.headline.trim()) issues.push({ where, message: 'missing page headline' });

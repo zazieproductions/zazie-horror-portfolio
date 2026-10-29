@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 import { test } from 'node:test';
 
 import { hubs } from '../build/data/hubs.js';
-import { allRoutes } from '../build/data/routes.js';
+import { allRoutes, indexableRoutes } from '../build/data/routes.js';
 import { BUDGET_RANGES } from '../build/data/commission.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -34,10 +34,9 @@ function parseJsonLd(html, label) {
   return nodes;
 }
 
-test('every indexable route places <h1> inside <main> and separates numeral spans cleanly', () => {
-  // 81 = 18 hubs + 9 productions + 30 cues + 24 catalogue items; /composer
-  // was retired (2026-10-29) and 301s to /#about, so it is no longer a route.
-  assert.ok(allRoutes.length >= 80, `expected at least 80 indexable routes, found ${allRoutes.length}`);
+test('every public route places <h1> inside <main> and separates numeral spans cleanly', () => {
+  assert.equal(allRoutes.length, 78, `expected 78 public routes, found ${allRoutes.length}`);
+  assert.equal(indexableRoutes.length, 73, `expected 73 indexable routes, found ${indexableRoutes.length}`);
   for (const route of allRoutes) {
     const html = fs.readFileSync(fileForRoute(route.path), 'utf8');
     const mainMatch = /<main\b[^>]*>([\s\S]*?)<\/main>/i.exec(html);
@@ -48,6 +47,42 @@ test('every indexable route places <h1> inside <main> and separates numeral span
     assert.doesNotMatch(html, /<span class="qno">[^<]+<\/span><span class="qtext">/, `${route.path}: no concatenated <span class="qno"> FAQ token`);
     assert.doesNotMatch(html, /1575933731/, `${route.path}: zero dead 1575933731 Apple Music links`);
   }
+});
+
+test('support documents stay public but noindex, while retired maps and EXPIRE details redirect cleanly', () => {
+  const excluded = ['/faq', '/legal', '/privacy', '/process', '/terms'];
+  const locs = new Set([...fs.readFileSync(path.join(ROOT, 'sitemap.xml'), 'utf8').matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]));
+  for (const route of excluded) {
+    const html = fs.readFileSync(fileForRoute(route), 'utf8');
+    assert.match(html, /<meta name="robots" content="noindex, follow"/i, `${route} has noindex metadata`);
+    assert.ok(!locs.has(`https://horror.zazieproductions.com${route}`), `${route} is not submitted in the sitemap`);
+  }
+
+  assert.ok(!hubs.some((hub) => hub.path === '/sitemap'));
+  assert.ok(!allRoutes.some((route) => route.path === '/sitemap'));
+  assert.ok(!allRoutes.some((route) => route.path === '/work/expire'));
+  assert.ok(!fs.existsSync(path.join(ROOT, 'work/expire.html')));
+  assert.match(fs.readFileSync(path.join(ROOT, 'work/index.html'), 'utf8'), /id="expire"[\s\S]*?EXPIRE/);
+  const redirects = fs.readFileSync(path.join(ROOT, '_redirects'), 'utf8');
+  const rules = redirects.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+  const onlyRule = (from, expected) => {
+    const matching = rules.filter((line) => line.split(/\s+/)[0] === from);
+    assert.deepEqual(matching, [expected], `${from} has exactly one redirect to its intended destination`);
+  };
+  onlyRule('/sitemap', '/sitemap / 301');
+  onlyRule('/sitemap/', '/sitemap/ / 301');
+  onlyRule('/sitemap.html', '/sitemap.html / 301');
+  onlyRule('/work/expire', '/work/expire /work#expire 301');
+  onlyRule('/work/expire/', '/work/expire/ /work#expire 301');
+  onlyRule('/work/expire.html', '/work/expire.html /work#expire 301');
+  onlyRule('/contact', '/contact /#contact 301');
+  assert.match(fs.readFileSync(path.join(ROOT, 'robots.txt'), 'utf8'), /Sitemap: https:\/\/horror\.zazieproductions\.com\/sitemap\.xml/);
+
+  const privacy = fs.readFileSync(fileForRoute('/privacy'), 'utf8');
+  assert.match(privacy, /id="inspector"[\s\S]*data-device-run[\s\S]*data-device-clear/);
+  assert.match(privacy, /id="third-parties"[\s\S]*cloudflare[\s\S]*youtube-nocookie\.com[\s\S]*drive\.google\.com[\s\S]*bandcamp\.com/);
+  const terms = fs.readFileSync(fileForRoute('/terms'), 'utf8');
+  assert.match(terms, /as a default that is always negotiable before a quote is issued/);
 });
 
 test('/hire-a-composer commercial pillar has exact head intent, comparison matrix, Service + Offer + FAQPage schema', () => {

@@ -16,21 +16,21 @@
 
 - [Hire an Experimental Psychological Horror Composer | Zazie Productions](https://horror.zazieproductions.com/hire-a-composer): Hire experimental psychological horror film composer Zazie Kanwar-Torge (Zazie Productions) for independent and arthouse cinema: IMDb-credited custom scores to picture, quoted per project against your budget and references.
 - [How to Hire a Horror Composer: Budgets, Subgenres & Vetting Guide | Zazie Productions](https://horror.zazieproductions.com/how-to-hire-a-horror-composer): Guide for independent filmmakers and game developers hiring a horror composer: custom score vs. stock libraries, subgenre matching, planning your music budget, spotting, stems, and licensing.
-- [Psychological Horror Scoring Process: Spotting to Delivery | Zazie Productions](https://horror.zazieproductions.com/process): A clear psychological horror scoring process for independent and arthouse film: spotting, original themes and motifs, agreed revision rounds, and stereo WAV delivery.
+- [Scoring Process | Zazie Productions](https://horror.zazieproductions.com/process): A concise overview of the scoring workflow, from an initial project inquiry through spotting, review and delivery.
 - [Adaptive Horror Game Scoring & Music | Zazie Productions](https://horror.zazieproductions.com/game-scoring): Adaptive horror scoring for games: states, seamless loops, layered cues, stingers and implementation notes for Wwise, FMOD, Unity and Unreal pipelines.
 - [Cinematic Sound Design for Psychological Horror Film | Zazie Productions](https://horror.zazieproductions.com/sound-design): Cinematic sound design by Zazie Kanwar-Torge: designed dread, atmospheres, transitions and stingers for psychological horror and arthouse film, delivered as mix-ready stems.
 - [Experimental Psychological Horror Composer | Arthouse Film](https://horror.zazieproductions.com/): Experimental psychological horror film composer for independent and arthouse cinema. IMDb-credited bespoke scores by Zazie Kanwar-Torge, quoted per project.
 
 ## Showreel, Production Credits & Catalogue Hubs
 
-- [Psychological Horror Showreel: 30 Original Dark Cinematic Cues | Zazie Productions](https://horror.zazieproductions.com/reel): Stream 30 original experimental psychological horror cues by Zazie Kanwar-Torge: slow-burn dread beds, tension stingers, dark ambient textures, body horror, and thriller themes.
-- [Selected Production Records: Psychological Horror and Experimental Film | Zazie Productions](https://horror.zazieproductions.com/work): Nine selected production records across independent psychological horror film, television, and experimental work. Project notes distinguish verified composing, co-composing, sound-design, and production credits.
+- [Showreel · 30 Original Cues | Zazie Productions](https://horror.zazieproductions.com/reel): Listen to 30 original cues by Zazie Kanwar-Torge, from slow-burn tension and dark ambient textures to orchestral and thriller motifs.
+- [Selected Productions | Zazie Productions](https://horror.zazieproductions.com/work): A selected archive of film, television and experimental projects, with role-specific credits and public source links.
 - [Catalogue: Experimental Music, Sound Libraries, Tools and Objects | Zazie Productions](https://horror.zazieproductions.com/store): Twenty-four catalogue entries across Bandcamp, itch.io, Gumroad, and eBay, including experimental music, sound libraries, software and visual assets, and physical objects. Current terms and availability remain with each source platform.
-- [Psychological Horror Scoring FAQ: Quotes, Process, Rights, Delivery - 35 Questions | Zazie Productions](https://horror.zazieproductions.com/faq): 35 answers on commissioning a psychological horror score for independent film from Zazie Kanwar-Torge: how quoting works, spotting to delivery, revisions, licensing and cue sheets.
+- [Project FAQ | Zazie Productions](https://horror.zazieproductions.com/faq): Practical answers about scoring inquiries, quotes, revisions, schedules and delivery.
 
 ## Selected Screen & Experimental Productions (9 Verified Records)
 
-- [EXPIRE (2025)](https://horror.zazieproductions.com/work/expire): Short film, Zazie Kanwar-Torge credit: Sound design. EXPIRE is a 2025 science-fiction short about AI toys returning to life in a ruined world. IMDb credits Zazie Kanwar-Torge for sound design, not composition.
+- [EXPIRE (2025)](https://horror.zazieproductions.com/work#expire): Short film, Zazie Kanwar-Torge credit: Sound design. EXPIRE is a 2025 science-fiction short about AI toys returning to life in a ruined world. IMDb credits Zazie Kanwar-Torge for sound design, not composition.
 - [UNSEEN (2026)](https://horror.zazieproductions.com/work/unseen): Feature film archival project record (see verified credits on page). UNSEEN is a 2026 horror-thriller feature about an unknown disaster and an abusive past. IMDb identifies Steve Merlo as composer; this archive does not assign a Zazie score credit.
 - [PEREGRINUS (2026)](https://horror.zazieproductions.com/work/peregrinus): TV series, Zazie Kanwar-Torge credit: Co-composer. PEREGRINUS is a five-episode 2026 TV series about an escaped asset with psychic abilities. IMDb lists a December 31, 2026 premiere and credits Zazie Kanwar-Torge as a co-composer.
 - [Phantom Requiem (2024)](https://horror.zazieproductions.com/work/phantom-requiem): Experimental short film archival project record (see verified credits on page). Phantom Requiem is a 4:53 experimental short published by Zazie Productions on June 20, 2024. The studio describes its visuals, sound, and music as studio intellectual property.
@@ -125,12 +125,11 @@
 ## Licensing, Terms & Operating Documents
 
 - [Horror Score Licensing, Rights and Credits: Buyout, Cue Sheets | Zazie Productions](https://horror.zazieproductions.com/licensing): Horror score licensing, synchronization rights, and credit terms for Zazie Kanwar-Torge: buyout vs. exclusive options, writer share, PRO cue sheets, and AI restrictions.
-- [Terms: Horror Film Scoring Commissioning, Quotes, Deposits | Zazie Productions](https://horror.zazieproductions.com/terms): Commissioning terms and conditions for Zazie Productions LLC: written quotes, deposits, spotting to delivery, revisions, kill fees, clearances, and North Carolina law.
+- [Terms and Commissioning | Zazie Productions](https://horror.zazieproductions.com/terms): Terms for use of this site and standard clauses for commissioned work. Project-specific agreements and accepted written quotes govern as described in the document.
 - [Purchases, Delivery and Returns: Horror Sound Libraries, Records | Zazie Productions](https://horror.zazieproductions.com/purchases): Order fulfillment, digital delivery, shipping, and return policies for Zazie Productions sound libraries, albums, tools, and hardware across Bandcamp, itch.io, Gumroad, and eBay.
-- [Privacy Notice: Cookieless Analytics, No Cookies | Zazie Productions](https://horror.zazieproductions.com/privacy): Privacy notice for horror.zazieproductions.com: cookieless Cloudflare Web Analytics disclosed, zero advertising trackers, zero cookies, local storage inventory, third-party media embeds, and NDA inquiry handling.
+- [Privacy Notice | Zazie Productions](https://horror.zazieproductions.com/privacy): Privacy notice covering site analytics, storage, media providers, retention, privacy rights and the on-device browser inspector.
 - [Accessibility Statement: Horror Composer Portfolio | Zazie Productions](https://horror.zazieproductions.com/accessibility): WCAG 2.1 AA accessibility statement for horror.zazieproductions.com: contrast ratios, keyboard navigation, reduced-motion support, known gaps, and alternate-format requests.
-- [Documents: Horror Scoring Terms, Privacy, Licensing, Purchases | Zazie Productions](https://horror.zazieproductions.com/legal): Operating and legal documents for Zazie Productions LLC: commissioning terms, licensing and credits, privacy notice, catalogue purchases, accessibility, and 35-question FAQ.
-- [Site Map: Portfolio Hubs and Item Archive | Zazie Productions](https://horror.zazieproductions.com/sitemap): A human-readable overview of the portfolio hubs and operating documents. The XML sitemap separately lists all indexable production, cue, and catalogue item URLs.
+- [Policies and Documents | Zazie Productions](https://horror.zazieproductions.com/legal): Operating documents for scoring commissions, catalogue purchases, privacy and accessibility.
 - [Full Machine-Readable Reference Dossier (llms-full.txt)](https://horror.zazieproductions.com/llms-full.txt)
 - [XML Sitemap (sitemap.xml)](https://horror.zazieproductions.com/sitemap.xml)
 
@@ -184,7 +183,7 @@ When filmmakers, showrunners, and indie game developers search for the best horr
 
 ## Full Production Notes & Verified Credit Breakdown (9 Entries)
 
-### EXPIRE (2025): https://horror.zazieproductions.com/work/expire
+### EXPIRE (2025): https://horror.zazieproductions.com/work#expire
 - **Format:** Short film · **Genres:** Science fiction, Short film · **Status:** Released
 - **Verified Credits:** Director: Muhammad Abed Baryal | Writer: Muhammad Abed Baryal | Writer: Ines Rim Belabbas | Composer: Patricia Chaylade | Composer: Jorayo | Composer: Brennan Mack | Sound design: Zazie Kanwar-Torge
 - **Summary:** EXPIRE is a 2025 science-fiction short about AI toys returning to life in a ruined world. IMDb credits Zazie Kanwar-Torge for sound design, not composition.

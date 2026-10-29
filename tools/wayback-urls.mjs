@@ -16,9 +16,9 @@
  *     node tools/wayback-urls.mjs --scope custom # same, from the environment
  *
  * "Core" is derived, not hand-listed: the homepage plus every single-segment
- * route in sitemap.xml (currently 17 URLs). Item pages (/work/<slug>,
+ * route in sitemap.xml (currently 11 URLs). Item pages (/work/<slug>,
  * /reel/<slug>, /store/<slug>) are two segments, so they only enter through
- * --scope all. Add a hub to src/data/hubs.ts and it is archived automatically.
+ * --scope all. An indexable hub added to the sitemap is archived automatically.
  *
  * The URL source of truth is the committed sitemap.xml, the same file
  * tools/indexnow.mjs submits from. Only page <loc> entries are read;

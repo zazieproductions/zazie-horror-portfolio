@@ -139,7 +139,7 @@
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
-# Canonical Link + explicit X-Robots-Tag headers on all indexable routes
+# Canonical Link + robots headers for route policy; support documents stay noindex
 /
   X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/>; rel="canonical"
@@ -173,13 +173,13 @@
   X-Robots-Tag: index, follow, max-image-preview:large
 
 /process
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: noindex, follow
   Link: <https://horror.zazieproductions.com/process>; rel="canonical"
 /process/
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: noindex, follow
   Link: <https://horror.zazieproductions.com/process>; rel="canonical"
 /process/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: noindex, follow
   Link: <https://horror.zazieproductions.com/process>; rel="canonical"
 
 /services
@@ -245,43 +245,43 @@
   X-Robots-Tag: index, follow, max-image-preview:large
 
 /legal
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: noindex, follow
   Link: <https://horror.zazieproductions.com/legal>; rel="canonical"
 /legal/
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: noindex, follow
   Link: <https://horror.zazieproductions.com/legal>; rel="canonical"
 /legal/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: noindex, follow
   Link: <https://horror.zazieproductions.com/legal>; rel="canonical"
 
 /faq
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: noindex, follow
   Link: <https://horror.zazieproductions.com/faq>; rel="canonical"
 /faq/
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: noindex, follow
   Link: <https://horror.zazieproductions.com/faq>; rel="canonical"
 /faq/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: noindex, follow
   Link: <https://horror.zazieproductions.com/faq>; rel="canonical"
 
 /terms
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: noindex, follow
   Link: <https://horror.zazieproductions.com/terms>; rel="canonical"
 /terms/
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: noindex, follow
   Link: <https://horror.zazieproductions.com/terms>; rel="canonical"
 /terms/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: noindex, follow
   Link: <https://horror.zazieproductions.com/terms>; rel="canonical"
 
 /privacy
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: noindex, follow
   Link: <https://horror.zazieproductions.com/privacy>; rel="canonical"
 /privacy/
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: noindex, follow
   Link: <https://horror.zazieproductions.com/privacy>; rel="canonical"
 /privacy/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: noindex, follow
   Link: <https://horror.zazieproductions.com/privacy>; rel="canonical"
 
 /licensing
@@ -313,13 +313,3 @@
 /accessibility/index.html
   X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/accessibility>; rel="canonical"
-
-/sitemap
-  X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/sitemap>; rel="canonical"
-/sitemap/
-  X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/sitemap>; rel="canonical"
-/sitemap/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/sitemap>; rel="canonical"

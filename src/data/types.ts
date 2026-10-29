@@ -25,6 +25,8 @@ export interface HubVideo {
 
 export interface Hub {
   path: string;
+  /** False when the route remains useful to visitors but should not be indexed or listed in sitemap.xml. */
+  indexable?: boolean;
   name: string;
   title: string;
   description: string;
@@ -77,6 +79,8 @@ export type ProductionSchemaType = 'Movie' | 'TVSeries' | 'CreativeWork';
 
 export interface Production {
   slug: string;
+  /** False when the verified record stays in /work but has no standalone detail route. */
+  detailPage?: boolean;
   title: string;
   headline: string;
   summary: string;
@@ -171,6 +175,8 @@ export interface ItemRoute {
 
 export interface Route {
   path: string;
+  /** Whether this page should be indexed and included in sitemap.xml. */
+  indexable?: boolean;
   kind: 'home' | 'hub' | ItemKind;
   title: string;
   description: string;

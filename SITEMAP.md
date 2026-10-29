@@ -1,63 +1,25 @@
-# Sitemap and crawl-path audit
+# Sitemap and route policy
 
-**Sitemap:** [`sitemap.xml`](https://horror.zazieproductions.com/sitemap.xml)
-**Generator:** `scripts/generate-sitemap.mjs`, backed by the typed records in `src/data/`
-**Validator:** `node tools/check-sitemap.mjs`
-**Scope:** 85 canonical URLs — 20 hub URLs (home + 19) + 65 item URLs (9 productions, 32 cues, 24 catalogue entries). The current XML contains 79 image entries and 12 video entries.
+- **XML sitemap:** [`sitemap.xml`](https://horror.zazieproductions.com/sitemap.xml)
+- **Generator:** `scripts/generate-sitemap.mjs`
+- **Validators:** `scripts/verify.mjs`, `tools/check-sitemap.mjs`
 
-The sitemap describes the intended committed static tree. A successful local build is not evidence that the production host has deployed it; the live URL audit is run separately by GitHub Actions after a production deploy.
+The current sitemap contains **73 indexable URLs**: 11 indexable hubs and 62 item-detail routes (8 production pages, 30 cues and 24 catalogue entries). Five public support routes—`/faq`, `/legal`, `/privacy`, `/process` and `/terms`—remain available to visitors with `noindex, follow` and are deliberately excluded. `/contact` remains a redirect to `/#contact`.
 
-## URL set and navigation policy
+The human-readable `/sitemap` page has been retired and redirects to `/`. `/sitemap.xml` is retained and remains advertised by `robots.txt`. These are separate routes and purposes.
 
-The 19 original routes (home and the existing portfolio/document hubs) are retained at their existing canonical paths. They remain the only routes linked directly from the homepage; the original hub/navigation pages do not link directly to item pages. The human-readable `/sitemap` remains a directory to the original hubs and their sections, not a second item catalogue.
+## Published item routes
 
-The XML sitemap includes all content item URLs:
+- `/work/<slug>` — 8 production detail pages. Nine verified production records remain in the `/work` archive; EXPIRE is archive-only because its verified credit is sound design, not composition.
+- `/reel/<slug>` — 30 cue pages.
+- `/store/<slug>` — 24 catalogue pages.
 
-- `/work/<production-slug>` — 9 production pages.
-- `/reel/<cue-title-slug>` — 32 cue pages; cue slugs derive from titles, never moods.
-- `/store/<catalogue-slug>` — 24 catalogue pages.
+Item pages are prerendered as flat `<section>/<slug>.html` files and use extensionless canonical URLs. Each links back to its owning archive and to related items. The home page remains a hub index; it does not link directly to item-detail URLs.
 
-Each item page is a real static HTML document generated at `<hub>/<slug>.html`, served at its extensionless canonical path with a 200 response and no canonical redirect hop. There is no `<hub>/<slug>/index.html` twin. Item pages link back to their original hub and to same-type siblings; production sibling cards use poster artwork, while cue and catalogue sibling cards are text-only. No item links are added to the homepage, original hubs, or human sitemap.
-
-Non-content paths (assets, build tooling, source files, and the 404 document) are not sitemap entries. `robots.txt` advertises the XML sitemap and does not block its URLs. Sitemap priority/changefreq and meta keywords are not used as indexing signals; the generator omits `<priority>` and `<changefreq>` entirely.
-
-## Source-rendered item metadata
-
-`scripts/prerender.mjs` writes item HTML from `src/data/routes.ts` and the shared renderers in `src/lib/`. It replaces the complete unified `<head>` in the homepage source template as well as rendering route-specific item heads. Title, description, canonical, robots, Open Graph, Twitter, and JSON-LD are in the initial HTML response; they are not injected by client JavaScript.
-
-Structured data is type-specific: productions use their declared `Movie`, `TVSeries`, or `CreativeWork` type and add a `VideoObject` only when the record has a real sample; cues use `MusicComposition` and `AudioObject`; catalogue entries use `Product` or `MusicAlbum` with `Offer`; each item also carries `WebPage` and `BreadcrumbList` data. Unknown or mutable facts, prices, stock claims, and unavailable artwork are omitted rather than invented.
+The retired `/work/expire`, `/work/expire/` and `/work/expire.html` forms redirect to `/work#expire`. The production record, source credit, poster and sample remain on `/work`.
 
 ## Validation
 
-`npm run build` regenerates the route pages, sitemap and robots files, then checks the data model, static paths, canonicals, substantive unique prose, structured data, asset references, sibling/hub links, and link policy. `tools/check-sitemap.mjs` additionally validates the sitemap structure, URL set, crawl rules, media references, page canonical tags, hub reachability, fragment links, and service-worker assets. `tools/route-aliases.mjs --check` verifies that the original hub twins match and that item directory twins do not exist.
+`npm run build` regenerates the sitemap and checks route data, canonical paths, page files, robots metadata, media references, internal links and aliases. `tools/index-coverage.mjs --check` checks contextual discovery and duplicate copy; its reported word counts are diagnostic only and are not a minimum-content target.
 
-Run locally:
-
-```sh
-npm ci
-npm run build
-npm run typecheck
-node --test tools/film-player.test.mjs
-node tools/check-sitemap.mjs
-node tools/route-aliases.mjs --check
-npm run serve
-```
-
-HTTP expectations for `npm run serve`:
-
-| Request | Expected |
-|---|---|
-| Every one of the 84 sitemap URLs | 200 HTML, no redirect, exact self-canonical, indexable |
-| Existing original hub directory forms such as `/work/` | Existing hub content remains available with its canonical pointing to the slashless hub URL |
-| Item `.html` alias (for example `/work/expire.html`) | Redirect to the extensionless item canonical |
-| Item trailing-slash twin (for example `/work/expire/`) | 404 HTML with `noindex`; no duplicate item page |
-| Unknown item or unrelated path | 404 HTML with `noindex` |
-
-`tools/live-route-audit.mjs` applies the same expectations to a reachable production or Pages host. The build sandbox cannot reach the production domain. `.github/workflows/deploy.yml` runs the live audit after a configured production deploy; `.github/workflows/live-route-audit.yml` supports a deliberate manual re-audit. Do not label a local-server table as a production audit.
-
-## Maintenance
-
-- Add or edit item copy and metadata in `src/data/`; do not hand-edit generated item HTML.
-- The build checks exact slug derivation, unique paths, source-backed references, two or more substantive unique body paragraphs, valid dates, and resolvable links.
-- Preserve the 19 pre-existing hub URLs and their approved visual/navigation structure. Do not add item hrefs to `/`, hub pages, or `/sitemap`.
-- After adding content, run the complete command set above. For a production status snapshot, run the live route audit only after the relevant URLs have been deployed, and retain its host and timestamp with the results.
+For live routing, `tools/live-route-audit.mjs` checks deployed canonical pages, aliases and retired-route redirects. A local build does not establish that the production host has deployed those outputs.

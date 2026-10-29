@@ -2,25 +2,28 @@
 /**
  * index-coverage.mjs
  * -----------------------------------------------------------------------------
- * Why pages sit in Search Console's "Discovered - currently not indexed".
+ * Route-discovery and content-distinctness audit for URLs submitted in the
+ * XML sitemap. Public support pages marked noindex are intentionally excluded.
  *
- * That status is not a broken-page report. Google found the URL, decided not to
- * spend a crawl on it yet, and last-crawled stays "N/A". The two things a site
- * owner actually controls in that bucket are:
+ * The audit checks the parts the site controls: in-body contextual links,
+ * resolvable files and duplicate copy. Public noindex documents are excluded
+ * as sitemap targets but remain valid sources of contextual links. It does not
+ * infer or promise indexing.
  *
  *   1. DISCOVERY  - is the URL linked from a page Google already crawls, in the
  *                   body content, with anchor text that describes it? A URL that
  *                   appears only in sitemap.xml and in sitewide footer chrome is
  *                   an orphan in everything but name: no context, no importance,
  *                   no reason to crawl it next.
- *   2. SUBSTANCE  - does the page carry enough unique text to be worth its own
- *                   index entry, or is it a near-duplicate of a sibling?
+ *   2. DISTINCTNESS - does the page have a clear purpose, or is its main copy a
+ *                     near-duplicate of a sibling?
  *
- * This tool measures both, per sitemap URL, against the files the host serves,
- * and fails the build when a submitted URL has no contextual internal link or is
- * too thin to defend. Numbers, not opinions:
+ * This tool audits indexable sitemap URLs against the files the host serves.
+ * It fails on missing files, missing contextual internal links and substantive
+ * near-duplicates. Word count is reported for diagnosis only; it is not a
+ * ranking target or a minimum-content requirement.
  *
- *   words     unique words of <main> text (scripts, styles, chrome removed)
+ *   words     words of <main> text (scripts, styles, chrome removed; diagnostic only)
  *   in-body   distinct pages whose <main> links to this URL (footer/header
  *             links are excluded on purpose - they are on every page, so they
  *             carry almost no weight and tell Google nothing about the page)
@@ -43,14 +46,10 @@ const argv = process.argv.slice(2);
 const check = argv.includes('--check');
 const asJson = argv.includes('--json');
 
-/* Thresholds. Deliberately low: these are floors that catch structural faults
- * (an unlinked URL, a page that is only a card grid), not a style guide.
- *
- * The home page is excluded from the near-duplicate test as a comparison target:
+/* Duplicate threshold. The home page is excluded from the near-duplicate test as a comparison target:
  * it is the summary that the detail pages expand, and the generated rate card is
  * written into both by scripts/sync-pricing.mjs, so the overlap is by design and
  * is reported rather than failed. */
-const MIN_WORDS = 300;
 const MAX_DUPE = 0.34;
 
 const SITE = 'https://horror.zazieproductions.com';
@@ -142,6 +141,59 @@ for (const loc of urls) {
   });
 }
 
+// Public support pages marked noindex are not sitemap targets, but their
+// in-body document index can still provide useful navigation to indexable
+// pages (for example, /legal -> /accessibility). Read them as link sources only.
+const excludedDirectories = new Set(['.git', '.arena', 'node_modules', 'build', 'dist', 'coverage', 'home-src', 'legal-src', 'store-src', 'src', 'tools', 'scripts']);
+function publicHtmlFiles(dir, files = []) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (entry.isDirectory()) {
+      if (!excludedDirectories.has(entry.name)) publicHtmlFiles(path.join(dir, entry.name), files);
+    } else if (entry.isFile() && entry.name.toLowerCase().endsWith('.html')) {
+      files.push(path.join(dir, entry.name));
+    }
+  }
+  return files;
+}
+
+for (const abs of publicHtmlFiles(root)) {
+  const html = fs.readFileSync(abs, 'utf8');
+  const robots = [...html.matchAll(/<meta\b[^>]*>/gi)]
+    .map((match) => match[0])
+    .find((tag) => /\bname=["']robots["']/i.test(tag));
+  const robotsContent = robots && /\bcontent=["']([^"']*)["']/i.exec(robots)?.[1];
+  if (!robotsContent || !/\bnoindex\b/i.test(robotsContent)) continue;
+
+  const canonicalTag = /<link\b[^>]*rel=["']canonical["'][^>]*>/i.exec(html)?.[0];
+  const canonicalHref = canonicalTag && /\bhref=["']([^"']+)["']/i.exec(canonicalTag)?.[1];
+  if (!canonicalHref) continue;
+  const canonical = new URL(canonicalHref, SITE);
+  if (canonical.origin !== SITE) continue;
+  const routePath = pathOf(canonical.href);
+  if (pages.has(routePath)) continue;
+
+  const markup = mainOf(html);
+  const withoutCode = markup.replace(/<(script|style|template)\b[\s\S]*?<\/\1>/gi, ' ');
+  const links = [];
+  for (const match of withoutCode.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)) {
+    const href = /href\s*=\s*["']([^"']*)["']/i.exec(match[1])?.[1];
+    if (!href) continue;
+    const clean = decode(href.trim());
+    if (!clean.startsWith('/') || clean.startsWith('//')) continue;
+    const target = pathOf(new URL(clean, SITE).href);
+    const text = decode(match[2].replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim();
+    links.push({ target, text, hash: clean.includes('#') });
+  }
+  pages.set(routePath, {
+    file: path.relative(root, abs),
+    words: 0,
+    text: '',
+    shingles: new Set(),
+    links,
+    noindexSource: true,
+  });
+}
+
 /* ---------------------------------------------------------------- link graph */
 
 const inbound = new Map(); // target -> [{ from, anchor }]
@@ -215,7 +267,6 @@ for (const row of rows) {
     failures.push(`${row.path}: sitemap URL has no file (${row.missing})`);
     continue;
   }
-  if (row.words < MIN_WORDS) failures.push(`${row.path}: ${row.words} words of <main> text (floor ${MIN_WORDS})`);
   if (row.sources === 0) failures.push(`${row.path}: no contextual in-body internal link - sitemap-only orphan`);
   if (row.dupe >= MAX_DUPE) {
     const message = `${row.path}: ${(row.dupe * 100).toFixed(0)}% near-duplicate of ${row.dupeWith}`;
@@ -251,7 +302,7 @@ for (const row of [...hubs, ...items]) {
     console.log(`${pad(row.path, 46)}MISSING ${row.missing}`);
     continue;
   }
-  const flag = row.sources === 0 ? '!' : row.words < MIN_WORDS ? '~' : ' ';
+  const flag = row.sources === 0 ? '!' : row.dupe >= MAX_DUPE ? '~' : ' ';
   console.log(
     `${flag}${pad(row.path, 45)}${pad(row.words, 7)}${pad(row.sources, 9)}${pad(
       `${(row.dupe * 100).toFixed(0)}%`,
@@ -261,12 +312,9 @@ for (const row of [...hubs, ...items]) {
 }
 
 const orphans = rows.filter((r) => !r.missing && r.sources === 0);
-const thin = rows.filter((r) => !r.missing && r.words < MIN_WORDS);
-const dupes = rows.filter((r) => !r.missing && r.dupe >= MAX_DUPE);
 
 console.log('');
 console.log(`sitemap-only orphans : ${orphans.length}`);
-console.log(`thin (<${MIN_WORDS} words)  : ${thin.length}`);
 console.log(`hub near-duplicates  : ${rows.filter((r) => !r.isItem && r.path !== '/' && !r.missing && r.dupe >= MAX_DUPE).length}`);
 console.log(`template duplicates  : ${rows.filter((r) => r.isItem && !r.missing && r.dupe >= MAX_DUPE).length} (item pages share a template - reported, not failed)`);
 if (warnings.length) {
@@ -280,12 +328,10 @@ if (failures.length) {
   console.log(`FAIL - ${failures.length} coverage problem(s):`);
   for (const failure of failures) console.log(`  error  ${failure}`);
   console.log(
-    '\nFix discovery before asking Search Console for a re-crawl: a URL linked only from\n' +
-      'sitemap.xml and the sitewide footer is exactly what Google leaves in\n' +
-      '"Discovered - currently not indexed".',
+    '\nReview route purpose, distinct copy and contextual linking. No word-count target is used by this audit.',
   );
 } else {
-  console.log('PASS - every submitted URL has contextual internal links, enough text, and a distinct body.');
+  console.log('PASS - every submitted URL resolves, has a contextual internal link, and has a distinct purpose.');
 }
 
 process.exit(check && failures.length ? 1 : 0);

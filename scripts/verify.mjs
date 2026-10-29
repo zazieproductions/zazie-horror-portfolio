@@ -6,7 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { hubs } from '../build/data/hubs.js';
-import { allRoutes, items, siblingsOf, productionBySlug, cueBySlug, releaseBySlug } from '../build/data/routes.js';
+import { allRoutes, indexableRoutes, items, siblingsOf, productionBySlug, cueBySlug, releaseBySlug } from '../build/data/routes.js';
 import { productions } from '../build/data/productions.js';
 import { cues } from '../build/data/cues.js';
 import { releases } from '../build/data/releases.js';
@@ -52,24 +52,36 @@ function linksOf(html) {
 }
 
 /* ---------------------------------------------------------- expected coverage */
-// /composer was retired (2026-10-29): it 301s to /#about, leaving 18 hubs /
-// 81 sitemap routes. Rebuild: node scripts/generate-sitemap.mjs.
-if (hubs.length !== 17) fail(`expected 17 hub routes, found ${hubs.length}`);
+// The human-readable /sitemap and standalone /work/expire page are retired.
+// FAQ, process, legal, terms and privacy remain public but are noindex.
+if (hubs.length !== 16) fail(`expected 16 public hub routes, found ${hubs.length}`);
 if (productions.length !== 9) fail(`expected 9 production pages, found ${productions.length}`);
 if (cues.length !== 30) fail(`expected 30 cue pages, found ${cues.length}`);
 if (releases.length !== 24) fail(`expected 24 catalogue pages, found ${releases.length}`);
-if (allRoutes.length !== 80) fail(`expected 80 sitemap routes, found ${allRoutes.length}`);
+if (items.length !== 62) fail(`expected 62 item detail routes, found ${items.length}`);
+if (allRoutes.length !== 78) fail(`expected 78 public routes, found ${allRoutes.length}`);
+if (indexableRoutes.length !== 73) fail(`expected 73 indexable routes, found ${indexableRoutes.length}`);
+
+const edgeHeadersFile = path.join(root, '_headers');
+const edgeHeaders = fs.existsSync(edgeHeadersFile) ? fs.readFileSync(edgeHeadersFile, 'utf8') : '';
+for (const route of allRoutes.filter((candidate) => candidate.indexable === false)) {
+  const rule = new RegExp(`^${route.path}\\n\\s+X-Robots-Tag:\\s*noindex,\\s*follow\\s*$`, 'm');
+  if (!rule.test(edgeHeaders)) fail(`${route.path}: _headers must send X-Robots-Tag: noindex, follow`);
+}
 
 const sitemapFile = path.join(root, 'sitemap.xml');
 if (!fs.existsSync(sitemapFile)) fail('sitemap.xml is missing');
 const sitemapXml = fs.existsSync(sitemapFile) ? fs.readFileSync(sitemapFile, 'utf8') : '';
 const sitemapLocs = [...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => decodeXml(match[1]));
 const sitemapSet = new Set(sitemapLocs);
-if (sitemapLocs.length !== allRoutes.length) fail(`sitemap has ${sitemapLocs.length} URLs; expected ${allRoutes.length}`);
+if (sitemapLocs.length !== indexableRoutes.length) fail(`sitemap has ${sitemapLocs.length} URLs; expected ${indexableRoutes.length}`);
 if (sitemapSet.size !== sitemapLocs.length) fail('sitemap has duplicate <loc> URLs');
-for (const route of allRoutes) {
+for (const route of indexableRoutes) {
   const expected = url(route.path);
   if (!sitemapSet.has(expected)) fail(`sitemap is missing ${expected}`);
+}
+for (const route of allRoutes.filter((candidate) => candidate.indexable === false)) {
+  if (sitemapSet.has(url(route.path))) fail(`sitemap must not include noindex route ${route.path}`);
 }
 for (const loc of sitemapLocs) {
   try {
@@ -84,6 +96,7 @@ for (const loc of sitemapLocs) {
 /** Snippet blocking makes the page ineligible for normal SERP descriptions. */
 const SNIPPET_BLOCK = /\bnosnippet\b|\bmax-snippet\s*:\s*0\b/i;
 let resolved = 0;
+let resolvedIndexable = 0;
 const missing = [];
 for (const route of allRoutes) {
   const file = fileFor(route);
@@ -92,6 +105,7 @@ for (const route of allRoutes) {
     continue;
   }
   resolved += 1;
+  if (route.indexable !== false) resolvedIndexable += 1;
   const html = fs.readFileSync(file, 'utf8');
   const canonical = [...html.matchAll(/<link\s+rel="canonical"\s+href="([^"]+)"/gi)];
   const titles = [...html.matchAll(/<title>/gi)];
@@ -101,7 +115,11 @@ for (const route of allRoutes) {
   if (titles.length !== 1) fail(`${route.path}: expected one title, found ${titles.length}`);
   if (descriptions.length !== 1) fail(`${route.path}: expected one description, found ${descriptions.length}`);
   if (canonical.length !== 1 || canonical[0][1] !== expected) fail(`${route.path}: canonical is not uniquely self-referential`);
-  if (!robots || /\bnoindex\b/i.test(robots) || !/\bindex\b/i.test(robots)) fail(`${route.path}: missing indexable robots metadata`);
+  if (route.indexable === false) {
+    if (!/\bnoindex\b/i.test(robots)) fail(`${route.path}: route is configured noindex but its page metadata is not`);
+  } else if (!robots || /\bnoindex\b/i.test(robots) || !/\bindex\b/i.test(robots)) {
+    fail(`${route.path}: missing indexable robots metadata`);
+  }
   if (SNIPPET_BLOCK.test(robots)) fail(`${route.path}: robots metadata blocks search snippets (nosnippet / max-snippet:0)`);
   if (!html.includes(`property="og:url" content="${expected}"`)) fail(`${route.path}: missing route-specific og:url`);
   if (!/<meta\s+name="twitter:card"/i.test(html)) fail(`${route.path}: missing Twitter card metadata`);
@@ -116,9 +134,9 @@ for (const route of allRoutes) {
 }
 if (missing.length) {
   console.error(`missing-file report: ${missing.join(', ')}`);
-  fail(`${missing.length} sitemap routes have no static file`);
+  fail(`${missing.length} public routes have no static file`);
 }
-if (resolved !== sitemapLocs.length) fail(`${sitemapLocs.length} sitemap URLs but only ${resolved} resolve to a static HTML file`);
+if (resolvedIndexable !== sitemapLocs.length) fail(`${sitemapLocs.length} sitemap URLs but only ${resolvedIndexable} resolve to indexable static HTML files`);
 
 /* ---------------------------------------------------------- JSON-LD & media */
 const home = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
@@ -298,12 +316,7 @@ for (const item of items) {
     const composerNames = production.credits.filter((credit) => /composer/i.test(credit.role)).map((credit) => credit.name);
     if (composerNames.length && !workNode?.composer) fail(`${item.path}: verified composer credit missing from schema`);
     if (!composerNames.length && workNode?.composer) fail(`${item.path}: schema invents a composer credit`);
-    if (production.slug === 'expire') {
-      const schemaComposers = Array.isArray(workNode?.composer) ? workNode.composer : workNode?.composer ? [workNode.composer] : [];
-      if (schemaComposers.some((composer) => composer?.name === 'Zazie Kanwar-Torge')) {
-        fail('/work/expire: schema incorrectly credits Zazie Kanwar-Torge as a composer');
-      }
-    }
+
   } else if (item.kind === 'cue') {
     const cue = cueBySlug.get(item.slug);
     if (!types.includes('MusicComposition') || !types.includes('AudioObject')) fail(`${item.path}: missing MusicComposition or AudioObject`);
@@ -341,10 +354,8 @@ const linkPaths = (html) => linksOf(html).map((href) => {
   try { return new URL(href, SITE_ORIGIN).pathname.replace(/\/$/, '') || '/'; } catch { return null; }
 }).filter(Boolean);
 
-// Every generated item route must be linked from the hub that owns it. Items
-// used to be excluded from hub navigation entirely, which left 65 of 85 sitemap
-// URLs with no internal link anywhere - the exact profile Search Console reports
-// as "Discovered - currently not indexed". Discovery now runs / -> hub -> item.
+// Every generated item route must be linked from the hub that owns it.
+// Discovery runs / -> hub -> item for each published detail page.
 const isItemRoute = (pathName) => /^\/(?:work|reel|store)\/[^/]+$/.test(pathName);
 for (const route of allRoutes) {
   if (!isItemRoute(route.path)) continue;
@@ -357,8 +368,7 @@ for (const route of allRoutes) {
   if (!linkPaths(hubHtml).includes(route.path)) fail(`${route.path}: not linked from its hub ${hubPath} (sitemap-only URL)`);
 }
 
-// The home page stays a hub index. Item discovery belongs to the hub that owns
-// the item; a 65-link homepage would bury the 19 pages that matter.
+// The home page stays a hub index. Item discovery belongs to the owning hub.
 for (const pathName of linkPaths(hubHtmlByPath.get('/') ?? '')) {
   if (isItemRoute(pathName)) fail(`/: home page links item route ${pathName}; item discovery belongs to the owning hub`);
 }
@@ -466,10 +476,10 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`verify: ${sitemapLocs.length} sitemap URLs, ${resolved} resolve to prerendered files`);
-console.log(`  route-status audit: ${hubs.length} original hubs 200; ${productions.length} productions 200; ${cues.length} cues 200; ${releases.length} catalogue items 200`);
+console.log(`verify: ${sitemapLocs.length} indexable sitemap URLs; ${resolved} public routes resolve to static files (${resolvedIndexable} indexable)`);
+console.log(`  route-status audit: ${hubs.length} public hubs 200; ${items.filter((item) => item.kind === 'production').length} production detail pages 200; ${cues.length} cues 200; ${releases.length} catalogue items 200`);
 console.log(`  internal-link audit: hubs reachable from /; item pages link to hub + ${items.length ? 'at least 3 siblings' : 'siblings'}; no item links added to hubs`);
-console.log('  SEO/schema audit: unique self-canonical, route-specific head, meta description, indexable robots, per-type JSON-LD');
+console.log('  metadata/schema audit: unique self-canonical, route-specific head, meta description, robots policy, per-type JSON-LD');
 console.log(`  media audit: ${cues.length} MP3 URLs, production samples only when supplied, catalogue artwork only when supplied`);
 console.log('  404 audit: /work/does-not-exist has no static page and Cloudflare fallback serves 404.html with noindex, follow');
 console.log(`  title length audit: / is ${homeTitleLength}/${TITLE_LIMIT} characters (not truncated); ${overLongTitles.length} other route(s) still run long and are listed here rather than failing the build`);
