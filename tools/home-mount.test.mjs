@@ -24,6 +24,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { test } from 'node:test';
+import { ensureFunnelAssets } from '../home-src/conversion-copy.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = (relative) => fs.readFileSync(path.join(ROOT, relative), 'utf8');
@@ -337,4 +338,17 @@ test('selected emotional cues follow the acoustic scar copy in both homepage ren
       position = audioAt;
     }
   }
+});
+
+
+test('funnel assets keep the selected-cue script stable before generated SEO across rebuilds', () => {
+  const once = ensureFunnelAssets(html);
+  const twice = ensureFunnelAssets(once);
+  assert.equal(twice, once, 'repeated injection does not change the head');
+  const script = '<script defer src="/selected-cues.js?v=2"></script>';
+  assert.equal(once.split(script).length - 1, 1, 'the player script appears exactly once');
+  assert.ok(once.indexOf(script) < once.indexOf('<title>'), 'the script precedes generated SEO tags');
+  const without = html.replace(script, '');
+  const restored = ensureFunnelAssets(without);
+  assert.ok(restored.indexOf(script) < restored.indexOf('<title>'), 'a newly inserted script also precedes generated SEO tags');
 });
