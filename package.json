@@ -18,6 +18,7 @@
     "typecheck": "tsc --noEmit",
     "test": "node --test tools/inquiry.test.mjs tools/selected-cues.test.mjs tools/film-player.test.mjs tools/geo.test.mjs tools/headers.test.mjs tools/boot-skip.test.mjs tools/showreel.test.mjs tools/reel-download.test.mjs tools/semantic-pages.test.mjs tools/home-mount.test.mjs tools/compilations.test.mjs tools/external-links.test.mjs tools/mobile-ux.test.mjs",
     "serve": "node server.mjs",
+    "lint:slop": "npx --yes aislop@0.19.1 ci --human",
     "seo:coverage": "node tools/index-coverage.mjs",
     "seo:coverage:json": "node tools/index-coverage.mjs --json"
   },

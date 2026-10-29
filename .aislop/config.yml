@@ -1,0 +1,49 @@
+# aislop — AI code quality gate (https://github.com/marketplace/actions/aislop-ai-code-quality-gate)
+#
+# Runs in CI via .github/workflows/aislop.yml and locally via `npm run lint:slop`.
+#
+# WHY THE EXCLUDES
+#
+# This repo commits its build output (vite bundles, hashed page CSS/JS, the
+# prerendered HTML) so the deploy workflow can prove the committed site matches
+# its sources. aislop analysing that output is noise, not signal: it flags
+# minified React internals ("__REACT_DEVTOOLS_GLOBAL_HOOK__ is not defined"),
+# innerHTML calls inside vendored/generated bundles, and the vendored
+# home-src/bundle.orig.js. None of those can be fixed by hand — the next
+# `npm run build` overwrites them, and deploy.yml fails any commit whose
+# generated files drift from their sources.
+#
+# So the gate watches the files humans and agents actually edit: src/, scripts/,
+# tools/, home-src/, store-src/, legal-src/, sw.js, server.mjs, package.json.
+# The generated artifacts stay out.
+
+version: 1
+
+exclude:
+  # Vite output at the repo root: index-df86bcce.js, index-3465aa44.css, ...
+  - "index-*.js"
+  - "index-*.css"
+  # Per-page bundles + stylesheets emitted by the build scripts.
+  - "store-*.js"
+  - "store-*.css"
+  - "legal-*.js"
+  - "legal-*.css"
+  - "item-*.js"
+  - "item-*.css"
+  - "reel-download-*.js"
+  - "inquiry-*.js"
+  # Vendored third-party bundle kept as a build reference.
+  - "home-src/bundle.orig.js"
+  # Deploy/audit artifacts (also gitignored).
+  - ".audit"
+  - ".wrangler"
+
+ci:
+  # Current score is 59 with the excludes above. The floor starts just under it
+  # so the gate is green on install; raise it as the score climbs and never
+  # lower it to get a PR through.
+  failBelow: 57
+  # Existing findings are accepted so the gate fails on *new* slop rather than
+  # on debt that predates it. Re-accept with:
+  #   npx aislop@0.19.1 baseline write && npx aislop@0.19.1 baseline prune
+  baseline: .aislop/ci-baseline.json
