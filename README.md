@@ -530,5 +530,7 @@ The root `*.md` files are dated implementation records — the repo's developmen
 | `LEGAL.md` | The trust/legal layer: how the documents were built and deploy |
 | `RATIFY.md` | Open facts a human must confirm (entity, law, rights) |
 | `SEO-DOSSIER.md` | The technical SEO programme: IA silos, schema matrix, crawl policy |
+| `SEO-COMPETITOR-AUDIT-WEARY-PINES.md` | Competitor teardown of wearypines.com: page, architecture, entity graph, roadmap |
+| `SEO-BACKLINK-ANALYSIS-WEARY-PINES.md` | Competitor backlink/entity-link inventory and counter-plan (2026-10-22) |
 | `SITEMAP.md` | Sitemap fixes and the validator contract |
 | `STORE.md` | Catalogue build, data model, deployment lessons (the redirect loop) |
