@@ -131,10 +131,14 @@
 // profile directory across both the prerendered document and home bundle.
 // v52: simplify the homepage compilation cards; refresh the cached document and bundle.
 // v53: refresh the Press Kit quotes in the cached homepage and bundle.
-// v54: the mobile density pass. The homepage gains its pre-React menu panel
-// and phone-only density rules, and the regenerated store, legal and item
-// stylesheets carry phone layout fixes and new content hashes.
-const CACHE_NAME = 'zazie-v55';
+// v54: the homepage mobile pass moves touch targets and small-screen type in the
+// precached document, so the cached bundle and document change with it.
+// v55: merge main's mobile pass into the inquiry stylesheet - 16px controls at
+// tablet widths and a 44px disclosure row - which re-hashes inquiry-<hash>.css.
+// v56: the mobile density pass - a pre-React menu panel and phone-only density
+// rules in the cached document, plus regenerated store, legal and item
+// stylesheets (catalogue cards, document tables, video embeds).
+const CACHE_NAME = 'zazie-v56';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -148,7 +152,7 @@ const PRECACHE_ASSETS = [
   '/store-3fc01be0.js',
   '/legal-13cbe4fc.css',
   '/legal-54feff84.js',
-  '/inquiry-1f1ff32f.css',
+  '/inquiry-d8cba1f7.css',
   '/inquiry-f408888b.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',

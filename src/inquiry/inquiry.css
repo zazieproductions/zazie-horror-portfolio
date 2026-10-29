@@ -54,7 +54,7 @@
   }.zp-cta, .zp-cta-ghost {
     width:100%;
     letter-spacing: .12em;
-  }.zp-inclusions-disclosure > summary small { flex-basis:100%; }.zp-inclusions-disclosure .zp-inclusions { padding:.75rem; }.zp-list-block { padding:1rem; }.zp-input { font-size:16px; }
+  }.zp-inclusions-disclosure > summary small { flex-basis:100%; }.zp-inclusions-disclosure .zp-inclusions { padding:.75rem; }.zp-list-block { padding:1rem; }
 }.zp-home-section p a {
   color:#e65650;
   text-decoration:underline;
@@ -65,5 +65,13 @@
     font-size: 1rem;
     line-height: 1.65;
   }
+  /* iOS Safari zooms the page when a focused control renders under 16px, and it
+     never zooms back out: a 15.2px field pushed the submit button off-screen
+     mid-form. The floor applies at every phone and tablet width, not only the
+     639px-and-under band the readability pass covers. */
+  .zp-input { font-size:16px; }
+  /* "Optional project details" is the first thing a phone user taps and the
+     text row alone is ~21px tall; the whole summary row is the target. */
+  .zp-inq-details > summary { min-height:44px; align-items:center; }
 }
 

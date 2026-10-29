@@ -289,8 +289,8 @@ test('skip button markup is accessible, free of aria-hidden ancestors, and style
   assert.match(bootCss, /html\.zp-boot-on \.zp-skip\{display:none\}/);
   assert.match(bootCss, /#zp-boot\.zp-off\.zp-fast\{animation:zpFadeOut \.16s ease forwards\}/);
   // The document and homepage bundle are precached, so the mobile density pass
-  // requires a fresh cache (v55).
-  assert.match(sw, /CACHE_NAME\s*=\s*'zazie-v55'/);
+  // requires a fresh cache (v56).
+  assert.match(sw, /CACHE_NAME\s*=\s*'zazie-v56'/);
 });
 
 test('clicking #zp-boot-skip immediately dismisses the intro in fast mode and removes the node', async () => {
