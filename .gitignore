@@ -9,3 +9,9 @@ build/
 .vite/
 dist/
 .audit/
+
+# aislop local side effects: score history, repair-agent sessions and worktrees.
+# The policy file (.aislop/config.yml) and the accepted-findings baseline
+# (.aislop/ci-baseline.json) are tracked on purpose; these are not.
+.aislop/history.jsonl
+.aislop/agent/

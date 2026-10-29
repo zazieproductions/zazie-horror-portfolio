@@ -1,0 +1,127 @@
+name: aislop quality gate
+
+# Installed from the GitHub Marketplace listing for
+# scanaislop/aislop — "Catch the slop AI coding agents leave in your code."
+#
+# WHY THIS EXISTS
+#
+# Most of this repository is written by coding agents against a large, mostly
+# generated tree. Tests, `npm run build`, the route checks and the header checks
+# all pass on code that is still rotten: narrative comments above
+# self-explanatory lines, swallowed exceptions, hidden `|| {}` fallbacks,
+# duplicated helpers, dead code, oversized functions. None of that shows up in a
+# green build; it shows up six months later when a fix has to cross three copies
+# of the same fallback.
+#
+# aislop scores every supported file 0–100 from deterministic rules (50+ rules,
+# 11 language targets, no LLM in the runtime path — same tree in, same score
+# out), so this gate is reproducible and cannot hallucinate a finding.
+#
+# WHAT IS GATED
+#
+# `.aislop/config.yml` owns the policy: it excludes the committed build output
+# (vite bundles, hashed page CSS/JS, the vendored `home-src/bundle.orig.js`)
+# because scoring minified React internals is noise the build would overwrite
+# anyway, sets the score floor, and points at `.aislop/ci-baseline.json`.
+#
+# The baseline is the important half. 130 findings predate this gate; blocking
+# every PR on debt nobody introduced is how a gate gets deleted. With the
+# baseline, `aislop ci` fails only on findings that are *new* since it was
+# written, plus any drop below the floor. Accept intentional debt with:
+#
+#   npx aislop@0.19.1 baseline write     # accept everything currently found
+#   npx aislop@0.19.1 baseline prune     # drop entries that no longer occur
+#
+# and commit `.aislop/ci-baseline.json` in the same PR as the code that caused
+# it, so the diff shows exactly which findings were accepted and why.
+#
+# LOCAL USE
+#
+#   npm run lint:slop            # same gate, human-readable, no CI round trip
+#   npx aislop@0.19.1 fix --dry-run   # mechanical fixes it would make (imports,
+#                                     # narrative comments, dead code)
+#
+# VERSIONING
+#
+# The action ref below pins the CLI (from v0.18.1 a release tag runs the
+# matching CLI version), and the summary step repeats that version so its output
+# cannot drift from the gate's. Dependabot's `github-actions` updates bump the
+# ref; move the `npx` version in the same commit.
+
+on:
+  pull_request:
+    paths:
+      - '**/*.ts'
+      - '**/*.js'
+      - '**/*.mjs'
+      - '**/*.css'
+      - '**/*.json'
+      - .aislop/**
+      - .github/workflows/aislop.yml
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: aislop-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      # The gate: `aislop ci` against this checkout, exiting 1 on a new finding
+      # or a score below `.aislop/config.yml` → `ci.failBelow`. Full JSON report
+      # lands in the job log.
+      - name: aislop gate
+        uses: scanaislop/aislop@v0.19.1
+        with:
+          node-version: '22'
+
+      # The JSON above is machine output. This renders the same scan as a
+      # per-file table so a red X says which files to open without reading JSON.
+      # Deliberately non-fatal: a reporting failure must not fail the gate.
+      - name: Findings by file
+        if: always()
+        continue-on-error: true
+        run: |
+          out=$(npx --yes aislop@0.19.1 scan . --json 2>/dev/null || true)
+          if [ -z "$out" ]; then
+            echo "aislop produced no report; see the gate step above." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          printf '%s' "$out" > aislop-report.json
+          node -e '
+            const fs = require("node:fs");
+            const r = JSON.parse(fs.readFileSync("aislop-report.json", "utf8"));
+            const byFile = new Map();
+            for (const d of r.diagnostics ?? []) {
+              const k = d.filePath ?? "(unknown)";
+              const row = byFile.get(k) ?? { errors: 0, warnings: 0 };
+              row[d.severity === "error" ? "errors" : "warnings"] += 1;
+              byFile.set(k, row);
+            }
+            const rows = [...byFile.entries()]
+              .sort((a, b) => (b[1].errors * 10 + b[1].warnings) - (a[1].errors * 10 + a[1].warnings))
+              .slice(0, 25);
+            const lines = [
+              "### aislop",
+              "",
+              `Score **${r.score ?? "n/a"}** (${r.label ?? "unrated"}) · ${r.summary?.files ?? 0} files · ` +
+                `${r.summary?.errors ?? 0} errors · ${r.summary?.warnings ?? 0} warnings`,
+              "",
+            ];
+            if (rows.length) {
+              lines.push("| File | Errors | Warnings |", "| --- | --- | --- |");
+              for (const [file, c] of rows) lines.push(`| \`${file}\` | ${c.errors} | ${c.warnings} |`);
+              lines.push("", "Fix the mechanical ones with `npx aislop@0.19.1 fix`, or accept debt with `baseline write` (see the workflow header).");
+            }
+            fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, lines.join("\n") + "\n");
+          '
+          rm -f aislop-report.json
