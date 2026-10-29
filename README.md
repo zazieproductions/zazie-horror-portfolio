@@ -50,8 +50,9 @@ Primary routes:
 | Route | Role |
 | --- | --- |
 | `/` | The portfolio: a continuous experience with film samples, original cues, credits, biography, and the inquiry form at the bottom |
-| `/work` · `/reel` · `/composer` · `/process` · `/services` | Indexable hub pages mirroring the portfolio's content silos |
+| `/work` · `/reel` · `/process` · `/services` | Indexable hub pages mirroring the portfolio's content silos |
 | `/contact` | Legacy URL redirects to `/#contact`; the standalone contact page has been removed |
+| `/composer` | Legacy URL redirects to `/#about`; the standalone composer biography page has been removed (the biography is section 01 on the homepage) |
 | `/hire-a-composer` · `/sound-design` · `/game-scoring` | Commission pages: the commercial pillar and its first two format spokes |
 | `/store` | The Catalogue: records, sound libraries, tools and objects — 24 items, checkout delegated to Bandcamp, itch.io, Gumroad and eBay |
 | `/legal` · `/faq` · `/terms` · `/privacy` · `/licensing` · `/purchases` · `/accessibility` | Trust, legal and operating documents |

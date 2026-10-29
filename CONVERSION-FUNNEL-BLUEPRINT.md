@@ -182,9 +182,8 @@ remains absent from both the prerendered HTML and the React bundle.
 - H2: **Selected Works**
 - The descriptive lead is removed; compilation cards and their players remain.
 
-### `#press` — Electronic Press Kit & Critical Recognition
-- Kicker: *Press & Recognition · Electronic Press Kit*
-- H2: **Press Kit**
+### `#press` — Press Kit & Critical Recognition
+- H2: **Press Kit** (no redundant kicker or side dossier box)
 - Lead: *"Independent features, interviews and award coverage - read what
   other people heard before you decide."*
 - Four-tier editorial press dossier (`src/lib/press-kit-markup.ts`):

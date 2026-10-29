@@ -52,11 +52,13 @@ function linksOf(html) {
 }
 
 /* ---------------------------------------------------------- expected coverage */
-if (hubs.length !== 19) fail(`expected 19 hub routes, found ${hubs.length}`);
+// /composer was retired (2026-10-29): it 301s to /#about, leaving 18 hubs /
+// 81 sitemap routes. Rebuild: node scripts/generate-sitemap.mjs.
+if (hubs.length !== 18) fail(`expected 18 hub routes, found ${hubs.length}`);
 if (productions.length !== 9) fail(`expected 9 production pages, found ${productions.length}`);
 if (cues.length !== 30) fail(`expected 30 cue pages, found ${cues.length}`);
 if (releases.length !== 24) fail(`expected 24 catalogue pages, found ${releases.length}`);
-if (allRoutes.length !== 82) fail(`expected 82 sitemap routes, found ${allRoutes.length}`);
+if (allRoutes.length !== 81) fail(`expected 81 sitemap routes, found ${allRoutes.length}`);
 
 const sitemapFile = path.join(root, 'sitemap.xml');
 if (!fs.existsSync(sitemapFile)) fail('sitemap.xml is missing');

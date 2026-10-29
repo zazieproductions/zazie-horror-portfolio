@@ -240,13 +240,33 @@ test('the hero carries one quiet lineage line directly beneath the call to actio
   assert.match(style, /\.zp-lineage\{[^}]*flex-wrap:nowrap/, 'the line stays a single line');
 });
 
-test('electronic press kit (#press) ships laurels, Lake Ivan Film Journal quotes, and fancy links in both SSR and bundle without retired heading', () => {
+test('homepage copy stays concise in both render paths', () => {
+  const bundleName = /import\("\/(index-[0-9a-f]{8}\.js)"\)/.exec(html)?.[1];
+  assert.ok(bundleName);
+  const bundle = read(bundleName);
+  for (const retired of ['Field notes / the obsession', 'Take the reel with you', 'You work with the composer, not a middleman.', 'Curated cues', 'The questions producers actually ask.', 'Will the music actually fit my edit?']) {
+    assert.ok(!html.includes(retired) && !bundle.includes(retired), `removed homepage copy stays absent: ${retired}`);
+  }
+  assert.match(html, />Bio<\/h2>/);
+  assert.ok(bundle.includes('children:"Bio"'));
+  assert.ok(!html.includes('id="zp-objections"') && !bundle.includes('zpFnObjections'));
+});
+
+test('press kit (#press) ships laurels, Lake Ivan Film Journal quotes, and fancy links in both SSR and bundle without retired or redundant chrome', () => {
   const bundleMatch = /import\("\/(index-[0-9a-f]{8}\.js)"\)/.exec(html);
   assert.ok(bundleMatch, 'index.html still imports its hashed React bundle');
   const bundle = read(bundleMatch[1]);
 
-  assert.ok(!html.includes('Not my opinion. Theirs.'), 'retired press heading is absent from index.html');
-  assert.ok(!bundle.includes('Not my opinion. Theirs.'), 'retired press heading is absent from bundle');
+  for (const absent of [
+    'Not my opinion. Theirs.',
+    'Studio Dossier',
+    'Electronic Press Kit',
+    'Press &amp; Recognition',
+    'Press & Recognition',
+  ]) {
+    assert.ok(!html.includes(absent), `"${absent}" is absent from index.html`);
+    assert.ok(!bundle.includes(absent), `"${absent}" is absent from bundle`);
+  }
 
   const pressSection = /<section id="press"[\s\S]*?<\/section>/.exec(html)?.[0] ?? '';
   assert.ok(pressSection.length > 0, '#press section exists in index.html');
@@ -273,4 +293,3 @@ test('electronic press kit (#press) ships laurels, Lake Ivan Film Journal quotes
   const pressStyle = /<style id="zp-press-style">([\s\S]*?)<\/style>/.exec(html)?.[1];
   assert.ok(pressStyle && pressStyle.includes('.zp-pk-laurel-card'), '#zp-press-style ships inline');
 });
-

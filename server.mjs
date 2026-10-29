@@ -116,8 +116,10 @@ const isFile = (rel) => {
 /** Exact legacy redirects from _redirects; wildcard routes are handled by the 404 fallback. */
 const explicitRedirects = new Map();
 for (const raw of fs.readFileSync(file('_redirects'), 'utf8').split(/\r?\n/)) {
-  const line = raw.replace(/#.*$/, '').trim();
-  if (!line) continue;
+  // Cloudflare Pages treats only lines that START with '#' as comments; a '#'
+  // inside a rule is a real fragment of the target (e.g. '/composer /#about').
+  const line = raw.trim();
+  if (!line || line.startsWith('#')) continue;
   const [from, to, rawStatus] = line.split(/\s+/);
   if (!from || !to || /[*:(]/.test(from)) continue;
   explicitRedirects.set(from, { to, status: Number(rawStatus) || 301 });

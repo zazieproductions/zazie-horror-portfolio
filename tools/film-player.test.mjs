@@ -339,6 +339,9 @@ test('showreel player starts with The Beautiful Wrongness and keeps The Fatal Ov
   assert.equal(tracks[0].src, '/audio/track-30.mp3');
   assert.equal(tracks[1].title, 'The Fatal Overdose');
   assert.equal(tracks[1].src, '/audio/track-12.mp3');
+  assert.equal(tracks[3].title, 'Dissociative Amnesia');
+  assert.equal(tracks[4].title, 'Variations on a Vanishing Body');
+  assert.equal(tracks[4].src, '/audio/track-05.mp3');
   assert.equal(new Set(tracks.map((track) => track.id)).size, 30, 'stable audio IDs remain unique');
 
   const sectionStart = html.indexOf('<section id="showreel"');
@@ -346,6 +349,8 @@ test('showreel player starts with The Beautiful Wrongness and keeps The Fatal Ov
   assert.ok(section.includes('Now playing</p><h3 class="mb-1 truncate font-display text-xl text-bone sm:text-2xl md:text-4xl">The Beautiful Wrongness</h3>'));
   assert.ok(section.includes('<span class="w-7 shrink-0 text-[11px] tabular-nums text-mist sm:w-8">01</span><div class="min-w-0 flex-1"><p class="truncate font-display text-base sm:text-lg md:text-xl text-blood">The Beautiful Wrongness</p>'));
   assert.ok(section.includes('<span class="w-7 shrink-0 text-[11px] tabular-nums text-mist sm:w-8">02</span><div class="min-w-0 flex-1"><p class="truncate font-display text-base sm:text-lg md:text-xl text-bone">The Fatal Overdose</p>'));
+  assert.ok(section.includes('<span class="w-7 shrink-0 text-[11px] tabular-nums text-mist sm:w-8">04</span><div class="min-w-0 flex-1"><p class="truncate font-display text-base sm:text-lg md:text-xl text-bone">Dissociative Amnesia</p>'));
+  assert.ok(section.includes('<span class="w-7 shrink-0 text-[11px] tabular-nums text-mist sm:w-8">05</span><div class="min-w-0 flex-1"><p class="truncate font-display text-base sm:text-lg md:text-xl text-bone">Variations on a Vanishing Body</p>'));
   assert.equal(section.includes('<span class="w-7 shrink-0 text-[11px] tabular-nums text-mist sm:w-8">01</span><div class="min-w-0 flex-1"><p class="truncate font-display text-base sm:text-lg md:text-xl text-blood">Needle in The Nerve</p>'), false);
 });
 

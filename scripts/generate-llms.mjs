@@ -64,7 +64,6 @@ ${[
   '/how-to-hire-a-horror-composer',
   '/services',
   '/process',
-  '/composer',
   '/game-scoring',
   '/sound-design',
   '/',

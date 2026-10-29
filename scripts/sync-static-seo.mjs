@@ -164,6 +164,7 @@ function upgradeJsonLdNode(node, relFile) {
   const id = node['@id'] || '';
 
   if (type === 'Person' && id.endsWith('#person')) {
+    node.url = person.url;
     node.jobTitle = person.jobTitle;
     node.description = person.description;
     node.knowsAbout = KNOWS_ABOUT_ENTITIES;
@@ -191,7 +192,7 @@ function upgradeJsonLdNode(node, relFile) {
     (type === 'MusicPlaylist' && relFile === 'reel/index.html') ||
     (type === 'Article' && relFile.endsWith('how-to-hire-a-horror-composer.html')) ||
     (type === 'WebPage' &&
-      ['composer/index.html', 'process/index.html', 'sound-design/index.html', 'game-scoring/index.html', 'store-src/store.html', 'legal-src/pages/hire-a-composer.html'].includes(relFile))
+      ['process/index.html', 'sound-design/index.html', 'game-scoring/index.html', 'store-src/store.html', 'legal-src/pages/hire-a-composer.html'].includes(relFile))
   ) {
     node.genre = PORTFOLIO_GENRES_DEEP_LINKED;
   }
@@ -303,10 +304,11 @@ function syncHtmlFile(relFile, options = {}) {
   return false;
 }
 
+// /composer was retired (2026-10-29): it redirects to /#about, so there is no
+// composer/index.html hub file to sync any more.
 const hubTargets = [
   ['work/index.html', '/work', '/work'],
   ['reel/index.html', '/reel', '/reel'],
-  ['composer/index.html', '/composer', '/composer'],
   ['process/index.html', '/process', '/process'],
   ['services/index.html', '/services', '/services'],
   ['sound-design/index.html', null, '/sound-design'],

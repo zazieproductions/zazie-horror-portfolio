@@ -429,23 +429,8 @@ export function pressKitInnerHtml(): string {
 
   return `<div class="zp-pk-ambient" aria-hidden="true"></div>
     <header class="zp-pk-masthead">
-      <div class="zp-pk-masthead-main">
-        <div class="zp-pk-kicker">
-          <span class="zp-pk-kicker-rule" aria-hidden="true"></span>
-          <span>Press &amp; Recognition · Electronic Press Kit</span>
-        </div>
-        <h2 id="zp-press-heading" class="zp-pk-heading">Press Kit</h2>
-        <p class="zp-pk-lead">Independent features, interviews and award coverage - read what other people heard before you decide.</p>
-      </div>
-      <aside class="zp-pk-desk" aria-label="Press desk quick actions">
-        <div class="zp-pk-desk-label">Studio Dossier · Zazie Productions LLC</div>
-        <div class="zp-pk-desk-meta">Zazie Kanwar-Torge · Asheville, NC · IMDb nm17333332</div>
-        <div class="zp-pk-desk-actions">
-          <a href="/reel#download" class="zp-pk-desk-btn zp-pk-desk-btn-primary">Download Reel</a>
-          <a href="/composer" class="zp-pk-desk-btn">Full Biography</a>
-          <a href="#contact" class="zp-pk-desk-btn">Press &amp; Scoring</a>
-        </div>
-      </aside>
+      <h2 id="zp-press-heading" class="zp-pk-heading">Press Kit</h2>
+      <p class="zp-pk-lead">Independent features, interviews and award coverage - read what other people heard before you decide.</p>
     </header>
 
     <div class="zp-pk-tier">
@@ -596,37 +581,13 @@ export const PRESS_CSS = `
   opacity: 0.45;
 }
 .zp-pk-masthead {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.75rem;
   padding-bottom: 2.25rem;
   border-bottom: 1px solid rgba(240, 235, 227, 0.1);
 }
 @media (min-width: 1024px) {
   .zp-pk-masthead {
-    grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.85fr);
-    align-items: end;
-    gap: 2.5rem;
-    padding-bottom: 2.75rem;
+    padding-bottom: 2.65rem;
   }
-}
-.zp-pk-kicker {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 0.9rem;
-  font-family: Inter, system-ui, -apple-system, sans-serif;
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: #e65650;
-}
-.zp-pk-kicker-rule {
-  display: inline-block;
-  width: 2rem;
-  height: 1px;
-  background: linear-gradient(90deg, #b82020, rgba(223, 196, 139, 0.55));
 }
 .zp-pk-heading {
   margin: 0;
@@ -644,64 +605,6 @@ export const PRESS_CSS = `
   font-size: 0.98rem;
   line-height: 1.7;
   color: #b5afa8;
-}
-.zp-pk-desk {
-  position: relative;
-  padding: 1.25rem 1.35rem;
-  border: 1px solid rgba(223, 196, 139, 0.18);
-  border-radius: 2px;
-  background: linear-gradient(155deg, rgba(255, 255, 255, 0.03) 0%, rgba(139, 0, 0, 0.06) 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-}
-.zp-pk-desk-label {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: #dfc48b;
-}
-.zp-pk-desk-meta {
-  margin-top: 0.35rem;
-  font-size: 0.8rem;
-  line-height: 1.5;
-  color: #b5afa8;
-}
-.zp-pk-desk-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.95rem;
-}
-.zp-pk-desk-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.46rem 0.8rem;
-  border: 1px solid rgba(240, 235, 227, 0.16);
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.02);
-  font-family: Inter, system-ui, -apple-system, sans-serif;
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  text-decoration: none;
-  color: #f0ebe3;
-  transition: border-color 0.22s ease, background-color 0.22s ease, color 0.22s ease, transform 0.22s ease;
-}
-.zp-pk-desk-btn:hover {
-  border-color: rgba(223, 196, 139, 0.55);
-  background: rgba(223, 196, 139, 0.09);
-  color: #fffaf2;
-}
-.zp-pk-desk-btn-primary {
-  border-color: rgba(184, 32, 32, 0.6);
-  background: rgba(139, 0, 0, 0.28);
-}
-.zp-pk-desk-btn-primary:hover {
-  border-color: #e65650;
-  background: rgba(168, 22, 22, 0.42);
-  color: #ffffff;
 }
 
 /* Section tiers */
@@ -1229,7 +1132,6 @@ export const PRESS_CSS = `
   transform: translate(2px, -2px);
 }
 
-.zp-pk-desk-btn:focus-visible,
 .zp-pk-review-cta:focus-visible,
 .zp-pk-feature-card:focus-visible,
 .zp-pk-dir-link:focus-visible {
@@ -1238,7 +1140,6 @@ export const PRESS_CSS = `
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .zp-pk-desk-btn,
   .zp-pk-laurel-card,
   .zp-pk-review-cta,
   .zp-pk-feature-card,
