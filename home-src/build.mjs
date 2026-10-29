@@ -39,6 +39,7 @@ import ts from 'typescript';
 import {
   applyBundleCopy,
   applyStaticCopy,
+  removeContactSubheadStatic,
   normalizeStaticCopy,
   normalizeStaticSections,
   injectBundleSections,
@@ -707,6 +708,10 @@ function patchBundle(orig) {
   // Apply the homepage funnel copy and its static React islands after the
   // latest commission-flow transformations have finished.
   out = applyBundleCopy(out);
+  // Remove the oversized italic promise beneath the contact heading.
+  const contactSubhead = '"Project inquiries ",u.jsx("span",{className:"mt-2 block italic text-blood",children:"A written quote, scope and schedule follow review."})';
+  if (countOf(out, contactSubhead) !== 1) throw new Error('bundle: contact subheading not found exactly once');
+  out = out.replace(contactSubhead, '"Project inquiries"');
   out = injectBundleSections(out);
   out = simplifyPosterHeaderBundle(out);
   out = simplifyWorkHeaderBundle(out);
@@ -1000,6 +1005,7 @@ function patchStatic(html, tracks) {
   out = out.replace(heroTagline, '');
   out = simplifyWorkHeaderStatic(out);
   out = applyStaticCopy(out);
+  out = removeContactSubheadStatic(out);
   out = injectStaticSections(out);
   out = simplifyPosterHeaderStatic(out);
   out = simplifyShowreelHeaderStatic(out);
