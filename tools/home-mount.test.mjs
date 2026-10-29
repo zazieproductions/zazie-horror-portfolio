@@ -309,3 +309,32 @@ test('press kit (#press) ships laurels, a curated mix of press quotes, and fancy
   const pressStyle = /<style id="zp-press-style">([\s\S]*?)<\/style>/.exec(html)?.[1];
   assert.ok(pressStyle && pressStyle.includes('.zp-pk-laurel-card'), '#zp-press-style ships inline');
 });
+
+test('selected emotional cues follow the acoustic scar copy in both homepage render paths', () => {
+  const bundleName = /import\("\/(index-[0-9a-f]{8}\.js)"\)/.exec(mountSection)[1];
+  const bundle = read(bundleName);
+  const bridge = 'signature acoustic scar that audiences emotionally will feel in their gut?';
+  for (const [label, content] of [['static', html], ['bundle', bundle]]) {
+    const start = content.indexOf(bridge);
+    const selected = content.indexOf('zp-listening-title', start);
+    const originalCues = content.indexOf('Hear it in 30 original cues', selected);
+    assert.ok(start >= 0 && selected > start && originalCues > selected, `${label}: listening section follows bridge and precedes archive link`);
+    const section = content.slice(selected, originalCues);
+    assert.match(section, /Emotional <em>Index<\/em>/, `${label}: index has its chosen name`);
+    assert.ok(section.includes('zp-index-scope') && section.includes('SIGNAL STUDY'), `${label}: terminal scope is present`);
+    for (const phrase of ['waterphone', 'The Shining', 'Black Swan', 'Requiem for a Dream', 'synth-driven', 'A24', 'sustained high intensity and forward momentum']) {
+      assert.ok(section.includes(phrase), `${label}: selected cue notes include ${phrase}`);
+    }
+    assert.equal((section.match(/zp-cue-play/g) || []).length, 4, `${label}: each cue has a play control`);
+    assert.equal((section.match(/zp-cue-seek/g) || []).length, 4, `${label}: each cue has a seek control`);
+    assert.equal((section.match(/zp-cue-visualizer/g) || []).length, 4, `${label}: each cue has an oscilloscope`);
+    let position = 0;
+    for (const [title, audio] of [['The Beautiful Wrongness', '/audio/track-30.mp3'], ['The Fatal Overdose', '/audio/track-12.mp3'], ['Variations on a Vanishing Body', '/audio/track-05.mp3'], ['Needle in The Nerve', '/audio/track-00.mp3']]) {
+      const titleAt = section.indexOf(title, position);
+      const audioAt = section.indexOf(audio, titleAt);
+      assert.ok(titleAt >= position && audioAt > titleAt, `${label}: ${title} has its audio in order`);
+      assert.ok(fs.existsSync(path.join(ROOT, audio)), `${title} audio exists`);
+      position = audioAt;
+    }
+  }
+});
