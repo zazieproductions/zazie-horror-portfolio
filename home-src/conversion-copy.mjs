@@ -223,7 +223,8 @@ const OBSESSION_INNER = `
   <h2 class="zp-fn-claim" id="zp-obsession-h">87% of independent psychological horror, folk dread, atmospheric dramas, and experimental thrillers get rejected by <strong>Sundance</strong>, <strong>SXSW</strong>, <strong>TIFF, and A24/NEON acquisitions</strong> within the first 600 seconds.</h2>
   <p class="zp-fn-quest">I became obsessed with a single question: why do certain frequencies make our bodies prepare to die?</p>
   <p class="zp-fn-lead zp-fn-study">I started studying neurobiology, weaponized sonic warfare, animal distress frequencies, and auditory pareidolia (how the human brain hallucinates voices in random frequencies).</p>
-  <p class="zp-fn-bridge">I bring that obsession into every cue — so the dread lands before the audience can name it, and your film stays with them long after the credits.</p>
+  <p class="zp-fn-lead">Quick&#8212;hum the terrifying clicking motif from <em>Hereditary</em>, the nauseating horn from <em>The Lighthouse</em>, or the descending siren of <em>Annihilation</em>.</p>
+  <p class="zp-fn-bridge">Now ask yourself: does your project have a signature acoustic scar that audiences emotionally will feel in their gut?</p>
   <div class="zp-fn-actions">${CTA('#showreel', 'Hear it in 30 original cues', true)}</div>
 </div>`;
 
