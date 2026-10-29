@@ -43,7 +43,8 @@ test('The Beautiful Wrongness is first in the 30-cue default player queue', () =
   const html = read('index.html');
   const section = html.slice(html.indexOf('<section id="showreel"'), html.indexOf('</section>', html.indexOf('<section id="showreel"')));
   assert.equal((section.match(/zp-track/g) ?? []).length, 30, 'static first paint has the same 30 rows');
-  assert.match(section, /<p class="font-display text-5xl[^>]*>30<\/p><p class="pb-1[^>]*>Curated cues<\/p>/);
+  assert.doesNotMatch(section, /Curated cues/);
+  assert.doesNotMatch(source, /children:"Curated cues"/);
   assert.match(section, /<h3 class="mb-1 truncate[^>]*>The Beautiful Wrongness<\/h3>/);
   assert.match(section, /<input class="seek[^>]*max="65\.411"[^>]*aria-label="Seek through current track"/);
   const firstRow = /<button class="[^"]*zp-track[^"]*"[^>]*>([\s\S]*?)<\/button>/.exec(section)?.[1] ?? '';
