@@ -1155,7 +1155,7 @@ export const PRESS_CSS = `
 /** Compact opening credits, using the same artwork as the full press kit. */
 export function heroLaurelsHtml(): string {
   const marks = [
-    ['Golden Bloody Globes · Festival Award Honoree', '<img src="/images/laurels/golden-bloody-globes.webp" alt="" width="480" height="280" decoding="async">'],
+    ['Golden Bloody Globes · Festival Award Honoree', '<img src="/images/laurels/golden-bloody-globes.webp" alt="" width="480" height="280" loading="lazy" decoding="async">'],
     ['Re:Fract Festival · Special Jury Mention · 2025', buildOliveBerryWreathSvg()],
     ['PVTV Fringe Flicks · Festival Winner', buildCinemaPalmWreathSvg()],
     ['Pebbles Underground · Jury Special Mention · 2024', buildBayMedallionWreathSvg()],
