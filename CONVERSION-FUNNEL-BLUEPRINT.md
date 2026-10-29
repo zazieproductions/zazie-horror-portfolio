@@ -192,7 +192,11 @@ remains absent from both the prerendered HTML and the React bundle.
   3. **Selected Features, Interviews & Coverage:** Six monograph press cards (*Lake Ivan Film Journal*, *Billboard Wire*, *Grammy Weekly*, *Limitless Magazine*, *Black Mountain College Museum*, *Visual Container TV* PDF).
   4. **Official Profiles, Credits & Streaming:** Verified industry directory (*IMDb*, *FilmFreeway*, *Bandcamp*, *Spotify*, *Apple Music*, *YouTube*, *SoundBetter*, *Muso.AI*).
 
-### `#method` — Desire/differentiation
+### `#method` — Desire/differentiation — **REMOVED 2026-10-29**
+> The Approach block was taken off the homepage at the owner's request: the
+> three cards restated the process story /process and the commissioning pages
+> already carry. The homepage now runs press kit -> **02 · Contact**. The copy
+> below is kept only as a record of what shipped before the removal.
 - H2: A distinct point of view, built for the story. →
   **How the dread actually gets built.**
 - Lead: now leads with "shaped to your picture, not a template" plus spotting,
