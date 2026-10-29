@@ -236,3 +236,24 @@ p a { text-decoration:underline; text-underline-offset:3px; text-decoration-thic
   body.zp-player-open .vignette,
   body.zp-player-open .blood-vignette,
   body.zp-player-open .grain{opacity:0!important;transition:opacity .3s ease}
+
+/* 2026-10-29 Mobile hero parity: the key-art portrait panel and the "Enter the
+   showreel" scroll cue are no longer hidden below 1024px. On phones the hero
+   stacks (portrait plate, then copy + CTAs) and stays scrollable so nothing is
+   clipped; the desktop right-hand panel is untouched. */
+@media (max-width: 1023px){
+  #top{flex-direction:column;overflow:visible}
+  #top .zp-hero-art{
+    position:relative;
+    width:auto;
+    max-width:260px;
+    margin:0 auto 1.25rem;
+    inset:auto;
+    padding:1rem .5rem;
+  }
+  #top .zp-hero-art-plate{
+    height:auto;
+    width:100%;
+    max-width:none;
+  }
+}
