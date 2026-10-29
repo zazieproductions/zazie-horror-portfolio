@@ -167,7 +167,7 @@ export const COPY = [
   {
     id: 'contact.h2a', stage: 'action',
     from: 'Tell me about your project.',
-    to: 'Tell me about the film — and the deadline.',
+    to: 'Project inquiries',
   },
   {
     id: 'contact.h2b', stage: 'action',
@@ -177,7 +177,7 @@ export const COPY = [
   {
     id: 'contact.lead', stage: 'action',
     from: 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.',
-    to: 'Only your name and email are required. Add a cut, a cue list or a deadline if you have them — the form prepares an email for you to review and send. No call, no commitment, no spam.',
+    to: 'Please provide your name and email. Project details and deadlines are optional.',
   },
   {
     id: 'contact.submit', stage: 'action',
@@ -356,6 +356,16 @@ export function applyStaticCopy(html) {
   );
 }
 
+/** Remove the former second-line contact promise from the homepage heading. */
+export function removeContactSubheadStatic(html) {
+  return html
+    .replace(
+      /<span class="mt-2 block italic text-blood">A written quote, scope and schedule follow review\.<\/span>/,
+      '',
+    )
+    .replace(/Project inquiries\s+<\/h2>/, 'Project inquiries</h2>');
+}
+
 /**
  * NEW -> OLD. Called at the START of patchStatic so every pre-existing PAIR
  * and the #about/#compilations reorder sees the canonical text it expects.
@@ -366,13 +376,29 @@ export function normalizeStaticCopy(html) {
   const normalizedTarget = (entry) => cleanStaticText(toHtml(entry));
   // The immediately previous build used this hero line. Normalize that
   // already-shipped version too, so the copy change remains rebuild-safe.
-  const legacyHero = cleanStaticHtml(html)
+  let legacyHtml = cleanStaticHtml(html)
     .replace('Horror scores that make them feel it ', 'Dark, atmospheric horror scores, ')
-    .replace('before they see it.', 'written to your picture.');
+    .replace('before they see it.', 'written to your picture.')
+    // Normalize the immediately previous contact-copy release as well as the
+    // current table, so this one-time copy refresh remains rebuild-safe.
+    .replace('Tell me about the film - and the deadline.', 'Project inquiries')
+    .replace('Only your name and email are required. Add a cut, a cue list or a deadline if you have them - the form prepares an email for you to review and send. No call, no commitment, no spam.', 'Please provide your name and email. Project details and deadlines are optional.');
+  // Restore the generated contact subheading before reversing copy pairs. This
+  // keeps future homepage rebuilds compatible with snapshots where the visible
+  // subheading was intentionally removed.
+  const contactStart = legacyHtml.indexOf('<section id="contact"');
+  const headingStart = legacyHtml.indexOf('<h2 ', contactStart);
+  const headingEnd = legacyHtml.indexOf('</h2>', headingStart);
+  if (contactStart >= 0 && headingStart >= 0 && headingEnd >= 0 &&
+      !legacyHtml.slice(headingStart, headingEnd).includes('mt-2 block italic text-blood')) {
+    legacyHtml = legacyHtml.slice(0, headingEnd) +
+      ' <span class="mt-2 block italic text-blood">A written quote, scope and schedule follow review.</span>' +
+      legacyHtml.slice(headingEnd);
+  }
   // The hero CTAs went back to their shipped wording on 2026-10-29
   // ("Play the showreel" / "Start an inquiry"), so an already-built document
   // has to be unwound before the rest of the patch sees canonical text.
-  const ctaRestored = restoreHeroCtaLabels(legacyHero);
+  const ctaRestored = restoreHeroCtaLabels(legacyHtml);
   const reversed = replaceSide(
     ctaRestored,
     reverse,
