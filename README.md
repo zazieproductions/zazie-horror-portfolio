@@ -309,7 +309,7 @@ node tools/indexnow.mjs /work /reel    # changed indexable pages only; /faq is n
 
 # Which URLs the next Wayback Machine archive run will capture (the run itself
 # happens in GitHub Actions — see the Deployment section)
-node tools/wayback-urls.mjs                  # core: home + 16 hubs
+node tools/wayback-urls.mjs                  # core: home + 10 indexable hubs
 node tools/wayback-urls.mjs --scope all      # every sitemap URL
 node tools/wayback-urls.mjs --scope custom /reel /faq
 
