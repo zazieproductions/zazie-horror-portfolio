@@ -141,7 +141,7 @@ function selectOptions(values: readonly string[], selected?: string): string {
 }
 
 /**
- * Structured inquiry form for /contact. It prepares an email; nothing is
+ * Structured inquiry form for the homepage inquiry section. It prepares an email; nothing is
  * sent by the site. Budget and musical references sit in the always-visible
  * part of the form: they are the two inputs a quote is now built from, and
  * the budget is stated by the visitor, in bands, never suggested by a
@@ -176,7 +176,6 @@ export function inquiryFormHtml(): string {
     `</div>`,
     `<label class="zp-field"><span class="zp-label">Rough cut or scene link <span class="zp-opt">(optional)</span></span><input class="zp-input" type="url" name="link" placeholder="Share a private link only when you are ready"></label>`,
     `<label class="zp-field"><span class="zp-label">Anything else <span class="zp-opt">(optional)</span></span><textarea class="zp-input" name="notes" rows="3" placeholder="Questions, constraints or anything you would like me to know."></textarea></label>`,
-    `<p class="zp-help">Unreleased material is treated as confidential. A mutual NDA is available before anything is shared.</p>`,
     `</div></details>`,
     `<p class="zp-help">${esc(MICROBUDGET_STATEMENT)}</p>`,
     `<p class="zp-help">Payment terms: ${esc(PAYMENT_TERMS)}</p>`,
@@ -222,7 +221,7 @@ export function serviceOfferGraph(serviceId: string, provider: string): object {
         itemOffered: { '@id': serviceId },
         seller: { '@id': provider },
         availability: 'https://schema.org/LimitedAvailability',
-        url: `${SITE_ORIGIN}/contact`,
+        url: `${SITE_ORIGIN}/#contact`,
       },
     ],
   };

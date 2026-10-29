@@ -192,17 +192,6 @@ export const hubs: Hub[] = [
     videos: [],
   },
   {
-    path: "/contact",
-    name: "Contact",
-    title: "Scoring Inquiry: Request a Score Quote | Zazie Productions",
-    description: "Request a scoring quote from an experimental psychological horror film composer for independent and arthouse cinema. Share what you know; scored minutes, format, timing and references can be added when available.",
-    lastmod: "2026-10-27",
-    images: [
-      { loc: "https://horror.zazieproductions.com/images/hero-portrait.jpg", caption: "Zazie Kanwar-Torge, experimental psychological horror composer available for commission", title: "Scoring Inquiry - Request a Score Quote" },
-    ],
-    videos: [],
-  },
-  {
     path: "/faq",
     name: "FAQ",
     title: "Psychological Horror Scoring FAQ: Quotes, Process, Rights, Delivery - 35 Questions | Zazie Productions",

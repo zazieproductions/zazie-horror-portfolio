@@ -2,7 +2,7 @@
 <!--
   Generated https://horror.zazieproductions.com/sitemap.xml from src/data/{hubs,productions,cues,releases,routes}.ts.
   Do not edit by hand. Each URL is a canonical, extensionless route.
-  Route count: 83 (20 original hubs + 9 productions + 30 cues + 24 catalogue items).
+  Route count: 82 (19 original hubs + 9 productions + 30 cues + 24 catalogue items).
   Sitemap priority and changefreq are intentionally omitted.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -320,16 +320,6 @@
       <image:loc>https://f4.bcbits.com/img/a1008810016_16.jpg</image:loc>
       <image:caption>Stutter to stammer - Bandcamp listing with one track, “List of Russian Spies on Wikipedia,” timed at 2:34.</image:caption>
       <image:title>Stutter to stammer - Zazie Productions</image:title>
-    </image:image>
-  </url>
-
-  <url>
-    <loc>https://horror.zazieproductions.com/contact</loc>
-    <lastmod>2026-10-27</lastmod>
-    <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/hero-portrait.jpg</image:loc>
-      <image:caption>Zazie Kanwar-Torge, experimental psychological horror composer available for commission</image:caption>
-      <image:title>Scoring Inquiry - Request a Score Quote</image:title>
     </image:image>
   </url>
 

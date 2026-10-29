@@ -16,7 +16,9 @@
 /composer.html /composer 301
 /process.html /process 301
 /services.html /services 301
-/contact.html /contact 301
+/contact /#contact 301
+/contact/ /#contact 301
+/contact.html /#contact 301
 /hire-a-composer.html /hire-a-composer 301
 /how-to-hire-a-horror-composer.html /how-to-hire-a-horror-composer 301
 /sound-design.html /sound-design 301

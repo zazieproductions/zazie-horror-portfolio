@@ -52,11 +52,11 @@ function linksOf(html) {
 }
 
 /* ---------------------------------------------------------- expected coverage */
-if (hubs.length !== 20) fail(`expected 20 hub routes, found ${hubs.length}`);
+if (hubs.length !== 19) fail(`expected 19 hub routes, found ${hubs.length}`);
 if (productions.length !== 9) fail(`expected 9 production pages, found ${productions.length}`);
 if (cues.length !== 30) fail(`expected 30 cue pages, found ${cues.length}`);
 if (releases.length !== 24) fail(`expected 24 catalogue pages, found ${releases.length}`);
-if (allRoutes.length !== 83) fail(`expected 83 sitemap routes, found ${allRoutes.length}`);
+if (allRoutes.length !== 82) fail(`expected 82 sitemap routes, found ${allRoutes.length}`);
 
 const sitemapFile = path.join(root, 'sitemap.xml');
 if (!fs.existsSync(sitemapFile)) fail('sitemap.xml is missing');
@@ -206,15 +206,24 @@ for (const item of additionalHomePosters) {
     if (!fs.existsSync(path.join(root, reference.slice(1)))) fail(`homepage poster asset is missing: ${reference}`);
   }
 }
-for (const className of ['zp-mobile-quote', 'zp-menu-button', 'zp-poster-dialog', 'zp-poster-close', 'zp-poster-contain', 'zp-steps', 'zp-home-island', 'zp-comp-article']) {
+for (const className of ['zp-mobile-quote', 'zp-menu-button', 'zp-poster-dialog', 'zp-poster-close', 'zp-poster-contain', 'zp-comp-article']) {
   if (!home.includes(className)) fail(`homepage mobile stylesheet/markup is missing ${className}`);
   if (!homeBundle.includes(className)) fail(`homepage React bundle is missing ${className}`);
 }
 if (!homeBundle.includes('"aria-expanded":n') || !homeBundle.includes('"aria-controls":"mobile-navigation"')) {
   fail('mobile menu no longer exposes its expanded state and controlled navigation');
 }
-if (!home.includes('<section id="services"') || !homeBundle.includes('id:"services"') || !homeBundle.includes('Commissioning a score')) {
-  fail('React must preserve the homepage Services section, its #services anchor and its heading');
+if (home.includes('<section id="services"') || homeBundle.includes('id:"services"') || homeBundle.includes('Commissioning a score')) {
+  fail('the retired homepage commissioning section or its copy is still present');
+}
+if (home.includes('href="#services"') || homeBundle.includes('href:"#services"')) {
+  fail('homepage contains a dangling link to the removed #services anchor');
+}
+if (!home.includes('href="/services"') || !homeBundle.includes('href:"/services"')) {
+  fail('homepage must keep a link to the dedicated /services route');
+}
+if (home.includes('id="zp-close"') || homeBundle.includes('zp-close')) {
+  fail('the retired READY WHEN YOU ARE closing section is still present');
 }
 if (/<div id="root"[^>]*>\s*<div class="relative min-h-\[100svh\]/.test(home)) {
   fail('homepage #root must not nest a redundant div.relative wrapper around <main>');

@@ -1,7 +1,7 @@
 /**
  * src/inquiry/main.ts
  * ----------------------------------------------------------------------------
- * Browser behaviour for the structured scoring inquiry form (/contact).
+ * Browser behaviour for the structured scoring inquiry form on the homepage.
  * Bundled to inquiry-<hash>.js by scripts/build-inquiry.mjs and loaded with
  * `defer`. Succeeded src/estimator/main.ts when the published rate card and
  * cost estimator were removed (2026-10-27): there is nothing left to
@@ -45,7 +45,7 @@ function setField(form: HTMLFormElement, name: string, value: string): boolean {
 }
 
 /**
- * Fill the inquiry from /contact?format=…&min=… style deep links, so a page
+ * Fill the homepage inquiry from /?format=…&min=… style deep links, so a page
  * can hand over whatever scope it already knows. Unknown or out-of-range
  * values are ignored rather than echoed.
  */
@@ -101,7 +101,7 @@ function inquiryBody(form: HTMLFormElement): string {
     get('notes') || '(none)',
     '',
     'Scope: an original score composed to picture. Not sound design or foley unless I have said so above.',
-    'Please reply with a written, nonbinding quote. Unreleased material is confidential; tell me if you need an NDA first.',
+    'Please reply with a written, nonbinding quote.',
   ].join('\n');
 }
 

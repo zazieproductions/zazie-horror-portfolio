@@ -49,8 +49,9 @@ Primary routes:
 
 | Route | Role |
 | --- | --- |
-| `/` | The portfolio: a single continuous React experience (productions, showreel, film samples, press, approach, services, composer, reviews, inquiry) |
-| `/work` · `/reel` · `/composer` · `/process` · `/services` · `/contact` | Indexable hub pages mirroring the portfolio's content silos |
+| `/` | The portfolio: a continuous experience with film samples, original cues, credits, biography, and the inquiry form at the bottom |
+| `/work` · `/reel` · `/composer` · `/process` · `/services` | Indexable hub pages mirroring the portfolio's content silos |
+| `/contact` | Legacy URL redirects to `/#contact`; the standalone contact page has been removed |
 | `/hire-a-composer` · `/sound-design` · `/game-scoring` | Commission pages: the commercial pillar and its first two format spokes |
 | `/store` | The Catalogue: records, sound libraries, tools and objects — 24 items, checkout delegated to Bandcamp, itch.io, Gumroad and eBay |
 | `/legal` · `/faq` · `/terms` · `/privacy` · `/licensing` · `/purchases` · `/accessibility` | Trust, legal and operating documents |
@@ -413,7 +414,7 @@ The site serves source-rendered SEO metadata and structured data (the repo's `SE
 
 - **Homepage schema:** `Person`, `Organization`, `WebSite`, and `WebPage` with shared IDs, a `CreativeWork` portfolio graph and a `MusicPlaylist` showreel graph, plus one `ItemList` of curated cue pages rendered as `MusicComposition` nodes (each with an `AudioObject` and the same `#composition`/`#audio` `@id`s the `/reel/<slug>` pages use, so the graphs merge).
 - **Item-page schema:** production `Movie`/`TVSeries`/`CreativeWork` plus verified `VideoObject` where supplied; cue `MusicComposition` + `AudioObject`; catalogue `Product`/`MusicAlbum` + `Offer`; all include `WebPage` and `BreadcrumbList`. Mutable price/stock claims are omitted.
-- `sitemap.xml` (85 URLs: 20 hubs including home + 65 item routes; current build has 79 artwork and 12 video entries) is checked by `tools/check-sitemap.mjs`, `tools/route-aliases.mjs`, and `scripts/verify.mjs`. The build verifies canonical paths, static files, structured data, links, media, and a real unknown-route 404. **Run `npm run build` before deploys that touch routes, links, media, or schema.**
+- `sitemap.xml` (82 URLs: 19 hubs including home + 63 item routes; current build has 78 artwork and 12 video entries) is checked by `tools/check-sitemap.mjs`, `tools/route-aliases.mjs`, and `scripts/verify.mjs`. The build verifies canonical paths, static files, structured data, links, media, and a real unknown-route 404. **Run `npm run build` before deploys that touch routes, links, media, or schema.**
 - **Sitelinks and crawl structure:** `/` links the 19 original hub routes and only those; each hub (`/work`, `/reel`, `/store`) links every one of its own item pages; each item page links its hub and at least three siblings. That is what keeps the 65 generated URLs out of the "sitemap-only orphan" state Google reports as *Discovered - currently not indexed*. `scripts/verify.mjs` and `tools/check-sitemap.mjs` fail the build if a hub stops linking an item, and `tools/index-coverage.mjs --check` fails it if any submitted URL loses its contextual internal link, drops below 300 words of `<main>` text, or becomes a near-duplicate of a hub sibling.
 - **Site name**: one `WebSite` node on `/` (`name` "Zazie Productions", `alternateName` "Zazie Productions Horror", "ZKT Productions"), matched by `og:site_name` on every page. No `SearchAction` (Google retired the sitelinks search box in November 2024) and no home-page `BreadcrumbList` (the home page is the root of the trail, not a trail).
 - **Beyond Google**: `sitemap.xml` is advertised in `robots.txt` for every engine; `tools/indexnow.mjs` pushes changed URLs to the IndexNow engines after a deploy.
@@ -507,7 +508,7 @@ Nothing on this list should be described as shipped until it is in the tree.
 - **Production records:** EXPIRE (Zazie Kanwar-Torge is credited for sound design; composers listed separately), UNSEEN (IMDb lists Steve Merlo as composer), PEREGRINUS (co-composer credit), Phantom Requiem (experimental short published by Zazie Productions), ECLIPSED (co-composer credits), THE HAUNTED (co-composer credits), CHOLERIC (co-producer credit), MIKE HAS A VISITOR (composer credit), and THE DARK AWAITS (composer credit). See each record's source links for details. Artwork © the respective productions.
 - **Press:** Visual Container, Grammy Weekly, Limitless Magazine, Billboard Wire (linked from the press-kit section).
 - **Presence:** [IMDb](https://www.imdb.com/name/nm17333332) · [Bandcamp](https://zazieproductions.bandcamp.com) · [Spotify](https://open.spotify.com/artist/4UOgvZEOo7xBhFBjJvlMm0) · [YouTube](https://youtube.com/@zazieproductions) · [Apple Music](https://music.apple.com/us/artist/zazie-productions/1623719351)
-- **Inquiries:** via [/contact](https://horror.zazieproductions.com/contact) (composing email in your own mail client — there is no form backend).
+- **Inquiries:** use the form at the bottom of the homepage ([`/#contact`](https://horror.zazieproductions.com/#contact)); the legacy `/contact` URL redirects there.
 
 ## License
 

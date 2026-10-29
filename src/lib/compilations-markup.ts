@@ -96,9 +96,8 @@ export const CONTAINER_CLASS = 'relative mx-auto max-w-7xl px-4 sm:px-6 md:px-8'
 export function compilationsInnerHtml(): string {
   return (
     `<div class="mb-10 max-w-2xl sm:mb-12">` +
-    `<p class="mb-3 inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.4em] text-blood sm:text-[11px]"><span class="h-px w-8 bg-blood/60" aria-hidden="true"></span>Compilations</p>` +
-    `<h2 class="font-display text-3xl leading-[1.05] tracking-tight text-bone sm:text-4xl md:text-5xl">Tracks and releases</h2>` +
-    `<p class="mt-4 text-base leading-relaxed text-mist">Selected compilation tracks and two Bandcamp releases. Select a cover to play; Bandcamp loads only when you do.</p>` +
+    `<p class="mb-3 inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.4em] text-blood sm:text-[11px]"><span class="h-px w-8 bg-blood/60" aria-hidden="true"></span>Compilation Features</p>` +
+    `<h2 class="font-display text-3xl leading-[1.05] tracking-tight text-bone sm:text-4xl md:text-5xl">Selected Works</h2>` +
     `</div>` +
     `<noscript><style>.zp-comp-body{display:flex}</style></noscript>` +
     `<ul class="zp-comp-grid">${compilations.map(card).join('')}</ul>` +

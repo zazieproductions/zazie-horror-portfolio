@@ -193,7 +193,7 @@ for page in sorted((src / "pages").glob("*.html")):
 # copy silently desynchronises the pair: the twin keeps serving the retired
 # stylesheet (a 404) and tools/route-aliases.mjs --check fails the build.
 shared_consumers = [root / "404.html", root / "sw.js"]
-for slug in ["composer", "contact", "process", "reel", "work", "services", "hire-a-composer", "sound-design", "game-scoring"]:
+for slug in ["composer", "process", "reel", "work", "services", "hire-a-composer", "sound-design", "game-scoring"]:
     shared_consumers.append(root / slug / "index.html")
     shared_consumers.append(root / (slug + ".html"))
 for target in shared_consumers:
