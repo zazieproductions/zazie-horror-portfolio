@@ -167,18 +167,28 @@
      a cover; only then is the iframe created, and it opens under the cover.
      The source must be a Bandcamp embedded-player URL, read from the page's
      own markup. */
-  var BC_PREFIX = "https://bandcamp.com/EmbeddedPlayer/";
   $$(".bc-embed").forEach(function (box) {
     var btn = $(".bc-load", box);
     var slot = $(".comp-slot-inner", box);
-    var src = box.getAttribute("data-bc-src") || "";
-    if (!btn || !slot || src.indexOf(BC_PREFIX) !== 0) return;
+    var rawSrc = box.getAttribute("data-bc-src") || "";
+    var parsedSrc;
+    try {
+      parsedSrc = new URL(rawSrc, window.location.href);
+    } catch (e) {
+      return;
+    }
+    var isAllowedBandcampEmbed =
+      parsedSrc.protocol === "https:" &&
+      parsedSrc.hostname === "bandcamp.com" &&
+      parsedSrc.pathname.indexOf("/EmbeddedPlayer/") === 0;
+    if (!btn || !slot || !isAllowedBandcampEmbed) return;
+    var safeSrc = parsedSrc.toString();
     btn.addEventListener("click", function () {
       var frame = document.createElement("iframe");
       var ready = function () { frame.classList.add("is-ready"); };
       frame.addEventListener("load", ready);
       window.setTimeout(ready, 4000);
-      frame.src = src;
+      frame.src = safeSrc;
       frame.title = box.getAttribute("data-bc-title") || "Bandcamp player";
       frame.setAttribute("allow", "autoplay; encrypted-media");
       frame.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");

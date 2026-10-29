@@ -64,9 +64,18 @@ test('support documents stay public but noindex, while retired maps and EXPIRE d
   assert.ok(!fs.existsSync(path.join(ROOT, 'work/expire.html')));
   assert.match(fs.readFileSync(path.join(ROOT, 'work/index.html'), 'utf8'), /id="expire"[\s\S]*?EXPIRE/);
   const redirects = fs.readFileSync(path.join(ROOT, '_redirects'), 'utf8');
-  assert.match(redirects, /^\/sitemap \/ 301$/m);
-  assert.match(redirects, /^\/work\/expire \/work#expire 301$/m);
-  assert.match(redirects, /^\/contact \/#contact 301$/m);
+  const rules = redirects.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+  const onlyRule = (from, expected) => {
+    const matching = rules.filter((line) => line.split(/\s+/)[0] === from);
+    assert.deepEqual(matching, [expected], `${from} has exactly one redirect to its intended destination`);
+  };
+  onlyRule('/sitemap', '/sitemap / 301');
+  onlyRule('/sitemap/', '/sitemap/ / 301');
+  onlyRule('/sitemap.html', '/sitemap.html / 301');
+  onlyRule('/work/expire', '/work/expire /work#expire 301');
+  onlyRule('/work/expire/', '/work/expire/ /work#expire 301');
+  onlyRule('/work/expire.html', '/work/expire.html /work#expire 301');
+  onlyRule('/contact', '/contact /#contact 301');
   assert.match(fs.readFileSync(path.join(ROOT, 'robots.txt'), 'utf8'), /Sitemap: https:\/\/horror\.zazieproductions\.com\/sitemap\.xml/);
 
   const privacy = fs.readFileSync(fileForRoute('/privacy'), 'utf8');

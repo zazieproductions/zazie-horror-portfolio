@@ -1,0 +1,845 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "rule": "ai-slop/hidden-fallback",
+      "engine": "ai-slop",
+      "file": "home-src/build.mjs",
+      "fingerprint": "b3f75bbb2fb1d3af",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/narrative-comment",
+      "engine": "ai-slop",
+      "file": "home-src/build.mjs",
+      "fingerprint": "78695c220de1ef46",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/narrative-comment",
+      "engine": "ai-slop",
+      "file": "home-src/build.mjs",
+      "fingerprint": "d853bb9ca30bcf00",
+      "count": 1
+    },
+    {
+      "rule": "complexity/file-too-large",
+      "engine": "code-quality",
+      "file": "home-src/build.mjs",
+      "fingerprint": "message:96b0128c3491727f",
+      "count": 1
+    },
+    {
+      "rule": "complexity/function-too-long",
+      "engine": "code-quality",
+      "file": "home-src/build.mjs",
+      "fingerprint": "2b7a08fb47c98ca6",
+      "count": 1
+    },
+    {
+      "rule": "complexity/function-too-long",
+      "engine": "code-quality",
+      "file": "home-src/build.mjs",
+      "fingerprint": "933a3c84f1f008b3",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-useless-escape",
+      "engine": "lint",
+      "file": "home-src/build.mjs",
+      "fingerprint": "096a70e63fdbab28",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-useless-escape",
+      "engine": "lint",
+      "file": "home-src/build.mjs",
+      "fingerprint": "159f86832b6d8b06",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-useless-escape",
+      "engine": "lint",
+      "file": "home-src/build.mjs",
+      "fingerprint": "196840286a707054",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-useless-escape",
+      "engine": "lint",
+      "file": "home-src/build.mjs",
+      "fingerprint": "949426b5cd3fd51b",
+      "count": 1
+    },
+    {
+      "rule": "complexity/file-too-large",
+      "engine": "code-quality",
+      "file": "home-src/conversion-copy.mjs",
+      "fingerprint": "message:96b0128c3491727f",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/swallowed-exception",
+      "engine": "ai-slop",
+      "file": "legal-src/legal.js",
+      "fingerprint": "750dbb5172f1c11b",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/swallowed-exception",
+      "engine": "ai-slop",
+      "file": "legal-src/legal.js",
+      "fingerprint": "8d265f7d40a8201e",
+      "count": 4
+    },
+    {
+      "rule": "ai-slop/swallowed-exception",
+      "engine": "ai-slop",
+      "file": "legal-src/legal.js",
+      "fingerprint": "c90e9d004d4a4a41",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-empty",
+      "engine": "lint",
+      "file": "legal-src/legal.js",
+      "fingerprint": "750dbb5172f1c11b",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-empty",
+      "engine": "lint",
+      "file": "legal-src/legal.js",
+      "fingerprint": "c90e9d004d4a4a41",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-unused-vars",
+      "engine": "lint",
+      "file": "legal-src/legal.js",
+      "fingerprint": "12124043d33346e0",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-unused-vars",
+      "engine": "lint",
+      "file": "legal-src/legal.js",
+      "fingerprint": "20764ddb24342c46",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-unused-vars",
+      "engine": "lint",
+      "file": "legal-src/legal.js",
+      "fingerprint": "56282e4cce6180db",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-unused-vars",
+      "engine": "lint",
+      "file": "legal-src/legal.js",
+      "fingerprint": "750dbb5172f1c11b",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-unused-vars",
+      "engine": "lint",
+      "file": "legal-src/legal.js",
+      "fingerprint": "9388a78fb36a6ce5",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-unused-vars",
+      "engine": "lint",
+      "file": "legal-src/legal.js",
+      "fingerprint": "a5bbb8c9e7ded1e3",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-unused-vars",
+      "engine": "lint",
+      "file": "legal-src/legal.js",
+      "fingerprint": "c90e9d004d4a4a41",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-unused-vars",
+      "engine": "lint",
+      "file": "legal-src/legal.js",
+      "fingerprint": "e1be4fdef0777b64",
+      "count": 1
+    },
+    {
+      "rule": "security/innerhtml",
+      "engine": "security",
+      "file": "legal-src/legal.js",
+      "fingerprint": "7a47915d7f24a87d",
+      "count": 1
+    },
+    {
+      "rule": "security/innerhtml",
+      "engine": "security",
+      "file": "legal-src/legal.js",
+      "fingerprint": "f0e8672da2a07f08",
+      "count": 1
+    },
+    {
+      "rule": "knip/skipped",
+      "engine": "code-quality",
+      "file": "package.json",
+      "fingerprint": "message:afa23e90d1b253b4",
+      "count": 1
+    },
+    {
+      "rule": "security/vulnerable-dependency",
+      "engine": "security",
+      "file": "package.json",
+      "fingerprint": "message:da06797007a92f5b",
+      "count": 1
+    },
+    {
+      "rule": "unicorn/no-useless-spread",
+      "engine": "lint",
+      "file": "scripts/generate-sitemap.mjs",
+      "fingerprint": "c2f2d0bf2be527ad",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-useless-escape",
+      "engine": "lint",
+      "file": "scripts/sync-commission.mjs",
+      "fingerprint": "1afd59df56ff61bc",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-useless-escape",
+      "engine": "lint",
+      "file": "scripts/sync-commission.mjs",
+      "fingerprint": "56018a406b722f43",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-useless-escape",
+      "engine": "lint",
+      "file": "scripts/sync-commission.mjs",
+      "fingerprint": "acbd4c3b5a4c802b",
+      "count": 2
+    },
+    {
+      "rule": "eslint/no-useless-escape",
+      "engine": "lint",
+      "file": "scripts/sync-commission.mjs",
+      "fingerprint": "c86590b74fe79a11",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-useless-escape",
+      "engine": "lint",
+      "file": "scripts/sync-commission.mjs",
+      "fingerprint": "cd0950f57d6525e5",
+      "count": 2
+    },
+    {
+      "rule": "ai-slop/unused-import",
+      "engine": "ai-slop",
+      "file": "scripts/verify.mjs",
+      "fingerprint": "50d7355dd32b8188",
+      "count": 2
+    },
+    {
+      "rule": "complexity/file-too-large",
+      "engine": "code-quality",
+      "file": "scripts/verify.mjs",
+      "fingerprint": "message:96b0128c3491727f",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-unused-vars",
+      "engine": "lint",
+      "file": "scripts/verify.mjs",
+      "fingerprint": "50d7355dd32b8188",
+      "count": 2
+    },
+    {
+      "rule": "unicorn/no-useless-spread",
+      "engine": "lint",
+      "file": "scripts/verify.mjs",
+      "fingerprint": "8f024b062e085adb",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/narrative-comment",
+      "engine": "ai-slop",
+      "file": "selected-cues.js",
+      "fingerprint": "54998f8e186fa164",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/console-leftover",
+      "engine": "ai-slop",
+      "file": "server.mjs",
+      "fingerprint": "47b2e763c50e5b28",
+      "count": 1
+    },
+    {
+      "rule": "complexity/file-too-large",
+      "engine": "code-quality",
+      "file": "src/data/cues.ts",
+      "fingerprint": "message:96b0128c3491727f",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "src/data/entities.ts",
+      "fingerprint": "3ab60b9f34dca1f1",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "src/data/entities.ts",
+      "fingerprint": "40c69938be607a02",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "src/data/entities.ts",
+      "fingerprint": "42d23972dabe43d7",
+      "count": 2
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "src/data/entities.ts",
+      "fingerprint": "4a64a0485fc5b7bb",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "src/data/entities.ts",
+      "fingerprint": "73f74c73eda43226",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "src/data/entities.ts",
+      "fingerprint": "80813ffbb0531030",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "src/data/entities.ts",
+      "fingerprint": "8ab46a40af366073",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "src/data/entities.ts",
+      "fingerprint": "8ba59f056b756df5",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "src/data/entities.ts",
+      "fingerprint": "90456016cbc8df0e",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "src/data/entities.ts",
+      "fingerprint": "931dd1b8384d8b7d",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "src/data/entities.ts",
+      "fingerprint": "acfec295a11add72",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "src/data/entities.ts",
+      "fingerprint": "b6bf43a460b9263c",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "src/data/entities.ts",
+      "fingerprint": "c914d1861c14241a",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "src/data/entities.ts",
+      "fingerprint": "cbd6af7a4ad26244",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "src/data/entities.ts",
+      "fingerprint": "d798ab3332759715",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "src/data/entities.ts",
+      "fingerprint": "e8f7b417e9190e0b",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "src/data/entities.ts",
+      "fingerprint": "efb0b709149c824b",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "src/data/entities.ts",
+      "fingerprint": "f525140fe3a6bdf8",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "src/data/entities.ts",
+      "fingerprint": "fd7b5a1043dbc891",
+      "count": 1
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/data/entities.ts",
+      "fingerprint": "367ea4c7a2d7c5bb",
+      "count": 1
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/data/hubs.ts",
+      "fingerprint": "962838989cc14577",
+      "count": 1
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/data/hubs.ts",
+      "fingerprint": "d9a3f3a2c5921dc1",
+      "count": 1
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/data/hubs.ts",
+      "fingerprint": "e52a1813c4604951",
+      "count": 1
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/data/productions.ts",
+      "fingerprint": "17e801fcd2ea2460",
+      "count": 1
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/data/productions.ts",
+      "fingerprint": "1daa97d025aae9e7",
+      "count": 1
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/data/productions.ts",
+      "fingerprint": "6918056393d0ffc9",
+      "count": 1
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/data/productions.ts",
+      "fingerprint": "8ad78ac27cf60c8a",
+      "count": 1
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/data/releases.ts",
+      "fingerprint": "2687cdf22401b500",
+      "count": 1
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/data/releases.ts",
+      "fingerprint": "2caeb64bd8d3b175",
+      "count": 1
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/data/releases.ts",
+      "fingerprint": "3248593b96b377da",
+      "count": 2
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/data/releases.ts",
+      "fingerprint": "39d4b54e0416be65",
+      "count": 1
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/data/releases.ts",
+      "fingerprint": "3c36a1b88fecdde0",
+      "count": 1
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/data/releases.ts",
+      "fingerprint": "529102074fdb1095",
+      "count": 1
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/data/releases.ts",
+      "fingerprint": "551de7a760522e17",
+      "count": 1
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/data/releases.ts",
+      "fingerprint": "784f77aff268d49d",
+      "count": 1
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/data/releases.ts",
+      "fingerprint": "900c822cf206f614",
+      "count": 1
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/data/releases.ts",
+      "fingerprint": "bc892ce56eb83231",
+      "count": 1
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/data/releases.ts",
+      "fingerprint": "ca9e16ee0e2a0ad8",
+      "count": 1
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/data/releases.ts",
+      "fingerprint": "d4d5b3969ba18c3a",
+      "count": 1
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/data/releases.ts",
+      "fingerprint": "e17b6f6c22567217",
+      "count": 1
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/data/releases.ts",
+      "fingerprint": "e51116172473ac90",
+      "count": 1
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/data/releases.ts",
+      "fingerprint": "e52a1813c4604951",
+      "count": 2
+    },
+    {
+      "rule": "complexity/file-too-large",
+      "engine": "code-quality",
+      "file": "src/data/releases.ts",
+      "fingerprint": "message:96b0128c3491727f",
+      "count": 1
+    },
+    {
+      "rule": "complexity/function-too-long",
+      "engine": "code-quality",
+      "file": "src/data/routes.ts",
+      "fingerprint": "01ba23d4bef0e3f1",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-useless-escape",
+      "engine": "lint",
+      "file": "src/lib/commission-markup.ts",
+      "fingerprint": "8f69b715846f05b5",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/thin-wrapper",
+      "engine": "ai-slop",
+      "file": "src/lib/head.ts",
+      "fingerprint": "82537897512038a1",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/unused-import",
+      "engine": "ai-slop",
+      "file": "src/lib/head.ts",
+      "fingerprint": "e0cbdab303939db3",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-unused-vars",
+      "engine": "lint",
+      "file": "src/lib/head.ts",
+      "fingerprint": "01754aba8d487eca",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-unused-vars",
+      "engine": "lint",
+      "file": "src/lib/head.ts",
+      "fingerprint": "5c75e60ed9c23679",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/double-type-assertion",
+      "engine": "ai-slop",
+      "file": "src/lib/home.ts",
+      "fingerprint": "0a2d7118d9cc7e6a",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/double-type-assertion",
+      "engine": "ai-slop",
+      "file": "src/lib/home.ts",
+      "fingerprint": "98515c4f73901e93",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/double-type-assertion",
+      "engine": "ai-slop",
+      "file": "src/lib/home.ts",
+      "fingerprint": "c19800dfd3b8052b",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/narrative-comment",
+      "engine": "ai-slop",
+      "file": "src/lib/home.ts",
+      "fingerprint": "562a8696daee1550",
+      "count": 1
+    },
+    {
+      "rule": "code-quality/duplicate-block",
+      "engine": "code-quality",
+      "file": "src/lib/home.ts",
+      "fingerprint": "e52a1813c4604951",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/duplicate-import",
+      "engine": "ai-slop",
+      "file": "src/lib/page.ts",
+      "fingerprint": "f078318eefe70a0e",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/unused-import",
+      "engine": "ai-slop",
+      "file": "src/lib/page.ts",
+      "fingerprint": "36ce0d4b927ad1e8",
+      "count": 1
+    },
+    {
+      "rule": "complexity/file-too-large",
+      "engine": "code-quality",
+      "file": "src/lib/page.ts",
+      "fingerprint": "message:96b0128c3491727f",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-unused-vars",
+      "engine": "lint",
+      "file": "src/lib/page.ts",
+      "fingerprint": "36ce0d4b927ad1e8",
+      "count": 1
+    },
+    {
+      "rule": "import/no-duplicates",
+      "engine": "lint",
+      "file": "src/lib/page.ts",
+      "fingerprint": "36ce0d4b927ad1e8",
+      "count": 1
+    },
+    {
+      "rule": "complexity/file-too-large",
+      "engine": "code-quality",
+      "file": "src/lib/press-kit-markup.ts",
+      "fingerprint": "message:96b0128c3491727f",
+      "count": 1
+    },
+    {
+      "rule": "complexity/deep-nesting",
+      "engine": "code-quality",
+      "file": "src/reel-download/archive.js",
+      "fingerprint": "01ab343fc959383a",
+      "count": 1
+    },
+    {
+      "rule": "complexity/function-too-long",
+      "engine": "code-quality",
+      "file": "src/reel-download/main.js",
+      "fingerprint": "b78f5bda09286f8e",
+      "count": 1
+    },
+    {
+      "rule": "security/innerhtml",
+      "engine": "security",
+      "file": "store-src/store.js",
+      "fingerprint": "649bf6ef9985f13e",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-empty",
+      "engine": "lint",
+      "file": "sw.js",
+      "fingerprint": "1ca7a1a796dadcc6",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "tools/check-links.mjs",
+      "fingerprint": "585adbe72fa7229c",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "tools/check-sitemap.mjs",
+      "fingerprint": "4820f4734ee8466f",
+      "count": 1
+    },
+    {
+      "rule": "complexity/file-too-large",
+      "engine": "code-quality",
+      "file": "tools/check-sitemap.mjs",
+      "fingerprint": "message:96b0128c3491727f",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-unused-vars",
+      "engine": "lint",
+      "file": "tools/check-sitemap.mjs",
+      "fingerprint": "68f278a25fe500d9",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "tools/headers.mjs",
+      "fingerprint": "68583f0d6bdc9572",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "tools/headers.mjs",
+      "fingerprint": "7f8858e5e5680026",
+      "count": 1
+    },
+    {
+      "rule": "eslint/no-unused-vars",
+      "engine": "lint",
+      "file": "tools/index-coverage.mjs",
+      "fingerprint": "2a237ad01342eb5a",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "tools/indexnow.mjs",
+      "fingerprint": "35856a49dab2bcc5",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "tools/indexnow.mjs",
+      "fingerprint": "5c865cd7a3d98bd5",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "tools/indexnow.mjs",
+      "fingerprint": "6447ae709919923e",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "tools/indexnow.mjs",
+      "fingerprint": "b94ce97eb59b7984",
+      "count": 1
+    },
+    {
+      "rule": "complexity/file-too-large",
+      "engine": "code-quality",
+      "file": "tools/live-route-audit.mjs",
+      "fingerprint": "message:96b0128c3491727f",
+      "count": 1
+    },
+    {
+      "rule": "complexity/function-too-long",
+      "engine": "code-quality",
+      "file": "tools/live-route-audit.mjs",
+      "fingerprint": "bdd8dd311fd5f564",
+      "count": 1
+    },
+    {
+      "rule": "unicorn/no-new-array",
+      "engine": "lint",
+      "file": "tools/live-route-audit.mjs",
+      "fingerprint": "903449dbdae8aee3",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/hardcoded-url",
+      "engine": "ai-slop",
+      "file": "tools/route-aliases.mjs",
+      "fingerprint": "b106fb735df6426a",
+      "count": 1
+    }
+  ]
+}

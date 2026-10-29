@@ -239,6 +239,8 @@ No cookies set by this site, no fonts CDN, and exactly one external JS: the Clou
 ├── tools/route-aliases.mjs     # Checks 18 hub twins and flat item routes for slash twins
 ├── tools/index-coverage.mjs    # Per-URL words / in-body inbound links / duplicate ratio
 ├── tools/indexnow.mjs          # Post-deploy IndexNow ping (Bing, Yandex, Seznam, Naver, Yep...)
+├── .aislop/config.yml          # AI code-quality gate policy (excludes, score floor, baseline)
+├── .aislop/ci-baseline.json    # Findings accepted as inherited debt; CI fails only on new ones
 ├── Eclipsed.png                # Raw cover upload: source of images/eclipsed-cover-1280.jpg
 ├── The Dark Awaits.png         # Raw poster upload kept for provenance (unreferenced)
 ├── PERFORMANCE.md LEGAL.md RATIFY.md SEO-DOSSIER.md SITEMAP.md STORE.md
@@ -303,7 +305,11 @@ node tools/check-sitemap.mjs          # offline
 node tools/check-sitemap.mjs --live   # + HTTP status of every URL
 
 # After a deploy is live: tell IndexNow engines what changed (not Google)
-node tools/indexnow.mjs /work /reel    # changed indexable pages only
+node tools/indexnow.mjs /work /reel    # changed indexable pages only; /faq is noindex
+
+# AI code-quality gate (aislop) — exactly what CI runs, human-readable
+npm run lint:slop                      # fails on new findings / score below the floor
+npx aislop@0.19.1 fix --dry-run        # preview the mechanical fixes it would make
 ```
 
 **Do not hand-edit generated outputs:** `store.html`, document hub copies, `work.html`/other hub root twins, the 65 flat item-page HTML files, or `item-<hash>.js/.css`. Edit the corresponding source/data files, then run `npm run build`. Legacy homepage bundle assets are not rebuilt by the item-page pipeline.
@@ -428,6 +434,8 @@ The site serves source-rendered SEO metadata and structured data (the repo's `SE
 
 **Cloudflare Pages**, served as a static asset tree. `.github/workflows/deploy.yml` runs on relevant pull requests and main-branch pushes: it runs `npm ci`, the full build, type and film-player tests, sitemap/route checks, and assembles the site-only upload. On main it also deploys with Wrangler and runs the live route audit when `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` are configured. Without those secrets, validation still runs and deployment is skipped; Cloudflare does not run the Node build itself.
 
+`.github/workflows/aislop.yml` is a separate, non-deploying gate (see [the aislop gate](#the-aislop-gate)): it scores the hand-written code and fails a PR that adds new findings.
+
 Two hard-won rules recorded in `STORE.md` / `LEGAL.md` / `SEO-DOSSIER.md`:
 
 1. **Do not rewrite routes to `.html` targets.** Original hubs use `<hub>/index.html` plus a byte-identical root `.html` twin for slashless 200s. Generated item pages use one flat `<hub>/<slug>.html` file only, with no directory/slash twin. The `/* /index.html 200` SPA splat is forbidden; unknown paths resolve to a real 404.
@@ -456,7 +464,27 @@ Documented honestly, in priority order — these are real, verified in the tree:
 - **Protect loading performance** as the media library grows; all media enters through the pipeline.
 - **Keep production and experiments separate.** Experiments remain progressive enhancements; page text and media availability must not depend on them.
 - **Documents sit still.** Legal/operating pages carry no torch, no scanlines, no roll — people rely on them.
+- **Agents clean up after themselves.** A green build is not the bar; `npm run lint:slop` is (see below).
 - **Update the records.** This repo keeps dated implementation records (`*.md`). If architecture changes, the records and this README change with it.
+
+### The aislop gate
+
+[aislop](https://github.com/marketplace/actions/aislop-ai-code-quality-gate) scores the code this repo's humans and agents actually write, 0–100, from deterministic rules — narrative comments above self-explanatory lines, swallowed exceptions, hidden fallbacks, duplicated helpers, dead code, oversized functions, hardcoded URLs and secrets. `npm run build`, `npm test` and the route/header checks all pass on that kind of code; this gate does not. There is no LLM in the scoring path, so the same tree always produces the same score.
+
+Policy lives in `.aislop/config.yml`:
+
+- **Generated output is excluded** — `index-*.js`, the hashed `store-/legal-/item-/reel-download-/inquiry-*` bundles, and the vendored `home-src/bundle.orig.js`. Scoring minified React internals is noise, and the repair would be overwritten by the next `npm run build` (or rejected by `deploy.yml`'s stale-output check).
+- **`ci.failBelow`** is the score floor.
+- **`ci.baseline`** points at `.aislop/ci-baseline.json`, which accepts the findings that predate the gate. CI therefore fails on *new* slop, not on inherited debt.
+
+Accepting debt goes in the same PR as the code that caused it, so the diff records what was accepted and why:
+
+```bash
+npx aislop@0.19.1 baseline write     # accept every finding currently present
+npx aislop@0.19.1 baseline prune     # drop entries for findings that are gone
+```
+
+Prefer the fix. `npx aislop@0.19.1 fix --dry-run` previews mechanical repairs (unused imports, narrative comments, dead code); `--safe` limits the run to changes that cannot alter behaviour. A single deliberate exception can be silenced in place — `// aislop-ignore-next-line <rule> -- why` — which stays visible in review, unlike an exclude.
 
 ## AI-agent continuity
 
@@ -468,7 +496,7 @@ For future AI-assisted development sessions. **Before changing anything:**
 4. **Keep homepage and item responsibilities separate**: regenerate the homepage head/poster data through the build; keep item content in its typed data module and template output.
 5. **Check mobile behaviour** — the portfolio has a mobile menu and responsive media; new item pages reuse the approved existing design.
 6. **Check media and performance implications** — keep media optional and avoid adding unverified artwork or broken links.
-7. **Verify**: `npm run build` after route/media/schema changes; serve with `npm run serve` and audit extensionless 200s, slash twins, and real 404s.
+7. **Verify**: `npm run build` after route/media/schema changes; serve with `npm run serve` and audit extensionless 200s, slash twins, and real 404s. Run `npm run lint:slop` before you call it done — it is the check that catches what the build cannot.
 8. **Update documentation** when architecture changes — this README and the dated records are the memory.
 
 **Explicitly do not:**
