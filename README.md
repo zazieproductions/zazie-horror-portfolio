@@ -219,6 +219,7 @@ No cookies set by this site, no fonts CDN, and exactly one external JS: the Clou
 │   ├── posters/<slug>-{640.avif,640.jpg,1200.jpg}   # 9 productions × 3 variants
 │   ├── hero-portrait.{avif,jpg}, headshot.{avif,jpg}, press-photo.jpg
 │   ├── atmosphere-bg.jpg       # hero ken-burns layer
+│   ├── lineage/                # hero footnote marks (BMC seal, Ars Electronica, Dolby Atmos), 2x white-on-transparent PNG
 │   ├── project-*.jpg           # film-sample covers (one per YouTube video)
 │   └── eclipsed-cover-1280.jpg # Eclipsed cover frame, from the root Eclipsed.png upload
 ├── work/ reel/ composer/ process/ services/ contact/

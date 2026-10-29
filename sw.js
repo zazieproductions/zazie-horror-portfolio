@@ -115,7 +115,11 @@
 // Commissions are quoted per project against the budget range and references
 // shared in the inquiry; estimator-<hash> assets are succeeded by
 // inquiry-<hash> ones, so the cache name moves with them.
-const CACHE_NAME = 'zazie-v47';
+// v48: the hero gains its lineage footnote - one desaturated line of marks
+// (Black Mountain College, Ars Electronica, Dolby Atmos) directly under the
+// call to action, added to both the prerendered document and the home bundle.
+// The document is precached as '/', so the cache name moves with it.
+const CACHE_NAME = 'zazie-v48';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -124,7 +128,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-3465aa44.css',
-  '/index-966d9de0.js',
+  '/index-1a96b4c4.js',
   '/store-1e13177a.css',
   '/store-3fc01be0.js',
   '/legal-f4e3a5fb.css',

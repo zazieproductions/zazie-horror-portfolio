@@ -66,22 +66,10 @@ export const COPY = [
   },
 
 
-  {
-    id: 'hero.cta.secondary', stage: 'attention',
-    from: 'Play the showreel',
-    to: 'Hear the showreel',
-  },
-  {
-    id: 'hero.cta.primary', stage: 'attention',
-    from: {
-      bundle: 'children:"Request a scoring quote"',
-      html: 'sm:w-auto">Request a scoring quote</a>',
-    },
-    to: {
-      bundle: 'children:"Get a free written quote"',
-      html: 'sm:w-auto">Get a free written quote</a>',
-    },
-  },
+  /* The hero keeps the wording it shipped with: "Play the showreel" and
+     "Start an inquiry" (2026-10-29). The conversion rewrite to "Hear the
+     showreel" / "Get a free written quote" is retired, so this table no longer
+     carries hero CTA entries and normalizeStaticCopy unwinds the old labels. */
 
 
   /* -------------------------------------------- 3. DESIRE — #work samples */
@@ -223,7 +211,8 @@ const OBSESSION_INNER = `
   <h2 class="zp-fn-claim" id="zp-obsession-h">87% of independent psychological horror, folk dread, atmospheric dramas, and experimental thrillers get rejected by <strong>Sundance</strong>, <strong>SXSW</strong>, <strong>TIFF, and A24/NEON acquisitions</strong> within the first 600 seconds.</h2>
   <p class="zp-fn-quest">I became obsessed with a single question: why do certain frequencies make our bodies prepare to die?</p>
   <p class="zp-fn-lead zp-fn-study">I started studying neurobiology, weaponized sonic warfare, animal distress frequencies, and auditory pareidolia (how the human brain hallucinates voices in random frequencies).</p>
-  <p class="zp-fn-bridge">I bring that obsession into every cue — so the dread lands before the audience can name it, and your film stays with them long after the credits.</p>
+  <p class="zp-fn-lead">Quick&#8212;hum the terrifying clicking motif from <em>Hereditary</em>, the nauseating horn from <em>The Lighthouse</em>, or the descending siren of <em>Annihilation</em>.</p>
+  <p class="zp-fn-bridge">Now ask yourself: does your project have a signature acoustic scar that audiences emotionally will feel in their gut?</p>
   <div class="zp-fn-actions">${CTA('#showreel', 'Hear it in 30 original cues', true)}</div>
 </div>`;
 
@@ -406,8 +395,12 @@ export function normalizeStaticCopy(html) {
       ' <span class="mt-2 block italic text-blood">A written quote, scope and schedule follow review.</span>' +
       legacyHtml.slice(headingEnd);
   }
+  // The hero CTAs went back to their shipped wording on 2026-10-29
+  // ("Play the showreel" / "Start an inquiry"), so an already-built document
+  // has to be unwound before the rest of the patch sees canonical text.
+  const ctaRestored = restoreHeroCtaLabels(legacyHtml);
   const reversed = replaceSide(
-    legacyHtml,
+    ctaRestored,
     reverse,
     normalizedTarget,
     fromHtml,
@@ -415,6 +408,20 @@ export function normalizeStaticCopy(html) {
     { allowAlreadyApplied: true },
   );
   return cleanStaticHtml(reversed);
+}
+
+/** Undo the retired hero CTA wording, at most once each. */
+function restoreHeroCtaLabels(html) {
+  let out = html;
+  for (const [shipped, original] of [
+    ['Hear the showreel', 'Play the showreel'],
+    ['Get a free written quote', 'Start an inquiry'],
+  ]) {
+    const n = countOf(out, shipped);
+    if (n > 1) throw new Error(`conversion-copy/normalize: "${shipped}" appears ${n} times`);
+    if (n === 1) out = out.replace(shipped, () => original);
+  }
+  return out;
 }
 
 const POSTER_HEADER_STATIC_TITLE = '<h2 class="mb-4 font-display text-3xl leading-none text-bone sm:text-4xl md:text-6xl">Credits</h2>';
@@ -589,6 +596,152 @@ export function removeHeroBookingStatic(html) {
 
 export function removeHeroProofStatic(html) {
   return removeStaticDiv(html, '<div class="mt-8 flex flex-col gap-4 border-t border-white/10 pt-6 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6">', 'hero proof strip', 1);
+}
+
+/* ------------------------------------------------------------------------- */
+/* Hero "boutique footnote" — the lineage strip.                              */
+/*                                                                            */
+/* One desaturated, low-contrast horizontal line sitting directly beneath the */
+/* hero call-to-action row: three monochrome marks, no caption and no label   */
+/* (2026-10-29: the working "Lineage" label was removed, and the marks grew   */
+/* to carry the line on their own). It is the hero's only third-party social  */
+/* proof, so it stays deliberately quiet - no boxes, no borders, no hover     */
+/* affordances, and nothing that competes with the H1 or the primary button.  */
+/*                                                                            */
+/* The marks live in /images/lineage as white-on-transparent rasters rendered */
+/* at 2x their display height, so one asset is sharp on retina and small on   */
+/* the wire. Each one carries the institution's name as alt text, so a screen */
+/* reader announces "Black Mountain College, Ars Electronica, Dolby Atmos"    */
+/* instead of three orphaned images.                                          */
+/* ------------------------------------------------------------------------- */
+
+export const LINEAGE_START = '<!--ZP-LINEAGE-START-->';
+export const LINEAGE_END = '<!--ZP-LINEAGE-END-->';
+
+/** Display heights are set in CSS; these are the 2x raster dimensions. */
+const LINEAGE_MARKS = [
+  ['black-mountain-college.png', 'Black Mountain College', 'zp-lineage-seal', 89, 88],
+  ['ars-electronica.png', 'Ars Electronica', 'zp-lineage-festival', 81, 72],
+  ['dolby-atmos.png', 'Dolby Atmos', 'zp-lineage-format', 210, 54],
+];
+
+export const LINEAGE_INNER =
+  LINEAGE_MARKS.map(
+    ([file, alt, className, width, height]) =>
+      `<img class="zp-lineage-mark ${className}" src="/images/lineage/${file}" alt="${alt}" width="${width}" height="${height}" loading="lazy" decoding="async">`,
+  ).join('');
+
+export const LINEAGE_HTML = `${LINEAGE_START}<p class="zp-lineage">${LINEAGE_INNER}</p>${LINEAGE_END}`;
+
+/** The CTA row the strip is appended to, in the prerendered document. */
+const HERO_CTA_STATIC =
+  '<div class="mt-8 flex w-full flex-col gap-3 sm:mt-10 sm:flex-row sm:items-center">';
+
+/** The same row in the minified bundle: its secondary anchor is the last child. */
+const HERO_CTA_BUNDLE = 'children:"Start an inquiry"})]})';
+
+/** Remove a previously injected strip so patchStatic always starts canonical. */
+export function normalizeHeroLineage(html) {
+  return html.replace(
+    new RegExp(`${LINEAGE_START.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[\\s\\S]*?${LINEAGE_END.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\n?`, 'g'),
+    '',
+  );
+}
+
+/**
+ * Insert the strip directly after the hero CTA row in the prerendered document.
+ * The row must close before the strip opens, or the strip would inherit the
+ * row's `sm:flex-row` and stop being a single line.
+ */
+export function injectHeroLineageStatic(html) {
+  const out = normalizeHeroLineage(html);
+  const start = out.indexOf(HERO_CTA_STATIC);
+  if (start < 0 || out.indexOf(HERO_CTA_STATIC, start + 1) >= 0) {
+    throw new Error('conversion-copy/static: hero CTA row not found exactly once');
+  }
+  const end = matchDiv(out, start, 'hero CTA row');
+  return out.slice(0, end) + LINEAGE_HTML + out.slice(end);
+}
+
+/**
+ * Same strip in the React tree. The markup is a static island, exactly like
+ * zpCompilations and the funnel sections, so both render paths cannot drift.
+ */
+export function injectHeroLineageBundle(bundle) {
+  if (bundle.includes('function zpLineage(') || bundle.includes('u.jsx(zpLineage,{})')) {
+    throw new Error('conversion-copy/bundle: lineage strip is patched twice');
+  }
+  const definitionAnchor = 'function I5(){return u.jsx("section",{id:"press"';
+  if (countOf(bundle, definitionAnchor) !== 1) {
+    throw new Error('conversion-copy/bundle: press component anchor drifted');
+  }
+  const definition = `function zpLineage(){return u.jsx("p",{className:"zp-lineage",dangerouslySetInnerHTML:{__html:${JSON.stringify(LINEAGE_INNER)}}})}`;
+  let out = bundle.replace(definitionAnchor, () => `${definition}${definitionAnchor}`);
+  if (countOf(out, HERO_CTA_BUNDLE) !== 1) {
+    throw new Error('conversion-copy/bundle: hero CTA row anchor drifted');
+  }
+  out = out.replace(HERO_CTA_BUNDLE, (match) => `${match.slice(0, -3)},u.jsx(zpLineage,{})]})`);
+  return out;
+}
+
+export const LINEAGE_CSS = `
+/* Hero lineage footnote: one quiet line under the call to action. */
+.zp-lineage{
+  display:flex;
+  flex-wrap:nowrap;
+  align-items:center;
+  gap:1rem;
+  margin:1.15rem 0 0;
+  padding:0;
+  line-height:1;
+  opacity:.85;
+}
+.zp-lineage-mark{
+  flex:none;
+  width:auto;
+  max-width:none;
+  filter:grayscale(1) brightness(.72) contrast(.9);
+  opacity:.62;
+  -webkit-mask-image:none;
+  mask-image:none;
+  mix-blend-mode:normal;
+}
+.zp-lineage-seal{height:44px;}
+.zp-lineage-festival{height:36px;}
+.zp-lineage-format{height:27px;}
+@media (max-width:359px){
+  .zp-lineage{gap:.6rem;}
+  .zp-lineage-seal{height:36px;}
+  .zp-lineage-festival{height:30px;}
+  .zp-lineage-format{height:23px;}
+}
+`;
+
+/** Idempotently keep <style id="zp-lineage-style"> in <head>. */
+export function ensureLineageAssets(html) {
+  const block = `<style id="zp-lineage-style">${LINEAGE_CSS}</style>`;
+  let kept = false;
+  let out = html.replace(/<style id="zp-lineage-style">[\s\S]*?<\/style>/g, () => {
+    if (kept) return '';
+    kept = true;
+    return block;
+  });
+  if (kept) return out;
+  if (!out.includes('</head>')) throw new Error('conversion-copy: no </head> to attach lineage styles');
+  return out.replace('</head>', () => `${block}\n</head>`);
+}
+
+/** Index of the character just past the </div> that closes the div at `start`. */
+function matchDiv(html, start, label) {
+  const token = /<\/?div\b[^>]*>/gi;
+  token.lastIndex = html.indexOf('>', start) + 1;
+  let depth = 1;
+  let match;
+  while ((match = token.exec(html))) {
+    depth += match[0].startsWith('</') ? -1 : 1;
+    if (depth === 0) return token.lastIndex;
+  }
+  throw new Error(`conversion-copy/static: ${label} never closes`);
 }
 
 const marker = (id) => ({ start: `<!--ZP-FN-START:${id}-->`, end: `<!--ZP-FN-END:${id}-->` });
