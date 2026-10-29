@@ -101,7 +101,8 @@ test('buildPromptBundle prioritizes source files, skips generated bundles, and n
   assert.deepEqual(bundle.meta.includedFiles, ['src/app.ts', 'work/eclipsed.html']);
   assert.deepEqual(bundle.meta.skippedGenerated, ['index-df86bcce.js']);
   assert.ok(!bundle.userPrompt.includes('minified2'));
-  assert.ok(bundle.userPrompt.includes('[delimiter-stripped]'));
+  assert.equal(bundle.userPrompt.match(/<\/untrusted_pr_title>/g)?.length, 1);
+  assert.ok(bundle.userPrompt.includes('‹/untrusted_pr_title›'));
   assert.equal(normalizeHeat('unknown-level'), 'medium-rare');
 });
 
@@ -169,14 +170,28 @@ test('normalizeRoastReport drops hallucinated paths and caps grade on high-sever
 
 test('renderRoastMarkdown sanitizes HTML/link injection and preserves sticky comment marker', () => {
   const scheme = `https${'://'}evil.example/payload`;
-  assert.ok(!sanitizeInline(`Click [here](${scheme}) <!-- x --> </details>`).includes('evil.example'));
+  const inlineSanitized = sanitizeInline(`Click [here](${scheme}) <!<!-- x --!> <scr<script>ipt> </details>`);
+  assert.ok(!inlineSanitized.includes('evil.example'));
+  assert.ok(!inlineSanitized.includes('<'));
+  assert.ok(!inlineSanitized.includes('>'));
 
   const report = normalizeRoastReport(
     {
       verdict: 'Shipped with confidence.',
       categories: {},
-      topBurns: ['<!-- spoof --> Zero issues, suspiciously tidy.'],
-      issues: [],
+      topBurns: ['<!-- spoof --!> Zero issues, suspiciously tidy.'],
+      issues: [
+        {
+          severity: 'low',
+          category: 'codeQuality',
+          file: 'src/a.mjs',
+          line: 3,
+          title: 'Tiny nit',
+          burn: 'Minor polish.',
+          explanation: 'Keep markup clean.',
+          fix: 'if (a < b) { /* </details> <!-- x --!> */ }',
+        },
+      ],
       redemptionArc: { whatWentRight: ['Clean diff.'], roadmap: [] },
     },
     { changedFiles: ['src/a.mjs'] },
@@ -190,6 +205,8 @@ test('renderRoastMarkdown sanitizes HTML/link injection and preserves sticky com
 
   assert.ok(md.startsWith(`${COMMENT_MARKER}\n`));
   assert.equal(md.match(/<!--/g)?.length, 1);
+  assert.ok(!md.includes('--!>'));
+  assert.ok(md.includes('<pre><code>if (a &lt; b)'));
   assert.ok(md.includes('## 🔥 RoastMyCode PR Review'));
   assert.ok(md.includes('`1234567`'));
 });

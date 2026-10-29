@@ -39,12 +39,28 @@ function clampScore(value) {
   return Math.max(0, Math.min(100, Math.round(num)));
 }
 
+function escapeHtmlEntities(value) {
+  return String(value === undefined || value === null ? '' : value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;');
+}
+
+function stripExternalLinks(text) {
+  let current = text;
+  for (let pass = 0; pass < 5; pass += 1) {
+    const next = current
+      .replace(/\[([^\]]+)\]\((?:https?:|javascript:|data:)[^)]*\)/gi, '$1')
+      .replace(/(?:https?:|javascript:|data:)\S+/gi, '[link-removed]');
+    if (next === current) break;
+    current = next;
+  }
+  return current;
+}
+
 export function sanitizeInline(value, maxLen = 280) {
-  const cleaned = String(value === undefined || value === null ? '' : value)
-    .replace(/<!--|-->/g, '')
-    .replace(/<\/?(?:script|iframe|object|embed|details|summary|style|link|meta)[^>]*>/gi, '')
-    .replace(/\[([^\]]+)\]\((?:https?:|javascript:|data:)[^)]*\)/gi, '$1')
-    .replace(/https?:\/\/\S+/gi, '[link-removed]')
+  const escaped = escapeHtmlEntities(stripExternalLinks(String(value === undefined || value === null ? '' : value)));
+  const cleaned = escaped
     .replace(/[\r\n|]+/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
@@ -52,12 +68,10 @@ export function sanitizeInline(value, maxLen = 280) {
 }
 
 function sanitizeCodeSnippet(value, maxLen = 1400) {
-  const cleaned = String(value === undefined || value === null ? '' : value)
-    .replace(/<!--|-->/g, '')
-    .replace(/<\/details>/gi, '<\\/details>')
-    .replace(/```+/g, '~~~')
-    .trim();
-  return cleaned.slice(0, maxLen);
+  const trimmed = String(value === undefined || value === null ? '' : value)
+    .trim()
+    .slice(0, maxLen);
+  return escapeHtmlEntities(trimmed);
 }
 
 export function extractJsonObject(rawText) {
@@ -219,7 +233,7 @@ function renderIssueBlock(issue) {
   if (issue.burn) lines.push(`> 🔥 _"${issue.burn}"_`);
   if (issue.explanation) lines.push('', issue.explanation);
   if (issue.fix) {
-    lines.push('', '<details>', '<summary>Suggested fix</summary>', '', '```', issue.fix, '```', '</details>');
+    lines.push('', '<details>', '<summary>Suggested fix</summary>', '', `<pre><code>${issue.fix}</code></pre>`, '</details>');
   }
   return lines.join('\n');
 }

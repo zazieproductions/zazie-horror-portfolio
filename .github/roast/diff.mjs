@@ -119,7 +119,8 @@ export function annotateUnifiedDiff(rawPatch) {
 
 function stripBoundaryTags(value) {
   return String(value || '')
-    .replace(/<\/?untrusted_[a-z_]+>/gi, '[delimiter-stripped]')
+    .replaceAll('<', '‹')
+    .replaceAll('>', '›')
     .trim();
 }
 
