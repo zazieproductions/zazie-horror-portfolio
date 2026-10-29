@@ -9,6 +9,8 @@
  */
 
 export const SITE_HOST = 'horror.zazieproductions.com';
+/** Regex-safe host literal for host allowlist checks. */
+export const SITE_HOST_REGEX = SITE_HOST.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 export const SITE_ORIGIN = `https://${SITE_HOST}`;
 
 export const SITE_NAME = 'Zazie Productions';
