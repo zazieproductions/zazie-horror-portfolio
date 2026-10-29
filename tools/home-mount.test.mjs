@@ -239,3 +239,15 @@ test('the hero carries one quiet lineage line directly beneath the call to actio
   assert.doesNotMatch(style, /hover/, 'the line is not interactive');
   assert.match(style, /\.zp-lineage\{[^}]*flex-wrap:nowrap/, 'the line stays a single line');
 });
+
+test('homepage copy stays concise in both render paths', () => {
+  const bundleName = /import\("\/(index-[0-9a-f]{8}\.js)"\)/.exec(html)?.[1];
+  assert.ok(bundleName);
+  const bundle = read(bundleName);
+  for (const retired of ['Field notes / the obsession', 'Take the reel with you', 'You work with the composer, not a middleman.', 'Curated cues', 'The questions producers actually ask.', 'Will the music actually fit my edit?']) {
+    assert.ok(!html.includes(retired) && !bundle.includes(retired), `removed homepage copy stays absent: ${retired}`);
+  }
+  assert.match(html, />Bio<\/h2>/);
+  assert.ok(bundle.includes('children:"Bio"'));
+  assert.ok(!html.includes('id="zp-objections"') && !bundle.includes('zpFnObjections'));
+});

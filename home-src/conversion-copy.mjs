@@ -78,14 +78,14 @@ export const COPY = [
   {
     id: 'reel.cta', stage: 'desire',
     from: 'Download demo reel',
-    to: 'Take the reel with you',
+    to: 'Download reel',
   },
 
   /* --------------------------------------- 5. TRUST — #about / #compilations */
   {
     id: 'about.h2', stage: 'trust',
-    from: 'The composer behind the atmosphere',
-    to: 'You work with the composer, not a middleman.',
+    from: { bundle: 'children:"The composer behind the atmosphere"', html: '>The composer behind the atmosphere</h2>' },
+    to: { bundle: 'children:"Bio"', html: '>Bio</h2>' },
   },
   {
     id: 'about.cta', stage: 'trust',
@@ -207,40 +207,12 @@ const CTA = (href, label, primary = false) =>
  */
 const OBSESSION_INNER = `
 <div class="zp-fn-shell">
-  <p class="zp-fn-kicker">Field notes / the obsession</p>
   <h2 class="zp-fn-claim" id="zp-obsession-h">87% of independent psychological horror, folk dread, atmospheric dramas, and experimental thrillers get rejected by <strong>Sundance</strong>, <strong>SXSW</strong>, <strong>TIFF, and A24/NEON acquisitions</strong> within the first 600 seconds.</h2>
   <p class="zp-fn-quest">I became obsessed with a single question: why do certain frequencies make our bodies prepare to die?</p>
   <p class="zp-fn-lead zp-fn-study">I started studying neurobiology, weaponized sonic warfare, animal distress frequencies, and auditory pareidolia (how the human brain hallucinates voices in random frequencies).</p>
   <p class="zp-fn-lead">Quick&#8212;hum the terrifying clicking motif from <em>Hereditary</em>, the nauseating horn from <em>The Lighthouse</em>, or the descending siren of <em>Annihilation</em>.</p>
   <p class="zp-fn-bridge">Now ask yourself: does your project have a signature acoustic scar that audiences emotionally will feel in their gut?</p>
   <div class="zp-fn-actions">${CTA('#showreel', 'Hear it in 30 original cues', true)}</div>
-</div>`;
-
-const OBJECTIONS_INNER = `
-<div class="zp-fn-shell">
-  <p class="zp-fn-kicker">Before you commit</p>
-  <h2 class="zp-fn-h2" id="zp-objections-h">The questions producers actually ask.</h2>
-  <p class="zp-fn-lead">Hiring a composer is a leap of faith on a deadline. Here are straight answers and verifiable credits — no pitch, no invented testimonials, no hidden fees.</p>
-  <ul class="zp-fn-proof" aria-label="Verifiable credits and catalogue">
-    <li>IMDb credited</li>
-    <li>Ars Electronica 2026</li>
-    <li>20.4-channel spatial audio</li>
-    <li>MUSLAB / Cero Records</li>
-    <li>EXiS Seoul</li>
-    <li>Black Mountain College Museum + Arts Center commission</li>
-    <li>30-cue showreel</li>
-    <li>9 selected productions</li>
-    <li>24-track catalogue</li>
-  </ul>
-  <div class="zp-fn-faq">
-    <details><summary>Will the music actually fit my edit?</summary><p>Every cue is written to picture after a spotting session. You get a written tone reference and a cue list before a note is composed, and defined consolidated revision rounds are included in every package.</p></details>
-    <details><summary>What if the deadline is brutal?</summary><p>Tell me the delivery date up front and I will tell you honestly whether it is possible. Rush and expedited schedules are quoted only when availability is confirmed in writing — never assumed, never promised before the agreement.</p></details>
-    <details><summary>Do I own the music?</summary><p>Rights are set out in a written agreement before work begins. Read the <a href="/licensing">licensing page</a> for the current terms, or ask for them in your quote — never assume a grant that is not in writing.</p></details>
-    <details><summary>What exactly do I get delivered?</summary><p>Original music to an agreed cue list, professional WAV files, a cue list with timings for your edit, and the revision rounds in your package. Stems, alternate mixes and soundtrack mastering are quoted separately.</p></details>
-    <details><summary>What if it is not right?</summary><p>Defined, consolidated revision rounds are included. A round means one consolidated set of changes to an agreed direction — you will always know where you stand and what happens next.</p></details>
-    <details><summary>How much will it cost?</summary><p>Every score is quoted individually. Share your format, desired music, budget range and references; a written quote follows review of your project.</p></details>
-  </div>
-  <div class="zp-fn-actions">${CTA('/services', 'See services and inclusions', true)}${CTA('/faq', 'Read the full FAQ')}${CTA('/process', 'See the process')}</div>
 </div>`;
 
 /**
@@ -252,9 +224,6 @@ export const SECTIONS = [
   { id: 'obsession', titleId: 'zp-obsession-h', variant: 'obsession',
     bundleAnchor: 'u.jsx(Q5,{"data-source-loc":"src/App.tsx:38:10"}),',
     staticAnchor: '<section id="posters"', inner: OBSESSION_INNER },
-  { id: 'objections', titleId: 'zp-objections-h', variant: 'objections',
-    bundleAnchor: 'u.jsx(dj,{"data-source-loc":"src/App.tsx:47:10"})',
-    staticAnchor: '<section id="contact"', inner: OBJECTIONS_INNER },
 ];
 
 /* ------------------------------------------------------------------------- */
@@ -265,7 +234,6 @@ export const FUNNEL_CSS = `
 /* Conversion funnel sections (homepage only). Scoped with zp-fn- so nothing
    here can leak into the rest of the design system. */
 .zp-fn{position:relative;padding:4.5rem 1.25rem;border-top:1px solid #1e1e1e;}
-.zp-fn--objections{background:#030303;}
 .zp-fn--obsession{background:linear-gradient(180deg,#0a0303 0%,#030303 100%);border-top:1px solid #2a0d0d;}
 .zp-fn-claim{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;font-size:clamp(1.75rem,4.2vw,3rem);line-height:1.16;color:#f0ebe3;margin:0 0 1.5rem;max-width:60rem;}
 .zp-fn-claim strong{color:#e65650;font-weight:600;font-style:italic;}
@@ -290,16 +258,6 @@ export const FUNNEL_CSS = `
 .zp-fn-btn--ghost{background:transparent;color:#f0ebe3;border-color:#1e1e1e;}
 .zp-fn-btn--ghost:hover{background:#1e1e1e;color:#f0ebe3;border-color:#e65650;}
 .zp-fn a:focus-visible,.zp-fn summary:focus-visible{outline:2px solid #e65650;outline-offset:3px;}
-.zp-fn-faq a{color:#e65650;text-decoration:underline;text-underline-offset:3px;}
-.zp-fn-proof{display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 2rem;padding:0;list-style:none;}
-.zp-fn-proof li{border:1px solid #1e1e1e;padding:.45rem .75rem;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#9a9590;}
-.zp-fn-faq{border-top:1px solid #1e1e1e;max-width:54rem;}
-.zp-fn-faq details{border-bottom:1px solid #1e1e1e;}
-.zp-fn-faq summary{cursor:pointer;list-style:none;position:relative;padding:1.05rem 2.5rem 1.05rem 0;color:#f0ebe3;font-size:1rem;}
-.zp-fn-faq summary::-webkit-details-marker{display:none;}
-.zp-fn-faq summary::after{content:"+";position:absolute;right:.3rem;top:1rem;color:#e65650;font-size:1.2rem;line-height:1;}
-.zp-fn-faq details[open] summary::after{content:"\\2212";}
-.zp-fn-faq details p{color:#9a9590;font-size:.92rem;line-height:1.75;margin:0;padding:0 2rem 1.3rem 0;max-width:50rem;}
 @media(min-width:768px){
   .zp-fn{padding:6.5rem 2rem;}
   .zp-fn-grid--3{grid-template-columns:repeat(3,1fr);}
@@ -377,6 +335,8 @@ export function normalizeStaticCopy(html) {
   // The immediately previous build used this hero line. Normalize that
   // already-shipped version too, so the copy change remains rebuild-safe.
   let legacyHtml = cleanStaticHtml(html)
+    .replace('Take the reel with you', 'Download reel')
+    .replace('You work with the composer, not a middleman.', 'Bio')
     .replace('Horror scores that make them feel it ', 'Dark, atmospheric horror scores, ')
     .replace('before they see it.', 'written to your picture.')
     // Normalize the immediately previous contact-copy release as well as the
@@ -490,7 +450,9 @@ export function simplifyShowreelHeaderStatic(html) {
   const sectionStart = html.indexOf('<section id="showreel"');
   const start = html.indexOf('<div class="min-w-0">', sectionStart);
   const end = html.indexOf(SHOWREEL_HEADER_STATIC_END, start);
-  if (sectionStart < 0 || start < 0 || end < 0) throw new Error('conversion-copy/static: Showreel header boundary not found');
+  if (sectionStart < 0 || start < 0) throw new Error('conversion-copy/static: Showreel header boundary not found');
+  if (end < 0 && html.startsWith(SHOWREEL_HEADER_STATIC_TITLE, start + '<div class="min-w-0">'.length)) return html;
+  if (end < 0) throw new Error('conversion-copy/static: Showreel header boundary not found');
   const blockEnd = end + '</div>'.length;
   const block = html.slice(start, blockEnd);
   if (block.includes(SHOWREEL_HEADER_STATIC_TITLE) && !block.includes('02 · Showreel')) return html;
@@ -549,6 +511,17 @@ function removeBundleCall(bundle, marker, label) {
   if (bundle[end] === ',') end++;
   else if (start > 0 && bundle[start - 1] === ',') return bundle.slice(0, start - 1) + bundle.slice(end);
   return bundle.slice(0, start) + bundle.slice(end);
+}
+
+/** Remove the redundant cue-count badge, but keep the player and download. */
+export function removeShowreelCountBundle(bundle) {
+  return removeBundleCall(bundle,
+    'u.jsxs("div",{className:"flex items-end gap-3 rounded-sm border border-white/5 bg-white/[0.02] px-5 py-4 backdrop-blur-sm md:flex-col md:items-end"',
+    'showreel cue count');
+}
+
+export function removeShowreelCountStatic(html) {
+  return html.replace(/<div class="flex items-end gap-3 rounded-sm border border-white\/5 bg-white\/\[0\.02\] px-5 py-4 backdrop-blur-sm md:flex-col md:items-end"><p class="font-display text-5xl leading-none text-blood sm:text-6xl">\d+<\/p><p class="pb-1 text-\[10px\] uppercase tracking-\[0\.3em\] text-mist">Curated cues<\/p><\/div>/, '');
 }
 
 export function removeHeroBookingBundle(bundle) {
