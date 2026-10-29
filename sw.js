@@ -119,7 +119,7 @@
 // (Black Mountain College, Ars Electronica, Dolby Atmos) directly under the
 // call to action, added to both the prerendered document and the home bundle.
 // The document is precached as '/', so the cache name moves with it.
-const CACHE_NAME = 'zazie-v48';
+const CACHE_NAME = 'zazie-v49';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -128,7 +128,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-3465aa44.css',
-  '/index-1a96b4c4.js',
+  '/index-399a22e2.js',
   '/store-1e13177a.css',
   '/store-3fc01be0.js',
   '/legal-f4e3a5fb.css',

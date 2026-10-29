@@ -267,7 +267,20 @@ export const person = {
     },
   },
   knowsAbout: KNOWS_ABOUT_ENTITIES,
+  award: [
+    'Golden Bloody Globes - Festival Award Honoree',
+    'Re:Fract Festival (2025) - Special Jury Mention',
+    'PVTV Fringe Flicks - Festival Winner',
+    'Pebbles Underground Film Festival (VisualcontainerTV, 2024) - Jury Special Mention',
+  ],
   subjectOf: [
+    {
+      '@type': 'Article',
+      headline: 'Spinning in the Wildness: Phantom Requiem (2024)',
+      author: { '@type': 'Person', name: 'David Finkelstein' },
+      url: 'https://lakeivan.substack.com/p/spinning-in-the-wildness-phantom',
+      publisher: { '@type': 'Organization', name: 'Lake Ivan Film Journal' },
+    },
     {
       '@type': 'Article',
       headline: 'How an Underground Experimental Musician Became a Go-To Composer for Psychological Horror',
@@ -291,6 +304,12 @@ export const person = {
       name: 'Broadcast: BMC Radio Artist Zazie Productions | Cheaper Impressions',
       url: 'https://www.blackmountaincollege.org/broadcast-bmc-radio-artist-zazie-productions/',
       publisher: { '@type': 'Organization', name: 'Black Mountain College Museum + Arts Center' },
+    },
+    {
+      '@type': 'CreativeWork',
+      name: 'Winter 2024 Award Winners Official Press Release',
+      url: 'https://www.visualcontainer.tv/wp-content/uploads/2025/01/Winter-2024-Award-Winners_Press-Release.pdf',
+      publisher: { '@type': 'Organization', name: 'VisualcontainerTV' },
     },
   ],
   sameAs: VERIFIED_SAME_AS,

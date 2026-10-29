@@ -66,6 +66,8 @@ const { budgetSelectOptions } = await import('../build/lib/commission-markup.js'
 const { BUDGET_RANGES } = await import('../build/data/commission.js');
 const { compilationsSectionHtml, compilationsInnerHtml, SECTION_CLASS, CONTAINER_CLASS, COMPILATIONS_CSS, COMPILATIONS_JS } =
   await import('../build/lib/compilations-markup.js');
+const { pressKitSectionHtml, pressKitInnerHtml, PRESS_SECTION_CLASS, PRESS_CONTAINER_CLASS, PRESS_CSS } =
+  await import('../build/lib/press-kit-markup.js');
 const { homePosterClientData } = await import('../build/lib/home.js');
 
 // Film sample cards are video + title only: no music-description text or
@@ -723,6 +725,20 @@ function patchBundle(orig) {
   out = removeHeroBookingBundle(out);
   out = removeHeroProofBundle(out);
   out = injectHeroLineageBundle(out);
+  // Replace #press component (I5) and remove legacy press array (W5) AFTER
+  // all anchor-dependent bundle injections have run.
+  {
+    const w5Cut = findTopLevelVariable(out, 'W5');
+    out = out.slice(0, w5Cut.start) + out.slice(w5Cut.end);
+    const i5Cut = findTopLevelFunction(out, 'I5');
+    const i5Replacement =
+      `function I5(){return u.jsx("section",{id:"press","aria-labelledby":"zp-press-heading",className:${JSON.stringify(PRESS_SECTION_CLASS)},` +
+      `children:u.jsx("div",{className:${JSON.stringify(PRESS_CONTAINER_CLASS)},dangerouslySetInnerHTML:{__html:${JSON.stringify(pressKitInnerHtml())}}})})}`;
+    out = out.slice(0, i5Cut.start) + i5Replacement + out.slice(i5Cut.end);
+    if (/\bW5\b/.test(out)) {
+      throw new Error('bundle: legacy press data W5 is still referenced after replacement');
+    }
+  }
   out = out.replace(/[ \t]*—[ \t]*/g, ' - ').replace(/[ \t]{2,}-[ \t]{2,}/g, ' - ');
   assertBundleParses(out);
   return out;
@@ -1017,8 +1033,32 @@ function patchStatic(html, tracks) {
   out = removeHeroBookingStatic(out);
   out = removeHeroProofStatic(out);
   out = injectHeroLineageStatic(out);
+  {
+    const pressRe = /<section id="press"(?:\s|>)[\s\S]*?<\/section>/;
+    if (!pressRe.test(out)) throw new Error('index.html: #press section not found');
+    const nextPress = pressKitSectionHtml();
+    const replaced = out.replace(pressRe, () => nextPress);
+    if (replaced !== out) applied.push('electronic press kit (#press) synced');
+    out = replaced;
+  }
   out = out.replace(/[ \t]*—[ \t]*/g, ' - ').replace(/[ \t]{2,}-[ \t]{2,}/g, ' - ');
   return { html: out, applied };
+}
+
+/** Inline style for the Electronic Press Kit (#press) section. */
+function ensurePressKitAssets(html) {
+  let out = html;
+  const block = `<style id="zp-press-style">${PRESS_CSS}</style>`;
+  const existing = /<style id="zp-press-style">[\s\S]*?<\/style>/g;
+  let kept = false;
+  const before = out;
+  out = out.replace(existing, () => {
+    if (kept) return '';
+    kept = true;
+    return block;
+  });
+  if (!kept) out = before.replace('</head>', () => `${block}\n</head>`);
+  return out;
 }
 
 /** Inline style and click-to-load script for the compilations section. */
@@ -1110,6 +1150,7 @@ let nextHtml = html
   .replace(/\/?index-[0-9a-f]{8}\.css/g, (m) => (m.startsWith('/') ? `/${cssName}` : cssName));
 nextHtml = ensureInquiryAssets(nextHtml);
 nextHtml = ensureCompilationsAssets(nextHtml);
+nextHtml = ensurePressKitAssets(nextHtml);
 nextHtml = ensureFunnelAssets(nextHtml);
 nextHtml = ensureLineageAssets(nextHtml);
 fs.writeFileSync(indexFile, nextHtml, 'utf8');

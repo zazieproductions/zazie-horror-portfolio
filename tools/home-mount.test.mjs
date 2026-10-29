@@ -239,3 +239,38 @@ test('the hero carries one quiet lineage line directly beneath the call to actio
   assert.doesNotMatch(style, /hover/, 'the line is not interactive');
   assert.match(style, /\.zp-lineage\{[^}]*flex-wrap:nowrap/, 'the line stays a single line');
 });
+
+test('electronic press kit (#press) ships laurels, Lake Ivan Film Journal quotes, and fancy links in both SSR and bundle without retired heading', () => {
+  const bundleMatch = /import\("\/(index-[0-9a-f]{8}\.js)"\)/.exec(html);
+  assert.ok(bundleMatch, 'index.html still imports its hashed React bundle');
+  const bundle = read(bundleMatch[1]);
+
+  assert.ok(!html.includes('Not my opinion. Theirs.'), 'retired press heading is absent from index.html');
+  assert.ok(!bundle.includes('Not my opinion. Theirs.'), 'retired press heading is absent from bundle');
+
+  const pressSection = /<section id="press"[\s\S]*?<\/section>/.exec(html)?.[0] ?? '';
+  assert.ok(pressSection.length > 0, '#press section exists in index.html');
+  assert.match(pressSection, /<h2 id="zp-press-heading" class="zp-pk-heading">Press Kit<\/h2>/);
+
+  for (const required of [
+    '/images/laurels/golden-bloody-globes.webp',
+    '/images/laurels/golden-bloody-globes.png',
+    'Golden Bloody Globes',
+    'Re:Fract Festival (2025)',
+    'Received a Special Jury Mention',
+    'PVTV Fringe Flicks',
+    'https://lakeivan.substack.com/p/spinning-in-the-wildness-phantom',
+    'Lake Ivan Film Journal',
+    'David Finkelstein',
+    'gushingly assaultive onslaught with finesse and precision',
+    'zp-pk-feature-card',
+    'zp-pk-dir-link',
+  ]) {
+    assert.ok(pressSection.includes(required), `SSR #press carries "${required}"`);
+    assert.ok(bundle.includes(required), `React bundle #press carries "${required}"`);
+  }
+
+  const pressStyle = /<style id="zp-press-style">([\s\S]*?)<\/style>/.exec(html)?.[1];
+  assert.ok(pressStyle && pressStyle.includes('.zp-pk-laurel-card'), '#zp-press-style ships inline');
+});
+

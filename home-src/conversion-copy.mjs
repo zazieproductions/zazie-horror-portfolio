@@ -93,28 +93,10 @@ export const COPY = [
     to: 'Talk to the composer directly',
   },
 
-  /* ------------------------------------------------ 6. TRUST — #press kit */
-  {
-    id: 'press.h2', stage: 'trust',
-    from: {
-      bundle: 'src/components/PressKit.tsx:13:1",children:"Press kit"',
-      html: '>Press kit</h2>',
-    },
-    to: {
-      bundle: 'src/components/PressKit.tsx:13:1",children:"Not my opinion. Theirs."',
-      html: '>Not my opinion. Theirs.</h2>',
-    },
-  },
-  {
-    id: 'press.lead.bundle', stage: 'trust',
-    from: { bundle: 'Selected interviews, features, and award coverage.', html: null },
-    to: { bundle: 'Independent features, interviews and award coverage — read what other people heard before you decide.', html: null },
-  },
-  {
-    id: 'press.lead.html', stage: 'trust',
-    from: { bundle: null, html: 'Selected interviews and features.' },
-    to: { bundle: null, html: 'Independent features, interviews and award coverage — read what other people heard before you decide.' },
-  },
+  /* ------------------------------------------------ 6. TRUST — #press kit
+   * Full Electronic Press Kit markup + CSS now lives in
+   * `src/lib/press-kit-markup.ts` and is injected identically into both
+   * `index.html` and `I5()` by `home-src/build.mjs`. */
 
   /* ---------------------------------------------- 7. DESIRE — #method cards */
   {
