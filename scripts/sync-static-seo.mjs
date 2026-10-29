@@ -59,6 +59,10 @@ const IMAGE_ALT_BY_SRC = new Map([
     '/images/press-photo.jpg',
     'Zazie Productions Studio: Experimental art house, psychological, folk, and body horror scoring suite of Zazie Kanwar-Torge featuring bowed metal, prepared strings, and custom synthesis.',
   ],
+  [
+    '/images/laurels/golden-bloody-globes.png',
+    'Golden Bloody Globes horror film festival laurel emblem',
+  ],
   // Film sample stills (8 screen samples)
   [
     '/images/project-HaVJP08j77U.jpg',
