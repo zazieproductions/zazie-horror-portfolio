@@ -100,7 +100,7 @@ test('the biography sits before the compilations in the static page and the bund
   assert.ok(staticOrder.every((at) => at >= 0), 'all four sections exist in index.html');
   assert.deepEqual([...staticOrder].sort((a, b) => a - b), staticOrder, 'index.html orders #about before #compilations, after #showreel');
   // React render: About (rj) is invoked once, between the showreel (G5) and
-  // the compilations component, not in its shipped slot after Services (lj).
+  // the compilations component; the retired homepage Services component is gone.
   const renderOrder = [
     'u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"})',
     'u.jsx(rj,{"data-source-loc":"src/App.tsx:45:10"})',
@@ -110,11 +110,53 @@ test('the biography sits before the compilations in the static page and the bund
   assert.ok(renderOrder.every((at) => at >= 0), 'bundle renders showreel, biography, compilations, press');
   assert.deepEqual([...renderOrder].sort((a, b) => a - b), renderOrder, 'bundle orders the biography before the compilations');
   assert.equal(bundle.match(/u\.jsx\(rj,/g)?.length, 1, 'the biography renders exactly once');
-  // The numbered kickers follow the new order without gaps or repeats.
-  const kickers = ['01 · On screen', '02 · Showreel', '03 · Biography', '04 · Approach', '05 · Scoring services', '06 · Contact']
+  // Video and music sections use simple, distinct headings; the remaining
+  // numbered kickers stay contiguous after the samples kicker is removed.
+  const kickers = ['01 · Biography', '02 · Approach', '03 · Contact']
     .map((marker) => html.indexOf(marker));
-  assert.ok(kickers.every((at) => at >= 0), 'every numbered kicker is present');
-  assert.deepEqual([...kickers].sort((a, b) => a - b), kickers, 'section numbers run 01-06 in page order');
+  assert.ok(kickers.every((at) => at >= 0), 'every remaining numbered kicker is present');
+  assert.deepEqual([...kickers].sort((a, b) => a - b), kickers, 'remaining section numbers run 01-03 in page order');
+  for (const marker of ['01 · Biography', '02 · Approach', '03 · Contact']) {
+    assert.ok(bundle.includes(marker), `bundle contains ${marker}`);
+  }
+  for (const removed of ['Commissioning a score', '04 · Scoring services', 'READY WHEN YOU ARE', 'zp-close']) {
+    assert.ok(!html.includes(removed) && !bundle.includes(removed), `retired homepage block stays absent: ${removed}`);
+  }
+  assert.ok(!html.includes('href="#services"') && !bundle.includes('href:"#services"'), 'removed #services anchor has no dangling links');
+  assert.ok(html.includes('href="/services"') && bundle.includes('href:"/services"'), 'dedicated /services route remains available');
+  assert.ok(html.includes('href="#contact" class="zp-mobile-quote">Get a quote</a>'), 'Get a quote scrolls to the homepage inquiry form');
+  assert.ok(!html.includes('href="/contact"') && !bundle.includes('href:"/contact"'), 'homepage quote navigation no longer opens a separate contact page');
+  assert.ok(html.includes('>Showreel</h2>'), 'film samples have the plain Showreel heading');
+  assert.ok(bundle.includes('data-source-loc":"src/components/Projects.tsx:13:10",children:"Showreel"'), 'the React film-samples heading matches');
+  assert.ok(html.includes('>Original cues</h2>'), 'the music section is titled Original cues');
+  assert.ok(bundle.includes('data-source-loc":"src/components/Showreel.tsx:59:1",children:"Original cues"'), 'the React music heading matches');
+  assert.ok(!html.includes('01 · On screen') && !bundle.includes('01 · On screen'), 'the old film-samples kicker is absent');
+  assert.ok(!html.includes('Hear it under picture.') && !bundle.includes('Hear it under picture.'), 'the old film-samples headline is absent');
+  assert.ok(!html.includes('Film samples with the score in place.') && !bundle.includes('Film samples with the score in place.'), 'the film-samples explanatory copy is absent');
+  const workSection = html.slice(html.indexOf('<section id="work"'), html.indexOf('</section>', html.indexOf('<section id="work"')) + '</section>'.length);
+  const musicSection = html.slice(html.indexOf('<section id="showreel"'), html.indexOf('</section>', html.indexOf('<section id="showreel"')) + '</section>'.length);
+  assert.equal((workSection.match(/<article\b/g) || []).length, 8, 'all eight film samples remain');
+  assert.ok(musicSection.includes('href="/reel#download"') && musicSection.includes('aria-label="Play"'), 'reel download and audio controls remain');
+  assert.ok(html.includes('>Credits</h2>'), 'poster wall has the plain Credits heading');
+  assert.ok(!html.includes('Proof of work') && !html.includes('Additional credits'), 'poster header lead is gone');
+  assert.ok(html.includes('WE CORRUPT SILENCE <span class="mt-1 block bg-gradient-to-r from-blood via-ember to-blood bg-clip-text italic text-transparent">TO SERVE THE FRAME.</span>'), 'the new hero declaration is present');
+  assert.ok(html.includes('Bespoke, avant-garde sonic identities for psychological horror, folk horror, <span class="text-mist">atmospheric dramas, and experimental art-house cinema.</span>'), 'the new hero service description is present');
+  const removedHeroTagline = 'For filmmakers who refuse to let a safe, predictable Hollywood score apologize for their visual ambition.';
+  assert.ok(!html.includes(removedHeroTagline) && !bundle.includes(removedHeroTagline), 'the Hollywood-score tagline is removed');
+  assert.ok(bundle.includes('WE CORRUPT SILENCE ') && bundle.includes('TO SERVE THE FRAME.'), 'the React bundle carries the new hero declaration');
+  assert.ok(bundle.includes('Bespoke, avant-garde sonic identities for psychological horror, folk horror,'), 'the React bundle carries the new hero support copy');
+  assert.ok(html.includes('Compilation Features') && html.includes('>Selected Works</h2>'), 'the compilation section uses plain headings');
+  assert.ok(bundle.includes('Compilation Features') && bundle.includes('Selected Works'), 'the React bundle uses the same compilation headings');
+  for (const removed of ['Out in the world', 'Music that exists outside a hard drive.', 'Compilation tracks and two Bandcamp releases already in the world.', 'folder of unused cues']) {
+    assert.ok(!html.includes(removed) && !bundle.includes(removed), `pretentious compilation copy stays absent: ${removed}`);
+  }
+  assert.ok(!html.includes('Horror scores that make them feel it') && !bundle.includes('Horror scores that make them feel it'), 'superseded hero headline is absent');
+  assert.ok(!html.includes('Now booking a limited number of 2026 commissions') && !html.includes('Booking select projects'), 'booking badge is removed');
+  assert.ok(!html.includes('IMDb credited · award-winning'), 'hero proof-strip copy is removed');
+  assert.ok(!html.includes('class="mt-8 flex flex-col gap-4 border-t border-white/10 pt-6 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6"'), 'empty hero proof strip is removed');
+  for (const removed of ['THE COST OF GETTING IT WRONG', 'Your film has one chance to be felt', '02 / THE GAP', '03 / THE WARNING']) {
+    assert.ok(!html.includes(removed), `retired homepage copy stays absent: ${removed}`);
+  }
 });
 
 test('homepage CSS carries AA link red and persistent underlines without type floors', () => {

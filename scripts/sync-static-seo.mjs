@@ -305,7 +305,6 @@ const hubTargets = [
   ['composer/index.html', '/composer', '/composer'],
   ['process/index.html', '/process', '/process'],
   ['services/index.html', '/services', '/services'],
-  ['contact/index.html', null, '/contact'],
   ['sound-design/index.html', null, '/sound-design'],
   ['game-scoring/index.html', null, '/game-scoring'],
   ['404.html', null, null],

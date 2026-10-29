@@ -68,8 +68,8 @@ const isFile = (rel) => {
 /** _redirects: exact source → destination, 301/308 only (rewrites pass through). */
 const redirects = new Map();
 for (const raw of fs.readFileSync(path.join(root, '_redirects'), 'utf8').split(/\r?\n/)) {
-  const line = raw.replace(/#.*$/, '').trim();
-  if (!line) continue;
+  const line = raw.trim();
+  if (!line || line.startsWith('#')) continue;
   const [from, to, status] = line.split(/\s+/);
   if (!from || !to || /[*:(]/.test(from)) continue;
   if (!['301', '302', '308', '307'].includes(status)) continue;
@@ -91,7 +91,10 @@ function resolvePath(urlPath, seen = 0) {
   if (redirects.has(urlPath)) {
     if (seen > 3) return { file: null, via: null };
     const next = redirects.get(urlPath);
-    const resolved = resolvePath(next, seen + 1);
+    let nextPath = next;
+    try { nextPath = new URL(next, 'https://horror.zazieproductions.com').pathname; }
+    catch { /* leave malformed redirect target for the resolver to reject */ }
+    const resolved = resolvePath(nextPath, seen + 1);
     return { file: resolved.file, via: next, redirected: true };
   }
   return { file: resolveFile(urlPath), via: null, redirected: false };

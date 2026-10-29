@@ -12,7 +12,7 @@
  * tools/pricing.test.mjs.
  */
 import assert from 'node:assert/strict';
-import { readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { test } from 'node:test';
@@ -81,6 +81,7 @@ test('inquiry form asks for a stated budget and musical references, visibly', ()
   assert.ok(form.indexOf('name="budget"') < form.indexOf('zp-inq-details'), 'budget is always visible');
   assert.ok(form.indexOf('name="tone"') < form.indexOf('zp-inq-details'), 'references are always visible');
   assert.doesNotMatch(form, /name="pkg"/, 'no package select');
+  assert.doesNotMatch(form, /type="checkbox"|mutual NDA|unreleased material is treated as confidential/i, 'no NDA checkbox or helper claim remains in the form');
   assert.doesNotMatch(form, RETIRED_FEE, 'no retired fee language anchors the form');
   assert.match(form, /no published rate card/i, 'the form explains the model in place');
 });
@@ -91,7 +92,7 @@ test('Offer schema carries availability, never a price', () => {
   assert.doesNotMatch(text, /price/i);
   const offer = graph['@graph'][0];
   assert.equal(offer.availability, 'https://schema.org/LimitedAvailability');
-  assert.ok(offer.url.endsWith('/contact'));
+  assert.ok(offer.url.endsWith('/#contact'));
 });
 
 test('built commissioning pages publish no fee and funnel to the inquiry', () => {
@@ -99,12 +100,14 @@ test('built commissioning pages publish no fee and funnel to the inquiry', () =>
   assert.doesNotMatch(services, RETIRED_FEE, '/services: no retired fees');
   assert.doesNotMatch(services, /data-zp-est|Preliminary estimate/, '/services: no estimator');
   assert.doesNotMatch(services, /priceSpecification/, '/services: no priced Offer schema');
-  assert.match(services, /href="\/contact"[^>]*>\s*Start a scoring inquiry/, '/services ends in the inquiry CTA');
+  assert.match(services, /href="\/#contact"[^>]*>\s*Start a scoring inquiry/, '/services links to the homepage inquiry form');
 
-  const contact = read('contact/index.html');
-  assert.match(contact, /name="budget"/);
-  assert.match(contact, /name="tone"/);
-  assert.doesNotMatch(contact, RETIRED_FEE, '/contact: no retired fees anchor the budget select');
+  const home = read('index.html');
+  assert.match(home, /id="contact"/, 'the homepage carries the inquiry section');
+  assert.match(home, /name="scored-minutes-music-not-film-length"/);
+  assert.doesNotMatch(home, RETIRED_FEE, 'the homepage inquiry carries no retired fees');
+  assert.ok(!existsSync(path.join(ROOT, 'contact/index.html')), 'the standalone contact page is removed');
+  assert.match(read('_redirects'), /^\/contact\s+\/#contact\s+301$/m, 'legacy contact links redirect to the homepage inquiry');
 
   const hire = read('hire-a-composer/index.html');
   assert.doesNotMatch(hire, RETIRED_FEE, '/hire-a-composer: no retired fees');
@@ -113,11 +116,13 @@ test('built commissioning pages publish no fee and funnel to the inquiry', () =>
   assert.doesNotMatch(faq, RETIRED_FEE, '/faq: fee answers carry no figures');
 });
 
-test('homepage renders commissioning, not rates, in static HTML and bundle', () => {
+test('homepage omits commissioning and closing sections while preserving the service route and inquiry form', () => {
   const home = read('index.html');
-  assert.match(home, /Commissioning a score/);
-  assert.doesNotMatch(home, /Rates &(amp;)? estimates/);
-  assert.doesNotMatch(home, />Rates</, 'nav label retired');
+  assert.doesNotMatch(home, /id="services"|Commissioning a score|How commissioning works|zp-steps|READY WHEN YOU ARE|zp-close/);
+  assert.doesNotMatch(home, /href="#services"/, 'no homepage link points to a removed anchor');
+  assert.match(home, /href="\/services"[^>]*>Services/, 'the separate services route remains linked');
+  assert.match(home, /id="contact"/, 'the homepage inquiry section remains');
+  assert.doesNotMatch(home, /WGA|DGA|mutual NDA protocol/i, 'the removed confidentiality claim stays absent');
   for (const range of [BUDGET_RANGES[0], BUDGET_RANGES[3]]) {
     assert.ok(home.includes(range), `homepage budget select: ${range}`);
   }
@@ -125,8 +130,9 @@ test('homepage renders commissioning, not rates, in static HTML and bundle', () 
   const bundleName = readdirSync(ROOT).find((f) => /^index-[0-9a-f]{8}\.js$/.test(f));
   assert.ok(bundleName, 'patched homepage bundle exists');
   const bundle = read(bundleName);
-  assert.match(bundle, /Commissioning a score/);
-  assert.match(bundle, /label:"Services"/);
+  assert.doesNotMatch(bundle, /id:"services"|Commissioning a score|How commissioning works|zp-steps|READY WHEN YOU ARE|zp-close/);
+  assert.doesNotMatch(bundle, /href:"#services"/, 'bundle has no dead services anchor');
+  assert.match(bundle, /href:"\/services",label:"Services"/, 'bundle keeps a link to the dedicated services route');
   assert.ok(bundle.includes(BUDGET_RANGES[3]), 'bundle budget list comes from commission.ts');
   assert.doesNotMatch(bundle, /Individual Scene Scoring: from/, 'no package-derived budget strings');
 });

@@ -202,16 +202,6 @@
   X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/services>; rel="canonical"
 
-/contact
-  X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/contact>; rel="canonical"
-/contact/
-  X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/contact>; rel="canonical"
-/contact/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/contact>; rel="canonical"
-
 /hire-a-composer
   X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/hire-a-composer>; rel="canonical"

@@ -51,7 +51,7 @@ const llmsTxt = `# ${SITE_NAME} | Experimental Psychological Horror Film Compose
 
 - **Composer & Founder:** ${AUTHOR_NAME} ([IMDb nm17333332](https://www.imdb.com/name/nm17333332/))
 - **Studio Legal Entity:** Zazie Productions LLC · Asheville, NC, USA (remote spotting, review, and electronic WAV delivery worldwide)
-- **Direct Commission Contact:** \`zaziediya@gmail.com\` · \`+1 (864) 430-0606\` · [Request a Scoring Quote](${SITE_ORIGIN}/contact)
+- **Direct Commission Contact:** \`zaziediya@gmail.com\` · \`+1 (864) 430-0606\` · [Request a Scoring Quote](${SITE_ORIGIN}/#contact)
 - **Primary Specialism:** Experimental psychological horror for independent and arthouse cinema; also folk horror, body horror, experimental art house, elevated horror, supernatural dread, cosmic horror, techno-thriller, dark sci-fi, and survival/adaptive horror games
 - **Signature Acoustic & Electroacoustic Palette:** Bowed metal, performed waterphone, struck & prepared strings, field & impulse recordings, granular processing, modular/custom synthesis, and hybrid orchestration
 - **International Festival & Institutional Recognition:** Featured at **Ars Electronica 2026** (20.4-channel spatial audio work), **EXiS Seoul** (2025), **MUSLAB / Cero Records** (2025), **Visual Container Winter 2024 Award**, and commissioned by the **Black Mountain College Museum + Arts Center**
@@ -64,7 +64,6 @@ ${[
   '/how-to-hire-a-horror-composer',
   '/services',
   '/process',
-  '/contact',
   '/composer',
   '/game-scoring',
   '/sound-design',

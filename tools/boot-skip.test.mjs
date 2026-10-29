@@ -15,9 +15,9 @@ const html = fs.readFileSync(new URL('index.html', root), 'utf8');
 const sw = fs.readFileSync(new URL('sw.js', root), 'utf8');
 
 const bootCss = /<style id="zp-boot-style">([\s\S]*?)<\/style>/.exec(html)?.[1] ?? '';
-const gateScript = /<script>\s*\/\* ZP ARCHIVE BOOT — gate[\s\S]*?<\/script>/.exec(html)?.[0]
+const gateScript = /<script>\s*\/\* ZP ARCHIVE BOOT\s+-\s+gate[\s\S]*?<\/script>/.exec(html)?.[0]
   ?.replace(/^<script>|<\/script>$/g, '') ?? '';
-const driverScript = /<script>\s*\/\* ZP ARCHIVE BOOT — silent[\s\S]*?<\/script>/.exec(html)?.[0]
+const driverScript = /<script>\s*\/\* ZP ARCHIVE BOOT\s+-\s+silent[\s\S]*?<\/script>/.exec(html)?.[0]
   ?.replace(/^<script>|<\/script>$/g, '') ?? '';
 const bootMarkup = /(<div id="zp-boot"[\s\S]*?<\/div>\s*<\/div>\s*<\/div>\s*<\/div>)/.exec(html)?.[1] ?? '';
 

@@ -89,7 +89,7 @@ test('the homepage and every cue offer downloads from the same published reel', 
 
   const home = read('index.html');
   const homeBundle = /import\("\/(index-[0-9a-f]{8}\.js)"\)/.exec(home)?.[1];
-  assert.match(home, /href="\/reel#download"[^>]*>[\s\S]*?Download demo reel<\/a>/);
+  assert.match(home, /href="\/reel#download"[^>]*>[\s\S]*?Take the reel with you<\/a>/);
   assert.ok(homeBundle && read(homeBundle).includes('href:"/reel#download"'), 'the link survives the React mount');
 
   const tracks = readReelTracks(cueDocument(publishedRows()));
