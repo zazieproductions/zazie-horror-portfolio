@@ -52,6 +52,7 @@ import {
   simplifyShowreelHeaderBundle,
   removeShowreelCountBundle,
   removeShowreelCountStatic,
+  removeMethodSectionStatic,
   simplifyShowreelHeaderStatic,
   removeHeroBookingBundle,
   removeHeroBookingStatic,
@@ -355,14 +356,17 @@ const PAIRS = [
     BUNDLE,
   ],
   ['u.jsx(cj,{"data-source-loc":"src/App.tsx:46:10"}),', '', BUNDLE],
+  // "02 · Approach" (#method) removed 2026-10-29 at the owner's request: the
+  // three cards restated the process story already carried by /process and the
+  // commissioning pages. The render call comes out here; the section component
+  // (ej) and its card data (tj) are cut by the parser in patchBundle, and
+  // removeMethodSectionStatic drops the matching static markup.
+  ['u.jsx(ej,{"data-source-loc":"src/App.tsx:41:10"}),', '', BUNDLE],
   // The film-samples intro is now an unnumbered Showreel heading. Keep the
-  // remaining numbered section kickers contiguous: Biography 01, Approach 02,
-  // Contact 03.
-  ['04 · Approach', '02 · Approach', HTML],
-  ['03 · Approach', '02 · Approach', BUNDLE],
+  // remaining numbered section kickers contiguous: Biography 01, Contact 02.
   ['03 · Biography', '01 · Biography', HTML],
   ['05 · Biography', '01 · Biography', BUNDLE],
-  ['06 · Contact', '03 · Contact', BOTH],
+  ['06 · Contact', '02 · Contact', BOTH],
   // Contact
   ['Share your format, runtime, timeline, and budget. The form prepares an email for you to review and send.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', BUNDLE],
   ['Share your format, scored minutes, timeline, and budget.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', HTML],
@@ -706,6 +710,26 @@ function patchBundle(orig) {
       throw new Error('bundle: testimonials data s1 is still referenced after removal');
     }
   }
+  // Approach excision (2026-10-29). The render call for #method is gone with
+  // the PAIRS above, so the section component (ej) and the three-card data it
+  // alone reads (tj) are unreferenced. Statement-level cuts keep the minified
+  // neighbours intact, and the finders demand exactly one top-level hit so a
+  // future minifier rename fails the build here instead of shipping a
+  // half-removed section.
+  {
+    const cut = findTopLevelFunction(out, 'ej');
+    out = out.slice(0, cut.start) + out.slice(cut.end);
+    if (out.includes('jsx(ej') || out.includes('jsxs(ej')) {
+      throw new Error('bundle: Approach component ej is still rendered after removal');
+    }
+  }
+  {
+    const cut = findTopLevelVariable(out, 'tj');
+    out = out.slice(0, cut.start) + out.slice(cut.end);
+    if (/\btj\b/.test(out)) {
+      throw new Error('bundle: Approach card data tj is still referenced after removal');
+    }
+  }
   out = addCompilationsSection(out);
   // The homepage services render call is removed above; remove its now-unused
   // component too so commissioning copy does not remain dormant in the bundle.
@@ -793,12 +817,14 @@ function addCompilationsSection(source) {
 function patchStatic(html, tracks) {
   let out = normalizeStaticCopy(html);
   out = normalizeStaticSections(out);
+  out = removeMethodSectionStatic(out);
   out = stripDerivedFieldNames(out).replaceAll('rel="noreferrer"', 'rel="noopener noreferrer"');
   const applied = [];
   // Normalize the previous generated section numbering back to its pristine
   // source values before applying the current contiguous sequence.
   if (countOf(out, '02 · Biography') === 1) out = out.replace('02 · Biography', '03 · Biography');
-  if (countOf(out, '03 · Approach') === 1) out = out.replace('03 · Approach', '04 · Approach');
+  if (countOf(out, '02 · Contact') === 1) out = out.replace('02 · Contact', '06 · Contact');
+  if (countOf(out, '03 · Contact') === 1) out = out.replace('03 · Contact', '06 · Contact');
   if (countOf(out, '04 · Contact') === 1) out = out.replace('04 · Contact', '06 · Contact');
   if (countOf(out, '05 · Contact') === 1) out = out.replace('05 · Contact', '06 · Contact');
   for (const [oldText, newText, target] of PAIRS) {
@@ -964,23 +990,6 @@ function patchStatic(html, tracks) {
       '<nav aria-label="Primary navigation" class="hidden items-center gap-1 xl:flex">',
     );
     applied.push('added aria-label="Primary navigation" to header <nav>');
-  }
-
-  // Convert the 3 Approach cards in #method from generic <div> to semantic <article>.
-  {
-    const methodStart = out.indexOf('<section id="method"');
-    const methodEnd = out.indexOf('</section>', methodStart);
-    if (methodStart >= 0 && methodEnd > methodStart) {
-      const beforeMethod = out.slice(methodStart, methodEnd);
-      const afterMethod = beforeMethod.replace(
-        /<div class="(group border border-ash bg-ink\/70 p-5 transition-colors hover:border-blood\/40 sm:p-7)">([\s\S]*?<p class="text-sm leading-relaxed text-mist">[\s\S]*?<\/p>)<\/div>/g,
-        '<article class="$1">$2</article>',
-      );
-      if (afterMethod !== beforeMethod) {
-        out = out.slice(0, methodStart) + afterMethod + out.slice(methodEnd);
-        applied.push('converted #method cards to <article>');
-      }
-    }
   }
 
   // The 8 film sample <article> cards in #work keep id="sample-${slug}" but

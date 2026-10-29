@@ -98,47 +98,15 @@ export const COPY = [
    * `src/lib/press-kit-markup.ts` and is injected identically into both
    * `index.html` and `I5()` by `home-src/build.mjs`. */
 
-  /* ---------------------------------------------- 7. DESIRE — #method cards */
-  {
-    id: 'method.h2', stage: 'desire',
-    from: 'A distinct point of view, built for the story.',
-    to: 'How the dread actually gets built.',
-  },
-  {
-    id: 'method.lead', stage: 'desire',
-    from: 'Themes, harmony, texture, and tension are shaped to picture, with clear spotting, revisions, and delivery.',
-    to: 'Every cue is shaped to your picture, not a template: themes, harmony, texture and tension, with agreed spotting, defined revisions and delivery you can plan around.',
-  },
-  {
-    id: 'method.card1.title', stage: 'desire',
-    from: 'Psychological architecture',
-    to: 'Tension you can control',
-  },
-  {
-    id: 'method.card1.body', stage: 'desire',
-    from: 'Cues built around how dread lands: slow-burn beds, dissociative harmony, and tension that hits the cut, not the cliché.',
-    to: 'Cues built around how dread lands: slow-burn beds, dissociative harmony and releases timed to your cut — so the audience is afraid before anything happens.',
-  },
-  {
-    id: 'method.card2.title', stage: 'desire',
-    from: 'Dark atmospheric color',
-    to: 'A palette that is not a preset',
-  },
-  {
-    id: 'method.card2.body', stage: 'desire',
-    from: 'Hybrid orchestral haze, sub-frequency gravity, frozen ambient space. Every color chosen for story. Never stock "scary pack" mood.',
-    to: 'Hybrid orchestral haze, bowed metal, sub-frequency gravity and frozen ambient space. Every color chosen for the story. Never a stock scary-pack preset.',
-  },
-  {
-    id: 'method.card3.title', stage: 'desire',
-    from: 'Cinematic themes that stalk',
-    to: 'Themes that survive the trailer cut',
-  },
-  {
-    id: 'method.card3.body', stage: 'desire',
-    from: 'Motifs that survive the festival loop and the trailer cut. Music you remember in the parking lot.',
-    to: 'Motifs that survive the festival loop, the trailer cut and the scroll. Music the audience takes out of the room with them.',
-  },
+  /* -------------------- 7. DESIRE — #method (Approach) section removed */
+
+  /* The "02 · Approach" block (#method) was removed on 2026-10-29. Its three
+     cards restated the process story already told on /process and the
+     commissioning pages, and the owner wanted the homepage to run from the
+     credits and press straight to the inquiry form. The copy entries that used
+     to rewrite those cards are gone with the section, so there is nothing left
+     to normalize or apply; the static removal lives in removeMethodSectionStatic
+     and the bundle render call + component cuts in home-src/build.mjs. */
 
   /* ------------------------------- 8. TRUST — retired homepage services copy */
 
@@ -688,6 +656,24 @@ export function removeShowreelCountBundle(bundle) {
 
 export function removeShowreelCountStatic(html) {
   return html.replace(/<div class="flex items-end gap-3 rounded-sm border border-white\/5 bg-white\/\[0\.02\] px-5 py-4 backdrop-blur-sm md:flex-col md:items-end"><p class="font-display text-5xl leading-none text-blood sm:text-6xl">\d+<\/p><p class="pb-1 text-\[10px\] uppercase tracking-\[0\.3em\] text-mist">Curated cues<\/p><\/div>/, '');
+}
+
+/**
+ * Drop the homepage "02 · Approach" block (#method) outright (2026-10-29).
+ * The section is a single top-level `<section id="method">…</section>` with no
+ * nested section, so the first closing tag ends it. Idempotent: once the
+ * section is gone from the snapshot this returns the markup untouched.
+ */
+export function removeMethodSectionStatic(html) {
+  const opening = '<section id="method"';
+  const start = html.indexOf(opening);
+  if (start < 0) return html;
+  if (html.indexOf(opening, start + opening.length) >= 0) {
+    throw new Error('conversion-copy/static: #method matched more than once');
+  }
+  const end = html.indexOf('</section>', start);
+  if (end < 0) throw new Error('conversion-copy/static: #method section never closes');
+  return html.slice(0, start) + html.slice(end + '</section>'.length);
 }
 
 export function removeHeroBookingBundle(bundle) {

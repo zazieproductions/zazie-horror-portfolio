@@ -112,13 +112,20 @@ test('the biography sits before the compilations in the static page and the bund
   assert.equal(bundle.match(/u\.jsx\(rj,/g)?.length, 1, 'the biography renders exactly once');
   // Video and music sections use simple, distinct headings; the remaining
   // numbered kickers stay contiguous after the samples kicker is removed.
-  const kickers = ['01 · Biography', '02 · Approach', '03 · Contact']
+  const kickers = ['01 · Biography', '02 · Contact']
     .map((marker) => html.indexOf(marker));
   assert.ok(kickers.every((at) => at >= 0), 'every remaining numbered kicker is present');
-  assert.deepEqual([...kickers].sort((a, b) => a - b), kickers, 'remaining section numbers run 01-03 in page order');
-  for (const marker of ['01 · Biography', '02 · Approach', '03 · Contact']) {
+  assert.deepEqual([...kickers].sort((a, b) => a - b), kickers, 'remaining section numbers run 01-02 in page order');
+  for (const marker of ['01 · Biography', '02 · Contact']) {
     assert.ok(bundle.includes(marker), `bundle contains ${marker}`);
   }
+  // The "02 · Approach" block (#method) was removed on 2026-10-29; neither
+  // render path may resurrect it or leave a dangling anchor to it.
+  for (const removed of ['id="method"', 'Approach', 'How the dread actually gets built.', 'Tension you can control', 'A palette that is not a preset', 'Themes that survive the trailer cut']) {
+    assert.ok(!html.includes(removed), `retired Approach markup stays absent from index.html: ${removed}`);
+    assert.ok(!bundle.includes(removed), `retired Approach markup stays absent from the bundle: ${removed}`);
+  }
+  assert.ok(!html.includes('href="#method"') && !bundle.includes('href:"#method"'), 'removed #method anchor has no dangling links');
   for (const removed of ['Commissioning a score', '04 · Scoring services', 'READY WHEN YOU ARE', 'zp-close']) {
     assert.ok(!html.includes(removed) && !bundle.includes(removed), `retired homepage block stays absent: ${removed}`);
   }
@@ -252,7 +259,7 @@ test('homepage copy stays concise in both render paths', () => {
   assert.ok(!html.includes('id="zp-objections"') && !bundle.includes('zpFnObjections'));
 });
 
-test('press kit (#press) ships laurels, Lake Ivan Film Journal quotes, and fancy links in both SSR and bundle without retired or redundant chrome', () => {
+test('press kit (#press) ships laurels, a curated mix of press quotes, and fancy links in both SSR and bundle without retired or redundant chrome', () => {
   const bundleMatch = /import\("\/(index-[0-9a-f]{8}\.js)"\)/.exec(html);
   assert.ok(bundleMatch, 'index.html still imports its hashed React bundle');
   const bundle = read(bundleMatch[1]);
@@ -283,12 +290,21 @@ test('press kit (#press) ships laurels, Lake Ivan Film Journal quotes, and fancy
     'Lake Ivan Film Journal',
     'David Finkelstein',
     'gushingly assaultive onslaught with finesse and precision',
+    'His scores are built around tension, anticipation, and psychological misdirection.',
+    'Listening on headphones feels almost physical, as if the music is happening around you rather than in front of you.',
+    'Ethan Walker · BillboardWire',
+    'Limitless Magazine · Anesthesia for the Signal Age',
+    'https://billboardwire.com/how-an-underground-experimental-musician-became-a-go-to-composer-for-psychological-horror/',
+    'https://limitless-magazine.com/2026/06/12/forget-asmr-zazie-productions-will-rewire-your-whole-nervous-system/',
     'zp-pk-feature-card',
     'zp-pk-dir-link',
   ]) {
     assert.ok(pressSection.includes(required), `SSR #press carries "${required}"`);
     assert.ok(bundle.includes(required), `React bundle #press carries "${required}"`);
   }
+
+  assert.equal((pressSection.match(/class="zp-pk-(?:lead|mini)-quote"/g) || []).length, 3);
+  assert.equal((pressSection.match(/David Finkelstein/g) || []).length, 2, 'one quote attribution plus one feature description');
 
   const pressStyle = /<style id="zp-press-style">([\s\S]*?)<\/style>/.exec(html)?.[1];
   assert.ok(pressStyle && pressStyle.includes('.zp-pk-laurel-card'), '#zp-press-style ships inline');

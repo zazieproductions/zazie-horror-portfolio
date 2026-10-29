@@ -288,11 +288,9 @@ test('skip button markup is accessible, free of aria-hidden ancestors, and style
   assert.match(btnRule, /font:600 12px\/1/);
   assert.match(bootCss, /html\.zp-boot-on \.zp-skip\{display:none\}/);
   assert.match(bootCss, /#zp-boot\.zp-off\.zp-fast\{animation:zpFadeOut \.16s ease forwards\}/);
-  // The document is precached as '/', so any change to index.html or its home
-  // bundle has to move the cache name with it (v51: Press Kit overhaul with
-  // festival laurels, Lake Ivan Film Journal spotlight, and verified profile
-  // directory merged atop v50 showreel/composer updates).
-  assert.match(sw, /CACHE_NAME\s*=\s*'zazie-v51'/);
+  // The document and homepage bundle are precached, so the press quote update
+  // requires a fresh cache (v53).
+  assert.match(sw, /CACHE_NAME\s*=\s*'zazie-v53'/);
 });
 
 test('clicking #zp-boot-skip immediately dismisses the intro in fast mode and removes the node', async () => {
