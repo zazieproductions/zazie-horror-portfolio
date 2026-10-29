@@ -70,7 +70,7 @@ const { budgetSelectOptions } = await import('../build/lib/commission-markup.js'
 const { BUDGET_RANGES } = await import('../build/data/commission.js');
 const { compilationsSectionHtml, compilationsInnerHtml, SECTION_CLASS, CONTAINER_CLASS, COMPILATIONS_CSS, COMPILATIONS_JS } =
   await import('../build/lib/compilations-markup.js');
-const { pressKitSectionHtml, pressKitInnerHtml, PRESS_SECTION_CLASS, PRESS_CONTAINER_CLASS, PRESS_CSS } =
+const { pressKitSectionHtml, pressKitInnerHtml, PRESS_SECTION_CLASS, PRESS_CONTAINER_CLASS, PRESS_CSS, heroLaurelsHtml, HERO_LAURELS_CSS } =
   await import('../build/lib/press-kit-markup.js');
 const { homePosterClientData } = await import('../build/lib/home.js');
 
@@ -1061,6 +1061,10 @@ function patchStatic(html, tracks) {
   out = removeHeroBookingStatic(out);
   out = removeHeroProofStatic(out);
   out = injectHeroLineageStatic(out);
+  out = out.replace(/<!--ZP-HERO-LAURELS-->[\s\S]*?<!--ZP-HERO-LAURELS-END-->/g, '');
+  const opening = '<p class="mb-4 text-[10px] uppercase tracking-[0.38em] text-mist sm:text-[11px]">';
+  if (countOf(out, opening) !== 1) throw new Error('Static hero opening anchor drifted');
+  out = out.replace(opening, () => `<!--ZP-HERO-LAURELS-->${heroLaurelsHtml()}<!--ZP-HERO-LAURELS-END-->${opening}`);
   {
     const pressRe = /<section id="press"(?:\s|>)[\s\S]*?<\/section>/;
     if (!pressRe.test(out)) throw new Error('index.html: #press section not found');
@@ -1076,7 +1080,7 @@ function patchStatic(html, tracks) {
 /** Inline style for the Electronic Press Kit (#press) section. */
 function ensurePressKitAssets(html) {
   let out = html;
-  const block = `<style id="zp-press-style">${PRESS_CSS}</style>`;
+  const block = `<style id="zp-press-style">${PRESS_CSS}${HERO_LAURELS_CSS}</style>`;
   const existing = /<style id="zp-press-style">[\s\S]*?<\/style>/g;
   let kept = false;
   const before = out;
@@ -1147,7 +1151,13 @@ const origHash = crypto.createHash('sha256').update(orig).digest('hex');
 if (!origHash.startsWith('2afd4ec8')) throw new Error(`bundle.orig.js is not the shipped bundle (sha256 ${origHash})`);
 
 // Retire the standalone Services route in both React navigation arrays and CTAs.
-const patched = patchBundle(orig)
+const heroLaurels = heroLaurelsHtml();
+function injectOpeningLaurels(bundle) {
+  const anchor = 'u.jsx(Bt.p,{custom:1,variants:Ss,initial:"hidden",animate:"show",className:"mb-4 text-[10px] uppercase tracking-[0.38em] text-mist sm:text-[11px]"';
+  if (countOf(bundle, anchor) !== 1) throw new Error('Hero opening anchor drifted');
+  return bundle.replace(anchor, () => `u.jsx("div",{dangerouslySetInnerHTML:{__html:${JSON.stringify(heroLaurels)}}}),${anchor}`);
+}
+const patched = injectOpeningLaurels(patchBundle(orig))
   .replace(/\{href:"\/services",label:"Services",title:"[^"]*"\},?/g, '')
   .replace(/\["\/services","Services"\],?/g, '')
   .replaceAll('href:"/services"', 'href:"/#contact"');
