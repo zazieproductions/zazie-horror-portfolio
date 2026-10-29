@@ -3,20 +3,34 @@
 # service, privacy policy, and support documentation.
 #
 # Lighthouse audit for the published horror.zazieproductions.com site.
-# Uses jakejarvis/lighthouse-action (GitHub Marketplace: "Lighthouse Audit"),
-# which runs Google Lighthouse against a URL, prints the Performance,
-# Accessibility, Best Practices, SEO and PWA scores (out of 100) to the step
-# output, and uploads the HTML and JSON reports as workflow artifacts.
+# Uses treosh/lighthouse-ci-action (GitHub Marketplace: "Lighthouse CI
+# Action"), which runs Google Lighthouse (via Lighthouse CI) against a URL
+# on the runner's preinstalled Chrome and uploads the HTML and JSON reports
+# as a workflow artifact. The step after it prints the Performance,
+# Accessibility, Best Practices and SEO scores (out of 100) to the job summary.
 #
-# Source: https://github.com/jakejarvis/lighthouse-action
-# Marketplace: https://github.com/marketplace/actions/lighthouse-audit
-# Latest release at authoring: v0.3.2
+# Source: https://github.com/treosh/lighthouse-ci-action
+# Marketplace: https://github.com/marketplace/actions/lighthouse-ci-action
+# Pinned release: 12.6.2 (bundles Lighthouse 12.6, runs on node24)
 #
-# The action installs Chrome and Lighthouse itself, so nothing needs to be
-# installed in the job. It audits a live, reachable URL -- this repo's
-# production site is not a PR preview, so unmerged changes are not audited
-# here; the deploy workflow (deploy.yml) already runs the live route audit
-# against whatever was just deployed.
+# WHY NOT jakejarvis/lighthouse-action
+#
+# That action (last release v0.3.2) is unmaintained. Its Docker image runs an
+# old Node and `npm install -g lighthouse` with no version pin, so every image
+# build pulled a Lighthouse that no longer runs on that Node and crashed with
+# `ERR_MODULE_NOT_FOUND: Cannot find package 'timers'`. It also declared no
+# inputs (hence the "Unexpected input(s) 'url'" warning) and parsed the `pwa`
+# category, which Lighthouse 12 removed. Pinning the tag cannot fix it: the
+# Lighthouse version is resolved when the image is built, not by the tag.
+#
+# Nothing needs to be installed in the job. It audits a live, reachable URL --
+# this repo's production site is not a PR preview, so unmerged changes are
+# not audited here; the deploy workflow (deploy.yml) already runs the live
+# route audit against whatever was just deployed.
+#
+# Note: the site serves crawlers, headless clients and Lighthouse the static,
+# no-bundle path (see PERFORMANCE.md, `ZP_RUNTIME_BOT`), so these scores
+# describe that path, not the idle-loaded React mount human visitors get.
 #
 # TRIGGERS
 #   push to main        audit the live production site after it ships
@@ -59,15 +73,36 @@ jobs:
       - name: Run Lighthouse audit
         id: lighthouse
         # Pin to a release; bump after reviewing the action's releases:
-        # https://github.com/jakejarvis/lighthouse-action/releases
-        uses: jakejarvis/lighthouse-action@v0.3.2
+        # https://github.com/treosh/lighthouse-ci-action/releases
+        uses: treosh/lighthouse-ci-action@12.6.2
         with:
-          url: ${{ inputs.url || 'https://horror.zazieproductions.com' }}
+          urls: ${{ inputs.url || 'https://horror.zazieproductions.com' }}
+          # Three runs; Lighthouse CI picks the median as the representative
+          # run, which damps network noise on a live-site audit.
+          runs: 3
+          # Uploads every run's HTML + JSON report (.lighthouseci/) as the
+          # `lighthouse-report` artifact -- replaces the separate
+          # actions/upload-artifact step the old action needed.
+          uploadArtifacts: true
+          artifactName: lighthouse-report
 
-      - name: Upload Lighthouse report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: lighthouse-report
-          path: ./report
-          if-no-files-found: warn
+      - name: Lighthouse scores
+        if: always() && steps.lighthouse.outputs.resultsPath != ''
+        env:
+          RESULTS_PATH: ${{ steps.lighthouse.outputs.resultsPath }}
+        run: |
+          node --input-type=module -e '
+            import { appendFileSync, readFileSync } from "node:fs";
+            import { join } from "node:path";
+            const manifest = JSON.parse(readFileSync(join(process.env.RESULTS_PATH, "manifest.json"), "utf8"));
+            const cats = [["performance", "Performance"], ["accessibility", "Accessibility"], ["best-practices", "Best Practices"], ["seo", "SEO"]];
+            const fmt = (s) => (typeof s === "number" ? String(Math.round(s * 100)) : "n/a");
+            const lines = ["### Lighthouse", "", "| URL | " + cats.map(([, l]) => l).join(" | ") + " |", "|---|" + cats.map(() => "---:").join("|") + "|"];
+            for (const run of manifest.filter((r) => r.isRepresentativeRun)) {
+              lines.push("| " + run.url + " | " + cats.map(([k]) => fmt(run.summary[k])).join(" | ") + " |");
+            }
+            lines.push("", "Representative (median) run of " + manifest.length + ". Full HTML/JSON reports: the `lighthouse-report` artifact.");
+            const out = lines.join("\n") + "\n";
+            process.stdout.write(out);
+            if (process.env.GITHUB_STEP_SUMMARY) appendFileSync(process.env.GITHUB_STEP_SUMMARY, out);
+          '

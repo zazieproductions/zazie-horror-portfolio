@@ -1,0 +1,308 @@
+name: RoastMyCode PR review
+
+# Native GitHub Actions PR code review inspired by RoastMyCode.ai
+# (https://github.com/marketplace/roastmycode-ai).
+#
+# WHY THIS EXISTS
+#
+# `aislop.yml` enforces deterministic static rules across the tree. This
+# workflow posts a RoastMyCode-style staff-engineer review on every pull
+# request: a calibrated letter grade (A+ through F), 0-100 scores across six
+# categories (Security, Architecture, Bugs, Performance, Dependencies, Code
+# Quality), specific line-referenced burns, concrete fix snippets, and a
+# Redemption Arc.
+#
+# HOW IT WORKS (DUAL ENGINE — ZERO SECRETS REQUIRED)
+#
+# Note: GitHub retired the `models.github.ai` GitHub Models endpoint on
+# 2026-07-30 (`actions/ai-inference@v1/v2` now receives plain-text `OK`), and
+# `actions/ai-inference@v3` requires `COPILOT_PAT`. So this workflow ships a
+# two-tier engine that works out-of-the-box with zero repository secrets:
+#
+# 1. Explorer & Deterministic Roaster (`.github/roast/cli.mjs prepare`) —
+#    always runs first with zero secrets. Skips committed minified bundles
+#    (`index-*.js`, `store-*.css`, etc.), lockfiles and binary media, checks
+#    diff hunks for security/bug/performance/quality hazards and repository
+#    guardrails (`_headers` parity, zero runtime dependencies, generated item
+#    HTML edits, workflow expression injection), and builds a calibrated roast.
+# 2. Optional LLM Deep-Roast Upgrade — automatically activates if any optional
+#    repository secret is configured:
+#      - `COPILOT_PAT`         -> runs `actions/ai-inference@v3` (Copilot CLI)
+#      - `OPENAI_API_KEY`      -> calls OpenAI Chat Completions (`gpt-4o`)
+#      - `OPENROUTER_API_KEY`  -> calls OpenRouter Chat Completions
+#    Verified LLM findings merge with deterministic guardrail findings; if no
+#    secret is set (or an API call fails), the deterministic roast publishes
+#    cleanly with no red CI check.
+# 3. Publisher (`.github/roast/cli.mjs render`) — drops hallucinated paths not
+#    in the PR diff, sanitizes untrusted text, writes to `$GITHUB_STEP_SUMMARY`,
+#    and creates or updates a single sticky PR comment (`<!-- pr-roast-comment -->`).
+#
+# MANUAL DISPATCH
+#
+#   gh workflow run roast.yml -f pr=172
+#   gh workflow run roast.yml -f pr=172 -f heat=inferno
+#   gh workflow run roast.yml -f base_ref=main -f heat=nuclear   # summary-only
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: Pull request number to roast (leave blank to diff HEAD against base_ref in job summary)
+        required: false
+        default: ''
+        type: string
+      base_ref:
+        description: Base branch when `pr` is blank
+        required: false
+        default: main
+        type: string
+      heat:
+        description: Roast heat level
+        required: false
+        default: medium-rare
+        type: choice
+        options:
+          - gentle
+          - medium-rare
+          - inferno
+          - nuclear
+      model:
+        description: Optional LLM model override (when COPILOT_PAT / OPENAI_API_KEY / OPENROUTER_API_KEY is set)
+        required: false
+        default: ''
+        type: string
+      post_comment:
+        description: Post/update comment on the pull request when `pr` is provided
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: roast-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  roast:
+    if: github.actor != 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+
+      - name: Self-test roast engine
+        run: node --test .github/roast/pr-roast.test.mjs
+
+      - name: Resolve pull request target
+        id: target
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_PR_NUMBER: ${{ github.event.pull_request.number }}
+          EVENT_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          EVENT_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          EVENT_PR_TITLE: ${{ github.event.pull_request.title }}
+          EVENT_PR_BODY: ${{ github.event.pull_request.body }}
+          EVENT_HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          INPUT_PR: ${{ inputs.pr }}
+          INPUT_BASE_REF: ${{ inputs.base_ref }}
+          INPUT_POST_COMMENT: ${{ inputs.post_comment }}
+          HAS_COPILOT: ${{ secrets.COPILOT_PAT != '' }}
+          HAS_OPENAI: ${{ secrets.OPENAI_API_KEY != '' }}
+          HAS_OPENROUTER: ${{ secrets.OPENROUTER_API_KEY != '' }}
+        run: |
+          set -euo pipefail
+          meta_dir="$RUNNER_TEMP/roast-target"
+          mkdir -p "$meta_dir"
+
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            pr_number="$EVENT_PR_NUMBER"
+            base_sha="$EVENT_BASE_SHA"
+            head_sha="$EVENT_HEAD_SHA"
+            printf '%s' "$EVENT_PR_TITLE" > "$meta_dir/title.txt"
+            printf '%s' "$EVENT_PR_BODY" > "$meta_dir/body.txt"
+            if [ "$EVENT_HEAD_REPO" = "$REPO" ]; then
+              can_comment="true"
+            else
+              can_comment="false"
+            fi
+          elif [ -n "$INPUT_PR" ]; then
+            if ! [[ "$INPUT_PR" =~ ^[0-9]+$ ]]; then
+              echo "Invalid PR number: $INPUT_PR" >&2
+              exit 1
+            fi
+            pr_number="$INPUT_PR"
+            pr_json=$(gh pr view "$pr_number" --repo "$REPO" --json baseRefOid,headRefOid,title,body)
+            base_sha=$(printf '%s' "$pr_json" | jq -r '.baseRefOid')
+            head_sha=$(printf '%s' "$pr_json" | jq -r '.headRefOid')
+            printf '%s' "$pr_json" | jq -r '.title // ""' > "$meta_dir/title.txt"
+            printf '%s' "$pr_json" | jq -r '.body // ""' > "$meta_dir/body.txt"
+            git fetch --no-tags origin "refs/pull/$pr_number/head"
+            if [ "$INPUT_POST_COMMENT" = "true" ]; then
+              can_comment="true"
+            else
+              can_comment="false"
+            fi
+          else
+            pr_number=""
+            base_ref="${INPUT_BASE_REF:-main}"
+            if ! [[ "$base_ref" =~ ^[A-Za-z0-9._/-]+$ ]] || [[ "$base_ref" == -* ]]; then
+              echo "Invalid base_ref: $base_ref" >&2
+              exit 1
+            fi
+            base_sha=$(git rev-parse "origin/$base_ref")
+            head_sha=$(git rev-parse HEAD)
+            git log -1 --pretty=%s > "$meta_dir/title.txt"
+            git log -1 --pretty=%b > "$meta_dir/body.txt"
+            can_comment="false"
+          fi
+
+          provider="static"
+          if [ "$HAS_COPILOT" = "true" ]; then
+            provider="copilot"
+          elif [ "$HAS_OPENAI" = "true" ]; then
+            provider="openai"
+          elif [ "$HAS_OPENROUTER" = "true" ]; then
+            provider="openrouter"
+          fi
+
+          {
+            echo "pr_number=$pr_number"
+            echo "base_sha=$base_sha"
+            echo "head_sha=$head_sha"
+            echo "can_comment=$can_comment"
+            echo "provider=$provider"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Prepare diff and deterministic roast
+        id: prepare
+        env:
+          BASE_SHA: ${{ steps.target.outputs.base_sha }}
+          HEAD_SHA: ${{ steps.target.outputs.head_sha }}
+          HEAT_LEVEL: ${{ inputs.heat || 'medium-rare' }}
+          OUT_SYSTEM_FILE: ${{ runner.temp }}/roast-system.txt
+          OUT_PROMPT_FILE: ${{ runner.temp }}/roast-prompt.txt
+          OUT_META_FILE: ${{ runner.temp }}/roast-meta.json
+        run: |
+          set -euo pipefail
+          PR_TITLE=$(cat "$RUNNER_TEMP/roast-target/title.txt") \
+          PR_BODY=$(cat "$RUNNER_TEMP/roast-target/body.txt") \
+          node .github/roast/cli.mjs prepare
+
+      - name: Install Copilot CLI
+        if: steps.prepare.outputs.skip_inference != 'true' && steps.target.outputs.provider == 'copilot'
+        continue-on-error: true
+        run: npm install -g @github/copilot
+
+      - name: Run AI inference (Copilot)
+        id: copilot_inference
+        if: steps.prepare.outputs.skip_inference != 'true' && steps.target.outputs.provider == 'copilot'
+        continue-on-error: true
+        uses: actions/ai-inference@v3
+        env:
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_PAT }}
+        with:
+          model: ${{ inputs.model || 'gpt-4.1' }}
+          system-prompt-file: ${{ runner.temp }}/roast-system.txt
+          prompt-file: ${{ runner.temp }}/roast-prompt.txt
+
+      - name: Run AI inference (OpenAI / OpenRouter)
+        id: http_inference
+        if: steps.prepare.outputs.skip_inference != 'true' && (steps.target.outputs.provider == 'openai' || steps.target.outputs.provider == 'openrouter')
+        continue-on-error: true
+        env:
+          PROVIDER: ${{ steps.target.outputs.provider }}
+          OPENAI_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENROUTER_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          INPUT_MODEL: ${{ inputs.model }}
+          SYSTEM_PROMPT_FILE: ${{ runner.temp }}/roast-system.txt
+          PROMPT_FILE: ${{ runner.temp }}/roast-prompt.txt
+          OUT_RESPONSE_FILE: ${{ runner.temp }}/roast-http-response.json
+        run: |
+          set -euo pipefail
+          if [ "$PROVIDER" = "openai" ]; then
+            export LLM_API_KEY="$OPENAI_KEY"
+            export LLM_API_URL="https://api.openai.com/v1/chat/completions"
+            export MODEL_NAME="${INPUT_MODEL:-gpt-4o}"
+          else
+            export LLM_API_KEY="$OPENROUTER_KEY"
+            export LLM_API_URL="https://openrouter.ai/api/v1/chat/completions"
+            export MODEL_NAME="${INPUT_MODEL:-openai/gpt-4o}"
+          fi
+          node .github/roast/cli.mjs infer
+
+      - name: Render and publish roast
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ steps.target.outputs.pr_number }}
+          HEAD_SHA: ${{ steps.target.outputs.head_sha }}
+          CAN_COMMENT: ${{ steps.target.outputs.can_comment }}
+          PROVIDER: ${{ steps.target.outputs.provider }}
+          SKIP_INFERENCE: ${{ steps.prepare.outputs.skip_inference }}
+          INPUT_MODEL: ${{ inputs.model }}
+          META_FILE: ${{ runner.temp }}/roast-meta.json
+          COPILOT_RESPONSE_FILE: ${{ steps.copilot_inference.outputs.response-file }}
+          COPILOT_RESPONSE: ${{ steps.copilot_inference.outputs.response }}
+          HTTP_RESPONSE_FILE: ${{ runner.temp }}/roast-http-response.json
+          OUT_MARKDOWN_FILE: ${{ runner.temp }}/roast-comment.md
+        run: |
+          set -euo pipefail
+          response_file=""
+          model_response=""
+          engine_label="static-guardrails"
+
+          if [ "$PROVIDER" = "copilot" ] && { [ -n "$COPILOT_RESPONSE_FILE" ] || [ -n "$COPILOT_RESPONSE" ]; }; then
+            response_file="$COPILOT_RESPONSE_FILE"
+            model_response="$COPILOT_RESPONSE"
+            engine_label="copilot/${INPUT_MODEL:-gpt-4.1}"
+          elif [ -f "$HTTP_RESPONSE_FILE" ]; then
+            response_file="$HTTP_RESPONSE_FILE"
+            engine_label="$PROVIDER/${INPUT_MODEL:-gpt-4o}"
+          fi
+
+          RESPONSE_FILE="$response_file" \
+          MODEL_RESPONSE="$model_response" \
+          ENGINE_LABEL="$engine_label" \
+          node .github/roast/cli.mjs render
+
+          cat "$OUT_MARKDOWN_FILE" >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$CAN_COMMENT" != "true" ] || [ -z "$PR_NUMBER" ]; then
+            echo "Summary written; PR comment skipped (can_comment=$CAN_COMMENT, pr=$PR_NUMBER)."
+            exit 0
+          fi
+
+          existing_id=$(
+            gh api --paginate "repos/$REPO/issues/$PR_NUMBER/comments" \
+              --jq '.[] | select(.user.login == "github-actions[bot]" and (.body | startswith("<!-- pr-roast-comment -->"))) | .id' \
+              | head -n 1 || true
+          )
+
+          if [ -n "$existing_id" ]; then
+            gh api --method PATCH "repos/$REPO/issues/comments/$existing_id" \
+              -F body=@"$OUT_MARKDOWN_FILE" >/dev/null
+            echo "Updated existing PR roast comment #$existing_id on PR #$PR_NUMBER."
+          elif [ "$SKIP_INFERENCE" != "true" ]; then
+            gh pr comment "$PR_NUMBER" --repo "$REPO" --body-file "$OUT_MARKDOWN_FILE"
+            echo "Posted new PR roast comment on PR #$PR_NUMBER."
+          else
+            echo "Skipped creating a new PR comment because only generated/binary files changed."
+          fi
