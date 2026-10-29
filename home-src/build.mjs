@@ -54,6 +54,9 @@ import {
   removeHeroBookingStatic,
   removeHeroProofBundle,
   removeHeroProofStatic,
+  injectHeroLineageBundle,
+  injectHeroLineageStatic,
+  ensureLineageAssets,
 } from './conversion-copy.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -713,6 +716,7 @@ function patchBundle(orig) {
   out = simplifyShowreelHeaderBundle(out);
   out = removeHeroBookingBundle(out);
   out = removeHeroProofBundle(out);
+  out = injectHeroLineageBundle(out);
   out = out.replace(/[ \t]*—[ \t]*/g, ' - ').replace(/[ \t]{2,}-[ \t]{2,}/g, ' - ');
   assertBundleParses(out);
   return out;
@@ -1005,6 +1009,7 @@ function patchStatic(html, tracks) {
   out = simplifyShowreelHeaderStatic(out);
   out = removeHeroBookingStatic(out);
   out = removeHeroProofStatic(out);
+  out = injectHeroLineageStatic(out);
   out = out.replace(/[ \t]*—[ \t]*/g, ' - ').replace(/[ \t]{2,}-[ \t]{2,}/g, ' - ');
   return { html: out, applied };
 }
@@ -1099,6 +1104,7 @@ let nextHtml = html
 nextHtml = ensureInquiryAssets(nextHtml);
 nextHtml = ensureCompilationsAssets(nextHtml);
 nextHtml = ensureFunnelAssets(nextHtml);
+nextHtml = ensureLineageAssets(nextHtml);
 fs.writeFileSync(indexFile, nextHtml, 'utf8');
 
 const swFile = path.join(root, 'sw.js');

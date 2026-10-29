@@ -565,6 +565,160 @@ export function removeHeroProofStatic(html) {
   return removeStaticDiv(html, '<div class="mt-8 flex flex-col gap-4 border-t border-white/10 pt-6 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6">', 'hero proof strip', 1);
 }
 
+/* ------------------------------------------------------------------------- */
+/* Hero "boutique footnote" — the lineage strip.                              */
+/*                                                                            */
+/* One desaturated, low-contrast horizontal line sitting directly beneath the */
+/* hero call-to-action row: a small "Lineage" label followed by three         */
+/* monochrome marks. It is the hero's only third-party social proof, so it    */
+/* stays deliberately quiet - no boxes, no borders, no hover affordances, and */
+/* nothing that competes with the H1 or the primary button.                   */
+/*                                                                            */
+/* The marks live in /images/lineage as white-on-transparent rasters rendered */
+/* at 2x their display height, so one asset is sharp on retina and small on   */
+/* the wire. Each one carries the institution's name as alt text; the visible */
+/* label means a screen reader announces "Lineage, Black Mountain College,    */
+/* Ars Electronica, Dolby Atmos" instead of three orphaned images.            */
+/* ------------------------------------------------------------------------- */
+
+export const LINEAGE_START = '<!--ZP-LINEAGE-START-->';
+export const LINEAGE_END = '<!--ZP-LINEAGE-END-->';
+
+/** Display heights are set in CSS; these are the 2x raster dimensions. */
+const LINEAGE_MARKS = [
+  ['black-mountain-college.png', 'Black Mountain College', 'zp-lineage-seal', 73, 72],
+  ['ars-electronica.png', 'Ars Electronica', 'zp-lineage-festival', 67, 60],
+  ['dolby-atmos.png', 'Dolby Atmos', 'zp-lineage-format', 171, 44],
+];
+
+export const LINEAGE_INNER =
+  '<span class="zp-lineage-label">Lineage</span>' +
+  LINEAGE_MARKS.map(
+    ([file, alt, className, width, height]) =>
+      `<img class="zp-lineage-mark ${className}" src="/images/lineage/${file}" alt="${alt}" width="${width}" height="${height}" loading="lazy" decoding="async">`,
+  ).join('');
+
+export const LINEAGE_HTML = `${LINEAGE_START}<p class="zp-lineage">${LINEAGE_INNER}</p>${LINEAGE_END}`;
+
+/** The CTA row the strip is appended to, in the prerendered document. */
+const HERO_CTA_STATIC =
+  '<div class="mt-8 flex w-full flex-col gap-3 sm:mt-10 sm:flex-row sm:items-center">';
+
+/** The same row in the minified bundle: its secondary anchor is the last child. */
+const HERO_CTA_BUNDLE = 'children:"Get a free written quote"})]})';
+
+/** Remove a previously injected strip so patchStatic always starts canonical. */
+export function normalizeHeroLineage(html) {
+  return html.replace(
+    new RegExp(`${LINEAGE_START.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[\\s\\S]*?${LINEAGE_END.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\n?`, 'g'),
+    '',
+  );
+}
+
+/**
+ * Insert the strip directly after the hero CTA row in the prerendered document.
+ * The row must close before the strip opens, or the strip would inherit the
+ * row's `sm:flex-row` and stop being a single line.
+ */
+export function injectHeroLineageStatic(html) {
+  const out = normalizeHeroLineage(html);
+  const start = out.indexOf(HERO_CTA_STATIC);
+  if (start < 0 || out.indexOf(HERO_CTA_STATIC, start + 1) >= 0) {
+    throw new Error('conversion-copy/static: hero CTA row not found exactly once');
+  }
+  const end = matchDiv(out, start, 'hero CTA row');
+  return out.slice(0, end) + LINEAGE_HTML + out.slice(end);
+}
+
+/**
+ * Same strip in the React tree. The markup is a static island, exactly like
+ * zpCompilations and the funnel sections, so both render paths cannot drift.
+ */
+export function injectHeroLineageBundle(bundle) {
+  if (bundle.includes('function zpLineage(') || bundle.includes('u.jsx(zpLineage,{})')) {
+    throw new Error('conversion-copy/bundle: lineage strip is patched twice');
+  }
+  const definitionAnchor = 'function I5(){return u.jsx("section",{id:"press"';
+  if (countOf(bundle, definitionAnchor) !== 1) {
+    throw new Error('conversion-copy/bundle: press component anchor drifted');
+  }
+  const definition = `function zpLineage(){return u.jsx("p",{className:"zp-lineage",dangerouslySetInnerHTML:{__html:${JSON.stringify(LINEAGE_INNER)}}})}`;
+  let out = bundle.replace(definitionAnchor, () => `${definition}${definitionAnchor}`);
+  if (countOf(out, HERO_CTA_BUNDLE) !== 1) {
+    throw new Error('conversion-copy/bundle: hero CTA row anchor drifted');
+  }
+  out = out.replace(HERO_CTA_BUNDLE, (match) => `${match.slice(0, -3)},u.jsx(zpLineage,{})]})`);
+  return out;
+}
+
+export const LINEAGE_CSS = `
+/* Hero lineage footnote: one quiet line under the call to action. */
+.zp-lineage{
+  display:flex;
+  flex-wrap:nowrap;
+  align-items:center;
+  gap:.8rem;
+  margin:1.05rem 0 0;
+  padding:0;
+  line-height:1;
+  opacity:.85;
+}
+.zp-lineage-label{
+  flex:none;
+  font-size:9px;
+  letter-spacing:.34em;
+  text-transform:uppercase;
+  color:#8a8580;
+  white-space:nowrap;
+}
+.zp-lineage-mark{
+  flex:none;
+  width:auto;
+  max-width:none;
+  filter:grayscale(1) brightness(.72) contrast(.9);
+  opacity:.62;
+  -webkit-mask-image:none;
+  mask-image:none;
+  mix-blend-mode:normal;
+}
+.zp-lineage-seal{height:34px;}
+.zp-lineage-festival{height:28px;}
+.zp-lineage-format{height:21px;}
+@media (max-width:359px){
+  .zp-lineage{gap:.6rem;}
+  .zp-lineage-seal{height:30px;}
+  .zp-lineage-festival{height:24px;}
+  .zp-lineage-format{height:18px;}
+}
+`;
+
+/** Idempotently keep <style id="zp-lineage-style"> in <head>. */
+export function ensureLineageAssets(html) {
+  const block = `<style id="zp-lineage-style">${LINEAGE_CSS}</style>`;
+  let kept = false;
+  let out = html.replace(/<style id="zp-lineage-style">[\s\S]*?<\/style>/g, () => {
+    if (kept) return '';
+    kept = true;
+    return block;
+  });
+  if (kept) return out;
+  if (!out.includes('</head>')) throw new Error('conversion-copy: no </head> to attach lineage styles');
+  return out.replace('</head>', () => `${block}\n</head>`);
+}
+
+/** Index of the character just past the </div> that closes the div at `start`. */
+function matchDiv(html, start, label) {
+  const token = /<\/?div\b[^>]*>/gi;
+  token.lastIndex = html.indexOf('>', start) + 1;
+  let depth = 1;
+  let match;
+  while ((match = token.exec(html))) {
+    depth += match[0].startsWith('</') ? -1 : 1;
+    if (depth === 0) return token.lastIndex;
+  }
+  throw new Error(`conversion-copy/static: ${label} never closes`);
+}
+
 const marker = (id) => ({ start: `<!--ZP-FN-START:${id}-->`, end: `<!--ZP-FN-END:${id}-->` });
 
 const sectionMarkup = (section) =>

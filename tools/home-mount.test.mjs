@@ -177,3 +177,55 @@ test('homepage CSS carries AA link red and persistent underlines without type fl
   const marker = '/* Cinema players stay upright';
   assert.ok(css.indexOf(marker) > css.indexOf('#e65650'), 'accessibility rules stay before the byte-identical cinema-player marker');
 });
+
+test('the hero carries one quiet lineage line directly beneath the call to action', () => {
+  const jsFile = /import\("(\/index-[0-9a-f]{8}\.js)"\)/.exec(html)?.[1];
+  assert.ok(jsFile, 'index.html imports a content-hashed home bundle');
+  const bundle = read(jsFile);
+
+  // The strip is a single line of low-contrast marks: one label, three images.
+  const strip = /<p class="zp-lineage">([\s\S]*?)<\/p>/.exec(html);
+  assert.ok(strip, 'the prerendered hero has the lineage line');
+  assert.equal(html.match(/<p class="zp-lineage">/g).length, 1, 'the lineage line is injected exactly once');
+  assert.ok(strip[1].includes('>Lineage</span>'), 'the line is labelled');
+  const marks = [...strip[1].matchAll(/<img class="zp-lineage-mark[^"]*" src="\/images\/lineage\/([^"]+)" alt="([^"]+)" width="(\d+)" height="(\d+)"/g)];
+  assert.deepEqual(
+    marks.map((m) => [m[1], m[2]]),
+    [
+      ['black-mountain-college.png', 'Black Mountain College'],
+      ['ars-electronica.png', 'Ars Electronica'],
+      ['dolby-atmos.png', 'Dolby Atmos'],
+    ],
+    'each mark is present, in order, with its institution as alt text',
+  );
+  for (const [, file, , width, height] of marks) {
+    assert.ok(fs.existsSync(path.join(ROOT, 'images/lineage', file)), `ship ${file}`);
+    // 2x rasters: attributes are the intrinsic size, CSS halves it.
+    assert.ok(Number(width) > 0 && Number(height) > 0, `${file} declares width/height for CLS safety`);
+  }
+
+  // Placement: after the hero CTA row, before the showreel section, and outside
+  // the CTA flex row (or the line would inherit sm:flex-row and stop being one line).
+  const ctaRow = '<div class="mt-8 flex w-full flex-col gap-3 sm:mt-10 sm:flex-row sm:items-center">';
+  const ctaAt = html.indexOf(ctaRow);
+  const stripAt = html.indexOf('<p class="zp-lineage">');
+  const reelAt = html.indexOf('<section id="showreel"');
+  assert.ok(ctaAt > 0 && stripAt > ctaAt && stripAt < reelAt, 'the line sits under the CTA and above the fold content');
+
+  // Both render paths ship it: the bundle mounts a static island, so a rebuild
+  // cannot drop the strip when React replaces the prerendered DOM.
+  assert.ok(bundle.includes('u.jsx(zpLineage,{})'), 'the React hero renders the same line');
+  assert.equal(bundle.match(/u\.jsx\(zpLineage,\{\}\)/g).length, 1, 'the React line is rendered exactly once');
+  for (const alt of ['Black Mountain College', 'Ars Electronica', 'Dolby Atmos']) {
+    assert.ok(bundle.includes(alt), `the React island carries ${alt}`);
+  }
+
+  // Desaturated and quiet: grayscale marks at reduced opacity, no borders or
+  // hover affordances, sized under the CTA.
+  const style = /<style id="zp-lineage-style">([\s\S]*?)<\/style>/.exec(html)?.[1];
+  assert.ok(style, 'the lineage styles ship inline');
+  assert.match(style, /\.zp-lineage-mark\{[^}]*filter:grayscale\(1\)/, 'marks are monochrome');
+  assert.match(style, /\.zp-lineage-mark\{[^}]*opacity:\.6/, 'marks are low-contrast');
+  assert.doesNotMatch(style, /hover/, 'the line is not interactive');
+  assert.match(style, /\.zp-lineage\{[^}]*flex-wrap:nowrap/, 'the line stays a single line');
+});
