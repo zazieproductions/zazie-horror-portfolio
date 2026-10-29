@@ -178,6 +178,7 @@ function buildHomeDocument() {
   templateHead = templateHead.replace(/<!--[\s\S]*?-->/g, (comment) =>
     /JSON-LD|STRUCTURED DATA/i.test(comment) ? '' : comment,
   );
+  templateHead = templateHead.replace(/(?:\r?\n[ \t]*){3,}/g, '\n\n');
   const close = templateHead.lastIndexOf('</head>');
   if (close === -1) throw new Error('index.html source head lost its </head> while rebuilding');
   const fullHead = `${templateHead.slice(0, close).trimEnd()}\n${renderHomeSeo()}\n</head>`;
