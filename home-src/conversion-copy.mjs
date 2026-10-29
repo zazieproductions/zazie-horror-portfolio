@@ -936,8 +936,15 @@ export function ensureFunnelAssets(html) {
     out = out.replace('</head>', () => `${block}\n</head>`);
   }
   const script = '<script defer src="/selected-cues.js?v=2"></script>';
-  out = out.replace(/<script defer src="\/selected-cues\.js(?:\?v=[^"]+)?"><\/script>\n?/g, '');
-  out = out.replace('</head>', () => `${script}\n</head>`);
+  // Keep the script in place: moving it after the generated SEO tags leaves
+  // their empty lines in the head on every prerender, causing CI drift.
+  let scriptKept = false;
+  out = out.replace(/<script defer src="\/selected-cues\.js(?:\?v=[^"]+)?"><\/script>\n?/g, () => {
+    if (scriptKept) return '';
+    scriptKept = true;
+    return `${script}\n`;
+  });
+  if (!scriptKept) out = out.replace(block, () => `${block}\n${script}`);
   return out;
 }
 
