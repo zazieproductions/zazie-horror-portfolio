@@ -430,7 +430,6 @@ export function pressKitInnerHtml(): string {
   return `<div class="zp-pk-ambient" aria-hidden="true"></div>
     <header class="zp-pk-masthead">
       <h2 id="zp-press-heading" class="zp-pk-heading">Press Kit</h2>
-      <p class="zp-pk-lead">Independent features, interviews and award coverage - read what other people heard before you decide.</p>
     </header>
 
     <div class="zp-pk-tier">
