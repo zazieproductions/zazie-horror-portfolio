@@ -43,6 +43,12 @@
  *  - Legal/pricing operative wording (licences, deposits, delivery promises) is
  *    NOT restated here. New copy points at /licensing, /faq and the written
  *    quote instead of asserting a rights grant or a turnaround guarantee.
+ *    Owner-supplied exception (2026-10-29): the reinstated #zp-objections FAQ
+ *    restates the no-published-rate-card position and the owner's own
+ *    capacity/reply commitments in the owner's words. It asserts no rights
+ *    grant: the union-clearance question from the same brief was held back
+ *    from the homepage at the owner's decision, so rights and clearance keep
+ *    pointing at /licensing, /faq and the written agreement.
  */
 
 /**
@@ -246,6 +252,59 @@ const OBSESSION_INNER = `
 </div>`;
 
 /**
+ * Closing "Objections" FAQ (reinstated 2026-10-29 with owner-supplied copy).
+ * Seven of the eight questions from the brief ship here; the union-clearance
+ * question was held back from the homepage at the owner's decision (see the
+ * guardrail note at the top of this file). Owner edits applied on the way in:
+ * the stray `beginning.it` link artifact and stray quotation marks were
+ * removed, film titles italicised, and "Q3/Q4" became "Q4" (the brief landed
+ * on 2026-10-29, after Q3 had ended). Wording is otherwise the owner's,
+ * including the four-features-a-year cap, the three remaining Q4 slots and
+ * the 72-hour personal reply - update or retire the slot count here when it
+ * changes, because this module is the only place it is published.
+ * Native <details> accordions, exactly like /faq: no JS, readable without
+ * hydration. No FAQPage schema is added for the homepage; /faq stays the
+ * canonical 35-question FAQ and this section links onward to it.
+ */
+const OBJECTIONS_INNER = `
+<div class="zp-fn-shell">
+  <p class="zp-fn-kicker">FAQ · Before you commit</p>
+  <h2 class="zp-fn-h2" id="zp-objections-h">What filmmakers ask before the first cue</h2>
+  <p class="zp-fn-lead">Timing, budget, fit, availability and pricing, answered plainly and in the open. The full detail on process, rights and delivery lives in the complete FAQ.</p>
+  <div class="zp-fn-faq">
+    <details class="zp-fn-item">
+      <summary><span class="zp-fn-qno" aria-hidden="true">01</span><span class="zp-fn-q">We are still in pre-production or mid-shoot. Is it too early to bring you on?</span><span class="zp-fn-mark" aria-hidden="true"></span></summary>
+      <div class="zp-fn-a"><p>Actually, <strong>the earlier, the better</strong>. The greatest horror films (e.g., <em>The Shining</em>, <em>Hereditary</em>, <em>Under the Skin</em>) were scored alongside filming. When you bring me on early, we can stay coordinated from the beginning. It can help establish a sonic identity before temporary music starts steering creative decisions. You don’t need a locked cut, just a clear sense of what you’re trying to make.</p></div>
+    </details>
+    <details class="zp-fn-item">
+      <summary><span class="zp-fn-qno" aria-hidden="true">02</span><span class="zp-fn-q">I’m a low-budget filmmaker. Can you still help me?</span><span class="zp-fn-mark" aria-hidden="true"></span></summary>
+      <div class="zp-fn-a"><p>Tell me the real number. A focused musical palette, a smaller cue count, or a carefully chosen amount of score can sometimes serve a film better than wall-to-wall music. If the scope and budget don’t align, you’ll know before committing.</p></div>
+    </details>
+    <details class="zp-fn-item">
+      <summary><span class="zp-fn-qno" aria-hidden="true">03</span><span class="zp-fn-q">How do I know you’ll actually be available for my timeline?</span><span class="zp-fn-mark" aria-hidden="true"></span></summary>
+      <div class="zp-fn-a"><p>I take on no more than four feature engagements per year. As of this writing, three slots remain for Q4. Every email is answered personally within 72 hours, even when the answer is no.</p></div>
+    </details>
+    <details class="zp-fn-item">
+      <summary><span class="zp-fn-qno" aria-hidden="true">04</span><span class="zp-fn-q">What kinds of projects are you the best fit for?</span><span class="zp-fn-mark" aria-hidden="true"></span></summary>
+      <div class="zp-fn-a"><p>Psychological horror, folk horror, body horror, slow-burn thrillers, experimental cinema, atmospheric games, A24-style art house, and projects that live between categories. If mood, texture, and emotional specificity matter to you, we’re already speaking the same language.</p></div>
+    </details>
+    <details class="zp-fn-item">
+      <summary><span class="zp-fn-qno" aria-hidden="true">05</span><span class="zp-fn-q">I like your work, but I already have a composer. Any options?</span><span class="zp-fn-mark" aria-hidden="true"></span></summary>
+      <div class="zp-fn-a"><p>Yes. If you need additional support, whether for a single sequence, a key nightmare scene, or one dissonant section, don’t hesitate to reach out.</p></div>
+    </details>
+    <details class="zp-fn-item">
+      <summary><span class="zp-fn-qno" aria-hidden="true">06</span><span class="zp-fn-q">How do you calculate your pricing or rates for a film score?</span><span class="zp-fn-mark" aria-hidden="true"></span></summary>
+      <div class="zp-fn-a"><p>Every score is quoted individually because no two productions share the same creative scale. There is no rigid, published retail rate card. Your written quotation is custom-built around your specific format, the exact minutes of music required, your timeline deadlines, and your stated budget allocation. We work transparently to align the musical scope with your project’s financial reality.</p></div>
+    </details>
+    <details class="zp-fn-item">
+      <summary><span class="zp-fn-qno" aria-hidden="true">07</span><span class="zp-fn-q">Can you collaborate remotely with production teams in different time zones?</span><span class="zp-fn-mark" aria-hidden="true"></span></summary>
+      <div class="zp-fn-a"><p>Yes! My post-production workflow is optimized for remote, borderless collaboration. I routinely score independent projects, theatrical shorts, and interactive media properties for directors, showrunners, and producers across North America, Europe, and international festival circuits with zero logistical friction.</p></div>
+    </details>
+  </div>
+  <div class="zp-fn-actions">${CTA('#contact', 'Start an inquiry', true)}${CTA('/faq', 'Read the full FAQ')}${CTA('/process', 'See the scoring process')}</div>
+</div>`;
+
+/**
  * One definition drives both render paths. `anchor` is the exact string in the
  * React render array / static HTML that the section is inserted BEFORE.
  */
@@ -254,6 +313,13 @@ export const SECTIONS = [
   { id: 'obsession', titleId: 'zp-obsession-h', variant: 'obsession',
     bundleAnchor: 'u.jsx(Q5,{"data-source-loc":"src/App.tsx:38:10"}),',
     staticAnchor: '<section id="posters"', inner: OBSESSION_INNER },
+  // "Objections" closes the trust stage: after #press, immediately before the
+  // #contact inquiry form, so the answers land at the point of hesitation.
+  // The Contact component (dj) is the last child of <main>, so its render
+  // call carries no trailing comma.
+  { id: 'objections', titleId: 'zp-objections-h', variant: 'objections',
+    bundleAnchor: 'u.jsx(dj,{"data-source-loc":"src/App.tsx:47:10"})',
+    staticAnchor: '<section id="contact"', inner: OBJECTIONS_INNER },
 ];
 
 /* ------------------------------------------------------------------------- */
@@ -382,6 +448,24 @@ export const FUNNEL_CSS = `
 .zp-listening-track.has-visualizer .zp-cue-visualizer,.zp-listening-track.has-visualizer .zp-listening-graphic small{display:block;}
 .zp-listening-track.has-visualizer .zp-listening-graphic>span,.zp-listening-track.has-visualizer .zp-listening-graphic>i,.zp-listening-track.has-visualizer .zp-listening-graphic>b,.zp-listening-track.has-visualizer .zp-listening-graphic:before,.zp-listening-track.has-visualizer .zp-listening-graphic:after{opacity:0;}
 @media(prefers-reduced-motion:reduce){.zp-listening-track.has-visualizer .zp-cue-visualizer,.zp-listening-track.has-visualizer .zp-listening-graphic small{display:none;}}
+/* Objections FAQ: native details accordions, hairline rules, still surface. */
+.zp-fn--objections{background:linear-gradient(180deg,#030303 0%,#0a0303 100%);}
+.zp-fn-faq{border-top:1px solid #1e1e1e;}
+.zp-fn-item{border-bottom:1px solid #1e1e1e;}
+.zp-fn-item summary{display:flex;align-items:baseline;gap:1rem;min-height:48px;padding:1.35rem .25rem;cursor:pointer;list-style:none;}
+.zp-fn-item summary::-webkit-details-marker{display:none;}
+.zp-fn-qno{flex:none;color:#e65650;font-size:10px;letter-spacing:.28em;}
+.zp-fn-q{flex:1;font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;font-size:1.35rem;line-height:1.25;color:#f0ebe3;}
+.zp-fn-item summary:hover .zp-fn-q{text-decoration:underline;text-decoration-color:#c41e1e;text-underline-offset:4px;}
+.zp-fn-mark{flex:none;position:relative;align-self:center;width:14px;height:14px;}
+.zp-fn-mark:before,.zp-fn-mark:after{content:"";position:absolute;background:#e65650;}
+.zp-fn-mark:before{left:0;top:6px;width:14px;height:2px;}
+.zp-fn-mark:after{left:6px;top:0;width:2px;height:14px;}
+.zp-fn-item[open] .zp-fn-mark:after{display:none;}
+.zp-fn-a{padding:0 .25rem 1.6rem;}
+.zp-fn-a p{color:#9a9590;font-size:.95rem;line-height:1.75;margin:0;max-width:46rem;}
+.zp-fn-a strong{color:#f0ebe3;}
+@media(min-width:768px){.zp-fn-a{padding-left:3.35rem;}}
 .zp-fn-actions{display:flex;flex-wrap:wrap;gap:.75rem 1.25rem;align-items:center;margin-top:1.75rem;}
 .zp-fn-btn{display:inline-flex;min-height:48px;align-items:center;justify-content:center;padding:.8rem 1.5rem;background:#c41e1e;color:#f0ebe3;border:1px solid #c41e1e;font-size:11px;letter-spacing:.16em;text-transform:uppercase;text-decoration:underline;text-underline-offset:3px;transition:background-color .15s,border-color .15s;}
 .zp-fn-btn:hover{background:#e65650;border-color:#e65650;color:#030303;}
