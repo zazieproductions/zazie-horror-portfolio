@@ -124,7 +124,9 @@
 // with the footer link, so the cache name moves again. This merge also folds
 // in main's post-v48 homepage copy passes (simplified contact copy, FAQ
 // section removal), which changed the same precached document and bundle.
-const CACHE_NAME = 'zazie-v49';
+// v50: move Variations on a Vanishing Body directly after Dissociative Amnesia
+// in the showreel queue; the precached '/' document and home bundle move with it.
+const CACHE_NAME = 'zazie-v50';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -133,7 +135,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-3465aa44.css',
-  '/index-d6413f15.js',
+  '/index-28d7c58d.js',
   '/store-1e13177a.css',
   '/store-3fc01be0.js',
   '/legal-f4e3a5fb.css',

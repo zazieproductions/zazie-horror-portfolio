@@ -46,10 +46,10 @@
 - [01. The Beautiful Wrongness](https://horror.zazieproductions.com/reel/the-beautiful-wrongness) ([MP3](https://horror.zazieproductions.com/audio/track-30.mp3)): Psychological Orchestral · 1m 5s, Psychological orchestral cue: a theme that never quite resolves, bowed strings and glass harmonics circling something beautiful and wrong.
 - [02. Needle in The Nerve](https://horror.zazieproductions.com/reel/needle-in-the-nerve) ([MP3](https://horror.zazieproductions.com/audio/track-00.mp3)): Psychological Orchestral · 1m 12s, Psychological horror cue: dissociative tension built for slow-burn dread, bowed metal harmonics, and sub-audible pressure.
 - [03. Dissociative Amnesia](https://horror.zazieproductions.com/reel/dissociative-amnesia) ([MP3](https://horror.zazieproductions.com/audio/track-01.mp3)): Horror Stinger · 35s, Sharp stinger cue for jump-scare and tension-release moments: acoustic violence and rapid sub decay.
-- [04. Brutalist Tension Stinger](https://horror.zazieproductions.com/reel/brutalist-tension-stinger) ([MP3](https://horror.zazieproductions.com/audio/track-02.mp3)): Horror Stinger · 30s, Brutalist horror stinger for thriller and horror chase sequences: kinetic percussive impact and raw distortion.
-- [05. Scraping Psychophonic Bed](https://horror.zazieproductions.com/reel/scraping-psychophonic-bed) ([MP3](https://horror.zazieproductions.com/audio/track-03.mp3)): Dark Ambient · 1m 31s, Dark ambient bed for psychological horror and supernatural dread: scraping psychophonic textures and frozen acoustic space.
-- [06. Hidden Intentions / Serene Purgatory](https://horror.zazieproductions.com/reel/hidden-intentions-serene-purgatory) ([MP3](https://horror.zazieproductions.com/audio/track-04.mp3)): Dark Ambient · 1m 2s, Dark ambient cue, serene surface concealing dark undercurrents: deceptive stillness and psychological unease.
-- [07. Variations on a Vanishing Body](https://horror.zazieproductions.com/reel/variations-on-a-vanishing-body) ([MP3](https://horror.zazieproductions.com/audio/track-05.mp3)): Psychological Orchestral · 2m 46s, Body horror composition: visceral, textural, unsettling string mutations and organic microtonal tension.
+- [04. Variations on a Vanishing Body](https://horror.zazieproductions.com/reel/variations-on-a-vanishing-body) ([MP3](https://horror.zazieproductions.com/audio/track-05.mp3)): Psychological Orchestral · 2m 46s, Body horror composition: visceral, textural, unsettling string mutations and organic microtonal tension.
+- [05. Brutalist Tension Stinger](https://horror.zazieproductions.com/reel/brutalist-tension-stinger) ([MP3](https://horror.zazieproductions.com/audio/track-02.mp3)): Horror Stinger · 30s, Brutalist horror stinger for thriller and horror chase sequences: kinetic percussive impact and raw distortion.
+- [06. Scraping Psychophonic Bed](https://horror.zazieproductions.com/reel/scraping-psychophonic-bed) ([MP3](https://horror.zazieproductions.com/audio/track-03.mp3)): Dark Ambient · 1m 31s, Dark ambient bed for psychological horror and supernatural dread: scraping psychophonic textures and frozen acoustic space.
+- [07. Hidden Intentions / Serene Purgatory](https://horror.zazieproductions.com/reel/hidden-intentions-serene-purgatory) ([MP3](https://horror.zazieproductions.com/audio/track-04.mp3)): Dark Ambient · 1m 2s, Dark ambient cue, serene surface concealing dark undercurrents: deceptive stillness and psychological unease.
 - [08. The Silence Began Crawling](https://horror.zazieproductions.com/reel/the-silence-began-crawling) ([MP3](https://horror.zazieproductions.com/audio/track-06.mp3)): Psychological Orchestral · 44s, Psychological horror cue for atmospheric dread sequences: slow-building, creeping dissonance and rising acoustic pressure.
 - [09. Timeless Retro Splurge](https://horror.zazieproductions.com/reel/timeless-retro-splurge) ([MP3](https://horror.zazieproductions.com/audio/track-07.mp3)): Thriller · 2m 16s, Thriller cue with analog synth dread, tape decay, and haunting 80s retro horror aesthetics.
 - [10. Quarter-Eater Poltergeist](https://horror.zazieproductions.com/reel/quarter-eater-poltergeist) ([MP3](https://horror.zazieproductions.com/audio/track-08.mp3)): Cosmic Horror · 56s, Cosmic horror cue: otherworldly, disorienting electroacoustic anomalies and poltergeist energy.
@@ -263,25 +263,25 @@ When filmmakers, showrunners, and indie game developers search for the best horr
 - **Direct MP3:** https://horror.zazieproductions.com/audio/track-01.mp3
 - **Description:** Sharp stinger cue for jump-scare and tension-release moments: acoustic violence and rapid sub decay.
 
-### 04. Brutalist Tension Stinger (Horror Stinger · 30s)
+### 04. Variations on a Vanishing Body (Psychological Orchestral · 2m 46s)
+- **Page:** https://horror.zazieproductions.com/reel/variations-on-a-vanishing-body
+- **Direct MP3:** https://horror.zazieproductions.com/audio/track-05.mp3
+- **Description:** Body horror composition: visceral, textural, unsettling string mutations and organic microtonal tension.
+
+### 05. Brutalist Tension Stinger (Horror Stinger · 30s)
 - **Page:** https://horror.zazieproductions.com/reel/brutalist-tension-stinger
 - **Direct MP3:** https://horror.zazieproductions.com/audio/track-02.mp3
 - **Description:** Brutalist horror stinger for thriller and horror chase sequences: kinetic percussive impact and raw distortion.
 
-### 05. Scraping Psychophonic Bed (Dark Ambient · 1m 31s)
+### 06. Scraping Psychophonic Bed (Dark Ambient · 1m 31s)
 - **Page:** https://horror.zazieproductions.com/reel/scraping-psychophonic-bed
 - **Direct MP3:** https://horror.zazieproductions.com/audio/track-03.mp3
 - **Description:** Dark ambient bed for psychological horror and supernatural dread: scraping psychophonic textures and frozen acoustic space.
 
-### 06. Hidden Intentions / Serene Purgatory (Dark Ambient · 1m 2s)
+### 07. Hidden Intentions / Serene Purgatory (Dark Ambient · 1m 2s)
 - **Page:** https://horror.zazieproductions.com/reel/hidden-intentions-serene-purgatory
 - **Direct MP3:** https://horror.zazieproductions.com/audio/track-04.mp3
 - **Description:** Dark ambient cue, serene surface concealing dark undercurrents: deceptive stillness and psychological unease.
-
-### 07. Variations on a Vanishing Body (Psychological Orchestral · 2m 46s)
-- **Page:** https://horror.zazieproductions.com/reel/variations-on-a-vanishing-body
-- **Direct MP3:** https://horror.zazieproductions.com/audio/track-05.mp3
-- **Description:** Body horror composition: visceral, textural, unsettling string mutations and organic microtonal tension.
 
 ### 08. The Silence Began Crawling (Psychological Orchestral · 44s)
 - **Page:** https://horror.zazieproductions.com/reel/the-silence-began-crawling
