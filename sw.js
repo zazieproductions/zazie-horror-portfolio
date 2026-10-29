@@ -137,7 +137,10 @@
 // tablet widths and a 44px disclosure row - which re-hashes inquiry-<hash>.css.
 // v56: the homepage hero opens with the festival laurel band (in flow above
 // the headline, 2x2 on phones), which re-hashes index-<hash>.js.
-const CACHE_NAME = 'zazie-v56';
+// v57: the homepage compilation cards become compact rows (small cover, title
+// beside it), which changes the inline #zp-comp-style in the precached '/'
+// document while leaving the bundle and stylesheet hashes untouched.
+const CACHE_NAME = 'zazie-v57';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -150,7 +153,7 @@ const PRECACHE_ASSETS = [
   '/store-1e13177a.css',
   '/store-3fc01be0.js',
   '/legal-f4e3a5fb.css',
-  '/legal-c623083a.js',
+  '/legal-54feff84.js',
   '/inquiry-d8cba1f7.css',
   '/inquiry-f408888b.js',
   // Hero & Atmosphere
