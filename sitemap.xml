@@ -2,7 +2,7 @@
 <!--
   Generated https://horror.zazieproductions.com/sitemap.xml from src/data/{hubs,productions,cues,releases,routes}.ts.
   Do not edit by hand. Each URL is a canonical, extensionless route.
-  Route count: 83 (20 original hubs + 9 productions + 30 cues + 24 catalogue items).
+  Route count: 80 (17 original hubs + 9 productions + 30 cues + 24 catalogue items).
   Sitemap priority and changefreq are intentionally omitted.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -11,7 +11,7 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/</loc>
-    <lastmod>2026-10-26</lastmod>
+    <lastmod>2026-10-27</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/hero-portrait.jpg</image:loc>
       <image:caption>Portfolio portrait for Zazie Productions, a composer and sound-design studio working across screen and experimental media.</image:caption>
@@ -21,11 +21,6 @@
       <image:loc>https://horror.zazieproductions.com/images/headshot.jpg</image:loc>
       <image:caption>Zazie Kanwar-Torge, composer and sound designer associated with Zazie Productions LLC.</image:caption>
       <image:title>Zazie Kanwar-Torge headshot - horror film composer, Zazie Productions LLC</image:title>
-    </image:image>
-    <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
-      <image:caption>Press photo for Zazie Productions horror composer portfolio. Original dark atmospheric scores for film, TV, and games.</image:caption>
-      <image:title>Zazie Productions press photo - horror composer portfolio, dark cinematic scores</image:title>
     </image:image>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/posters/expire-red-check-1200.jpg</image:loc>
@@ -249,32 +244,12 @@
   </url>
 
   <url>
-    <loc>https://horror.zazieproductions.com/composer</loc>
-    <lastmod>2026-10-26</lastmod>
-    <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/headshot.jpg</image:loc>
-      <image:caption>Zazie Kanwar-Torge, experimental psychological horror composer and founder of Zazie Productions LLC, Asheville NC.</image:caption>
-      <image:title>Zazie Kanwar-Torge - Experimental Psychological Horror Composer Biography</image:title>
-    </image:image>
-  </url>
-
-  <url>
     <loc>https://horror.zazieproductions.com/process</loc>
-    <lastmod>2026-10-26</lastmod>
+    <lastmod>2026-10-27</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
       <image:caption>Zazie Kanwar-Torge at the scoring desk, Asheville, NC studio</image:caption>
       <image:title>Psychological Horror Scoring Suite - Process</image:title>
-    </image:image>
-  </url>
-
-  <url>
-    <loc>https://horror.zazieproductions.com/services</loc>
-    <lastmod>2026-10-26</lastmod>
-    <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
-      <image:caption>Zazie Productions psychological horror film scoring suite, Asheville, NC</image:caption>
-      <image:title>Psychological Horror Scoring Suite - Rates</image:title>
     </image:image>
   </url>
 
@@ -324,18 +299,8 @@
   </url>
 
   <url>
-    <loc>https://horror.zazieproductions.com/contact</loc>
-    <lastmod>2026-10-26</lastmod>
-    <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/hero-portrait.jpg</image:loc>
-      <image:caption>Zazie Kanwar-Torge, experimental psychological horror composer available for commission</image:caption>
-      <image:title>Scoring Inquiry - Request a Score Quote</image:title>
-    </image:image>
-  </url>
-
-  <url>
     <loc>https://horror.zazieproductions.com/faq</loc>
-    <lastmod>2026-10-26</lastmod>
+    <lastmod>2026-10-27</lastmod>
   </url>
 
   <url>
@@ -370,26 +335,26 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/sitemap</loc>
-    <lastmod>2026-10-18</lastmod>
+    <lastmod>2026-10-27</lastmod>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/hire-a-composer</loc>
-    <lastmod>2026-10-26</lastmod>
+    <lastmod>2026-10-27</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
       <image:caption>Zazie Kanwar-Torge, IMDb-credited experimental psychological horror film composer for hire at Zazie Productions LLC.</image:caption>
-      <image:title>Hire an Experimental Psychological Horror Composer — Zazie Kanwar-Torge</image:title>
+      <image:title>Hire an Experimental Psychological Horror Composer | Zazie Kanwar-Torge</image:title>
     </image:image>
   </url>
 
   <url>
     <loc>https://horror.zazieproductions.com/how-to-hire-a-horror-composer</loc>
-    <lastmod>2026-10-26</lastmod>
+    <lastmod>2026-10-27</lastmod>
     <image:image>
       <image:loc>https://horror.zazieproductions.com/images/press-photo.jpg</image:loc>
       <image:caption>Guide to hiring a horror composer for independent films, series, and video games by Zazie Kanwar-Torge.</image:caption>
-      <image:title>How to Hire a Horror Composer: Rates, Subgenres &amp; Vetting Checklist</image:title>
+      <image:title>How to Hire a Horror Composer: Budgets, Subgenres &amp; Vetting Checklist</image:title>
     </image:image>
   </url>
 
@@ -423,7 +388,7 @@
     </image:image>
     <video:video>
       <video:thumbnail_loc>https://i.ytimg.com/vi/lWm4Ies7edI/hqdefault.jpg</video:thumbnail_loc>
-      <video:title>EXPIRE — official first-look clip</video:title>
+      <video:title>EXPIRE: official first-look clip</video:title>
       <video:description>IMDb lists this YouTube video as the official first-look clip for the 2025 science-fiction short EXPIRE. It is a film clip, not represented here as a score excerpt.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/lWm4Ies7edI</video:player_loc>
     </video:video>
@@ -459,7 +424,7 @@
     </image:image>
     <video:video>
       <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-UX2kv3G89Jw.jpg</video:thumbnail_loc>
-      <video:title>Phantom Requiem — experimental short film</video:title>
+      <video:title>Phantom Requiem: experimental short film</video:title>
       <video:description>The complete experimental short Phantom Requiem, published by Zazie Productions on June 20, 2024. The video runs 4 minutes 53 seconds.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/UX2kv3G89Jw</video:player_loc>
       <video:duration>293</video:duration>
@@ -487,7 +452,7 @@
     </image:image>
     <video:video>
       <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-Ty8tPp59mDc.jpg</video:thumbnail_loc>
-      <video:title>THE HAUNTED — official trailer</video:title>
+      <video:title>THE HAUNTED: official trailer</video:title>
       <video:description>Official trailer for THE HAUNTED from Crystal Fox Films. The trailer is promotional film media, not presented as a separate score excerpt.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/Ty8tPp59mDc</video:player_loc>
       <video:duration>149</video:duration>
@@ -514,7 +479,7 @@
     </image:image>
     <video:video>
       <video:thumbnail_loc>https://horror.zazieproductions.com/images/project-HaVJP08j77U.jpg</video:thumbnail_loc>
-      <video:title>MIKE HAS A VISITOR — short film</video:title>
+      <video:title>MIKE HAS A VISITOR: short film</video:title>
       <video:description>The 14:23 YouTube upload of MIKE HAS A VISITOR, published by director Marco Saikaley on June 30, 2025. IMDb separately credits Zazie Kanwar-Torge as composer.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/HaVJP08j77U</video:player_loc>
       <video:duration>863</video:duration>
@@ -548,6 +513,11 @@
   </url>
 
   <url>
+    <loc>https://horror.zazieproductions.com/reel/variations-on-a-vanishing-body</loc>
+    <lastmod>2026-10-24</lastmod>
+  </url>
+
+  <url>
     <loc>https://horror.zazieproductions.com/reel/brutalist-tension-stinger</loc>
     <lastmod>2026-10-24</lastmod>
   </url>
@@ -559,11 +529,6 @@
 
   <url>
     <loc>https://horror.zazieproductions.com/reel/hidden-intentions-serene-purgatory</loc>
-    <lastmod>2026-10-24</lastmod>
-  </url>
-
-  <url>
-    <loc>https://horror.zazieproductions.com/reel/variations-on-a-vanishing-body</loc>
     <lastmod>2026-10-24</lastmod>
   </url>
 

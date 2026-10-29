@@ -48,6 +48,7 @@ import { allRoutes, items } from '../build/data/routes.js';
 import * as site from '../build/data/site.js';
 import { renderHomePosterCards, renderHomeSeo } from '../build/lib/home.js';
 import { renderItemPage } from '../build/lib/page.js';
+import { ensureMobileUxAssets } from '../home-src/mobile-ux.mjs';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const { url, SITE_HOST } = site;
@@ -178,11 +179,20 @@ function buildHomeDocument() {
   templateHead = templateHead.replace(/<!--[\s\S]*?-->/g, (comment) =>
     /JSON-LD|STRUCTURED DATA/i.test(comment) ? '' : comment,
   );
+  // Every tag stripped above keeps its own line ending, so a rebuilt head that
+  // re-emits them at the end gains one blank line per tag on every run. Collapse
+  // the gaps that leaves (head whitespace is not significant) so a second build
+  // reproduces the first byte for byte.
+  templateHead = templateHead.replace(/\n(?:[ \t]*\n){2,}/g, '\n\n');
   const close = templateHead.lastIndexOf('</head>');
   if (close === -1) throw new Error('index.html source head lost its </head> while rebuilding');
   const fullHead = `${templateHead.slice(0, close).trimEnd()}\n${renderHomeSeo()}\n</head>`;
   html = replaceMarkedContents(html, SEO_START, SEO_END, fullHead, 'SEO');
   html = replaceMarkedContents(html, HOME_POSTERS_START, HOME_POSTERS_END, renderHomePosterCards(), 'home-poster');
+  // The rebuilt <head> appends the SEO tags after the head resources that were
+  // carried over, so the phone overrides are re-applied here to stay the last
+  // stylesheet in <head>: nothing injected afterwards may outrank them.
+  html = ensureMobileUxAssets(html);
   fs.writeFileSync(indexFile, html, 'utf8');
   console.log('prerender: replaced the complete homepage <head> from src/lib/home.ts + home entities');
   console.log('prerender: rendered curated poster-wall cards from src/data/home.ts + productions.ts');

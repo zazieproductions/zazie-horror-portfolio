@@ -127,7 +127,7 @@
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
-/estimator-*.js
+/inquiry-*.js
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
@@ -172,16 +172,6 @@
 /reel/*
   X-Robots-Tag: index, follow, max-image-preview:large
 
-/composer
-  X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/composer>; rel="canonical"
-/composer/
-  X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/composer>; rel="canonical"
-/composer/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/composer>; rel="canonical"
-
 /process
   X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/process>; rel="canonical"
@@ -201,16 +191,6 @@
 /services/index.html
   X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/services>; rel="canonical"
-
-/contact
-  X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/contact>; rel="canonical"
-/contact/
-  X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/contact>; rel="canonical"
-/contact/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/contact>; rel="canonical"
 
 /hire-a-composer
   X-Robots-Tag: index, follow, max-image-preview:large

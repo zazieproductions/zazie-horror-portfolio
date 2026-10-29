@@ -1,25 +1,30 @@
 #!/usr/bin/env node
 /**
- * scripts/sync-pricing.mjs
+ * scripts/sync-commission.mjs
  * ----------------------------------------------------------------------------
- * Writes the published prices into the static HTML from src/data/pricing.ts.
+ * Writes the generated commissioning surfaces into the static HTML from
+ * src/data/commission.ts (via src/lib/commission-markup.ts):
  *
- *   {{zp:scene.label}}          a raw token. The first run wraps its value as
- *                               <!--v:scene.label-->From $250<!--/v:scene.label-->
+ *   {{zp:payment}}              a raw token. The first run wraps its value as
+ *                               <!--v:payment-->…<!--/v:payment-->
  *                               so later runs can refresh it in place.
- *   <!--zp:packages-->…<!--/zp:packages-->
+ *   <!--zp:inquiry-->…<!--/zp:inquiry-->
  *                               marker blocks; the content between the markers
  *                               is replaced with generated markup
  *
- * Block names: packages, inclusions, estimator, inquiry, notice, factors,
- *               licences, offers.
+ * Block names: meta-hire, meta-services, commissioning, inclusions,
+ *               licences, factors, inquiry, offer.
  *
- * The script edits committed HTML in place, so every page carries the same
- * figures as the estimator. It fails on an unknown token or an unclosed
- * marker, so a typo cannot ship a stale or missing price.
+ * Succeeded scripts/sync-pricing.mjs when the published rate card was
+ * removed (2026-10-27). No block or token here can produce a fee: unknown
+ * tokens and blocks fail the build, so a retired pricing token left in a
+ * page cannot ship a stale figure.
  *
- *   node scripts/sync-pricing.mjs           write changes
- *   node scripts/sync-pricing.mjs --check   exit 1 if any page is out of date
+ * The script edits committed HTML in place. It fails on an unknown token or
+ * an unclosed marker.
+ *
+ *   node scripts/sync-commission.mjs           write changes
+ *   node scripts/sync-commission.mjs --check   exit 1 if any page is out of date
  *
  * Requires `tsc` to have emitted build/ first (the npm build script does this).
  */
@@ -31,33 +36,38 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const check = process.argv.includes('--check');
 
-const markup = await import('../build/lib/pricing-markup.js');
-const { expandTokens, packagesHtml, pricingMetaHtml, inclusionsHtml, estimatorHtml, inquiryFormHtml, noticeHtml, offersGraph, tokenValue, factorsHtml, licencesHtml, SITE_ORIGIN } = markup;
+const markup = await import('../build/lib/commission-markup.js');
+const { commissioningHtml, factorsHtml, inclusionsHtml, inquiryFormHtml, licencesHtml, metaHtml, serviceOfferGraph, tokenValue, SITE_ORIGIN } = markup;
 const { ORG_ID } = await import('../build/data/site.js');
+const { hubs } = await import('../build/data/hubs.js');
 
-const SERVICE_ID = `${SITE_ORIGIN}/services#service`;
+const SERVICE_ID = `${SITE_ORIGIN}/#scoring-service`;
 const PROVIDER_ID = ORG_ID;
+
+const hubDescription = (p) => {
+  const hub = hubs.find((h) => h.path === p);
+  if (!hub) throw new Error(`sync-commission: no hub ${p} in src/data/hubs.ts`);
+  return hub.description;
+};
 
 /** Generated markup for each marker block. */
 const BLOCKS = {
-  'pricing-meta': () => pricingMetaHtml(),
-  packages: () => packagesHtml(),
+  'meta-hire': () => metaHtml(hubDescription('/hire-a-composer')),
+  commissioning: () => commissioningHtml(),
   inclusions: () => inclusionsHtml(),
-  estimator: () => estimatorHtml(),
-  inquiry: () => inquiryFormHtml(),
-  notice: () => noticeHtml(),
-  factors: () => factorsHtml(),
   licences: () => licencesHtml(),
-  offers: () => `<script type="application/ld+json">${JSON.stringify(offersGraph(SERVICE_ID, PROVIDER_ID))}</script>`,
+  factors: () => factorsHtml(),
+  inquiry: () => inquiryFormHtml(),
+  offer: () => `<script type="application/ld+json">${JSON.stringify(serviceOfferGraph(SERVICE_ID, PROVIDER_ID))}</script>`,
 };
 
 // legal-src/ keeps its raw {{zp:…}} tokens: build.sh copies those sources into
 // the served pages, and this script fills the copies. Filling the sources too
-// would freeze the prices into them.
+// would freeze the statements into them.
 const SKIP_DIRS = new Set(['node_modules', 'build', '.git', 'dist', 'out', 'coverage', '.cache', 'legal-src']);
 const errors = [];
 
-/** Every committed HTML file, including legal-src sources. */
+/** Every committed HTML file outside the skipped source trees. */
 function htmlFiles(dir = root, found = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     if (entry.isDirectory()) {
@@ -77,15 +87,18 @@ function syncBlocks(source, where) {
   const openers = [...source.matchAll(/<!--zp:([a-z-]+)-->/g)];
   const closers = [...source.matchAll(/<!--\/zp:([a-z-]+)-->/g)];
   for (const m of openers) {
-    if (!BLOCKS[m[1]]) errors.push(`${where}:${lineOf(source, m.index)} unknown pricing block "${m[1]}"`);
+    if (!BLOCKS[m[1]]) errors.push(`${where}:${lineOf(source, m.index)} unknown commissioning block "${m[1]}"`);
   }
   for (const m of closers) {
-    if (!BLOCKS[m[1]]) errors.push(`${where}:${lineOf(source, m.index)} unknown closing pricing block "${m[1]}"`);
+    if (!BLOCKS[m[1]]) errors.push(`${where}:${lineOf(source, m.index)} unknown closing commissioning block "${m[1]}"`);
   }
-  const pattern = /<!--zp:([a-z-]+)-->[\s\S]*?<!--\/zp:\1-->/g;
+  const pattern = /<!--zp:([a-z-]+)-->([\s\S]*?)<!--\/zp:\1-->/g;
   const paired = new Set();
-  const out = source.replace(pattern, (_match, name) => {
+  const out = source.replace(pattern, (match, name) => {
     paired.add(name);
+    // Unknown blocks were already reported above; leave them untouched so
+    // every offender is listed in one run instead of crashing on the first.
+    if (!BLOCKS[name]) return match;
     return `<!--zp:${name}-->${BLOCKS[name]()}<!--/zp:${name}-->`;
   });
   for (const m of openers) {
@@ -103,11 +116,11 @@ function syncFile(file) {
 
   for (const m of source.matchAll(/\{\{zp:([^}]*)\}\}/g)) {
     if (!/^[a-z0-9.\-]+$/.test(m[1]) || tokenValue(m[1]) === null) {
-      errors.push(`${where}:${lineOf(source, m.index)} unknown pricing token {{zp:${m[1]}}}`);
+      errors.push(`${where}:${lineOf(source, m.index)} unknown commissioning token {{zp:${m[1]}}}`);
     }
   }
   for (const m of source.matchAll(/<!--v:([^ ]*?)-->/g)) {
-    if (tokenValue(m[1]) === null) errors.push(`${where}:${lineOf(source, m.index)} unknown pricing value <!--v:${m[1]}-->`);
+    if (tokenValue(m[1]) === null) errors.push(`${where}:${lineOf(source, m.index)} unknown commissioning value <!--v:${m[1]}-->`);
   }
 
   const jsonEscape = (value) => JSON.stringify(String(value)).slice(1, -1);
@@ -120,12 +133,12 @@ function syncFile(file) {
     const rawHtml = text.slice(cursor, start);
     parts.push(
       rawHtml
-        .replace(/<!--v:([a-z0-9.\-]+)-->[\s\S]*?<!--\/v:\1-->/g, (_m, key) => `<!--v:${key}-->${tokenValue(key) ?? ''}<!--/v:${key}-->`)
+        .replace(/<!--v:([a-z0-9.\-]+)-->([\s\S]*?)<!--\/v:\1-->/g, (_m, key) => `<!--v:${key}-->${tokenValue(key) ?? ''}<!--/v:${key}-->`)
         .replace(/\{\{zp:([a-z0-9.\-]+)\}\}/g, (_m, key) => `<!--v:${key}-->${tokenValue(key) ?? ''}<!--/v:${key}-->`),
     );
     parts.push(
       scriptMatch[0]
-        .replace(/<!--v:([a-z0-9.\-]+)-->[\s\S]*?<!--\/v:\1-->/g, (_m, key) => jsonEscape(tokenValue(key) ?? ''))
+        .replace(/<!--v:([a-z0-9.\-]+)-->([\s\S]*?)<!--\/v:\1-->/g, (_m, key) => jsonEscape(tokenValue(key) ?? ''))
         .replace(/\{\{zp:([a-z0-9.\-]+)\}\}/g, (_m, key) => jsonEscape(tokenValue(key) ?? '')),
     );
     cursor = start + scriptMatch[0].length;
@@ -133,7 +146,7 @@ function syncFile(file) {
   parts.push(
     text
       .slice(cursor)
-      .replace(/<!--v:([a-z0-9.\-]+)-->[\s\S]*?<!--\/v:\1-->/g, (_m, key) => `<!--v:${key}-->${tokenValue(key) ?? ''}<!--/v:${key}-->`)
+      .replace(/<!--v:([a-z0-9.\-]+)-->([\s\S]*?)<!--\/v:\1-->/g, (_m, key) => `<!--v:${key}-->${tokenValue(key) ?? ''}<!--/v:${key}-->`)
       .replace(/\{\{zp:([a-z0-9.\-]+)\}\}/g, (_m, key) => `<!--v:${key}-->${tokenValue(key) ?? ''}<!--/v:${key}-->`),
   );
   text = parts.join('');
@@ -150,22 +163,22 @@ for (const file of htmlFiles()) {
 }
 
 if (errors.length) {
-  console.error('sync-pricing: refusing to continue.');
+  console.error('sync-commission: refusing to continue.');
   for (const e of errors) console.error(`  ${e}`);
   process.exit(1);
 }
 
 if (check) {
   if (changed.length) {
-    console.error('sync-pricing --check: these pages are out of date with src/data/pricing.ts:');
+    console.error('sync-commission --check: these pages are out of date with src/data/commission.ts:');
     for (const c of changed) console.error(`  ${c.where}`);
-    console.error('Run: node scripts/sync-pricing.mjs');
+    console.error('Run: node scripts/sync-commission.mjs');
     process.exit(1);
   }
-  console.log(`sync-pricing --check: PASS (${scanned} pricing pages in step with pricing.ts)`);
+  console.log(`sync-commission --check: PASS (${scanned} commissioning pages in step with commission.ts)`);
   process.exit(0);
 }
 
 for (const c of changed) fs.writeFileSync(c.file, c.after, 'utf8');
-console.log(`sync-pricing: ${scanned} pricing pages scanned, ${changed.length} updated`);
+console.log(`sync-commission: ${scanned} commissioning pages scanned, ${changed.length} updated`);
 for (const c of changed) console.log(`  wrote ${c.where}`);

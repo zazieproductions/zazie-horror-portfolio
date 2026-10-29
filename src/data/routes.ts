@@ -45,15 +45,15 @@ export function releasePath(release: Release): string {
 }
 
 function productionTitle(production: Production): string {
-  return `${production.title} — ${production.workType} | Zazie Productions`;
+  return `${production.title}: ${production.workType} | Zazie Productions`;
 }
 
 function cueTitle(cue: Cue): string {
-  return `${cue.title} — ${cue.category} cue (${cue.duration}) | Zazie Productions`;
+  return `${cue.title}: ${cue.category} cue (${cue.duration}) | Zazie Productions`;
 }
 
 function releaseTitle(release: Release): string {
-  return `${release.title} — ${release.kicker} | Zazie Productions`;
+  return `${release.title}: ${release.kicker} | Zazie Productions`;
 }
 
 function itemRoutes(): ItemRoute[] {

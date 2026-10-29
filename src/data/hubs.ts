@@ -17,7 +17,6 @@
  * src/data/routes.ts.
  */
 
-import { MINIMUM_FEE, pricingSummary } from './pricing.js';
 import type { Hub } from './types.js';
 
 export const hubs: Hub[] = [
@@ -29,13 +28,12 @@ export const hubs: Hub[] = [
     // specialist phrase inside the 30-60 character budget (no brand suffix);
     // the description states the full identity sentence verbatim. Both are
     // what the WebPage JSON-LD and sitemap reuse.
-    title: "Experimental Psychological Horror Composer — Arthouse Film",
-    description: `Experimental psychological horror film composer for independent and arthouse cinema. IMDb-credited bespoke scores by Zazie Kanwar-Torge, from $${MINIMUM_FEE} USD.`,
-    lastmod: "2026-10-26",
+    title: "Experimental Psychological Horror Composer | Arthouse Film",
+    description: `Experimental psychological horror film composer for independent and arthouse cinema. IMDb-credited bespoke scores by Zazie Kanwar-Torge, quoted per project.`,
+    lastmod: "2026-10-27",
     images: [
       { loc: "https://horror.zazieproductions.com/images/hero-portrait.jpg", caption: "Portfolio portrait for Zazie Productions, a composer and sound-design studio working across screen and experimental media.", title: "Zazie Kanwar-Torge: Psychological Horror Composer - Dark Atmospheric Scores" },
       { loc: "https://horror.zazieproductions.com/images/headshot.jpg", caption: "Zazie Kanwar-Torge, composer and sound designer associated with Zazie Productions LLC.", title: "Zazie Kanwar-Torge headshot - horror film composer, Zazie Productions LLC" },
-      { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Press photo for Zazie Productions horror composer portfolio. Original dark atmospheric scores for film, TV, and games.", title: "Zazie Productions press photo - horror composer portfolio, dark cinematic scores" },
       { loc: "https://horror.zazieproductions.com/images/posters/expire-red-check-1200.jpg", caption: "EXPIRE poster artwork. IMDb credits Zazie Kanwar-Torge for sound design; the listed composers are Patricia Chaylade, Jorayo, and Brennan Mack.", title: "EXPIRE (2025) - Short Film; Sound Design Credit" },
       { loc: "https://horror.zazieproductions.com/images/posters/unseen-1200.jpg", caption: "UNSEEN poster artwork. IMDb lists Steve Merlo as composer; no Zazie composing credit is asserted here.", title: "UNSEEN - Feature Film Record; IMDb Composer Credit: Steve Merlo" },
       { loc: "https://horror.zazieproductions.com/images/posters/the-haunted-1200.jpg", caption: "THE HAUNTED poster artwork for the horror and science-fiction short; IMDb credits Zazie Kanwar-Torge and Robert Mason Sandifer as co-composers.", title: "THE HAUNTED - Horror and Science-Fiction Short" },
@@ -142,35 +140,13 @@ export const hubs: Hub[] = [
     videos: [],
   },
   {
-    path: "/composer",
-    name: "Composer biography",
-    title: "Zazie Kanwar-Torge: Experimental Psychological Horror Composer Biography | Zazie Productions",
-    description: "Biography of experimental psychological horror film composer Zazie Kanwar-Torge, founder of Zazie Productions LLC in Asheville, NC, scoring independent and arthouse cinema.",
-    lastmod: "2026-10-26",
-    images: [
-      { loc: "https://horror.zazieproductions.com/images/headshot.jpg", caption: "Zazie Kanwar-Torge, experimental psychological horror composer and founder of Zazie Productions LLC, Asheville NC.", title: "Zazie Kanwar-Torge - Experimental Psychological Horror Composer Biography" },
-    ],
-    videos: [],
-  },
-  {
     path: "/process",
     name: "Scoring process",
     title: "Psychological Horror Scoring Process: Spotting to Delivery | Zazie Productions",
-    description: "A clear psychological horror scoring process for independent and arthouse film: spotting, original themes and motifs, package-specific revisions, and stereo WAV delivery.",
-    lastmod: "2026-10-26",
+    description: "A clear psychological horror scoring process for independent and arthouse film: spotting, original themes and motifs, agreed revision rounds, and stereo WAV delivery.",
+    lastmod: "2026-10-27",
     images: [
       { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Kanwar-Torge at the scoring desk, Asheville, NC studio", title: "Psychological Horror Scoring Suite - Process" },
-    ],
-    videos: [],
-  },
-  {
-    path: "/services",
-    name: "Rate card",
-    title: "Psychological Horror Score Packages and Quotes | Zazie Productions",
-    description: `Original music for experimental psychological horror and arthouse cinema. ${pricingSummary()}`,
-    lastmod: "2026-10-26",
-    images: [
-      { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Productions psychological horror film scoring suite, Asheville, NC", title: "Psychological Horror Scoring Suite - Rates" },
     ],
     videos: [],
   },
@@ -193,22 +169,11 @@ export const hubs: Hub[] = [
     videos: [],
   },
   {
-    path: "/contact",
-    name: "Contact",
-    title: "Scoring Inquiry: Request a Score Quote | Zazie Productions",
-    description: "Request a scoring quote from an experimental psychological horror film composer for independent and arthouse cinema. Share what you know; scored minutes, format, timing and references can be added when available.",
-    lastmod: "2026-10-26",
-    images: [
-      { loc: "https://horror.zazieproductions.com/images/hero-portrait.jpg", caption: "Zazie Kanwar-Torge, experimental psychological horror composer available for commission", title: "Scoring Inquiry - Request a Score Quote" },
-    ],
-    videos: [],
-  },
-  {
     path: "/faq",
     name: "FAQ",
-    title: "Psychological Horror Scoring FAQ: Fees, Process, Rights, Delivery - 35 Questions | Zazie Productions",
-    description: "35 answers on commissioning a psychological horror score for independent film from Zazie Kanwar-Torge: packages priced by scored minutes, spotting to delivery, revisions, licensing and cue sheets.",
-    lastmod: "2026-10-26",
+    title: "Psychological Horror Scoring FAQ: Quotes, Process, Rights, Delivery - 35 Questions | Zazie Productions",
+    description: "35 answers on commissioning a psychological horror score for independent film from Zazie Kanwar-Torge: how quoting works, spotting to delivery, revisions, licensing and cue sheets.",
+    lastmod: "2026-10-27",
     images: [],
     videos: [],
   },
@@ -271,7 +236,7 @@ export const hubs: Hub[] = [
     name: "Site map",
     title: "Site Map: Portfolio Hubs and Item Archive | Zazie Productions",
     description: "A human-readable overview of the portfolio hubs and operating documents. The XML sitemap separately lists all indexable production, cue, and catalogue item URLs.",
-    lastmod: "2026-10-18",
+    lastmod: "2026-10-27",
     images: [],
     videos: [],
   },
@@ -279,21 +244,21 @@ export const hubs: Hub[] = [
     path: "/hire-a-composer",
     name: "Hire a horror composer",
     title: "Hire an Experimental Psychological Horror Composer | Zazie Productions",
-    description: `Hire experimental psychological horror film composer Zazie Kanwar-Torge (Zazie Productions) for independent and arthouse cinema: IMDb-credited custom scores to picture. ${pricingSummary()}`,
-    lastmod: "2026-10-26",
+    description: "Hire experimental psychological horror film composer Zazie Kanwar-Torge (Zazie Productions) for independent and arthouse cinema: IMDb-credited custom scores to picture, quoted per project against your budget and references.",
+    lastmod: "2026-10-27",
     images: [
-      { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Kanwar-Torge, IMDb-credited experimental psychological horror film composer for hire at Zazie Productions LLC.", title: "Hire an Experimental Psychological Horror Composer — Zazie Kanwar-Torge" },
+      { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Kanwar-Torge, IMDb-credited experimental psychological horror film composer for hire at Zazie Productions LLC.", title: "Hire an Experimental Psychological Horror Composer | Zazie Kanwar-Torge" },
     ],
     videos: [],
   },
   {
     path: "/how-to-hire-a-horror-composer",
     name: "How to hire a horror composer",
-    title: "How to Hire a Horror Composer: Rates, Subgenres & Vetting Guide | Zazie Productions",
-    description: `Guide for independent filmmakers and game developers hiring a horror composer: custom score vs. stock libraries, subgenre matching, cue budgets from $${MINIMUM_FEE} USD, spotting, stems, and licensing.`,
-    lastmod: "2026-10-26",
+    title: "How to Hire a Horror Composer: Budgets, Subgenres & Vetting Guide | Zazie Productions",
+    description: "Guide for independent filmmakers and game developers hiring a horror composer: custom score vs. stock libraries, subgenre matching, planning your music budget, spotting, stems, and licensing.",
+    lastmod: "2026-10-27",
     images: [
-      { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Guide to hiring a horror composer for independent films, series, and video games by Zazie Kanwar-Torge.", title: "How to Hire a Horror Composer: Rates, Subgenres & Vetting Checklist" },
+      { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Guide to hiring a horror composer for independent films, series, and video games by Zazie Kanwar-Torge.", title: "How to Hire a Horror Composer: Budgets, Subgenres & Vetting Checklist" },
     ],
     videos: [],
   },

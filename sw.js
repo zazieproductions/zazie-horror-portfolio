@@ -111,10 +111,30 @@
 // the rebuilt legal script also restores Expand all for individual cue links.
 // v46: combine the download action with main's simplified navigation in a new
 // homepage bundle, clearing the older cached bundle and document.
-// v47: mobile layout pass - phone-only rules for the homepage compilations and
-// footer ribbons, the pre-React menu panel, new legal/store stylesheet hashes
-// (document tables, catalogue cards), and the uncropped press figure.
-const CACHE_NAME = 'zazie-v47';
+// v47: the published rate card and cost estimator are removed (2026-10-27).
+// Commissions are quoted per project against the budget range and references
+// shared in the inquiry; estimator-<hash> assets are succeeded by
+// inquiry-<hash> ones, so the cache name moves with them.
+// v48: the hero gains its lineage footnote - one desaturated line of marks
+// (Black Mountain College, Ars Electronica, Dolby Atmos) directly under the
+// call to action, added to both the prerendered document and the home bundle.
+// The document is precached as '/', so the cache name moves with it.
+// v49: /composer is retired (2026-10-29) and redirects to the homepage
+// biography section (/#about); the precached '/' document and bundle change
+// with the footer link, so the cache name moves again. This merge also folds
+// in main's post-v48 homepage copy passes (simplified contact copy, FAQ
+// section removal), which changed the same precached document and bundle.
+// v50: move Variations on a Vanishing Body directly after Dissociative Amnesia
+// in the showreel queue; the precached '/' document and home bundle move with it.
+// v51: overhaul #press into the luxury Press Kit with festival laurels, Lake
+// Ivan Film Journal critical spotlight, monograph press cards, and verified
+// profile directory across both the prerendered document and home bundle.
+// v52: simplify the homepage compilation cards; refresh the cached document and bundle.
+// v53: refresh the Press Kit quotes in the cached homepage and bundle.
+// v54: the mobile density pass. The homepage gains its pre-React menu panel
+// and phone-only density rules, and the regenerated store, legal and item
+// stylesheets carry phone layout fixes and new content hashes.
+const CACHE_NAME = 'zazie-v55';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -123,13 +143,13 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-3465aa44.css',
-  '/index-e6806e5c.js',
+  '/index-04bddc64.js',
   '/store-2d68d26d.css',
   '/store-3fc01be0.js',
   '/legal-13cbe4fc.css',
-  '/legal-c623083a.js',
-  '/estimator-fc4ddfe0.css',
-  '/estimator-2b081a5e.js',
+  '/legal-54feff84.js',
+  '/inquiry-1f1ff32f.css',
+  '/inquiry-f408888b.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',
   '/images/hero-portrait.avif'

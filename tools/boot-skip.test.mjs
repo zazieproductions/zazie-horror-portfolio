@@ -15,9 +15,9 @@ const html = fs.readFileSync(new URL('index.html', root), 'utf8');
 const sw = fs.readFileSync(new URL('sw.js', root), 'utf8');
 
 const bootCss = /<style id="zp-boot-style">([\s\S]*?)<\/style>/.exec(html)?.[1] ?? '';
-const gateScript = /<script>\s*\/\* ZP ARCHIVE BOOT — gate[\s\S]*?<\/script>/.exec(html)?.[0]
+const gateScript = /<script>\s*\/\* ZP ARCHIVE BOOT\s+-\s+gate[\s\S]*?<\/script>/.exec(html)?.[0]
   ?.replace(/^<script>|<\/script>$/g, '') ?? '';
-const driverScript = /<script>\s*\/\* ZP ARCHIVE BOOT — silent[\s\S]*?<\/script>/.exec(html)?.[0]
+const driverScript = /<script>\s*\/\* ZP ARCHIVE BOOT\s+-\s+silent[\s\S]*?<\/script>/.exec(html)?.[0]
   ?.replace(/^<script>|<\/script>$/g, '') ?? '';
 const bootMarkup = /(<div id="zp-boot"[\s\S]*?<\/div>\s*<\/div>\s*<\/div>\s*<\/div>)/.exec(html)?.[1] ?? '';
 
@@ -288,11 +288,9 @@ test('skip button markup is accessible, free of aria-hidden ancestors, and style
   assert.match(btnRule, /font:600 12px\/1/);
   assert.match(bootCss, /html\.zp-boot-on \.zp-skip\{display:none\}/);
   assert.match(bootCss, /#zp-boot\.zp-off\.zp-fast\{animation:zpFadeOut \.16s ease forwards\}/);
-  // The document is precached as '/', so any change to index.html or its home
-  // bundle has to move the cache name with it (v43: crawler mount gate,
-  // precache fetch mode and AA link-contrast stylesheet; v47: mobile layout
-  // pass - new legal/store stylesheet hashes and the pre-React menu panel).
-  assert.match(sw, /CACHE_NAME\s*=\s*'zazie-v47'/);
+  // The document and homepage bundle are precached, so the mobile density pass
+  // requires a fresh cache (v55).
+  assert.match(sw, /CACHE_NAME\s*=\s*'zazie-v55'/);
 });
 
 test('clicking #zp-boot-skip immediately dismisses the intro in fast mode and removes the node', async () => {

@@ -13,11 +13,9 @@
  *   root sw.js                points at the new bundle name.
  *
  * Changes made to the bundle:
- *   1. Copy pairs (hero, bio, services heading, contact copy, budget list).
- *   2. The Services estimator component (`lj`, found with the TypeScript parser)
- *      is replaced by static markup generated from src/data/pricing.ts. Its
- *      live behaviour comes from estimator-<hash>.js, which delegates events on
- *      the document, so it works inside the React island.
+ *   1. Copy pairs (hero, bio, contact copy, budget list and site navigation).
+ *   2. The homepage Services render call and its now-unused component (`lj`)
+ *      are removed; the dedicated /services route remains intact.
  *   3. The testimonial section is deleted outright (2026-10-24): there are no
  *      attributable, permissioned quotes to publish, and a "5.0 collaborator
  *      rating" badge pointing at placeholder reviews reads as fabricated.
@@ -30,7 +28,7 @@
  * fails. In index.html, a pair that is already applied is skipped, so the
  * script can run again without damage.
  *
- *   node home-src/build.mjs        (run after `tsc -p .`, before sync-pricing)
+ *   node home-src/build.mjs        (run after `tsc -p .`, before sync-commission)
  */
 
 import crypto from 'node:crypto';
@@ -38,14 +36,42 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
+import { ensureMobileUxAssets } from './mobile-ux.mjs';
+import {
+  applyBundleCopy,
+  applyStaticCopy,
+  removeContactSubheadStatic,
+  normalizeStaticCopy,
+  normalizeStaticSections,
+  injectBundleSections,
+  injectStaticSections,
+  ensureFunnelAssets,
+  simplifyPosterHeaderBundle,
+  simplifyPosterHeaderStatic,
+  simplifyWorkHeaderBundle,
+  simplifyWorkHeaderStatic,
+  simplifyShowreelHeaderBundle,
+  removeShowreelCountBundle,
+  removeShowreelCountStatic,
+  removeMethodSectionStatic,
+  simplifyShowreelHeaderStatic,
+  removeHeroBookingBundle,
+  removeHeroBookingStatic,
+  removeHeroProofBundle,
+  removeHeroProofStatic,
+  injectHeroLineageBundle,
+  injectHeroLineageStatic,
+  ensureLineageAssets,
+} from './conversion-copy.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const here = path.join(root, 'home-src');
-const pricing = await import('../build/lib/pricing-markup.js');
-const { budgetOptions, budgetSelectOptions, estimatorHtml, packagesHtml, inclusionsHtml } = pricing;
-const { MICROBUDGET_STATEMENT } = await import('../build/data/pricing.js');
+const { budgetSelectOptions } = await import('../build/lib/commission-markup.js');
+const { BUDGET_RANGES } = await import('../build/data/commission.js');
 const { compilationsSectionHtml, compilationsInnerHtml, SECTION_CLASS, CONTAINER_CLASS, COMPILATIONS_CSS, COMPILATIONS_JS } =
   await import('../build/lib/compilations-markup.js');
+const { pressKitSectionHtml, pressKitInnerHtml, PRESS_SECTION_CLASS, PRESS_CONTAINER_CLASS, PRESS_CSS } =
+  await import('../build/lib/press-kit-markup.js');
 const { homePosterClientData } = await import('../build/lib/home.js');
 
 // Film sample cards are video + title only: no music-description text or
@@ -127,7 +153,7 @@ const PAIRS = [
   // Non-visible semantic title attributes on primary navigation (visible labels stay concise & uncrowded)
   [
     'Ix=[{href:"#showreel",label:"Reel"},{href:"#work",label:"Work"},{href:"#services",label:"Rates"},{href:"/hire-a-composer",label:"Hire"},{href:"/store",label:"Store"}]',
-    'Ix=[{href:"#showreel",label:"Reel",title:"Body horror, folk horror, and psychological horror composer showreel"},{href:"#work",label:"Work",title:"Experimental art house, psychological, folk, and body horror film scores"},{href:"#services",label:"Rates",title:"Horror and experimental art house film scoring rates"},{href:"/store",label:"Store",title:"Horror sound libraries, experimental art house records, and audio tools"}]',
+    'Ix=[{href:"#showreel",label:"Reel",title:"Body horror, folk horror, and psychological horror composer showreel"},{href:"#work",label:"Work",title:"Experimental art house, psychological, folk, and body horror film scores"},{href:"/services",label:"Services",title:"Service details and commissioning information"},{href:"/store",label:"Store",title:"Horror sound libraries, experimental art house records, and audio tools"}]',
     BUNDLE,
   ],
   [
@@ -141,11 +167,6 @@ const PAIRS = [
     BUNDLE,
   ],
   [
-    '<a href="#showreel" title="Body horror, folk horror, and psychological horror composer showreel" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Reel</a><a href="#work" title="Experimental art house, psychological, folk, and body horror film scores" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Work</a><a href="#services" title="Horror and experimental art house film scoring rates" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Rates</a><a href="/hire-a-composer" title="Hire a folk horror, body horror, and psychological horror composer" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Hire</a><a href="/store" title="Horror sound libraries, experimental art house records, and audio tools" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Store</a>',
-    '<a href="#showreel" title="Body horror, folk horror, and psychological horror composer showreel" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Reel</a><a href="#work" title="Experimental art house, psychological, folk, and body horror film scores" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Work</a><a href="#services" title="Horror and experimental art house film scoring rates" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Rates</a><a href="/store" title="Horror sound libraries, experimental art house records, and audio tools" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Store</a>',
-    HTML,
-  ],
-  [
     '<a href="#contact" class="ml-3 bg-blood px-5 py-2.5 text-[10px] uppercase tracking-[0.22em] text-bone shadow-[0_0_24px_rgba(196,30,30,0.25)] transition-all hover:bg-ember hover:shadow-[0_0_32px_rgba(255,42,42,0.35)]">Scoring inquiry</a>',
     '<a href="#contact" title="Commission an experimental art house, psychological, folk, or body horror score" class="ml-3 bg-blood px-5 py-2.5 text-[10px] uppercase tracking-[0.22em] text-bone shadow-[0_0_24px_rgba(196,30,30,0.25)] transition-all hover:bg-ember hover:shadow-[0_0_32px_rgba(255,42,42,0.35)]">Scoring inquiry</a>',
     HTML,
@@ -156,23 +177,19 @@ const PAIRS = [
     BUNDLE,
   ],
   // Hero (keep visible copy clean & uncrowded)
+
   [
-    '<h1 class="font-display text-[2.35rem] leading-[1.02] tracking-tight text-bone sm:text-4xl md:text-5xl">Experimental Art House &amp; Psychological Horror <span class="mt-1 block bg-gradient-to-r from-blood via-ember to-blood bg-clip-text italic text-transparent">Scores for Folk Horror &amp; Body Horror.</span></h1>',
-    '<h1 class="font-display text-[2.35rem] leading-[1.02] tracking-tight text-bone sm:text-5xl md:text-6xl lg:text-[3.75rem]">Dark, atmospheric horror scores, <span class="mt-1 block bg-gradient-to-r from-blood via-ember to-blood bg-clip-text italic text-transparent">written to your picture.</span></h1>',
-    HTML,
-  ],
-  [
-    '<p class="mt-5 max-w-lg font-display text-xl leading-snug text-bone/90 sm:mt-6 sm:text-2xl">Bespoke Body Horror, Folk Horror, and Experimental Art House film scores — <span class="text-mist">bowed metal, prepared strings, and psychological dread composed to picture for prestige cinema, TV, and games.</span></p>',
     '<p class="mt-5 max-w-md font-display text-xl leading-snug text-bone/90 sm:mt-6 sm:text-2xl">Experimental psychological horror film composer <span class="text-mist">for independent and arthouse cinema.</span></p>',
+    '<p class="mt-5 max-w-md font-display text-xl leading-snug text-bone/90 sm:mt-6 sm:text-2xl">Bespoke, avant-garde sonic identities for psychological horror, folk horror, <span class="text-mist">atmospheric dramas, and experimental art-house cinema.</span></p>',
     HTML,
   ],
-  // Primary identity (2026-10-26): the hero subhead states the specialist
-  // positioning verbatim in the same two-tone slot. The bundle renders the
-  // subhead as two string children, so each half is its own pair; the H1
-  // above it ("Dark, atmospheric horror scores...") is deliberately kept.
-  ['Original music for psychological horror, thrillers, and dark sci-fi,', 'Experimental psychological horror film composer', BUNDLE],
-  ['composed for film, TV, and games.', 'for independent and arthouse cinema.', BUNDLE],
-  ['Start an inquiry', 'Request a scoring quote', BOTH],
+  // New above-the-fold positioning. The bundle renders the supporting
+  // sentence as two string children, so each half is its own pair; the
+  // static snapshot uses one matching paragraph.
+  ['Original music for psychological horror, thrillers, and dark sci-fi,', 'Bespoke, avant-garde sonic identities for psychological horror, folk horror,', BUNDLE],
+  ['composed for film, TV, and games.', 'atmospheric dramas, and experimental art-house cinema.', BUNDLE],
+  // The hero's secondary CTA keeps its shipped label ("Start an inquiry"): the
+  // 2026-10-28 rewrite to "Request a scoring quote" was reverted on 2026-10-29.
   // User-provided biography; HTML emphasis is shared with the static snapshot.
   ["Zazie Kanwar-Torge is an award-winning composer, experimental producer, and multi-instrumentalist. Under Zazie Productions, he writes and performs original scores for psychological, folk, and body horror, supernatural thrillers, and dark sci-fi.", "<strong>Zazie Kanwar-Torge</strong> is an award-winning film composer, experimental producer, and multi-instrumentalist specializing in <strong>experimental psychological horror for independent and arthouse cinema, folk horror, body horror, supernatural thrillers, and dark science fiction</strong>. Through Zazie Productions, he creates original film scores and immersive sonic atmospheres that explore dread, dissonance, isolation, and the uncanny.", "bundle"],
   [
@@ -196,10 +213,18 @@ const PAIRS = [
   [' · Atmospheric horror scores', ' · Psychological horror film scores', BUNDLE],
   ['[["/hire-a-composer","Hire a composer"],["/sound-design","Sound design"]', '[["/hire-a-composer","Hire a horror composer"],["/how-to-hire-a-horror-composer","Hiring guide"],["/sound-design","Sound design"]', BUNDLE],
   ['<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a composer</a><a href="/sound-design"', '<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a horror composer</a><a href="/how-to-hire-a-horror-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hiring guide</a><a href="/sound-design"', HTML],
+  ['["/services","Rate card"]', '["/services","Services"]', BUNDLE],
+  ['["/contact","Contact"]', '["#contact","Contact"]', BUNDLE],
+  // /composer retired (2026-10-29): the footer archive link folds into the
+  // homepage biography section instead of a standalone page.
+  ['["/composer","Composer biography"]', '["#about","Composer biography"]', BUNDLE],
+  ['<a href="/composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Composer biography</a>', '<a href="#about" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Composer biography</a>', HTML],
   // Keep a direct, 44px quote action visible on phones; the full section menu
   // remains available beside it. aria-expanded follows the React menu state.
-  [']}),u.jsx("button",{className:"border border-white/10 p-2.5 text-bone transition-colors hover:border-blood/50 xl:hidden",onClick:()=>r(e=>!e),"aria-label":n?"Close menu":"Open menu",', ']}),u.jsx("a",{href:"/contact",className:"zp-mobile-quote",children:"Get a quote"}),u.jsx("button",{type:"button",className:"zp-menu-button xl:hidden",onClick:()=>r(e=>!e),"aria-expanded":n,"aria-controls":"mobile-navigation","aria-label":n?"Close menu":"Open menu",', BUNDLE],
-  ['<button class="border border-white/10 p-2.5 text-bone transition-colors hover:border-blood/50 xl:hidden" aria-label="Open menu">', '<a href="/contact" class="zp-mobile-quote">Get a quote</a><button type="button" class="zp-menu-button xl:hidden" aria-expanded="false" aria-controls="mobile-navigation" aria-label="Open menu">', HTML],
+  [']}),u.jsx("button",{className:"border border-white/10 p-2.5 text-bone transition-colors hover:border-blood/50 xl:hidden",onClick:()=>r(e=>!e),"aria-label":n?"Close menu":"Open menu",', ']}),u.jsx("a",{href:"#contact",className:"zp-mobile-quote",children:"Get a quote"}),u.jsx("button",{type:"button",className:"zp-menu-button xl:hidden",onClick:()=>r(e=>!e),"aria-expanded":n,"aria-controls":"mobile-navigation","aria-label":n?"Close menu":"Open menu",', BUNDLE],
+  ['<button class="border border-white/10 p-2.5 text-bone transition-colors hover:border-blood/50 xl:hidden" aria-label="Open menu">', '<a href="#contact" class="zp-mobile-quote">Get a quote</a><button type="button" class="zp-menu-button xl:hidden" aria-expanded="false" aria-controls="mobile-navigation" aria-label="Open menu">', HTML],
+  ['<a href="/contact" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Contact</a>', '<a href="#contact" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Contact</a>', HTML],
+  ['u.jsx("a",{href:"/contact",className:"text-bone underline underline-offset-2 hover:text-blood",children:"scoring inquiry page"})', 'u.jsx("a",{href:"#contact",className:"text-bone underline underline-offset-2 hover:text-blood",children:"scoring inquiry page"})', BUNDLE],
   ['u.jsxs("nav",{className:"hidden items-center gap-1 xl:flex",', 'u.jsxs("nav",{"aria-label":"Primary navigation",className:"hidden items-center gap-1 xl:flex",', BUNDLE],
   ['n&&u.jsx(Bt.div,{initial:{opacity:0,height:0},animate:{opacity:1,height:"auto"},exit:{opacity:0,height:0},className:"overflow-hidden border-t border-white/5 bg-void/95 backdrop-blur-xl xl:hidden",', 'n&&u.jsx(Bt.nav,{initial:{opacity:0,height:0},animate:{opacity:1,height:"auto"},exit:{opacity:0,height:0},id:"mobile-navigation","aria-label":"Mobile navigation",className:"overflow-hidden border-t border-white/5 bg-void/95 backdrop-blur-xl xl:hidden",', BUNDLE],
   ['tj.map((e,t)=>u.jsxs(Bt.div,{initial:{opacity:0,y:16},whileInView:{opacity:1,y:0}', 'tj.map((e,t)=>u.jsxs(Bt.article,{initial:{opacity:0,y:16},whileInView:{opacity:1,y:0}', BUNDLE],
@@ -331,23 +356,17 @@ const PAIRS = [
     BUNDLE,
   ],
   ['u.jsx(cj,{"data-source-loc":"src/App.tsx:46:10"}),', '', BUNDLE],
-  // Section order: the biography (#about, rj) now sits before the compilations
-  // section (see addCompilationsSection / patchStatic), so the numbered
-  // kickers renumber with it — Biography 05→03, Approach 03→04, Services
-  // 04→05; Contact stays 06. The HTML-only services pair migrates a snapshot
-  // already carrying the previous build's "04 · Scoring services"; it must run
-  // before the BOTH pair below, whose bundle source still reads "Scope and
-  // budget" and whose static side then sees the new text and skips.
-  ['03 · Approach', '04 · Approach', BOTH],
-  ['05 · Biography', '03 · Biography', BOTH],
-  ['04 · Scoring services', '05 · Scoring services', HTML],
-  // Services heading
-  ['04 · Scope and budget', '05 · Scoring services', BOTH],
-  ['Build a scope and estimate', 'Rates & estimates', BUNDLE],
-  ['Build a scope and estimate', 'Rates &amp; estimates', HTML],
-  ['Choose a project type, scored runtime, complexity, and delivery needs.', 'Packages are priced by scored music minutes, not film length.', BOTH],
-  ["Estimates scale with your project's funding.", 'Preliminary estimate — final quotation subject to creative scope and written agreement.', BUNDLE],
-  ['Packages are priced by scored music minutes, not film length. Estimates are indicative and nonbinding.', 'Packages are priced by scored music minutes, not film length. Preliminary estimate — final quotation subject to creative scope and written agreement.', HTML],
+  // "02 · Approach" (#method) removed 2026-10-29 at the owner's request: the
+  // three cards restated the process story already carried by /process and the
+  // commissioning pages. The render call comes out here; the section component
+  // (ej) and its card data (tj) are cut by the parser in patchBundle, and
+  // removeMethodSectionStatic drops the matching static markup.
+  ['u.jsx(ej,{"data-source-loc":"src/App.tsx:41:10"}),', '', BUNDLE],
+  // The film-samples intro is now an unnumbered Showreel heading. Keep the
+  // remaining numbered section kickers contiguous: Biography 01, Contact 02.
+  ['03 · Biography', '01 · Biography', HTML],
+  ['05 · Biography', '01 · Biography', BUNDLE],
+  ['06 · Contact', '02 · Contact', BOTH],
   // Contact
   ['Share your format, runtime, timeline, and budget. The form prepares an email for you to review and send.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', BUNDLE],
   ['Share your format, scored minutes, timeline, and budget.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', HTML],
@@ -364,6 +383,7 @@ const PAIRS = [
   ['>Runtime<', '>Scored minutes (music, not film length)<', HTML],
   ['placeholder="e.g. 12 min / 90 min"', 'placeholder="e.g. 3 scored minutes"', HTML],
   ['aria-label="Runtime"', 'aria-label="Scored minutes (music, not film length)"', HTML],
+  ['References, creative goals, rights, or other project details', 'Musical references (films, scores or tracks you love), creative goals, rights, or anything else', BOTH],
 
   // Form controls (see fieldName above). The two Contact field components are
   // patched once each and derive their name from the label they already render
@@ -397,7 +417,7 @@ const PAIRS = [
   ],
 ];
 
-/** Budget options come from the package list; the bundle reads xu[]. */
+/** Budget ranges come from commission.ts (client-stated, never a fee); the bundle reads xu[]. */
 const BUNDLE_BUDGET_OLD = 'xu=["Under $300","$300 - $500","$500 - $700","$700 - $900","$900+","Flexible / discuss"]';
 const BUNDLE_BUDGET_DEFAULT_OLD = 'useState(xu[1])';
 
@@ -409,40 +429,6 @@ const BUNDLE_BUDGET_DEFAULT_OLD = 'useState(xu[1])';
  */
 const HERO_ART_HTML =
   '<div class="pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] lg:block"><div class="zp-hero-art"><div class="zp-hero-art-plate"><picture><source srcset="/images/hero-portrait.avif" type="image/avif"><img alt="Zazie Productions: Experimental art house, psychological, folk, and body horror film scores by Zazie Kanwar-Torge featuring bowed metal and experimental synthesis." class="absolute inset-0 h-full w-full object-contain" src="/images/hero-portrait.jpg" width="896" height="1152" loading="lazy" decoding="async"></picture></div><div class="zp-hero-art-scrim" aria-hidden="true"></div></div></div>';
-
-const ISLAND_OPEN = '<div class="zp-home-section zp-home-island" data-zp-island="estimator"><div class="zp-shell">';
-const ISLAND_CLOSE = '</div></div>';
-const SERVICES_HEADER = [
-  '<div class="mb-10 max-w-2xl sm:mb-14">',
-  '<p class="mb-3 text-[10px] uppercase tracking-[0.35em] text-blood sm:text-[11px] sm:tracking-[0.4em]">05 · Scoring services</p>',
-  '<h2 class="mb-4 font-display text-3xl leading-none text-bone sm:text-4xl md:text-6xl">Rates &amp; estimates</h2>',
-  '<p class="text-sm leading-relaxed text-mist sm:text-base">Packages are priced by scored music minutes, not film length. Preliminary estimate — final quotation subject to creative scope and written agreement.</p>',
-  '</div>',
-].join('');
-
-/**
- * Markup for the homepage island. The bundle renders the real markup; the
- * static copy in index.html carries sync-pricing marker blocks in the same
- * places, so sync-pricing fills it from pricing.ts and it never drifts.
- */
-function islandHtml(staticMarkers = false) {
-  const block = (name, render) => (staticMarkers ? `<!--zp:${name}--><!--/zp:${name}-->` : render());
-  // The static copy carries a pricing token so sync-pricing keeps it in step;
-  // the bundle inlines the same statement from pricing.ts at build time.
-  const microbudget = staticMarkers
-    ? '<p class="zp-microbudget">{{zp:microbudget}}</p>'
-    : `<p class="zp-microbudget">${MICROBUDGET_STATEMENT}</p>`;
-  return [
-    ISLAND_OPEN,
-    '<p class="zp-kicker">Commission packages</p>',
-    block('packages', packagesHtml),
-    block('inclusions', inclusionsHtml),
-    microbudget,
-    '<h3 class="zp-sub">Estimate your scope</h3>',
-    block('estimator', estimatorHtml),
-    ISLAND_CLOSE,
-  ].join('');
-}
 
 /* ----------------------------------------------------------- bundle patch */
 
@@ -489,6 +475,10 @@ function readShowreelTracks(source) {
   if (tracks.length !== 30) throw new Error(`bundle: expected 30 showreel tracks after patching, found ${tracks.length}`);
   if (tracks[0].title !== 'The Beautiful Wrongness') throw new Error('bundle: The Beautiful Wrongness must be the default first track');
   if (tracks[1].title !== 'The Fatal Overdose') throw new Error('bundle: The Fatal Overdose must be the second track');
+  const amnesiaIndex = tracks.findIndex((track) => track.title === 'Dissociative Amnesia');
+  if (amnesiaIndex < 0 || tracks[amnesiaIndex + 1]?.title !== 'Variations on a Vanishing Body') {
+    throw new Error('bundle: Variations on a Vanishing Body must immediately follow Dissociative Amnesia');
+  }
   if (new Set(tracks.map((track) => track.id)).size !== tracks.length) throw new Error('bundle: duplicate showreel track IDs');
   for (const retired of ['Dark Thriller Cinematic Cue', 'Screams of The Damned']) {
     if (tracks.some((track) => track.title === retired)) throw new Error(`bundle: retired track remains: ${retired}`);
@@ -633,8 +623,9 @@ function patchBundle(orig) {
     out = out.replace(oldText, () => newText);
   }
   // The Beautiful Wrongness is the default; retain main's promotion of The
-  // Fatal Overdose immediately after it. IDs remain stable audio-file mappings;
-  // visible row numbers already come from each track's queue index.
+  // Fatal Overdose immediately after it, and place Variations on a Vanishing
+  // Body directly after Dissociative Amnesia. IDs remain stable audio-file
+  // mappings; visible row numbers already come from each track's queue index.
   const tracksMatch = out.match(/tracks:\[([\s\S]*?)\],projects:/);
   if (!tracksMatch) throw new Error('bundle: homepage player track list not found');
   const tracks = tracksMatch[1].split('},{').map((track) =>
@@ -645,6 +636,12 @@ function patchBundle(orig) {
   if (!tracks[0].includes('title:"The Beautiful Wrongness"')) throw new Error('bundle: The Beautiful Wrongness must remain first');
   const [fatal] = tracks.splice(fatalIndex, 1);
   tracks.splice(1, 0, fatal);
+  const vanishingIndex = tracks.findIndex((track) => track.includes('title:"Variations on a Vanishing Body"'));
+  if (vanishingIndex < 0) throw new Error('bundle: Variations on a Vanishing Body not found');
+  const [vanishing] = tracks.splice(vanishingIndex, 1);
+  const amnesiaIndex = tracks.findIndex((track) => track.includes('title:"Dissociative Amnesia"'));
+  if (amnesiaIndex < 0) throw new Error('bundle: Dissociative Amnesia not found');
+  tracks.splice(amnesiaIndex + 1, 0, vanishing);
   out = out.replace(tracksMatch[0], `tracks:[${tracks.join(',')}],projects:`);
 
   // Enrich It.projects with slug so K5 renders the semantic `sample-${slug}` anchor.
@@ -690,7 +687,7 @@ function patchBundle(orig) {
     out = out.slice(0, cut.start) + f5Replacement + out.slice(cut.end);
   }
 
-  for (const [oldText, newText] of [[BUNDLE_BUDGET_OLD, `xu=${JSON.stringify(budgetOptions())}`], [BUNDLE_BUDGET_DEFAULT_OLD, 'useState(xu[0])']]) {
+  for (const [oldText, newText] of [[BUNDLE_BUDGET_OLD, `xu=${JSON.stringify([...BUDGET_RANGES])}`], [BUNDLE_BUDGET_DEFAULT_OLD, 'useState(xu[0])']]) {
     const n = countOf(out, oldText);
     if (n !== 1) throw new Error(`bundle: "${oldText}" matched ${n} times, expected 1`);
     out = out.replace(oldText, () => newText);
@@ -713,12 +710,31 @@ function patchBundle(orig) {
       throw new Error('bundle: testimonials data s1 is still referenced after removal');
     }
   }
-  const { start, end } = findTopLevelFunction(out, 'lj');
-  const servicesMarkup = SERVICES_HEADER + islandHtml(false);
-  const replacement = `function lj(){return u.jsx("section",{id:"services",className:"relative bg-ink py-14 sm:py-20 md:py-28",children:u.jsx("div",{className:"mx-auto max-w-7xl px-4 sm:px-6 md:px-8",dangerouslySetInnerHTML:{__html:${JSON.stringify(servicesMarkup)}}})})}`;
-  out = out.slice(0, start) + replacement + out.slice(end);
+  // Approach excision (2026-10-29). The render call for #method is gone with
+  // the PAIRS above, so the section component (ej) and the three-card data it
+  // alone reads (tj) are unreferenced. Statement-level cuts keep the minified
+  // neighbours intact, and the finders demand exactly one top-level hit so a
+  // future minifier rename fails the build here instead of shipping a
+  // half-removed section.
+  {
+    const cut = findTopLevelFunction(out, 'ej');
+    out = out.slice(0, cut.start) + out.slice(cut.end);
+    if (out.includes('jsx(ej') || out.includes('jsxs(ej')) {
+      throw new Error('bundle: Approach component ej is still rendered after removal');
+    }
+  }
+  {
+    const cut = findTopLevelVariable(out, 'tj');
+    out = out.slice(0, cut.start) + out.slice(cut.end);
+    if (/\btj\b/.test(out)) {
+      throw new Error('bundle: Approach card data tj is still referenced after removal');
+    }
+  }
   out = addCompilationsSection(out);
-  // Remove unneeded explanatory paragraph under red \"Send scoring inquiry\" button
+  // The homepage services render call is removed above; remove its now-unused
+  // component too so commissioning copy does not remain dormant in the bundle.
+  const servicesComponent = findTopLevelFunction(out, 'lj');
+  out = out.slice(0, servicesComponent.start) + out.slice(servicesComponent.end);
   // Pristine bundle renders: <button>Send scoring inquiry</button><p>Opens your email → ...</p>
   // That text is redundant next to the button and clutters the contact form.
   // Removal is idempotent: if already gone, no change.
@@ -736,6 +752,36 @@ function patchBundle(orig) {
       out = out.slice(0, idx) + out.slice(cutEnd);
     }
   }
+  // Apply the homepage funnel copy and its static React islands after the
+  // latest commission-flow transformations have finished.
+  out = applyBundleCopy(out);
+  // Remove the oversized italic promise beneath the contact heading.
+  const contactSubhead = '"Project inquiries ",u.jsx("span",{className:"mt-2 block italic text-blood",children:"A written quote, scope and schedule follow review."})';
+  if (countOf(out, contactSubhead) !== 1) throw new Error('bundle: contact subheading not found exactly once');
+  out = out.replace(contactSubhead, '"Project inquiries"');
+  out = injectBundleSections(out);
+  out = simplifyPosterHeaderBundle(out);
+  out = simplifyWorkHeaderBundle(out);
+  out = simplifyShowreelHeaderBundle(out);
+  out = removeShowreelCountBundle(out);
+  out = removeHeroBookingBundle(out);
+  out = removeHeroProofBundle(out);
+  out = injectHeroLineageBundle(out);
+  // Replace #press component (I5) and remove legacy press array (W5) AFTER
+  // all anchor-dependent bundle injections have run.
+  {
+    const w5Cut = findTopLevelVariable(out, 'W5');
+    out = out.slice(0, w5Cut.start) + out.slice(w5Cut.end);
+    const i5Cut = findTopLevelFunction(out, 'I5');
+    const i5Replacement =
+      `function I5(){return u.jsx("section",{id:"press","aria-labelledby":"zp-press-heading",className:${JSON.stringify(PRESS_SECTION_CLASS)},` +
+      `children:u.jsx("div",{className:${JSON.stringify(PRESS_CONTAINER_CLASS)},dangerouslySetInnerHTML:{__html:${JSON.stringify(pressKitInnerHtml())}}})})}`;
+    out = out.slice(0, i5Cut.start) + i5Replacement + out.slice(i5Cut.end);
+    if (/\bW5\b/.test(out)) {
+      throw new Error('bundle: legacy press data W5 is still referenced after replacement');
+    }
+  }
+  out = out.replace(/[ \t]*—[ \t]*/g, ' - ').replace(/[ \t]{2,}-[ \t]{2,}/g, ' - ');
   assertBundleParses(out);
   return out;
 }
@@ -743,9 +789,9 @@ function patchBundle(orig) {
 /**
  * Homepage "Compilations" section (src/lib/compilations-markup.ts). It is a
  * static-markup component placed between the biography (About, rj) and the
- * press kit (I5) in App, with the biography itself moved up from its shipped
- * slot between Services (lj) and Contact (dj) so the bio sits before the
- * compilations; index.html carries the identical order (patchStatic).
+ * press kit (I5) in App. The biography is moved up after the showreel, and the
+ * homepage commissioning component (lj) is removed from its shipped slot;
+ * index.html carries the same section order (patchStatic).
  */
 function addCompilationsSection(source) {
   let out = source;
@@ -756,8 +802,8 @@ function addCompilationsSection(source) {
     ['function I5(){return u.jsx("section",{id:"press"', `${component}function I5(){return u.jsx("section",{id:"press"`],
     // Biography before compilations, straight after the showreel (G5).
     ['u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"}),u.jsx(I5,', 'u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"}),u.jsx(rj,{"data-source-loc":"src/App.tsx:45:10"}),u.jsx(zpCompilations,{}),u.jsx(I5,'],
-    // …and out of its shipped slot, so About renders exactly once.
-    ['u.jsx(lj,{"data-source-loc":"src/App.tsx:44:10"}),u.jsx(rj,{"data-source-loc":"src/App.tsx:45:10"}),', 'u.jsx(lj,{"data-source-loc":"src/App.tsx:44:10"}),'],
+    // Remove the duplicate biography and the retired homepage services section.
+    ['u.jsx(lj,{"data-source-loc":"src/App.tsx:44:10"}),u.jsx(rj,{"data-source-loc":"src/App.tsx:45:10"}),', ''],
   ]) {
     const n = countOf(out, oldText);
     if (n !== 1) throw new Error(`bundle: "${oldText.slice(0, 60)}" matched ${n} times, expected 1`);
@@ -769,8 +815,18 @@ function addCompilationsSection(source) {
 /* ------------------------------------------------------ static copy patch */
 
 function patchStatic(html, tracks) {
-  let out = stripDerivedFieldNames(html).replaceAll('rel="noreferrer"', 'rel="noopener noreferrer"');
+  let out = normalizeStaticCopy(html);
+  out = normalizeStaticSections(out);
+  out = removeMethodSectionStatic(out);
+  out = stripDerivedFieldNames(out).replaceAll('rel="noreferrer"', 'rel="noopener noreferrer"');
   const applied = [];
+  // Normalize the previous generated section numbering back to its pristine
+  // source values before applying the current contiguous sequence.
+  if (countOf(out, '02 · Biography') === 1) out = out.replace('02 · Biography', '03 · Biography');
+  if (countOf(out, '02 · Contact') === 1) out = out.replace('02 · Contact', '06 · Contact');
+  if (countOf(out, '03 · Contact') === 1) out = out.replace('03 · Contact', '06 · Contact');
+  if (countOf(out, '04 · Contact') === 1) out = out.replace('04 · Contact', '06 · Contact');
+  if (countOf(out, '05 · Contact') === 1) out = out.replace('05 · Contact', '06 · Contact');
   for (const [oldText, newText, target] of PAIRS) {
     if (target === BUNDLE) continue;
     const n = countOf(out, oldText);
@@ -779,6 +835,10 @@ function patchStatic(html, tracks) {
       applied.push(oldText.slice(0, 40));
     } else if (n === 0 && countOf(out, newText) >= 1) {
       continue; // already applied
+    } else if (n === 0 && countOf(out, newText) === 0 && oldText.includes('Browse and play original horror cues by mood.') && /<section id="showreel"[\s\S]*?href="\/reel#download"/.test(out)) {
+      // The current canonical header is already simplified and carries the
+      // download link; the older explanatory paragraph no longer exists.
+      continue;
     } else if (n === 0 && countOf(out, newText) === 0 && oldText === '32-cue showreel') {
       // This string lives only inside the helper paragraph removed below.
       // If the paragraph was already deleted (e.g., manual edit before a rebuild),
@@ -788,7 +848,19 @@ function patchStatic(html, tracks) {
       throw new Error(`index.html: "${oldText.slice(0, 60)}" matched ${n} times, expected 1`);
     }
   }
-  // Remove unneeded explanatory paragraph under red \"Send scoring inquiry\" button
+  // Keep the homepage Services nav item, but point it at the dedicated route
+  // rather than a removed in-page section. Accept both the original Rates
+  // label and the previously generated Services label.
+  const servicesNav = /<a href="#services" title="[^"]*" class="px-4 py-2 text-\[10px\] uppercase tracking-\[0\.28em\] text-mist transition-colors hover:text-bone">(?:Rates|Services)<\/a>/;
+  if (servicesNav.test(out)) {
+    out = out.replace(servicesNav, '<a href="/services" title="Service details and commissioning information" class="px-4 py-2 text-[10px] uppercase tracking-[0.28em] text-mist transition-colors hover:text-bone">Services</a>');
+    applied.push('homepage Services nav now opens /services');
+  }
+  if (out.includes('href="#services"')) {
+    out = out.replaceAll('href="#services"', 'href="/services"');
+    applied.push('remaining homepage #services links now open /services');
+  }
+
   // Static snapshot carries: <p class=\"text-[10px] leading-relaxed text-mist\">Opens your email → ...</p>
   // This must run AFTER the PAIRS above, because the pristine snapshot has
   // \"32-cue showreel\" inside this paragraph and PAIRS converts it to \"30-cue\"
@@ -880,42 +952,19 @@ function patchStatic(html, tracks) {
     applied.push('biography placed before the compilations section, after the showreel');
   }
 
-  // Services: replace the old React estimator snapshot with the static island.
-  // The header paragraph is followed by its wrapper's </div>, then the grid
-  // that holds the old "Scope builder". We replace the grid, matched by depth.
-  const sectionStart = out.indexOf('<section id="services"');
-  const sectionEnd = out.indexOf('</section>', sectionStart);
-  if (sectionStart < 0 || sectionEnd < 0) throw new Error('index.html: no #services section');
-  const previousPackageSubheading = '<h3 class="zp-sub" style="margin-top:0">Choose by scored music minutes</h3>';
-  if (out.includes(previousPackageSubheading)) {
-    out = out.replace(previousPackageSubheading, '');
-    applied.push('redundant package subheading removed');
-  }
-  const legacyIslandOpen = '<div class="zp-home-section"><div class="zp-shell">';
-  if (out.includes(legacyIslandOpen)) {
-    out = out.replace(legacyIslandOpen, ISLAND_OPEN);
-    applied.push('services island identity updated');
-  }
-  if (!out.slice(sectionStart, sectionEnd).includes('zp-home-section')) {
-    const header = out.indexOf('Packages are priced by scored music minutes, not film length.', sectionStart);
-    if (header < 0) throw new Error('index.html: services header paragraph not found');
-    const gridOpen = '<div class="grid gap-5 lg:grid-cols-12 lg:gap-6">';
-    const gridStart = out.indexOf(gridOpen, header);
-    if (gridStart < 0 || gridStart > sectionEnd) throw new Error('index.html: services grid not found');
-    let depth = 0;
-    let gridEnd = -1;
-    const tag = /<div\b[^>]*>|<\/div>/g;
-    tag.lastIndex = gridStart;
-    for (let m = tag.exec(out); m; m = tag.exec(out)) {
-      depth += m[0].startsWith('</') ? -1 : 1;
-      if (depth === 0) { gridEnd = m.index + m[0].length; break; }
+  // Retire the homepage commissioning block completely. The dedicated
+  // /services route remains available; this removal only affects `/`.
+  {
+    const services = /<section id="services"[\s\S]*?<\/section>/g;
+    const matches = [...out.matchAll(services)];
+    if (matches.length > 1) throw new Error(`index.html: expected at most one homepage #services section, found ${matches.length}`);
+    if (matches.length === 1) {
+      out = out.replace(services, '');
+      applied.push('homepage commissioning section removed');
     }
-    if (gridEnd < 0 || gridEnd > sectionEnd) throw new Error('index.html: services grid did not close inside #services');
-    out = out.slice(0, gridStart) + islandHtml(true) + out.slice(gridEnd);
-    applied.push(`services grid replaced by island (${gridEnd - gridStart} chars)`);
   }
 
-  // Budget select: option list from the package list.
+  // Budget select: option list from the commission.ts budget ranges.
   const budgetRe = /(<select[^>]*aria-label="Budget">)[\s\S]*?(<\/select>)/;
   if (!budgetRe.test(out)) throw new Error('index.html: budget select not found');
   out = out.replace(budgetRe, (_m, open, close) => `${open}${budgetSelectOptions()}${close}`);
@@ -941,23 +990,6 @@ function patchStatic(html, tracks) {
       '<nav aria-label="Primary navigation" class="hidden items-center gap-1 xl:flex">',
     );
     applied.push('added aria-label="Primary navigation" to header <nav>');
-  }
-
-  // Convert the 3 Approach cards in #method from generic <div> to semantic <article>.
-  {
-    const methodStart = out.indexOf('<section id="method"');
-    const methodEnd = out.indexOf('</section>', methodStart);
-    if (methodStart >= 0 && methodEnd > methodStart) {
-      const beforeMethod = out.slice(methodStart, methodEnd);
-      const afterMethod = beforeMethod.replace(
-        /<div class="(group border border-ash bg-ink\/70 p-5 transition-colors hover:border-blood\/40 sm:p-7)">([\s\S]*?<p class="text-sm leading-relaxed text-mist">[\s\S]*?<\/p>)<\/div>/g,
-        '<article class="$1">$2</article>',
-      );
-      if (afterMethod !== beforeMethod) {
-        out = out.slice(0, methodStart) + afterMethod + out.slice(methodEnd);
-        applied.push('converted #method cards to <article>');
-      }
-    }
   }
 
   // The 8 film sample <article> cards in #work keep id="sample-${slug}" but
@@ -1016,7 +1048,45 @@ function patchStatic(html, tracks) {
     out = named.html;
   }
 
+  const heroTagline = '<p class="mt-4 max-w-md text-sm italic leading-relaxed text-bone/80">For filmmakers who refuse to let a safe, predictable Hollywood score apologize for their visual ambition.</p>';
+  if (countOf(out, heroTagline) > 1) throw new Error('index.html: duplicate hero tagline found');
+  out = out.replace(heroTagline, '');
+  out = simplifyWorkHeaderStatic(out);
+  out = applyStaticCopy(out);
+  out = removeContactSubheadStatic(out);
+  out = injectStaticSections(out);
+  out = simplifyPosterHeaderStatic(out);
+  out = simplifyShowreelHeaderStatic(out);
+  out = removeShowreelCountStatic(out);
+  out = removeHeroBookingStatic(out);
+  out = removeHeroProofStatic(out);
+  out = injectHeroLineageStatic(out);
+  {
+    const pressRe = /<section id="press"(?:\s|>)[\s\S]*?<\/section>/;
+    if (!pressRe.test(out)) throw new Error('index.html: #press section not found');
+    const nextPress = pressKitSectionHtml();
+    const replaced = out.replace(pressRe, () => nextPress);
+    if (replaced !== out) applied.push('electronic press kit (#press) synced');
+    out = replaced;
+  }
+  out = out.replace(/[ \t]*—[ \t]*/g, ' - ').replace(/[ \t]{2,}-[ \t]{2,}/g, ' - ');
   return { html: out, applied };
+}
+
+/** Inline style for the Electronic Press Kit (#press) section. */
+function ensurePressKitAssets(html) {
+  let out = html;
+  const block = `<style id="zp-press-style">${PRESS_CSS}</style>`;
+  const existing = /<style id="zp-press-style">[\s\S]*?<\/style>/g;
+  let kept = false;
+  const before = out;
+  out = out.replace(existing, () => {
+    if (kept) return '';
+    kept = true;
+    return block;
+  });
+  if (!kept) out = before.replace('</head>', () => `${block}\n</head>`);
+  return out;
 }
 
 /** Inline style and click-to-load script for the compilations section. */
@@ -1025,21 +1095,32 @@ function ensureCompilationsAssets(html) {
   const style = `<style id="zp-comp-style">${COMPILATIONS_CSS}</style>`;
   const script = `<script id="zp-comp-script">${COMPILATIONS_JS}</script>`;
   for (const [id, tag, block] of [['zp-comp-style', 'style', style], ['zp-comp-script', 'script', script]]) {
-    const existing = new RegExp(`<${tag} id="${id}">[\\s\\S]*?</${tag}>`);
-    out = existing.test(out) ? out.replace(existing, () => block) : out.replace('</head>', () => `${block}\n</head>`);
+    const existing = new RegExp(`<${tag} id="${id}">[\\s\\S]*?</${tag}>`, 'g');
+    let kept = false;
+    const before = out;
+    out = out.replace(existing, () => {
+      if (kept) return '';
+      kept = true;
+      return block;
+    });
+    if (!kept) out = before.replace('</head>', () => `${block}\n</head>`);
   }
   return out;
 }
 
-/** The estimator stylesheet and script used by the homepage island. */
-function ensureEstimatorAssets(html) {
-  const css = fs.readdirSync(root).find((f) => /^estimator-[0-9a-f]{8}\.css$/.test(f));
-  const js = fs.readdirSync(root).find((f) => /^estimator-[0-9a-f]{8}\.js$/.test(f));
-  if (!css || !js) throw new Error('estimator assets missing: run node scripts/build-estimator.mjs first');
+/** The inquiry stylesheet and script used by the homepage island and forms. */
+function ensureInquiryAssets(html) {
+  const css = fs.readdirSync(root).find((f) => /^inquiry-[0-9a-f]{8}\.css$/.test(f));
+  const js = fs.readdirSync(root).find((f) => /^inquiry-[0-9a-f]{8}\.js$/.test(f));
+  if (!css || !js) throw new Error('inquiry assets missing: run node scripts/build-inquiry.mjs first');
   let out = html;
-  if (!/\/estimator-[0-9a-f]{8}\.css/.test(out)) {
-    // Non-blocking: this sheet only paints the below-fold scope builder and the
-    // inquiry form, so it must never sit on the hero's render path.
+  // Migrate any retired estimator-<hash> references from pre-2026-10-27 builds.
+  out = out.replace(/\/estimator-[0-9a-f]{8}\.css/g, () => `/${css}`);
+  out = out.replace(/\/estimator-[0-9a-f]{8}\.js/g, () => `/${js}`);
+  if (!/\/inquiry-[0-9a-f]{8}\.css/.test(out)) {
+    // Non-blocking: this sheet only paints the below-fold commissioning
+    // island and the inquiry form, so it must never sit on the hero's
+    // render path.
     out = out.replace(
       '</head>',
       () =>
@@ -1047,12 +1128,14 @@ function ensureEstimatorAssets(html) {
         `<noscript><link href="/${css}" rel="stylesheet"/></noscript>\n</head>`,
     );
   } else {
-    // A rebuild that changes the estimator hash must not leave the preload
+    // A rebuild that changes the inquiry hash must not leave the preload
     // pointing at a file that no longer exists.
-    out = out.replace(/\/estimator-[0-9a-f]{8}\.css/g, () => `/${css}`);
+    out = out.replace(/\/inquiry-[0-9a-f]{8}\.css/g, () => `/${css}`);
   }
-  if (!/\/estimator-[0-9a-f]{8}\.js/.test(out)) {
+  if (!/\/inquiry-[0-9a-f]{8}\.js/.test(out)) {
     out = out.replace('</body>', () => `<script src="/${js}" defer></script>\n</body>`);
+  } else {
+    out = out.replace(/\/inquiry-[0-9a-f]{8}\.js/g, () => `/${js}`);
   }
   return out;
 }
@@ -1063,7 +1146,11 @@ const orig = fs.readFileSync(path.join(here, 'bundle.orig.js'), 'utf8');
 const origHash = crypto.createHash('sha256').update(orig).digest('hex');
 if (!origHash.startsWith('2afd4ec8')) throw new Error(`bundle.orig.js is not the shipped bundle (sha256 ${origHash})`);
 
-const patched = patchBundle(orig);
+// Retire the standalone Services route in both React navigation arrays and CTAs.
+const patched = patchBundle(orig)
+  .replace(/\{href:"\/services",label:"Services",title:"[^"]*"\},?/g, '')
+  .replace(/\["\/services","Services"\],?/g, '')
+  .replaceAll('href:"/services"', 'href:"/#contact"');
 const showreelTracks = readShowreelTracks(patched);
 const hash = crypto.createHash('sha256').update(patched).digest('hex').slice(0, 8);
 const name = `index-${hash}.js`;
@@ -1093,8 +1180,15 @@ if (currentCssFile !== cssName) {
 let nextHtml = html
   .replace(/\/?index-[0-9a-f]{8}\.js/g, (m) => (m.startsWith('/') ? `/${name}` : name))
   .replace(/\/?index-[0-9a-f]{8}\.css/g, (m) => (m.startsWith('/') ? `/${cssName}` : cssName));
-nextHtml = ensureEstimatorAssets(nextHtml);
+nextHtml = ensureInquiryAssets(nextHtml);
 nextHtml = ensureCompilationsAssets(nextHtml);
+nextHtml = ensurePressKitAssets(nextHtml);
+nextHtml = ensureFunnelAssets(nextHtml);
+nextHtml = ensureLineageAssets(nextHtml);
+nextHtml = ensureMobileUxAssets(nextHtml);
+nextHtml = nextHtml
+  .replace(/<a\b[^>]*href="\/services"[^>]*>Services<\/a>/g, '')
+  .replaceAll('href="/services"', 'href="/#contact"');
 fs.writeFileSync(indexFile, nextHtml, 'utf8');
 
 const swFile = path.join(root, 'sw.js');

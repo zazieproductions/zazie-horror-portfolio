@@ -116,8 +116,10 @@ const isFile = (rel) => {
 /** Exact legacy redirects from _redirects; wildcard routes are handled by the 404 fallback. */
 const explicitRedirects = new Map();
 for (const raw of fs.readFileSync(file('_redirects'), 'utf8').split(/\r?\n/)) {
-  const line = raw.replace(/#.*$/, '').trim();
-  if (!line) continue;
+  // Cloudflare Pages treats only lines that START with '#' as comments; a '#'
+  // inside a rule is a real fragment of the target (e.g. '/composer /#about').
+  const line = raw.trim();
+  if (!line || line.startsWith('#')) continue;
   const [from, to, rawStatus] = line.split(/\s+/);
   if (!from || !to || /[*:(]/.test(from)) continue;
   explicitRedirects.set(from, { to, status: Number(rawStatus) || 301 });
@@ -205,17 +207,13 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  // Serve the clean URL for a real flat .html file through one permanent
-  // alias redirect. Unknown .html paths are not redirected to another miss;
-  // they fall through to the real noindex 404 below.
-  if (urlPath !== '/' && urlPath.endsWith('.html') && urlPath !== '/404.html' && urlPath !== '/index.html') {
-    const targetPath = urlPath.slice(0, -'.html'.length);
-    if (resolve(targetPath)) {
-      res.writeHead(308, responseHeaders(urlPath, { extra: { Location: targetPath + parsed.search } }));
-      res.end();
-      return;
-    }
-  }
+  // .html alias redirects no longer live here. They are declared in _redirects
+  // (the same rules deployed to Cloudflare Pages): legacy hub aliases as 301,
+  // flat item aliases as generated 308 rules. Keeping the redirect logic in
+  // _redirects makes this local mirror faithful to the edge: a missing rule
+  // surfaces as a real response here instead of being silently papered over.
+  // Unknown .html paths fall through to resolve() and then to the real
+  // noindex 404 below.
   // Do not trim a trailing slash before resolution. Existing directory hubs
   // have a real index.html and still resolve; flat item paths have no directory
   // twin and therefore reach the noindex 404 below.

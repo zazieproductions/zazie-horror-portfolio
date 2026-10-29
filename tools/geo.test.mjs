@@ -11,7 +11,7 @@ import { test } from 'node:test';
 
 import { hubs } from '../build/data/hubs.js';
 import { allRoutes } from '../build/data/routes.js';
-import { MINIMUM_FEE, PACKAGES, priceLabel } from '../build/data/pricing.js';
+import { BUDGET_RANGES } from '../build/data/commission.js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -25,7 +25,7 @@ function fileForRoute(routePath) {
 function parseJsonLd(html, label) {
   const nodes = [];
   for (const m of html.matchAll(/<script\b[^>]*\btype=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
-    assert.doesNotMatch(m[1], /<!--v:|<!--\/v:|\{\{zp:/, `${label}: JSON-LD must not contain raw pricing comment markers`);
+    assert.doesNotMatch(m[1], /<!--v:|<!--\/v:|\{\{zp:/, `${label}: JSON-LD must not contain raw commissioning comment markers`);
     const parsed = JSON.parse(m[1]);
     if (Array.isArray(parsed)) nodes.push(...parsed);
     else if (Array.isArray(parsed['@graph'])) nodes.push(...parsed['@graph']);
@@ -35,7 +35,9 @@ function parseJsonLd(html, label) {
 }
 
 test('every indexable route places <h1> inside <main> and separates numeral spans cleanly', () => {
-  assert.ok(allRoutes.length >= 83, `expected at least 83 indexable routes, found ${allRoutes.length}`);
+  // 81 = 18 hubs + 9 productions + 30 cues + 24 catalogue items; /composer
+  // was retired (2026-10-29) and 301s to /#about, so it is no longer a route.
+  assert.ok(allRoutes.length >= 80, `expected at least 80 indexable routes, found ${allRoutes.length}`);
   for (const route of allRoutes) {
     const html = fs.readFileSync(fileForRoute(route.path), 'utf8');
     const mainMatch = /<main\b[^>]*>([\s\S]*?)<\/main>/i.exec(html);
@@ -56,7 +58,8 @@ test('/hire-a-composer commercial pillar has exact head intent, comparison matri
   assert.match(main, /Zazie Kanwar-Torge/);
   assert.match(main, /Zazie Productions LLC/);
   assert.match(main, /Comparing Horror Music Options by Subgenre, Workflow &amp; Budget/);
-  assert.match(main, new RegExp(priceLabel(PACKAGES[0]).replace('$', '\\$')));
+  assert.match(main, /quoted per project/i);
+  assert.doesNotMatch(main, /From \$\d|starting fee/i);
 
   const nodes = parseJsonLd(html, '/hire-a-composer');
   const types = new Set(nodes.flatMap((n) => (Array.isArray(n['@type']) ? n['@type'] : [n['@type']])));
@@ -85,10 +88,10 @@ test('/how-to-hire-a-horror-composer guide answers fan-out queries with Article 
 
 test('homepage links directly to /hire-a-composer and /how-to-hire-a-horror-composer in both SSR HTML and client bundle', () => {
   const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-  assert.match(html, /<title>Experimental Psychological Horror Composer — Arthouse Film<\/title>/);
+  assert.match(html, /<title>Experimental Psychological Horror Composer \| Arthouse Film<\/title>/);
   const title = /<title>([^<]*)<\/title>/.exec(html)[1].replace(/&amp;/g, '&');
   assert.ok(title.length >= 30 && title.length <= 60, `homepage title is ${title.length} characters; keep it between 30 and 60`);
-  assert.match(html, new RegExp(`from \\$${MINIMUM_FEE} USD`));
+  assert.match(html, /quoted per project/);
   assert.match(html, /href="\/hire-a-composer"/);
   assert.match(html, /href="\/how-to-hire-a-horror-composer"/);
 
@@ -99,7 +102,7 @@ test('homepage links directly to /hire-a-composer and /how-to-hire-a-horror-comp
   assert.match(bundle, /\/how-to-hire-a-horror-composer/);
 });
 
-test('robots.txt welcomes AI search crawlers and llms.txt + llms-full.txt stay synced with pricing.ts', () => {
+test('robots.txt welcomes AI search crawlers and llms.txt + llms-full.txt stay synced with commission.ts', () => {
   const robots = fs.readFileSync(path.join(ROOT, 'robots.txt'), 'utf8');
   for (const bot of [
     'Googlebot',
@@ -123,7 +126,9 @@ test('robots.txt welcomes AI search crawlers and llms.txt + llms-full.txt stay s
     assert.match(content, /experimental psychological horror film composer for independent and arthouse cinema/i);
     assert.match(content, /https:\/\/horror\.zazieproductions\.com\/hire-a-composer/);
     assert.match(content, /https:\/\/horror\.zazieproductions\.com\/how-to-hire-a-horror-composer/);
-    assert.match(content, new RegExp(`\\$${MINIMUM_FEE}`));
+    assert.match(content, /quoted per project/i);
+    assert.ok(content.includes(BUDGET_RANGES[3]), `${file}: carries the client-stated inquiry budget ranges`);
+    assert.doesNotMatch(content, /\$650|\$1,500|starting fees|indicative minimum/i);
     assert.doesNotMatch(content, /\bundefined\b|\bNaN\b|\bnull\b/);
   }
 });
@@ -136,7 +141,7 @@ test('navigation headers stay visually concise while non-visible attributes and 
   const homeHead = /<head>([\s\S]*?)<\/head>/i.exec(homeHtml)?.[1] ?? '';
   const navHtml = /<nav aria-label="Primary navigation"[\s\S]*?<\/nav>/.exec(homeHtml)?.[0] ?? '';
   const visibleLabels = [...navHtml.matchAll(/>([^<]+)<\/a>/g)].map((m) => m[1].trim());
-  assert.deepEqual(visibleLabels, ['Reel', 'Work', 'Rates', 'Store', 'Scoring inquiry']);
+  assert.deepEqual(visibleLabels, ['Reel', 'Work', 'Store', 'Scoring inquiry']);
   for (const term of specialistTerms) {
     assert.match(navHtml, new RegExp(term, 'i'), `homepage nav non-visible title attributes include "${term}"`);
     assert.match(homeHead, new RegExp(term, 'i'), `homepage <head> metadata includes "${term}"`);
@@ -153,7 +158,7 @@ test('navigation headers stay visually concise while non-visible attributes and 
     const html = fs.readFileSync(fileForRoute(route.path), 'utf8');
     const tabsHtml = /<nav class="tabs"[\s\S]*?<\/nav>/.exec(html)?.[0] ?? '';
     const tabLabels = [...tabsHtml.matchAll(/>([^<]+)<\/a>/g)].map((m) => m[1].trim());
-    assert.deepEqual(tabLabels, ['Reel', 'Work', 'Composer', 'Rates', 'Store'], `${route.path}: concise visible masthead labels`);
+    assert.deepEqual(tabLabels, ['Reel', 'Work', 'Composer', 'Store'], `${route.path}: concise visible masthead labels`);
     for (const term of specialistTerms) {
       assert.match(tabsHtml, new RegExp(term, 'i'), `${route.path}: non-visible masthead title attributes include "${term}"`);
     }
@@ -231,21 +236,16 @@ test('JSON-LD knowsAbout and genre fields across all routes deep-link to externa
 
 test('horror reference topics link identity knowledge and biography mentions without affiliation claims', () => {
   const names = ['A24 film aesthetic', 'Mica Levi scoring techniques', 'Folk Horror tropes'];
-  for (const file of ['index.html', 'composer.html', 'composer/index.html']) {
-    const html = fs.readFileSync(path.join(ROOT, file), 'utf8');
-    const nodes = parseJsonLd(html, file);
-    const person = nodes.find(n => n['@type'] === 'Person' && n.knowsAbout);
-    for (const name of names) {
-      const topic = person.knowsAbout.find(t => t.name === name);
-      assert.ok(topic, `${file}: knowsAbout ${name}`);
-      assert.match(topic.url, /^https:\/\/en.wikipedia.org\/wiki\//);
-      assert.ok(!person.sameAs.includes(topic.url), 'references must not become identity aliases');
-    }
-    if (file.startsWith('composer')) {
-      const page = nodes.find(n => n['@type'] === 'WebPage');
-      assert.equal(page.about['@id'], person['@id']);
-      assert.deepEqual(page.mentions.map(t => t.name), names);
-      assert.match(html, /not claims of affiliation, collaboration, or production credits/);
-    }
+  // /composer was retired (2026-10-29) and 301s to /#about: the biography is
+  // section 01 on the homepage, whose Person graph carries these same
+  // reference topics. There is no standalone composer*.html to audit.
+  const html = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  const nodes = parseJsonLd(html, 'index.html');
+  const person = nodes.find(n => n['@type'] === 'Person' && n.knowsAbout);
+  for (const name of names) {
+    const topic = person.knowsAbout.find(t => t.name === name);
+    assert.ok(topic, `index.html: knowsAbout ${name}`);
+    assert.match(topic.url, /^https:\/\/en.wikipedia.org\/wiki\//);
+    assert.ok(!person.sameAs.includes(topic.url), 'references must not become identity aliases');
   }
 });

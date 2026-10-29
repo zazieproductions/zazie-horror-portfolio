@@ -246,7 +246,9 @@ export const person = {
   alternateName: SITE_NAME,
   description:
     'IMDb-credited experimental psychological horror film composer for independent and arthouse cinema, experimental producer, sound designer, and multi-instrumentalist based in Asheville, North Carolina. Founder of Zazie Productions LLC, composing bespoke psychological, folk and body horror scores for independent film, television, and games worldwide.',
-  url: `${SITE_ORIGIN}/composer`,
+  // The standalone /composer biography page was retired (2026-10-29); the
+  // biography is section 01 on the homepage, so the person URL is its anchor.
+  url: `${SITE_ORIGIN}/#about`,
   image: `${SITE_ORIGIN}/images/headshot.jpg`,
   jobTitle: [
     'Experimental Psychological Horror Film Composer',
@@ -267,7 +269,20 @@ export const person = {
     },
   },
   knowsAbout: KNOWS_ABOUT_ENTITIES,
+  award: [
+    'Golden Bloody Globes - Festival Award Honoree',
+    'Re:Fract Festival (2025) - Special Jury Mention',
+    'PVTV Fringe Flicks - Festival Winner',
+    'Pebbles Underground Film Festival (VisualcontainerTV, 2024) - Jury Special Mention',
+  ],
   subjectOf: [
+    {
+      '@type': 'Article',
+      headline: 'Spinning in the Wildness: Phantom Requiem (2024)',
+      author: { '@type': 'Person', name: 'David Finkelstein' },
+      url: 'https://lakeivan.substack.com/p/spinning-in-the-wildness-phantom',
+      publisher: { '@type': 'Organization', name: 'Lake Ivan Film Journal' },
+    },
     {
       '@type': 'Article',
       headline: 'How an Underground Experimental Musician Became a Go-To Composer for Psychological Horror',
@@ -288,9 +303,15 @@ export const person = {
     },
     {
       '@type': 'WebPage',
-      name: 'Broadcast: BMC Radio Artist Zazie Productions — Cheaper Impressions',
+      name: 'Broadcast: BMC Radio Artist Zazie Productions | Cheaper Impressions',
       url: 'https://www.blackmountaincollege.org/broadcast-bmc-radio-artist-zazie-productions/',
       publisher: { '@type': 'Organization', name: 'Black Mountain College Museum + Arts Center' },
+    },
+    {
+      '@type': 'CreativeWork',
+      name: 'Winter 2024 Award Winners Official Press Release',
+      url: 'https://www.visualcontainer.tv/wp-content/uploads/2025/01/Winter-2024-Award-Winners_Press-Release.pdf',
+      publisher: { '@type': 'Organization', name: 'VisualcontainerTV' },
     },
   ],
   sameAs: VERIFIED_SAME_AS,
@@ -304,7 +325,7 @@ export const organization = {
   legalName: 'Zazie Productions LLC',
   alternateName: SITE_NAME,
   description:
-    'Boutique scoring and experimental sound-design atelier led by composer Zazie Kanwar-Torge, writing original experimental psychological horror scores to picture for independent and arthouse cinema — feature films, festival shorts, series, and horror video games.',
+    'Boutique scoring and experimental sound-design atelier led by composer Zazie Kanwar-Torge, writing original experimental psychological horror scores to picture for independent and arthouse cinema: feature films, festival shorts, series, and horror video games.',
   url: SITE_ORIGIN,
   logo: `${SITE_ORIGIN}/images/hero-portrait.jpg`,
   founder: { '@id': PERSON_ID },
@@ -342,7 +363,7 @@ export const website = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   '@id': WEBSITE_ID,
-  name: `${SITE_NAME} — Experimental Psychological Horror Film Composer Zazie Kanwar-Torge`,
+  name: `${SITE_NAME} | Experimental Psychological Horror Film Composer Zazie Kanwar-Torge`,
   alternateName: SITE_NAME,
   url: `${SITE_ORIGIN}/`,
   publisher: { '@id': ORG_ID },

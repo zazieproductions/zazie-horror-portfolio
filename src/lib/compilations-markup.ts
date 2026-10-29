@@ -52,8 +52,6 @@ function stage(item: CompilationItem): string {
   return (
     `<div class="zp-stage">` +
     img +
-    `<span class="zp-badge">${item.kind}</span>` +
-    `<span class="zp-dur">${esc(item.duration)}</span>` +
     `<button class="zp-bc-load" type="button" aria-label="${esc(label)}"><span class="zp-play">${PLAY_ICON}</span></button>` +
     `</div>`
   );
@@ -63,11 +61,16 @@ function card(item: CompilationItem): string {
   const slug = compilationSlug(item);
   const albumSlug = compilationAlbumSlug(item);
   const articleIdAttr = albumSlug && albumSlug !== slug ? ` id="${albumSlug}"` : '';
-  const links: string[] = [`<a href="#${slug}">Permalink</a>`];
-  if (item.trackUrl) links.push(`<a href="${item.trackUrl}" target="_blank" rel="noopener">Track on Bandcamp</a>`);
-  if (item.albumUrl) {
-    links.push(`<a href="${item.albumUrl}" target="_blank" rel="noopener">${item.kind === 'Compilation' ? 'Full compilation' : 'Full release'}</a>`);
-  }
+  // The song title doubles as the no-JavaScript listening link, without adding
+  // another label to the card. Some tracks only have an album URL.
+  const listenUrl = item.trackUrl || item.albumUrl;
+  const song = listenUrl
+    ? `<a class="zp-comp-listen" href="${esc(listenUrl)}" target="_blank" rel="noopener" aria-label="${esc(item.title)} on Bandcamp (opens in a new tab)">${esc(item.title)}</a>`
+    : esc(item.title);
+  // A single title is enough when the release and song have the same name.
+  const titles = item.album === item.title
+    ? `<h3 id="${slug}-title">${song}</h3>`
+    : `<h3 id="${slug}-title">${esc(item.album)}</h3><p class="zp-comp-track">${song}</p>`;
   const title = `${item.title} - ${item.duration} - Bandcamp player`;
   return (
     `<li class="zp-comp-card" id="${slug}">` +
@@ -76,13 +79,7 @@ function card(item: CompilationItem): string {
     stage(item) +
     `<div class="zp-slot"><div class="zp-slot-inner"></div></div>` +
     `</div>` +
-    `<div class="zp-comp-body">` +
-    `<p class="zp-comp-meta">${esc(item.kind)} · ${esc(item.album)} · ${esc(item.duration)}</p>` +
-    `<h3 id="${slug}-title"><a class="zp-comp-title-link" href="#${slug}">${esc(item.title)}</a></h3>` +
-    `<p class="zp-comp-note">${esc(item.note)}</p>` +
-    `<p class="zp-bc-nojs">The in-page player needs JavaScript. Use the Bandcamp links below to listen.</p>` +
-    `<p class="zp-comp-links">${links.join('')}</p>` +
-    `</div>` +
+    `<div class="zp-comp-body">${titles}</div>` +
     `</article>` +
     `</li>`
   );
@@ -96,13 +93,10 @@ export const CONTAINER_CLASS = 'relative mx-auto max-w-7xl px-4 sm:px-6 md:px-8'
 export function compilationsInnerHtml(): string {
   return (
     `<div class="mb-10 max-w-2xl sm:mb-12">` +
-    `<p class="mb-3 inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.4em] text-blood sm:text-[11px]"><span class="h-px w-8 bg-blood/60" aria-hidden="true"></span>Compilations</p>` +
-    `<h2 class="font-display text-3xl leading-[1.05] tracking-tight text-bone sm:text-4xl md:text-5xl">Tracks and releases</h2>` +
-    `<p class="mt-4 text-base leading-relaxed text-mist">Selected compilation tracks and two Bandcamp releases. Select a cover to play; Bandcamp loads only when you do.</p>` +
+    `<p class="mb-3 inline-flex items-center gap-3 text-[10px] uppercase tracking-[0.4em] text-blood sm:text-[11px]"><span class="h-px w-8 bg-blood/60" aria-hidden="true"></span>Compilation Features</p>` +
+    `<h2 class="font-display text-3xl leading-[1.05] tracking-tight text-bone sm:text-4xl md:text-5xl">Selected Works</h2>` +
     `</div>` +
-    `<noscript><style>.zp-comp-body{display:flex}</style></noscript>` +
-    `<ul class="zp-comp-grid">${compilations.map(card).join('')}</ul>` +
-    `<p class="mt-6 text-base tracking-wide text-mist">Playback runs in Bandcamp&rsquo;s own player. Full catalogue on <a href="https://zazieproductions.bandcamp.com" target="_blank" rel="noopener" class="text-blood underline underline-offset-4 hover:text-bone">Bandcamp</a>, in the <a href="/reel#compilations" class="text-blood underline underline-offset-4 hover:text-bone">showreel compilation archive</a>, and in the <a href="/store" class="text-blood underline underline-offset-4 hover:text-bone">store</a>.</p>`
+    `<ul class="zp-comp-grid">${compilations.map(card).join('')}</ul>`
   );
 }
 
@@ -125,9 +119,6 @@ export const COMPILATIONS_CSS = `
   .zp-stage img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .9s cubic-bezier(.2,.7,.2,1),filter .5s}
   .zp-comp-card:hover .zp-stage img{transform:scale(1.05)}
   .zp-stage::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(3,3,3,.5) 0,rgba(3,3,3,0) 28%,rgba(3,3,3,0) 55%,rgba(3,3,3,.82) 100%)}
-  .zp-badge,.zp-dur{position:absolute;z-index:2;padding:.3rem .6rem;border:1px solid rgba(240,235,227,.14);background:rgba(3,3,3,.62);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#f0ebe3;font-size:.6875rem;line-height:1;letter-spacing:.22em;text-transform:uppercase}
-  .zp-badge{top:.8rem;left:.8rem}
-  .zp-dur{right:.8rem;bottom:.8rem;font-variant-numeric:tabular-nums;letter-spacing:.12em}
   .zp-bc-load{position:absolute;inset:0;z-index:3;display:none;align-items:center;justify-content:center;margin:0;padding:0;border:0;background:transparent;cursor:pointer;transition:opacity .35s}
   .zp-bc-js .zp-bc-load{display:flex}
   .zp-play{position:relative;display:grid;place-items:center;width:4.25rem;height:4.25rem;border-radius:50%;background:rgba(196,30,30,.94);color:#f0ebe3;box-shadow:0 0 0 1px rgba(255,255,255,.14),0 12px 32px rgba(0,0,0,.6);transition:transform .35s cubic-bezier(.2,.7,.2,1),background .3s}
@@ -143,23 +134,12 @@ export const COMPILATIONS_CSS = `
   .zp-slot iframe{display:block;width:100%;height:120px;border:0;opacity:0;transition:opacity .45s .1s}
   .zp-slot iframe.zp-ready{opacity:1}
   @keyframes zp-shimmer{to{background-position:-200% 0}}
-  .zp-comp-body{display:flex;flex:1;flex-direction:column;gap:.55rem;padding:1.15rem 1.35rem 1.35rem}
-  /* Keep the gallery artwork-only; reveal details with the requested player. */
-  .zp-comp-body{display:none}
-  .zp-open .zp-comp-body{display:flex}
+  .zp-comp-body{display:flex;flex:1;flex-direction:column;gap:.4rem;padding:1.15rem 1.35rem 1.35rem}
   .zp-comp-card:has(.zp-bc-load:focus-visible){outline-offset:3px}
-  .zp-comp-meta{margin:0;font-size:.875rem;letter-spacing:.16em;text-transform:uppercase;color:#e65650}
   .zp-comp-card h3{margin:0;font-family:var(--font-display,'Cormorant Garamond',serif);font-weight:400;font-size:1.65rem;line-height:1.15;color:#f0ebe3;overflow-wrap:anywhere}
-  .zp-comp-title-link{color:inherit;text-decoration:none;transition:color .2s}
-  .zp-comp-title-link:hover,.zp-comp-title-link:focus-visible{color:#e65650;text-decoration:underline;text-underline-offset:3px}
-  .zp-comp-note{margin:0;font-size:1rem;line-height:1.65;color:#c2bdb6}
-  .zp-bc-nojs{margin:0;font-size:1rem;line-height:1.65;color:#c2bdb6}
-  .zp-bc-js .zp-bc-nojs{display:none}
-  .zp-comp-links{display:flex;flex-wrap:wrap;gap:.5rem;margin:auto 0 0;padding-top:.5rem}
-  .zp-comp-links a{padding:.45rem .8rem;border:1px solid #2e2e2e;color:#f0ebe3;font-size:.8125rem;letter-spacing:.12em;text-transform:uppercase;text-decoration:underline;text-underline-offset:3px;text-decoration-color:#e65650;transition:border-color .25s,color .25s,background .25s}
-  .zp-comp-links a::after{content:" \\2197";color:#e65650}
-  .zp-comp-links a[href^="#"]::after{content:" #";color:#e65650}
-  .zp-comp-links a:hover,.zp-comp-links a:focus-visible{border-color:#e65650;background:rgba(230,86,80,.1);color:#f0ebe3}
+  .zp-comp-track{margin:0;font-size:1rem;line-height:1.45;color:#c2bdb6;overflow-wrap:anywhere}
+  .zp-comp-listen{color:inherit;text-decoration:underline;text-decoration-color:rgba(230,86,80,.6);text-underline-offset:3px;transition:color .2s,text-decoration-color .2s}
+  .zp-comp-listen:hover,.zp-comp-listen:focus-visible{color:#e65650;text-decoration-color:currentColor}
   @media (prefers-reduced-motion:reduce){
     .zp-comp-card,.zp-stage img,.zp-play,.zp-slot,.zp-slot iframe{transition:none}
     .zp-comp-card:hover{transform:none}.zp-comp-card:hover .zp-stage img{transform:none}

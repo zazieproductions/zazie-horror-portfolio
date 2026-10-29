@@ -8,7 +8,7 @@ const root = new URL('../', import.meta.url);
 const read = (file) => fs.readFileSync(new URL(file, root), 'utf8');
 
 test('all shipped HTML links opening a new tab explicitly include noopener', () => {
-  const files = execFileSync('git', ['ls-files', '-z', '*.html'], { cwd: root, encoding: 'utf8' }).split('\0').filter(Boolean);
+  const files = execFileSync('git', ['ls-files', '-z', '*.html'], { cwd: root, encoding: 'utf8' }).split('\0').filter((file) => file && fs.existsSync(new URL(file, root)));
   assert.ok(files.length > 0);
   let checked = 0;
   for (const file of files) {
