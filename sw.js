@@ -72,7 +72,70 @@
 // Pricing unchanged: scene 1–2 min / $250 from; focused 3–5 min / $650 from;
 // extended 6–12 min / $1,500 from; substantial feature/experimental scores
 // custom quoted with an indicative $2,500 minimum.
-const CACHE_NAME = 'zazie-v34';
+// v34: GEO overhaul — rebuilt /hire-a-composer pillar + interactive estimator,
+// added /how-to-hire-a-horror-composer hub, /llms.txt + /llms-full.txt,
+// <main>-wrapped document headers and spaced numeral headings across all 85 routes,
+// clean JSON-LD schema graphs, and re-hashed home bundle index-4d715571.js.
+// v36: 2026-10-22 mobile-audit pass — 12px type floor and 44px targets in the
+// home/estimator CSS, WCAG AA label colours, styled skip link, poster AVIF
+// 400/480/640 ladder, and re-hashed home bundle index-9e03d452.js.
+// v37: the archive-boot intro is back in index.html (the gate script that had
+// been dropped in the prerender pass is restored, so the overlay actually
+// plays again). The document is precached as '/', so the cache name moves with
+// it: without the bump a returning visitor could keep the boot-less document.
+// v38: adds a prominent high-contrast "Skip intro" button (#zp-boot-skip) in
+// the archive-boot deck above the CRT vignette layer, with 160ms fast teardown,
+// accessible keyboard Tab/Enter/Space/Escape support, and mobile safe-area sizing.
+// v39: native film-play buttons, accessible close control, and focus restoration.
+// v40: hero artwork plate — the poster is no longer centre-cropped by a
+// 46%-wide panel and no longer stops on a hard vertical edge; it keeps its own
+// 896x1152 ratio, is feathered into the UI, and fades into the fold under one
+// bottom scrim. The document (precached as '/') and the home bundle
+// index-b29b75e2.js both change, so the cache name moves with them.
+// v41: seamless hero artwork blend — screen-blended dark-point-aligned <img>,
+// wide cosine-eased intersected top/left/bottom masks, and radial void scrim.
+// v42: merge the 30-cue showreel with the latest homepage updates. The Beautiful
+// Wrongness is the default, The Fatal Overdose follows, and two cues are retired.
+// v43: homepage rendering/SEO pass — (1) precache install uses
+// cache:'force-cache' instead of the old cache:'reload', which forced a second
+// network download of every precached asset (hero image, CSS, JS, fonts) even
+// though the page had just fetched them; hashed assets are immutable so the
+// HTTP cache is authoritative, and '/' is network-first at fetch time anyway.
+// (2) The React bundle no longer mounts for crawlers, and the homepage
+// stylesheet carries the AA link-contrast and prose-underline rules under a
+// fresh content hash below. The 2026-10-25 blanket type floors were reverted
+// on 2026-10-26, so the design's original 8-12px label scale is back and the
+// hash plus this cache version (v43 -> v44) move together.
+// v45: add a reel-download entry point to the homepage and on-demand ZIP
+// preparation on /reel. The homepage bundle and cached document change too;
+// the rebuilt legal script also restores Expand all for individual cue links.
+// v46: combine the download action with main's simplified navigation in a new
+// homepage bundle, clearing the older cached bundle and document.
+// v47: the published rate card and cost estimator are removed (2026-10-27).
+// Commissions are quoted per project against the budget range and references
+// shared in the inquiry; estimator-<hash> assets are succeeded by
+// inquiry-<hash> ones, so the cache name moves with them.
+// v48: the hero gains its lineage footnote - one desaturated line of marks
+// (Black Mountain College, Ars Electronica, Dolby Atmos) directly under the
+// call to action, added to both the prerendered document and the home bundle.
+// The document is precached as '/', so the cache name moves with it.
+// v49: /composer is retired (2026-10-29) and redirects to the homepage
+// biography section (/#about); the precached '/' document and bundle change
+// with the footer link, so the cache name moves again. This merge also folds
+// in main's post-v48 homepage copy passes (simplified contact copy, FAQ
+// section removal), which changed the same precached document and bundle.
+// v50: move Variations on a Vanishing Body directly after Dissociative Amnesia
+// in the showreel queue; the precached '/' document and home bundle move with it.
+// v51: overhaul #press into the luxury Press Kit with festival laurels, Lake
+// Ivan Film Journal critical spotlight, monograph press cards, and verified
+// profile directory across both the prerendered document and home bundle.
+// v52: simplify the homepage compilation cards; refresh the cached document and bundle.
+// v53: refresh the Press Kit quotes in the cached homepage and bundle.
+// v54: the homepage mobile pass moves touch targets and small-screen type in the
+// precached document, so the cached bundle and document change with it.
+// v55: merge main's mobile pass into the inquiry stylesheet - 16px controls at
+// tablet widths and a 44px disclosure row - which re-hashes inquiry-<hash>.css.
+const CACHE_NAME = 'zazie-v55';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -80,28 +143,32 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-normal.woff2',
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
-  '/index-f509fde0.css',
-  '/index-faf27e88.js',
-  '/store-eed3eeee.css',
+  '/index-3465aa44.css',
+  '/index-df86bcce.js',
+  '/store-1e13177a.css',
   '/store-3fc01be0.js',
-  '/legal-886033c7.css',
-  '/legal-ab598df8.js',
-  '/estimator-77f6902e.css',
-  '/estimator-9052be1a.js',
+  '/legal-f4e3a5fb.css',
+  '/legal-c623083a.js',
+  '/inquiry-d8cba1f7.css',
+  '/inquiry-f408888b.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',
-  '/images/hero-portrait.avif',
-  '/images/hero-portrait.jpg'
+  '/images/hero-portrait.avif'
 ];
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then(async (cache) => {
-      // Use allSettled to ensure installation succeeds even if an asset is temporarily delayed
+      // Use allSettled to ensure installation succeeds even if an asset is temporarily delayed.
+      // force-cache on purpose: the old cache:'reload' bypassed the browser HTTP cache and
+      // re-downloaded every precached asset on every install/SW update, duplicating the page's
+      // own requests for the hero image, stylesheet, bundle and fonts. Content-hashed assets
+      // are served immutable (see _headers), so an HTTP-cache hit is byte-identical; the '/'
+      // document revalidates per its own Cache-Control and stays network-first at fetch time.
       const fetchPromises = PRECACHE_ASSETS.map(async (url) => {
         try {
-          const res = await fetch(url, { cache: 'reload' });
+          const res = await fetch(url, { cache: 'force-cache' });
           if (res.ok) {
             await cache.put(url, res);
           }

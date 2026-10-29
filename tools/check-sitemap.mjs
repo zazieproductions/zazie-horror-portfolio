@@ -29,9 +29,10 @@
  *       route back into a host redirect
  *  18.  Every in-site #fragment link resolves   -> valid section links
  *  19.  Original hubs remain reachable from /    -> approved hub navigation
- *       while item URLs stay off home/hubs
- *  20.  Existing hubs do not link to item URLs   -> item discovery stays in the
- *       homepage or hub navigation                   sitemap and sibling links
+ *       and the home page does not link items         (item URLs stay off /)
+ *  20.  Every item route is linked from the hub  -> no sitemap-only orphans;
+ *       that owns it                                  discovery never depends
+ *                                                     on sitemap.xml alone
  *  21.  sw.js precaches only hashed assets that  -> valid service-worker cache
  *       exist
  *
@@ -705,22 +706,33 @@ for (const p of sitemapPaths) {
     if (!homeLinks.has(p)) err(`internal links: original hub ${p} is not linked from the home page`);
   }
 }
-note(`internal links: ${hubCount} original hub URLs are reachable from / (${topLevel} top-level hubs linked directly); item URLs are intentionally excluded from homepage reachability`);
+note(`internal links: ${hubCount} original hub URLs are reachable from / (${topLevel} top-level hubs linked directly); item URLs are reached through their hub, not the home page`);
 
-// 8c. item routes are not added to the homepage or original hub navigation
-let hubItemLinks = 0;
-for (const [src, html] of htmlPages) {
-  // Item-to-item sibling links are required. Only enforce the exclusion on the
-  // homepage and original hub pages; item pages must remain free to cross-link.
-  if (isItemPath(src)) continue;
-  for (const link of linksOf(src, html)) {
-    if (isItemPath(link.path)) {
-      hubItemLinks++;
-      err(`internal links: original hub ${src} links directly to item route ${link.path}; item URLs must remain off hub navigation`);
-    }
+// 8c. every item route is linked from the hub that owns it; the home page stays hub-only
+//
+// What this replaced: hubs used to carry NO link to their own item pages, so the
+// 65 generated routes were discoverable only from sitemap.xml. Google does not
+// schedule crawls for URLs that nothing links to - that is the "Discovered -
+// currently not indexed" profile - and a sitemap full of unlinked URLs lowers
+// the priority of every URL in the same file, including the 19 hubs.
+const itemPaths = sitemapPaths.filter(isItemPath);
+for (const p of itemPaths) {
+  const hub = p.split('/').slice(0, 2).join('/');
+  const hubGraph = graph.get(hub);
+  if (!hubGraph) {
+    err(`internal links: item route ${p} has no hub page ${hub} to link it`);
+    continue;
+  }
+  if (!hubGraph.has(p)) {
+    err(`internal links: item route ${p} is not linked from its own hub ${hub} - it would be discoverable only from sitemap.xml`);
   }
 }
-if (!hubItemLinks) note('internal links: no direct item-page links were added to the homepage or original hubs');
+for (const link of homeLinks) {
+  if (isItemPath(link)) {
+    err(`internal links: the home page links directly to item route ${link}; item discovery belongs to the hub that owns it, and the home page stays a hub index`);
+  }
+}
+note(`internal links: ${itemPaths.length} item URLs are each linked from their own hub; the home page links only original hub routes`);
 
 // 8d. sw.js precaches hashed assets that actually exist
 const swFile = path.join(ROOT, 'sw.js');

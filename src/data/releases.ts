@@ -32,7 +32,7 @@ export const releases: Release[] = [
     ],
     image: {
       src: 'https://f4.bcbits.com/img/a4087485987_16.jpg',
-      alt: 'Cover artwork for Anesthesia for the Signal Age',
+      alt: 'Anesthesia for the Signal Age: Experimental body-horror and acousmatic album by Zazie Kanwar-Torge featuring surgical steel foley, CRT hum, and modular percussion.',
       width: 700,
       height: 700,
     },
@@ -67,7 +67,7 @@ export const releases: Release[] = [
     ],
     image: {
       src: 'https://f4.bcbits.com/img/a4110701137_16.jpg',
-      alt: 'Cover artwork for Opaline Lament (Life From The Beyond)',
+      alt: 'Opaline Lament (Life From The Beyond): Experimental art house chamber-horror composition by Zazie Kanwar-Torge featuring mournful solo strings and spectral orchestration.',
       width: 700,
       height: 700,
     },
@@ -103,7 +103,7 @@ export const releases: Release[] = [
     ],
     image: {
       src: 'https://f4.bcbits.com/img/a3756749177_16.jpg',
-      alt: 'Cover artwork for Spectral Ode to Synesthesia',
+      alt: 'Spectral Ode to Synesthesia: Experimental electroacoustic horror composition by Zazie Kanwar-Torge featuring stretched rubber, electromagnetic field recordings, and 3D binaural granular synthesis.',
       width: 700,
       height: 700,
     },
@@ -140,7 +140,7 @@ export const releases: Release[] = [
     ],
     image: {
       src: 'https://f4.bcbits.com/img/a0612904516_16.jpg',
-      alt: 'Cover artwork for To Halt Space Adrift',
+      alt: 'To Halt Space Adrift: Avant-garde experimental album by Zazie Kanwar-Torge featuring fractured synthesis and surrealist electroacoustic textures.',
       width: 700,
       height: 700,
     },
@@ -175,7 +175,7 @@ export const releases: Release[] = [
     ],
     image: {
       src: 'https://f4.bcbits.com/img/a0050695008_16.jpg',
-      alt: 'Cover artwork for Vermiform',
+      alt: 'Vermiform: Surrealist avant-garde horror album by Zazie Kanwar-Torge featuring dissonant experimental textures and uncanny outsider instrumentation.',
       width: 700,
       height: 700,
     },
@@ -210,7 +210,7 @@ export const releases: Release[] = [
     ],
     image: {
       src: 'https://f4.bcbits.com/img/a0935502895_16.jpg',
-      alt: 'Cover artwork for Constrained Capacity',
+      alt: 'Constrained Capacity: Industrial dark ambient and psychological horror album by Zazie Kanwar-Torge featuring musique concrète foley and noise-rock distortion.',
       width: 700,
       height: 700,
     },
@@ -245,7 +245,7 @@ export const releases: Release[] = [
     ],
     image: {
       src: 'https://f4.bcbits.com/img/a0281727228_16.jpg',
-      alt: 'Cover artwork for Interference Archive 01010101',
+      alt: 'Interference Archive 01010101: Cyberpunk industrial synth album by Zazie Kanwar-Torge featuring analog-modeled sequencers and digital signal decay.',
       width: 700,
       height: 700,
     },
@@ -280,7 +280,7 @@ export const releases: Release[] = [
     ],
     image: {
       src: 'https://f4.bcbits.com/img/a1008810016_16.jpg',
-      alt: 'Cover artwork for Stutter to stammer',
+      alt: 'Stutter to stammer: Experimental paranoia single by Zazie Kanwar-Torge featuring rhythmic tape-stutter manipulation and tense electronic textures.',
       width: 700,
       height: 700,
     },
@@ -313,7 +313,7 @@ export const releases: Release[] = [
     ],
     image: {
       src: 'https://img.itch.zone/aW1nLzI5MTYyOTA5LnBuZw==/347x500/%2F%2Bsnt7.png',
-      alt: 'Cover art for UNHOLY ANATOMY',
+      alt: 'UNHOLY ANATOMY: Body horror and supernatural sound effects library by Zazie Kanwar-Torge featuring visceral bone impacts, organic flesh foley, and demonic vocalizations.',
       width: 347,
       height: 500,
     },
@@ -322,6 +322,7 @@ export const releases: Release[] = [
       { label: 'Organization', value: '10 labeled categories' },
       { label: 'Examples', value: 'Body impacts, bones, screams, creatures, demons, ghosts, undead, and vampires' },
     ],
+    genre: ['Body Horror', 'Sound effects'],
     relatedCueSlugs: [],
     updatedAt,
   },
@@ -340,11 +341,11 @@ export const releases: Release[] = [
     summary: 'A focused set of 25+ one-shot interface sounds: minimal error beeps, warning signals, invalid-input tones, and system-failure alerts.',
     paragraphs: [
       'The itch.io description presents FAULT CODES as a small toolkit for machines and fictional interfaces that refuse an input. Its listed examples include error tones, warning signals, invalid-action beeps, and short alerts for malfunctions or unavailable actions.',
-      'The page specifies 25+ original one-shot effects as individual WAV files and suggests use in games, interactive media, terminals, puzzles, and sound design. The listing—not this static archive page—remains the source for current download terms.',
+      'The page specifies 25+ original one-shot effects as individual WAV files and suggests use in games, interactive media, terminals, puzzles, and sound design. The listing (not this static archive page) remains the source for current download terms.',
     ],
     image: {
       src: 'https://img.itch.zone/aW1nLzI4NjA5NjM4LnBuZw==/347x500/xUrAIl.png',
-      alt: 'Cover art for FAULT CODES',
+      alt: 'FAULT CODES: Sci-fi horror UI sound library by Zazie Kanwar-Torge featuring minimal system-failure synthesis, clinical error tones, and terminal warning signals.',
       width: 347,
       height: 500,
     },
@@ -353,6 +354,7 @@ export const releases: Release[] = [
       { label: 'File type', value: 'Individual WAV files' },
       { label: 'Sound types', value: 'Error beeps, warning tones, invalid-input sounds, and system-failure signals' },
     ],
+    genre: ['Science fiction', 'Sound effects'],
     relatedCueSlugs: [],
     updatedAt,
   },
@@ -375,7 +377,7 @@ export const releases: Release[] = [
     ],
     image: {
       src: 'https://public-files.gumroad.com/kxisasmtty6rugi2h6wyhz29lvb4',
-      alt: 'Cover artwork for Galactic Requiem',
+      alt: 'Galactic Requiem: Cosmic sci-fi horror 3D soundscape by Zazie Kanwar-Torge featuring metallic hull impacts, alien vocal processing, and glitch synthesis.',
       width: 700,
       height: 700,
     },
@@ -409,7 +411,7 @@ export const releases: Release[] = [
     ],
     image: {
       src: 'https://public-files.gumroad.com/gxx8r6nvhvokuqz8ktnou29qlm7c',
-      alt: 'Cover artwork for Plug-in Mega-Vault',
+      alt: 'Plug-in Mega-Vault: Experimental audio software archive curated by Zazie Productions featuring VST synthesizers, granular loop slicers, and distortion processors.',
       width: 700,
       height: 700,
     },
@@ -441,7 +443,7 @@ export const releases: Release[] = [
     ],
     image: {
       src: 'https://public-files.gumroad.com/ggkcnd8qzh2wnynjbinyw2b54l0b',
-      alt: 'Cover artwork for the Micro-Rupture Collection',
+      alt: 'Micro-Rupture Collection: Experimental horror visual pack by Zazie Productions featuring analog signal-loss transitions, data corruption, and cyber-static cuts.',
       width: 700,
       height: 700,
     },
@@ -472,7 +474,7 @@ export const releases: Release[] = [
     ],
     image: {
       src: 'https://public-files.gumroad.com/h4mkhyng4g2dq47w82bof8aa1xa0',
-      alt: 'Cover artwork for The Forbidden Canticles',
+      alt: 'The Forbidden Canticles: Archival gothic and liturgical score-facsimile PDF collection curated by Zazie Productions featuring historical musical engravings.',
       width: 700,
       height: 700,
     },
@@ -503,7 +505,7 @@ export const releases: Release[] = [
     ],
     image: {
       src: 'https://img.itch.zone/aW1hZ2UvMzQ1Njk3Mi8yMDYyMDc4NC5qcGVn/347x500/bUXLKJ.jpeg',
-      alt: 'Cover artwork for Room 7G: The Hygiene Loop',
+      alt: 'Room 7G: The Hygiene Loop: Liminal psychological horror environment asset by Zazie Productions featuring uncanny fluorescent flicker in an abandoned concrete room.',
       width: 347,
       height: 500,
     },
@@ -534,7 +536,7 @@ export const releases: Release[] = [
     ],
     image: {
       src: 'https://img.itch.zone/aW1nLzIwNzcyOTUyLnBuZw==/347x500/3Ub2Qv.png',
-      alt: 'Cover art for CRYPTOTYPE-9',
+      alt: 'CRYPTOTYPE-9: Retro-occult horror game UI asset pack by Zazie Productions featuring modular pixel-art card frames and arcane lost-console icons.',
       width: 347,
       height: 500,
     },
@@ -564,7 +566,7 @@ export const releases: Release[] = [
     ],
     image: {
       src: 'https://i.ebayimg.com/images/g/v5cAAeSwYHhqrDTs/s-l500.webp',
-      alt: 'Skull-shaped Aztec death whistle shown in the eBay listing',
+      alt: 'Aztec Death Whistle: Skull-shaped acoustic shriek instrument listed by Zazie Productions for ritual folk horror foley and practical sound design.',
       width: 500,
       height: 500,
     },
@@ -624,7 +626,7 @@ export const releases: Release[] = [
     ],
     image: {
       src: 'https://i.ebayimg.com/images/g/c-cAAeSwjBpqrDDB/s-l500.webp',
-      alt: 'Creepy Cricket Noise Generator module shown in the eBay listing',
+      alt: 'Creepy Cricket Noise Generator: Compact high-frequency electronic sound-effect module listed by Zazie Productions on eBay.',
       width: 500,
       height: 500,
     },

@@ -61,7 +61,11 @@ if (paths.length) {
   urlList = [...xml.matchAll(/<loc>\s*([^<\s]+)\s*<\/loc>/g)]
     .map((m) => m[1].replace(/&amp;/g, '&'))
     .filter((u) => new URL(u).host === HOST && !/\.(jpe?g|png|avif|webp|gif|svg)$/i.test(new URL(u).pathname));
-  urlList = [...new Set(urlList)];
+  urlList = [...new Set([
+    ...urlList,
+    `https://${HOST}/llms.txt`,
+    `https://${HOST}/llms-full.txt`,
+  ])];
 }
 const offHost = urlList.filter((u) => new URL(u).host !== HOST);
 if (offHost.length) fail(`only ${HOST} URLs can be submitted with this key: ${offHost.join(', ')}`);

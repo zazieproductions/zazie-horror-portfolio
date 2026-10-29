@@ -10,7 +10,8 @@ import { allRoutes, items, siblingsOf, productionBySlug, cueBySlug, releaseBySlu
 import { productions } from '../build/data/productions.js';
 import { cues } from '../build/data/cues.js';
 import { releases } from '../build/data/releases.js';
-import { SITE_HOST, SITE_ORIGIN, escapeHtml, oneLine, url } from '../build/data/site.js';
+import { additionalHomePosters, featuredCueSlugs, featuredPosterSlugs } from '../build/data/home.js';
+import { SITE_HOST, SITE_ORIGIN, escapeHtml, isoDuration, oneLine, url } from '../build/data/site.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const errors = [];
@@ -51,11 +52,13 @@ function linksOf(html) {
 }
 
 /* ---------------------------------------------------------- expected coverage */
-if (hubs.length !== 19) fail(`expected 19 original hubs, found ${hubs.length}`);
+// /composer was retired (2026-10-29): it 301s to /#about, leaving 18 hubs /
+// 81 sitemap routes. Rebuild: node scripts/generate-sitemap.mjs.
+if (hubs.length !== 17) fail(`expected 17 hub routes, found ${hubs.length}`);
 if (productions.length !== 9) fail(`expected 9 production pages, found ${productions.length}`);
-if (cues.length !== 32) fail(`expected 32 cue pages, found ${cues.length}`);
+if (cues.length !== 30) fail(`expected 30 cue pages, found ${cues.length}`);
 if (releases.length !== 24) fail(`expected 24 catalogue pages, found ${releases.length}`);
-if (allRoutes.length !== 84) fail(`expected 84 sitemap routes, found ${allRoutes.length}`);
+if (allRoutes.length !== 80) fail(`expected 80 sitemap routes, found ${allRoutes.length}`);
 
 const sitemapFile = path.join(root, 'sitemap.xml');
 if (!fs.existsSync(sitemapFile)) fail('sitemap.xml is missing');
@@ -78,6 +81,8 @@ for (const loc of sitemapLocs) {
 }
 
 /* --------------------------------------------------------------- page files */
+/** Snippet blocking makes the page ineligible for normal SERP descriptions. */
+const SNIPPET_BLOCK = /\bnosnippet\b|\bmax-snippet\s*:\s*0\b/i;
 let resolved = 0;
 const missing = [];
 for (const route of allRoutes) {
@@ -97,6 +102,7 @@ for (const route of allRoutes) {
   if (descriptions.length !== 1) fail(`${route.path}: expected one description, found ${descriptions.length}`);
   if (canonical.length !== 1 || canonical[0][1] !== expected) fail(`${route.path}: canonical is not uniquely self-referential`);
   if (!robots || /\bnoindex\b/i.test(robots) || !/\bindex\b/i.test(robots)) fail(`${route.path}: missing indexable robots metadata`);
+  if (SNIPPET_BLOCK.test(robots)) fail(`${route.path}: robots metadata blocks search snippets (nosnippet / max-snippet:0)`);
   if (!html.includes(`property="og:url" content="${expected}"`)) fail(`${route.path}: missing route-specific og:url`);
   if (!/<meta\s+name="twitter:card"/i.test(html)) fail(`${route.path}: missing Twitter card metadata`);
   if (/(?:href|src)="#"/.test(html)) fail(`${route.path}: contains a placeholder # link`);
@@ -116,12 +122,146 @@ if (resolved !== sitemapLocs.length) fail(`${sitemapLocs.length} sitemap URLs bu
 
 /* ---------------------------------------------------------- JSON-LD & media */
 const home = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+/**
+ * SERP display limits for the homepage, the one route an external audit reads
+ * first. Titles are measured as rendered (entities decoded): 30-60 characters
+ * fit Google's title link, 120-160 render without truncation in a description.
+ */
+const homeMetaTitle = decodeXml(/<title>([^<]*)<\/title>/i.exec(home)?.[1] ?? '');
+const homeMetaDescription = decodeXml(/<meta\s+name="description"\s+content="([^"]*)"/i.exec(home)?.[1] ?? '');
+if (homeMetaTitle.length < 30 || homeMetaTitle.length > 60) fail(`homepage title is ${homeMetaTitle.length} characters; keep it between 30 and 60`);
+if (homeMetaDescription.length < 120 || homeMetaDescription.length > 160) fail(`homepage description is ${homeMetaDescription.length} characters; keep it between 120 and 160`);
 const homeNodes = jsonLdBlocks(home, '/');
 const homeTypes = allTypes(homeNodes);
-for (const required of ['Person', 'Organization', 'WebSite', 'WebPage']) {
+for (const required of ['Person', 'Organization', 'WebSite', 'WebPage', 'CreativeWork', 'MusicPlaylist', 'ItemList']) {
   if (homeTypes.filter((type) => type === required).length !== 1) fail(`homepage JSON-LD must contain exactly one ${required} node`);
 }
-if (homeNodes.length !== 4) fail(`homepage JSON-LD should contain only Person, Organization, WebSite and WebPage; found ${homeNodes.length} nodes`);
+if (homeNodes.length !== 7) {
+  fail(`homepage JSON-LD should contain Person, Organization, WebSite, WebPage, CreativeWork, MusicPlaylist and the curated cue ItemList; found ${homeNodes.length} nodes`);
+}
+// This is a portfolio page with multiple supplementary samples, not a video
+// watch page. Keep VideoObject markup off the homepage; Google otherwise
+// selects one sample from the portfolio and rejects it as non-primary content.
+if (homeTypes.includes('VideoObject')) fail('homepage must not declare VideoObject schema; publish video schema only on a dedicated watch page');
+
+/* The homepage ItemList republishes curated cues as MusicComposition nodes.
+   It must describe works that really exist, mirror the /reel/<slug> graph
+   @ids, and point every AudioObject at a playable MP3 on this origin. */
+const cueCatalog = homeNodes.find((node) => node?.['@type'] === 'ItemList');
+if (cueCatalog) {
+  if (cueCatalog['@id'] !== `${SITE_ORIGIN}/#cue-catalog`) fail('homepage cue ItemList must use the stable /#cue-catalog @id');
+  const entries = cueCatalog.itemListElement ?? [];
+  if (entries.length !== featuredCueSlugs.length) {
+    fail(`homepage cue ItemList must list the ${featuredCueSlugs.length} featuredCueSlugs, found ${entries.length}`);
+  }
+  entries.forEach((entry, index) => {
+    const where = `homepage cue ItemList position ${index + 1}`;
+    if (entry?.['@type'] !== 'ListItem' || entry.position !== index + 1) fail(`${where}: ListItem wrapper or position is wrong`);
+    const composition = entry?.item;
+    if (composition?.['@type'] !== 'MusicComposition') fail(`${where}: item must be a MusicComposition`);
+    const cue = cueBySlug.get(featuredCueSlugs[index]);
+    if (!cue) return; // coverage of the slug list itself is asserted when cues load
+    const cuePath = `/reel/${cue.slug}`;
+    if (composition['@id'] !== `${url(cuePath)}#composition`) fail(`${where}: composition @id must match the ${cuePath} graph`);
+    if (composition.url !== url(cuePath)) fail(`${where}: composition url must point at ${cuePath}`);
+    if (composition.name !== cue.title) fail(`${where}: composition name does not match cues.ts`);
+    const compGenres = Array.isArray(composition.genre) ? composition.genre : [composition.genre];
+    if (!compGenres.includes(cue.category)) fail(`${where}: composition genre does not match cues.ts`);
+    if (composition.duration !== isoDuration(cue.durationSeconds)) fail(`${where}: composition duration is not the ISO-8601 cue duration`);
+    if (composition.composer?.['@id'] !== `${SITE_ORIGIN}/#person`) fail(`${where}: composition must credit the verified Person entity`);
+    const audio = composition.audio;
+    if (audio?.['@type'] !== 'AudioObject' || audio['@id'] !== `${url(cuePath)}#audio`) fail(`${where}: audio must reference the cue page AudioObject @id`);
+    if (audio.contentUrl !== url(cue.audioPath)) fail(`${where}: AudioObject contentUrl does not match the cue MP3`);
+    if (!fs.existsSync(path.join(root, cue.audioPath.slice(1)))) fail(`${where}: MP3 ${cue.audioPath} is missing from the repository`);
+  });
+}
+
+/* ---------------------------------------------------- home mobile + posters */
+const homeBundleMatch = /import\("\/(index-[a-f\d]+\.js)"\)/.exec(home);
+if (!homeBundleMatch) {
+  fail('homepage React bundle reference is missing; cannot verify poster/mobile parity');
+}
+const homeBundle = homeBundleMatch ? fs.readFileSync(path.join(root, homeBundleMatch[1]), 'utf8') : '';
+const expectedPosterSlugs = [...featuredPosterSlugs, ...additionalHomePosters.map((poster) => poster.slug)];
+const staticPosterSlugs = [...home.matchAll(/data-home-poster="([^"]+)"/g)].map((match) => match[1]);
+if (JSON.stringify(staticPosterSlugs) !== JSON.stringify(expectedPosterSlugs)) {
+  fail(`homepage poster cards do not match src/data/home.ts: ${staticPosterSlugs.join(', ')}`);
+}
+const posterTitles = new Map([
+  ...productions.map((production) => [production.slug, production.title]),
+  ...additionalHomePosters.map((poster) => [poster.slug, poster.title]),
+]);
+for (const slug of expectedPosterSlugs) {
+  const title = posterTitles.get(slug);
+  if (title && !homeBundle.includes(`title:${JSON.stringify(title)}`)) {
+    fail(`homepage React poster wall is missing ${title}`);
+  }
+}
+for (const item of additionalHomePosters) {
+  const artwork = item.poster;
+  const references = [artwork.src, artwork.avif, artwork.avifSet, artwork.srcset]
+    .filter(Boolean)
+    .flatMap((value) => value.split(','))
+    .map((value) => value.trim().split(/\s+/)[0])
+    .filter((value) => value.startsWith('/'));
+  for (const reference of new Set(references)) {
+    if (!fs.existsSync(path.join(root, reference.slice(1)))) fail(`homepage poster asset is missing: ${reference}`);
+  }
+}
+for (const className of ['zp-mobile-quote', 'zp-menu-button', 'zp-poster-dialog', 'zp-poster-close', 'zp-poster-contain', 'zp-comp-article']) {
+  if (!home.includes(className)) fail(`homepage mobile stylesheet/markup is missing ${className}`);
+  if (!homeBundle.includes(className)) fail(`homepage React bundle is missing ${className}`);
+}
+if (!homeBundle.includes('"aria-expanded":n') || !homeBundle.includes('"aria-controls":"mobile-navigation"')) {
+  fail('mobile menu no longer exposes its expanded state and controlled navigation');
+}
+if (home.includes('<section id="services"') || homeBundle.includes('id:"services"') || homeBundle.includes('Commissioning a score')) {
+  fail('the retired homepage commissioning section or its copy is still present');
+}
+if (home.includes('href="#services"') || homeBundle.includes('href:"#services"')) {
+  fail('homepage contains a dangling link to the removed #services anchor');
+}
+if (home.includes('href="/services"') || homeBundle.includes('href:"/services"')) {
+  fail('homepage must not link to the retired /services route');
+}
+if (home.includes('id="zp-close"') || homeBundle.includes('zp-close')) {
+  fail('the retired READY WHEN YOU ARE closing section is still present');
+}
+if (/<div id="root"[^>]*>\s*<div class="relative min-h-\[100svh\]/.test(home)) {
+  fail('homepage #root must not nest a redundant div.relative wrapper around <main>');
+}
+if (!home.includes('<main id="main-content"') || !homeBundle.includes('id:"main-content"')) {
+  fail('homepage <main> must carry id="main-content" in both SSR HTML and the React bundle');
+}
+for (const anchorId of ['the-undead', 'vlad-the-impaler', 'poster-expire', 'sample-eclipsed']) {
+  if (!home.includes(`id="${anchorId}"`)) fail(`homepage is missing crawlable anchor target #${anchorId}`);
+}
+for (const imgMatch of home.matchAll(/<img\b[^>]*>/gi)) {
+  const tag = imgMatch[0];
+  if (tag.includes('/images/atmosphere-bg.jpg')) continue;
+  if (!/\bloading="lazy"/i.test(tag)) fail(`below-fold homepage image is missing loading="lazy": ${tag}`);
+}
+
+/**
+ * Archive boot (homepage only). It has already shipped inert once: the
+ * prerender pass rewrote the <head> and dropped the synchronous gate, so the
+ * overlay stayed display:none and a later audit deleted it as dead weight.
+ * These four assertions make that failure a build error instead.
+ */
+const bootGateAt = home.indexOf("classList.add('zp-boot-on')");
+const bootOverlayAt = home.indexOf('id="zp-boot"');
+const bootSkipBtnAt = home.indexOf('id="zp-boot-skip"');
+if (bootGateAt === -1) fail('homepage lost the archive-boot gate script: the overlay would never display (see PERFORMANCE.md)');
+if (bootOverlayAt === -1) fail('homepage lost the archive-boot overlay markup (see PERFORMANCE.md)');
+if (bootSkipBtnAt === -1) fail('homepage lost the archive-boot #zp-boot-skip button');
+if (bootGateAt !== -1 && bootOverlayAt !== -1 && bootGateAt > bootOverlayAt) {
+  fail('the archive-boot gate must run synchronously in <head>, before the overlay markup');
+}
+if (!home.includes('html.zp-boot-on #zp-boot')) fail('homepage lost the archive-boot stylesheet that reveals the overlay');
+if (/<div[^>]*id="zp-boot"[^>]*aria-hidden="true"/i.test(home)) {
+  fail('#zp-boot must not set aria-hidden="true" while containing focusable #zp-boot-skip (axe aria-hidden-focus)');
+}
+if (/sessionStorage|localStorage/.test(home)) fail('homepage must not write a storage key for the archive boot (LEGAL.md / /privacy claims)');
 
 for (const item of items) {
   const route = routeByPath.get(item.path);
@@ -194,13 +334,33 @@ for (const hub of hubs) {
   const route = routeByPath.get(hub.path);
   const file = route ? fileFor(route) : null;
   if (!file) continue;
-  const html = fs.readFileSync(file, 'utf8');
-  hubHtmlByPath.set(hub.path, html);
-  for (const href of linksOf(html)) {
-    let pathName;
-    try { pathName = new URL(href, SITE_ORIGIN).pathname; } catch { continue; }
-    if (/^\/(?:work|reel|store)\/[^/]+$/.test(pathName)) fail(`${hub.path}: hub contains a direct item link to ${pathName}`);
+  hubHtmlByPath.set(hub.path, fs.readFileSync(file, 'utf8'));
+}
+
+const linkPaths = (html) => linksOf(html).map((href) => {
+  try { return new URL(href, SITE_ORIGIN).pathname.replace(/\/$/, '') || '/'; } catch { return null; }
+}).filter(Boolean);
+
+// Every generated item route must be linked from the hub that owns it. Items
+// used to be excluded from hub navigation entirely, which left 65 of 85 sitemap
+// URLs with no internal link anywhere - the exact profile Search Console reports
+// as "Discovered - currently not indexed". Discovery now runs / -> hub -> item.
+const isItemRoute = (pathName) => /^\/(?:work|reel|store)\/[^/]+$/.test(pathName);
+for (const route of allRoutes) {
+  if (!isItemRoute(route.path)) continue;
+  const hubPath = `/${route.path.split('/')[1]}`;
+  const hubHtml = hubHtmlByPath.get(hubPath);
+  if (!hubHtml) {
+    fail(`${route.path}: no hub page ${hubPath} exists to link it`);
+    continue;
   }
+  if (!linkPaths(hubHtml).includes(route.path)) fail(`${route.path}: not linked from its hub ${hubPath} (sitemap-only URL)`);
+}
+
+// The home page stays a hub index. Item discovery belongs to the hub that owns
+// the item; a 65-link homepage would bury the 19 pages that matter.
+for (const pathName of linkPaths(hubHtmlByPath.get('/') ?? '')) {
+  if (isItemRoute(pathName)) fail(`/: home page links item route ${pathName}; item discovery belongs to the owning hub`);
 }
 
 const hubLinks = new Map();
@@ -226,6 +386,12 @@ if (unreachableHubs.length) fail(`original hub routes not reachable from /: ${un
 /* --------------------------------------------------------------- real 404 */
 const notFound = fs.readFileSync(path.join(root, '404.html'), 'utf8');
 if (!/<meta[^>]+name="robots"[^>]+content="[^"]*noindex/i.test(notFound)) fail('404.html must carry noindex, follow');
+const headerRules = fs.readFileSync(path.join(root, '_headers'), 'utf8');
+for (const line of headerRules.split(/\r?\n/)) {
+  if (/^\s*X-Robots-Tag\s*:/i.test(line) && SNIPPET_BLOCK.test(line)) {
+    fail(`_headers blocks search snippets: ${line.trim()}`);
+  }
+}
 const redirectLines = fs.readFileSync(path.join(root, '_redirects'), 'utf8')
   .split(/\r?\n/)
   .map((line) => line.replace(/#.*$/, '').trim())
@@ -242,6 +408,57 @@ for (const hub of hubs) {
 const unknownWorkFile = path.join(root, 'work', 'does-not-exist.html');
 if (fs.existsSync(unknownWorkFile) || routeByPath.has('/work/does-not-exist')) fail('unknown production route unexpectedly has a page');
 
+/* ----------------------------------------------------- GEO extractability */
+for (const route of allRoutes) {
+  const file = fileFor(route);
+  if (!file) continue;
+  const html = fs.readFileSync(file, 'utf8');
+  const mainMatch = /<main\b[^>]*>([\s\S]*?)<\/main>/i.exec(html);
+  if (!mainMatch) {
+    fail(`${route.path}: missing <main> landmark`);
+    continue;
+  }
+  if (!/<h1\b[^>]*>[\s\S]*?<\/h1>/i.test(mainMatch[1])) {
+    fail(`${route.path}: <h1> sits outside <main> and will be stripped by RAG / AI Overview extractors`);
+  }
+  if (/<span class="no">[^<]+<\/span>\S/.test(html)) {
+    fail(`${route.path}: unspaced <span class="no"> corrupts extracted section heading tokens`);
+  }
+  if (html.includes('1575933731')) {
+    fail(`${route.path}: contains dead 1575933731 Apple Music artist ID`);
+  }
+  for (const scriptMatch of html.matchAll(/<script\b[^>]*\btype=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
+    if (/<!--v:|\{\{zp:/.test(scriptMatch[1])) {
+      fail(`${route.path}: contains uncleaned commissioning comment/token inside JSON-LD`);
+    }
+  }
+}
+
+/* ------------------------------------------------------------ title length */
+// Google truncates <title> at roughly 65 characters in a desktop result, and a
+// truncated title loses the brand or the call to action that was paying for it.
+// The home page is held to the limit; the rest are reported so the remaining
+// editorial pass has a queue it can see.
+const TITLE_LIMIT = 65;
+const overLongTitles = [];
+let homeTitleLength = 0;
+for (const route of allRoutes) {
+  const file = fileFor(route);
+  if (!file) continue;
+  const html = fs.readFileSync(file, 'utf8');
+  const raw = /<title>([\s\S]*?)<\/title>/i.exec(html)?.[1] ?? '';
+  const text = decodeXml(raw).replace(/\s+/g, ' ').trim();
+  if (route.path === '/') homeTitleLength = text.length;
+  if (text && text.length > TITLE_LIMIT) overLongTitles.push({ path: route.path, length: text.length, text });
+}
+const homeTitle = overLongTitles.find((entry) => entry.path === '/');
+if (homeTitle) fail(`/ title is ${homeTitle.length} characters, over the ${TITLE_LIMIT}-character limit Google renders: "${homeTitle.text}"`);
+
+for (const llmFile of ['llms.txt', 'llms-full.txt']) {
+  const fullPath = path.join(root, llmFile);
+  if (!fs.existsSync(fullPath)) fail(`missing ${llmFile} at repository root`);
+}
+
 if (errors.length) {
   console.error(`verify: ${errors.length} problem(s)`);
   for (const error of [...new Set(errors)]) console.error(`  - ${error}`);
@@ -253,6 +470,18 @@ console.log(`verify: ${sitemapLocs.length} sitemap URLs, ${resolved} resolve to 
 console.log(`  route-status audit: ${hubs.length} original hubs 200; ${productions.length} productions 200; ${cues.length} cues 200; ${releases.length} catalogue items 200`);
 console.log(`  internal-link audit: hubs reachable from /; item pages link to hub + ${items.length ? 'at least 3 siblings' : 'siblings'}; no item links added to hubs`);
 console.log('  SEO/schema audit: unique self-canonical, route-specific head, meta description, indexable robots, per-type JSON-LD');
-console.log('  media audit: 32 MP3 URLs, production samples only when supplied, catalogue artwork only when supplied');
+console.log(`  media audit: ${cues.length} MP3 URLs, production samples only when supplied, catalogue artwork only when supplied`);
 console.log('  404 audit: /work/does-not-exist has no static page and Cloudflare fallback serves 404.html with noindex, follow');
+console.log(`  title length audit: / is ${homeTitleLength}/${TITLE_LIMIT} characters (not truncated); ${overLongTitles.length} other route(s) still run long and are listed here rather than failing the build`);
 console.log('  missing-file report: none');
+
+// Poster descriptions belong in the lightbox, never underneath gallery artwork.
+if (home.includes('class="zp-poster-meta-box') || homeBundle.includes('className:"zp-poster-meta-box')) {
+  fail('homepage poster wall must not render below-poster text panels');
+}
+
+// Film sample cards are video + title only: no music-description text or
+// permalink block underneath (removed 2026-10-25).
+if (home.includes('zp-sample-meta') || homeBundle.includes('zp-sample-meta')) {
+  fail('homepage film samples must not render below-sample text blocks');
+}

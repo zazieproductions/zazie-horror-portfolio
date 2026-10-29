@@ -107,7 +107,7 @@ export function oneLine(value: string): string {
 
 /** The site-wide robots directive every indexable route ships. */
 export const INDEXABLE_ROBOTS =
-  'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1';
+  'index, follow, max-image-preview:large';
 
 /** Trim a description to a length a SERP will actually render. */
 export function clamp(value: string, max: number): string {

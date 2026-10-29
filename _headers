@@ -1,246 +1,325 @@
+# Cloudflare Pages response headers
+# -----------------------------------------------------------------------------
+# HOW RULES COMBINE (read before editing)
+#
+#   Every rule whose pattern matches a request contributes its headers, and a
+#   header set by more than one matching rule is JOINED WITH A COMMA -- the more
+#   specific rule does not win. That made the previous cache policy a no-op:
+#
+#     /*
+#       Cache-Control: public, max-age=0, must-revalidate
+#     /fonts/*
+#       Cache-Control: public, max-age=31536000, immutable
+#
+#   served `public, max-age=0, must-revalidate, public, max-age=31536000,
+#   immutable`, and RFC 9111 reads the first max-age -- so fonts, images and
+#   content-hashed CSS/JS were revalidated on every request.
+#
+#   So: `/*` is the only rule allowed to set Cache-Control as a default, and
+#   every rule that needs a different lifetime first DETACHES it with
+#   `! Cache-Control` and then sets its own. Detach is order-sensitive: the
+#   broad rule must already have applied, which is why `/*` is first in the file
+#   and every detach sits below it.
+#
+#   tools/check-headers.mjs simulates these joins and fails the build if any
+#   path would come out with two Cache-Control lifetimes again.
+#
+# The security policy lives in tools/headers.mjs; that module and this block are
+# checked against each other on every build.
+#
+# Cloudflare injects its Web Analytics beacon (static.cloudflareinsights.com/
+# beacon.min.js) into HTML at the edge; nothing in this repository asks for the
+# tag. Since 26 October 2026 the beacon is deliberately allowed: script-src
+# names its host exactly (the injected URL carries a version path, so a
+# path-scoped source would not match) and connect-src names
+# cloudflareinsights.com for its /cdn-cgi/rum reporting endpoint (the
+# same-origin form is already covered by 'self'). It is the only remote script
+# and the only remote connection allowed, it is cookieless, and /privacy
+# sections 1, 3, 4, 6, 8, 9 and 13 disclose it. tools/check-headers.mjs fails
+# the build if either host is dropped below or any other remote script/connect
+# origin is added. To stop collecting, disable Web Analytics in the Cloudflare
+# dashboard and remove both hosts here in the same change.
+#
+# Cloudflare Pages limit: 100 header rules, 2,000 characters per line.
+
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
   Strict-Transport-Security: max-age=63072000; includeSubDomains; preload
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self'; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://drive.google.com https://docs.google.com; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; media-src 'self' https:; font-src 'self'; frame-src https://www.youtube.com https://www.youtube-nocookie.com https://drive.google.com https://docs.google.com https://bandcamp.com; connect-src 'self' https://cloudflareinsights.com; object-src 'none'; base-uri 'self'; form-action 'self' mailto:; frame-ancestors 'self'; upgrade-insecure-requests
+  X-DNS-Prefetch-Control: on
   Cache-Control: public, max-age=0, must-revalidate
 
+# The error page is never worth keeping, and a cached 404 poisons the route.
 /404.html
   X-Robots-Tag: noindex, follow
+  ! Cache-Control
   Cache-Control: no-store
 
+# The service worker must be re-fetched every time, or a stale worker pins the
+# previous asset graph in front of the new one for up to 24 hours.
 /sw.js
+  ! Cache-Control
   Cache-Control: no-cache, no-store, must-revalidate
 
 /sitemap.xml
   Content-Type: application/xml; charset=utf-8
   X-Robots-Tag: noindex, follow
+  ! Cache-Control
   Cache-Control: public, max-age=3600
 
 /robots.txt
   Content-Type: text/plain; charset=utf-8
+  ! Cache-Control
   Cache-Control: public, max-age=3600
 
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+  X-Robots-Tag: index, follow
+  ! Cache-Control
+  Cache-Control: public, max-age=3600
+
+/llms-full.txt
+  Content-Type: text/plain; charset=utf-8
+  X-Robots-Tag: index, follow
+  ! Cache-Control
+  Cache-Control: public, max-age=3600
+
+# -----------------------------------------------------------------------------
+# Static assets
+#
+# Every URL below is either fingerprinted by the build (name-<hash8>.css/js) or
+# a font/image/audio path whose contents are replaced only together with a
+# rebuild that also rewrites every reference, so a year is safe. HTML is the
+# only thing that must revalidate.
+
 /fonts/*
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
 /images/*
+  ! Cache-Control
   Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
 
 /audio/*
+  ! Cache-Control
+  Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
+
+/favicon.svg
+  ! Cache-Control
   Cache-Control: public, max-age=2592000, stale-while-revalidate=86400
 
 /*.css
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
 /index-*.js
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
 /store-*.js
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
 /legal-*.js
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
-/estimator-*.js
+/inquiry-*.js
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
 /item-*.js
+  ! Cache-Control
+  Cache-Control: public, max-age=31536000, immutable
+
+/reel-download-*.js
+  ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
 # Canonical Link + explicit X-Robots-Tag headers on all indexable routes
 /
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/>; rel="canonical"
 
 /index.html
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/>; rel="canonical"
 
 /work
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/work>; rel="canonical"
 /work/
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/work>; rel="canonical"
 /work/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/work>; rel="canonical"
 /work/*
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
 
 /reel
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/reel>; rel="canonical"
 /reel/
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/reel>; rel="canonical"
 /reel/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/reel>; rel="canonical"
 /reel/*
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
-
-/composer
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
-  Link: <https://horror.zazieproductions.com/composer>; rel="canonical"
-/composer/
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
-  Link: <https://horror.zazieproductions.com/composer>; rel="canonical"
-/composer/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
-  Link: <https://horror.zazieproductions.com/composer>; rel="canonical"
+  X-Robots-Tag: index, follow, max-image-preview:large
 
 /process
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/process>; rel="canonical"
 /process/
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/process>; rel="canonical"
 /process/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/process>; rel="canonical"
 
 /services
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/services>; rel="canonical"
 /services/
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/services>; rel="canonical"
 /services/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/services>; rel="canonical"
 
-/contact
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
-  Link: <https://horror.zazieproductions.com/contact>; rel="canonical"
-/contact/
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
-  Link: <https://horror.zazieproductions.com/contact>; rel="canonical"
-/contact/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
-  Link: <https://horror.zazieproductions.com/contact>; rel="canonical"
-
 /hire-a-composer
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/hire-a-composer>; rel="canonical"
 /hire-a-composer/
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/hire-a-composer>; rel="canonical"
 /hire-a-composer/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/hire-a-composer>; rel="canonical"
 
+/how-to-hire-a-horror-composer
+  X-Robots-Tag: index, follow, max-image-preview:large
+  Link: <https://horror.zazieproductions.com/how-to-hire-a-horror-composer>; rel="canonical"
+/how-to-hire-a-horror-composer/
+  X-Robots-Tag: index, follow, max-image-preview:large
+  Link: <https://horror.zazieproductions.com/how-to-hire-a-horror-composer>; rel="canonical"
+/how-to-hire-a-horror-composer/index.html
+  X-Robots-Tag: index, follow, max-image-preview:large
+  Link: <https://horror.zazieproductions.com/how-to-hire-a-horror-composer>; rel="canonical"
+
 /sound-design
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/sound-design>; rel="canonical"
 /sound-design/
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/sound-design>; rel="canonical"
 /sound-design/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/sound-design>; rel="canonical"
 
 /game-scoring
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/game-scoring>; rel="canonical"
 /game-scoring/
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/game-scoring>; rel="canonical"
 /game-scoring/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/game-scoring>; rel="canonical"
 
 /store
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/store>; rel="canonical"
 /store/
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/store>; rel="canonical"
 /store/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/store>; rel="canonical"
 /store/*
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
 
 /legal
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/legal>; rel="canonical"
 /legal/
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/legal>; rel="canonical"
 /legal/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/legal>; rel="canonical"
 
 /faq
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/faq>; rel="canonical"
 /faq/
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/faq>; rel="canonical"
 /faq/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/faq>; rel="canonical"
 
 /terms
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/terms>; rel="canonical"
 /terms/
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/terms>; rel="canonical"
 /terms/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/terms>; rel="canonical"
 
 /privacy
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/privacy>; rel="canonical"
 /privacy/
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/privacy>; rel="canonical"
 /privacy/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/privacy>; rel="canonical"
 
 /licensing
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/licensing>; rel="canonical"
 /licensing/
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/licensing>; rel="canonical"
 /licensing/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/licensing>; rel="canonical"
 
 /purchases
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/purchases>; rel="canonical"
 /purchases/
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/purchases>; rel="canonical"
 /purchases/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/purchases>; rel="canonical"
 
 /accessibility
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/accessibility>; rel="canonical"
 /accessibility/
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/accessibility>; rel="canonical"
 /accessibility/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/accessibility>; rel="canonical"
 
 /sitemap
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/sitemap>; rel="canonical"
 /sitemap/
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/sitemap>; rel="canonical"
 /sitemap/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1
+  X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/sitemap>; rel="canonical"

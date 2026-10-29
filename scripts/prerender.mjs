@@ -159,14 +159,22 @@ function buildHomeDocument() {
   let templateHead = markedHead;
   templateHead = templateHead.replace(/<title\b[^>]*>[\s\S]*?<\/title>/gi, '');
   templateHead = templateHead.replace(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '');
+  // Every meta tag this function re-emits from seoBlock() has to be dropped
+  // from the carried-over template, not just the ones that "look like SEO".
+  // color-scheme was missing from this list, so each build kept the previous
+  // build's copy and added another one: index.html grew a duplicate meta per
+  // run and the workflow's "generated output is stale" diff could never pass.
   templateHead = templateHead.replace(/<meta\b[^>]*>/gi, (tag) => {
     const name = /\bname\s*=\s*(["'])(.*?)\1/i.exec(tag)?.[2]?.toLowerCase() ?? '';
     const property = /\bproperty\s*=\s*(["'])(.*?)\1/i.exec(tag)?.[2]?.toLowerCase() ?? '';
-    if (name === 'description' || name === 'robots' || name === 'author' || name.startsWith('twitter:')) return '';
+    if (name === 'description' || name === 'robots' || name === 'author' || name === 'color-scheme') return '';
+    if (name.startsWith('twitter:')) return '';
     if (property.startsWith('og:')) return '';
     return tag;
   });
-  templateHead = templateHead.replace(/<link\b[^>]*>/gi, (tag) => /\brel\s*=\s*(["'])canonical\1/i.test(tag) ? '' : tag);
+  templateHead = templateHead.replace(/<link\b[^>]*>/gi, (tag) =>
+    /\brel\s*=\s*(["'])canonical\1/i.test(tag) || /\/llms\.txt\b/i.test(tag) ? '' : tag,
+  );
   templateHead = templateHead.replace(/<!--[\s\S]*?-->/g, (comment) =>
     /JSON-LD|STRUCTURED DATA/i.test(comment) ? '' : comment,
   );
@@ -177,7 +185,7 @@ function buildHomeDocument() {
   html = replaceMarkedContents(html, HOME_POSTERS_START, HOME_POSTERS_END, renderHomePosterCards(), 'home-poster');
   fs.writeFileSync(indexFile, html, 'utf8');
   console.log('prerender: replaced the complete homepage <head> from src/lib/home.ts + home entities');
-  console.log('prerender: rendered 9 curated poster-wall cards from src/data/home.ts + productions.ts');
+  console.log('prerender: rendered curated poster-wall cards from src/data/home.ts + productions.ts');
 }
 const chrome = readChrome();
 const only = process.argv

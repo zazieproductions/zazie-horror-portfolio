@@ -15,7 +15,9 @@
  *
  * WHAT IT CHECKS
  *
- *   1. every <loc> in sitemap.xml          -> 200, no redirect hop, and the
+ *   1. every <loc> in sitemap.xml          -> 200 (or, for a directory route,
+ *                                             Cloudflare Pages' own 308 to its
+ *                                             trailing-slash form), and the
  *                                             in-page canonical equals the URL
  *                                             the sitemap advertised
  *   2. the ".html" form of each URL        -> 308 to the canonical (or an
@@ -24,6 +26,12 @@
  *                                             hubs, 404 for flat item routes
  *                                             (there is no item slash twin)
  *   4. unknown paths and slash twins        -> HTML 404 with noindex
+ *   5. delivery: on one HTML page, one content-hashed bundle, one font and
+ *      one image -- Strict-Transport-Security, a CSP with frame-ancestors,
+ *      X-Frame-Options: SAMEORIGIN, nosniff, a Cache-Control with exactly one
+ *      max-age (Cloudflare Pages joins matching rules with a comma, which is
+ *      how an earlier "/* plus /fonts/*" pair silently disabled caching), and
+ *      a Brotli or Gzip content-encoding when the client offers both
  *
  * Run it from anywhere with internet access. From the build sandbox it dies on
  * the first fetch, by design -- see .github/workflows/live-route-audit.yml for
@@ -194,45 +202,72 @@ async function run() {
 
   /* ------------------------------------------------------ expectations */
 
-  /** What this request should answer, honouring _redirects over host convention. */
+  /**
+   * What this request should answer, honouring `_redirects` over host
+   * convention. A canonical answer is returned as one or more acceptable
+   * responses: a slashless directory route in particular may be served
+   * directly (200 from a root twin) or canonicalised by Cloudflare Pages with
+   * a 308 to its trailing-slash form - both are valid, so both are accepted.
+   */
   const expectedFor = (p) => {
     const rule = RULES.get(p);
-    if (rule) return { status: rule.status, to: rule.to };
-    if (unknownPaths.includes(p) || unknownPaths.includes(targetOf(p))) return { status: 404, to: null };
+    if (rule) return { accepts: [{ status: rule.status, to: rule.to }] };
+    if (unknownPaths.includes(p) || unknownPaths.includes(targetOf(p))) {
+      return { accepts: [{ status: 404, to: null }] };
+    }
     if (SITEMAP_PATHS.includes(targetOf(p))) {
-      if (p.endsWith('.html')) return { status: 308, to: targetOf(p) };
+      if (p.endsWith('.html')) return { accepts: [{ status: 308, to: targetOf(p) }] };
       if (p.endsWith('/') && p !== '/') {
         // Original hubs still have directory indexes; a flat item has no
         // <slug>/index.html twin and must remain a real noindex 404.
-        return hasDirectoryIndex(targetOf(p)) ? { status: 200, to: null } : { status: 404, to: null };
+        return hasDirectoryIndex(targetOf(p))
+          ? { accepts: [{ status: 200, to: null }] }
+          : { accepts: [{ status: 404, to: null }] };
       }
-      return { status: 200, to: null };
+      // Slashless canonical. Served directly as 200 when a root twin exists;
+      // otherwise Cloudflare Pages answers the directory route with its own
+      // 308 canonical redirect to the trailing-slash form. Allow either so a
+      // deploy that leans on the host's 308 still passes the audit.
+      const accepts = [{ status: 200, to: null }];
+      if (hasDirectoryIndex(targetOf(p))) accepts.push({ status: 308, to: `${targetOf(p)}/` });
+      return { accepts };
     }
-    return { status: 200, to: null }; // /work and friends, /sitemap.xml, /robots.txt
+    return { accepts: [{ status: 200, to: null }] }; // /work and friends, /sitemap.xml, /robots.txt
   };
 
-  /** Does a probe match its expectation? */
+  /** Does a probe match one of its expected responses? */
   const rowOk = (r) => {
-    const want = expectedFor(r.url);
-    if (r.status !== want.status) return false;
-    if (want.to && r.location !== want.to) return false;
-    if (want.status === 200 && SITEMAP_PATHS.includes(targetOf(r.url))) {
-      if (!r.type?.toLowerCase().includes('html')) return false;
-      if (r.canonical !== targetOf(r.url)) return false;
+    const { accepts } = expectedFor(r.url);
+    for (const a of accepts) {
+      if (r.status !== a.status) continue;
+      if (a.to && r.location !== a.to) continue;
+      if (a.status === 200 && SITEMAP_PATHS.includes(targetOf(r.url))) {
+        if (!r.type?.toLowerCase().includes('html')) continue;
+        if (r.canonical !== targetOf(r.url)) continue;
+      }
+      if (a.status === 404 && (!r.type?.toLowerCase().includes('html') || !r.noindex)) continue;
+      return true;
     }
-    if (want.status === 404 && (!r.type?.toLowerCase().includes('html') || !r.noindex)) return false;
-    return true;
+    return false;
   };
+
+  /** Human-readable summary of what a request is allowed to answer. */
+  const wantLabel = (r) =>
+    expectedFor(r.url)
+      .accepts.map((a) => (a.to ? `${a.status}->${a.to}` : String(a.status)))
+      .join(' or ');
+  /** True when a 404 (and therefore a noindex body) is among the valid answers. */
+  const expectsNoindex = (r) => expectedFor(r.url).accepts.some((a) => a.status === 404);
 
   const row = (r) => {
-    const want = expectedFor(r.url);
+    const want = wantLabel(r);
     return {
       request: r.url,
       status: r.status || 'ERR',
       location: r.location || '-',
-      want: want.status,
+      want,
       ok: rowOk(r),
-      note: r.error ? ` (${r.error})` : want.status === 404 && !r.noindex ? ' (missing noindex)' : '',
+      note: r.error ? ` (${r.error})` : expectsNoindex(r) && !r.noindex ? ' (missing noindex)' : '',
     };
   };
 
@@ -240,7 +275,12 @@ async function run() {
 
   /* 1. every <loc> in sitemap.xml */
   const canonical = await mapLimit(SITEMAP_PATHS, (p) => probe(p));
-  const canonFail = canonical.filter((r) => !rowOk(r) || !r.title || r.noindex);
+  const canonFail = canonical.filter((r) => {
+    // A 308 directory canonicalization is a valid answer for a slashless hub;
+    // its body is never inspected, so the title/noindex gates below don't apply.
+    if (r.status === 308) return !rowOk(r);
+    return !rowOk(r) || !r.title || r.noindex;
+  });
 
   /* 2 + 3. the alias forms of every URL */
   const aliasJobs = [];
@@ -265,7 +305,86 @@ async function run() {
     ...unknownPaths,
   ];
   const rows = (await mapLimit(tablePaths, (p) => probe(p))).map(row);
-  const failures = [...canonFail, ...aliasFail, ...unknownFail];
+
+  /* ------------------------------------------------------- 5. delivery */
+  /**
+   * Headers and compression are part of the contract, and they are invisible
+   * to the route table above. These four requests are the ones a real visitor
+   * makes on a cold load: the document, the fingerprinted CSS, the font it
+   * references, and a decoded image.
+   */
+  const hashedBundle = (() => {
+    const sw = path.join(ROOT, 'sw.js');
+    if (!fs.existsSync(sw)) return null;
+    const match = /['"]\/((?:index|store|legal|estimator|item)-[0-9a-f]{8}\.css)['"]/.exec(fs.readFileSync(sw, 'utf8'));
+    return match ? `/${match[1]}` : null;
+  })();
+  const fontFile = (() => {
+    const dir = path.join(ROOT, 'fonts');
+    if (!fs.existsSync(dir)) return null;
+    const font = fs.readdirSync(dir).find((name) => name.endsWith('.woff2'));
+    return font ? `/fonts/${font}` : null;
+  })();
+
+  async function fetchHeaders(urlPath, accept) {
+    try {
+      const res = await fetch(BASE + urlPath, {
+        redirect: 'manual',
+        headers: { 'user-agent': UA, accept, 'accept-encoding': 'br, gzip' },
+        signal: AbortSignal.timeout(TIMEOUT_MS),
+      });
+      await res.arrayBuffer().catch(() => {});
+      return { url: urlPath, status: res.status, headers: res.headers, error: null };
+    } catch (error) {
+      return { url: urlPath, status: 0, headers: new Headers(), error: error.message };
+    }
+  }
+
+  const DOC = await fetchHeaders('/', 'text/html');
+  const CSS = hashedBundle ? await fetchHeaders(hashedBundle, 'text/css,*/*;q=0.1') : null;
+  const FONT = fontFile ? await fetchHeaders(fontFile, 'font/woff2,*/*;q=0.1') : null;
+  const IMG = await fetchHeaders('/images/hero-portrait.jpg', 'image/avif,image/webp,image/*,*/*;q=0.8');
+  const XML = await fetchHeaders('/sitemap.xml', 'application/xml,*/*;q=0.1');
+
+  const delivery = [];
+  const expect = (label, response, name, test, wanted) => {
+    const value = response?.headers.get(name);
+    delivery.push({
+      label,
+      url: response?.url || '-',
+      header: name,
+      value: value ?? '(absent)',
+      ok: Boolean(response) && response.status === 200 && test(value),
+      wanted,
+    });
+  };
+  const has = (needle) => (value) => Boolean(value) && value.toLowerCase().includes(needle.toLowerCase());
+  const oneMaxAge = (value) => Boolean(value) && (value.match(/max-age=/g) || []).length === 1;
+  const maxAgeAtLeast = (seconds) => (value) => {
+    const match = /max-age=(\d+)/.exec(value || '');
+    return Boolean(match) && Number(match[1]) >= seconds && oneMaxAge(value);
+  };
+  const compressed = (value) => ['br', 'gzip'].includes((value || '').toLowerCase());
+  const revalidates = (value) => Boolean(value) && /must-revalidate|no-cache|no-store/.test(value) && oneMaxAge(value);
+
+  /** Security headers are contract, not a suggestion: they must be on the document. */
+  expect('Strict-Transport-Security', DOC, 'strict-transport-security', has('max-age='), 'HSTS with a max-age');
+  expect('CSP frame-ancestors', DOC, 'content-security-policy', has("frame-ancestors 'self'"), "frame-ancestors 'self'");
+  expect('CSP object-src', DOC, 'content-security-policy', has("object-src 'none'"), "object-src 'none'");
+  expect('X-Frame-Options', DOC, 'x-frame-options', (v) => (v || '').toUpperCase() === 'SAMEORIGIN', 'SAMEORIGIN');
+  expect('X-Content-Type-Options', DOC, 'x-content-type-options', has('nosniff'), 'nosniff');
+  expect('Referrer-Policy', DOC, 'referrer-policy', has('strict-origin'), 'strict-origin-when-cross-origin');
+  expect('HTML revalidates', DOC, 'cache-control', revalidates, 'max-age=0 + must-revalidate');
+  expect('HTML compressed', DOC, 'content-encoding', compressed, 'br or gzip');
+  expect('hashed CSS cached a year', CSS, 'cache-control', maxAgeAtLeast(31536000), 'max-age=31536000, immutable');
+  expect('hashed CSS compressed', CSS, 'content-encoding', compressed, 'br or gzip');
+  expect('font cached a year', FONT, 'cache-control', maxAgeAtLeast(31536000), 'max-age=31536000, immutable');
+  expect('image cached', IMG, 'cache-control', maxAgeAtLeast(86400), 'a max-age of at least a day');
+  expect('sitemap short cache', XML, 'cache-control', (v) => oneMaxAge(v) && /max-age=\d+/.test(v || ''), 'one max-age');
+
+  const deliveryFail = delivery.filter((row) => !row.ok);
+
+  const failures = [...canonFail, ...aliasFail, ...unknownFail, ...deliveryFail];
 
   /* ------------------------------------------------------------- output */
 
@@ -279,7 +398,7 @@ async function run() {
     line('| URL path | HTTP | Canonical | Result |');
     line('|---|---:|---|---|');
     for (const r of canonical) {
-      const ok = rowOk(r) && Boolean(r.title) && !r.noindex;
+      const ok = r.status === 308 ? rowOk(r) : (rowOk(r) && Boolean(r.title) && !r.noindex);
       const status = ok ? String(r.status) : `**${r.status || 'ERR'}**`;
       const canon = r.canonical ? `\`${r.canonical}\`` : '-';
       line(`| \`${r.url}\` | ${status} | ${canon} | ${ok ? 'PASS' : 'FAIL'} |`);
@@ -295,7 +414,18 @@ async function run() {
     }
     line('');
     line('```');
-    line(`sitemap URLs: ${canonical.filter((r) => rowOk(r) && r.title && !r.noindex).length}/${SITEMAP_URLS.length} passed; failing: ${canonFail.length}`);
+    line('');
+    line('## Delivery: headers and compression');
+    line('');
+    line('| Check | Request | Value | Result |');
+    line('|---|---|---|---|');
+    for (const d of delivery) {
+      line(`| ${d.label} | \`${d.url}\` | \`${String(d.value).replace(/\|/g, '\\|')}\` | ${d.ok ? 'PASS' : `**FAIL** (wanted ${d.wanted})`} |`);
+    }
+    line('');
+    line('```');
+    line(`delivery: ${delivery.length - deliveryFail.length}/${delivery.length} header and compression checks passed`);
+    line(`sitemap URLs: ${canonical.filter((r) => (r.status === 308 ? rowOk(r) : (rowOk(r) && r.title && !r.noindex))).length}/${SITEMAP_URLS.length} passed; failing: ${canonFail.length}`);
     line(`alias forms: ${alias.length} checked (.html / trailing slash); failing: ${aliasFail.length}`);
     line(`unknown paths: ${unknown.length} checked (404 + noindex); failing: ${unknownFail.length}`);
     line('```');
@@ -309,6 +439,7 @@ async function run() {
         ['.html alias (expected 308 to the canonical, or the 301 _redirects wrote)', aliasFail.filter((f) => f.kind === '.html')],
         ['trailing-slash alias (expected 200 for a hub directory index, 404 for an item)', aliasFail.filter((f) => f.kind !== '.html')],
         ['unknown path (expected 404 with noindex)', unknownFail],
+        ['delivery (security headers, caching, compression)', deliveryFail.map((d) => ({ url: `${d.url} [${d.header}]`, status: d.ok ? 200 : 'FAIL', location: '', note: '' }))],
       ];
       const rank = (f) => (/^\/(work|reel|store)\/.+/.test(f.url) ? 1 : 0);
       for (const [label, list] of groups) {
@@ -339,7 +470,7 @@ async function run() {
   }
   line('');
   line(`### every sitemap URL (${SITEMAP_URLS.length})`);
-  line('  expected 200, no redirect hop, in-page canonical == <loc>, <title> present, not noindex');
+  line('  expected 200 (or Cloudflare 308 to the trailing slash for a directory route), in-page canonical == <loc>, <title> present, not noindex');
   line(`  200: ${canonical.filter((r) => r.status === 200).length}   other: ${canonical.filter((r) => r.status !== 200).length}   failing: ${canonFail.length}`);
   line('');
   line(`### alias forms (${alias.length})`);
@@ -355,6 +486,12 @@ async function run() {
   line('### unknown paths');
   for (const r of unknown) line(`  ${String(r.status || 'ERR').padEnd(7)} ${r.url}`);
   line('');
+  line('### delivery (security headers, cache lifetimes, compression)');
+  for (const d of delivery) {
+    line(`  ${(d.ok ? 'PASS' : 'FAIL').padEnd(5)} ${d.header.padEnd(24)} ${String(d.value).slice(0, 70)}  <- ${d.url}`);
+  }
+  line(`  ${delivery.length - deliveryFail.length}/${delivery.length} passed`);
+  line('');
   if (failures.length) {
     line(`### FAIL — ${failures.length} request(s) did not answer as expected`);
     const rank = (f) => (/^\/(work|reel|store)\/.+/.test(f.url) ? 1 : 0);
@@ -363,7 +500,7 @@ async function run() {
     }
     if (failures.length > 25) line(`  ... and ${failures.length - 25} more`);
   } else {
-    line(`### PASS — ${SITEMAP_URLS.length} sitemap URLs, ${alias.length} alias forms, ${unknown.length} unknown paths, all as expected`);
+    line(`### PASS — ${SITEMAP_URLS.length} sitemap URLs, ${alias.length} alias forms, ${unknown.length} unknown paths, ${delivery.length} delivery checks, all as expected`);
   }
   line('');
   line(`(${((Date.now() - started) / 1000).toFixed(1)}s, ${BASE})`);
