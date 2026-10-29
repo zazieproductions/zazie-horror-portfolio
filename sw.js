@@ -129,7 +129,8 @@
 // v51: overhaul #press into the luxury Press Kit with festival laurels, Lake
 // Ivan Film Journal critical spotlight, monograph press cards, and verified
 // profile directory across both the prerendered document and home bundle.
-const CACHE_NAME = 'zazie-v51';
+// v52: simplify the homepage compilation cards; refresh the cached document and bundle.
+const CACHE_NAME = 'zazie-v52';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -138,7 +139,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-3465aa44.css',
-  '/index-9c1eaa25.js',
+  '/index-4d5a6391.js',
   '/store-1e13177a.css',
   '/store-3fc01be0.js',
   '/legal-f4e3a5fb.css',
