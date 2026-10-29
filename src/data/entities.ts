@@ -246,7 +246,9 @@ export const person = {
   alternateName: SITE_NAME,
   description:
     'IMDb-credited experimental psychological horror film composer for independent and arthouse cinema, experimental producer, sound designer, and multi-instrumentalist based in Asheville, North Carolina. Founder of Zazie Productions LLC, composing bespoke psychological, folk and body horror scores for independent film, television, and games worldwide.',
-  url: `${SITE_ORIGIN}/composer`,
+  // The standalone /composer biography page was retired (2026-10-29); the
+  // biography is section 01 on the homepage, so the person URL is its anchor.
+  url: `${SITE_ORIGIN}/#about`,
   image: `${SITE_ORIGIN}/images/headshot.jpg`,
   jobTitle: [
     'Experimental Psychological Horror Film Composer',

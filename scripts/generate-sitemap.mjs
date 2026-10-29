@@ -54,7 +54,9 @@ for (const route of allRoutes) {
   }
 }
 
-if (hubs.length !== 19) fail(`expected 19 hub routes, received ${hubs.length}`);
+// /composer was retired (2026-10-29): it 301s to the homepage biography
+// section (/#about), so it must not appear as a hub route.
+if (hubs.length !== 18) fail(`expected 18 hub routes, received ${hubs.length}`);
 if (productions.length !== 9 || cues.length !== 30 || releases.length !== 24) {
   fail(`expected 9 productions, 30 cues and 24 catalogue items; received ${productions.length}, ${cues.length}, ${releases.length}`);
 }

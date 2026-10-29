@@ -172,16 +172,6 @@
 /reel/*
   X-Robots-Tag: index, follow, max-image-preview:large
 
-/composer
-  X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/composer>; rel="canonical"
-/composer/
-  X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/composer>; rel="canonical"
-/composer/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/composer>; rel="canonical"
-
 /process
   X-Robots-Tag: index, follow, max-image-preview:large
   Link: <https://horror.zazieproductions.com/process>; rel="canonical"

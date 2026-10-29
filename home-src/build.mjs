@@ -211,6 +211,10 @@ const PAIRS = [
   ['<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a composer</a><a href="/sound-design"', '<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a horror composer</a><a href="/how-to-hire-a-horror-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hiring guide</a><a href="/sound-design"', HTML],
   ['["/services","Rate card"]', '["/services","Services"]', BUNDLE],
   ['["/contact","Contact"]', '["#contact","Contact"]', BUNDLE],
+  // /composer retired (2026-10-29): the footer archive link folds into the
+  // homepage biography section instead of a standalone page.
+  ['["/composer","Composer biography"]', '["#about","Composer biography"]', BUNDLE],
+  ['<a href="/composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Composer biography</a>', '<a href="#about" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Composer biography</a>', HTML],
   ['<a href="/services" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Rate card</a>', '<a href="/services" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Services</a>', HTML],
   // Keep a direct, 44px quote action visible on phones; the full section menu
   // remains available beside it. aria-expanded follows the React menu state.

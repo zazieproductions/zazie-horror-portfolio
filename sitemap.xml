@@ -2,7 +2,7 @@
 <!--
   Generated https://horror.zazieproductions.com/sitemap.xml from src/data/{hubs,productions,cues,releases,routes}.ts.
   Do not edit by hand. Each URL is a canonical, extensionless route.
-  Route count: 82 (19 original hubs + 9 productions + 30 cues + 24 catalogue items).
+  Route count: 81 (18 original hubs + 9 productions + 30 cues + 24 catalogue items).
   Sitemap priority and changefreq are intentionally omitted.
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -246,16 +246,6 @@
   <url>
     <loc>https://horror.zazieproductions.com/reel</loc>
     <lastmod>2026-10-26</lastmod>
-  </url>
-
-  <url>
-    <loc>https://horror.zazieproductions.com/composer</loc>
-    <lastmod>2026-10-26</lastmod>
-    <image:image>
-      <image:loc>https://horror.zazieproductions.com/images/headshot.jpg</image:loc>
-      <image:caption>Zazie Kanwar-Torge, experimental psychological horror composer and founder of Zazie Productions LLC, Asheville NC.</image:caption>
-      <image:title>Zazie Kanwar-Torge - Experimental Psychological Horror Composer Biography</image:title>
-    </image:image>
   </url>
 
   <url>
