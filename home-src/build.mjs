@@ -36,6 +36,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
+import { ensureMobileUxAssets } from './mobile-ux.mjs';
 import {
   applyBundleCopy,
   applyStaticCopy,
@@ -1184,6 +1185,7 @@ nextHtml = ensureCompilationsAssets(nextHtml);
 nextHtml = ensurePressKitAssets(nextHtml);
 nextHtml = ensureFunnelAssets(nextHtml);
 nextHtml = ensureLineageAssets(nextHtml);
+nextHtml = ensureMobileUxAssets(nextHtml);
 nextHtml = nextHtml
   .replace(/<a\b[^>]*href="\/services"[^>]*>Services<\/a>/g, '')
   .replaceAll('href="/services"', 'href="/#contact"');
