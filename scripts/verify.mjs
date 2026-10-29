@@ -236,9 +236,22 @@ if (!home.includes('<main id="main-content"') || !homeBundle.includes('id:"main-
 for (const anchorId of ['the-undead', 'vlad-the-impaler', 'poster-expire', 'sample-eclipsed']) {
   if (!home.includes(`id="${anchorId}"`)) fail(`homepage is missing crawlable anchor target #${anchorId}`);
 }
+// Images painted on the first screen must not be deferred behind
+// loading="lazy"; everything else must be. The opening laurel band sits above
+// the hero headline, so its emblem joins the hero background on the
+// allow-list - and has to declare low priority, because it must never compete
+// with the hero background / portrait for bandwidth.
+const ABOVE_FOLD_HOME_IMAGES = ['/images/atmosphere-bg.jpg', '/images/laurels/golden-bloody-globes.webp'];
 for (const imgMatch of home.matchAll(/<img\b[^>]*>/gi)) {
   const tag = imgMatch[0];
-  if (tag.includes('/images/atmosphere-bg.jpg')) continue;
+  const aboveFold = ABOVE_FOLD_HOME_IMAGES.find((path) => tag.includes(path));
+  if (aboveFold) {
+    if (/\bloading="lazy"/i.test(tag)) fail(`above-fold homepage image must not be lazy-loaded: ${tag}`);
+    if (aboveFold.endsWith('/golden-bloody-globes.webp') && !/\bfetchpriority="low"/i.test(tag)) {
+      fail(`above-fold laurel emblem must declare fetchpriority="low": ${tag}`);
+    }
+    continue;
+  }
   if (!/\bloading="lazy"/i.test(tag)) fail(`below-fold homepage image is missing loading="lazy": ${tag}`);
 }
 
