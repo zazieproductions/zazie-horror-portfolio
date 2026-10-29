@@ -135,9 +135,11 @@
 // precached document, so the cached bundle and document change with it.
 // v55: merge main's mobile pass into the inquiry stylesheet - 16px controls at
 // tablet widths and a 44px disclosure row - which re-hashes inquiry-<hash>.css.
-// v56: the hero's two CTAs now share one label typeface, so the precached
-// document and home bundle change with it.
-const CACHE_NAME = 'zazie-v56';
+// v56: the homepage hero opens with the festival laurel band (in flow above
+// the headline, 2x2 on phones), which re-hashes index-<hash>.js.
+// v57: the hero's two CTAs share one label typeface, so the precached document
+// and home bundle change with it.
+const CACHE_NAME = 'zazie-v57';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -146,7 +148,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-3465aa44.css',
-  '/index-8093c395.js',
+  '/index-3d3fa8c7.js',
   '/store-1e13177a.css',
   '/store-3fc01be0.js',
   '/legal-f4e3a5fb.css',

@@ -9,3 +9,9 @@
   Steve Merlo — the page says so).
 - Poster pipeline: `images/posters/<slug>-{640.avif,640.jpg,1200.jpg}` with
   explicit `width`/`height`; 1200px variant loads only in the lightbox.
+- The hero opens with the festival laurel band (`heroLaurelsHtml()` in
+  `src/lib/press-kit-markup.ts`): the same four marks as the press kit, in
+  flow above the eyebrow and `<h1>`, each linking to `#press`. It renders 2x2
+  on phones and 4-up from 768px, and the emblem is eager + `fetchpriority="low"`
+  with intrinsic dimensions. The full Electronic Press Kit remains below at
+  `#press`; `tools/press-laurels.test.mjs` keeps the two in sync.

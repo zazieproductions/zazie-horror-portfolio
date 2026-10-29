@@ -1152,30 +1152,44 @@ export const PRESS_CSS = `
 }
 `.trim();
 
-/** Compact opening credits, using the same artwork as the full press kit. */
+/**
+ * Compact opening credits, using the same artwork as the full press kit.
+ *
+ * The band renders in normal flow directly above the hero opening line (the
+ * eyebrow, then the `<h1>`), so festival recognition is the first thing a
+ * visitor reads. Every mark links to the full `#press` dossier below, and the
+ * artwork is the same in both places, so the opening band and the press kit
+ * can never disagree.
+ */
 export function heroLaurelsHtml(): string {
   const marks = [
-    ['Golden Bloody Globes · Festival Award Honoree', '<img src="/images/laurels/golden-bloody-globes.webp" alt="" width="480" height="280" loading="lazy" decoding="async">'],
+    // Above the fold, but never the LCP candidate: the hero background and
+    // portrait outrank it, so it loads eagerly at low priority instead of
+    // being deferred behind loading="lazy".
+    ['Golden Bloody Globes · Festival Award Honoree', '<img src="/images/laurels/golden-bloody-globes.webp" alt="" width="480" height="280" decoding="async" fetchpriority="low">'],
     ['Re:Fract Festival · Special Jury Mention · 2025', buildOliveBerryWreathSvg()],
     ['PVTV Fringe Flicks · Festival Winner', buildCinemaPalmWreathSvg()],
     ['Pebbles Underground · Jury Special Mention · 2024', buildBayMedallionWreathSvg()],
   ];
-  return `<div class="zp-hero-laurels" aria-label="Festival recognition">${marks.map(([label, art]) => `<a href="#press" aria-label="${label}. View press kit" title="${label}">${art}</a>`).join('')}</div>`;
+  return `<div class="zp-hero-laurels" role="list" aria-label="Festival recognition">${marks.map(([label, art]) => `<a href="#press" role="listitem" aria-label="${label}. View press kit" title="${label}">${art}</a>`).join('')}</div>`;
 }
 
 export const HERO_LAURELS_CSS = `
-#top .zp-hero-laurels{position:absolute;top:88px;left:32px;right:32px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;max-width:960px;margin:0 auto;align-items:center;padding-bottom:18px;border-bottom:1px solid rgba(223,196,139,.18)}
+/* Opening laurel band. In flow above the hero opening line: no absolute
+   placement, no reserved padding, no magic offsets, so the band can never be
+   clipped by the hero's overflow-hidden or hidden behind the fixed header.
+   All four marks are visible without scrolling, including on phones (2x2). */
+#top .zp-hero-laurels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:center;gap:12px 18px;margin:0 0 24px;padding:0 0 18px;border-bottom:1px solid rgba(223,196,139,.18)}
 #top .zp-hero-laurels a{display:flex;align-items:center;justify-content:center;min-width:0;min-height:44px;transition:filter .2s}
 #top .zp-hero-laurels svg,#top .zp-hero-laurels img{display:block;width:100%;height:auto;max-height:none;object-fit:contain;flex-shrink:0}
 #top .zp-hero-laurels svg{aspect-ratio:360/202}
 #top .zp-hero-laurels img{aspect-ratio:480/280}
 #top .zp-hero-laurels a:hover{filter:brightness(1.25)}
 #top .zp-hero-laurels a:focus-visible{outline:2px solid #dfc48b;outline-offset:4px}
-#top>div.relative.z-10{padding-top:280px}
-#top .zp-hero-art{top:270px}
-@media(max-width:640px){
-  #top .zp-hero-laurels{top:76px;left:16px;right:16px;gap:16px;grid-template-columns:repeat(4,145px);overflow-x:auto;justify-content:start;padding:4px 4px 16px;scroll-snap-type:x proximity}
-  #top .zp-hero-laurels a{scroll-snap-align:start}
-  #top>div.relative.z-10{padding-top:220px}
+@media(min-width:768px){
+  #top .zp-hero-laurels{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-bottom:28px}
+}
+@media(prefers-reduced-motion:reduce){
+  #top .zp-hero-laurels a{transition:none}
 }
 `;

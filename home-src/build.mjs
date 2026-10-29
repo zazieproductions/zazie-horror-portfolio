@@ -194,11 +194,12 @@ const PAIRS = [
   // uppercase while "Play the showreel" is 14px/500 sentence case, so the pair
   // read as two different designs side by side. Hierarchy stays in fill vs.
   // outline, not in type. The static snapshot (index.html) carries the same
-  // classes; without this pair a rebuild reverts the anchor.
+  // classes, so the pair runs on both render paths; without it a rebuild reverts
+  // the anchor.
   [
     'px-7 py-4 text-[11px] uppercase tracking-[0.22em] text-bone backdrop-blur-sm',
     'px-7 py-4 text-sm font-medium tracking-wide text-bone backdrop-blur-sm',
-    BUNDLE,
+    BOTH,
   ],
   // User-provided biography; HTML emphasis is shared with the static snapshot.
   ["Zazie Kanwar-Torge is an award-winning composer, experimental producer, and multi-instrumentalist. Under Zazie Productions, he writes and performs original scores for psychological, folk, and body horror, supernatural thrillers, and dark sci-fi.", "<strong>Zazie Kanwar-Torge</strong> is an award-winning film composer, experimental producer, and multi-instrumentalist specializing in <strong>experimental psychological horror for independent and arthouse cinema, folk horror, body horror, supernatural thrillers, and dark science fiction</strong>. Through Zazie Productions, he creates original film scores and immersive sonic atmospheres that explore dread, dissonance, isolation, and the uncanny.", "bundle"],
