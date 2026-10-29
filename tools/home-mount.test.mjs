@@ -12,10 +12,11 @@
  *      persistent paragraph-link underlines, while the designed type scale
  *      (the 8-12px uppercase labels and the mobile prose size) is left alone:
  *      the 2026-10-25 blanket 12px/16px floors are deliberately absent.
- *   4. The biography (#about) sits before the compilations section, straight
- *      after the showreel, in both the prerendered document and the React
- *      bundle's render order, and the numbered section kickers run in
- *      sequence (Biography is 03, not its shipped 05).
+ *   4. The biography (#about) sits straight after the showreel and before the
+ *      press kit in both the prerendered document and the React bundle's
+ *      render order; the compilation players live inside the press kit's
+ *      tier IV rather than a homepage section of their own, and the numbered
+ *      section kickers run in sequence (Biography is 03, not its shipped 05).
  *
  * Run: node --test tools/home-mount.test.mjs
  */
@@ -91,26 +92,32 @@ test('precached homepage stylesheet is the same hashed file the document links',
   assert.deepEqual(sheets, [cssName]);
 });
 
-test('the biography sits before the compilations in the static page and the bundle render', () => {
+test('the biography sits before the press kit in the static page and the bundle render', () => {
   const jsFile = /import\("\/(index-[0-9a-f]{8}\.js)"\)/.exec(html)?.[1];
   assert.ok(jsFile, 'index.html imports a content-hashed home bundle');
   const bundle = read(jsFile);
-  // Static first paint: showreel, then biography, then compilations, then press.
-  const staticOrder = ['<section id="showreel"', '<section id="about"', '<section id="compilations"', '<section id="press"']
+  // Static first paint: showreel, then biography, then press (the press kit
+  // carries the compilation players in its fourth tier).
+  const staticOrder = ['<section id="showreel"', '<section id="about"', '<section id="press"']
     .map((marker) => html.indexOf(marker));
-  assert.ok(staticOrder.every((at) => at >= 0), 'all four sections exist in index.html');
-  assert.deepEqual([...staticOrder].sort((a, b) => a - b), staticOrder, 'index.html orders #about before #compilations, after #showreel');
+  assert.ok(staticOrder.every((at) => at >= 0), 'all three sections exist in index.html');
+  assert.deepEqual([...staticOrder].sort((a, b) => a - b), staticOrder, 'index.html orders #about after #showreel and before #press');
+  assert.equal(html.indexOf('<section id="compilations"'), -1, 'the compilations are not a homepage section of their own');
+  const press = html.slice(html.indexOf('<section id="press"'), html.indexOf('</section>', html.indexOf('<section id="press"')));
+  const blockAt = press.indexOf('<div id="compilations"');
+  const dirAt = press.indexOf('class="zp-pk-dir-grid"');
+  assert.ok(blockAt > 0 && dirAt > 0 && dirAt < blockAt, 'the players sit inside #press, under the profiles directory');
   // React render: About (rj) is invoked once, between the showreel (G5) and
-  // the compilations component; the retired homepage Services component is gone.
+  // the press kit (I5); the retired homepage Services component is gone.
   const renderOrder = [
     'u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"})',
     'u.jsx(rj,{"data-source-loc":"src/App.tsx:45:10"})',
-    'u.jsx(zpCompilations,{})',
     'u.jsx(I5,',
   ].map((marker) => bundle.indexOf(marker));
-  assert.ok(renderOrder.every((at) => at >= 0), 'bundle renders showreel, biography, compilations, press');
-  assert.deepEqual([...renderOrder].sort((a, b) => a - b), renderOrder, 'bundle orders the biography before the compilations');
+  assert.ok(renderOrder.every((at) => at >= 0), 'bundle renders showreel, biography, press');
+  assert.deepEqual([...renderOrder].sort((a, b) => a - b), renderOrder, 'bundle orders the biography before the press kit');
   assert.equal(bundle.match(/u\.jsx\(rj,/g)?.length, 1, 'the biography renders exactly once');
+  assert.equal(bundle.indexOf('zpCompilations'), -1, 'no separate compilations component remains in the bundle');
   // Video and music sections use simple, distinct headings; the remaining
   // numbered kickers stay contiguous after the samples kicker is removed.
   const kickers = ['01 · Biography', '02 · Contact']
@@ -153,8 +160,9 @@ test('the biography sits before the compilations in the static page and the bund
   assert.ok(!html.includes(removedHeroTagline) && !bundle.includes(removedHeroTagline), 'the Hollywood-score tagline is removed');
   assert.ok(bundle.includes('WE CORRUPT SILENCE ') && bundle.includes('TO SERVE THE FRAME.'), 'the React bundle carries the new hero declaration');
   assert.ok(bundle.includes('Bespoke, avant-garde sonic identities for psychological horror, folk horror,'), 'the React bundle carries the new hero support copy');
-  assert.ok(html.includes('Compilation Features') && html.includes('>Selected Works</h2>'), 'the compilation section uses plain headings');
-  assert.ok(bundle.includes('Compilation Features') && bundle.includes('Selected Works'), 'the React bundle uses the same compilation headings');
+  assert.ok(!html.includes('Compilation Features') && !html.includes('>Selected Works</h2>'), 'the retired compilation section heading is gone');
+  assert.ok(!bundle.includes('Compilation Features') && !bundle.includes('Selected Works'), 'the bundle carries no separate compilation heading');
+  assert.ok(html.includes('>Official Profiles, Credits &amp; Streaming</span>'), 'the players stay under the tier IV heading');
   for (const removed of ['Out in the world', 'Music that exists outside a hard drive.', 'Compilation tracks and two Bandcamp releases already in the world.', 'folder of unused cues']) {
     assert.ok(!html.includes(removed) && !bundle.includes(removed), `pretentious compilation copy stays absent: ${removed}`);
   }

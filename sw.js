@@ -140,7 +140,11 @@
 // v57: the homepage compilation cards become compact rows (small cover, title
 // beside it), which changes the inline #zp-comp-style in the precached '/'
 // document while leaving the bundle and stylesheet hashes untouched.
-const CACHE_NAME = 'zazie-v57';
+// v58: those players move into the press kit's tier IV as ~200px cover cards
+// (no homepage #compilations section), so the document, the inline
+// #zp-comp-style and the re-hashed home bundle index-<hash>.js all change with
+// it. v57 never shipped, so v56 -> v58 is the only step returning visitors see.
+const CACHE_NAME = 'zazie-v58';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -149,7 +153,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-3465aa44.css',
-  '/index-11ae0e31.js',
+  '/index-71b6d428.js',
   '/store-1e13177a.css',
   '/store-3fc01be0.js',
   '/legal-f4e3a5fb.css',

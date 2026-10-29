@@ -9,6 +9,8 @@
  * leaves `index.html` byte-identical to the bundle string.
  */
 
+import { compilationsTierHtml } from './compilations-markup.js';
+
 export const PRESS_SECTION_CLASS =
   'zp-pk-section relative overflow-hidden border-y border-blood/20 bg-ink py-20 sm:py-28 md:py-32';
 
@@ -553,6 +555,7 @@ export function pressKitInnerHtml(): string {
       <div class="zp-pk-dir-grid">
         ${directoryHtml}
       </div>
+      ${compilationsTierHtml()}
     </div>`;
 }
 

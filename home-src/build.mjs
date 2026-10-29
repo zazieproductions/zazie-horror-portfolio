@@ -68,8 +68,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const here = path.join(root, 'home-src');
 const { budgetSelectOptions } = await import('../build/lib/commission-markup.js');
 const { BUDGET_RANGES } = await import('../build/data/commission.js');
-const { compilationsSectionHtml, compilationsInnerHtml, SECTION_CLASS, CONTAINER_CLASS, COMPILATIONS_CSS, COMPILATIONS_JS } =
-  await import('../build/lib/compilations-markup.js');
+const { COMPILATIONS_CSS, COMPILATIONS_JS } = await import('../build/lib/compilations-markup.js');
 const { pressKitSectionHtml, pressKitInnerHtml, PRESS_SECTION_CLASS, PRESS_CONTAINER_CLASS, PRESS_CSS, heroLaurelsHtml, HERO_LAURELS_CSS } =
   await import('../build/lib/press-kit-markup.js');
 const { homePosterClientData } = await import('../build/lib/home.js');
@@ -730,7 +729,7 @@ function patchBundle(orig) {
       throw new Error('bundle: Approach card data tj is still referenced after removal');
     }
   }
-  out = addCompilationsSection(out);
+  out = placeBiographyAfterShowreel(out);
   // The homepage services render call is removed above; remove its now-unused
   // component too so commissioning copy does not remain dormant in the bundle.
   const servicesComponent = findTopLevelFunction(out, 'lj');
@@ -787,21 +786,18 @@ function patchBundle(orig) {
 }
 
 /**
- * Homepage "Compilations" section (src/lib/compilations-markup.ts). It is a
- * static-markup component placed between the biography (About, rj) and the
- * press kit (I5) in App. The biography is moved up after the showreel, and the
- * homepage commissioning component (lj) is removed from its shipped slot;
- * index.html carries the same section order (patchStatic).
+ * The biography (About, rj) moves straight after the showreel (G5) and before
+ * the press kit (I5); the duplicate biography and the retired homepage
+ * commissioning component (lj) are cut from their shipped slots. The
+ * compilation players are not a homepage section any more: they render inside
+ * the press kit's tier IV (src/lib/press-kit-markup.ts), so the same markup
+ * reaches index.html and the bundle through pressKitInnerHtml().
  */
-function addCompilationsSection(source) {
+function placeBiographyAfterShowreel(source) {
   let out = source;
-  const component =
-    `function zpCompilations(){return u.jsx("section",{id:"compilations",className:${JSON.stringify(SECTION_CLASS)},` +
-    `children:u.jsx("div",{className:${JSON.stringify(CONTAINER_CLASS)},dangerouslySetInnerHTML:{__html:${JSON.stringify(compilationsInnerHtml())}}})})}`;
   for (const [oldText, newText] of [
-    ['function I5(){return u.jsx("section",{id:"press"', `${component}function I5(){return u.jsx("section",{id:"press"`],
-    // Biography before compilations, straight after the showreel (G5).
-    ['u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"}),u.jsx(I5,', 'u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"}),u.jsx(rj,{"data-source-loc":"src/App.tsx:45:10"}),u.jsx(zpCompilations,{}),u.jsx(I5,'],
+    // Biography after the showreel, before the press kit.
+    ['u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"}),u.jsx(I5,', 'u.jsx(G5,{"data-source-loc":"src/App.tsx:34:10"}),u.jsx(rj,{"data-source-loc":"src/App.tsx:45:10"}),u.jsx(I5,'],
     // Remove the duplicate biography and the retired homepage services section.
     ['u.jsx(lj,{"data-source-loc":"src/App.tsx:44:10"}),u.jsx(rj,{"data-source-loc":"src/App.tsx:45:10"}),', ''],
   ]) {
@@ -931,25 +927,26 @@ function patchStatic(html, tracks) {
   out = patchStaticShowreel(out, tracks);
   if (out !== previousShowreel) applied.push(`showreel queue synced (${tracks.length} cues; ${tracks[0].title} first)`);
 
-  // Biography before compilations: #about is lifted out of its shipped slot
-  // (between #services and #contact) and the two sections are placed together
-  // straight after the showreel, biography first — the same order the bundle
-  // renders (addCompilationsSection). Idempotent: both sections are extracted
-  // wherever they currently sit and re-inserted in this order, and the
-  // compilations markup is regenerated, so a change to the data still
-  // reaches index.html.
+  // Biography placement: #about is lifted out of its shipped slot (between
+  // #services and #contact) and placed straight after the showreel, the same
+  // order the bundle renders (placeBiographyAfterShowreel). The compilation
+  // players now live inside the press kit's tier IV, so any legacy standalone
+  // #compilations section is removed here; #press is regenerated below.
   {
-    const section = compilationsSectionHtml();
     const aboutMatch = /<section id="about"[\s\S]*?<\/section>/.exec(out);
     if (!aboutMatch) throw new Error('index.html: #about (biography) section not found');
     const about = aboutMatch[0];
     out = out.replace(about, () => '');
-    out = out.replace(/<section id="compilations"[\s\S]*?<\/section>/, () => '');
+    const legacyCompilations = /<section id="compilations"[\s\S]*?<\/section>/;
+    if (legacyCompilations.test(out)) {
+      out = out.replace(legacyCompilations, () => '');
+      applied.push('legacy compilations section removed');
+    }
     const showreelStart = out.indexOf('<section id="showreel"');
     if (showreelStart < 0) throw new Error('index.html: #showreel section not found');
     const at = out.indexOf('</section>', showreelStart) + '</section>'.length;
-    out = out.slice(0, at) + about + section + out.slice(at);
-    applied.push('biography placed before the compilations section, after the showreel');
+    out = out.slice(0, at) + about + out.slice(at);
+    applied.push('biography placed after the showreel');
   }
 
   // Retire the homepage commissioning block completely. The dedicated
@@ -1093,7 +1090,7 @@ function ensurePressKitAssets(html) {
   return out;
 }
 
-/** Inline style and click-to-load script for the compilations section. */
+/** Inline style and click-to-load script for the press kit's compilation players. */
 function ensureCompilationsAssets(html) {
   let out = html;
   const style = `<style id="zp-comp-style">${COMPILATIONS_CSS}</style>`;

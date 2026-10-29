@@ -8,7 +8,7 @@
 | Reel downloads | `src/reel-download/`, `scripts/build-reel-download.mjs` | Per-cue download without JS; optional in-browser ZIP (fflate) built on demand |
 | Selected cues | `selected-cues.js` (root, committed) | Loaded by the homepage; keep in step with cue data |
 | Store previews / room tone | `store-src/store.js` | Per-card previews, looping ambience ducked under previews; `preload="none"` |
-| Compilation players | `src/data/compilations.ts` + `src/lib/compilations-markup.ts`; mirrored hand-written list on `/reel` | Click-to-load Bandcamp iframes (no Bandcamp request on page load) — **keep both lists in step** |
+| Compilation players | `src/data/compilations.ts` + `src/lib/compilations-markup.ts`, rendered inside the press kit's tier IV (`src/lib/press-kit-markup.ts`); mirrored hand-written list on `/reel` | Click-to-load Bandcamp iframes (no Bandcamp request on page load) — **keep both lists in step** |
 
 > [!WARNING]
 > Do not transcode, rename or renumber `audio/track-*.mp3` without updating

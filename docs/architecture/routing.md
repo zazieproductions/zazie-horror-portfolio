@@ -24,6 +24,6 @@ Rules that protect this:
   `/composer` → `/#about`); `tools/generate-redirects.mjs --check` guards it.
 - `server.mjs` mirrors the host's routing locally so link/route bugs are
   testable before deploy; `tools/check-links.mjs` resolves targets the same way.
-- `sw.js` is hand-written; bump `CACHE_NAME` (currently `zazie-v57`) whenever
+- `sw.js` is hand-written; bump `CACHE_NAME` (currently `zazie-v58`) whenever
   precached assets or cache behaviour change, or returning visitors keep the
   old asset graph.

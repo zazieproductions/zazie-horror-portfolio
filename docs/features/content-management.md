@@ -10,7 +10,7 @@ without files.
 | Production | `src/data/productions.ts` (verify credits role-by-role, poster set, `updatedAt`) | Build; check `/work/<slug>` + poster wall |
 | Cue | `src/data/cues.ts` + add `audio/track-NN.mp3` (slug derives from title) | Build; check `/reel/<slug>`, downloads list |
 | Catalogue item | `src/data/releases.ts` (verified facts/artwork only; no invented price/stock) | Build; check `/store/<slug>` |
-| Compilation | `src/data/compilations.ts` **and** the mirrored `/reel` list | Build; both lists must stay in step |
+| Compilation | `src/data/compilations.ts` **and** the mirrored `/reel` list | Build; both lists must stay in step. Rendered by `src/lib/compilations-markup.ts` inside the press kit's tier IV (no homepage section of its own) |
 | Hub page | Its source (`store-src/` or `legal-src/`) if it has one; else the committed hub HTML + root twin together | `node tools/route-aliases.mjs` must pass |
 | Document (legal/FAQ/…) | `legal-src/pages/<slug>.html` (shared chrome: `legal-src/partials/`) | Build; documents ship readable with JS off |
 

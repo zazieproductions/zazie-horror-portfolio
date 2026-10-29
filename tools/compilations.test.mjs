@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
- * Homepage compilation cards must stay minimal in both render paths, while
- * preserving the opt-in Bandcamp player and the no-JavaScript listening link.
+ * The compilation cards live inside the homepage press kit (tier IV), and must
+ * stay minimal in both render paths, while preserving the opt-in Bandcamp
+ * player and the no-JavaScript listening link.
  * Run: node --test tools/compilations.test.mjs
  */
 import assert from 'node:assert/strict';
@@ -15,13 +16,21 @@ const html = read('index.html');
 const jsFile = /import\("\/(index-[0-9a-f]{8}\.js)"\)/.exec(html)?.[1];
 assert.ok(jsFile, 'the homepage imports its generated React bundle');
 const bundle = read(jsFile);
-const section = /<section id="compilations"[\s\S]*?<\/section>/.exec(html)?.[0];
-assert.ok(section, 'the static homepage contains the compilations section');
-const component = bundle.slice(bundle.indexOf('function zpCompilations(){'), bundle.indexOf('function I5(){'));
-const innerJson = /dangerouslySetInnerHTML:\{__html:("(?:\\.|[^"\\])*")\}/.exec(component)?.[1];
-assert.ok(innerJson, 'the client bundle renders the compilation markup');
+const grid = /<ul class="zp-comp-grid">[\s\S]*?<\/ul>/.exec(html)?.[0];
+assert.ok(grid, 'the static homepage contains the compilation grid');
+const press = html.slice(html.indexOf('<section id="press"'), html.indexOf('</section>', html.indexOf('<section id="press"')) + '</section>'.length);
+assert.ok(press.includes(grid), 'the compilation grid renders inside the press kit');
+const dirAt = press.indexOf('class="zp-pk-dir-grid"');
+const gridAt = press.indexOf('<ul class="zp-comp-grid">');
+assert.ok(dirAt > 0 && gridAt > dirAt, 'the players sit under the official profiles directory in tier IV');
+assert.equal(html.indexOf('<section id="compilations"'), -1, 'the compilations are not a homepage section of their own');
+const pressStart = bundle.indexOf('function I5(){');
+const pressComponent = bundle.slice(pressStart, bundle.indexOf('function ', pressStart + 20));
+const innerJson = /dangerouslySetInnerHTML:\{__html:("(?:\\.|[^"\\])*")\}/.exec(pressComponent)?.[1];
+assert.ok(innerJson, 'the client bundle renders the press kit markup that carries the players');
 const reactMarkup = JSON.parse(innerJson);
-const cards = [...section.matchAll(/<li class="zp-comp-card"[\s\S]*?<\/li>/g)].map((match) => match[0]);
+assert.ok(reactMarkup.includes(grid), 'React and the prerendered homepage use identical compilation markup');
+const cards = [...grid.matchAll(/<li class="zp-comp-card"[\s\S]*?<\/li>/g)].map((match) => match[0]);
 const css = /<style id="zp-comp-style">([\s\S]*?)<\/style>/.exec(html)?.[1];
 const script = /<script id="zp-comp-script">([\s\S]*?)<\/script>/.exec(html)?.[1];
 assert.ok(css && script, 'the homepage ships the compilation styles and player script');
@@ -41,14 +50,19 @@ const releases = [
 const textContent = (markup) => markup.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
 
 test('both homepage render paths show only release and song names on each cover card', () => {
-  assert.ok(section.includes(reactMarkup), 'React and the prerendered homepage use identical section contents');
-  assert.match(section, />Compilation Features<\/p>/);
-  assert.match(section, />Selected Works<\/h2>/);
+  assert.match(press, />Official Profiles, Credits &amp; Streaming<\/span>/, 'the players stay under the tier IV heading');
   assert.equal(cards.length, releases.length, 'all nine cards remain in order');
-  assert.doesNotMatch(section, /class="zp-(?:badge|dur|comp-meta|comp-note|comp-links|bc-nojs)"/);
-  assert.doesNotMatch(section, /Playback runs in Bandcamp|Permalink|Track on Bandcamp|Full compilation|Full release/);
+  assert.doesNotMatch(press, /class="zp-(?:badge|dur|comp-meta|comp-note|comp-links|bc-nojs)"/);
+  assert.doesNotMatch(press, /Playback runs in Bandcamp|Permalink|Track on Bandcamp|Full compilation|Full release/);
   assert.match(css, /\.zp-comp-body\{display:flex;/, 'titles are visible without opening the player');
   assert.doesNotMatch(css, /\.zp-comp-body\{display:none/, 'titles are not hidden before playback');
+  // Cover-forward cards, roughly 200px wide, two abreast on phones and three
+  // across in the tier from 900px.
+  assert.match(css, /\.zp-stage\{position:relative;aspect-ratio:1\/1/, 'the covers stay square');
+  assert.match(css, /\.zp-comp-grid\{display:grid;grid-template-columns:repeat\(2/, 'two columns on small screens');
+  assert.match(css, /@media \(min-width:900px\)\{\.zp-comp-grid\{grid-template-columns:repeat\(3/, 'three across in the press kit tier');
+  assert.match(css, /max-width:44rem/, 'the shelf stays cover-sized instead of page-wide');
+  assert.match(css, /\.zp-comp-block\{[^}]*border-top:1px solid/, 'the shelf is separated from the profile directory');
 
   cards.forEach((card, index) => {
     const { album, song, artId } = releases[index];

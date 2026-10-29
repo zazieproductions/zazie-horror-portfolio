@@ -4,43 +4,52 @@ Date: 2026-09-25 · Branch: `arena/01a0d613-zazie-horror-portfolio`
 Scope: horror.zazieproductions.com (static prerendered React build on an edge host with `_headers`/`_redirects` semantics, i.e. Netlify/Cloudflare-Pages style).
 
 
-## Compact compilation rows: 2026-10-29
+## Compilation players move into the press kit: 2026-10-29
 
-The homepage "Selected Works" section was nine full-width cover-art cards in a
-3-up grid: each card carried a ~389px square cover at 1280px plus a large
-caption, so the section alone stood about 1,500px tall and pushed the press kit
-far down the page. It is now a compact list: a 52px cover thumbnail on phones
-and a 60px one from 640px, with the release and song names set beside it as a
-short row, still 2-up from 640px and 3-up from 1024px. The section measures
-roughly 190px at 1280px and ~500px on a phone.
+The homepage "Selected Works" section was nine page-wide cover-art cards in a
+3-up grid — a ~389px square cover plus a large caption each, roughly 1,500px of
+scrolling between the biography and the press kit. It is no longer a section of
+its own: the same nine players now render inside `#press`, in tier IV
+("Official Profiles, Credits & Streaming"), as a shelf of cover cards directly
+under the verified-profiles directory. Each card is roughly 200px wide
+(2-up on phones, 3-up from 900px, capped at 44rem so the covers stay cover-sized
+instead of stretching to the page), with the release and song names beneath.
 
-What changed (source of truth: `src/lib/compilations-markup.ts`, rendered into
-`index.html` and the patched `index-<hash>.js` by `home-src/build.mjs`):
+What changed (source of truth: `src/lib/compilations-markup.ts` and
+`src/lib/press-kit-markup.ts`, rendered into `index.html` and the patched
+`index-<hash>.js` by `home-src/build.mjs`):
 
-- **Row instead of card.** `.zp-comp-article` is a two-row grid
-  (`stage body` / `player player`); the cover is a fixed 3.25rem/3.75rem
-  column and `.zp-bc` is `display:contents`, so the existing click-to-load
-  wrapper contributes no box of its own and the player slot still opens
-  full-width beneath the row. Markup, the delegated player script and every
-  Bandcamp URL are unchanged.
-- **Type scaled to the row.** Titles drop from 1.65rem to .95rem and the song
-  line from 1rem to .78rem, both line-clamped (2 and 1) so long release names
-  like *Experiments on the Witch House [IND255GVA]* cannot stretch a row.
-  Clamping is visual only - the text stays in the accessible name and the
-  no-JavaScript Bandcamp link is untouched.
-- **Play target survives the shrink.** The play disc is 1.75rem inside a
-  full-cover button, so the whole thumbnail (52-60px, over the 44px minimum)
-  remains the tap target; the focus ring and reduced-motion opt-outs are kept.
-- **No new requests.** The same nine 700px Bandcamp covers load lazily, as
-  before; nothing was added to the precache list.
+- **One render path, not two.** `compilationsTierHtml()` is called from
+  `pressKitInnerHtml()`, so the players reach the static document and the React
+  press-kit component through the same string. The synthetic
+  `zpCompilations` component and its `SECTION_CLASS`/`CONTAINER_CLASS` wrapper
+  are gone from `home-src/build.mjs` (the biography placement patch stays,
+  renamed `placeBiographyAfterShowreel`), and `patchStatic` now simply deletes
+  any legacy `<section id="compilations">`.
+- **Anchor kept.** The shelf wrapper carries `id="compilations"`, so older
+  inbound links and the `/reel#compilations` cross-reference still land on the
+  players.
+- **Sized for a tier, not a page.** Covers are square and full-card-width;
+  `.zp-comp-block` opens with a hairline rule under the directory, the title is
+  1.05rem with a 2-line clamp and the song line .78rem with a 1-line clamp. The
+  play disc is 2.5rem inside a full-cover button.
+- **The player still opens in place.** Same `.zp-slot` row animation; on open
+  the cover crops to 2:1 and, below 900px, the card spans both columns so the
+  120px Bandcamp iframe is readable. URLs, `data-bc-*` attributes, the
+  delegated script and the no-JavaScript Bandcamp links are unchanged, and
+  nothing is requested from bandcamp.com until a cover is pressed.
+- **No new requests or origins.** The same nine 700px Bandcamp covers load
+  lazily, as before; the precache list is unchanged.
 
-Validation: `tools/compilations.test.mjs` and `tools/home-mount.test.mjs` pass
-(identical static and React markup, nine cards in order, opt-in iframe, honest
-Bandcamp fallbacks), along with the full `npm test` suite, `npm run build`,
-`npm run verify`, `npm run check:links`, `npm run check:forms` and
-`npm run check:headers`. `sw.js` cache name moved `zazie-v56` -> `zazie-v57`
-because the inline `#zp-comp-style` in the precached `/` document changed; the
-bundle and stylesheet hashes did not.
+Validation: `tools/compilations.test.mjs` (grid inside `#press` under the
+profiles, identical static/React markup, nine cards in order, opt-in iframe,
+honest Bandcamp fallbacks, 2-up/3-up sizing) and `tools/home-mount.test.mjs`
+(section order, no leftover compilations component) pass, along with the full
+`npm test` suite (89/89), `npm run verify`, `npm run check:links`,
+`npm run check:forms` and `npm run check:headers`. `sw.js` cache name moved
+`zazie-v56` -> `zazie-v58` because the inline `#zp-comp-style` and the
+press-kit markup changed and the home bundle re-hashed
+(`index-11ae0e31.js` -> `index-71b6d428.js`).
 
 ## Laurel-led hero opening: 2026-10-29
 
