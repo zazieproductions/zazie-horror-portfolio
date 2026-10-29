@@ -438,7 +438,7 @@ The site serves source-rendered SEO metadata and structured data (the repo's `SE
 
 **Cloudflare Pages**, served as a static asset tree. `.github/workflows/deploy.yml` runs on relevant pull requests and main-branch pushes: it runs `npm ci`, the full build, type and film-player tests, sitemap/route checks, and assembles the site-only upload. On main it also deploys with Wrangler and runs the live route audit when `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` are configured. Without those secrets, validation still runs and deployment is skipped; Cloudflare does not run the Node build itself.
 
-`.github/workflows/aislop.yml` is a separate, non-deploying gate (see [the aislop gate](#the-aislop-gate)): it scores the hand-written code and fails a PR that adds new findings.
+`.github/workflows/aislop.yml` is a separate, non-deploying gate (see [the aislop gate](#the-aislop-gate)): it scores the hand-written code and fails a PR that adds new findings. `.github/workflows/roast.yml` pairs it with a non-blocking AI code review on pull requests (see [PR roast review](#pr-roast-review)).
 
 Two hard-won rules recorded in `STORE.md` / `LEGAL.md` / `SEO-DOSSIER.md`:
 
@@ -489,6 +489,19 @@ npx aislop@0.19.1 baseline prune     # drop entries for findings that are gone
 ```
 
 Prefer the fix. `npx aislop@0.19.1 fix --dry-run` previews mechanical repairs (unused imports, narrative comments, dead code); `--safe` limits the run to changes that cannot alter behaviour. A single deliberate exception can be silenced in place — `// aislop-ignore-next-line <rule> -- why` — which stays visible in review, unlike an exclude.
+
+### PR roast review
+
+`.github/workflows/roast.yml` runs a native [RoastMyCode](https://github.com/marketplace/roastmycode-ai)-style pull-request review with **zero required secrets**, plus an automatic LLM deep-roast upgrade when an optional provider secret is configured:
+
+- **Explorer & Deterministic Roaster (`.github/roast/cli.mjs prepare` + `heuristic.mjs`)** skips committed minified bundles, lockfiles and binary media, prefixes diff hunks with exact target line numbers (`+L42:`), and runs out-of-the-box checks across Security, Architecture, Bugs, Performance, Dependencies and Code Quality — including repo-specific guardrails (`_headers` / `tools/headers.mjs` parity, zero runtime npm dependencies, prerendered item HTML edits, `target="_blank"` `noopener`, and workflow `${{ }}` shell injection).
+- **Optional LLM Deep-Roast Upgrade** activates automatically if `COPILOT_PAT` (`actions/ai-inference@v3` via Copilot CLI — GitHub retired `models.github.ai` on 2026-07-30), `OPENAI_API_KEY`, or `OPENROUTER_API_KEY` is present in repository secrets, merging verified LLM findings with deterministic guardrail checks.
+- **Scorer & Publisher (`.github/roast/cli.mjs render`)** drops hallucinated file paths not in the PR diff, calibrates the `A+`–`F` grade across all six categories, writes to `$GITHUB_STEP_SUMMARY`, and creates or updates a single sticky PR comment (`<!-- pr-roast-comment -->`) in place.
+
+```bash
+node --test .github/roast/pr-roast.test.mjs         # local self-test (10 tests)
+gh workflow run roast.yml -f pr=175 -f heat=inferno # manual PR roast
+```
 
 ## AI-agent continuity
 
