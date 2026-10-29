@@ -354,9 +354,10 @@ const PAIRS = [
   ['04 · Scope and budget', '05 · Scoring services', BOTH],
   ['Build a scope and estimate', 'Commissioning a score', BUNDLE],
   ['Rates &amp; estimates', 'Commissioning a score', HTML],
-  ['Choose a project type, scored runtime, complexity, and delivery needs.', 'Every score is quoted individually — there is no published rate card. Share your format, the music you need, your budget range and your references, and the quote is built around your project.', BUNDLE],
-  ["Estimates scale with your project's funding.", 'Every score is quoted individually — there is no published rate card.', BUNDLE],
-  ['Packages are priced by scored music minutes, not film length. Preliminary estimate — final quotation subject to creative scope and written agreement.', 'Every score is quoted individually — there is no published rate card. Share your format, the music you need, your budget range and your references, and the quote is built around your project.', HTML],
+  ['Choose a project type, scored runtime, complexity, and delivery needs.', 'Every score is quoted individually. There is no published rate card. Share your format, the music you need, your budget range and your references, and the quote is built around your project.', BUNDLE],
+  ["Estimates scale with your project's funding.", 'Every score is quoted individually. There is no published rate card.', BUNDLE],
+  ['project funding — most projects land', 'project funding: most projects land', BUNDLE],
+  ['Packages are priced by scored music minutes, not film length. Preliminary estimate: final quotation subject to creative scope and written agreement.', 'Every score is quoted individually. There is no published rate card. Share your format, the music you need, your budget range and your references, and the quote is built around your project.', HTML],
   // Contact
   ['Share your format, runtime, timeline, and budget. The form prepares an email for you to review and send.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', BUNDLE],
   ['Share your format, scored minutes, timeline, and budget.', 'Only your name and email are needed to start. Project details are optional; the form prepares an email for you to review and send.', HTML],
@@ -426,7 +427,7 @@ const SERVICES_HEADER = [
   '<div class="mb-10 max-w-2xl sm:mb-14">',
   '<p class="mb-3 text-[10px] uppercase tracking-[0.35em] text-blood sm:text-[11px] sm:tracking-[0.4em]">05 · Scoring services</p>',
   '<h2 class="mb-4 font-display text-3xl leading-none text-bone sm:text-4xl md:text-6xl">Commissioning a score</h2>',
-  '<p class="text-sm leading-relaxed text-mist sm:text-base">Every score is quoted individually — there is no published rate card. Share your format, the music you need, your budget range and your references, and the quote is built around your project.</p>',
+  '<p class="text-sm leading-relaxed text-mist sm:text-base">Every score is quoted individually. There is no published rate card. Share your format, the music you need, your budget range and your references, and the quote is built around your project.</p>',
   '</div>',
 ].join('');
 

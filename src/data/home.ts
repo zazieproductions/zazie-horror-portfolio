@@ -55,7 +55,7 @@ export const additionalHomePosters = [
     workType: 'Horror film',
     roleLabel: 'Featured production artwork',
     summary:
-      "Featured production poster for Uncle Fred's Monster Problem — 'His problem is now your problem.' Presented in the selected horror and genre productions gallery.",
+      "Featured production poster for Uncle Fred's Monster Problem, 'His problem is now your problem.' Presented in the selected horror and genre productions gallery.",
     fit: 'contain',
     poster: {
       src: '/images/posters/uncle-freds-monster-problem-640.jpg',

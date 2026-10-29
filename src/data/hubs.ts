@@ -28,7 +28,7 @@ export const hubs: Hub[] = [
     // specialist phrase inside the 30-60 character budget (no brand suffix);
     // the description states the full identity sentence verbatim. Both are
     // what the WebPage JSON-LD and sitemap reuse.
-    title: "Experimental Psychological Horror Composer — Arthouse Film",
+    title: "Experimental Psychological Horror Composer | Arthouse Film",
     description: `Experimental psychological horror film composer for independent and arthouse cinema. IMDb-credited bespoke scores by Zazie Kanwar-Torge, quoted per project.`,
     lastmod: "2026-10-27",
     images: [
@@ -281,7 +281,7 @@ export const hubs: Hub[] = [
     description: "Hire experimental psychological horror film composer Zazie Kanwar-Torge (Zazie Productions) for independent and arthouse cinema: IMDb-credited custom scores to picture, quoted per project against your budget and references.",
     lastmod: "2026-10-27",
     images: [
-      { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Kanwar-Torge, IMDb-credited experimental psychological horror film composer for hire at Zazie Productions LLC.", title: "Hire an Experimental Psychological Horror Composer — Zazie Kanwar-Torge" },
+      { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Kanwar-Torge, IMDb-credited experimental psychological horror film composer for hire at Zazie Productions LLC.", title: "Hire an Experimental Psychological Horror Composer | Zazie Kanwar-Torge" },
     ],
     videos: [],
   },

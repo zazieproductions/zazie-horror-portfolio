@@ -341,7 +341,7 @@ export const releases: Release[] = [
     summary: 'A focused set of 25+ one-shot interface sounds: minimal error beeps, warning signals, invalid-input tones, and system-failure alerts.',
     paragraphs: [
       'The itch.io description presents FAULT CODES as a small toolkit for machines and fictional interfaces that refuse an input. Its listed examples include error tones, warning signals, invalid-action beeps, and short alerts for malfunctions or unavailable actions.',
-      'The page specifies 25+ original one-shot effects as individual WAV files and suggests use in games, interactive media, terminals, puzzles, and sound design. The listing—not this static archive page—remains the source for current download terms.',
+      'The page specifies 25+ original one-shot effects as individual WAV files and suggests use in games, interactive media, terminals, puzzles, and sound design. The listing (not this static archive page) remains the source for current download terms.',
     ],
     image: {
       src: 'https://img.itch.zone/aW1nLzI4NjA5NjM4LnBuZw==/347x500/xUrAIl.png',

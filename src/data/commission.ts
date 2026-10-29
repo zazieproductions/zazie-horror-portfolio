@@ -37,14 +37,14 @@
  * here only — both inquiry forms follow.
  */
 export const BUDGET_RANGES: readonly string[] = [
-  'Not sure yet — please advise',
+  'Not sure yet',
   'Under $500',
   '$500 – $1,000',
   '$1,000 – $2,500',
   '$2,500 – $5,000',
   '$5,000 – $10,000',
   'Over $10,000',
-  'Flexible — let’s discuss',
+  'Flexible',
 ];
 
 /** Formats offered in the inquiry form. */
@@ -153,13 +153,13 @@ export const REVISION_DEFINITION =
 
 /** The quoting notice repeated at the foot of every commissioning surface. */
 export const QUOTE_NOTICE =
-  'There is no published rate card: every commission is quoted individually against the budget, scope and references you share. The written quote — issued after review of your cut, cue list or scene notes — states the scope, revision rounds, licence and fee for your project, and it is the only binding figure. Quotes are nonbinding until accepted in writing; taxes, live players and third-party clearances are additional where they apply.';
+  'There is no published rate card: every commission is quoted individually against the budget, scope and references you share. The written quote (issued after review of your cut, cue list or scene notes) states the scope, revision rounds, licence and fee for your project, and it is the only binding figure. Quotes are nonbinding until accepted in writing; taxes, live players and third-party clearances are additional where they apply.';
 
 /* --------------------------------------------------------- commissioning copy */
 
 /** What shapes a written quote, in order. Generated onto /services. */
 export const QUOTE_FACTORS: readonly (readonly [string, string])[] = [
-  ['Your budget', 'Tell me the range you have set aside for music and the scope is built around it honestly — a focused cue set, a fuller score, or licensing existing material where that serves the film better. “Not sure yet” is a workable answer; the quote still itemizes exactly what it covers.'],
+  ['Your budget', 'Tell me the range you have set aside for music and the scope is built around it honestly: a focused cue set, a fuller score, or licensing existing material where that serves the film better. “Not sure yet” is a workable answer; the quote still itemizes exactly what it covers.'],
   ['Scored music', 'Minutes of finished music, not film runtime. A fourteen-minute short with three minutes of score is quoted on three minutes; nothing scales with how long the film is.'],
   ['Cues', 'How many separate pieces the score needs. The cue list is agreed at spotting and named in the quote; a cue added after the list is locked is quoted before it is written.'],
   ['Musical complexity', 'A focused palette (a few sources, one motif family), a layered hybrid (orchestral and electronic textures, several themes), or bespoke and experimental work (custom builds, performed waterphone, bowed metal, unconventional structure). A complex two-minute composition can quote higher than a simple atmospheric cue of the same length.'],
@@ -174,11 +174,11 @@ export const QUOTE_FACTORS: readonly (readonly [string, string])[] = [
 export const COMMISSION_STEPS: readonly { title: string; body: string }[] = [
   {
     title: 'Tell me about the project',
-    body: 'Format, how much music you need and your deadline — rough answers are fine, and only your name and email are required to start.',
+    body: 'Format, how much music you need and your deadline, rough answers are fine, and only your name and email are required to start.',
   },
   {
     title: 'Share your budget & references',
-    body: 'Pick the budget range you have set aside for music and name the films, scores or tracks you love. The scope is then built around your production — not around a published rate card, because there isn’t one.',
+    body: 'Pick the budget range you have set aside for music and name the films, scores or tracks you love. The scope is then built around your production (not around a published rate card, because there isn’t one).',
   },
   {
     title: 'Receive a written quote',

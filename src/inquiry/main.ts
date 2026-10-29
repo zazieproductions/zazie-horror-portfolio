@@ -85,7 +85,7 @@ function inquiryBody(form: HTMLFormElement): string {
     `Email: ${get('email')}`,
     `Project: ${get('project') || 'Not named yet'}`,
     `Format: ${get('format') || 'Not sure yet'}`,
-    `Music budget: ${get('budget') || 'Not sure yet — please advise'}`,
+    `Music budget: ${get('budget') || 'Not sure yet'}`,
     '',
     'Musical references:',
     get('tone') || '(none given)',
