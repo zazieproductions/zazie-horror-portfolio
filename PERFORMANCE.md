@@ -4,6 +4,44 @@ Date: 2026-09-25 · Branch: `arena/01a0d613-zazie-horror-portfolio`
 Scope: horror.zazieproductions.com (static prerendered React build on an edge host with `_headers`/`_redirects` semantics, i.e. Netlify/Cloudflare-Pages style).
 
 
+## Compact compilation rows: 2026-10-29
+
+The homepage "Selected Works" section was nine full-width cover-art cards in a
+3-up grid: each card carried a ~389px square cover at 1280px plus a large
+caption, so the section alone stood about 1,500px tall and pushed the press kit
+far down the page. It is now a compact list: a 52px cover thumbnail on phones
+and a 60px one from 640px, with the release and song names set beside it as a
+short row, still 2-up from 640px and 3-up from 1024px. The section measures
+roughly 190px at 1280px and ~500px on a phone.
+
+What changed (source of truth: `src/lib/compilations-markup.ts`, rendered into
+`index.html` and the patched `index-<hash>.js` by `home-src/build.mjs`):
+
+- **Row instead of card.** `.zp-comp-article` is a two-row grid
+  (`stage body` / `player player`); the cover is a fixed 3.25rem/3.75rem
+  column and `.zp-bc` is `display:contents`, so the existing click-to-load
+  wrapper contributes no box of its own and the player slot still opens
+  full-width beneath the row. Markup, the delegated player script and every
+  Bandcamp URL are unchanged.
+- **Type scaled to the row.** Titles drop from 1.65rem to .95rem and the song
+  line from 1rem to .78rem, both line-clamped (2 and 1) so long release names
+  like *Experiments on the Witch House [IND255GVA]* cannot stretch a row.
+  Clamping is visual only - the text stays in the accessible name and the
+  no-JavaScript Bandcamp link is untouched.
+- **Play target survives the shrink.** The play disc is 1.75rem inside a
+  full-cover button, so the whole thumbnail (52-60px, over the 44px minimum)
+  remains the tap target; the focus ring and reduced-motion opt-outs are kept.
+- **No new requests.** The same nine 700px Bandcamp covers load lazily, as
+  before; nothing was added to the precache list.
+
+Validation: `tools/compilations.test.mjs` and `tools/home-mount.test.mjs` pass
+(identical static and React markup, nine cards in order, opt-in iframe, honest
+Bandcamp fallbacks), along with the full `npm test` suite, `npm run build`,
+`npm run verify`, `npm run check:links`, `npm run check:forms` and
+`npm run check:headers`. `sw.js` cache name moved `zazie-v56` -> `zazie-v57`
+because the inline `#zp-comp-style` in the precached `/` document changed; the
+bundle and stylesheet hashes did not.
+
 ## Laurel-led hero opening: 2026-10-29
 
 The festival laurels that used to appear only inside the Electronic Press Kit
