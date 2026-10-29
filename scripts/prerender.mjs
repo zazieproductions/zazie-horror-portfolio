@@ -141,6 +141,8 @@ function replaceMarkedContents(html, startMarker, endMarker, replacement, label)
  * and player treatments; every title/description/canonical/robots/OG/Twitter
  * tag and every JSON-LD block is then rebuilt together from home data.
  */
+import { ensureMobileUxAssets } from '../home-src/mobile-ux.mjs';
+
 function buildHomeDocument() {
   const indexFile = path.join(repoRoot, 'index.html');
   let html = fs.readFileSync(indexFile, 'utf8');
@@ -178,11 +180,25 @@ function buildHomeDocument() {
   templateHead = templateHead.replace(/<!--[\s\S]*?-->/g, (comment) =>
     /JSON-LD|STRUCTURED DATA/i.test(comment) ? '' : comment,
   );
+  // Removing a tag leaves its line ending behind, so each rebuild of the head
+  // grew index.html by one blank line per stripped title/meta/link/JSON-LD tag
+  // and the workflow's "generated output is stale" diff could never settle.
+  // Drop the empty lines the removals leave, so build -> prerender is a fixed
+  // point at the file level, not just the file list.
+  templateHead = templateHead
+    .split('\n')
+    .filter((line) => line.trim().length > 0)
+    .join('\n');
   const close = templateHead.lastIndexOf('</head>');
   if (close === -1) throw new Error('index.html source head lost its </head> while rebuilding');
   const fullHead = `${templateHead.slice(0, close).trimEnd()}\n${renderHomeSeo()}\n</head>`;
   html = replaceMarkedContents(html, SEO_START, SEO_END, fullHead, 'SEO');
   html = replaceMarkedContents(html, HOME_POSTERS_START, HOME_POSTERS_END, renderHomePosterCards(), 'home-poster');
+  // The head rebuild above re-emits the template's carried-over nodes, which
+  // pushes anything appended after them (the mobile override block) back up the
+  // cascade. Re-apply it last so the phone overrides still win and the document
+  // stays a fixed point of home-src/build.mjs -> prerender.
+  html = ensureMobileUxAssets(html);
   fs.writeFileSync(indexFile, html, 'utf8');
   console.log('prerender: replaced the complete homepage <head> from src/lib/home.ts + home entities');
   console.log('prerender: rendered curated poster-wall cards from src/data/home.ts + productions.ts');
