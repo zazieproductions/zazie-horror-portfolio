@@ -4,6 +4,47 @@ Date: 2026-09-25 · Branch: `arena/01a0d613-zazie-horror-portfolio`
 Scope: horror.zazieproductions.com (static prerendered React build on an edge host with `_headers`/`_redirects` semantics, i.e. Netlify/Cloudflare-Pages style).
 
 
+## Laurel-led hero opening: 2026-10-29
+
+The festival laurels that used to appear only inside the Electronic Press Kit
+now open the homepage: a compact band of the same four marks sits in the hero
+immediately above the opening line (`Zazie Kanwar-Torge`, then the `<h1>`), so
+recognition is on screen before any scrolling. The full press kit is unchanged
+and still lives at `#press` with the same artwork, award lines, captions and
+press coverage, and every mark in the opening band deep-links into it.
+
+What changed (source of truth: `src/lib/press-kit-markup.ts`, rendered into
+`index.html` and the patched `index-<hash>.js` by `home-src/build.mjs`):
+
+- **In flow, not floated.** The band was `position:absolute` at the top of
+  `#top`, with two magic offsets reserving room for it
+  (`#top>div.relative.z-10{padding-top:280px}` and
+  `#top .zp-hero-art{top:270px}`). Because the hero is `min-h-[100svh]` with
+  `items-center` and `overflow-hidden`, that reserve was fragile: taller
+  content could clip the band, and the 960px-wide overlay crossed the
+  right-hand portrait panel. The band is now a grid inside the hero's own text
+  column; both offsets are deleted and the portrait returns to its designed
+  position.
+- **All four marks visible immediately, including phones.** The old mobile
+  rule turned the band into a 4x145px horizontal scroller, so a phone visitor
+  saw one laurel and had to swipe for the rest. It is now 2x2 on phones and
+  4-up from 768px, with 44px touch targets, unchanged hover/focus treatment
+  and a `prefers-reduced-motion` opt-out.
+- **Above-the-fold load priority.** The bitmap laurel emblem is now eager with
+  `fetchpriority="low"` and explicit `width`/`height` (no lazy loading, no
+  layout shift). `scripts/verify.mjs` keeps the below-fold `loading="lazy"`
+  rule for every other homepage image and adds an above-fold allow-list that
+  requires the low priority hint, so a regression fails the build instead of
+  shipping.
+
+Validation: `tools/press-laurels.test.mjs` (added to `npm test`) pins document
+order (band before eyebrow/`<h1>`, `#press` after), bundle parity, four
+`#press` links with accessible names, in-flow CSS (no `position:absolute`, no
+horizontal scroller, no reserved hero padding), the 2x2/4-up breakpoints, the
+emblem's eager/low-priority/dimension attributes, and the complete laurel grid
+that remains in `#press`. `sw.js` cache name moved `zazie-v55` -> `zazie-v56`
+because the bundle hash changed.
+
 ## Crawler render path, MusicComposition schema and AA link contrast: 2026-10-25
 
 An external SEO/quality audit flagged three things: a JavaScript
