@@ -18,12 +18,15 @@ pass moved the unchanged mobile block behind those SEO tags. Removing generated
 SEO while leaving that block in place could also accumulate blank lines.
 
 Repair: the marked head/poster transform now lives in pure
-`home-src/document.mjs`. It removes carried mobile blocks before stripping SEO,
-regenerates the typed SEO/posters, and calls `ensureMobileUxAssets()` as the
-final head operation. One current block remains, after SEO, and repeated full
-builds are byte-identical. The original failing test is unchanged; new fixtures
-cover fresh heads, stale/duplicate blocks, SEO preservation and idempotence.
-`deploy.yml` now runs the complete build twice before the stale-output gate.
+`home-src/document.mjs`. Generated SEO occupies an explicit marked region, so a
+rebuild replaces that region instead of stripping individual head tags; non-SEO
+scripts/comments are carried through unchanged. The renderer removes carried
+mobile blocks before regenerating SEO/posters and calls `ensureMobileUxAssets()`
+as the final head operation. One current block remains, after SEO, and repeated
+full builds are byte-identical. The original failing test is unchanged; new
+fixtures cover fresh heads, stale/duplicate blocks, SEO preservation and
+idempotence. `deploy.yml` now runs the complete build twice before the
+stale-output gate.
 
 Further genuine drift was regenerated rather than discarded: the committed
 legal bundle predated the URL-validation source change, and the item CSS hash

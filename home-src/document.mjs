@@ -4,6 +4,8 @@ const SEO_START = '<!--SEO:START-->';
 const SEO_END = '<!--SEO:END-->';
 const HOME_POSTERS_START = '<!--HOME-POSTERS:START-->';
 const HOME_POSTERS_END = '<!--HOME-POSTERS:END-->';
+export const GENERATED_SEO_START = '<!--SEO:GENERATED:START-->';
+export const GENERATED_SEO_END = '<!--SEO:GENERATED:END-->';
 
 function replaceMarkedContents(html, startMarker, endMarker, replacement, label) {
   const start = html.indexOf(startMarker);
@@ -29,32 +31,13 @@ export function renderHomeDocument(html, { seo, posters }) {
     throw new Error('index.html SEO markers must enclose one complete <head>...</head>');
   }
 
-  let templateHead = markedHead;
-  // Remove the mobile block before stripping SEO. If it stayed between the
-  // resources and SEO, each regeneration would leave more blank lines there.
-  // ensureMobileUxAssets() reinstalls exactly one current block at the end.
-  templateHead = templateHead.replace(/<style id="zp-mobile-ux">[\s\S]*?<\/style>\s*/g, '');
-  templateHead = templateHead.replace(/<title\b[^>]*>[\s\S]*?<\/title>/gi, '');
-  templateHead = templateHead.replace(/<script\b[^>]*type=["']application\/ld\+json["'][^>]*>[\s\S]*?<\/script>/gi, '');
-  // Drop every meta tag re-emitted by the SEO source, including color-scheme;
-  // otherwise each complete build accumulates another copy.
-  templateHead = templateHead.replace(/<meta\b[^>]*>/gi, (tag) => {
-    const name = /\bname\s*=\s*(["'])(.*?)\1/i.exec(tag)?.[2]?.toLowerCase() ?? '';
-    const property = /\bproperty\s*=\s*(["'])(.*?)\1/i.exec(tag)?.[2]?.toLowerCase() ?? '';
-    if (name === 'description' || name === 'robots' || name === 'author' || name === 'color-scheme') return '';
-    if (name.startsWith('twitter:')) return '';
-    if (property.startsWith('og:')) return '';
-    return tag;
-  });
-  templateHead = templateHead.replace(/<link\b[^>]*>/gi, (tag) =>
-    /\brel\s*=\s*(["'])canonical\1/i.test(tag) || /\/llms\.txt\b/i.test(tag) ? '' : tag,
-  );
-  templateHead = templateHead.replace(/<!--[\s\S]*?-->/g, (comment) =>
-    /JSON-LD|STRUCTURED DATA/i.test(comment) ? '' : comment,
-  );
+  // Remove the mobile block before regenerating SEO so repeated passes cannot
+  // accumulate whitespace ahead of it; the final ensure installs one block.
+  let templateHead = markedHead.replace(/<style id="zp-mobile-ux">[\s\S]*?<\/style>\s*/g, '');
+  templateHead = replaceMarkedContents(templateHead, GENERATED_SEO_START, GENERATED_SEO_END, seo, 'generated SEO');
   const close = templateHead.lastIndexOf('</head>');
   if (close === -1) throw new Error('index.html source head lost its </head> while rebuilding');
-  const fullHead = `${templateHead.slice(0, close).trimEnd()}\n${seo}\n</head>`;
+  const fullHead = `${templateHead.slice(0, close).trimEnd()}\n</head>`;
   let nextHtml = replaceMarkedContents(html, SEO_START, SEO_END, fullHead, 'SEO');
   nextHtml = replaceMarkedContents(nextHtml, HOME_POSTERS_START, HOME_POSTERS_END, posters, 'home-poster');
   return ensureMobileUxAssets(nextHtml);

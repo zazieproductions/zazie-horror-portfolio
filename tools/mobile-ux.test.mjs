@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { MOBILE_UX_CSS, ensureMobileUxAssets } from '../home-src/mobile-ux.mjs';
-import { renderHomeDocument } from '../home-src/document.mjs';
+import { renderHomeDocument, GENERATED_SEO_START, GENERATED_SEO_END } from '../home-src/document.mjs';
 
 test('mobile UX stylesheet is injected once, last in head, and survives regeneration', () => {
   const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
@@ -46,8 +46,10 @@ ${head}
 `;
 
 test('complete homepage rendering keeps mobile CSS after SEO and is byte-idempotent', () => {
-  const first = render(documentWithHead('<link rel="stylesheet" href="/index-test.css"/>'));
-  assert.ok(first.includes(`${generatedSeo}\n${mobileBlock}\n</head>`),
+  const first = render(documentWithHead(`<script id="keep">window.keep=true;</script>\n<!-- keep comment -->\n<link rel="stylesheet" href="/index-test.css"/>\n${GENERATED_SEO_START}\nstale seo\n${GENERATED_SEO_END}`));
+  assert.ok(first.includes('<script id="keep">window.keep=true;</script>'), 'non-SEO head scripts are carried, not sanitized away');
+  assert.ok(first.includes('<!-- keep comment -->'), 'non-SEO head comments are carried, not sanitized away');
+  assert.ok(first.includes(`${generatedSeo}\n${GENERATED_SEO_END}\n${mobileBlock}\n</head>`),
     'the final head writer places mobile overrides after regenerated canonical and JSON-LD');
   assert.equal(render(first), first, 'a second complete homepage render changes no bytes');
   assert.equal(ensureMobileUxAssets(first), first, 'the earlier homepage pass also agrees on the final position');
@@ -61,9 +63,9 @@ test('complete homepage rendering keeps mobile CSS after SEO and is byte-idempot
 
 test('stale or duplicated mobile blocks converge to one current block without losing SEO', () => {
   const stale = '<style id="zp-mobile-ux">/* obsolete rules */</style>';
-  const first = render(documentWithHead(`${stale}\n${generatedSeo}\n${mobileBlock}`));
+  const first = render(documentWithHead(`${stale}\n${GENERATED_SEO_START}\n${generatedSeo}\n${GENERATED_SEO_END}\n${mobileBlock}`));
   assert.equal((first.match(/id="zp-mobile-ux"/g) ?? []).length, 1);
   assert.ok(!first.includes('obsolete rules'));
-  assert.ok(first.includes(`${generatedSeo}\n${mobileBlock}\n</head>`));
+  assert.ok(first.includes(`${generatedSeo}\n${GENERATED_SEO_END}\n${mobileBlock}\n</head>`));
   assert.equal(render(first), first);
 });
