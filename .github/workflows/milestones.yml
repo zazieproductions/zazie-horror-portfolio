@@ -1,0 +1,67 @@
+name: Milestone Assigner
+
+# Automatically files every newly opened issue and pull request into the
+# repository's review-queue milestone, using the Marketplace action
+# Julexar/Milestone-Assigner:
+#   https://github.com/marketplace/actions/milestone-assigner
+#
+# WHY THIS EXISTS
+#
+# This repository collects a steady stream of proposals — agent-generated
+# PRs, dependabot bumps, security autofixes, one-off issues. Without an
+# automated triage step, every new item opens with no milestone and the
+# open milestones stay empty; reviewers cannot see which queue an item
+# belongs to without reading it. The Milestone-Assigner closes that gap:
+# the moment an issue or PR is opened, it matches the configured milestone
+# title against the repository's milestones and assigns the first match.
+# No manual triage, no forgetting.
+#
+# WHAT IT ASSIGNS
+#
+# One milestone, one step — the action has no per-item routing, so every
+# new issue and PR lands in the same queue:
+#   "Review queue: product, media & commercial"
+#
+# To reroute everything (or to split by branch with one step per rule),
+# change `milestone:` — the input takes an exact milestone title, or a
+# glob pattern with `use-glob: 'true'` (matched against milestone titles
+# with minimatch). The action FAILS the job when no milestone matches,
+# which is deliberate: a typo or a deleted milestone should be loud, not
+# silently skipped.
+#
+# EVENTS
+#
+#   issues:                 [opened]   -> new issues get the milestone
+#   pull_request_target:    [opened]   -> new PRs get the milestone
+#
+# pull_request_target (not pull_request) so PRs opened from forks also get
+# filed: the pull_request event hands a read-only token to fork PRs and the
+# assignment would fail there. This workflow never checks out or executes
+# PR code — it only calls the issues API — so running with the write token
+# is safe here (same pattern as .github/workflows/label.yml).
+#
+# VERSIONING
+#
+# Pinned to the action's only release tag (v1.0), matching how the other
+# workflows pin their actions; bump deliberately if a new release appears.
+
+on:
+  issues:
+    types: [opened]
+  pull_request_target:
+    types: [opened]
+
+permissions:
+  issues: write
+
+jobs:
+  assign:
+    name: Add Milestone
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # Marketplace: https://github.com/marketplace/actions/milestone-assigner
+      - uses: Julexar/Milestone-Assigner@v1.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          milestone: "Review queue: product, media & commercial"
