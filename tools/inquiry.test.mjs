@@ -96,11 +96,7 @@ test('Offer schema carries availability, never a price', () => {
 });
 
 test('built commissioning pages publish no fee and funnel to the inquiry', () => {
-  const services = read('services/index.html');
-  assert.doesNotMatch(services, RETIRED_FEE, '/services: no retired fees');
-  assert.doesNotMatch(services, /data-zp-est|Preliminary estimate/, '/services: no estimator');
-  assert.doesNotMatch(services, /priceSpecification/, '/services: no priced Offer schema');
-  assert.match(services, /href="\/#contact"[^>]*>\s*Start a scoring inquiry/, '/services links to the homepage inquiry form');
+  assert.ok(!existsSync(path.join(ROOT, 'services/index.html')), 'services page is retired');
 
   const home = read('index.html');
   assert.match(home, /id="contact"/, 'the homepage carries the inquiry section');
@@ -120,7 +116,7 @@ test('homepage omits commissioning and closing sections while preserving the ser
   const home = read('index.html');
   assert.doesNotMatch(home, /id="services"|Commissioning a score|How commissioning works|zp-steps|READY WHEN YOU ARE|zp-close/);
   assert.doesNotMatch(home, /href="#services"/, 'no homepage link points to a removed anchor');
-  assert.match(home, /href="\/services"[^>]*>Services/, 'the separate services route remains linked');
+  assert.doesNotMatch(home, /href="\/services/, 'retired services route is not linked');
   assert.match(home, /id="contact"/, 'the homepage inquiry section remains');
   assert.doesNotMatch(home, /WGA|DGA|mutual NDA protocol/i, 'the removed confidentiality claim stays absent');
   for (const range of [BUDGET_RANGES[0], BUDGET_RANGES[3]]) {
@@ -132,7 +128,7 @@ test('homepage omits commissioning and closing sections while preserving the ser
   const bundle = read(bundleName);
   assert.doesNotMatch(bundle, /id:"services"|Commissioning a score|How commissioning works|zp-steps|READY WHEN YOU ARE|zp-close/);
   assert.doesNotMatch(bundle, /href:"#services"/, 'bundle has no dead services anchor');
-  assert.match(bundle, /href:"\/services",label:"Services"/, 'bundle keeps a link to the dedicated services route');
+  assert.doesNotMatch(bundle, /href:"\/services/, 'bundle does not link to retired services route');
   assert.ok(bundle.includes(BUDGET_RANGES[3]), 'bundle budget list comes from commission.ts');
   assert.doesNotMatch(bundle, /Individual Scene Scoring: from/, 'no package-derived budget strings');
 });

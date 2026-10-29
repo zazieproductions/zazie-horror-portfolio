@@ -130,7 +130,7 @@ test('the biography sits before the compilations in the static page and the bund
     assert.ok(!html.includes(removed) && !bundle.includes(removed), `retired homepage block stays absent: ${removed}`);
   }
   assert.ok(!html.includes('href="#services"') && !bundle.includes('href:"#services"'), 'removed #services anchor has no dangling links');
-  assert.ok(html.includes('href="/services"') && bundle.includes('href:"/services"'), 'dedicated /services route remains available');
+  assert.ok(!html.includes('href="/services"') && !bundle.includes('href:"/services"'), 'retired /services route is not linked');
   assert.ok(html.includes('href="#contact" class="zp-mobile-quote">Get a quote</a>'), 'Get a quote scrolls to the homepage inquiry form');
   assert.ok(!html.includes('href="/contact"') && !bundle.includes('href:"/contact"'), 'homepage quote navigation no longer opens a separate contact page');
   assert.ok(html.includes('>Showreel</h2>'), 'film samples have the plain Showreel heading');

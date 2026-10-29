@@ -214,7 +214,7 @@ export function serviceOfferGraph(serviceId: string, provider: string): object {
     '@graph': [
       {
         '@type': 'Offer',
-        '@id': `${SITE_ORIGIN}/services#offer`,
+        '@id': `${SITE_ORIGIN}/#scoring-offer`,
         name: 'Original score commission',
         description:
           'Original music composed to picture for independent and arthouse psychological horror cinema. No published rate card: every commission is quoted individually, in writing, against the budget range, scope and musical references shared in the inquiry.',

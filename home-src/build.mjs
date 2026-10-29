@@ -218,7 +218,6 @@ const PAIRS = [
   // homepage biography section instead of a standalone page.
   ['["/composer","Composer biography"]', '["#about","Composer biography"]', BUNDLE],
   ['<a href="/composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Composer biography</a>', '<a href="#about" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Composer biography</a>', HTML],
-  ['<a href="/services" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Rate card</a>', '<a href="/services" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Services</a>', HTML],
   // Keep a direct, 44px quote action visible on phones; the full section menu
   // remains available beside it. aria-expanded follows the React menu state.
   [']}),u.jsx("button",{className:"border border-white/10 p-2.5 text-bone transition-colors hover:border-blood/50 xl:hidden",onClick:()=>r(e=>!e),"aria-label":n?"Close menu":"Open menu",', ']}),u.jsx("a",{href:"#contact",className:"zp-mobile-quote",children:"Get a quote"}),u.jsx("button",{type:"button",className:"zp-menu-button xl:hidden",onClick:()=>r(e=>!e),"aria-expanded":n,"aria-controls":"mobile-navigation","aria-label":n?"Close menu":"Open menu",', BUNDLE],
@@ -1146,7 +1145,11 @@ const orig = fs.readFileSync(path.join(here, 'bundle.orig.js'), 'utf8');
 const origHash = crypto.createHash('sha256').update(orig).digest('hex');
 if (!origHash.startsWith('2afd4ec8')) throw new Error(`bundle.orig.js is not the shipped bundle (sha256 ${origHash})`);
 
-const patched = patchBundle(orig);
+// Retire the standalone Services route in both React navigation arrays and CTAs.
+const patched = patchBundle(orig)
+  .replace(/\{href:"\/services",label:"Services",title:"[^"]*"\},?/g, '')
+  .replace(/\["\/services","Services"\],?/g, '')
+  .replaceAll('href:"/services"', 'href:"/#contact"');
 const showreelTracks = readShowreelTracks(patched);
 const hash = crypto.createHash('sha256').update(patched).digest('hex').slice(0, 8);
 const name = `index-${hash}.js`;
@@ -1181,6 +1184,9 @@ nextHtml = ensureCompilationsAssets(nextHtml);
 nextHtml = ensurePressKitAssets(nextHtml);
 nextHtml = ensureFunnelAssets(nextHtml);
 nextHtml = ensureLineageAssets(nextHtml);
+nextHtml = nextHtml
+  .replace(/<a\b[^>]*href="\/services"[^>]*>Services<\/a>/g, '')
+  .replaceAll('href="/services"', 'href="/#contact"');
 fs.writeFileSync(indexFile, nextHtml, 'utf8');
 
 const swFile = path.join(root, 'sw.js');
