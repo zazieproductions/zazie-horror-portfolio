@@ -1,0 +1,187 @@
+name: Wayback Machine
+
+# Archive horror.zazieproductions.com to the Wayback Machine (web.archive.org)
+# with the Marketplace action JamieMagee/wayback, a.k.a. "Wayback Machine":
+#   https://github.com/marketplace/actions/wayback-machine
+#
+# WHY THIS EXISTS
+#
+# Nothing else preserves the *served* site. The repository holds the source
+# and the committed static output, but the exact pages, headers and rendered
+# state visitors (and crawlers) saw on a given date only exist at the edge.
+# A Wayback capture is the public, timestamped copy of record: if Cloudflare
+# Pages, the domain or this repository is lost, the portfolio — credits, cue
+# pages, catalogue, legal documents — stays readable and citable, and any
+# "what did the site claim on date X" question has an independent answer.
+#
+# WHEN IT RUNS (and what each run archives)
+#
+#   Deploy to Cloudflare Pages succeeds on main  -> the 17 core URLs
+#     (homepage + every hub). Not on push: `workflow_run` fires only once
+#     deploy.yml has finished, so a capture can never snapshot the *previous*
+#     deploy. deploy.yml also runs the live route audit before completing,
+#     so the pages are verified live before they are archived.
+#   Weekly, Mondays 06:17 UTC                    -> every URL in sitemap.xml
+#     (currently 80). `ifNotArchivedWithin: 6d` makes archive.org skip any
+#     URL it already captured that week (e.g. by a post-deploy run), instead
+#     of piling up identical captures.
+#   Manually (Actions -> Wayback Machine)        -> scope of your choice:
+#     core, all, or custom paths/URLs, with optional screenshot.
+#
+# The URL list is never hand-maintained here: tools/wayback-urls.mjs derives
+# it from the committed sitemap.xml (the same source tools/indexnow.mjs
+# submits to search engines), so a page added to the sitemap is archived
+# automatically. Core = homepage + single-segment routes; item pages are
+# two segments and only enter via scope `all` / `custom`.
+#
+# CAPTURE SETTINGS
+#
+#   saveErrors: false    The Marketplace default (true) would happily archive
+#                        a 404/5xx response. A capture must be the real page,
+#                        never this site's "Signal Lost" 404 dressed as one.
+#   saveOutlinks: false  Bandcamp / YouTube / marketplace embeds are other
+#                        people's pages (and an unbounded crawl). They stay
+#                        authoritative on their own platforms; only this
+#                        host is archived. Flip it in a manual run only if
+#                        you accept archive.org crawling every outbound link.
+#   saveScreenshot       Off except when requested manually; one screenshot
+#                        per URL across 80 URLs is slow and mostly redundant.
+#   Action outputs       `wayback_url` (last capture), `wayback_urls` (one
+#                        per archived URL) and the screenshot equivalents are
+#                        surfaced in the job summary by the step below (the
+#                        action also writes its own per-URL summary).
+#
+# COST / LIMITS
+#
+# No secrets, no API key: the action uses archive.org's anonymous Save Page
+# Now endpoint, and this job needs only `contents: read`. Captures are
+# sequential (up to ~3 min polling each), hence the generous timeout; a
+# red run usually means archive.org rate-limited the host ("daily capture
+# limit") — re-run it later rather than hammering it. Like
+# .github/workflows/indexnow.yml, archiving must happen from a runner that
+# can reach the live site, which rules out the build sandbox.
+#
+# RUN IT BY HAND
+#
+#   gh workflow run wayback.yml                                   # 17 core URLs
+#   gh workflow run wayback.yml -f scope=all                      # all 80
+#   gh workflow run wayback.yml -f scope=custom -f urls="/reel /faq"
+#   gh workflow run wayback.yml -f scope=custom -f urls="/reel" -f save_screenshot=true
+#
+# Until this file is on the default branch, GitHub will not offer the manual
+# dispatch or honour the schedule / workflow_run triggers — that is a GitHub
+# rule for workflow files, not a bug in this one.
+#
+# VERSIONING
+#
+# Pinned to the exact Marketplace release (v2.2.0, the current `v2` line) so
+# a capture pipeline cannot change behaviour mid-week; bump the ref
+# deliberately, the way .github/workflows/aislop.yml pins its action.
+
+on:
+  workflow_run:
+    workflows: ["Deploy to Cloudflare Pages"]
+    types: [completed]
+    branches: [main]
+  schedule:
+    # Mondays 06:17 UTC — off the :00 rush, after the weekend's merges.
+    - cron: '17 6 * * 1'
+  workflow_dispatch:
+    inputs:
+      scope:
+        description: Which URLs to archive
+        required: true
+        default: core
+        type: choice
+        options:
+          - core
+          - all
+          - custom
+      urls:
+        description: 'Custom scope only: paths or URLs, space/comma/newline separated (e.g. "/reel /faq")'
+        required: false
+        default: ''
+        type: string
+      save_screenshot:
+        description: Also save a screenshot of each archived page
+        required: true
+        default: false
+        type: boolean
+      if_not_archived_within:
+        description: 'Skip URLs archive.org captured more recently than this (e.g. 1d, 3h 20m); blank = always capture'
+        required: false
+        default: ''
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: wayback
+  cancel-in-progress: false
+
+jobs:
+  archive:
+    name: Save to the Wayback Machine
+    # A failed deploy must never be archived as if it were the site.
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    # Sequential captures with per-URL polling: 80 URLs cannot fit the
+    # 10-minute budget the audit workflows use.
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # workflow_run and schedule have no dispatch inputs, so their scope is
+      # fixed here: scheduled runs take the whole sitemap, post-deploy runs
+      # take the core hubs. Manual runs take whatever was chosen above.
+      - name: Resolve URLs to archive
+        id: urls
+        env:
+          SCOPE: ${{ github.event_name == 'schedule' && 'all' || inputs.scope || 'core' }}
+          WAYBACK_CUSTOM_URLS: ${{ inputs.urls || '' }}
+        run: |
+          {
+            echo 'list<<WAYBACK_URLS_EOF'
+            node tools/wayback-urls.mjs --scope "$SCOPE"
+            echo 'WAYBACK_URLS_EOF'
+            echo "scope=$SCOPE"
+          } >> "$GITHUB_OUTPUT"
+          echo "Archiving scope '$SCOPE':"
+          node tools/wayback-urls.mjs --scope "$SCOPE"
+
+      # Marketplace: https://github.com/marketplace/actions/wayback-machine
+      - name: Save pages to the Wayback Machine
+        id: wayback
+        uses: JamieMagee/wayback@v2.2.0
+        with:
+          url: ${{ steps.urls.outputs.list }}
+          saveErrors: false
+          saveOutlinks: false
+          saveScreenshot: ${{ github.event_name == 'workflow_dispatch' && inputs.save_screenshot == true }}
+          ifNotArchivedWithin: ${{ github.event_name == 'schedule' && '6d' || inputs.if_not_archived_within || '' }}
+
+      - name: Archived URLs
+        if: steps.wayback.outputs.wayback_urls != ''
+        env:
+          SCOPE: ${{ steps.urls.outputs.scope }}
+          WAYBACK_URLS: ${{ steps.wayback.outputs.wayback_urls }}
+          SCREENSHOT_URLS: ${{ steps.wayback.outputs.screenshot_urls }}
+        run: |
+          {
+            echo '### Wayback Machine'
+            echo ''
+            echo "Scope \`${SCOPE}\` — captures saved:"
+            echo ''
+            printf '%s\n' "$WAYBACK_URLS" | sed 's/^/- /'
+            if [ -n "$SCREENSHOT_URLS" ]; then
+              echo ''
+              echo 'Screenshots:'
+              echo ''
+              printf '%s\n' "$SCREENSHOT_URLS" | sed 's/^/- /'
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
