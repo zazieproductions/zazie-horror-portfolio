@@ -38,7 +38,7 @@
 
 ### Deployment — shipping to Cloudflare Pages
 - [Cloudflare](deployment/cloudflare.md) — Pages config, secrets (names only), upload assembly
-- [CI/CD](deployment/ci-cd.md) — what each of the 12 workflows does
+- [CI/CD](deployment/ci-cd.md) — what each of the 13 workflows does
 - [Rollback](deployment/rollback.md) — reverting a bad deploy safely
 - [Verification](deployment/verification.md) — the four meanings of "it deployed"
 

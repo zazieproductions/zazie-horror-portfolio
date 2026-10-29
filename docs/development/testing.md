@@ -14,6 +14,7 @@ All commands below exist in `package.json` (verified 2026-10-29).
 | `npm run check:docs` | Local Markdown links in `README.md` + `docs/` resolve (this overhaul) |
 | `npm run lint:slop` | aislop quality gate (score floor + baseline in `.aislop/`) |
 | `npm run seo:coverage` | Per-URL word count / inbound links / duplication report |
+| `node tools/resolve-conflicts.mjs --base origin/main --dry-run` | Merge-base dry run: shows which conflicts the build can resolve and which need a human (`tools/resolve-conflicts.test.mjs` covers the decision logic) |
 
 ## Known baseline (2026-10-29, this branch, Node 22)
 

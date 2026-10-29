@@ -17,8 +17,8 @@ workflow uploads a filtered copy of it to Cloudflare Pages.
 | Generated item pages | 63 (9 + 30 + 24) | flat files under `work/`, `reel/`, `store/` |
 | Sitemap URLs | 80 (17 + 63) | committed `sitemap.xml` |
 | Showreel MP3s | 30 files in `audio/` | `audio/track-*.mp3` (no `track-09`/`track-23`) |
-| Test files | 14 (`tools/*.test.mjs`) | `package.json` → `test` |
-| GitHub workflows | 11 | `.github/workflows/` |
+| Test files | 16 (`tools/*.test.mjs`) | `package.json` → `test` |
+| GitHub workflows | 13 | `.github/workflows/` |
 
 > [!WARNING]
 > Older prose in places (including the pre-2026-10-29 README) cites 19 hubs,
