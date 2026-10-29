@@ -18,6 +18,12 @@
 /contact /#contact 301
 /contact/ /#contact 301
 /contact.html /#contact 301
+/sitemap / 301
+/sitemap/ / 301
+/sitemap.html / 301
+/work/expire /work#expire 301
+/work/expire/ /work#expire 301
+/work/expire.html /work#expire 301
 # /composer is retired (2026-10-29): the standalone biography page read as
 # bloat, so the route folds into section 01 on the homepage, like /contact.
 /composer /#about 301
@@ -34,6 +40,5 @@
 /licensing.html /licensing 301
 /purchases.html /purchases 301
 /accessibility.html /accessibility 301
-/sitemap.html /sitemap 301
 /hiring-a-horror-composer /how-to-hire-a-horror-composer 301
 /hiring-a-horror-composer/ /how-to-hire-a-horror-composer 301

@@ -1,6 +1,8 @@
-# Indexing Runbook — "Discovered – currently not indexed"
+# Historical Indexing Runbook — 21 October 2026
 
-**Status in Search Console (21 Oct 2026):** 14 URLs, `Last crawled: N/A`, validation started 21 Oct 2026.
+> **Superseded on 29 October 2026.** This snapshot predates the current route policy: `/faq`, `/legal`, `/privacy`, `/process` and `/terms` are public `noindex` support pages; `/sitemap` now redirects to `/`; EXPIRE is an archive-only project on `/work`; the 300-word minimum has been removed. Use `README.md`, `SITEMAP.md` and `ITEM-URLS.md` for current behavior. The historical Search Console report below is retained as context, not as an indexing to-do list.
+
+**Historical Search Console status (21 Oct 2026):** 14 URLs, `Last crawled: N/A`, validation started 21 Oct 2026.
 
 ```
 /accessibility  /composer  /contact  /faq      /legal      /licensing

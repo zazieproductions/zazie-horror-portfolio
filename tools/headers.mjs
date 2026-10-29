@@ -74,8 +74,7 @@ export const SECURITY_HEADERS = {
  * https://cloudflareinsights.com/cdn-cgi/rum in its cross-origin form.
  *
  * Allowing it was a copy change first: /privacy sections 1, 3, 4, 6, 8, 9 and
- * 13, the FAQ tracking answer and the privacy summaries on /legal and /sitemap
- * now disclose the beacon instead of claiming no analytics and no third-party
+ * 13 now disclose the beacon instead of claiming no analytics or third-party
  * script. tools/check-headers.mjs fails the build if either origin below is
  * dropped (the console CSP error and the dead analytics return) or if any
  * other remote script-src / connect-src origin is added without this list

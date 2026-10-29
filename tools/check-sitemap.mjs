@@ -18,7 +18,7 @@
  *   8.  No duplicate <loc>                       -> duplicate page entries
  *   9.  Every loc resolves to a real page        -> missing-file / 404 entries
  *  10.  Page canonical == sitemap loc            -> canonical mismatch
- *  11.  Page is not noindex                      -> submitted page excluded
+ *  11.  Submitted pages are indexable; public noindex routes stay out       -> submitted page excluded
  *  12.  Nothing is blocked by robots.txt         -> crawlability
  *  13.  robots.txt advertises the sitemap        -> discovery
  *  14.  image/video assets exist on disk         -> missing media references
@@ -594,9 +594,18 @@ const walk = (dir) => {
 };
 walk(ROOT);
 const uniquePageFiles = [...new Set(pageFiles)];
-const missing = uniquePageFiles.filter((p) => !seenLocs.has(`https://${SITE_HOST}${p === '/' ? '/' : p}`));
+const isIndexablePage = (route) => {
+  const file = pageFilePath.get(route);
+  if (!file) return true;
+  const html = fs.readFileSync(file, 'utf8');
+  const robots = /<meta\s+name="robots"\s+content="([^"]*)"/i.exec(html)?.[1] ?? '';
+  return !/\bnoindex\b/i.test(robots);
+};
+const missing = uniquePageFiles.filter((p) =>
+  !seenLocs.has(`https://${SITE_HOST}${p === '/' ? '/' : p}`) && isIndexablePage(p),
+);
 if (missing.length) {
-  warn(`pages on disk that are NOT in the sitemap: ${missing.join(', ')}`);
+  warn(`indexable pages on disk that are NOT in the sitemap: ${missing.join(', ')}`);
 }
 
 /* 6. route aliases: a root twin for every directory route ------------------ */
@@ -706,15 +715,9 @@ for (const p of sitemapPaths) {
     if (!homeLinks.has(p)) err(`internal links: original hub ${p} is not linked from the home page`);
   }
 }
-note(`internal links: ${hubCount} original hub URLs are reachable from / (${topLevel} top-level hubs linked directly); item URLs are reached through their hub, not the home page`);
+note(`internal links: ${hubCount} indexable hub URLs are reachable from / (${topLevel} top-level hubs linked directly); item URLs are reached through their hub, not the home page`);
 
-// 8c. every item route is linked from the hub that owns it; the home page stays hub-only
-//
-// What this replaced: hubs used to carry NO link to their own item pages, so the
-// 65 generated routes were discoverable only from sitemap.xml. Google does not
-// schedule crawls for URLs that nothing links to - that is the "Discovered -
-// currently not indexed" profile - and a sitemap full of unlinked URLs lowers
-// the priority of every URL in the same file, including the 19 hubs.
+// 8c. every published item route is linked from the hub that owns it; the home page stays hub-only
 const itemPaths = sitemapPaths.filter(isItemPath);
 for (const p of itemPaths) {
   const hub = p.split('/').slice(0, 2).join('/');

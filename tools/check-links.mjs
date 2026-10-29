@@ -10,7 +10,7 @@
  *
  *   /work            → work.html (root twin) or work/index.html     [200]
  *   /work/           → work/index.html                              [200]
- *   /work/expire     → work/expire.html                             [404 if absent]
+ *   /work/expire     → /work#expire                                 [301 archive redirect]
  *   /foo.html        → 301 to /foo when /foo resolves               [200 + hop]
  *   /images/x.jpg    → exact file                                   [200]
  *

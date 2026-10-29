@@ -8,7 +8,7 @@ An immersive web environment for psychological horror scoring, experimental comp
 [![Architecture](https://img.shields.io/badge/architecture-static_%C2%B7_zero_backend-1e1e1e)](#architecture)
 [![Hosting](https://img.shields.io/badge/host-Cloudflare_Pages-1e1e1e)](#deployment)
 [![Showreel](https://img.shields.io/badge/showreel-32_cues_%C2%B7_9_productions-1e1e1e)](#core-experiences--features)
-[![Sitemap](https://img.shields.io/badge/sitemap-84_urls_%C2%B7_79_images_%C2%B7_12_videos-1e1e1e)](#seo--structured-data)
+[![Sitemap](https://img.shields.io/badge/sitemap-73_indexable_urls-1e1e1e)](#seo--structured-data)
 
 ---
 
@@ -50,13 +50,15 @@ Primary routes:
 | Route | Role |
 | --- | --- |
 | `/` | The portfolio: a continuous experience with film samples, original cues, credits, biography, and the inquiry form at the bottom |
-| `/work` · `/reel` · `/process` · `/services` | Indexable hub pages mirroring the portfolio's content silos |
+| `/work` · `/reel` · `/services` | Portfolio and commission hubs |
+| `/process` | Public workflow guide; `noindex` support page |
 | `/contact` | Legacy URL redirects to `/#contact`; the standalone contact page has been removed |
 | `/composer` | Legacy URL redirects to `/#about`; the standalone composer biography page has been removed (the biography is section 01 on the homepage) |
 | `/hire-a-composer` · `/sound-design` · `/game-scoring` | Commission pages: the commercial pillar and its first two format spokes |
 | `/store` | The Catalogue: records, sound libraries, tools and objects — 24 items, checkout delegated to Bandcamp, itch.io, Gumroad and eBay |
 | `/legal` · `/faq` · `/terms` · `/privacy` · `/licensing` · `/purchases` · `/accessibility` | Trust, legal and operating documents |
-| `/sitemap` | HTML site map: original hub pages and their in-page sections, linked from every footer (item URLs are listed in `/sitemap.xml`) |
+| `/sitemap` | Retired human-readable map; redirects to `/` |
+| `/sitemap.xml` | Machine-readable sitemap for indexable routes |
 | `404.html` (fallback document) | "Signal Lost: Archive Entry Not Found" — served with HTTP 404 and `noindex` for unknown paths |
 
 Every route is a **real static path**: original hubs use `<hub>/index.html` plus a byte-identical root twin, while generated item URLs use flat `<hub>/<slug>.html` files with no slash twin. There is deliberately no SPA rewrite fallback.
@@ -70,7 +72,7 @@ This repository is simultaneously:
 - **A contributor guide & development memory** — guardrails, recipes, and dated implementation records (`*.md` at root).
 - **The deployment artifact itself.** The served site is checked in at the repository root. GitHub Actions builds and validates pull requests and main-branch deployments; it uploads only the static site when the Cloudflare credentials are configured.
 
-> **Important architecture note:** the original main-portfolio React/TypeScript source tree is not included, and the legacy `index-<hash>.js` / `.css` artifacts are not rebuilt by this package. This repository now has a separate, typed content model and static prerender pipeline for 9 production, 32 cue, and 24 catalogue item pages. `npm run build` regenerates the catalogue and documents, validates the 84-URL sitemap, builds the item assets, prerenders all 65 item pages, and runs route/link/schema checks. Item content lives in `src/data/`; shared page layout lives in `src/lib/`.
+> **Important architecture note:** the original main-portfolio React/TypeScript source tree is not included, and the legacy `index-<hash>.js` / `.css` artifacts are not rebuilt by this package. This repository now has a separate, typed content model and static prerender pipeline for 9 production records (8 detail pages), 30 cue pages and 24 catalogue pages. `npm run build` regenerates the catalogue and documents, validates the 73-URL indexable sitemap, builds item assets, prerenders 62 item pages and runs route/link/schema checks. Five public support pages remain available with `noindex`. Item content lives in `src/data/`; shared page layout lives in `src/lib/`.
 
 ## Purpose & creative direction
 
@@ -89,8 +91,8 @@ Unconventional choices exist for artistic or experiential reasons and are docume
 
 **The portfolio (`/`)** — committed static HTML that is meaningful before JavaScript; the item-page pipeline also rebuilds its complete SEO head and selected-production poster cards from route data:
 
-- **Production records** — 9 individual project pages with source-linked, role-specific credits and verified artwork. The archive does not imply that every title is a Zazie composition credit.
-- **Showreel** — 32 title-derived cue pages plus the existing cue hub and MP3s (`/audio/track-00.mp3` … `track-31.mp3`). Each item page carries readable cue notes, duration/category, native optional playback, and sibling links.
+- **Production records** — 9 archive entries (8 standalone detail pages) with source-linked, role-specific credits and verified artwork. EXPIRE remains in the work archive as a sound-design credit, not a separate detail route. The archive does not imply that every title is a Zazie composition credit.
+- **Showreel** — 30 title-derived cue pages plus the existing cue hub and MP3s. Each item page carries concise cue notes, duration/category, native optional playback, and sibling links.
 - **Film samples** — 8 embeds: 7 lazy `youtube-nocookie.com` players plus 1 Google Drive preview, with poster-`<picture>` covers.
 - **Press kit** — features and coverage (Visual Container award-winners press release PDF, Grammy Weekly, Limitless Magazine, Billboard Wire).
 - **Approach / Services / Composer / Reviews / Inquiry** — scoring method, how commissioning works (no published rate card: visitors state their music budget range and references via `src/data/commission.ts`, and every score is quoted per project in writing; details on `/services`), biography, 5.0 collaborator rating with 3 featured reviews, and a structured inquiry form that builds a `mailto:` handoff.
@@ -99,7 +101,7 @@ Unconventional choices exist for artistic or experiential reasons and are docume
 
 **The Catalogue (`/store`)** — the existing hub plus 24 individual catalogue records. Item pages link to verified listings when available, omit mutable price/stock schema, and keep the source platform authoritative for current terms.
 
-**The documents** — `/legal`, `/faq` (35 questions), `/terms` (25 clauses), `/privacy` (15 sections), `/licensing`, `/purchases`, `/accessibility`. Share one stylesheet, one script and two partials; ship fully open without JavaScript; served **network-first** through the service worker because their effective dates matter. The same pipeline builds the human-readable **`/sitemap`** overview (`legal-src/pages/sitemap.html`), which links the original portfolio hubs and their sections. The XML sitemap includes all 19 original hub URLs plus 65 item URLs. Discovery runs `/` → hub → item: every hub links to each of its own item pages, every item page links back to its hub and to siblings, and the home page deliberately stays a hub index. No submitted URL is discoverable from `sitemap.xml` alone.
+**The documents** — `/legal`, `/faq` (7 concise questions), `/terms` (25 clauses), `/privacy` (15 sections), `/licensing`, `/purchases`, `/accessibility`. Terms and privacy clauses use native disclosures; content and the privacy device inspector remain usable without JavaScript. The five support pages `/legal`, `/faq`, `/privacy`, `/process` and `/terms` stay public but are marked `noindex`; `/sitemap` is retired while `/sitemap.xml` remains. The XML sitemap contains 11 indexable hubs and 62 item routes. The homepage and archive hubs retain direct, useful links to published records.
 
 ## Visual preview
 
@@ -139,10 +141,10 @@ Three build systems of different eras, plus a set of committed hub pages, all se
 │ ✓ store-src/ + build.sh hand-rolled page, no framework store-<hash>.* │
 │                                                       store/index.html
 │ ✓ legal-src/ + build.sh bash+python3 generator          <slug>/index.html
-│                          (7 documents + human sitemap; legal-<hash>.*  │
-│                           FAQPage schema from markup)                  │
-│ ✓ src/ + vite.config.ts typed item data + HTML renderer 65 flat pages  │
-│                          (9 productions, 32 cues, 24 catalogue items)  │
+│                          (7 documents; sitemap.xml is separate; legal-<hash>.*│
+│                           native FAQ disclosures)                       │
+│ ✓ src/ + vite.config.ts typed item data + HTML renderer 62 flat pages  │
+│                          (9 productions, 30 cues, 24 catalogue items)  │
 │ ✗ committed output      original portfolio hub pages    <slug>/index.html
 │                          (except legal-src/store-src sources)          │
 └──────────────────────────────────────────────────────────────────────┘
@@ -211,7 +213,7 @@ No cookies set by this site, no fonts CDN, and exactly one external JS: the Clou
 ├── server.mjs                  # Local static server: clean routes + 404 fallback, Brotli/Gzip, ETag/304
 ├── _headers                    # CSP, canonical Link headers, per-path cache policy (read the top comment)
 ├── _redirects                  # Legacy aliases + explicit real-404 fallback
-├── robots.txt / sitemap.xml    # Crawl control; 84 URLs / 79 images / 12 videos
+├── robots.txt / sitemap.xml    # Crawl control; 73 indexable URLs
 ├── <32-hex>.txt                # IndexNow key file (public by design; see tools/indexnow.mjs)
 ├── audio/
 │   └── track-00..31.mp3        # 32 showreel cues (~98 MB) — the audio library
@@ -227,12 +229,12 @@ No cookies set by this site, no fonts CDN, and exactly one external JS: the Clou
 │   └── index.html              # Hub pages — COMMITTED OUTPUT, no in-repo source
 ├── store.html → store/index.html   # Catalogue — GENERATED, do not hand-edit
 ├── store-src/                  # Catalogue source (store.html/.css/.js + build.sh)
-├── legal/ faq/ terms/ privacy/ licensing/ purchases/ accessibility/ sitemap/
-│   └── index.html              # Documents + HTML site map — GENERATED, do not hand-edit
-├── legal-src/                  # Document sources, shared partials, CSS/JS, build.sh
+├── legal/ faq/ terms/ privacy/ licensing/ purchases/ accessibility/
+│   └── index.html              # Documents — GENERATED, do not hand-edit
+├── legal-src/                  # Seven document sources, shared partials, CSS/JS, build.sh
 ├── src/data/{hubs,productions,cues,releases,routes}.ts # Data-driven hub/item URLs and metadata
 ├── src/lib/{head,page,home}.ts # Source-rendered SEO heads and item-page layouts
-├── scripts/{generate-sitemap,prerender,verify}.mjs # 84-URL build and structural verification
+├── scripts/{generate-sitemap,prerender,verify}.mjs # 73-URL build and structural verification
 ├── tools/check-sitemap.mjs     # Sitemap, file, canonical, robot and hub-link audit
 ├── tools/route-aliases.mjs     # Checks 18 hub twins and flat item routes for slash twins
 ├── tools/index-coverage.mjs    # Per-URL words / in-body inbound links / duplicate ratio
@@ -269,7 +271,7 @@ Item content is data-first and routes are generated from the title-owned slug in
 - **Catalogue item:** add or update `src/data/releases.ts`; keep marketplace terms and prices out of structured data, include only verified source facts/artwork, and omit unavailable metadata.
 - **Existing hub:** update its source where one exists (`store-src/` or `legal-src/`); manually maintained hub pages keep their current layout and canonical URL. Run `node tools/route-aliases.mjs` after editing a hub directory page.
 
-The build fails on duplicate/malformed paths, missing titles or descriptions, non-real `lastmod`, broken data relationships, unsubstantial or duplicated item copy, missing local media, missing internal sibling links, or a sitemap URL without a prerendered file. Keep the human `/sitemap` page hub-only; do not add item hrefs there or to the homepage/navbar.
+The build fails on duplicate/malformed paths, missing titles or descriptions, non-real `lastmod`, broken data relationships, duplicated item copy, missing local media, missing internal sibling links, or a sitemap URL without a prerendered file. Word counts in `tools/index-coverage.mjs` are diagnostic only; there is no minimum-content target. Keep item routes linked from their owning archive, not from the homepage/navigation.
 
 ## Local development
 
@@ -279,7 +281,7 @@ Requirements: Node.js 20.19+ and npm, Bash, and Python 3 (for the catalogue/docu
 # Install only the local build tools
 npm install
 
-# Rebuild hubs, sitemap, item assets and all 65 item pages; run all verifiers
+# Rebuild hubs, sitemap, item assets and all 62 item pages; run all verifiers
 npm run build
 
 # Type-check the editable content/layout modules
@@ -290,7 +292,7 @@ npm run serve                   # → http://localhost:8080  (PORT env overrides
 
 # Rebuild one source set independently if needed
 ./store-src/build.sh            # catalogue hub + hashed assets
-./legal-src/build.sh            # 7 documents + human sitemap + hashed assets
+./legal-src/build.sh            # 7 documents + hashed assets
 node tools/route-aliases.mjs    # refresh 18 hub root twins
 
 # Check both film-player implementations (markup, controls, switching, cache hashes)
@@ -301,7 +303,7 @@ node tools/check-sitemap.mjs          # offline
 node tools/check-sitemap.mjs --live   # + HTTP status of every URL
 
 # After a deploy is live: tell IndexNow engines what changed (not Google)
-node tools/indexnow.mjs /reel /faq     # changed pages only; no args = every sitemap URL
+node tools/indexnow.mjs /work /reel    # changed indexable pages only
 ```
 
 **Do not hand-edit generated outputs:** `store.html`, document hub copies, `work.html`/other hub root twins, the 65 flat item-page HTML files, or `item-<hash>.js/.css`. Edit the corresponding source/data files, then run `npm run build`. Legacy homepage bundle assets are not rebuilt by the item-page pipeline.
@@ -353,7 +355,7 @@ node tools/live-route-audit.mjs https://horror.zazieproductions.com
 
 The no-behavioural-tracking privacy claim is structural: adding any *other* analytics, an advertising pixel, or a cookie would invalidate `/privacy`, the footer statement on every page, and the device inspector on `/privacy`. Don't.
 
-The one exception is deliberate and disclosed. Cloudflare injects its Web Analytics beacon (`https://static.cloudflareinsights.com/beacon.min.js`) into the HTML it serves at the edge — it is in no file here, it is not in the upload, and no build step can add or delete it. Since 26 October 2026 `script-src` allowlists that host exactly (the injected URL carries a version path, so a path-scoped source would not match) and `connect-src` allowlists `cloudflareinsights.com` for its `/cdn-cgi/rum` reporting endpoint; the same-origin report form is covered by `'self'`. `/privacy` (sections 1, 3, 4, 6, 8, 9 and 13), the FAQ tracking answer and the privacy summaries on `/legal` and `/sitemap` describe the beacon — cookieless, no client-side storage, no fingerprinting — and `tools/check-headers.mjs` fails the build if either host is dropped or any other remote script/connect origin is added. To stop collecting, switch off **Analytics & Logs → Web Analytics** in the Cloudflare dashboard *and* remove both hosts from `tools/headers.mjs` + `_headers` in the same change.
+The one exception is deliberate and disclosed. Cloudflare injects its Web Analytics beacon (`https://static.cloudflareinsights.com/beacon.min.js`) into the HTML it serves at the edge — it is in no file here, it is not in the upload, and no build step can add or delete it. Since 26 October 2026 `script-src` allowlists that host exactly (the injected URL carries a version path, so a path-scoped source would not match) and `connect-src` allowlists `cloudflareinsights.com` for its `/cdn-cgi/rum` reporting endpoint; the same-origin report form is covered by `'self'`. `/privacy` (sections 1, 3, 4, 6, 8, 9 and 13) describes the beacon — cookieless, no client-side storage, no fingerprinting — and `tools/check-headers.mjs` fails the build if either host is dropped or any other remote script/connect origin is added. To stop collecting, switch off **Analytics & Logs → Web Analytics** in the Cloudflare dashboard *and* remove both hosts from `tools/headers.mjs` + `_headers` in the same change.
 
 ## Media & asset pipeline
 
@@ -416,11 +418,11 @@ The site serves source-rendered SEO metadata and structured data (the repo's `SE
 
 - **Homepage schema:** `Person`, `Organization`, `WebSite`, and `WebPage` with shared IDs, a `CreativeWork` portfolio graph and a `MusicPlaylist` showreel graph, plus one `ItemList` of curated cue pages rendered as `MusicComposition` nodes (each with an `AudioObject` and the same `#composition`/`#audio` `@id`s the `/reel/<slug>` pages use, so the graphs merge).
 - **Item-page schema:** production `Movie`/`TVSeries`/`CreativeWork` plus verified `VideoObject` where supplied; cue `MusicComposition` + `AudioObject`; catalogue `Product`/`MusicAlbum` + `Offer`; all include `WebPage` and `BreadcrumbList`. Mutable price/stock claims are omitted.
-- `sitemap.xml` (82 URLs: 19 hubs including home + 63 item routes; current build has 78 artwork and 12 video entries) is checked by `tools/check-sitemap.mjs`, `tools/route-aliases.mjs`, and `scripts/verify.mjs`. The build verifies canonical paths, static files, structured data, links, media, and a real unknown-route 404. **Run `npm run build` before deploys that touch routes, links, media, or schema.**
-- **Sitelinks and crawl structure:** `/` links the 19 original hub routes and only those; each hub (`/work`, `/reel`, `/store`) links every one of its own item pages; each item page links its hub and at least three siblings. That is what keeps the 65 generated URLs out of the "sitemap-only orphan" state Google reports as *Discovered - currently not indexed*. `scripts/verify.mjs` and `tools/check-sitemap.mjs` fail the build if a hub stops linking an item, and `tools/index-coverage.mjs --check` fails it if any submitted URL loses its contextual internal link, drops below 300 words of `<main>` text, or becomes a near-duplicate of a hub sibling.
+- `sitemap.xml` contains 73 indexable URLs (11 indexable hubs plus 62 detail routes) and is checked by `tools/check-sitemap.mjs`, `tools/route-aliases.mjs`, and `scripts/verify.mjs`. Public noindex support pages are deliberately excluded. The build verifies canonical paths, static files, structured data, links, media and a real unknown-route 404. **Run `npm run build` before deploys that touch routes, links, media or schema.**
+- **Route structure:** each published item page links to its owning hub and related records; support documents remain available without being submitted for indexing. `tools/index-coverage.mjs --check` checks files, contextual links and duplicate copy. Its word counts are diagnostic only; it does not set a minimum or encourage adding text.
 - **Site name**: one `WebSite` node on `/` (`name` "Zazie Productions", `alternateName` "Zazie Productions Horror", "ZKT Productions"), matched by `og:site_name` on every page. No `SearchAction` (Google retired the sitelinks search box in November 2024) and no home-page `BreadcrumbList` (the home page is the root of the trail, not a trail).
 - **Beyond Google**: `sitemap.xml` is advertised in `robots.txt` for every engine; `tools/indexnow.mjs` pushes changed URLs to the IndexNow engines after a deploy.
-- Canonical `Link:` headers at the edge for original hub variants; legacy `.html` redirects; a real 404 (no soft-404 SPA fallback); robots.txt advertises the 84-URL sitemap and does not block public item pages.
+- Canonical `Link:` headers at the edge for original hub variants; legacy `.html` redirects; a real 404 (no soft-404 SPA fallback); robots.txt advertises the 73-URL indexable sitemap and does not block public item pages.
 
 ## Deployment
 
@@ -481,12 +483,12 @@ For future AI-assisted development sessions. **Before changing anything:**
 
 **Implemented** (all verifiable in this tree):
 
-- Full portfolio experience: poster wall + lightbox (9 productions), 32-cue showreel with mood clusters and sticky player, 7 film samples, press kit, commissioning overview, reviews, `mailto:` inquiry
+- Full portfolio experience: poster wall + lightbox (9 productions), 30-cue showreel with mood clusters and sticky player, 8 film samples, press kit, commissioning overview, reviews, `mailto:` inquiry
 - Archive boot restored 2026-10-22: the terminal loading screen the prerender pass had silently disabled plays again on the homepage, now gated in the head so it can never become inert unnoticed (`PERFORMANCE.md`)
-- 19 original hub routes + 65 data-generated production/cue/catalogue pages, seven legal/operating documents with generated FAQ schema, and a hub-only human sitemap
+- 16 public hubs (11 indexable) + 62 data-generated item pages, with five noindex support routes and a retained XML sitemap
 - Service worker (SWR / network-first / cache-first tiers), CSP + canonical headers, 301 map, real 404
-- 84-URL sitemap with verified image/video extensions; per-type item JSON-LD; route, alias, link, media, and 404 verifiers
-- Sitelinks groundwork: the home page links only the original hub routes; item pages are reachable through the sitemap and their hub/sibling links
+- 73-URL indexable sitemap with verified image/video extensions; per-type item JSON-LD; route, alias, link, media, and 404 verifiers
+- Route structure: the home page stays focused on portfolio hubs; item pages link to their owning archive and related records
 - Performance mandate preserved (AVIF artwork, self-hosted fonts, static first paint, item assets exported as immutable hashed bundles)
 
 **Open items recorded in the repo** (in development / awaiting a decision):

@@ -203,7 +203,7 @@ export const homeJsonLd: Json[] = [
       name: prod.title,
       description: prod.summary,
       genre: deepLinkGenres(prod.genres),
-      url: url(`/work/${prod.slug}`),
+      url: url(prod.detailPage === false ? '/work#expire' : `/work/${prod.slug}`),
       ...(prod.releaseYear ? { datePublished: String(prod.releaseYear) } : {}),
     })),
   },

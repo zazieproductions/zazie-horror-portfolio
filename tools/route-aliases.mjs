@@ -99,9 +99,9 @@ export function discoverRoutes(root = ROOT) {
 }
 
 /**
- * Audit flat item files under the three generated collections. A sitemap URL
- * such as /work/expire must resolve from work/expire.html only; if the host
- * also finds work/expire/index.html it may redirect to a slash twin.
+ * Audit flat item files under the three generated collections. Published item
+ * routes resolve from `<section>/<slug>.html`; there is no directory twin that
+ * could introduce a competing trailing-slash URL.
  */
 function inspectFlatItemRoutes(root) {
   const routes = [];

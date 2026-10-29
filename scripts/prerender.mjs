@@ -2,17 +2,16 @@
 /**
  * scripts/prerender.mjs
  * ----------------------------------------------------------------------------
- * Writes one flat HTML file per production, cue and store item:
+ * Writes one flat HTML file per published production, cue and store detail:
  *
  *   work/<slug>.html     served by the host at /work/<slug>
  *   reel/<slug>.html     served by the host at /reel/<slug>
  *   store/<slug>.html    served by the host at /store/<slug>
  *
- * Flat files, not directories: the host answers the extensionless path from
- * `<route>.html` directly, so /work/expire is a 200 with no redirect hop and
- * there is no /work/expire/ twin for a crawler to find. The 19 routes that
- * already existed keep their existing shape (`<route>/index.html` plus the root
- * `<route>.html` twin) and are not touched by this script.
+ * Archive-only production records stay on /work and do not get detail pages.
+ * Flat files, not directories: the host answers each extensionless item route
+ * from `<route>.html` directly. Existing hub routes keep their own
+ * `<route>/index.html` plus root twin and are not touched by this script.
  *
  * The document is built by src/lib/page.ts (compiled to build/lib/page.js) from
  * src/data/*.ts, with the same masthead, footer and stylesheet the rest of the
@@ -23,10 +22,10 @@
  *
  * It then verifies itself:
  *
- *   * every route in src/data/routes.ts resolves to a file the host can serve
+ *   * every indexable route in src/data/routes.ts resolves to a file the host can serve
  *     at that exact path (hub routes -> <path>/index.html + root twin, item
  *     routes -> <hub>/<slug>.html);
- *   * every generated page carries exactly one title, canonical, robots meta,
+ *   * every generated page carries exactly one title, canonical, indexable robots meta,
  *     og/twitter set and JSON-LD block, and the canonical points at the page's
  *     own URL;
  *   * the page body really contains its H1, its intro paragraph and a
@@ -34,8 +33,8 @@
  *
  * Usage:
  *   node scripts/prerender.mjs                 all item routes
- *   node scripts/prerender.mjs --only=expire   one item, for design review
- *   node scripts/prerender.mjs --only=/work/expire,/reel/needle-in-the-nerve
+ *   node scripts/prerender.mjs --only=unseen   one item, for design review
+ *   node scripts/prerender.mjs --only=/work/unseen,/reel/needle-in-the-nerve
  */
 
 import { createHash } from 'node:crypto';
@@ -44,10 +43,11 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { hubs } from '../build/data/hubs.js';
-import { allRoutes, items } from '../build/data/routes.js';
+import { allRoutes, indexableRoutes, items } from '../build/data/routes.js';
 import * as site from '../build/data/site.js';
 import { renderHomePosterCards, renderHomeSeo } from '../build/lib/home.js';
 import { renderItemPage } from '../build/lib/page.js';
+import { ensureMobileUxAssets } from '../home-src/mobile-ux.mjs';
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const { url, SITE_HOST } = site;
@@ -183,6 +183,7 @@ function buildHomeDocument() {
   const fullHead = `${templateHead.slice(0, close).trimEnd()}\n${renderHomeSeo()}\n</head>`;
   html = replaceMarkedContents(html, SEO_START, SEO_END, fullHead, 'SEO');
   html = replaceMarkedContents(html, HOME_POSTERS_START, HOME_POSTERS_END, renderHomePosterCards(), 'home-poster');
+  html = ensureMobileUxAssets(html);
   fs.writeFileSync(indexFile, html, 'utf8');
   console.log('prerender: replaced the complete homepage <head> from src/lib/home.ts + home entities');
   console.log('prerender: rendered curated poster-wall cards from src/data/home.ts + productions.ts');
@@ -221,10 +222,10 @@ const problems = [];
 /**
  * The file the host serves for a path. Hub routes are directories
  * (/work -> work/index.html); item routes are flat files
- * (/work/expire -> work/expire.html) and are never directories.
+ * (/work/unseen -> work/unseen.html) and are never directories.
  */
 const routeByPath = new Map(allRoutes.map((route) => [route.path, route]));
-const routeList = allRoutes;
+const routeList = indexableRoutes;
 const sitemapFile = path.join(repoRoot, 'sitemap.xml');
 const sitemapXml = fs.existsSync(sitemapFile) ? fs.readFileSync(sitemapFile, 'utf8') : '';
 const sitemapLocs = [...sitemapXml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1].replace(/&amp;/g, '&'));

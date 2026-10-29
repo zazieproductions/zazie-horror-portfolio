@@ -6,7 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { hubs } from '../build/data/hubs.js';
-import { allRoutes, items, productionBySlug, releaseBySlug, validateRoutes } from '../build/data/routes.js';
+import { allRoutes, indexableRoutes, items, productionBySlug, releaseBySlug, validateRoutes } from '../build/data/routes.js';
 import { productions } from '../build/data/productions.js';
 import { cues } from '../build/data/cues.js';
 import { releases } from '../build/data/releases.js';
@@ -56,9 +56,14 @@ for (const route of allRoutes) {
 
 // /composer was retired (2026-10-29): it 301s to the homepage biography
 // section (/#about), so it must not appear as a hub route.
-if (hubs.length !== 17) fail(`expected 17 hub routes, received ${hubs.length}`);
-if (productions.length !== 9 || cues.length !== 30 || releases.length !== 24) {
-  fail(`expected 9 productions, 30 cues and 24 catalogue items; received ${productions.length}, ${cues.length}, ${releases.length}`);
+if (hubs.length !== 16) fail(`expected 16 public hub routes, received ${hubs.length}`);
+if (allRoutes.length !== 78) fail(`expected 78 public routes, received ${allRoutes.length}`);
+if (indexableRoutes.length !== 73) fail(`expected 73 indexable routes, received ${indexableRoutes.length}`);
+const indexableHubRoutes = indexableRoutes.filter((route) => route.kind === 'home' || route.kind === 'hub');
+const productionRouteCount = items.filter((item) => item.kind === 'production').length;
+if (indexableHubRoutes.length !== 11) fail(`expected 11 indexable hub routes, received ${indexableHubRoutes.length}`);
+if (productions.length !== 9 || productionRouteCount !== 8 || cues.length !== 30 || releases.length !== 24) {
+  fail(`expected 9 production records with 8 detail pages, 30 cues and 24 catalogue items; received ${productions.length} records, ${productionRouteCount} production pages, ${cues.length} cues and ${releases.length} catalogue items`);
 }
 
 /* -------------------------------------------------------------- image audit */
@@ -133,7 +138,7 @@ function urlEntry(route, { images = [], videos = [] } = {}) {
 }
 
 const hubByPath = new Map(hubs.map((hub) => [hub.path, hub]));
-const hubRoutes = allRoutes.filter((route) => route.kind === 'home' || route.kind === 'hub');
+const hubRoutes = indexableRoutes.filter((route) => route.kind === 'home' || route.kind === 'hub');
 const itemRoutes = {
   production: items.filter((item) => item.kind === 'production'),
   cue: items.filter((item) => item.kind === 'cue'),
@@ -145,7 +150,7 @@ add(
   '<!--',
   `  Generated ${SITE_ORIGIN}/sitemap.xml from src/data/{hubs,productions,cues,releases,routes}.ts.`,
   '  Do not edit by hand. Each URL is a canonical, extensionless route.',
-  `  Route count: ${allRoutes.length} (${hubs.length} original hubs + ${productions.length} productions + ${cues.length} cues + ${releases.length} catalogue items).`,
+  `  Route count: ${indexableRoutes.length} indexable URLs (${hubRoutes.length} hubs + ${itemRoutes.production.length} productions + ${itemRoutes.cue.length} cues + ${itemRoutes.release.length} catalogue items).`,
   '  Sitemap priority and changefreq are intentionally omitted.',
   '-->',
   '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"',
@@ -237,6 +242,6 @@ fs.writeFileSync(path.join(root, 'robots.txt'), robotsTxt, 'utf8');
 const locCount = (sitemapXml.match(/<loc>/g) ?? []).length;
 const imageCount = (sitemapXml.match(/<image:image>/g) ?? []).length;
 const videoCount = (sitemapXml.match(/<video:video>/g) ?? []).length;
-console.log(`generate-sitemap: ${locCount} URLs (${hubs.length} hubs, ${productions.length} productions, ${cues.length} cues, ${releases.length} catalogue items)`);
+console.log(`generate-sitemap: ${locCount} URLs (${hubRoutes.length} hubs, ${itemRoutes.production.length} productions, ${itemRoutes.cue.length} cues, ${itemRoutes.release.length} catalogue items)`);
 console.log(`  ${imageCount} verified artwork entries, ${videoCount} video entries; robots.txt leaves every sitemap URL crawlable`);
 console.log(`  every URL is unique, HTTPS, on ${SITE_HOST}, extensionless, and free of query strings or fragments`);
