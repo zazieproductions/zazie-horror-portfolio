@@ -469,6 +469,10 @@ function readShowreelTracks(source) {
   if (tracks.length !== 30) throw new Error(`bundle: expected 30 showreel tracks after patching, found ${tracks.length}`);
   if (tracks[0].title !== 'The Beautiful Wrongness') throw new Error('bundle: The Beautiful Wrongness must be the default first track');
   if (tracks[1].title !== 'The Fatal Overdose') throw new Error('bundle: The Fatal Overdose must be the second track');
+  const amnesiaIndex = tracks.findIndex((track) => track.title === 'Dissociative Amnesia');
+  if (amnesiaIndex < 0 || tracks[amnesiaIndex + 1]?.title !== 'Variations on a Vanishing Body') {
+    throw new Error('bundle: Variations on a Vanishing Body must immediately follow Dissociative Amnesia');
+  }
   if (new Set(tracks.map((track) => track.id)).size !== tracks.length) throw new Error('bundle: duplicate showreel track IDs');
   for (const retired of ['Dark Thriller Cinematic Cue', 'Screams of The Damned']) {
     if (tracks.some((track) => track.title === retired)) throw new Error(`bundle: retired track remains: ${retired}`);
@@ -613,8 +617,9 @@ function patchBundle(orig) {
     out = out.replace(oldText, () => newText);
   }
   // The Beautiful Wrongness is the default; retain main's promotion of The
-  // Fatal Overdose immediately after it. IDs remain stable audio-file mappings;
-  // visible row numbers already come from each track's queue index.
+  // Fatal Overdose immediately after it, and place Variations on a Vanishing
+  // Body directly after Dissociative Amnesia. IDs remain stable audio-file
+  // mappings; visible row numbers already come from each track's queue index.
   const tracksMatch = out.match(/tracks:\[([\s\S]*?)\],projects:/);
   if (!tracksMatch) throw new Error('bundle: homepage player track list not found');
   const tracks = tracksMatch[1].split('},{').map((track) =>
@@ -625,6 +630,12 @@ function patchBundle(orig) {
   if (!tracks[0].includes('title:"The Beautiful Wrongness"')) throw new Error('bundle: The Beautiful Wrongness must remain first');
   const [fatal] = tracks.splice(fatalIndex, 1);
   tracks.splice(1, 0, fatal);
+  const vanishingIndex = tracks.findIndex((track) => track.includes('title:"Variations on a Vanishing Body"'));
+  if (vanishingIndex < 0) throw new Error('bundle: Variations on a Vanishing Body not found');
+  const [vanishing] = tracks.splice(vanishingIndex, 1);
+  const amnesiaIndex = tracks.findIndex((track) => track.includes('title:"Dissociative Amnesia"'));
+  if (amnesiaIndex < 0) throw new Error('bundle: Dissociative Amnesia not found');
+  tracks.splice(amnesiaIndex + 1, 0, vanishing);
   out = out.replace(tracksMatch[0], `tracks:[${tracks.join(',')}],projects:`);
 
   // Enrich It.projects with slug so K5 renders the semantic `sample-${slug}` anchor.

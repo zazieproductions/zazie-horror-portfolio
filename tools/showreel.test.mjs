@@ -36,6 +36,13 @@ test('The Beautiful Wrongness is first in the 30-cue default player queue', () =
     { title: 'The Fatal Overdose', src: '/audio/track-12.mp3' },
     'main’s promoted cue stays next in the merged queue',
   );
+  const amnesiaIndex = tracks.findIndex((track) => track.title === 'Dissociative Amnesia');
+  assert.ok(amnesiaIndex >= 0, 'Dissociative Amnesia is in the player queue');
+  assert.deepEqual(
+    { title: tracks[amnesiaIndex + 1]?.title, src: tracks[amnesiaIndex + 1]?.src },
+    { title: 'Variations on a Vanishing Body', src: '/audio/track-05.mp3' },
+    'Variations on a Vanishing Body immediately follows Dissociative Amnesia',
+  );
   assert.equal(new Set(tracks.map((track) => track.id)).size, tracks.length, 'React keys remain unique');
   assert.ok(source.includes('String(s+1).padStart(2,"0")'), 'visible numbers follow queue order, not stable audio IDs');
   for (const title of retiredTitles) assert.equal(source.includes(title), false, `${title} is absent from the player bundle`);
@@ -59,6 +66,9 @@ test('the showreel archive and structured playlist use the same order', () => {
   assert.equal(details.length, 30);
   assert.match(details[0], /<span class="qno">01<\/span>[\s\S]*The Beautiful Wrongness/);
   assert.match(details[0], /\/audio\/track-30\.mp3/);
+  assert.match(details[2], /<span class="qno">03<\/span>[\s\S]*Dissociative Amnesia/);
+  assert.match(details[3], /<span class="qno">04<\/span>[\s\S]*Variations on a Vanishing Body/);
+  assert.match(details[3], /\/audio\/track-05\.mp3/);
 
   let playlist;
   for (const match of html.matchAll(/<script type="application\/ld\+json">\n([\s\S]*?)\n<\/script>/g)) {
@@ -71,6 +81,11 @@ test('the showreel archive and structured playlist use the same order', () => {
   assert.equal(playlist.track[0].position, 1);
   assert.equal(playlist.track[0].name, 'The Beautiful Wrongness');
   assert.equal(playlist.track[0].audio.contentUrl, 'https://horror.zazieproductions.com/audio/track-30.mp3');
+  assert.equal(playlist.track[2].position, 3);
+  assert.equal(playlist.track[2].name, 'Dissociative Amnesia');
+  assert.equal(playlist.track[3].position, 4);
+  assert.equal(playlist.track[3].name, 'Variations on a Vanishing Body');
+  assert.equal(playlist.track[3].audio.contentUrl, 'https://horror.zazieproductions.com/audio/track-05.mp3');
 });
 
 test('retired cue pages, audio files, and public references are gone', () => {
