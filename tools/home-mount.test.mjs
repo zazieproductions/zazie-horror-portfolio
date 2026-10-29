@@ -112,13 +112,20 @@ test('the biography sits before the compilations in the static page and the bund
   assert.equal(bundle.match(/u\.jsx\(rj,/g)?.length, 1, 'the biography renders exactly once');
   // Video and music sections use simple, distinct headings; the remaining
   // numbered kickers stay contiguous after the samples kicker is removed.
-  const kickers = ['01 · Biography', '02 · Approach', '03 · Contact']
+  const kickers = ['01 · Biography', '02 · Contact']
     .map((marker) => html.indexOf(marker));
   assert.ok(kickers.every((at) => at >= 0), 'every remaining numbered kicker is present');
-  assert.deepEqual([...kickers].sort((a, b) => a - b), kickers, 'remaining section numbers run 01-03 in page order');
-  for (const marker of ['01 · Biography', '02 · Approach', '03 · Contact']) {
+  assert.deepEqual([...kickers].sort((a, b) => a - b), kickers, 'remaining section numbers run 01-02 in page order');
+  for (const marker of ['01 · Biography', '02 · Contact']) {
     assert.ok(bundle.includes(marker), `bundle contains ${marker}`);
   }
+  // The "02 · Approach" block (#method) was removed on 2026-10-29; neither
+  // render path may resurrect it or leave a dangling anchor to it.
+  for (const removed of ['id="method"', 'Approach', 'How the dread actually gets built.', 'Tension you can control', 'A palette that is not a preset', 'Themes that survive the trailer cut']) {
+    assert.ok(!html.includes(removed), `retired Approach markup stays absent from index.html: ${removed}`);
+    assert.ok(!bundle.includes(removed), `retired Approach markup stays absent from the bundle: ${removed}`);
+  }
+  assert.ok(!html.includes('href="#method"') && !bundle.includes('href:"#method"'), 'removed #method anchor has no dangling links');
   for (const removed of ['Commissioning a score', '04 · Scoring services', 'READY WHEN YOU ARE', 'zp-close']) {
     assert.ok(!html.includes(removed) && !bundle.includes(removed), `retired homepage block stays absent: ${removed}`);
   }
