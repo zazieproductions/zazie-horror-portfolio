@@ -147,4 +147,17 @@ textarea.zp-input { resize:vertical; }
 .zp-licence-effect { justify-self:start; display:inline-block; border:1px solid rgba(196,30,30,.45); background:rgba(196,30,30,.08); padding:.32rem .6rem; font-size:.6rem; line-height:1.4; letter-spacing:.14em; text-transform:uppercase; color:#e65650; }
 .zp-licence-note { font-size:.85rem; line-height:1.65; color:#9a9590; }
 
+/* ----- Phones: keep focused controls at 16px ----------------------------- */
+/* iOS Safari zooms the page whenever a focused input, select or textarea
+   renders below 16px. That zoom shifts the field under the thumb, cuts the
+   submit button off-screen and is a well-known reason people abandon a form
+   mid-way. The 16px floor applies only to phone widths, so the desktop type
+   scale is unchanged. */
+@media (max-width:767px) {
+  .zp-input { font-size:16px; }
+  /* The disclosure that reveals the optional fields is the one control that
+     opts into more typing; give it a full tap target. */
+  .zp-inq-details > summary { min-height:44px; align-items:center; }
+}
+
 @media (prefers-reduced-motion:reduce) { .zp-cta, .zp-choice { transition:none; } }

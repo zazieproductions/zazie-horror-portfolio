@@ -72,7 +72,7 @@
 // Pricing unchanged: scene 1–2 min / $250 from; focused 3–5 min / $650 from;
 // extended 6–12 min / $1,500 from; substantial feature/experimental scores
 // custom quoted with an indicative $2,500 minimum.
-const CACHE_NAME = 'zazie-v33';
+const CACHE_NAME = 'zazie-v34';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -81,12 +81,12 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-f509fde0.css',
-  '/index-0f649b5c.js',
+  '/index-faf27e88.js',
   '/store-eed3eeee.css',
   '/store-3fc01be0.js',
   '/legal-886033c7.css',
   '/legal-ab598df8.js',
-  '/estimator-b63bdccc.css',
+  '/estimator-77f6902e.css',
   '/estimator-9052be1a.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',
