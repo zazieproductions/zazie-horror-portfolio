@@ -305,6 +305,12 @@ node tools/check-sitemap.mjs --live   # + HTTP status of every URL
 # After a deploy is live: tell IndexNow engines what changed (not Google)
 node tools/indexnow.mjs /reel /faq     # changed pages only; no args = every sitemap URL
 
+# Which URLs the next Wayback Machine archive run will capture (the run itself
+# happens in GitHub Actions — see the Deployment section)
+node tools/wayback-urls.mjs                  # core: home + 16 hubs
+node tools/wayback-urls.mjs --scope all      # every sitemap URL
+node tools/wayback-urls.mjs --scope custom /reel /faq
+
 # AI code-quality gate (aislop) — exactly what CI runs, human-readable
 npm run lint:slop                      # fails on new findings / score below the floor
 npx aislop@0.19.1 fix --dry-run        # preview the mechanical fixes it would make
