@@ -181,7 +181,8 @@ const PAIRS = [
   // static snapshot uses one matching paragraph.
   ['Original music for psychological horror, thrillers, and dark sci-fi,', 'Bespoke, avant-garde sonic identities for psychological horror, folk horror,', BUNDLE],
   ['composed for film, TV, and games.', 'atmospheric dramas, and experimental art-house cinema.', BUNDLE],
-  ['Start an inquiry', 'Request a scoring quote', BOTH],
+  // The hero's secondary CTA keeps its shipped label ("Start an inquiry"): the
+  // 2026-10-28 rewrite to "Request a scoring quote" was reverted on 2026-10-29.
   // User-provided biography; HTML emphasis is shared with the static snapshot.
   ["Zazie Kanwar-Torge is an award-winning composer, experimental producer, and multi-instrumentalist. Under Zazie Productions, he writes and performs original scores for psychological, folk, and body horror, supernatural thrillers, and dark sci-fi.", "<strong>Zazie Kanwar-Torge</strong> is an award-winning film composer, experimental producer, and multi-instrumentalist specializing in <strong>experimental psychological horror for independent and arthouse cinema, folk horror, body horror, supernatural thrillers, and dark science fiction</strong>. Through Zazie Productions, he creates original film scores and immersive sonic atmospheres that explore dread, dissonance, isolation, and the uncanny.", "bundle"],
   [

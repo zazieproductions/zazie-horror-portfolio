@@ -66,22 +66,10 @@ export const COPY = [
   },
 
 
-  {
-    id: 'hero.cta.secondary', stage: 'attention',
-    from: 'Play the showreel',
-    to: 'Hear the showreel',
-  },
-  {
-    id: 'hero.cta.primary', stage: 'attention',
-    from: {
-      bundle: 'children:"Request a scoring quote"',
-      html: 'sm:w-auto">Request a scoring quote</a>',
-    },
-    to: {
-      bundle: 'children:"Get a free written quote"',
-      html: 'sm:w-auto">Get a free written quote</a>',
-    },
-  },
+  /* The hero keeps the wording it shipped with: "Play the showreel" and
+     "Start an inquiry" (2026-10-29). The conversion rewrite to "Hear the
+     showreel" / "Get a free written quote" is retired, so this table no longer
+     carries hero CTA entries and normalizeStaticCopy unwinds the old labels. */
 
 
   /* -------------------------------------------- 3. DESIRE — #work samples */
@@ -380,8 +368,12 @@ export function normalizeStaticCopy(html) {
   const legacyHero = cleanStaticHtml(html)
     .replace('Horror scores that make them feel it ', 'Dark, atmospheric horror scores, ')
     .replace('before they see it.', 'written to your picture.');
+  // The hero CTAs went back to their shipped wording on 2026-10-29
+  // ("Play the showreel" / "Start an inquiry"), so an already-built document
+  // has to be unwound before the rest of the patch sees canonical text.
+  const ctaRestored = restoreHeroCtaLabels(legacyHero);
   const reversed = replaceSide(
-    legacyHero,
+    ctaRestored,
     reverse,
     normalizedTarget,
     fromHtml,
@@ -389,6 +381,20 @@ export function normalizeStaticCopy(html) {
     { allowAlreadyApplied: true },
   );
   return cleanStaticHtml(reversed);
+}
+
+/** Undo the retired hero CTA wording, at most once each. */
+function restoreHeroCtaLabels(html) {
+  let out = html;
+  for (const [shipped, original] of [
+    ['Hear the showreel', 'Play the showreel'],
+    ['Get a free written quote', 'Start an inquiry'],
+  ]) {
+    const n = countOf(out, shipped);
+    if (n > 1) throw new Error(`conversion-copy/normalize: "${shipped}" appears ${n} times`);
+    if (n === 1) out = out.replace(shipped, () => original);
+  }
+  return out;
 }
 
 const POSTER_HEADER_STATIC_TITLE = '<h2 class="mb-4 font-display text-3xl leading-none text-bone sm:text-4xl md:text-6xl">Credits</h2>';
@@ -569,16 +575,17 @@ export function removeHeroProofStatic(html) {
 /* Hero "boutique footnote" — the lineage strip.                              */
 /*                                                                            */
 /* One desaturated, low-contrast horizontal line sitting directly beneath the */
-/* hero call-to-action row: a small "Lineage" label followed by three         */
-/* monochrome marks. It is the hero's only third-party social proof, so it    */
-/* stays deliberately quiet - no boxes, no borders, no hover affordances, and */
-/* nothing that competes with the H1 or the primary button.                   */
+/* hero call-to-action row: three monochrome marks, no caption and no label   */
+/* (2026-10-29: the working "Lineage" label was removed, and the marks grew   */
+/* to carry the line on their own). It is the hero's only third-party social  */
+/* proof, so it stays deliberately quiet - no boxes, no borders, no hover     */
+/* affordances, and nothing that competes with the H1 or the primary button.  */
 /*                                                                            */
 /* The marks live in /images/lineage as white-on-transparent rasters rendered */
 /* at 2x their display height, so one asset is sharp on retina and small on   */
-/* the wire. Each one carries the institution's name as alt text; the visible */
-/* label means a screen reader announces "Lineage, Black Mountain College,    */
-/* Ars Electronica, Dolby Atmos" instead of three orphaned images.            */
+/* the wire. Each one carries the institution's name as alt text, so a screen */
+/* reader announces "Black Mountain College, Ars Electronica, Dolby Atmos"    */
+/* instead of three orphaned images.                                          */
 /* ------------------------------------------------------------------------- */
 
 export const LINEAGE_START = '<!--ZP-LINEAGE-START-->';
@@ -586,13 +593,12 @@ export const LINEAGE_END = '<!--ZP-LINEAGE-END-->';
 
 /** Display heights are set in CSS; these are the 2x raster dimensions. */
 const LINEAGE_MARKS = [
-  ['black-mountain-college.png', 'Black Mountain College', 'zp-lineage-seal', 73, 72],
-  ['ars-electronica.png', 'Ars Electronica', 'zp-lineage-festival', 67, 60],
-  ['dolby-atmos.png', 'Dolby Atmos', 'zp-lineage-format', 171, 44],
+  ['black-mountain-college.png', 'Black Mountain College', 'zp-lineage-seal', 89, 88],
+  ['ars-electronica.png', 'Ars Electronica', 'zp-lineage-festival', 81, 72],
+  ['dolby-atmos.png', 'Dolby Atmos', 'zp-lineage-format', 210, 54],
 ];
 
 export const LINEAGE_INNER =
-  '<span class="zp-lineage-label">Lineage</span>' +
   LINEAGE_MARKS.map(
     ([file, alt, className, width, height]) =>
       `<img class="zp-lineage-mark ${className}" src="/images/lineage/${file}" alt="${alt}" width="${width}" height="${height}" loading="lazy" decoding="async">`,
@@ -605,7 +611,7 @@ const HERO_CTA_STATIC =
   '<div class="mt-8 flex w-full flex-col gap-3 sm:mt-10 sm:flex-row sm:items-center">';
 
 /** The same row in the minified bundle: its secondary anchor is the last child. */
-const HERO_CTA_BUNDLE = 'children:"Get a free written quote"})]})';
+const HERO_CTA_BUNDLE = 'children:"Start an inquiry"})]})';
 
 /** Remove a previously injected strip so patchStatic always starts canonical. */
 export function normalizeHeroLineage(html) {
@@ -657,19 +663,11 @@ export const LINEAGE_CSS = `
   display:flex;
   flex-wrap:nowrap;
   align-items:center;
-  gap:.8rem;
-  margin:1.05rem 0 0;
+  gap:1rem;
+  margin:1.15rem 0 0;
   padding:0;
   line-height:1;
   opacity:.85;
-}
-.zp-lineage-label{
-  flex:none;
-  font-size:9px;
-  letter-spacing:.34em;
-  text-transform:uppercase;
-  color:#8a8580;
-  white-space:nowrap;
 }
 .zp-lineage-mark{
   flex:none;
@@ -681,14 +679,14 @@ export const LINEAGE_CSS = `
   mask-image:none;
   mix-blend-mode:normal;
 }
-.zp-lineage-seal{height:34px;}
-.zp-lineage-festival{height:28px;}
-.zp-lineage-format{height:21px;}
+.zp-lineage-seal{height:44px;}
+.zp-lineage-festival{height:36px;}
+.zp-lineage-format{height:27px;}
 @media (max-width:359px){
   .zp-lineage{gap:.6rem;}
-  .zp-lineage-seal{height:30px;}
-  .zp-lineage-festival{height:24px;}
-  .zp-lineage-format{height:18px;}
+  .zp-lineage-seal{height:36px;}
+  .zp-lineage-festival{height:30px;}
+  .zp-lineage-format{height:23px;}
 }
 `;
 

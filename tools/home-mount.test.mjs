@@ -187,7 +187,7 @@ test('the hero carries one quiet lineage line directly beneath the call to actio
   const strip = /<p class="zp-lineage">([\s\S]*?)<\/p>/.exec(html);
   assert.ok(strip, 'the prerendered hero has the lineage line');
   assert.equal(html.match(/<p class="zp-lineage">/g).length, 1, 'the lineage line is injected exactly once');
-  assert.ok(strip[1].includes('>Lineage</span>'), 'the line is labelled');
+  assert.ok(strip[1].startsWith('<img'), 'the line is the marks alone, with no caption');
   const marks = [...strip[1].matchAll(/<img class="zp-lineage-mark[^"]*" src="\/images\/lineage\/([^"]+)" alt="([^"]+)" width="(\d+)" height="(\d+)"/g)];
   assert.deepEqual(
     marks.map((m) => [m[1], m[2]]),
@@ -219,6 +219,16 @@ test('the hero carries one quiet lineage line directly beneath the call to actio
   for (const alt of ['Black Mountain College', 'Ars Electronica', 'Dolby Atmos']) {
     assert.ok(bundle.includes(alt), `the React island carries ${alt}`);
   }
+
+  // The hero keeps its shipped CTA wording; the retired conversion labels stay
+  // gone from both render paths.
+  assert.match(html, /class="relative">Play the showreel<\/span>/, 'the primary hero CTA keeps "Play the showreel"');
+  assert.match(html, />Start an inquiry<\/a>/, 'the secondary hero CTA keeps "Start an inquiry"');
+  for (const retired of ['Hear the showreel', 'Request a scoring quote', 'Get a free written quote']) {
+    assert.ok(!html.includes(retired) && !bundle.includes(retired), `retired hero CTA copy stays absent: ${retired}`);
+  }
+  assert.ok(bundle.includes('"Pause reel":"Play the showreel"') && bundle.includes('children:"Start an inquiry"'), 'the bundle renders the same CTA labels');
+  assert.ok(!strip[1].includes('Lineage</span>') && !/<span class="zp-lineage-label">/.test(html), 'the "Lineage" label is removed');
 
   // Desaturated and quiet: grayscale marks at reduced opacity, no borders or
   // hover affordances, sized under the CTA.
