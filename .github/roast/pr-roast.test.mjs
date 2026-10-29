@@ -13,9 +13,11 @@ import {
   normalizeHeat,
   parseNameStatus,
 } from './diff.mjs';
+import { buildDeterministicRoast } from './heuristic.mjs';
 import {
   COMMENT_MARKER,
   extractJsonObject,
+  mergeWithDeterministic,
   normalizeRoastReport,
   renderRoastMarkdown,
   sanitizeInline,
@@ -249,19 +251,80 @@ test('CLI prepare and render work end-to-end against a temporary git repository'
       'utf8',
     );
 
+    const outZeroSecretMdFile = path.join(tmpDir, 'comment-static.md');
+    const staticRendered = runRender({
+      META_FILE: metaFile,
+      OUT_MARKDOWN_FILE: outZeroSecretMdFile,
+      HEAD_SHA: headSha,
+    });
+    assert.ok(staticRendered.includes('Engine: `static-guardrails`'));
+    assert.ok(staticRendered.includes('**Grade: A+** (97/100)'));
+
     const rendered = runRender({
       META_FILE: metaFile,
       RESPONSE_FILE: respFile,
       OUT_MARKDOWN_FILE: outMdFile,
-      MODEL_NAME: 'openai/gpt-4o',
+      ENGINE_LABEL: 'copilot/gpt-4.1',
       HEAD_SHA: headSha,
     });
 
     assert.ok(rendered.includes('**Grade: A+** (97/100)'));
     assert.ok(rendered.includes('🌤️ Gentle Singe'));
+    assert.ok(rendered.includes('Engine: `copilot/gpt-4.1`'));
   } finally {
     fs.rmSync(tmpDir, { recursive: true, force: true });
   }
+});
+
+test('buildDeterministicRoast flags real hazards and repo guardrail violations while merging cleanly with LLM output', () => {
+  const entries = parseNameStatus(
+    [
+      'M\tsrc/widget.ts',
+      'M\t_headers',
+      'M\tpackage.json',
+      'M\tindex.html',
+    ].join('\n'),
+  );
+  const patches = new Map([
+    [
+      'src/widget.ts',
+      [
+        '--- a/src/widget.ts',
+        '+++ b/src/widget.ts',
+        '@@ -1,1 +1,4 @@',
+        ' export function run(el: any) {',
+        '+  try { el.innerHTML = "<b>hi</b>"; } catch (e) {}',
+        ' }',
+      ].join('\n'),
+    ],
+    ['_headers', '--- a/_headers\n+++ b/_headers\n@@ -1,1 +1,2 @@\n /*\n+  X-Test: 1'],
+    ['package.json', '--- a/package.json\n+++ b/package.json\n@@ -1,2 +1,3 @@\n {\n+  "dependencies": { "left-pad": "1.0.0" },\n }'],
+    ['index.html', '--- a/index.html\n+++ b/index.html\n@@ -1,1 +1,2 @@\n <main>\n+  <a href="x" target="_blank">open</a>'],
+  ]);
+
+  const meta = {
+    heat: 'inferno',
+    changedFiles: entries.map((e) => e.path),
+    includedFiles: entries.map((e) => e.path),
+  };
+
+  const det = buildDeterministicRoast({ entries, patchesByPath: patches, meta });
+  assert.ok(det.issues.length >= 5);
+  assert.ok(det.overallScore <= 69);
+
+  const cleanLlm = normalizeRoastReport(
+    {
+      verdict: 'Missed the static traps.',
+      categories: {},
+      topBurns: ['Burn'],
+      issues: [],
+      redemptionArc: { whatWentRight: [], roadmap: [] },
+    },
+    meta,
+  );
+  const merged = mergeWithDeterministic(cleanLlm, det, meta);
+  assert.equal(merged.issues.length, det.issues.length);
+  assert.ok(merged.overallScore <= 69);
 });
 
 test('roast.yml workflow never interpolates GitHub expressions directly inside shell run blocks', () => {

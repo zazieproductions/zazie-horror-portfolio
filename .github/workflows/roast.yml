@@ -5,26 +5,37 @@ name: RoastMyCode PR review
 #
 # WHY THIS EXISTS
 #
-# `aislop.yml` enforces deterministic static rules (swallowed exceptions,
-# unused imports, oversized files). This workflow complements it with an
-# AI staff-engineer review on every pull request: a calibrated letter grade
-# (A+ through F), 0-100 scores across six categories (Security, Architecture,
-# Bugs, Performance, Dependencies, Code Quality), specific line-referenced
-# burns, concrete fix snippets, and a Redemption Arc.
+# `aislop.yml` enforces deterministic static rules across the tree. This
+# workflow posts a RoastMyCode-style staff-engineer review on every pull
+# request: a calibrated letter grade (A+ through F), 0-100 scores across six
+# categories (Security, Architecture, Bugs, Performance, Dependencies, Code
+# Quality), specific line-referenced burns, concrete fix snippets, and a
+# Redemption Arc.
 #
-# HOW IT WORKS
+# HOW IT WORKS (DUAL ENGINE — ZERO SECRETS REQUIRED)
 #
-# 1. Explorer (`.github/roast/cli.mjs prepare`) — inspects the PR diff, skips
-#    committed minified bundles (`index-*.js`, `store-*.css`, etc.), lockfiles
-#    and binary media so token budget goes to hand-authored code, and prefixes
-#    each diff hunk with exact target line numbers (`+L42:`).
-# 2. Roaster (`actions/ai-inference@v2`) — calls GitHub Models using the
-#    built-in `GITHUB_TOKEN` (`models: read`); no repository secrets required.
-# 3. Scorer & Verifier (`.github/roast/cli.mjs render`) — drops hallucinated
-#    file paths not in the PR diff, calibrates the overall grade from the six
-#    category scores (capping grades when high-severity bug/security findings
-#    exist), sanitizes untrusted model text, writes the report to the Actions
-#    job summary, and creates or updates a single sticky PR comment in place.
+# Note: GitHub retired the `models.github.ai` GitHub Models endpoint on
+# 2026-07-30 (`actions/ai-inference@v1/v2` now receives plain-text `OK`), and
+# `actions/ai-inference@v3` requires `COPILOT_PAT`. So this workflow ships a
+# two-tier engine that works out-of-the-box with zero repository secrets:
+#
+# 1. Explorer & Deterministic Roaster (`.github/roast/cli.mjs prepare`) —
+#    always runs first with zero secrets. Skips committed minified bundles
+#    (`index-*.js`, `store-*.css`, etc.), lockfiles and binary media, checks
+#    diff hunks for security/bug/performance/quality hazards and repository
+#    guardrails (`_headers` parity, zero runtime dependencies, generated item
+#    HTML edits, workflow expression injection), and builds a calibrated roast.
+# 2. Optional LLM Deep-Roast Upgrade — automatically activates if any optional
+#    repository secret is configured:
+#      - `COPILOT_PAT`         -> runs `actions/ai-inference@v3` (Copilot CLI)
+#      - `OPENAI_API_KEY`      -> calls OpenAI Chat Completions (`gpt-4o`)
+#      - `OPENROUTER_API_KEY`  -> calls OpenRouter Chat Completions
+#    Verified LLM findings merge with deterministic guardrail findings; if no
+#    secret is set (or an API call fails), the deterministic roast publishes
+#    cleanly with no red CI check.
+# 3. Publisher (`.github/roast/cli.mjs render`) — drops hallucinated paths not
+#    in the PR diff, sanitizes untrusted text, writes to `$GITHUB_STEP_SUMMARY`,
+#    and creates or updates a single sticky PR comment (`<!-- pr-roast-comment -->`).
 #
 # MANUAL DISPATCH
 #
@@ -58,9 +69,9 @@ on:
           - inferno
           - nuclear
       model:
-        description: GitHub Models identifier
+        description: Optional LLM model override (when COPILOT_PAT / OPENAI_API_KEY / OPENROUTER_API_KEY is set)
         required: false
-        default: openai/gpt-4o
+        default: ''
         type: string
       post_comment:
         description: Post/update comment on the pull request when `pr` is provided
@@ -82,17 +93,16 @@ jobs:
     timeout-minutes: 10
     permissions:
       contents: read
-      models: read
       pull-requests: write
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: '22'
 
@@ -114,6 +124,9 @@ jobs:
           INPUT_PR: ${{ inputs.pr }}
           INPUT_BASE_REF: ${{ inputs.base_ref }}
           INPUT_POST_COMMENT: ${{ inputs.post_comment }}
+          HAS_COPILOT: ${{ secrets.COPILOT_PAT != '' }}
+          HAS_OPENAI: ${{ secrets.OPENAI_API_KEY != '' }}
+          HAS_OPENROUTER: ${{ secrets.OPENROUTER_API_KEY != '' }}
         run: |
           set -euo pipefail
           meta_dir="$RUNNER_TEMP/roast-target"
@@ -161,14 +174,24 @@ jobs:
             can_comment="false"
           fi
 
+          provider="static"
+          if [ "$HAS_COPILOT" = "true" ]; then
+            provider="copilot"
+          elif [ "$HAS_OPENAI" = "true" ]; then
+            provider="openai"
+          elif [ "$HAS_OPENROUTER" = "true" ]; then
+            provider="openrouter"
+          fi
+
           {
             echo "pr_number=$pr_number"
             echo "base_sha=$base_sha"
             echo "head_sha=$head_sha"
             echo "can_comment=$can_comment"
+            echo "provider=$provider"
           } >> "$GITHUB_OUTPUT"
 
-      - name: Prepare diff and prompt
+      - name: Prepare diff and deterministic roast
         id: prepare
         env:
           BASE_SHA: ${{ steps.target.outputs.base_sha }}
@@ -183,16 +206,47 @@ jobs:
           PR_BODY=$(cat "$RUNNER_TEMP/roast-target/body.txt") \
           node .github/roast/cli.mjs prepare
 
-      - name: Run AI inference
-        id: inference
-        if: steps.prepare.outputs.skip_inference != 'true'
-        uses: actions/ai-inference@v2
+      - name: Install Copilot CLI
+        if: steps.prepare.outputs.skip_inference != 'true' && steps.target.outputs.provider == 'copilot'
+        continue-on-error: true
+        run: npm install -g @github/copilot
+
+      - name: Run AI inference (Copilot)
+        id: copilot_inference
+        if: steps.prepare.outputs.skip_inference != 'true' && steps.target.outputs.provider == 'copilot'
+        continue-on-error: true
+        uses: actions/ai-inference@v3
+        env:
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_PAT }}
         with:
-          model: ${{ inputs.model || 'openai/gpt-4o' }}
+          model: ${{ inputs.model || 'gpt-4.1' }}
           system-prompt-file: ${{ runner.temp }}/roast-system.txt
           prompt-file: ${{ runner.temp }}/roast-prompt.txt
-          max-completion-tokens: '2200'
-          temperature: '0.4'
+
+      - name: Run AI inference (OpenAI / OpenRouter)
+        id: http_inference
+        if: steps.prepare.outputs.skip_inference != 'true' && (steps.target.outputs.provider == 'openai' || steps.target.outputs.provider == 'openrouter')
+        continue-on-error: true
+        env:
+          PROVIDER: ${{ steps.target.outputs.provider }}
+          OPENAI_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENROUTER_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          INPUT_MODEL: ${{ inputs.model }}
+          SYSTEM_PROMPT_FILE: ${{ runner.temp }}/roast-system.txt
+          PROMPT_FILE: ${{ runner.temp }}/roast-prompt.txt
+          OUT_RESPONSE_FILE: ${{ runner.temp }}/roast-http-response.json
+        run: |
+          set -euo pipefail
+          if [ "$PROVIDER" = "openai" ]; then
+            export LLM_API_KEY="$OPENAI_KEY"
+            export LLM_API_URL="https://api.openai.com/v1/chat/completions"
+            export MODEL_NAME="${INPUT_MODEL:-gpt-4o}"
+          else
+            export LLM_API_KEY="$OPENROUTER_KEY"
+            export LLM_API_URL="https://openrouter.ai/api/v1/chat/completions"
+            export MODEL_NAME="${INPUT_MODEL:-openai/gpt-4o}"
+          fi
+          node .github/roast/cli.mjs infer
 
       - name: Render and publish roast
         env:
@@ -201,15 +255,34 @@ jobs:
           PR_NUMBER: ${{ steps.target.outputs.pr_number }}
           HEAD_SHA: ${{ steps.target.outputs.head_sha }}
           CAN_COMMENT: ${{ steps.target.outputs.can_comment }}
+          PROVIDER: ${{ steps.target.outputs.provider }}
           SKIP_INFERENCE: ${{ steps.prepare.outputs.skip_inference }}
-          MODEL_NAME: ${{ inputs.model || 'openai/gpt-4o' }}
+          INPUT_MODEL: ${{ inputs.model }}
           META_FILE: ${{ runner.temp }}/roast-meta.json
-          RESPONSE_FILE: ${{ steps.inference.outputs.response-file }}
-          MODEL_RESPONSE: ${{ steps.inference.outputs.response }}
+          COPILOT_RESPONSE_FILE: ${{ steps.copilot_inference.outputs.response-file }}
+          COPILOT_RESPONSE: ${{ steps.copilot_inference.outputs.response }}
+          HTTP_RESPONSE_FILE: ${{ runner.temp }}/roast-http-response.json
           OUT_MARKDOWN_FILE: ${{ runner.temp }}/roast-comment.md
         run: |
           set -euo pipefail
+          response_file=""
+          model_response=""
+          engine_label="static-guardrails"
+
+          if [ "$PROVIDER" = "copilot" ] && { [ -n "$COPILOT_RESPONSE_FILE" ] || [ -n "$COPILOT_RESPONSE" ]; }; then
+            response_file="$COPILOT_RESPONSE_FILE"
+            model_response="$COPILOT_RESPONSE"
+            engine_label="copilot/${INPUT_MODEL:-gpt-4.1}"
+          elif [ -f "$HTTP_RESPONSE_FILE" ]; then
+            response_file="$HTTP_RESPONSE_FILE"
+            engine_label="$PROVIDER/${INPUT_MODEL:-gpt-4o}"
+          fi
+
+          RESPONSE_FILE="$response_file" \
+          MODEL_RESPONSE="$model_response" \
+          ENGINE_LABEL="$engine_label" \
           node .github/roast/cli.mjs render
+
           cat "$OUT_MARKDOWN_FILE" >> "$GITHUB_STEP_SUMMARY"
 
           if [ "$CAN_COMMENT" != "true" ] || [ -z "$PR_NUMBER" ]; then

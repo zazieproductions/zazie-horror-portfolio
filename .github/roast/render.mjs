@@ -231,13 +231,46 @@ function renderFooter(context) {
   if (Number.isFinite(context.filesAnalyzed)) {
     parts.push(`${context.filesAnalyzed} file(s) analyzed`);
   }
-  if (context.model) {
+  if (context.engine) {
+    parts.push(`Engine: \`${sanitizeInline(context.engine, 60)}\``);
+  } else if (context.model) {
     parts.push(`Model: \`${sanitizeInline(context.model, 60)}\``);
   }
   if (context.headSha) {
     parts.push(`Commit: \`${sanitizeInline(String(context.headSha).slice(0, 7), 12)}\``);
   }
   return `<sub>🔥 Automated PR Roast · ${parts.join(' · ')}</sub>`;
+}
+
+export function mergeWithDeterministic(llmReport, deterministicReport, meta) {
+  if (!deterministicReport || !Array.isArray(deterministicReport.issues) || deterministicReport.issues.length === 0) {
+    return llmReport;
+  }
+  const seen = new Set(llmReport.issues.map((i) => `${i.file}:${i.line || 0}:${i.title}`));
+  const mergedIssues = [...llmReport.issues];
+  for (const detIssue of deterministicReport.issues) {
+    const key = `${detIssue.file}:${detIssue.line || 0}:${detIssue.title}`;
+    if (!seen.has(key)) mergedIssues.push(detIssue);
+  }
+  const mergedCategories = {};
+  for (const cat of CATEGORIES) {
+    const a = llmReport.categories[cat.key];
+    const b = deterministicReport.categories[cat.key];
+    mergedCategories[cat.key] = {
+      score: Math.min(a.score, b.score),
+      label: a.score <= b.score ? a.label : b.label,
+    };
+  }
+  return normalizeRoastReport(
+    {
+      verdict: llmReport.verdict,
+      categories: mergedCategories,
+      topBurns: llmReport.topBurns.length > 0 ? llmReport.topBurns : deterministicReport.topBurns,
+      issues: mergedIssues,
+      redemptionArc: llmReport.redemptionArc,
+    },
+    meta,
+  );
 }
 
 export function renderRoastMarkdown(report, context = {}) {

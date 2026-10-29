@@ -486,15 +486,15 @@ Prefer the fix. `npx aislop@0.19.1 fix --dry-run` previews mechanical repairs (u
 
 ### PR roast review
 
-`.github/workflows/roast.yml` runs a native [RoastMyCode](https://github.com/marketplace/roastmycode-ai)-style AI pull-request review via `actions/ai-inference@v2` and GitHub Models (`models: read` on the built-in `GITHUB_TOKEN`; no secrets required):
+`.github/workflows/roast.yml` runs a native [RoastMyCode](https://github.com/marketplace/roastmycode-ai)-style pull-request review with **zero required secrets**, plus an automatic LLM deep-roast upgrade when an optional provider secret is configured:
 
-- **Explorer (`.github/roast/cli.mjs prepare`)** filters out committed minified bundles, lockfiles and binary media so token budget goes to hand-authored code, and prefixes diff hunks with exact target line numbers (`+L42:`).
-- **Roaster (`actions/ai-inference@v2`)** scores Security, Architecture, Bugs, Performance, Dependencies and Code Quality (0–100) at configurable heat (`gentle`, `medium-rare`, `inferno`, `nuclear`) with line-referenced burns and concrete fix snippets.
-- **Scorer & Verifier (`.github/roast/cli.mjs render`)** drops hallucinated file paths not in the PR diff, calibrates the overall `A+`–`F` grade (capping grades when high-severity bug or security issues are present), writes to the Actions job summary, and updates a single sticky PR comment (`<!-- pr-roast-comment -->`) in place.
+- **Explorer & Deterministic Roaster (`.github/roast/cli.mjs prepare` + `heuristic.mjs`)** skips committed minified bundles, lockfiles and binary media, prefixes diff hunks with exact target line numbers (`+L42:`), and runs out-of-the-box checks across Security, Architecture, Bugs, Performance, Dependencies and Code Quality — including repo-specific guardrails (`_headers` / `tools/headers.mjs` parity, zero runtime npm dependencies, prerendered item HTML edits, `target="_blank"` `noopener`, and workflow `${{ }}` shell injection).
+- **Optional LLM Deep-Roast Upgrade** activates automatically if `COPILOT_PAT` (`actions/ai-inference@v3` via Copilot CLI — GitHub retired `models.github.ai` on 2026-07-30), `OPENAI_API_KEY`, or `OPENROUTER_API_KEY` is present in repository secrets, merging verified LLM findings with deterministic guardrail checks.
+- **Scorer & Publisher (`.github/roast/cli.mjs render`)** drops hallucinated file paths not in the PR diff, calibrates the `A+`–`F` grade across all six categories, writes to `$GITHUB_STEP_SUMMARY`, and creates or updates a single sticky PR comment (`<!-- pr-roast-comment -->`) in place.
 
 ```bash
-node --test .github/roast/pr-roast.test.mjs         # local self-test
-gh workflow run roast.yml -f pr=172 -f heat=inferno # manual PR roast
+node --test .github/roast/pr-roast.test.mjs         # local self-test (10 tests)
+gh workflow run roast.yml -f pr=175 -f heat=inferno # manual PR roast
 ```
 
 ## AI-agent continuity

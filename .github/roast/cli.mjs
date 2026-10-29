@@ -4,8 +4,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildPromptBundle, parseNameStatus } from './diff.mjs';
+import { buildDeterministicRoast } from './heuristic.mjs';
 import {
   extractJsonObject,
+  mergeWithDeterministic,
   normalizeRoastReport,
   renderRoastMarkdown,
   renderSkippedMarkdown,
@@ -69,17 +71,65 @@ export function runPrepare(env = process.env) {
     maxChars,
   });
 
+  const deterministicReport = bundle.meta.skipInference
+    ? null
+    : buildDeterministicRoast({ entries, patchesByPath, meta: bundle.meta });
+  const enrichedMeta = { ...bundle.meta, deterministicReport };
+
   fs.writeFileSync(systemFile, bundle.systemPrompt, 'utf8');
   fs.writeFileSync(promptFile, bundle.userPrompt, 'utf8');
-  fs.writeFileSync(metaFile, JSON.stringify(bundle.meta, null, 2), 'utf8');
+  fs.writeFileSync(metaFile, JSON.stringify(enrichedMeta, null, 2), 'utf8');
 
   if (env.GITHUB_OUTPUT) {
     fs.appendFileSync(env.GITHUB_OUTPUT, `skip_inference=${bundle.meta.skipInference}\n`, 'utf8');
   }
   process.stdout.write(
-    `prepared roast prompt: ${bundle.meta.includedFiles.length}/${bundle.meta.totalChangedFiles} file(s), skip=${bundle.meta.skipInference}\n`,
+    `prepared roast: ${bundle.meta.includedFiles.length}/${bundle.meta.totalChangedFiles} file(s), skip=${bundle.meta.skipInference}\n`,
   );
-  return bundle;
+  return { ...bundle, meta: enrichedMeta };
+}
+
+export async function runInfer(env = process.env) {
+  const apiKey = String(env.LLM_API_KEY || '').trim();
+  const apiUrl = String(env.LLM_API_URL || '').trim();
+  if (!apiKey || !apiUrl) {
+    throw new Error('LLM_API_KEY and LLM_API_URL are required for HTTP inference.');
+  }
+  const systemPrompt = fs.readFileSync(path.resolve(env.SYSTEM_PROMPT_FILE), 'utf8');
+  const userPrompt = fs.readFileSync(path.resolve(env.PROMPT_FILE), 'utf8');
+  const outFile = path.resolve(env.OUT_RESPONSE_FILE || 'roast-response.json');
+  const model = String(env.MODEL_NAME || 'gpt-4o-mini').trim();
+
+  const res = await fetch(apiUrl, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model,
+      temperature: 0.4,
+      max_completion_tokens: 2200,
+      response_format: { type: 'json_object' },
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
+    }),
+  });
+
+  if (!res.ok) {
+    const bodyText = await res.text();
+    throw new Error(`LLM HTTP ${res.status}: ${bodyText.slice(0, 240)}`);
+  }
+  const payload = await res.json();
+  const content = payload?.choices?.[0]?.message?.content;
+  if (typeof content !== 'string' || !content.trim()) {
+    throw new Error('LLM response did not contain choices[0].message.content.');
+  }
+  fs.writeFileSync(outFile, content, 'utf8');
+  process.stdout.write(`received LLM roast response (${content.length} chars)\n`);
+  return content;
 }
 
 export function runRender(env = process.env) {
@@ -87,10 +137,9 @@ export function runRender(env = process.env) {
   const outMarkdownFile = path.resolve(env.OUT_MARKDOWN_FILE || 'roast-comment.md');
   const meta = JSON.parse(fs.readFileSync(metaFile, 'utf8'));
 
-  const context = {
+  const baseContext = {
     heat: meta.heat,
     filesAnalyzed: Array.isArray(meta.includedFiles) ? meta.includedFiles.length : 0,
-    model: env.MODEL_NAME || 'openai/gpt-4o',
     headSha: env.HEAD_SHA || '',
   };
 
@@ -99,7 +148,7 @@ export function runRender(env = process.env) {
       meta.totalChangedFiles === 0
         ? 'No changed files between the base and head commits.'
         : 'Only generated bundles or binary media changed in this pull request; no hand-authored source diff to roast.';
-    const md = renderSkippedMarkdown(reason, context);
+    const md = renderSkippedMarkdown(reason, { ...baseContext, engine: 'static-guardrails' });
     fs.writeFileSync(outMarkdownFile, md, 'utf8');
     return md;
   }
@@ -109,23 +158,40 @@ export function runRender(env = process.env) {
     rawResponse = fs.readFileSync(env.RESPONSE_FILE, 'utf8');
   }
 
-  const extracted = extractJsonObject(rawResponse);
-  if (!extracted.ok) {
-    const md = renderSkippedMarkdown(
-      `Roast model output could not be parsed as JSON (${extracted.error}). Re-run the workflow to retry.`,
-      context,
-    );
+  if (rawResponse.trim()) {
+    const extracted = extractJsonObject(rawResponse);
+    if (extracted.ok) {
+      const llmReport = normalizeRoastReport(extracted.value, meta);
+      const combined = mergeWithDeterministic(llmReport, meta.deterministicReport, meta);
+      const engine = env.ENGINE_LABEL || env.MODEL_NAME || 'llm';
+      const md = renderRoastMarkdown(combined, { ...baseContext, engine });
+      fs.writeFileSync(outMarkdownFile, md, 'utf8');
+      process.stdout.write(
+        `rendered LLM+guardrail roast: grade=${combined.grade} (${combined.overallScore}/100), issues=${combined.issues.length}\n`,
+      );
+      return md;
+    }
+    process.stderr.write(`LLM output invalid JSON (${extracted.error}); falling back to deterministic roast.\n`);
+  }
+
+  if (meta.deterministicReport) {
+    const md = renderRoastMarkdown(meta.deterministicReport, {
+      ...baseContext,
+      engine: 'static-guardrails',
+    });
     fs.writeFileSync(outMarkdownFile, md, 'utf8');
+    process.stdout.write(
+      `rendered deterministic roast: grade=${meta.deterministicReport.grade} (${meta.deterministicReport.overallScore}/100), issues=${meta.deterministicReport.issues.length}\n`,
+    );
     return md;
   }
 
-  const report = normalizeRoastReport(extracted.value, meta);
-  const md = renderRoastMarkdown(report, context);
-  fs.writeFileSync(outMarkdownFile, md, 'utf8');
-  process.stdout.write(
-    `rendered roast report: grade=${report.grade} (${report.overallScore}/100), issues=${report.issues.length}\n`,
-  );
-  return md;
+  const fallback = renderSkippedMarkdown('No roast report was produced for this diff.', {
+    ...baseContext,
+    engine: 'static-guardrails',
+  });
+  fs.writeFileSync(outMarkdownFile, fallback, 'utf8');
+  return fallback;
 }
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
@@ -133,10 +199,15 @@ if (isMain) {
   const command = process.argv[2];
   if (command === 'prepare') {
     runPrepare();
+  } else if (command === 'infer') {
+    runInfer().catch((err) => {
+      process.stderr.write(`${err instanceof Error ? err.message : String(err)}\n`);
+      process.exitCode = 1;
+    });
   } else if (command === 'render') {
     runRender();
   } else {
-    process.stderr.write('Usage: node .github/roast/cli.mjs <prepare|render>\n');
+    process.stderr.write('Usage: node .github/roast/cli.mjs <prepare|infer|render>\n');
     process.exitCode = 2;
   }
 }
