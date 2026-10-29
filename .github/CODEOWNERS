@@ -1,0 +1,4 @@
+# Single-maintainer project: all paths route to the repository owner.
+# CODEOWNERS requires valid GitHub usernames; @zazieproductions is the
+# organization account that owns this repository.
+* @zazieproductions

@@ -1,0 +1,14 @@
+name: Content change
+description: Add or correct a production, cue, catalogue item or page copy
+labels: [content]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options: [Production, Showreel cue, Catalogue item, Page copy, Legal/document]
+    validations: { required: true }
+  - type: textarea
+    id: facts
+    attributes: { label: Verified facts and sources, description: "Links proving credits/facts. Unverifiable facts will be omitted, per repo policy." }
+    validations: { required: true }

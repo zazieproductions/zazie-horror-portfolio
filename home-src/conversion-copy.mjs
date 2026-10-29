@@ -27,7 +27,7 @@
  * The reverse pass is what makes a rebuild byte-identical: index.html on disk
  * already carries the new copy and the new sections, so patchStatic first puts
  * it back into the shape the older build steps expect, then re-applies the
- * rewrite at the end. See CONVERSION-FUNNEL-BLUEPRINT.md for the strategy deck.
+ * rewrite at the end. See docs/archive/CONVERSION-FUNNEL-BLUEPRINT.md for the strategy deck.
  *
  * Guardrails
  * ----------

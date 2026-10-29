@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="240" viewBox="0 0 1200 240" role="img" aria-labelledby="t d">
+  <title id="t">Zazie Productions — horror.zazieproductions.com</title>
+  <desc id="d">Repository banner. Static architecture, data-driven item pages, Cloudflare Pages.</desc>
+  <rect width="1200" height="240" fill="#0B0D10"/>
+  <rect x="0" y="0" width="6" height="240" fill="#C41E1E"/>
+  <text x="56" y="92" font-family="Georgia, 'Times New Roman', serif" font-size="52" fill="#F2EFE9" letter-spacing="2">ZAZIE PRODUCTIONS</text>
+  <text x="56" y="132" font-family="ui-monospace, Menlo, monospace" font-size="19" fill="#C89543">horror.zazieproductions.com</text>
+  <text x="56" y="172" font-family="ui-monospace, Menlo, monospace" font-size="15" fill="#9AA7B4">STATIC ARCHITECTURE · DATA-DRIVEN ITEM PAGES · CLOUDFLARE PAGES</text>
+  <g font-family="ui-monospace, Menlo, monospace" font-size="12">
+    <rect x="56" y="192" width="150" height="26" fill="none" stroke="#527CA6"/><text x="66" y="209" fill="#A9C2D8">ARCHITECTURE</text>
+    <rect x="216" y="192" width="110" height="26" fill="none" stroke="#39846B"/><text x="226" y="209" fill="#9ED3BE">VERIFIED</text>
+    <rect x="336" y="192" width="150" height="26" fill="none" stroke="#806AA9"/><text x="346" y="209" fill="#C4B2E8">DOCUMENTATION</text>
+    <rect x="496" y="192" width="120" height="26" fill="none" stroke="#C89543"/><text x="506" y="209" fill="#E8C88A">HANDLE WITH CARE</text>
+  </g>
+</svg>

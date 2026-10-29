@@ -1,568 +1,270 @@
-# horror.zazieproductions.com
+<div align="center">
+
+<img src="docs/assets/banner.svg" alt="Zazie Productions — horror.zazieproductions.com. Static architecture, data-driven item pages, Cloudflare Pages." width="100%">
 
 **The horror-facing portfolio of Zazie Productions — the scoring and sound-design studio of composer Zazie Kanwar-Torge.**
 
-An immersive web environment for psychological horror scoring, experimental composition, sound design, and dark audiovisual work — at the intersection of **horror cinema × experimental music × sound design × interactive web technology**.
+An immersive static web environment for psychological horror scoring, experimental
+composition and dark audiovisual work: horror cinema × experimental music × sound
+design × interactive web technology.
 
-[![Live site](https://img.shields.io/badge/site-horror.zazieproductions.com-c41e1e)](https://horror.zazieproductions.com)
-[![Architecture](https://img.shields.io/badge/architecture-static_%C2%B7_zero_backend-1e1e1e)](#architecture)
-[![Hosting](https://img.shields.io/badge/host-Cloudflare_Pages-1e1e1e)](#deployment)
-[![Showreel](https://img.shields.io/badge/showreel-32_cues_%C2%B7_9_productions-1e1e1e)](#core-experiences--features)
-[![Sitemap](https://img.shields.io/badge/sitemap-84_urls_%C2%B7_79_images_%C2%B7_12_videos-1e1e1e)](#seo--structured-data)
+[![Live site](https://img.shields.io/badge/LIVE-horror.zazieproductions.com-C41E1E?style=flat-square)](https://horror.zazieproductions.com)
+[![Project](https://img.shields.io/badge/project-static_portfolio-64748B?style=flat-square)](#project-overview)
+[![Maintained](https://img.shields.io/badge/maintained-active-39846B?style=flat-square)](#maintenance-and-known-limitations)
 
----
+[![TypeScript](https://img.shields.io/badge/TypeScript-strict-527CA6?style=flat-square&logo=typescript&logoColor=white)](#technology-stack)
+[![Vite](https://img.shields.io/badge/Vite-item_bundle-527CA6?style=flat-square&logo=vite&logoColor=white)](#technology-stack)
+[![Architecture](https://img.shields.io/badge/architecture-static_·_zero_backend-527CA6?style=flat-square)](#architecture-at-a-glance)
+[![Cloudflare Pages](https://img.shields.io/badge/host-Cloudflare_Pages-527CA6?style=flat-square&logo=cloudflare&logoColor=white)](#cloudflare-deployment)
+[![Deploy](https://img.shields.io/github/actions/workflow/status/zazieproductions/zazie-horror-portfolio/deploy.yml?branch=main&label=deploy&style=flat-square&color=39846B)](https://github.com/zazieproductions/zazie-horror-portfolio/actions/workflows/deploy.yml)
 
-## Table of contents
+[![Architecture guide](https://img.shields.io/badge/docs-architecture-806AA9?style=flat-square)](docs/architecture/overview.md)
+[![Development guide](https://img.shields.io/badge/docs-development-806AA9?style=flat-square)](docs/development/getting-started.md)
+[![Deployment guide](https://img.shields.io/badge/docs-deployment-806AA9?style=flat-square)](docs/deployment/cloudflare.md)
+[![Contributing](https://img.shields.io/badge/docs-contributing-806AA9?style=flat-square)](CONTRIBUTING.md)
+[![Agents](https://img.shields.io/badge/docs-AGENTS.md-806AA9?style=flat-square)](AGENTS.md)
 
-1. [Live site](#live-site)
-2. [What this repository is](#what-this-repository-is)
-3. [Purpose & creative direction](#purpose--creative-direction)
-4. [Core experiences & features](#core-experiences--features)
-5. [Visual preview](#visual-preview)
-6. [Audio & audiovisual systems](#audio--audiovisual-systems)
-7. [Architecture](#architecture)
-8. [Technology stack](#technology-stack)
-9. [Repository map](#repository-map)
-10. [Where to add new work](#where-to-add-new-work)
-11. [Local development](#local-development)
-12. [Configuration & environment](#configuration--environment)
-13. [Media & asset pipeline](#media--asset-pipeline)
-14. [Performance](#performance)
-15. [Accessibility](#accessibility)
-16. [SEO & structured data](#seo--structured-data)
-17. [Deployment](#deployment)
-18. [Known technical debt](#known-technical-debt)
-19. [Development guardrails](#development-guardrails)
-20. [AI-agent continuity](#ai-agent-continuity)
-21. [Roadmap](#roadmap)
-22. [Credits & authorship](#credits--authorship)
-23. [License](#license)
-24. [Related documents](#related-documents)
+</div>
+
+> [!NOTE]
+> **Read this first if you are changing anything.** This repository contains
+> multiple generations of site infrastructure. The homepage's React bundle has
+> **no source in this repository**; newer TypeScript/Vite code generates the
+> 63 item pages; the catalogue and legal documents have their own pipelines.
+> Generated output is committed and never hand-edited. The map is in
+> [docs/architecture/system-map.md](docs/architecture/system-map.md), the
+> rules in [AGENTS.md](AGENTS.md).
 
 ---
 
-## Live site
+## Navigation
+
+| Start here | Go deeper |
+|---|---|
+| [Project overview](#project-overview) · [Live experience](#live-experience) · [Key features](#key-features) | [Architecture](docs/architecture/overview.md) · [System map](docs/architecture/system-map.md) |
+| [Quick start](#quick-start) · [Local development](#local-development) · [Build & verification](#build-and-verification) | [Development docs](docs/development/getting-started.md) · [Testing](docs/development/testing.md) |
+| [Cloudflare deployment](#cloudflare-deployment) · [Testing & QA](#testing-and-quality-assurance) | [Deployment docs](docs/deployment/cloudflare.md) · [Verification](docs/deployment/verification.md) |
+| [Content & media](#content-and-media-architecture) · [Contributing](#contributing) | [Content management](docs/features/content-management.md) · [Full docs index](docs/README.md) |
+
+---
+
+## Project overview
+
+`horror.zazieproductions.com` is simultaneously a client-facing portfolio, an
+archive of record for productions/cues/catalogue items, and — unusually — its
+own deployment artifact: the served static tree is committed at the repository
+root and uploaded (filtered) to Cloudflare Pages by GitHub Actions.
+
+| Verified fact | Value | Source |
+|---|---|---|
+| Hub routes | 17 (incl. `/`) | `src/data/hubs.ts` |
+| Productions / cues / catalogue items | 9 / 30 / 24 | `src/data/{productions,cues,releases}.ts` |
+| Generated item pages | 63 | `work/`, `reel/`, `store/` flat files |
+| Sitemap URLs | 80 | `sitemap.xml` |
+| Backend / runtime dependencies | none / none | `package.json` |
+
+> [!WARNING]
+> Older prose in this repo's history cites 19 hubs, 65 items, 32 cues and
+> 84 URLs. Those described an earlier tree. Re-derive counts from `src/data/`
+> before quoting them — see [known limitations](docs/project/known-limitations.md).
+
+## Live experience
 
 **<https://horror.zazieproductions.com>**
 
-Primary routes:
-
 | Route | Role |
-| --- | --- |
-| `/` | The portfolio: a continuous experience with film samples, original cues, credits, biography, and the inquiry form at the bottom |
-| `/work` · `/reel` · `/process` · `/services` | Indexable hub pages mirroring the portfolio's content silos |
-| `/contact` | Legacy URL redirects to `/#contact`; the standalone contact page has been removed |
-| `/composer` | Legacy URL redirects to `/#about`; the standalone composer biography page has been removed (the biography is section 01 on the homepage) |
-| `/hire-a-composer` · `/sound-design` · `/game-scoring` | Commission pages: the commercial pillar and its first two format spokes |
-| `/store` | The Catalogue: records, sound libraries, tools and objects — 24 items, checkout delegated to Bandcamp, itch.io, Gumroad and eBay |
-| `/legal` · `/faq` · `/terms` · `/privacy` · `/licensing` · `/purchases` · `/accessibility` | Trust, legal and operating documents |
-| `/sitemap` | HTML site map: original hub pages and their in-page sections, linked from every footer (item URLs are listed in `/sitemap.xml`) |
-| `404.html` (fallback document) | "Signal Lost: Archive Entry Not Found" — served with HTTP 404 and `noindex` for unknown paths |
+|---|---|
+| `/` | Portfolio: productions, 30-cue showreel, film samples, press, inquiry (`mailto:` handoff) |
+| `/work` `/reel` `/store` | Hubs for productions, cues, catalogue (checkout delegated to marketplaces) |
+| `/hire-a-composer` `/sound-design` `/game-scoring` `/how-to-hire-a-horror-composer` | Commissioning pages |
+| `/process` `/faq` `/legal` `/terms` `/privacy` `/licensing` `/purchases` `/accessibility` `/sitemap` | Process, trust and legal documents |
+| any unknown path | `404.html` — "Signal Lost", served with a real HTTP 404 |
 
-Every route is a **real static path**: original hubs use `<hub>/index.html` plus a byte-identical root twin, while generated item URLs use flat `<hub>/<slug>.html` files with no slash twin. There is deliberately no SPA rewrite fallback.
-
-## What this repository is
-
-This repository is simultaneously:
-
-- **Portfolio documentation** — what the site is, for directors, producers, supervisors and collaborators.
-- **An architectural map** — where every system lives, so development resumes without re-discovery.
-- **A contributor guide & development memory** — guardrails, recipes, and dated implementation records (`*.md` at root).
-- **The deployment artifact itself.** The served site is checked in at the repository root. GitHub Actions builds and validates pull requests and main-branch deployments; it uploads only the static site when the Cloudflare credentials are configured.
-
-> **Important architecture note:** the original main-portfolio React/TypeScript source tree is not included, and the legacy `index-<hash>.js` / `.css` artifacts are not rebuilt by this package. This repository now has a separate, typed content model and static prerender pipeline for 9 production, 32 cue, and 24 catalogue item pages. `npm run build` regenerates the catalogue and documents, validates the 84-URL sitemap, builds the item assets, prerenders all 65 item pages, and runs route/link/schema checks. Item content lives in `src/data/`; shared page layout lives in `src/lib/`.
-
-## Purpose & creative direction
-
-Zazie Productions scores psychological horror: dread, tension, possession, cosmic and body horror — for film, TV and games, alongside sound-design libraries and experimental records released under the same name.
-
-The site is built to *demonstrate* rather than describe that identity:
-
-- **A restrained dark system, not decoration.** One palette (`void #030303`, `ink`, `smoke`, `ash`, `mist #9a9590`, `bone #f0ebe3`, `blood #c41e1e`, `ember #ff2a2a`), one serif voice (Cormorant Garamond) against one workhorse sans (Inter variable), and a fixed atmosphere layer (film grain, vignette, drifting ambient orbs, ken-burns hero) that is part of the first painted frame, not an after-effect of JavaScript.
-- **"The Archive" frame.** The 404 is an archive-entry error; the homepage opens on a tape-deck boot transmission, while the copy speaks in catalogue and signal language. The metaphor is consistent and quiet.
-- **Listen first.** The showreel — 32 original cues, playable inline, organised by mood — is the centre of gravity of the whole site. Film samples embed the scores *in context*. Commerce points outward to marketplaces rather than building a parallel shop.
-- **No backend, no behavioural tracking.** The inquiry form composes an email in the visitor's own mail client. No cookies set by this site, no accounts, no newsletter. The one analytics service is Cloudflare Web Analytics (cookieless, no fingerprinting, disclosed in `/privacy`), and the privacy notice inventories every third party the site can touch; a device inspector lets the visitor verify the claims themselves.
-
-Unconventional choices exist for artistic or experiential reasons and are documented where they do. Do not flatten them into generic SaaS patterns.
-
-## Core experiences & features
-
-**The portfolio (`/`)** — committed static HTML that is meaningful before JavaScript; the item-page pipeline also rebuilds its complete SEO head and selected-production poster cards from route data:
-
-- **Production records** — 9 individual project pages with source-linked, role-specific credits and verified artwork. The archive does not imply that every title is a Zazie composition credit.
-- **Showreel** — 32 title-derived cue pages plus the existing cue hub and MP3s (`/audio/track-00.mp3` … `track-31.mp3`). Each item page carries readable cue notes, duration/category, native optional playback, and sibling links.
-- **Film samples** — 8 embeds: 7 lazy `youtube-nocookie.com` players plus 1 Google Drive preview, with poster-`<picture>` covers.
-- **Press kit** — features and coverage (Visual Container award-winners press release PDF, Grammy Weekly, Limitless Magazine, Billboard Wire).
-- **Approach / Services / Composer / Reviews / Inquiry** — scoring method, how commissioning works (no published rate card: visitors state their music budget range and references via `src/data/commission.ts`, and every score is quoted per project in writing; details on `/services`), biography, 5.0 collaborator rating with 3 featured reviews, and a structured inquiry form that builds a `mailto:` handoff.
-
-**Archive boot** — the terminal loading screen plays at first paint on the homepage only: a silent, ~3 s analog-signal intro (wordmark, typed console lines, oscilloscope, progress deck) that any click, key or tap skips and that removes itself afterwards. A synchronous head gate keeps it away from no-JS visitors, crawlers, bots, Lighthouse and `prefers-reduced-motion`; `?boot=0` / `#noboot` disables it and `?boot=1` / `#boot` forces it. It makes no network requests and writes no storage key. Portfolio text is never gated behind it.
-
-**The Catalogue (`/store`)** — the existing hub plus 24 individual catalogue records. Item pages link to verified listings when available, omit mutable price/stock schema, and keep the source platform authoritative for current terms.
-
-**The documents** — `/legal`, `/faq` (35 questions), `/terms` (25 clauses), `/privacy` (15 sections), `/licensing`, `/purchases`, `/accessibility`. Share one stylesheet, one script and two partials; ship fully open without JavaScript; served **network-first** through the service worker because their effective dates matter. The same pipeline builds the human-readable **`/sitemap`** overview (`legal-src/pages/sitemap.html`), which links the original portfolio hubs and their sections. The XML sitemap includes all 19 original hub URLs plus 65 item URLs. Discovery runs `/` → hub → item: every hub links to each of its own item pages, every item page links back to its hub and to siblings, and the home page deliberately stays a hub index. No submitted URL is discoverable from `sitemap.xml` alone.
-
-## Visual preview
-
-Film key art from the poster wall (grid assets shown; the lightbox serves 1200 px variants):
+Every route is a real static path. There is deliberately **no SPA fallback**.
 
 | | | | |
-| --- | --- | --- | --- |
+|---|---|---|---|
 | ![ECLIPSED](images/posters/eclipsed-640.jpg) | ![THE HAUNTED](images/posters/the-haunted-640.jpg) | ![CHOLERIC](images/posters/choleric-640.jpg) | ![MIKE HAS A VISITOR](images/posters/mike-has-a-visitor-640.jpg) |
 
-All artwork © the respective productions. See the [live site](https://horror.zazieproductions.com) for the full experience — the atmosphere layer, showreel and boot sequence are the point, and none of them fit in a static image.
+*Film key art © the respective productions.*
 
-## Audio & audiovisual systems
+## Key features
 
-| System | Where it lives | Notes |
-| --- | --- | --- |
-| Showreel audio engine | `src/lib/audioContext.tsx` (in bundle), rendered by `Showreel.tsx` + `StickyPlayer.tsx` | One `<audio>` element for the whole site, shared through React context: `playTrack / toggle / next / prev / seek / setVolume`. Previous-track restarts if >3 s in. `preload="metadata"`; MP3s stream from `/audio/`. |
-| Reel downloads | `/reel#download`, `src/reel-download/`, `scripts/build-reel-download.mjs` | Visitors can save individual MP3s without JavaScript or prepare one ZIP of all 30 cues in their browser. The ZIP reads the published cue list and same-origin audio on demand, shows progress, and can be cancelled; it does not require a second 90 MB archive on the host. MP3s are stored in the ZIP without re-encoding. Downloads do not grant project-use or redistribution rights. |
-| Mood clusters | `tracks` array in the bundle (32 entries: `id, title, src, duration, tag`) | Each cue carries one mood tag; its dedicated item page uses `MusicComposition` + `AudioObject` schema. |
-| Sticky player | `StickyPlayer.tsx` | Hidden until first play; animated wave-bar visualisation; respects `prefers-reduced-motion`. |
-| Film samples | `Projects.tsx` data + prerendered covers | 6 YouTube-nocookie iframes get a real `src` only when lazy-loaded; 1 Google Drive embed; `preconnect` to YouTube deferred off the critical path. |
-| Boot overlay | legacy inline markup in `index.html` | Disabled by default; never covers the readable homepage content. |
-| Store previews & room tone | `store-src/store.js` | Per-card audio previews (`data-preview`); a looping room tone (`data-ambience`) crossfades down while previews play. `preload="none"`. |
-| Compilation players | Homepage `#compilations` (data in `src/data/compilations.ts`, markup/CSS/JS in `src/lib/compilations-markup.ts`, wired into the bundle and `index.html` by `home-src/build.mjs`); `/reel#compilations` (hand-written in `reel/index.html`, click handler in `legal-src/legal.js` — keep the two lists in step) | Nine Bandcamp embeds, the same set and order as the ReelCrafter reel: seven compilation tracks (e.g. Sounds for the Soul *The Undead* and *Vampires*, Inner Demons *Experiments on the Witch House*) and two own releases (*Opaline Lament*, *Constrained Capacity*). The homepage cards show the release and song names beneath the artwork; the song title links to Bandcamp as a no-JavaScript listening fallback. Click-to-load: the Bandcamp iframe is created only when the visitor presses the button, so the page makes no Bandcamp request on load (privacy notice §6–7). `https://bandcamp.com` is in CSP `frame-src`. To add one, update the homepage data and the corresponding `.comp-card` on `/reel` using the album/track ids from Bandcamp's embed code. |
-| External score player | Reelcrafter | Referenced as a `significantLink` in JSON-LD and linked from the homepage and `/reel`; not embedded. Its host is **not** in CSP `frame-src`, so an embed would need `https://play.reelcrafter.com` added to `tools/headers.mjs` and `_headers`. |
+- **Data-driven item archive** — 63 pages generated from typed data with
+  per-page `<head>`, canonical and JSON-LD in the first byte; readable with
+  JavaScript off.
+- **Showreel** — 30 cues with dedicated pages, native playback and an
+  on-demand in-browser ZIP download; no second hosted archive.
+- **Listen-first, privacy-structural** — no backend, no cookies set by the
+  site, no accounts; the only remote script is the disclosed, cookieless
+  Cloudflare Web Analytics beacon (see `/privacy`).
+- **Catalogue without a shop** — 24 records linking to Bandcamp / itch.io /
+  Gumroad / eBay; no invented prices or stock claims in schema.
+- **Self-verifying build** — the pipeline audits its own links, headers,
+  forms, routes, sitemap and coverage, and CI rejects stale generated output.
 
-## Architecture
+## Architecture at a glance
 
-Three build systems of different eras, plus a set of committed hub pages, all served as one static tree:
+Three pipelines, one served tree. Full diagrams: [system map](docs/architecture/system-map.md).
 
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│ SOURCE-IN-REPO?         SYSTEM                        OUTPUT          │
-├──────────────────────────────────────────────────────────────────────┤
-│ ✗ (built elsewhere)     React + Vite + Tailwind       index.html      │
-│                         (bundle keeps data-source-loc)  index-<hash>.js│
-│                                                         index-<hash>.css
-│ ✓ store-src/ + build.sh hand-rolled page, no framework store-<hash>.* │
-│                                                       store/index.html
-│ ✓ legal-src/ + build.sh bash+python3 generator          <slug>/index.html
-│                          (7 documents + human sitemap; legal-<hash>.*  │
-│                           FAQPage schema from markup)                  │
-│ ✓ src/ + vite.config.ts typed item data + HTML renderer 65 flat pages  │
-│                          (9 productions, 32 cues, 24 catalogue items)  │
-│ ✗ committed output      original portfolio hub pages    <slug>/index.html
-│                          (except legal-src/store-src sources)          │
-└──────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+  DATA["src/data/*.ts — 9 productions · 30 cues · 24 items · 17 hubs"] --> BUILD["npm run build<br/>tsc · store-src · legal-src · home-src · vite · prerender"]
+  LIB["src/lib/*.ts — page/head/home rendering"] --> BUILD
+  BUILD --> OUT["Committed served tree<br/>63 item pages · hubs · index.html · hashed assets"]
+  LEGACY["index-&lt;hash&gt;.js — legacy React bundle<br/>source NOT in this repo"] -. "patched, never rebuilt" .-> OUT
+  OUT --> CF["Cloudflare Pages<br/>filtered dist/ upload · _headers · _redirects · sw.js"]
 ```
 
-### Static homepage and item renderer
-
-The homepage is served as static HTML. `scripts/prerender.mjs` replaces its **complete `<head>`** and the data-generated production poster cards; it does not inject route metadata at runtime. The original React source is not present, and the legacy `index-<hash>.js` / `.css` files are not rebuilt by this package. New item content belongs in `src/data/`; shared HTML and schema layout belongs in `src/lib/`.
-
-Every item page is a flat static file with its full body and route-specific `<head>` present in the first byte. JavaScript is optional enhancement only; cue copy is readable without audio, and the item template does not include the homepage overlay.
-
-### Historical component map of the legacy bundle
-
-Reconstructed from `data-source-loc` breadcrumbs preserved in the older `index-<hash>.js`; this is archival context, not an active build input:
-
-```
-src/
-├── main.tsx                  # entry; dynamic-import boot, SW registration
-├── App.tsx                   # section composition
-├── lib/audioContext.tsx      # global single-audio player state
-└── components/
-    ├── Nav.tsx               # header tabs + sub-xl mobile menu
-    ├── Hero.tsx              # atmosphere stack, ken-burns portrait
-    ├── PosterWall.tsx        # 9 productions, lightbox
-    ├── Projects.tsx          # film data (n1 array) + film samples
-    ├── Showreel.tsx          # 32 cues, mood browsing
-    ├── StickyPlayer.tsx      # persistent now-playing bar
-    ├── PressKit.tsx          # press features + PDF
-    ├── Method.tsx            # scoring approach
-    ├── Services.tsx          # scope & estimate bands
-    ├── About.tsx             # composer bio
-    ├── Testimonials.tsx      # reviews (with StarRating.tsx)
-    ├── Contact.tsx           # mailto inquiry builder
-    ├── Footer.tsx            # legal row + entity footer
-    └── AmbientLight.tsx      # drifting ambient orbs
-```
-
-### Rendering & delivery model
-
-- **Static first paint.** Fonts, route metadata, descriptions, cue copy, credits, and internal links are in HTML before any JavaScript runs. The item-page bundle adds enhancement; it does not create the content.
-- **Service worker (`sw.js`, v29)** — retains the existing navigation/static strategies; generated item pages are not bulk-precached. `CACHE_NAME` must be bumped when precached hashes or cache behavior change.
-- **Edge layer** — `_headers` carries the CSP allowlist and canonical `Link:` headers. `_redirects` preserves legacy `.html` aliases and sends unknown routes to `/404.html` with status 404; there is no `/* /index.html 200` SPA splat.
+> [!CAUTION]
+> Do not move, rename or "tidy" production files for visual neatness.
+> Routing, hashing, precaching and the stale-output CI gate all depend on
+> current paths. Relocations require the manifest process used in
+> [docs/archive/RELOCATION-MANIFEST.md](docs/archive/RELOCATION-MANIFEST.md).
 
 ## Technology stack
 
-As shipped (verified from the artifacts):
+TypeScript (strict) + Vite 6 for the item bundle · vanilla ES modules for
+documents/catalogue · Bash + Python 3 build scripts · hand-written service
+worker · Cloudflare Pages (`_headers`/`_redirects`) · Node.js ≥ 20.19
+(CI: 22). Build-only dependencies only; **zero runtime dependencies**.
 
-- **TypeScript + Vite** for the data-driven item-page renderer and bundle
-- **Vanilla ES modules** for the documents (`legal-src/legal.js`) and catalogue (`store-src/store.js`) — progressive enhancement, no framework
-- **Legacy homepage assets** (`index-<hash>.js` / `.css`) are retained but are not rebuilt by the item-page pipeline
-- **Service Worker API** — hand-written `sw.js`
-- **Cloudflare Pages** — static hosting, `_headers` / `_redirects` semantics
-- **Bash + Python 3** — the two build scripts
-- **Node.js 20.19+** — item build, static server, sitemap generation and validators
+## Project structure
 
-No cookies set by this site, no fonts CDN, and exactly one external JS: the Cloudflare Web Analytics beacon (see below). No other analytics, tracking or external script.
-
-## Repository map
-
-```
+```text
 .
-├── index.html                  # Home: prerendered DOM + archive boot (gate, overlay, driver) + 4 generated JSON-LD blocks
-├── index-<hash>.js / .css      # Retained legacy homepage assets (not rebuilt here)
-├── 404.html                    # "Signal Lost" — served with real 404 status
-├── sw.js                       # Service worker (CACHE_NAME zazie-v29; bump it on any precache change)
-├── server.mjs                  # Local static server: clean routes + 404 fallback, Brotli/Gzip, ETag/304
-├── _headers                    # CSP, canonical Link headers, per-path cache policy (read the top comment)
-├── _redirects                  # Legacy aliases + explicit real-404 fallback
-├── robots.txt / sitemap.xml    # Crawl control; 84 URLs / 79 images / 12 videos
-├── <32-hex>.txt                # IndexNow key file (public by design; see tools/indexnow.mjs)
-├── audio/
-│   └── track-00..31.mp3        # 32 showreel cues (~98 MB) — the audio library
-├── fonts/                      # Cormorant Garamond 400 n/i + Inter variable (woff2)
-├── images/
-│   ├── posters/<slug>-{640.avif,640.jpg,1200.jpg}   # 9 productions × 3 variants
-│   ├── hero-portrait.{avif,jpg}, headshot.{avif,jpg}, press-photo.jpg
-│   ├── atmosphere-bg.jpg       # hero ken-burns layer
-│   ├── lineage/                # hero footnote marks (BMC seal, Ars Electronica, Dolby Atmos), 2x white-on-transparent PNG
-│   ├── project-*.jpg           # film-sample covers (one per YouTube video)
-│   └── eclipsed-cover-1280.jpg # Eclipsed cover frame, from the root Eclipsed.png upload
-├── work/ reel/ composer/ process/ services/ contact/
-│   └── index.html              # Hub pages — COMMITTED OUTPUT, no in-repo source
-├── store.html → store/index.html   # Catalogue — GENERATED, do not hand-edit
-├── store-src/                  # Catalogue source (store.html/.css/.js + build.sh)
-├── legal/ faq/ terms/ privacy/ licensing/ purchases/ accessibility/ sitemap/
-│   └── index.html              # Documents + HTML site map — GENERATED, do not hand-edit
-├── legal-src/                  # Document sources, shared partials, CSS/JS, build.sh
-├── src/data/{hubs,productions,cues,releases,routes}.ts # Data-driven hub/item URLs and metadata
-├── src/lib/{head,page,home}.ts # Source-rendered SEO heads and item-page layouts
-├── scripts/{generate-sitemap,prerender,verify}.mjs # 84-URL build and structural verification
-├── tools/check-sitemap.mjs     # Sitemap, file, canonical, robot and hub-link audit
-├── tools/route-aliases.mjs     # Checks 18 hub twins and flat item routes for slash twins
-├── tools/index-coverage.mjs    # Per-URL words / in-body inbound links / duplicate ratio
-├── tools/indexnow.mjs          # Post-deploy IndexNow ping (Bing, Yandex, Seznam, Naver, Yep...)
-├── .aislop/config.yml          # AI code-quality gate policy (excludes, score floor, baseline)
-├── .aislop/ci-baseline.json    # Findings accepted as inherited debt; CI fails only on new ones
-├── Eclipsed.png                # Raw cover upload: source of images/eclipsed-cover-1280.jpg
-├── The Dark Awaits.png         # Raw poster upload kept for provenance (unreferenced)
-├── PERFORMANCE.md LEGAL.md RATIFY.md SEO-DOSSIER.md SITEMAP.md STORE.md
-│                               # Dated implementation records — the repo's memory
-└── .nojekyll
+├── index.html · index-<hash>.{js,css}   # homepage + LEGACY bundle (no source in repo)
+├── 404.html · sw.js · _headers · _redirects · robots.txt · sitemap.xml
+├── src/            # EDITABLE: data/ (routes & content) · lib/ (rendering) · item/ · inquiry/
+├── scripts/        # EDITABLE: build pipeline (prerender, sitemap, llms, verify…)
+├── tools/          # EDITABLE: checks + tests (check-links/headers/forms, *.test.mjs)
+├── store-src/ · legal-src/ · home-src/   # EDITABLE pipeline sources
+├── work/ reel/ store/                    # GENERATED item pages — never hand-edit
+├── audio/ images/ fonts/                 # static media (30 showreel MP3s)
+├── docs/           # authoritative engineering documentation (start: docs/README.md)
+├── AGENTS.md · CONTRIBUTING.md · SECURITY.md · CHANGELOG.md
+├── PERFORMANCE.md LEGAL.md RATIFY.md SEO-DOSSIER.md SITEMAP.md STORE.md ITEM-URLS.md
+│                   # dated implementation records — living project memory, kept at root
+└── docs/archive/   # dated dossiers/audits/proposals (not current instructions)
 ```
 
-### Where each kind of system lives
+## Quick start
 
-| Concern | Location |
-| --- | --- |
-| Pages / routes | `<slug>/index.html` at root; home in `index.html` |
-| Production / cue / catalogue item data | `src/data/productions.ts`, `cues.ts`, `releases.ts`; route and hub registry in `routes.ts` / `hubs.ts` |
-| Item-page HTML and SEO | `src/lib/page.ts`, `head.ts`, `home.ts`; static output in `work/*.html`, `reel/*.html`, `store/*.html` |
-| Audio | `/audio/track-NN.mp3`; all 32 cue pages include optional native MP3 playback |
-| Images / video | `/images`; source-verified poster and item artwork, plus project embeds where available |
-| Hub pages | Existing directory `index.html` plus byte-identical root `.html` twins; item routes are flat `.html` files with no slash twin |
-| Catalogue / documents | `store-src/` and `legal-src/` build sources |
-| Metadata / SEO | Route-specific source HTML heads; generated `sitemap.xml`; `robots.txt`; canonical `Link:` headers in `_headers` |
-| Configuration | `package.json`, `tsconfig.json`, `vite.config.ts`, `_headers`, `_redirects`, `sw.js` |
-| Utilities | `scripts/`, `tools/check-sitemap.mjs`, `tools/check-links.mjs`, `tools/check-headers.mjs`, `tools/route-aliases.mjs`, `server.mjs` |
-| Public/static assets | root + `/audio` + `/fonts` + `/images` |
-
-## Where to add new work
-
-Item content is data-first and routes are generated from the title-owned slug in `src/data/`. Do not add item links to the existing home or hub navigation; item pages connect to their hub and siblings, and the XML sitemap exposes the complete set.
-
-- **Production record:** add or update `src/data/productions.ts`; verify role-by-role credits, source links, poster, paragraphs, and `updatedAt`.
-- **Showreel cue:** add or update `src/data/cues.ts`; the slug must derive from the cue title, and the record must identify its MP3, duration, category, unique paragraphs, and related catalogue records.
-- **Catalogue item:** add or update `src/data/releases.ts`; keep marketplace terms and prices out of structured data, include only verified source facts/artwork, and omit unavailable metadata.
-- **Existing hub:** update its source where one exists (`store-src/` or `legal-src/`); manually maintained hub pages keep their current layout and canonical URL. Run `node tools/route-aliases.mjs` after editing a hub directory page.
-
-The build fails on duplicate/malformed paths, missing titles or descriptions, non-real `lastmod`, broken data relationships, unsubstantial or duplicated item copy, missing local media, missing internal sibling links, or a sitemap URL without a prerendered file. Keep the human `/sitemap` page hub-only; do not add item hrefs there or to the homepage/navbar.
+```bash
+git clone https://github.com/zazieproductions/zazie-horror-portfolio.git
+cd zazie-horror-portfolio
+npm ci            # Node >= 20.19; also needs Bash + Python 3
+npm run build     # full pipeline — rewrites generated output; review `git status`
+npm run serve     # http://localhost:8080 — mirrors Cloudflare routing locally
+```
 
 ## Local development
 
-Requirements: Node.js 20.19+ and npm, Bash, and Python 3 (for the catalogue/document build scripts). Dependencies are local development tools; `node_modules/` is ignored and is never deployed.
-
-```bash
-# Install only the local build tools
-npm install
-
-# Rebuild hubs, sitemap, item assets and all 65 item pages; run all verifiers
-npm run build
-
-# Type-check the editable content/layout modules
-npm run typecheck
-
-# Serve the built site locally (clean routes, correct 404 fallback)
-npm run serve                   # → http://localhost:8080  (PORT env overrides)
-
-# Rebuild one source set independently if needed
-./store-src/build.sh            # catalogue hub + hashed assets
-./legal-src/build.sh            # 7 documents + human sitemap + hashed assets
-node tools/route-aliases.mjs    # refresh 18 hub root twins
-
-# Check both film-player implementations (markup, controls, switching, cache hashes)
-node --test tools/film-player.test.mjs # built-in Node test runner; no dependencies
-
-# Validate the sitemap (structure, files, canonicals, robots)
-node tools/check-sitemap.mjs          # offline
-node tools/check-sitemap.mjs --live   # + HTTP status of every URL
-
-# After a deploy is live: tell IndexNow engines what changed (not Google)
-node tools/indexnow.mjs /reel /faq     # changed pages only; no args = every sitemap URL
-
-# Which URLs the next Wayback Machine archive run will capture (the run itself
-# happens in GitHub Actions — see the Deployment section)
-node tools/wayback-urls.mjs                  # core: home + 16 hubs
-node tools/wayback-urls.mjs --scope all      # every sitemap URL
-node tools/wayback-urls.mjs --scope custom /reel /faq
-
-# AI code-quality gate (aislop) — exactly what CI runs, human-readable
-npm run lint:slop                      # fails on new findings / score below the floor
-npx aislop@0.19.1 fix --dry-run        # preview the mechanical fixes it would make
-```
-
-**Do not hand-edit generated outputs:** `store.html`, document hub copies, `work.html`/other hub root twins, the 65 flat item-page HTML files, or `item-<hash>.js/.css`. Edit the corresponding source/data files, then run `npm run build`. Legacy homepage bundle assets are not rebuilt by the item-page pipeline.
-
-## Configuration & environment
-
-There are **no environment variables and no secrets**. The `.gitignore` pre-emptively excludes `.env*` and `.wrangler/`. All configuration is declarative and versioned:
-
-| File | Controls |
-| --- | --- |
-| `_headers` | Security policy (HSTS, CSP, X-Frame-Options), `X-Robots-Tag`, canonical `Link:` headers, per-path `Cache-Control` |
-| `tools/headers.mjs` | The same security/cache policy as data: `server.mjs` serves it, `tools/check-headers.mjs` validates `_headers` against it |
-| `_redirects` | Legacy `.html` aliases plus `/* /404.html 404` fallback |
-| `robots.txt` | Default crawl policy and sitemap declaration |
-| `sw.js` | Offline strategy; `CACHE_NAME` + precache manifest |
-| `server.mjs` | `PORT` (local dev only), `LOCAL_HTTPS=1` to also send HSTS when testing over TLS |
-
-### Response headers, caching and compression
-
-`_headers` is not a cascade: **every** rule whose pattern matches contributes,
-and a header set twice is joined with a comma (`/*` first, then `/fonts/*`
-produced `max-age=0, must-revalidate, …, max-age=31536000` — and RFC 9111 reads
-the *first* `max-age`, so nothing was cacheable). The file's top comment states
-the rule that follows from it: `/*` is the only default, and every narrower
-`Cache-Control` detaches it first with `! Cache-Control`.
-
-| Path | `Cache-Control` |
-| --- | --- |
-| HTML documents (`/`, `/work`, `/work/`, `/<slug>`) | `public, max-age=0, must-revalidate` |
-| `/index-*`, `/store-*`, `/legal-*`, `/inquiry-*`, `/item-*` CSS/JS, `/*.css`, `/fonts/*` | `public, max-age=31536000, immutable` |
-| `/images/*`, `/audio/*`, `/favicon.svg` | `public, max-age=2592000, stale-while-revalidate=86400` |
-| `/sitemap.xml`, `/robots.txt`, `/llms.txt`, `/llms-full.txt` | `public, max-age=3600` |
-| `/404.html` | `no-store` |
-| `/sw.js` | `no-cache, no-store, must-revalidate` |
-
-Compression is negotiated per request. Cloudflare Pages Brotli/Gzip-compresses
-static text at the edge; `server.mjs` does the same locally (Brotli q11 when
-`Accept-Encoding` offers it, Gzip next, `Vary: Accept-Encoding`, nothing below
-1 KB) so the behaviour is testable before it ships. `npm run build` fails if
-`_headers` drifts from the policy, if any path would serve two cache lifetimes,
-or if any internal link or `#fragment` stops resolving:
-
-```
-npm run check:headers
-npm run check:links
-npm run check:forms
-node tools/live-route-audit.mjs https://horror.zazieproductions.com
-```
-
-The no-behavioural-tracking privacy claim is structural: adding any *other* analytics, an advertising pixel, or a cookie would invalidate `/privacy`, the footer statement on every page, and the device inspector on `/privacy`. Don't.
-
-The one exception is deliberate and disclosed. Cloudflare injects its Web Analytics beacon (`https://static.cloudflareinsights.com/beacon.min.js`) into the HTML it serves at the edge — it is in no file here, it is not in the upload, and no build step can add or delete it. Since 26 October 2026 `script-src` allowlists that host exactly (the injected URL carries a version path, so a path-scoped source would not match) and `connect-src` allowlists `cloudflareinsights.com` for its `/cdn-cgi/rum` reporting endpoint; the same-origin report form is covered by `'self'`. `/privacy` (sections 1, 3, 4, 6, 8, 9 and 13), the FAQ tracking answer and the privacy summaries on `/legal` and `/sitemap` describe the beacon — cookieless, no client-side storage, no fingerprinting — and `tools/check-headers.mjs` fails the build if either host is dropped or any other remote script/connect origin is added. To stop collecting, switch off **Analytics & Logs → Web Analytics** in the Cloudflare dashboard *and* remove both hosts from `tools/headers.mjs` + `_headers` in the same change.
-
-## Media & asset pipeline
-
-### Images — the poster pipeline
-
-Each production ships exactly three derivatives, verified at display size:
-
-| File | Role | Served |
-| --- | --- | --- |
-| `images/posters/<slug>-640.avif` | grid, AVIF-capable browsers (10–83 KB, q60) | `<picture>` first source |
-| `images/posters/<slug>-640.jpg` | grid fallback, progressive JPEG (q82) | `<picture>` fallback |
-| `images/posters/<slug>-1200.jpg` | lightbox only, on click (q82) | never loaded in the grid |
-
-Rules: always set `width`/`height` (CLS-safe); grid and client render must reference identical URLs (the React render swaps in and must not re-download); hero and portraits use the same `<picture>` AVIF→JPG pattern with `fetchpriority="high"` preloads. Raw uploads are **not** committed as site assets — they are cleaned, cropped to key art, and encoded per this table. Two root PNGs are the exceptions, and neither is served: `The Dark Awaits.png`, kept as provenance and referenced by nothing, and `Eclipsed.png`, the raw upload behind `images/eclipsed-cover-1280.jpg`.
-
-### Audio
-
-`/audio/track-NN.mp3`, positional numbering, ~98 MB for 32 cues. Streamed with `preload="metadata"`; edge-cached `immutable` 1 y. Audio quality decisions belong to the composer — don't transcode the library without asking. This is the repo's largest payload and grows linearly with the catalogue; see [Known technical debt](#known-technical-debt).
-
-### Video & external embeds
-
-No video files in the repo. Film samples are lazy `youtube-nocookie.com` iframes (real `src` assigned post-load so `loading="lazy"` holds) and one Google Drive preview. YouTube thumbnails come from `i.ytimg.com`; catalogue covers from four marketplace CDNs — all enumerated in the CSP. External embeds are a known fragility: the Drive preview depends on Google's scanner behaviour (recorded in `PERFORMANCE.md`).
-
-### Adding media safely — checklist
-
-- [ ] Correct derivative set and naming (`<slug>-640.avif|-640.jpg|-1200.jpg`, `project-<id>.jpg`, or a named cover derived from a root upload such as `eclipsed-cover-1280.jpg`)
-- [ ] `width`/`height` on every `<img>`/`<picture>`; `loading="lazy"` below the fold
-- [ ] Referenced from **both** DOM copies (prerendered + bundle) with identical URLs
-- [ ] Added to `pageImages` (inline module script), lightbox list if applicable, `sw.js` precache (+ `CACHE_NAME` bump), `sitemap.xml` (+ validator pass)
-- [ ] Domain of any new external host added to the CSP in `_headers` — the strictest allowlist wins, so a missing domain is a broken resource, not a warning
-- [ ] `prefers-reduced-motion` behaviour considered for anything that moves
-
-## Performance
-
-Recorded results of the performance mandate (`PERFORMANCE.md` — numbers below are from that audit and current byte counts):
-
-- **Critical transfer** ≈ 260 KB desktop (HTML 224 KB raw / 39 KB gzip, CSS 75 KB / 13 KB, fonts ~100 KB, hero AVIF 143 KB) with the 426 KB / ~123 KB-gzip bundle deliberately **off the critical path** (dynamic import at `load` + idle).
-- **Poster wall scroll cost** cut from 9.15 MB of originals to ≤ 323 KB initial (AVIF-capable) / ≤ 593 KB (JPEG-only), via the 640/1200 derivative pipeline.
-- **Fonts**: 3 self-hosted woff2 with `ascent/descent-override` metric fallbacks — near-zero swap shift, no third-party origin.
-- **Repeat visits**: service-worker stale-while-revalidate gives ~0 ms navigations.
-- **Guard the budget**: heavy media is the growth axis of this site. New media must enter through the pipeline above; anything that pushes first-paint cost back up (eager JS, unoptimized posters, render-blocking requests) is a regression.
-
-Not yet measured in a real browser: field LCP/CLS/CrUX data. The audit was verified by static analysis and a jsdom smoke test in its sandbox, and says so honestly.
-
-## Accessibility
-
-Target: **WCAG 2.2 Level AA, partially conformant** — stated precisely on [`/accessibility`](https://horror.zazieproductions.com/accessibility), which implements the pattern this repo expects: *implemented features and measured gaps are named, not hand-waved*.
-
-- Progressive enhancement everywhere: every document clause, FAQ answer, catalogue card and link works with JavaScript off.
-- `prefers-reduced-motion` stops the ken-burns hero, ambient orbs and wave animation; the archive boot never plays for a reduced-motion visitor, is `aria-hidden`, skippable by any input and never gates page text.
-- Semantic headings, single H1 per page, skip links, `aria-pressed`/`aria-label` on controls, breadcrumbs in schema and (on document pages) visibly.
-- **Every form control carries an `id` or a `name`.** A field with neither cannot be autofilled and is not reachable through `form.elements`; `tools/check-forms.mjs` reads the served pages — not the sources — and fails the build on any unnamed `<input>`, `<select>` or `<textarea>`. The homepage is the hard case, because the React bundle and the prerendered snapshot in `index.html` both render the inquiry form and the two media scrubs. `home-src/build.mjs` derives each name from the control's own accessible label (`fieldName`, folded to a slug and applied by both render paths), so a renamed field cannot leave one copy anonymous, and the checker proves the result landed.
-- Document pages keep a legibility red (`--blood-text #e65650`, 5.71:1 on void) where small text needs it.
-- The homepage stylesheet uses AA red `#e65650` (4.61–5.71:1 across its dark surfaces) for every text-blood foreground, with persistent underlines on prose links; microtype utilities are floored at 12px and mobile body copy renders at 16px. Brand red `#c41e1e` stays on fills, rules, icons and 24px+ display type, where the 3:1 large-text/non-text threshold applies.
-- **Named gaps** (see `/accessibility` §4): the catalogue (`/store`) still uses darker red `#c41e1e` (3.49:1) for small labels, and atmosphere effects create exceptions on the portfolio pages. These are recorded deliberately — fix them in the open, don't quietly restyle the identity either way.
-
-## SEO & structured data
-
-The site serves source-rendered SEO metadata and structured data (the repo's `SEO-DOSSIER.md` and `SITEMAP.md` retain the historical programme):
-
-- **Homepage schema:** `Person`, `Organization`, `WebSite`, and `WebPage` with shared IDs, a `CreativeWork` portfolio graph and a `MusicPlaylist` showreel graph, plus one `ItemList` of curated cue pages rendered as `MusicComposition` nodes (each with an `AudioObject` and the same `#composition`/`#audio` `@id`s the `/reel/<slug>` pages use, so the graphs merge).
-- **Item-page schema:** production `Movie`/`TVSeries`/`CreativeWork` plus verified `VideoObject` where supplied; cue `MusicComposition` + `AudioObject`; catalogue `Product`/`MusicAlbum` + `Offer`; all include `WebPage` and `BreadcrumbList`. Mutable price/stock claims are omitted.
-- `sitemap.xml` (82 URLs: 19 hubs including home + 63 item routes; current build has 78 artwork and 12 video entries) is checked by `tools/check-sitemap.mjs`, `tools/route-aliases.mjs`, and `scripts/verify.mjs`. The build verifies canonical paths, static files, structured data, links, media, and a real unknown-route 404. **Run `npm run build` before deploys that touch routes, links, media, or schema.**
-- **Sitelinks and crawl structure:** `/` links the 19 original hub routes and only those; each hub (`/work`, `/reel`, `/store`) links every one of its own item pages; each item page links its hub and at least three siblings. That is what keeps the 65 generated URLs out of the "sitemap-only orphan" state Google reports as *Discovered - currently not indexed*. `scripts/verify.mjs` and `tools/check-sitemap.mjs` fail the build if a hub stops linking an item, and `tools/index-coverage.mjs --check` fails it if any submitted URL loses its contextual internal link, drops below 300 words of `<main>` text, or becomes a near-duplicate of a hub sibling.
-- **Site name**: one `WebSite` node on `/` (`name` "Zazie Productions", `alternateName` "Zazie Productions Horror", "ZKT Productions"), matched by `og:site_name` on every page. No `SearchAction` (Google retired the sitelinks search box in November 2024) and no home-page `BreadcrumbList` (the home page is the root of the trail, not a trail).
-- **Beyond Google**: `sitemap.xml` is advertised in `robots.txt` for every engine; `tools/indexnow.mjs` pushes changed URLs to the IndexNow engines after a deploy.
-- Canonical `Link:` headers at the edge for original hub variants; legacy `.html` redirects; a real 404 (no soft-404 SPA fallback); robots.txt advertises the 84-URL sitemap and does not block public item pages.
-
-## Deployment
-
-**Cloudflare Pages**, served as a static asset tree. `.github/workflows/deploy.yml` runs on relevant pull requests and main-branch pushes: it runs `npm ci`, the full build, type and film-player tests, sitemap/route checks, and assembles the site-only upload. On main it also deploys with Wrangler and runs the live route audit when `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` are configured. Without those secrets, validation still runs and deployment is skipped; Cloudflare does not run the Node build itself.
-
-`.github/workflows/aislop.yml` is a separate, non-deploying gate (see [the aislop gate](#the-aislop-gate)): it scores the hand-written code and fails a PR that adds new findings.
-
-Two hard-won rules recorded in `STORE.md` / `LEGAL.md` / `SEO-DOSSIER.md`:
-
-1. **Do not rewrite routes to `.html` targets.** Original hubs use `<hub>/index.html` plus a byte-identical root `.html` twin for slashless 200s. Generated item pages use one flat `<hub>/<slug>.html` file only, with no directory/slash twin. The `/* /index.html 200` SPA splat is forbidden; unknown paths resolve to a real 404.
-2. **Hashed assets are immutable — the hash is the cache-buster.** Content-hash filenames (`index-<hash>.js`, `store-<hash>.css`, `legal-<hash>.js`) carry `Cache-Control: immutable, max-age=1y`. Change content → change the name (the build scripts do this; for the React bundle, rename per the raw `sha256[:8]` convention) → update the referencing HTML *and* the `sw.js` precache list → bump `CACHE_NAME`.
-
-## Known technical debt
-
-Documented honestly, in priority order — these are real, verified in the tree:
-
-1. **Original homepage source is not in this repository.** Its legacy bundle remains committed, but this build keeps the homepage static and only regenerates its SEO head and poster wall from the item data.
-2. **Most legacy hub pages are manually maintained output.** `store-src/` and `legal-src/` have sources; other original hubs preserve their existing layout and are checked for canonical aliases, hub links, and item-link exclusion.
-3. ~~**`sw.js` precache drift.**~~ Resolved: the manifest lists the store stylesheet that actually ships, and since 2026-09-25 `tools/check-sitemap.mjs` fails on any precached hashed asset that does not exist (check 22).
-4. **95 MB of MP3 in Git.** The audio library lives in the repo and grows with every cue. Fine at this scale; will eventually need Git LFS or external storage.
-5. **Two hash conventions.** `legal-src`/`store-src` hash `"$(cat file)"` (trailing newline stripped); the React bundle hash is `sha256` over raw bytes. Both are content-hashes; know which one you're reproducing.
-6. **Duplicate footers by construction.** Three footers exist (prerendered, bundle, legal partial) because three systems render chrome, and the hub pages, `store-src/store.html` and `404.html` carry their own copies of the partial. They must be kept in sync manually — a known, accepted cost of the current architecture, not an invitation to add another. The "Documents" row (`nav.foot-law`) is byte-identical on every non-home page; keep it that way.
-
-## Development guardrails
-
-- **Preserve the identity.** The archive/tape language, the grain-and-blood palette, the typographic pairing and the atmosphere layer are the product. Do not homogenize them into generic SaaS aesthetics.
-- **Atmosphere never breaks function.** Every experimental interaction (boot, torch, sticky player, tilt) must remain skippable, reduced-motion-aware, and harmless when JavaScript fails entirely.
-- **Real paths, real statuses.** Hub routes use directory pages + canonical twins; item routes use flat extensionless-file aliases. No slash twins, no SPA rewrites, no soft 404s.
-- **Data/layout separation is absolute.** Item content belongs in `src/data/`; markup/schema belongs in `src/lib/`. Do not hand-edit generated item HTML or add item links to original hubs.
-- **Reuse before new.** Design tokens, the shared partials, the legal/store build pattern, and existing components come first. No new frameworks, no new CSS systems, no parallel implementations of an existing one. Duplicated components (see debt #6) are a cost, not a pattern.
-- **Avoid dependencies.** Zero-runtime-dependency is a feature and a privacy claim. Any new third-party origin must be added to the CSP, inventoried in `/privacy`, and justified.
-- **Counts move together.** Production/cue/item totals appear in metadata, schema, FAQ and copy — update them everywhere or not at all.
-- **Protect loading performance** as the media library grows; all media enters through the pipeline.
-- **Keep production and experiments separate.** Experiments remain progressive enhancements; page text and media availability must not depend on them.
-- **Documents sit still.** Legal/operating pages carry no torch, no scanlines, no roll — people rely on them.
-- **Agents clean up after themselves.** A green build is not the bar; `npm run lint:slop` is (see below).
-- **Update the records.** This repo keeps dated implementation records (`*.md`). If architecture changes, the records and this README change with it.
-
-### The aislop gate
-
-[aislop](https://github.com/marketplace/actions/aislop-ai-code-quality-gate) scores the code this repo's humans and agents actually write, 0–100, from deterministic rules — narrative comments above self-explanatory lines, swallowed exceptions, hidden fallbacks, duplicated helpers, dead code, oversized functions, hardcoded URLs and secrets. `npm run build`, `npm test` and the route/header checks all pass on that kind of code; this gate does not. There is no LLM in the scoring path, so the same tree always produces the same score.
-
-Policy lives in `.aislop/config.yml`:
-
-- **Generated output is excluded** — `index-*.js`, the hashed `store-/legal-/item-/reel-download-/inquiry-*` bundles, and the vendored `home-src/bundle.orig.js`. Scoring minified React internals is noise, and the repair would be overwritten by the next `npm run build` (or rejected by `deploy.yml`'s stale-output check).
-- **`ci.failBelow`** is the score floor.
-- **`ci.baseline`** points at `.aislop/ci-baseline.json`, which accepts the findings that predate the gate. CI therefore fails on *new* slop, not on inherited debt.
-
-Accepting debt goes in the same PR as the code that caused it, so the diff records what was accepted and why:
-
-```bash
-npx aislop@0.19.1 baseline write     # accept every finding currently present
-npx aislop@0.19.1 baseline prune     # drop entries for findings that are gone
-```
-
-Prefer the fix. `npx aislop@0.19.1 fix --dry-run` previews mechanical repairs (unused imports, narrative comments, dead code); `--safe` limits the run to changes that cannot alter behaviour. A single deliberate exception can be silenced in place — `// aislop-ignore-next-line <rule> -- why` — which stays visible in review, unlike an exclude.
-
-## AI-agent continuity
-
-For future AI-assisted development sessions. **Before changing anything:**
-
-1. **Inspect the architecture first** — read this README, then the relevant record (`PERFORMANCE.md`, `LEGAL.md`, `RATIFY.md`, `STORE.md`, `SITEMAP.md`, `SEO-DOSSIER.md`), then the actual files.
-2. **Identify the canonical implementation** before writing any component. If a system exists (player, lightbox, poster pipeline, document chrome), extend it — do not create a sibling.
-3. **Check whether your target is generated.** If so, edit the source and run the build; never the output.
-4. **Keep homepage and item responsibilities separate**: regenerate the homepage head/poster data through the build; keep item content in its typed data module and template output.
-5. **Check mobile behaviour** — the portfolio has a mobile menu and responsive media; new item pages reuse the approved existing design.
-6. **Check media and performance implications** — keep media optional and avoid adding unverified artwork or broken links.
-7. **Verify**: `npm run build` after route/media/schema changes; serve with `npm run serve` and audit extensionless 200s, slash twins, and real 404s. Run `npm run lint:slop` before you call it done — it is the check that catches what the build cannot.
-8. **Update documentation** when architecture changes — this README and the dated records are the memory.
-
-**Explicitly do not:**
-
-- Create duplicate components, alternate implementations, or an abandoned rewrite of an existing system.
-- Introduce unnecessary frameworks, UI libraries, analytics, or third-party scripts (the only allowed third-party script is the disclosed Cloudflare Web Analytics beacon; anything else breaks `/privacy`).
-- Invent placeholder portfolio material — **no fictional films, fake credits, invented reviews, or dummy scores.** Real productions, real cues, real catalogue items only; if a link or credit is unknown (e.g. THE DARK AWAITS title links), ship without it and record that, exactly as the existing entries do.
-- Make undocumented architectural changes, hand-edit generated files, reintroduce SPA rewrites, or ship a changed hash without bumping `CACHE_NAME` and updating every reference.
-- Describe aspirational features as existing — in docs, schema, or copy.
-
-## Roadmap
-
-**Implemented** (all verifiable in this tree):
-
-- Full portfolio experience: poster wall + lightbox (9 productions), 32-cue showreel with mood clusters and sticky player, 7 film samples, press kit, commissioning overview, reviews, `mailto:` inquiry
-- Archive boot restored 2026-10-22: the terminal loading screen the prerender pass had silently disabled plays again on the homepage, now gated in the head so it can never become inert unnoticed (`PERFORMANCE.md`)
-- 19 original hub routes + 65 data-generated production/cue/catalogue pages, seven legal/operating documents with generated FAQ schema, and a hub-only human sitemap
-- Service worker (SWR / network-first / cache-first tiers), CSP + canonical headers, 301 map, real 404
-- 84-URL sitemap with verified image/video extensions; per-type item JSON-LD; route, alias, link, media, and 404 verifiers
-- Sitelinks groundwork: the home page links only the original hub routes; item pages are reachable through the sitemap and their hub/sibling links
-- Performance mandate preserved (AVIF artwork, self-hosted fonts, static first paint, item assets exported as immutable hashed bundles)
-
-**Open items recorded in the repo** (in development / awaiting a decision):
-
-- Human decisions collected in `RATIFY.md` (contracting entity confirmation, governing law, rights language — facts that create obligations, deliberately not invented)
-- Eclipsed Google Drive sample: if it stops streaming, the fix is a re-upload on the Drive side (`PERFORMANCE.md`)
-- THE DARK AWAITS: no title IMDb/video link known yet; falls back to the composer's IMDb
-- Reconcile hub-page sources (debt #2)
-
-**Potential / experimental** (recorded direction, not built):
-
-- Bring the React/Vite source tree into this repository and regenerate the prerendered HTML from the app (`createRoot` → `hydrateRoot`), closing debts #1, #2 and the three-footer sync cost
-- External storage or LFS for the audio library as it grows (debt #4)
-- Reelcrafter score player: linked only; embedding it needs `https://play.reelcrafter.com` added to the CSP `frame-src`
-
-Nothing on this list should be described as shipped until it is in the tree.
-
-## Credits & authorship
-
-- **Composer & studio:** Zazie Kanwar-Torge — Zazie Productions LLC. All scores, cues, sound-design libraries and catalogue items are original work.
-- **Production records:** EXPIRE (Zazie Kanwar-Torge is credited for sound design; composers listed separately), UNSEEN (IMDb lists Steve Merlo as composer), PEREGRINUS (co-composer credit), Phantom Requiem (experimental short published by Zazie Productions), ECLIPSED (co-composer credits), THE HAUNTED (co-composer credits), CHOLERIC (co-producer credit), MIKE HAS A VISITOR (composer credit), and THE DARK AWAITS (composer credit). See each record's source links for details. Artwork © the respective productions.
-- **Press:** Visual Container, Grammy Weekly, Limitless Magazine, Billboard Wire (linked from the press-kit section).
-- **Presence:** [IMDb](https://www.imdb.com/name/nm17333332) · [Bandcamp](https://zazieproductions.bandcamp.com) · [Spotify](https://open.spotify.com/artist/4UOgvZEOo7xBhFBjJvlMm0) · [YouTube](https://youtube.com/@zazieproductions) · [Apple Music](https://music.apple.com/us/artist/zazie-productions/1623719351)
-- **Inquiries:** use the form at the bottom of the homepage ([`/#contact`](https://horror.zazieproductions.com/#contact)); the legacy `/contact` URL redirects there.
-
-## License
-
-**All rights reserved.** No open-source license is granted for the code, design, copy, artwork or audio in this repository.
-
-- Music and catalogue licensing runs through [`/licensing`](https://horror.zazieproductions.com/licensing) and the marketplace listings on [`/store`](https://horror.zazieproductions.com/store).
-- Site terms: [`/terms`](https://horror.zazieproductions.com/terms) · Privacy: [`/privacy`](https://horror.zazieproductions.com/privacy).
-- Film key art remains the property of the respective productions.
-
-## Related documents
-
-The root `*.md` files are dated implementation records — the repo's development memory. Read the one matching your task before touching that system:
-
-| Record | Covers |
-| --- | --- |
-| `PERFORMANCE.md` | Critical-path work, media pipeline, caching, verification, residual risks |
-| `LEGAL.md` | The trust/legal layer: how the documents were built and deploy |
-| `RATIFY.md` | Open facts a human must confirm (entity, law, rights) |
-| `SEO-DOSSIER.md` | The technical SEO programme: IA silos, schema matrix, crawl policy |
-| `SITEMAP.md` | Sitemap fixes and the validator contract |
-| `STORE.md` | Catalogue build, data model, deployment lessons (the redirect loop) |
+Edit `src/`, `store-src/`, `legal-src/` or `home-src/` → `npm run build` →
+refresh. There is no whole-site hot reload; `server.mjs` deliberately mirrors
+production routing/headers so local behaviour is evidence, not approximation.
+Details: [local development](docs/development/local-development.md).
+
+> [!TIP]
+> Fresh clone: run `npm run build` **before** `npm test` — two test files
+> import compiled output from `build/`. Baseline results, including the one
+> environment-dependent failure observed 2026-10-29, are recorded honestly in
+> [testing](docs/development/testing.md).
+
+## Build and verification
+
+| Command | Proves |
+|---|---|
+| `npm run build` | Whole pipeline incl. verify/headers/links/forms/sitemap gates |
+| `npm run typecheck` | Strict TypeScript over `src/` |
+| `npm test` | 14 `node --test` suites in `tools/` |
+| `npm run verify` · `check:links` · `check:forms` · `check:headers` | Page structure · link integrity · form labelling · header policy |
+| `npm run check:docs` | Markdown links in this README + `docs/` resolve |
+| `npm run lint:slop` | aislop quality gate (`.aislop/` policy + baseline) |
+
+> [!IMPORTANT]
+> Scripts that rewrite committed HTML/assets: `build`, `prerender`,
+> `generate:sitemap`, `generate:llms`. Never run them casually and commit
+> the churn without understanding the diff.
+
+## Content and media architecture
+
+Content is code: productions in `src/data/productions.ts`, cues in
+`src/data/cues.ts` (+ `audio/track-NN.mp3`), catalogue in
+`src/data/releases.ts`. Recipes and guardrails (credits must be sourced;
+no invented facts): [content management](docs/features/content-management.md).
+
+## Cloudflare deployment
+
+GitHub Actions → filtered `dist/` (`scripts/build-deploy-dir.mjs`) → Wrangler
+Pages upload → live route audit. Secrets by name only:
+`CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`. "Actions green" ≠ "site
+updated": the four-level verification model and failure decision tree are in
+[deployment verification](docs/deployment/verification.md).
+
+## Testing and quality assurance
+
+See [testing](docs/development/testing.md) for the full matrix and the
+recorded 2026-10-29 baseline. Quality docs: [accessibility](docs/quality/accessibility.md) ·
+[performance](docs/quality/performance.md) · [security](docs/quality/security.md) · [SEO](docs/quality/seo.md).
+
+## Security and accessibility
+
+CSP/header policy is single-sourced in `tools/headers.mjs` and build-checked
+against `_headers`; vulnerability reporting in [SECURITY.md](SECURITY.md).
+Accessibility target is WCAG 2.2 AA (partially conformant, gaps named on
+`/accessibility`) — patterns in [accessibility](docs/quality/accessibility.md).
+
+## Documentation index
+
+[docs/README.md](docs/README.md) is the map: architecture · development ·
+deployment · features · quality · project · archive, plus the
+single-source-of-truth table that prevents documentation drift.
+
+## Development workflow
+
+Branch → smallest change → build + checks → commit source with regenerated
+output → PR (template provided) → `deploy.yml` validates; merge to `main`
+deploys. Agents: [AGENTS.md](AGENTS.md) is mandatory reading.
+
+## Contributing
+
+[CONTRIBUTING.md](CONTRIBUTING.md). This is a single-maintainer,
+independently run project — no corporate process theatre, but the validation
+bar is real.
+
+## Maintenance and known limitations
+
+[Maintenance](docs/project/maintenance.md) · [known limitations](docs/project/known-limitations.md)
+(legacy bundle source absence, test/build ordering, observed hash
+non-reproducibility) · open human decisions in [RATIFY.md](RATIFY.md).
+
+## Credits, copyright and licensing
+
+Composer & studio: **Zazie Kanwar-Torge — Zazie Productions LLC**.
+Production records credit roles exactly as sourced (per-page source links;
+e.g. UNSEEN's IMDb composer is Steve Merlo — recorded, not claimed).
+Press/links: [IMDb](https://www.imdb.com/name/nm17333332) ·
+[Bandcamp](https://zazieproductions.bandcamp.com) ·
+[YouTube](https://youtube.com/@zazieproductions) ·
+[Spotify](https://open.spotify.com/artist/4UOgvZEOo7xBhFBjJvlMm0).
+
+**All rights reserved (`UNLICENSED`).** No open-source license is granted for
+code, design, copy, artwork or audio in this repository. Music licensing:
+[`/licensing`](https://horror.zazieproductions.com/licensing). Terms:
+[`/terms`](https://horror.zazieproductions.com/terms) · Privacy:
+[`/privacy`](https://horror.zazieproductions.com/privacy). Film key art
+remains the property of the respective productions.
+
+<details>
+<summary>Historical detail preserved from the previous README</summary>
+
+The pre-2026-10-29 README (568 lines) documented, among other things, the
+reconstructed legacy component map, per-system audio tables, cache-policy
+tables and the aislop gate in full. That material now lives, corrected to
+verified counts, in `docs/` (audio: `docs/architecture/audio-systems.md`;
+headers/caching: `docs/quality/security.md` + `_headers` itself; aislop:
+`.aislop/config.yml`). The full old text remains in git history
+(`git log --follow -- README.md` — the version before this overhaul).
+
+</details>
