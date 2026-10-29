@@ -15,6 +15,7 @@ Detail lives in the dated root records; this file is the index of *intent*.
 | D8 | aislop gate with accepted-debt baseline | Fail on *new* slop, not inherited debt | `.aislop/config.yml`, `.github/workflows/aislop.yml` |
 | D9 | Deploy uploads a filtered `dist/`, not the repo root | Repo root contains tooling/sources that must not be public | `scripts/build-deploy-dir.mjs` |
 | D10 | Root dated `*.md` records stay at root | Referenced by name in code comments, scripts and workflows | [docs index](../README.md) |
+| D11 | Merge conflicts in generated output are resolved by rebuilding, never by hand-merging; source conflicts are always handed to a human | Generated files have one correct author (`npm run build`); picking a side in a source conflict destroys someone's work | `.github/workflows/auto-resolve-conflicts.yml`, `tools/resolve-conflicts.mjs` |
 
 New decision? Add a row here **and** write the dated record; do not edit
 history to make an old decision look current.

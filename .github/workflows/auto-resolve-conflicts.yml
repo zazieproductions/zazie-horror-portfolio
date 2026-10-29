@@ -1,0 +1,228 @@
+name: Auto-resolve merge conflicts
+
+# WHY THIS EXISTS
+#
+# This repository commits its generated output (AGENTS.md: "Generated files
+# (item/hub HTML, sitemap.xml, llms*.txt, hashed bundles) are committed and
+# never hand-edited"). Two branches that touch different sources therefore
+# still collide on sitemap.xml, llms.txt, sw.js and the hub pages, and every
+# such PR waits for a human to re-run npm run build and paste the output back.
+# That is mechanical work with one correct answer, so it is automated here.
+#
+# Source conflicts are the opposite: two agents editing src/data/cues.ts
+# disagree about content, and a robot that picks a side silently deletes
+# somebody's work. So this workflow is deliberately asymmetric. It resolves a
+# conflict only when the build *proves* the file is build output (seed the file,
+# build, see it rewritten); anything else is reported back to the PR with the
+# exact paths and left alone. See tools/resolve-conflicts.mjs for the proof and
+# tools/resolve-conflicts.test.mjs for the decision logic under test.
+#
+# WHAT RUNS
+#
+#   pull_request (opened/reopened/synchronize/labeled)  automatic
+#   workflow_dispatch                                   manual, by PR number
+#
+# Automatic runs are cheap when nothing is wrong: the mergeable state is checked
+# through the API first, so npm ci and the build only happen for a PR that is
+# actually conflicting. A maintainer can force a run by adding the
+# `resolve-conflicts` label, and veto the workflow on a PR with the
+# `no-auto-resolve` label.
+#
+# WHAT IT WILL NOT DO
+#
+#   - push to main, or to any branch other than the PR's own head branch
+#   - touch fork PRs (the workflow token is read-only there)
+#   - auto-merge a hand-authored file (.github/, src/, docs/, tools/, scripts/,
+#     package*.json, Markdown, _headers, config files)
+#   - commit build drift that already exists at HEAD. Known limitation #3 in
+#     docs/project/known-limitations.md says bundle hashes are not reproducible
+#     on every checkout, so the resolver builds HEAD first and commits only the
+#     churn the merge itself caused. If a rebuild moves those files again, it
+#     aborts instead of committing churn.
+#
+# TOKEN NOTE
+#
+# Pushes made with GITHUB_TOKEN do not trigger other workflows, so the PR's
+# checks do not re-run on the resolution commit (the run below validates it
+# itself: build, no conflict markers, reproducible rebuild). To make downstream
+# checks run too, add a `CONFLICT_RESOLVER_TOKEN` secret (a fine-grained PAT
+# with contents:write + pull-requests:write on this repository); the workflow
+# uses it automatically when present.
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, labeled]
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: Pull request number to fix
+        required: true
+        type: string
+      merge_when_clean:
+        description: Also merge base when the branch has no conflicts (update branch)
+        required: true
+        default: false
+        type: boolean
+      dry_run:
+        description: Report what would happen without committing
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: auto-resolve-${{ github.event.pull_request.number || inputs.pr }}
+  cancel-in-progress: true
+
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    # Fork heads are not pushable with this token, and a PR that opts out stays
+    # out. `labeled` only reacts to the label that means "try again".
+    if: |
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.head.repo.full_name == github.repository &&
+       !contains(github.event.pull_request.labels.*.name, 'no-auto-resolve') &&
+       (github.event.action != 'labeled' || github.event.label.name == 'resolve-conflicts'))
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      GH_TOKEN: ${{ secrets.CONFLICT_RESOLVER_TOKEN || secrets.GITHUB_TOKEN }}
+      REPO: ${{ github.repository }}
+      PR_NUMBER: ${{ github.event.pull_request.number || inputs.pr }}
+      HEAD_REF: ${{ github.event.pull_request.head.ref }}
+      BASE_REF: ${{ github.event.pull_request.base.ref }}
+    steps:
+      - name: Preflight
+        id: preflight
+        env:
+          EVENT: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+          pr_json=$(gh api "repos/$REPO/pulls/$PR_NUMBER")
+          head_ref=${HEAD_REF:-$(jq -r .head.ref <<<"$pr_json")}
+          base_ref=${BASE_REF:-$(jq -r .base.ref <<<"$pr_json")}
+          head_repo=$(jq -r .head.repo.full_name <<<"$pr_json")
+          labels=$(jq -r '[.labels[].name] | join(" ")' <<<"$pr_json")
+
+          if [ "$head_repo" != "$REPO" ]; then
+            echo "::notice title=Not a same-repository branch::#$PR_NUMBER comes from $head_repo. This workflow cannot push there, so conflicts stay manual."
+            exit 0
+          fi
+          if [ "$head_ref" = "$base_ref" ] || [ "$head_ref" = "main" ]; then
+            echo "::notice title=Unsupported branch::The PR head is $head_ref. The resolver only updates feature branches."
+            exit 0
+          fi
+          if [[ " $labels " == *" no-auto-resolve "* ]] && [ "$EVENT" != "workflow_dispatch" ]; then
+            echo "::notice title=Opted out::Label no-auto-resolve is present."
+            exit 0
+          fi
+
+          # mergeable is computed lazily; poll until GitHub answers.
+          mergeable=UNKNOWN
+          for _ in $(seq 1 10); do
+            state=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json mergeable,mergeStateStatus)
+            mergeable=$(jq -r .mergeable <<<"$state")
+            merge_state=$(jq -r .mergeStateStatus <<<"$state")
+            [ "$mergeable" != "UNKNOWN" ] && break
+            sleep 4
+          done
+          echo "mergeable=$mergeable ($merge_state)"
+
+          {
+            echo "head_ref=$head_ref"
+            echo "base_ref=$base_ref"
+            echo "should_run=true"
+            if [ "$mergeable" = "CONFLICTING" ]; then echo "conflicting=true"; else echo "conflicting=false"; fi
+          } >> "$GITHUB_OUTPUT"
+
+          if [ "$mergeable" != "CONFLICTING" ]; then
+            echo "::notice title=Nothing to resolve::#$PR_NUMBER is $mergeable against $base_ref; no conflicts to fix."
+          fi
+
+      - name: Check out the PR branch
+        if: steps.preflight.outputs.should_run == 'true' && (steps.preflight.outputs.conflicting == 'true' || inputs.merge_when_clean == true)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.preflight.outputs.head_ref }}
+          fetch-depth: 0
+          token: ${{ secrets.CONFLICT_RESOLVER_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        if: steps.preflight.outputs.should_run == 'true' && (steps.preflight.outputs.conflicting == 'true' || inputs.merge_when_clean == true)
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install
+        if: steps.preflight.outputs.should_run == 'true' && (steps.preflight.outputs.conflicting == 'true' || inputs.merge_when_clean == true)
+        run: npm ci
+
+      # The resolver never edits sources, so nothing it commits can change the
+      # site's meaning without the build agreeing. Its exit code 2 means "needs
+      # a human": that is a report, not a broken build, so it stays green and
+      # the comment carries the verdict.
+      - name: Resolve
+        id: resolve
+        if: steps.preflight.outputs.should_run == 'true' && (steps.preflight.outputs.conflicting == 'true' || inputs.merge_when_clean == true)
+        continue-on-error: true
+        env:
+          BASE_REF: ${{ steps.preflight.outputs.base_ref }}
+          MERGE_WHEN_CLEAN: ${{ inputs.merge_when_clean || 'false' }}
+          DRY_RUN: ${{ inputs.dry_run || 'false' }}
+          REPORT: ${{ runner.temp }}/resolve-report.json
+          COMMENT: ${{ runner.temp }}/resolve-comment.md
+        run: |
+          set -uo pipefail
+          args=(--base "origin/$BASE_REF" --report "$REPORT" --comment "$COMMENT")
+          [ "$MERGE_WHEN_CLEAN" = "true" ] && args+=(--merge-when-clean)
+          [ "$DRY_RUN" = "true" ] && args+=(--dry-run)
+          node tools/resolve-conflicts.mjs "${args[@]}"
+          status=$?
+          {
+            echo "status=$(jq -r .status "$REPORT" 2>/dev/null || echo unknown)"
+            echo "post=$(jq -r '.postComment' "$REPORT" 2>/dev/null || echo false)"
+            echo "exit=$status"
+          } >> "$GITHUB_OUTPUT"
+          exit 0
+
+      - name: Push the resolution
+        if: steps.resolve.outputs.status == 'resolved' || steps.resolve.outputs.status == 'merged-clean'
+        env:
+          HEAD_REF: ${{ steps.preflight.outputs.head_ref }}
+        run: |
+          set -euo pipefail
+          if git push origin "HEAD:refs/heads/$HEAD_REF"; then
+            echo "::notice title=Pushed::Resolution committed to $HEAD_REF."
+          else
+            echo "::error title=Push rejected::$HEAD_REF moved while this ran. Re-run the workflow."
+            exit 1
+          fi
+
+      - name: Comment on the pull request
+        if: steps.resolve.outputs.post == 'true'
+        env:
+          COMMENT: ${{ runner.temp }}/resolve-comment.md
+        run: |
+          set -euo pipefail
+          [ -f "$COMMENT" ] || exit 0
+          cat "$COMMENT" >> "$GITHUB_STEP_SUMMARY"
+          existing=$(gh api --paginate "repos/$REPO/issues/$PR_NUMBER/comments" \
+            --jq '.[] | select(.body | contains("<!-- auto-resolve-conflicts -->")) | .id' | head -1)
+          if [ -n "$existing" ]; then
+            gh api --method PATCH "repos/$REPO/issues/comments/$existing" -F body=@"$COMMENT" >/dev/null
+            echo "Updated comment $existing."
+          else
+            gh api --method POST "repos/$REPO/issues/$PR_NUMBER/comments" -F body=@"$COMMENT" >/dev/null
+            echo "Created a comment on #$PR_NUMBER."
+          fi
+
+      - name: Report a resolver failure
+        if: steps.resolve.outputs.exit == '1'
+        run: |
+          echo "::error title=Conflict resolver failed::See the Resolve step log. Nothing was committed to the branch."
+          exit 1
