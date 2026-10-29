@@ -135,7 +135,10 @@
 // precached document, so the cached bundle and document change with it.
 // v55: merge main's mobile pass into the inquiry stylesheet - 16px controls at
 // tablet widths and a 44px disclosure row - which re-hashes inquiry-<hash>.css.
-const CACHE_NAME = 'zazie-v55';
+// v56: the mobile density pass - a pre-React menu panel and phone-only density
+// rules in the cached document, plus regenerated store, legal and item
+// stylesheets (catalogue cards, document tables, video embeds).
+const CACHE_NAME = 'zazie-v56';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -144,11 +147,11 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-3465aa44.css',
-  '/index-df86bcce.js',
-  '/store-1e13177a.css',
+  '/index-04bddc64.js',
+  '/store-2d68d26d.css',
   '/store-3fc01be0.js',
-  '/legal-f4e3a5fb.css',
-  '/legal-c623083a.js',
+  '/legal-13cbe4fc.css',
+  '/legal-54feff84.js',
   '/inquiry-d8cba1f7.css',
   '/inquiry-f408888b.js',
   // Hero & Atmosphere

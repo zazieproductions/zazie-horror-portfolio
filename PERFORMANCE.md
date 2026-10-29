@@ -4,6 +4,82 @@ Date: 2026-09-25 · Branch: `arena/01a0d613-zazie-horror-portfolio`
 Scope: horror.zazieproductions.com (static prerendered React build on an edge host with `_headers`/`_redirects` semantics, i.e. Netlify/Cloudflare-Pages style).
 
 
+## Mobile density pass: 2026-10-27
+
+A phone-layout pass over every public route: the goal was a less cluttered page
+at 360–390 px without changing the dark archive aesthetic, the prerendered copy
+or the React bundle. Everything here is CSS in the three stylesheet sources,
+markup in the legal page source, and inline style/script in `index.html`; the
+shipped bundle is untouched.
+
+### Measured document heights (headless Chromium, 390×844, settle 750 ms)
+
+| Route | Before | After | |
+| --- | --- | --- | --- |
+| `/` | 19,909 px | **16,735 px** | −16% |
+| `/store` | 23,546 px | **12,041 px** | −49% |
+| `/faq` | 20,221 px | **17,671 px** | −13% |
+| `/work/mike-has-a-visitor` | 7,943 px | **6,942 px** | −13% |
+| `/work/the-haunted` (item) | — | 15,221 px | +2% (deliberate) |
+| `/hire-a-composer` | 12,977 px | 16,576 px | taller (deliberate) |
+
+The two routes that grew are the fixes, not regressions: `/hire-a-composer` no
+longer slices its press photograph through a forced 2:3 crop and its document
+jump rows are now 40 px and tab rows 44 px; the work pages cap the embed at
+`clamp(210px, 66vw, 300px)` instead of a 16:9 box that resolved to 462 px at
+390 px, so the video is smaller and the copy below it is readable.
+
+### Changes
+
+1. **Store catalogue** (`store-src/store.css`) — catalogue cards go horizontal
+   below 640 px (`.card{flex-direction:row}` with `min-width:0` on the card,
+   the 44% media column and the body), copy clamped, 44 px tab rows with a
+   right-edge mask, compact footer grids. The `min-width:0` is the actual fix:
+   the cards were flex children that could not shrink, so every card pushed the
+   document 12 px past the viewport and the page scrolled sideways.
+2. **Document pages** (`legal-src/legal.css`) — `.doc-layout > *{min-width:0}`,
+   prose tables fit with `overflow-wrap:anywhere`, comparison tables with a
+   `30rem` floor scroll inside their own wrapper, `.doc-jump` 40 px rows, `.tabs`
+   44 px rows plus mask, the masthead progress rail hidden on phones. On the hire
+   page the 5-column rate table had been collapsing to one character per cell.
+3. **Press photograph** (`legal-src/pages/hire-a-composer.html`) — the press
+   plate uses a new `.press-figure` (auto aspect ratio, `object-fit:contain`,
+   bordered plate, caption) instead of `poster-figure`, which had been cropping
+   the photo to 2:3 and cutting the title and rate line out of frame.
+4. **Item / work pages** (`src/item/item.css`) — `.entry-embed` drops the fixed
+   16:9 ratio and the 260 px `min-height` for a clamped height, capped width,
+   and an iframe that cannot exceed it.
+5. **Homepage** (`index.html`, inline `<style id="zp-mobile-pass">`) — a
+   ≤639 px density pass for the compilation grid and footer link ribbons, plus a
+   second homepage change below.
+6. **Mobile menu before React** (`index.html`, inline script) — the hamburger's
+   panel is rendered by the React bundle, which mounts on idle after load, so on
+   a phone the button did nothing for the first seconds and `aria-controls`
+   pointed at an element that did not exist. A small inline script now clones
+   the header's own desktop nav links into `#mobile-navigation`, toggles
+   `aria-expanded` and the label, closes on a second tap / link tap / outside
+   tap, and steps aside when React replaces the prerendered header. The panel
+   carries a full-viewport scrim so the hero headline cannot show through it.
+   No document-level `keydown` listener (the film-player guard in
+   `tools/film-player.test.mjs` forbids one) — the burger keeps focus, so a
+   focused activation is still the keyboard path.
+7. **Service worker** — `CACHE_NAME` → `zazie-v47` because the homepage HTML and
+   the hashed legal/store stylesheets changed; `tools/boot-skip.test.mjs` pins
+   the literal.
+
+### Verification
+
+Eight routes (`/`, `/store`, `/faq`, `/hire-a-composer`,
+`/how-to-hire-a-horror-composer`, `/work/mike-has-a-visitor`, `/privacy`,
+`/licensing`) at 390×844: every page before the pass had a document wider than
+the viewport (756 px, 562 px, 472 px, 478 px of overflowing subtrees); after it
+`scrollWidth === clientWidth` on all eight, with zero page errors. Menu
+behaviour was checked twice — with the bundle blocked (fallback panel opens at
+336 px, `aria-expanded="true"`, label "Close menu", closes on link tap) and with
+the bundle loaded (React's own panel, 406 px). `npm run build` and
+`npm run typecheck` clean, `npm test` 78/78.
+
+
 ## Crawler render path, MusicComposition schema and AA link contrast: 2026-10-25
 
 An external SEO/quality audit flagged three things: a JavaScript

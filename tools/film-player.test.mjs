@@ -116,11 +116,15 @@ function earlyPlayer(fullscreenEnabled = true, webkitFullscreenEnabled = false) 
     activeElement: null,
     createElement: (tag) => new Element(tag),
     querySelectorAll: (selector) => body.querySelectorAll(selector),
-    addEventListener: (name, listener) => { listeners[name] = listener; },
+    // The page registers more than one document-level click handler (the film
+    // player, and the pre-React mobile-menu fallback), so the fixture keeps a
+    // list per event type instead of the last handler winning.
+    addEventListener: (name, listener) => { (listeners[name] || (listeners[name] = [])).push(listener); },
   };
   const context = vm.createContext({ document, window: { matchMedia: () => ({ matches: true }) } });
   vm.runInContext(inline, context);
-  return { ...context, drive, yt, listeners };
+  const emit = (name, event) => (listeners[name] || []).forEach((listener) => listener(event));
+  return { ...context, drive, yt, listeners, emit };
 }
 
 function reactPlayer(activeId = eclipsed.drive, fullscreenEnabled = true, webkitFullscreenEnabled = false) {
@@ -290,7 +294,7 @@ test('YouTube parameters and its single-iframe layout stay unchanged', () => {
 test('film posters use native buttons and do not install custom keyboard interception', () => {
   const early = earlyPlayer();
   const event = { target: early.drive.poster, preventDefault() { throw new Error('native button click must not be canceled'); } };
-  early.listeners.click(event);
+  early.emit('click', event);
   assert.equal(early.window.__zpPlayer.id, eclipsed.drive);
   const react = reactPlayer(null);
   const poster = nodes(react.tree).find((node) => node.props['aria-label'] === 'Play Eclipsed film sample');
