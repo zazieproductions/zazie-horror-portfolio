@@ -58,7 +58,9 @@ ATTENTION  ──►  AGITATION  ──►  DESIRE  ──►  TRUST  ──► 
 **Two active funnel sections**, injected in the exact same order in both render paths:
 
 1. `#zp-obsession` — immediately after the hero, before `#posters`.
-2. `#zp-objections` — between `#method` and `#contact`; its service-details CTA links to `/services`.
+2. `#zp-objections` — between `#press` and `#contact` (originally after the
+   since-removed `#method`), closing the trust stage immediately before the
+   inquiry form.
 
 ---
 

@@ -322,18 +322,12 @@ html.zp-boot-on .zp-skip{display:none}
 </style>
 <link href="favicon.svg" rel="icon" type="image/svg+xml"/>
 <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport"/>
-
 <meta content="#050505" name="theme-color"/>
-
-
-
 <!-- Critical hero/LCP preload: atmosphere-bg is the full-bleed hero plate on mobile and desktop. -->
 <link rel="preload" as="image" href="/images/atmosphere-bg.jpg" fetchpriority="high"/>
-
 <!-- Only the two text faces used immediately above the fold are promoted. The italic face remains font-display: swap. -->
 <link rel="preload" as="font" type="font/woff2" href="/fonts/cormorant-garamond-latin-400-normal.woff2" crossorigin fetchpriority="high"/>
 <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-latin-wght-normal.woff2" crossorigin/>
-
 <!-- Video, gallery, and third-party connections are opened on intent instead of on every landing. -->
 <style>
 @font-face{font-family:"Cormorant Garamond";font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/cormorant-garamond-latin-400-normal.woff2) format("woff2");unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
@@ -342,8 +336,6 @@ html.zp-boot-on .zp-skip{display:none}
 @font-face{font-family:"Cormorant Garamond Fallback";src:local("Georgia"),local("Times New Roman");ascent-override:92.4%;descent-override:28.7%;line-gap-override:0%}
 @font-face{font-family:"Inter Fallback";src:local("Arial"),local("Helvetica Neue"),local("Helvetica");ascent-override:96.9%;descent-override:24.2%;line-gap-override:0%}
 </style>
-
-
 <style>
 .border-bone\/70{border-color:#f0ebe3b3}
 .bg-black\/60{background-color:#00000099}
@@ -353,11 +345,9 @@ html.zp-boot-on .zp-skip{display:none}
 //    updateViaCache:none - the sw.js update check must always see fresh bytes,
 //    so no returning visitor (or the studio) is stuck on an old cached build.
 if("serviceWorker" in navigator&&!/bot|crawl|spider|google|bing|yandex|slurp|duckduck|baidu|applebot|lighthouse|headless/i.test(navigator.userAgent)){window.addEventListener("load",()=>{navigator.serviceWorker.register("/sw.js",{updateViaCache:"none"}).catch(()=>{})},{once:true})}
-
 // 2. Below-fold media is intentionally scheduled by native loading=lazy or
 // by an explicit user action. Do not warm the whole portfolio from the home
 // page: that starves the hero on mobile and defeats the browser's media queue.
-
 // 3. Instant inline cinema player (works immediately, before and after React mounts)
 //    Real embedded iframes only - playback never leaves the page.
 //    - youtube-nocookie.com: privacy-enhanced host, same player, no extra
@@ -488,7 +478,6 @@ document.addEventListener("click", (e) => {
   if (!card || card.querySelector("iframe")) return; // clicks inside the player never reach us
   zpActivate(card);
 });
-
 document.addEventListener("pointerenter", (e) => {
   // A brief mouse hover is a useful intent signal, but do not warm YouTube
   // while a touch user scrolls past a card or while the pointer merely crosses it.
@@ -506,7 +495,6 @@ document.addEventListener("pointerenter", (e) => {
     }, 240);
   }
 }, true);
-
 // 4. React Bundle Mount
 //    The prerendered DOM is the complete document (copy, media, menus, the
 //    vanilla film player), so crawlers and automated clients must never run
@@ -520,30 +508,12 @@ document.addEventListener("pointerenter", (e) => {
 const ZP_RUNTIME_BOT = /bot|crawl|spider|google|bing|yandex|slurp|duckduck|baidu|applebot|lighthouse|headless/i.test(navigator.userAgent);
 const boot = () => {
   if (ZP_RUNTIME_BOT) return;
-  const go = () => import("/index-3d3fa8c7.js");
+  const go = () => import("/index-368ca99a.js");
   "requestIdleCallback" in window ? requestIdleCallback(go, { timeout: 1200 }) : setTimeout(go, 250);
 };
 document.readyState === "complete" ? boot() : window.addEventListener("load", boot, { once: true });
 </script>
 <link href="index-3465aa44.css" rel="stylesheet"/>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style>
   /* ==================================================================
      HERO ARTWORK PLATE (desktop only, lg and up)
@@ -602,14 +572,12 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
     .zp-hero-art-plate{height:min(100%,calc(64vw - 5.25rem))}
   }
 </style>
-
 <style>
   /* Disable poster-wall entrance flicker */
   img[data-source-loc="src/components/PosterWall.tsx:178:1"] {
     opacity: 0.95 !important;
     animation: none !important;
   }
-
   div:has(> img[data-source-loc="src/components/PosterWall.tsx:178:1"]),
   a:has(> img[data-source-loc="src/components/PosterWall.tsx:178:1"]) {
     opacity: 1 !important;
@@ -619,7 +587,6 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
     animation: none !important;
     transition: none !important;
   }
-
   /* Mobile task shortcuts and touch-friendly poster viewing. */
   section[id]{scroll-margin-top:5rem}
   .zp-mobile-quote{
@@ -652,7 +619,6 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
     #contact input,#contact select{min-height:48px}
   }
 </style>
-
 <style>
   /* ══════════════════════════════════════════════════════════════════
      CINEMA PLAYER - YouTube (privacy-enhanced host) + Google Drive
@@ -734,30 +700,6 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
   body.zp-player-open .blood-vignette,
   body.zp-player-open .grain{opacity:0!important;transition:opacity .3s ease}
 </style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style id="zp-atelier">
 /* Boutique scoring house - same palette, quieter craft. Interactive
    layers (boot, poster wall, showreel, cursor, kenburns) stay in play. */
@@ -783,7 +725,6 @@ document.readyState === "complete" ? boot() : window.addEventListener("load", bo
 #top .animate-ping{animation:none !important;opacity:0 !important}
 #top button.group > span.absolute.inset-0{opacity:0 !important;transform:none !important}
 h2.font-display{letter-spacing:-.02em}
-
 /* Hairline CTAs instead of neon bloom */
 .shadow-\[0_0_24px_rgba\(196\,30\,30\,0\.25\)\],
 .shadow-\[0_0_24px_rgba\(196\,30\,30\,0\.8\)\],
@@ -804,7 +745,6 @@ header nav a.bg-blood,
 }
 header.fixed{border-bottom:1px solid rgba(240,235,227,.05)}
 header a[href="#top"] span.border{border-radius:0}
-
 .glass-panel{
   background:rgba(8,8,8,.62);
   box-shadow:none;
@@ -816,7 +756,6 @@ header a[href="#top"] span.border{border-radius:0}
   border-color:rgba(196,30,30,.42);
   box-shadow:0 18px 40px rgba(0,0,0,.5);
 }
-
 /* Atmosphere: filmic, not arcade */
 .grain{opacity:.03}
 .scanlines{opacity:.018}
@@ -829,50 +768,22 @@ header a[href="#top"] span.border{border-radius:0}
 .glitch:hover:after{color:#c41e1e}
 .cursor-pointer-wrap{filter:drop-shadow(0 0 2px rgba(196,30,30,.4))}
 .cursor-pointer-wrap.hovering{filter:drop-shadow(0 0 4px rgba(196,30,30,.5))}
-
 .zp-cta,
 .zp-cta:hover,
 .zp-cta-ghost:hover{box-shadow:none}
 .zp-cta:hover{box-shadow:0 12px 28px rgba(0,0,0,.4)}
 .zp-packages{background:#161616}
-
 @media (max-width:767px){
   .grain{opacity:.022}
   .scanlines{opacity:.012}
 }
 </style>
-
 <!-- The inquiry stylesheet only paints the below-fold commissioning section and inquiry
      form, so it must not block the hero paint. It is fetched as a preload and
      promoted to a stylesheet as soon as it lands; the <noscript> copy keeps the
      form styled with scripting off. -->
 <link href="/inquiry-d8cba1f7.css" rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'"/>
 <noscript><link href="/inquiry-d8cba1f7.css" rel="stylesheet"/></noscript>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style id="zp-comp-style">
   /* Homepage compilations: cover art cards with a click-to-load Bandcamp player. */
   .zp-comp-grid{display:grid;gap:1.25rem;margin:0;padding:0;list-style:none}
@@ -941,35 +852,6 @@ header a[href="#top"] span.border{border-radius:0}
     frame.focus();
   });
 })();</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style id="zp-fn-style">
 /* Conversion funnel sections (homepage only). Scoped with zp-fn- so nothing
    here can leak into the rest of the design system. */
@@ -1092,6 +974,24 @@ header a[href="#top"] span.border{border-radius:0}
 .zp-listening-track.has-visualizer .zp-cue-visualizer,.zp-listening-track.has-visualizer .zp-listening-graphic small{display:block;}
 .zp-listening-track.has-visualizer .zp-listening-graphic>span,.zp-listening-track.has-visualizer .zp-listening-graphic>i,.zp-listening-track.has-visualizer .zp-listening-graphic>b,.zp-listening-track.has-visualizer .zp-listening-graphic:before,.zp-listening-track.has-visualizer .zp-listening-graphic:after{opacity:0;}
 @media(prefers-reduced-motion:reduce){.zp-listening-track.has-visualizer .zp-cue-visualizer,.zp-listening-track.has-visualizer .zp-listening-graphic small{display:none;}}
+/* Objections FAQ: native details accordions, hairline rules, still surface. */
+.zp-fn--objections{background:linear-gradient(180deg,#030303 0%,#0a0303 100%);}
+.zp-fn-faq{border-top:1px solid #1e1e1e;}
+.zp-fn-item{border-bottom:1px solid #1e1e1e;}
+.zp-fn-item summary{display:flex;align-items:baseline;gap:1rem;min-height:48px;padding:1.35rem .25rem;cursor:pointer;list-style:none;}
+.zp-fn-item summary::-webkit-details-marker{display:none;}
+.zp-fn-qno{flex:none;color:#e65650;font-size:10px;letter-spacing:.28em;}
+.zp-fn-q{flex:1;font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;font-size:1.35rem;line-height:1.25;color:#f0ebe3;}
+.zp-fn-item summary:hover .zp-fn-q{text-decoration:underline;text-decoration-color:#c41e1e;text-underline-offset:4px;}
+.zp-fn-mark{flex:none;position:relative;align-self:center;width:14px;height:14px;}
+.zp-fn-mark:before,.zp-fn-mark:after{content:"";position:absolute;background:#e65650;}
+.zp-fn-mark:before{left:0;top:6px;width:14px;height:2px;}
+.zp-fn-mark:after{left:6px;top:0;width:2px;height:14px;}
+.zp-fn-item[open] .zp-fn-mark:after{display:none;}
+.zp-fn-a{padding:0 .25rem 1.6rem;}
+.zp-fn-a p{color:#9a9590;font-size:.95rem;line-height:1.75;margin:0;max-width:46rem;}
+.zp-fn-a strong{color:#f0ebe3;}
+@media(min-width:768px){.zp-fn-a{padding-left:3.35rem;}}
 .zp-fn-actions{display:flex;flex-wrap:wrap;gap:.75rem 1.25rem;align-items:center;margin-top:1.75rem;}
 .zp-fn-btn{display:inline-flex;min-height:48px;align-items:center;justify-content:center;padding:.8rem 1.5rem;background:#c41e1e;color:#f0ebe3;border:1px solid #c41e1e;font-size:11px;letter-spacing:.16em;text-transform:uppercase;text-decoration:underline;text-underline-offset:3px;transition:background-color .15s,border-color .15s;}
 .zp-fn-btn:hover{background:#e65650;border-color:#e65650;color:#030303;}
@@ -1103,35 +1003,6 @@ header a[href="#top"] span.border{border-radius:0}
   .zp-fn-grid--3{grid-template-columns:repeat(3,1fr);}
 }
 </style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style id="zp-lineage-style">
 /* Hero lineage footnote: one quiet line under the call to action. */
 .zp-lineage{
@@ -1164,35 +1035,6 @@ header a[href="#top"] span.border{border-radius:0}
   .zp-lineage-format{height:23px;}
 }
 </style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style id="zp-press-style">.zp-pk-section {
   background:
     radial-gradient(ellipse 75% 42% at 50% 0%, rgba(139, 0, 0, 0.13) 0%, transparent 72%),
@@ -1237,7 +1079,6 @@ header a[href="#top"] span.border{border-radius:0}
   line-height: 1.7;
   color: #b5afa8;
 }
-
 /* Section tiers */
 .zp-pk-tier {
   margin-top: 3rem;
@@ -1282,7 +1123,6 @@ header a[href="#top"] span.border{border-radius:0}
   height: 1px;
   background: linear-gradient(90deg, rgba(240, 235, 227, 0.16), rgba(240, 235, 227, 0.02));
 }
-
 /* Tier I: Festival Laurels */
 .zp-pk-laurels-grid {
   display: grid;
@@ -1381,7 +1221,6 @@ header a[href="#top"] span.border{border-radius:0}
   line-height: 1.5;
   color: #a9a39b;
 }
-
 /* Tier II: Critical Spotlight */
 .zp-pk-spotlight {
   display: grid;
@@ -1524,7 +1363,6 @@ header a[href="#top"] span.border{border-radius:0}
   letter-spacing: 0.06em;
   color: #9e9890;
 }
-
 /* Tier III: Monograph Press Feature Cards */
 .zp-pk-features-grid {
   display: grid;
@@ -1672,7 +1510,6 @@ header a[href="#top"] span.border{border-radius:0}
   color: #dfc48b;
   transform: translate(2px, -2px);
 }
-
 /* Tier IV: Verified Profiles & Streaming Directory */
 .zp-pk-dir-grid {
   display: grid;
@@ -1762,14 +1599,12 @@ header a[href="#top"] span.border{border-radius:0}
   color: #dfc48b;
   transform: translate(2px, -2px);
 }
-
 .zp-pk-review-cta:focus-visible,
 .zp-pk-feature-card:focus-visible,
 .zp-pk-dir-link:focus-visible {
   outline: 2px solid #dfc48b;
   outline-offset: 2px;
 }
-
 @media (prefers-reduced-motion: reduce) {
   .zp-pk-laurel-card,
   .zp-pk-review-cta,
@@ -1801,122 +1636,6 @@ header a[href="#top"] span.border{border-radius:0}
 }
 </style>
 <script defer src="/selected-cues.js?v=2"></script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <title>Experimental Psychological Horror Composer | Arthouse Film</title>
 <meta name="description" content="Experimental psychological horror film composer for independent and arthouse cinema. IMDb-credited bespoke scores by Zazie Kanwar-Torge, quoted per project."/>
 <meta name="color-scheme" content="dark"/>
@@ -4315,7 +4034,44 @@ header a[href="#top"] span.border{border-radius:0}
       <span class="zp-pk-dir-arrow" aria-hidden="true"><svg class="zp-pk-arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg></span>
     </a>
       </div>
-    </div></div></section><section id="contact" class="relative overflow-hidden bg-void py-16 sm:py-24 md:py-32"><div class="pointer-events-none absolute inset-0"><div class="absolute bottom-0 left-1/2 h-64 w-[80%] -translate-x-1/2 bg-blood/10 blur-[100px]"></div></div><div class="relative mx-auto max-w-7xl px-4 sm:px-6 md:px-8"><div class="grid gap-10 lg:grid-cols-12 lg:gap-12"><div class="lg:col-span-5"><p class="mb-3 text-[10px] uppercase tracking-[0.35em] text-blood sm:text-[11px] sm:tracking-[0.4em]">02 · Contact</p><h2 class="mb-4 font-display text-3xl leading-none text-bone sm:mb-6 sm:text-4xl md:text-6xl">Project inquiries</h2><p class="mb-6 text-sm leading-relaxed text-mist sm:mb-8 sm:text-base">Please provide your name and email. Project details and deadlines are optional.</p><div class="mb-8 space-y-4 sm:mb-10"><a href="mailto:zaziediya@gmail.com?subject=Scoring%20Inquiry" class="flex items-center gap-3 text-bone transition-colors hover:text-blood"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail shrink-0 text-blood" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg><!--email_off--><span class="break-all text-sm">zaziediya@gmail.com</span><!--/email_off--></a><a href="tel:+18644300606" class="flex items-center gap-3 text-bone transition-colors hover:text-blood"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone shrink-0 text-blood" aria-hidden="true"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path></svg><span class="text-sm">+1 (864) 430-0606</span></a></div><div class="border border-ash bg-ink/50 p-4 sm:p-5"><div class="mb-3 flex items-center gap-2 text-blood"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"></path><path d="M14 2v5a1 1 0 0 0 1 1h5"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg><p class="text-[10px] uppercase tracking-[0.3em]">Email preview</p></div><p class="mb-2 text-[10px] uppercase tracking-[0.2em] text-mist">Subject: Scoring Inquiry</p><pre class="max-h-48 overflow-auto whitespace-pre-wrap font-sans text-[11px] leading-relaxed text-mist sm:max-h-56">Name: -
+    </div></div></section><!--ZP-FN-START:objections--><section id="zp-objections" class="zp-fn zp-fn--objections" aria-labelledby="zp-objections-h">
+<div class="zp-fn-shell">
+  <p class="zp-fn-kicker">FAQ · Before you commit</p>
+  <h2 class="zp-fn-h2" id="zp-objections-h">What filmmakers ask before the first cue</h2>
+  <p class="zp-fn-lead">Timing, budget, fit, availability and pricing, answered plainly and in the open. The full detail on process, rights and delivery lives in the complete FAQ.</p>
+  <div class="zp-fn-faq">
+    <details class="zp-fn-item">
+      <summary><span class="zp-fn-qno" aria-hidden="true">01</span><span class="zp-fn-q">We are still in pre-production or mid-shoot. Is it too early to bring you on?</span><span class="zp-fn-mark" aria-hidden="true"></span></summary>
+      <div class="zp-fn-a"><p>Actually, <strong>the earlier, the better</strong>. The greatest horror films (e.g., <em>The Shining</em>, <em>Hereditary</em>, <em>Under the Skin</em>) were scored alongside filming. When you bring me on early, we can stay coordinated from the beginning. It can help establish a sonic identity before temporary music starts steering creative decisions. You don’t need a locked cut, just a clear sense of what you’re trying to make.</p></div>
+    </details>
+    <details class="zp-fn-item">
+      <summary><span class="zp-fn-qno" aria-hidden="true">02</span><span class="zp-fn-q">I’m a low-budget filmmaker. Can you still help me?</span><span class="zp-fn-mark" aria-hidden="true"></span></summary>
+      <div class="zp-fn-a"><p>Tell me the real number. A focused musical palette, a smaller cue count, or a carefully chosen amount of score can sometimes serve a film better than wall-to-wall music. If the scope and budget don’t align, you’ll know before committing.</p></div>
+    </details>
+    <details class="zp-fn-item">
+      <summary><span class="zp-fn-qno" aria-hidden="true">03</span><span class="zp-fn-q">How do I know you’ll actually be available for my timeline?</span><span class="zp-fn-mark" aria-hidden="true"></span></summary>
+      <div class="zp-fn-a"><p>I take on no more than four feature engagements per year. As of this writing, three slots remain for Q4. Every email is answered personally within 72 hours, even when the answer is no.</p></div>
+    </details>
+    <details class="zp-fn-item">
+      <summary><span class="zp-fn-qno" aria-hidden="true">04</span><span class="zp-fn-q">What kinds of projects are you the best fit for?</span><span class="zp-fn-mark" aria-hidden="true"></span></summary>
+      <div class="zp-fn-a"><p>Psychological horror, folk horror, body horror, slow-burn thrillers, experimental cinema, atmospheric games, A24-style art house, and projects that live between categories. If mood, texture, and emotional specificity matter to you, we’re already speaking the same language.</p></div>
+    </details>
+    <details class="zp-fn-item">
+      <summary><span class="zp-fn-qno" aria-hidden="true">05</span><span class="zp-fn-q">I like your work, but I already have a composer. Any options?</span><span class="zp-fn-mark" aria-hidden="true"></span></summary>
+      <div class="zp-fn-a"><p>Yes. If you need additional support, whether for a single sequence, a key nightmare scene, or one dissonant section, don’t hesitate to reach out.</p></div>
+    </details>
+    <details class="zp-fn-item">
+      <summary><span class="zp-fn-qno" aria-hidden="true">06</span><span class="zp-fn-q">How do you calculate your pricing or rates for a film score?</span><span class="zp-fn-mark" aria-hidden="true"></span></summary>
+      <div class="zp-fn-a"><p>Every score is quoted individually because no two productions share the same creative scale. There is no rigid, published retail rate card. Your written quotation is custom-built around your specific format, the exact minutes of music required, your timeline deadlines, and your stated budget allocation. We work transparently to align the musical scope with your project’s financial reality.</p></div>
+    </details>
+    <details class="zp-fn-item">
+      <summary><span class="zp-fn-qno" aria-hidden="true">07</span><span class="zp-fn-q">Can you collaborate remotely with production teams in different time zones?</span><span class="zp-fn-mark" aria-hidden="true"></span></summary>
+      <div class="zp-fn-a"><p>Yes! My post-production workflow is optimized for remote, borderless collaboration. I routinely score independent projects, theatrical shorts, and interactive media properties for directors, showrunners, and producers across North America, Europe, and international festival circuits with zero logistical friction.</p></div>
+    </details>
+  </div>
+  <div class="zp-fn-actions"><a class="zp-fn-btn" href="#contact">Start an inquiry</a><a class="zp-fn-btn zp-fn-btn--ghost" href="/faq">Read the full FAQ</a><a class="zp-fn-btn zp-fn-btn--ghost" href="/process">See the scoring process</a></div>
+</div></section><!--ZP-FN-END:objections-->
+<section id="contact" class="relative overflow-hidden bg-void py-16 sm:py-24 md:py-32"><div class="pointer-events-none absolute inset-0"><div class="absolute bottom-0 left-1/2 h-64 w-[80%] -translate-x-1/2 bg-blood/10 blur-[100px]"></div></div><div class="relative mx-auto max-w-7xl px-4 sm:px-6 md:px-8"><div class="grid gap-10 lg:grid-cols-12 lg:gap-12"><div class="lg:col-span-5"><p class="mb-3 text-[10px] uppercase tracking-[0.35em] text-blood sm:text-[11px] sm:tracking-[0.4em]">02 · Contact</p><h2 class="mb-4 font-display text-3xl leading-none text-bone sm:mb-6 sm:text-4xl md:text-6xl">Project inquiries</h2><p class="mb-6 text-sm leading-relaxed text-mist sm:mb-8 sm:text-base">Please provide your name and email. Project details and deadlines are optional.</p><div class="mb-8 space-y-4 sm:mb-10"><a href="mailto:zaziediya@gmail.com?subject=Scoring%20Inquiry" class="flex items-center gap-3 text-bone transition-colors hover:text-blood"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mail shrink-0 text-blood" aria-hidden="true"><path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7"></path><rect x="2" y="4" width="20" height="16" rx="2"></rect></svg><!--email_off--><span class="break-all text-sm">zaziediya@gmail.com</span><!--/email_off--></a><a href="tel:+18644300606" class="flex items-center gap-3 text-bone transition-colors hover:text-blood"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-phone shrink-0 text-blood" aria-hidden="true"><path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384"></path></svg><span class="text-sm">+1 (864) 430-0606</span></a></div><div class="border border-ash bg-ink/50 p-4 sm:p-5"><div class="mb-3 flex items-center gap-2 text-blood"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text" aria-hidden="true"><path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"></path><path d="M14 2v5a1 1 0 0 0 1 1h5"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg><p class="text-[10px] uppercase tracking-[0.3em]">Email preview</p></div><p class="mb-2 text-[10px] uppercase tracking-[0.2em] text-mist">Subject: Scoring Inquiry</p><pre class="max-h-48 overflow-auto whitespace-pre-wrap font-sans text-[11px] leading-relaxed text-mist sm:max-h-56">Name: -
 Email: -
 Project: -
 Format: Short film

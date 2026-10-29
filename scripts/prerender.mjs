@@ -180,6 +180,15 @@ function buildHomeDocument() {
   templateHead = templateHead.replace(/<!--[\s\S]*?-->/g, (comment) =>
     /JSON-LD|STRUCTURED DATA/i.test(comment) ? '' : comment,
   );
+  // Removing a tag leaves its line ending behind, so each rebuild of the head
+  // grew index.html by one blank line per stripped title/meta/link/JSON-LD tag
+  // and the workflow's "generated output is stale" diff could never settle.
+  // Drop the empty lines the removals leave, so build -> prerender is a fixed
+  // point at the file level, not just the file list.
+  templateHead = templateHead
+    .split('\n')
+    .filter((line) => line.trim().length > 0)
+    .join('\n');
   const close = templateHead.lastIndexOf('</head>');
   if (close === -1) throw new Error('index.html source head lost its </head> while rebuilding');
   const fullHead = `${templateHead.slice(0, close).trimEnd()}\n${renderHomeSeo()}\n</head>`;
