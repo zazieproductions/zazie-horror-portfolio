@@ -194,6 +194,90 @@ const OBSESSION_INNER = `
   <p class="zp-fn-lead zp-fn-study">I started studying neurobiology, weaponized sonic warfare, animal distress frequencies, and auditory pareidolia (how the human brain hallucinates voices in random frequencies).</p>
   <p class="zp-fn-lead">Quick&#8212;hum the terrifying clicking motif from <em>Hereditary</em>, the nauseating horn from <em>The Lighthouse</em>, or the descending siren of <em>Annihilation</em>.</p>
   <p class="zp-fn-bridge">Now ask yourself: does your project have a signature acoustic scar that audiences emotionally will feel in their gut?</p>
+  <section class="zp-listening" aria-labelledby="zp-listening-title">
+    <div class="zp-index-terminal-bar" aria-hidden="true"><span>ZP:// AUDIO ARCHIVE <b> / </b> EMOTIONAL INDEX</span><span class="zp-index-online"><i></i> SIGNAL OPEN</span></div>
+    <div class="zp-listening-head">
+      <div class="zp-index-copy">
+        <p class="zp-listening-eyebrow"><span class="zp-listening-dot" aria-hidden="true"></span> Selected cues <span aria-hidden="true">/</span> A closer listen</p>
+        <h3 id="zp-listening-title">Emotional <em>Index</em></h3>
+        <p class="zp-listening-intro">Four studies in dissonance, vulnerability, and the uneasy space between beauty and dread.</p>
+        <div class="zp-index-console" aria-hidden="true"><span>+ &nbsp; SELECT A CUE TO LISTEN</span><span class="zp-index-cursor"></span></div>
+      </div>
+      <div class="zp-index-scope" aria-hidden="true">
+        <div class="zp-index-disc"></div>
+        <svg class="zp-index-wave" viewBox="0 0 500 160" preserveAspectRatio="none" focusable="false"><path class="zp-index-wave-base" d="M0 80 L70 80 83 77 96 83 112 80 132 80 145 60 155 108 166 37 180 124 192 74 203 83 225 80 249 80 260 88 271 50 283 113 294 78 310 80 335 80 348 66 357 89 367 80 392 80 405 77 418 83 430 80 500 80"/><path class="zp-index-wave-trace" d="M0 80 L70 80 83 77 96 83 112 80 132 80 145 60 155 108 166 37 180 124 192 74 203 83 225 80 249 80 260 88 271 50 283 113 294 78 310 80 335 80 348 66 357 89 367 80 392 80 405 77 418 83 430 80 500 80"/></svg>
+        <div class="zp-index-scope-note"><span>MONITOR // 01</span><span>SIGNAL STUDY</span></div>
+      </div>
+    </div>
+    <div class="zp-listening-register" aria-hidden="true"><span>Listening archive</span><span>Four entries &nbsp; / &nbsp; 01—04</span></div>
+    <div class="zp-listening-tracks">
+      <article class="zp-listening-track">
+        <div class="zp-listening-index" aria-hidden="true"><span>01</span><span> / I</span></div>
+        <div class="zp-listening-info">
+          <p class="zp-listening-tag">Atmosphere <span aria-hidden="true">/</span> Cue 01</p>
+          <h4>The Beautiful Wrongness</h4>
+          <p>A visceral, synth-driven soundscape with a mourning sense of tension, inspired by prestige atmospheric dramas and A24.</p>
+        </div>
+        <div class="zp-listening-player">
+          <div class="zp-listening-graphic" aria-hidden="true"><span></span><span></span><span></span><i></i><b></b><canvas class="zp-cue-visualizer"></canvas><small>SIGNAL // LIVE</small></div>
+          <audio controls preload="none" aria-label="The Beautiful Wrongness"><source src="/audio/track-30.mp3" type="audio/mpeg">Your browser does not support audio playback. <a href="/audio/track-30.mp3">Listen to The Beautiful Wrongness</a>.</audio>
+          <div class="zp-cue-controls" hidden>
+            <button class="zp-cue-play" type="button" aria-label="Play The Beautiful Wrongness"><span aria-hidden="true">▶</span></button>
+            <div class="zp-cue-timeline"><div class="zp-cue-times"><span class="zp-cue-state">Listen</span><span><span class="zp-cue-current">0:00</span> / 01:05</span></div><input class="zp-cue-seek" type="range" name="cue-seek-30" min="0" max="1000" value="0" aria-label="Seek in The Beautiful Wrongness"></div>
+          </div>
+        </div>
+      </article>
+      <article class="zp-listening-track">
+        <div class="zp-listening-index" aria-hidden="true"><span>02</span><span> / II</span></div>
+        <div class="zp-listening-info">
+          <p class="zp-listening-tag">Dissonance <span aria-hidden="true">/</span> Cue 02</p>
+          <h4>The Fatal Overdose</h4>
+          <p>String mutations and dissonant microtonal tension on waterphone, inspired by <em>The Shining</em>.</p>
+        </div>
+        <div class="zp-listening-player">
+          <div class="zp-listening-graphic" aria-hidden="true"><span></span><span></span><span></span><i></i><b></b><canvas class="zp-cue-visualizer"></canvas><small>SIGNAL // LIVE</small></div>
+          <audio controls preload="none" aria-label="The Fatal Overdose"><source src="/audio/track-12.mp3" type="audio/mpeg">Your browser does not support audio playback. <a href="/audio/track-12.mp3">Listen to The Fatal Overdose</a>.</audio>
+          <div class="zp-cue-controls" hidden>
+            <button class="zp-cue-play" type="button" aria-label="Play The Fatal Overdose"><span aria-hidden="true">▶</span></button>
+            <div class="zp-cue-timeline"><div class="zp-cue-times"><span class="zp-cue-state">Listen</span><span><span class="zp-cue-current">0:00</span> / 00:42</span></div><input class="zp-cue-seek" type="range" name="cue-seek-12" min="0" max="1000" value="0" aria-label="Seek in The Fatal Overdose"></div>
+          </div>
+        </div>
+      </article>
+      <article class="zp-listening-track">
+        <div class="zp-listening-index" aria-hidden="true"><span>03</span><span> / III</span></div>
+        <div class="zp-listening-info">
+          <p class="zp-listening-tag">Psychological tension <span aria-hidden="true">/</span> Cue 03</p>
+          <h4>Variations on a Vanishing Body</h4>
+          <p>A string piece inspired by <em>Black Swan</em> and <em>Requiem for a Dream</em>.</p>
+        </div>
+        <div class="zp-listening-player">
+          <div class="zp-listening-graphic" aria-hidden="true"><span></span><span></span><span></span><i></i><b></b><canvas class="zp-cue-visualizer"></canvas><small>SIGNAL // LIVE</small></div>
+          <audio controls preload="none" aria-label="Variations on a Vanishing Body"><source src="/audio/track-05.mp3" type="audio/mpeg">Your browser does not support audio playback. <a href="/audio/track-05.mp3">Listen to Variations on a Vanishing Body</a>.</audio>
+          <div class="zp-cue-controls" hidden>
+            <button class="zp-cue-play" type="button" aria-label="Play Variations on a Vanishing Body"><span aria-hidden="true">▶</span></button>
+            <div class="zp-cue-timeline"><div class="zp-cue-times"><span class="zp-cue-state">Listen</span><span><span class="zp-cue-current">0:00</span> / 02:46</span></div><input class="zp-cue-seek" type="range" name="cue-seek-05" min="0" max="1000" value="0" aria-label="Seek in Variations on a Vanishing Body"></div>
+          </div>
+        </div>
+      </article>
+      <article class="zp-listening-track">
+        <div class="zp-listening-index" aria-hidden="true"><span>04</span><span> / IV</span></div>
+        <div class="zp-listening-info">
+          <p class="zp-listening-tag">Tension sequence <span aria-hidden="true">/</span> Cue 04</p>
+          <h4>Needle in The Nerve</h4>
+          <p>A tension sequence with sustained high intensity and forward momentum.</p>
+        </div>
+        <div class="zp-listening-player">
+          <div class="zp-listening-graphic" aria-hidden="true"><span></span><span></span><span></span><i></i><b></b><canvas class="zp-cue-visualizer"></canvas><small>SIGNAL // LIVE</small></div>
+          <audio controls preload="none" aria-label="Needle in The Nerve"><source src="/audio/track-00.mp3" type="audio/mpeg">Your browser does not support audio playback. <a href="/audio/track-00.mp3">Listen to Needle in The Nerve</a>.</audio>
+          <div class="zp-cue-controls" hidden>
+            <button class="zp-cue-play" type="button" aria-label="Play Needle in The Nerve"><span aria-hidden="true">▶</span></button>
+            <div class="zp-cue-timeline"><div class="zp-cue-times"><span class="zp-cue-state">Listen</span><span><span class="zp-cue-current">0:00</span> / 01:12</span></div><input class="zp-cue-seek" type="range" name="cue-seek-00" min="0" max="1000" value="0" aria-label="Seek in Needle in The Nerve"></div>
+          </div>
+        </div>
+      </article>
+    </div>
+    <div class="zp-listening-foot" aria-hidden="true"><span>Sound / emotion / memory</span><span>End of selection &nbsp; +</span></div>
+  </section>
   <div class="zp-fn-actions">${CTA('#showreel', 'Hear it in 30 original cues', true)}</div>
 </div>`;
 
@@ -234,6 +318,106 @@ export const FUNNEL_CSS = `
 .zp-fn-h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;font-size:1.4rem;line-height:1.2;color:#f0ebe3;margin:0 0 .65rem;}
 .zp-fn-card p{color:#9a9590;font-size:.9rem;line-height:1.7;margin:0;}
 .zp-fn-bridge{border-left:2px solid #c41e1e;padding-left:1.25rem;margin:2.25rem 0 1.75rem;max-width:48rem;color:#f0ebe3;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.35rem;line-height:1.4;}
+/* Listening archive: editorial lines, restrained instrumentation and native fallback. */
+.zp-listening{margin:4rem 0 3rem;background:#0c0909;border:1px solid #443130;position:relative;}
+.zp-listening:before{content:"";position:absolute;top:-1px;left:0;width:5rem;height:2px;background:#d2685d;}
+.zp-listening-head{display:grid;gap:1.5rem;padding:clamp(1.5rem,4vw,3.5rem);background:radial-gradient(ellipse at 85% 0%,#2c1718 0%,transparent 55%);}
+.zp-listening-eyebrow,.zp-listening-tag,.zp-listening-register,.zp-listening-foot{font-family:Inter,Arial,sans-serif;text-transform:uppercase;letter-spacing:.18em;font-size:.62rem;line-height:1.6;color:#d88b82;margin:0;}
+.zp-listening-eyebrow{display:flex;align-items:center;gap:.65rem;margin-bottom:1.35rem;}
+.zp-listening-dot{width:6px;height:6px;border-radius:50%;background:#cf655a;box-shadow:0 0 12px #b3423a;}
+.zp-listening-eyebrow span:not(.zp-listening-dot),.zp-listening-tag span{color:#765450;}
+.zp-listening h3{font-family:"Cormorant Garamond",Georgia,serif;font-weight:400;font-size:clamp(2.2rem,4.5vw,4rem);line-height:1;color:#f0ebe3;margin:0;}
+.zp-listening h3 em{color:#cfa7a0;font-weight:400;}
+.zp-listening-intro{font-size:.88rem;line-height:1.7;color:#bfb0aa;max-width:23rem;margin:0;align-self:end;}
+.zp-listening-register,.zp-listening-foot{display:flex;justify-content:space-between;gap:1rem;padding:.8rem clamp(1.5rem,4vw,3.5rem);border-top:1px solid #443130;color:#a99089;font-size:.58rem;}
+.zp-listening-track{display:grid;grid-template-columns:2.5rem minmax(0,1fr);gap:1rem;padding:2rem clamp(1.5rem,4vw,3.5rem);border-top:1px solid #443130;transition:background-color .2s;}
+.zp-listening-track:hover,.zp-listening-track.is-playing{background:#171010;}
+.zp-listening-index{font-family:"Cormorant Garamond",Georgia,serif;color:#dbb2a9;font-size:1.5rem;line-height:1;}
+.zp-listening-index span+span{display:block;margin-top:.55rem;font-family:Inter,Arial,sans-serif;font-size:.56rem;letter-spacing:.12em;color:#9e827a;}
+.zp-listening-tag{font-size:.58rem;margin:0 0 .6rem;}
+.zp-listening-info h4{font-family:"Cormorant Garamond",Georgia,serif;font-weight:500;font-size:clamp(1.6rem,2.5vw,2.15rem);line-height:1.08;color:#f0ebe3;margin:0 0 .65rem;}
+.zp-listening-info>p:last-child{font-size:.85rem;line-height:1.65;color:#bfb0aa;max-width:31rem;margin:0;}
+.zp-listening-player{grid-column:2;min-width:0;margin-top:.35rem;}
+.zp-listening-player audio{display:block;width:100%;max-width:21rem;height:40px;color-scheme:dark;}.zp-listening-player audio[hidden]{display:none;}
+.zp-listening-graphic{height:28px;display:flex;align-items:center;gap:4px;position:relative;overflow:hidden;margin-bottom:.65rem;opacity:.7;}
+.zp-listening-graphic:before,.zp-listening-graphic:after{content:"";position:absolute;left:0;right:0;height:1px;background:#563a38;top:50%;}
+.zp-listening-graphic:after{left:auto;right:6px;width:24px;height:24px;top:2px;border:1px solid #ad756c;border-radius:50%;background:transparent;}
+.zp-listening-graphic span{position:relative;z-index:1;width:1px;height:18px;background:#b77b70;}
+.zp-listening-graphic span:nth-child(2){height:8px}.zp-listening-graphic span:nth-child(3){height:24px}.zp-listening-graphic i{position:absolute;right:17px;width:1px;height:28px;background:#ad756c;}
+.zp-cue-controls[hidden]{display:none}.zp-cue-controls{display:flex;align-items:center;gap:1rem;}
+.zp-cue-play{flex:none;display:grid;place-items:center;width:44px;height:44px;border:1px solid #bc8178;border-radius:50%;background:transparent;color:#f2e1d9;cursor:pointer;font-size:.8rem;transition:background .2s,color .2s;}
+.zp-cue-play:hover,.zp-listening-track.is-playing .zp-cue-play{background:#d39b91;color:#160b0b;}
+.zp-cue-play:focus-visible,.zp-cue-seek:focus-visible{outline:2px solid #e7a399;outline-offset:4px;}
+.zp-cue-timeline{min-width:0;flex:1;max-width:21rem;}.zp-cue-times{display:flex;justify-content:space-between;gap:1rem;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#c0a39a;font-variant-numeric:tabular-nums;}
+.zp-cue-seek{display:block;width:100%;height:22px;margin:.25rem 0 0;accent-color:#d18c80;cursor:pointer;}
+.zp-listening-foot{border-top:1px solid #443130;}
+@media(min-width:768px){.zp-listening-head{grid-template-columns:1fr 19rem;gap:2rem;}.zp-listening-track{grid-template-columns:3rem minmax(0,1fr) minmax(13rem,18rem);gap:1.5rem;align-items:center;}.zp-listening-index{align-self:start}.zp-listening-player{grid-column:auto;margin-top:0;}}
+@media(max-width:420px){.zp-listening-register,.zp-listening-foot{font-size:.5rem;letter-spacing:.1em}.zp-listening-track{grid-template-columns:2rem minmax(0,1fr);gap:.8rem}}
+/* The index behaves like an editorial instrument panel, not a waveform. */
+.zp-listening{overflow:hidden;border-color:#4b2727;background:#0b0808;}
+.zp-listening:before{width:7rem;background:#e14c43;box-shadow:0 0 20px #b7211c;}
+.zp-listening-head{position:relative;isolation:isolate;overflow:hidden;min-height:17rem;align-items:end;background:radial-gradient(ellipse at 83% 42%,#351517 0%,#170b0c 30%,#0b0808 72%);}
+.zp-listening-head:after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 47px,rgba(197,76,68,.055) 48px),repeating-linear-gradient(90deg,transparent 0 95px,rgba(197,76,68,.04) 96px);mask-image:linear-gradient(90deg,transparent 10%,#000 100%);}
+.zp-listening h3{font-size:clamp(3rem,6.2vw,5.6rem);letter-spacing:-.035em;}
+.zp-listening h3 em{color:#e58d80;}
+.zp-listening-aside{display:flex;align-items:end;gap:1.3rem;position:relative;}
+.zp-listening-intro{position:relative;z-index:1;}
+.zp-index-emblem{position:relative;flex:none;width:5.75rem;aspect-ratio:1;border:1px solid rgba(217,95,83,.55);border-radius:50%;}
+.zp-index-emblem:before,.zp-index-emblem:after{content:"";position:absolute;inset:13%;border:1px solid rgba(217,95,83,.35);border-radius:50%;}
+.zp-index-emblem:after{inset:31%;border-color:rgba(236,130,115,.65);}
+.zp-index-orbit{position:absolute;inset:-5px;border:1px solid transparent;border-top-color:#e15f53;border-radius:50%;animation:zp-index-orbit 16s linear infinite;}
+.zp-index-orbit:after{content:"";position:absolute;top:10%;right:10%;width:4px;height:4px;border-radius:50%;background:#f07163;box-shadow:0 0 8px #ed4c41;}
+.zp-index-core{position:absolute;inset:46%;border-radius:50%;background:#e15f53;box-shadow:0 0 15px #e23c32;animation:zp-index-breathe 4s ease-in-out infinite;}
+.zp-index-cross:before,.zp-index-cross:after{content:"";position:absolute;background:rgba(217,95,83,.45);}
+.zp-index-cross:before{width:1px;top:-10px;bottom:-10px;left:50%;}.zp-index-cross:after{height:1px;left:-10px;right:-10px;top:50%;}
+.zp-listening-register{border-color:#5a302e;background:#1c0d0e;color:#d7a49a;}
+.zp-listening-track{position:relative;transition:background-color .3s,border-color .3s;}
+.zp-listening-track:before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:#d44b40;opacity:0;transition:opacity .3s;}
+.zp-listening-track:hover:before,.zp-listening-track.is-playing:before{opacity:1;}
+.zp-listening-track.is-playing{background:linear-gradient(90deg,#211011,#120b0b 55%,#160b0b);}
+.zp-listening-track.is-playing .zp-listening-index{color:#ef7969;}
+.zp-listening-graphic{height:38px;opacity:.8;margin-bottom:.85rem;}
+.zp-listening-graphic b{position:absolute;left:0;top:50%;width:24%;height:1px;background:linear-gradient(90deg,transparent,#f26a5b,transparent);box-shadow:0 0 7px #d13d34;opacity:.65;animation:zp-index-scan 7s ease-in-out infinite alternate;}
+.zp-listening-track:nth-child(2) .zp-listening-graphic b{animation-delay:-2s;}.zp-listening-track:nth-child(3) .zp-listening-graphic b{animation-delay:-4s;}
+.zp-listening-track.is-playing .zp-listening-graphic b{opacity:1;animation-duration:3s;}
+.zp-cue-play{border-color:#ce766a;}.zp-cue-play:hover,.zp-listening-track.is-playing .zp-cue-play{background:#e06a5c;color:#100707;}
+@keyframes zp-index-orbit{to{transform:rotate(360deg)}}
+@keyframes zp-index-breathe{50%{opacity:.45;transform:scale(.7)}}
+@keyframes zp-index-scan{from{transform:translateX(0)}to{transform:translateX(300%)}}
+@media(max-width:767px){.zp-listening-head{min-height:0;}.zp-listening-aside{align-items:center;}.zp-index-emblem{width:4rem;}.zp-listening-intro{font-size:.82rem;}}
+@media(prefers-reduced-motion:reduce){.zp-index-orbit,.zp-index-core,.zp-listening-graphic b{animation:none;}.zp-listening-track,.zp-listening-track:before,.zp-cue-play{transition:none;}}
+/* Analog terminal styling echoes the archive boot without obscuring controls. */
+.zp-listening{--index-red:#ee3e42;--index-mono:ui-monospace,"Cascadia Mono","SF Mono",Menlo,Consolas,"Liberation Mono",monospace;background:#090304;border:1px solid rgba(233,57,65,.35);box-shadow:inset 0 0 0 1px #030102,0 20px 70px rgba(0,0,0,.3);}
+.zp-listening:before{z-index:3;pointer-events:none;inset:-1px;width:auto;height:auto;background:linear-gradient(var(--index-red),var(--index-red)) left top / 25px 2px no-repeat,linear-gradient(var(--index-red),var(--index-red)) left top / 2px 25px no-repeat,linear-gradient(var(--index-red),var(--index-red)) right top / 25px 2px no-repeat,linear-gradient(var(--index-red),var(--index-red)) right top / 2px 25px no-repeat,linear-gradient(var(--index-red),var(--index-red)) left bottom / 25px 2px no-repeat,linear-gradient(var(--index-red),var(--index-red)) left bottom / 2px 25px no-repeat,linear-gradient(var(--index-red),var(--index-red)) right bottom / 25px 2px no-repeat,linear-gradient(var(--index-red),var(--index-red)) right bottom / 2px 25px no-repeat;box-shadow:none;opacity:.8;}
+.zp-listening:after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 2px,rgba(0,0,0,.12) 3px 4px);opacity:.5;}
+.zp-index-terminal-bar,.zp-listening-register,.zp-listening-foot,.zp-listening-eyebrow,.zp-listening-tag,.zp-listening-index span+span,.zp-cue-times,.zp-index-console,.zp-index-scope-note{font-family:var(--index-mono);}
+.zp-index-terminal-bar{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1.1rem clamp(1.5rem,4vw,3.5rem);border-bottom:1px solid rgba(224,68,72,.25);color:#c18c89;font:500 .62rem/1.4 var(--index-mono);letter-spacing:.13em;}
+.zp-index-terminal-bar b{color:#ef5052;font-weight:400;}.zp-index-online{color:#f27b75;white-space:nowrap;display:flex;align-items:center;gap:.55rem;}.zp-index-online i{width:6px;height:6px;border-radius:50%;background:#ee3e42;box-shadow:0 0 10px #ee3e42;animation:zp-index-breathe 3s ease-in-out infinite;}
+.zp-listening-head{min-height:0;align-items:center;gap:1.5rem;background:radial-gradient(ellipse 50% 90% at 78% 50%,rgba(156,11,25,.26),transparent),radial-gradient(ellipse at 45% 40%,#1c0709,#090304 70%);}
+.zp-index-copy{position:relative;z-index:1;}.zp-listening-eyebrow{color:#f46b66;letter-spacing:.23em;}.zp-listening h3{text-transform:uppercase;font-size:clamp(3.3rem,6.4vw,5.7rem);line-height:.88;letter-spacing:.01em;color:#ee3e42;text-shadow:2px 3px 0 #3c070b;}.zp-listening h3 em{display:block;margin-top:.16em;color:#e9d8d3;font-size:.54em;font-style:normal;letter-spacing:.25em;}
+.zp-listening-intro{margin:1.5rem 0 0;max-width:27rem;color:#dac2bb;}.zp-index-console{max-width:27rem;margin-top:1.7rem;padding:.8rem 1rem;border-top:1px solid rgba(202,58,61,.32);border-left:2px solid #d7484b;background:linear-gradient(90deg,rgba(76,12,19,.35),transparent);color:#d9aaa4;font-size:.62rem;line-height:1.6;letter-spacing:.12em;}
+.zp-index-console span:first-child{color:#e7b7b0;}.zp-index-cursor{display:inline-block;vertical-align:-.1em;width:.55em;height:1em;margin-left:.5em;background:#f2605c;box-shadow:0 0 9px rgba(238,62,66,.75);animation:zp-index-cursor 1.2s steps(2) infinite;}
+.zp-index-scope{position:relative;width:min(100%,16rem);aspect-ratio:1;justify-self:center;display:grid;place-items:center;pointer-events:none;}.zp-index-scope:before{content:"";position:absolute;inset:-8%;border-radius:50%;background:radial-gradient(circle,rgba(183,13,25,.2),transparent 68%);filter:blur(20px);}
+.zp-index-disc{width:80%;aspect-ratio:1;border:1px solid rgba(238,64,69,.36);border-radius:50%;background:repeating-radial-gradient(circle,rgba(244,73,72,.09) 0 1px,transparent 1px 15px),radial-gradient(circle,#020101 0 7%,#4c070e 11%,#9e1521 15%,#3b060c 23%,#0e0305 48%,#070203 70%);box-shadow:0 0 65px rgba(184,12,25,.25),inset 0 0 48px rgba(0,0,0,.88);animation:zp-index-scope-breathe 5s ease-in-out infinite;}
+.zp-index-disc:after{content:"";position:absolute;inset:10%;border-radius:50%;background:linear-gradient(90deg,transparent calc(50% - .5px),rgba(238,62,66,.4) 50%,transparent calc(50% + .5px)),linear-gradient(0deg,transparent calc(50% - .5px),rgba(238,62,66,.4) 50%,transparent calc(50% + .5px));}
+.zp-index-wave{position:absolute;left:0;top:35%;width:100%;height:30%;overflow:visible;filter:drop-shadow(0 0 7px rgba(239,56,62,.9));}.zp-index-wave path{fill:none;stroke-linecap:round;stroke-linejoin:round;}.zp-index-wave-base{stroke:rgba(247,112,103,.25);stroke-width:1;}.zp-index-wave-trace{stroke:#fa7670;stroke-width:1.5;stroke-dasharray:1100;animation:zp-index-trace 7s ease-in-out infinite;}
+.zp-index-scope-note{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:space-between;color:#c78b86;font-size:.55rem;letter-spacing:.14em;}
+.zp-listening-register{background:#16090b;border-color:rgba(224,68,72,.3);color:#d5a5a0;}.zp-listening-track{border-color:rgba(224,68,72,.22);}.zp-listening-track:hover,.zp-listening-track.is-playing{background:linear-gradient(90deg,rgba(88,12,19,.34),rgba(16,4,5,.5));}.zp-listening-index{color:#e66963;}.zp-listening-tag{color:#f07870;}.zp-listening-info>p:last-child{color:#d1b9b3;}
+.zp-listening-player{padding:.9rem 1rem;border:1px solid rgba(202,58,61,.24);background:linear-gradient(130deg,rgba(56,10,14,.34),rgba(4,1,2,.6));}.zp-listening-graphic{height:25px;}.zp-cue-play{width:44px;height:44px;border-radius:0;border-color:#ee3e42;background:#26070b;color:#f3c4ba;}.zp-cue-play:hover,.zp-listening-track.is-playing .zp-cue-play{background:#ee3e42;color:#160405;}.zp-cue-times{color:#e1b3ac;}
+.zp-cue-seek{appearance:none;-webkit-appearance:none;background:transparent;accent-color:#f36f68;}.zp-cue-seek::-webkit-slider-runnable-track{height:4px;background:linear-gradient(90deg,#ec3940 0%,#ff8f80 var(--seek,0%),#361014 var(--seek,0%),#361014 100%);}.zp-cue-seek::-moz-range-track{height:4px;background:#361014;}.zp-cue-seek::-moz-range-progress{height:4px;background:#ee3e42;}.zp-cue-seek::-webkit-slider-thumb{-webkit-appearance:none;width:10px;height:10px;margin-top:-3px;border-radius:0;background:#f07b70;box-shadow:0 0 8px rgba(248,57,64,.65);}.zp-cue-seek::-moz-range-thumb{width:10px;height:10px;border:0;border-radius:0;background:#f07b70;box-shadow:0 0 8px rgba(248,57,64,.65);}
+@keyframes zp-index-cursor{50%{opacity:0}}@keyframes zp-index-scope-breathe{50%{filter:brightness(1.22)}}@keyframes zp-index-trace{0%{stroke-dashoffset:1100;opacity:.4}45%,75%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:-1100;opacity:.4}}
+@media(min-width:768px){.zp-listening-head{grid-template-columns:minmax(0,1fr) minmax(12rem,17rem);}}
+@media(max-width:767px){.zp-listening-head{grid-template-columns:minmax(0,1fr) minmax(6rem,9rem);gap:.75rem;}.zp-index-scope{width:100%;}.zp-index-scope-note{font-size:.45rem;letter-spacing:.06em;}.zp-listening h3{font-size:clamp(2.7rem,9vw,4rem);}.zp-listening h3 em{letter-spacing:.14em;}.zp-index-console{font-size:.55rem;}}
+@media(max-width:480px){.zp-index-terminal-bar{font-size:.51rem;letter-spacing:.07em;}.zp-listening-head{grid-template-columns:1fr;}.zp-index-scope{width:8.5rem;margin-top:-.25rem;justify-self:end;}.zp-listening-intro{margin-top:1rem;}.zp-index-console{margin-top:1rem;}}
+@media(prefers-reduced-motion:reduce){.zp-index-online i,.zp-index-cursor,.zp-index-disc,.zp-index-wave-trace{animation:none;}.zp-index-wave-trace{stroke-dashoffset:0;}}
+/* A live oscilloscope sits inside the active cue's terminal. */
+.zp-listening-graphic{height:54px;border:1px solid rgba(204,69,68,.2);background:repeating-linear-gradient(90deg,transparent 0 23px,rgba(226,65,66,.08) 24px),repeating-linear-gradient(0deg,transparent 0 17px,rgba(226,65,66,.06) 18px),#0c0405;}
+.zp-listening-graphic:before{background:#66312f}.zp-listening-graphic:after{right:10px;top:14px}.zp-listening-graphic span:first-child{margin-left:10px;}
+.zp-listening-graphic i{right:21px;}.zp-listening-graphic small{display:none;position:absolute;right:6px;top:4px;z-index:2;font:500 8px/1 ui-monospace,monospace;letter-spacing:.12em;color:#eaa39a;}
+.zp-cue-visualizer{display:none;position:absolute;inset:0;width:100%;height:100%;z-index:1;}
+.zp-listening-track.has-visualizer .zp-cue-visualizer,.zp-listening-track.has-visualizer .zp-listening-graphic small{display:block;}
+.zp-listening-track.has-visualizer .zp-listening-graphic>span,.zp-listening-track.has-visualizer .zp-listening-graphic>i,.zp-listening-track.has-visualizer .zp-listening-graphic>b,.zp-listening-track.has-visualizer .zp-listening-graphic:before,.zp-listening-track.has-visualizer .zp-listening-graphic:after{opacity:0;}
+@media(prefers-reduced-motion:reduce){.zp-listening-track.has-visualizer .zp-cue-visualizer,.zp-listening-track.has-visualizer .zp-listening-graphic small{display:none;}}
 .zp-fn-actions{display:flex;flex-wrap:wrap;gap:.75rem 1.25rem;align-items:center;margin-top:1.75rem;}
 .zp-fn-btn{display:inline-flex;min-height:48px;align-items:center;justify-content:center;padding:.8rem 1.5rem;background:#c41e1e;color:#f0ebe3;border:1px solid #c41e1e;font-size:11px;letter-spacing:.16em;text-transform:uppercase;text-decoration:underline;text-underline-offset:3px;transition:background-color .15s,border-color .15s;}
 .zp-fn-btn:hover{background:#e65650;border-color:#e65650;color:#030303;}
@@ -761,9 +945,14 @@ export function ensureFunnelAssets(html) {
     kept = true;
     return block;
   });
-  if (kept) return out;
-  if (!out.includes('</head>')) throw new Error('conversion-copy: no </head> to attach funnel styles');
-  return out.replace('</head>', () => `${block}\n</head>`);
+  if (!kept) {
+    if (!out.includes('</head>')) throw new Error('conversion-copy: no </head> to attach funnel styles');
+    out = out.replace('</head>', () => `${block}\n</head>`);
+  }
+  const script = '<script defer src="/selected-cues.js?v=2"></script>';
+  out = out.replace(/<script defer src="\/selected-cues\.js(?:\?v=[^"]+)?"><\/script>\n?/g, '');
+  out = out.replace('</head>', () => `${script}\n</head>`);
+  return out;
 }
 
 /**
