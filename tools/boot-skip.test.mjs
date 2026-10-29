@@ -290,7 +290,7 @@ test('skip button markup is accessible, free of aria-hidden ancestors, and style
   assert.match(bootCss, /#zp-boot\.zp-off\.zp-fast\{animation:zpFadeOut \.16s ease forwards\}/);
   // The document and homepage bundle are precached, so the press quote update
   // requires a fresh cache (v53).
-  assert.match(sw, /CACHE_NAME\s*=\s*'zazie-v53'/);
+  assert.match(sw, /CACHE_NAME\s*=\s*'zazie-v54'/);
 });
 
 test('clicking #zp-boot-skip immediately dismisses the intro in fast mode and removes the node', async () => {

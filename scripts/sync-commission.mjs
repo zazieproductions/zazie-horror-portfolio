@@ -41,7 +41,7 @@ const { commissioningHtml, factorsHtml, inclusionsHtml, inquiryFormHtml, licence
 const { ORG_ID } = await import('../build/data/site.js');
 const { hubs } = await import('../build/data/hubs.js');
 
-const SERVICE_ID = `${SITE_ORIGIN}/services#service`;
+const SERVICE_ID = `${SITE_ORIGIN}/#scoring-service`;
 const PROVIDER_ID = ORG_ID;
 
 const hubDescription = (p) => {
@@ -53,7 +53,6 @@ const hubDescription = (p) => {
 /** Generated markup for each marker block. */
 const BLOCKS = {
   'meta-hire': () => metaHtml(hubDescription('/hire-a-composer')),
-  'meta-services': () => metaHtml(hubDescription('/services')),
   commissioning: () => commissioningHtml(),
   inclusions: () => inclusionsHtml(),
   licences: () => licencesHtml(),

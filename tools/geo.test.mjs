@@ -37,7 +37,7 @@ function parseJsonLd(html, label) {
 test('every indexable route places <h1> inside <main> and separates numeral spans cleanly', () => {
   // 81 = 18 hubs + 9 productions + 30 cues + 24 catalogue items; /composer
   // was retired (2026-10-29) and 301s to /#about, so it is no longer a route.
-  assert.ok(allRoutes.length >= 81, `expected at least 81 indexable routes, found ${allRoutes.length}`);
+  assert.ok(allRoutes.length >= 80, `expected at least 80 indexable routes, found ${allRoutes.length}`);
   for (const route of allRoutes) {
     const html = fs.readFileSync(fileForRoute(route.path), 'utf8');
     const mainMatch = /<main\b[^>]*>([\s\S]*?)<\/main>/i.exec(html);
@@ -141,7 +141,7 @@ test('navigation headers stay visually concise while non-visible attributes and 
   const homeHead = /<head>([\s\S]*?)<\/head>/i.exec(homeHtml)?.[1] ?? '';
   const navHtml = /<nav aria-label="Primary navigation"[\s\S]*?<\/nav>/.exec(homeHtml)?.[0] ?? '';
   const visibleLabels = [...navHtml.matchAll(/>([^<]+)<\/a>/g)].map((m) => m[1].trim());
-  assert.deepEqual(visibleLabels, ['Reel', 'Work', 'Services', 'Store', 'Scoring inquiry']);
+  assert.deepEqual(visibleLabels, ['Reel', 'Work', 'Store', 'Scoring inquiry']);
   for (const term of specialistTerms) {
     assert.match(navHtml, new RegExp(term, 'i'), `homepage nav non-visible title attributes include "${term}"`);
     assert.match(homeHead, new RegExp(term, 'i'), `homepage <head> metadata includes "${term}"`);
@@ -158,7 +158,7 @@ test('navigation headers stay visually concise while non-visible attributes and 
     const html = fs.readFileSync(fileForRoute(route.path), 'utf8');
     const tabsHtml = /<nav class="tabs"[\s\S]*?<\/nav>/.exec(html)?.[0] ?? '';
     const tabLabels = [...tabsHtml.matchAll(/>([^<]+)<\/a>/g)].map((m) => m[1].trim());
-    assert.deepEqual(tabLabels, ['Reel', 'Work', 'Composer', 'Services', 'Store'], `${route.path}: concise visible masthead labels`);
+    assert.deepEqual(tabLabels, ['Reel', 'Work', 'Composer', 'Store'], `${route.path}: concise visible masthead labels`);
     for (const term of specialistTerms) {
       assert.match(tabsHtml, new RegExp(term, 'i'), `${route.path}: non-visible masthead title attributes include "${term}"`);
     }

@@ -62,7 +62,6 @@ const llmsTxt = `# ${SITE_NAME} | Experimental Psychological Horror Film Compose
 ${[
   '/hire-a-composer',
   '/how-to-hire-a-horror-composer',
-  '/services',
   '/process',
   '/game-scoring',
   '/sound-design',

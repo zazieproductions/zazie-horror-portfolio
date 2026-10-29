@@ -151,17 +151,6 @@ export const hubs: Hub[] = [
     videos: [],
   },
   {
-    path: "/services",
-    name: "Services",
-    title: "Horror Film Scoring Services: Commissioning a Score | Zazie Productions",
-    description: "Original music for experimental psychological horror and arthouse cinema, quoted per project: what you can commission, what is included, licence options and how your quote is shaped.",
-    lastmod: "2026-10-27",
-    images: [
-      { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Productions psychological horror film scoring suite, Asheville, NC", title: "Psychological Horror Scoring Suite - Services" },
-    ],
-    videos: [],
-  },
-  {
     path: "/store",
     name: "Catalogue",
     title: "Catalogue: Experimental Music, Sound Libraries, Tools and Objects | Zazie Productions",
