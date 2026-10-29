@@ -16,6 +16,11 @@
  *      after the showreel, in both the prerendered document and the React
  *      bundle's render order, and the numbered section kickers run in
  *      sequence (Biography is 03, not its shipped 05).
+ *   5. The objections FAQ (#zp-objections, reinstated 2026-10-29 with
+ *      owner-supplied copy) renders its seven questions immediately before
+ *      #contact in both render paths, and the copy held back at the owner's
+ *      decision (the union question; the stale "Q3/Q4" slot window) stays
+ *      off the homepage.
  *
  * Run: node --test tools/home-mount.test.mjs
  */
@@ -257,7 +262,66 @@ test('homepage copy stays concise in both render paths', () => {
   }
   assert.match(html, />Bio<\/h2>/);
   assert.ok(bundle.includes('children:"Bio"'));
-  assert.ok(!html.includes('id="zp-objections"') && !bundle.includes('zpFnObjections'));
+});
+
+test('objections FAQ (#zp-objections) answers the owner-supplied questions immediately before #contact in both render paths', () => {
+  const bundleName = /import\("\/(index-[0-9a-f]{8}\.js)"\)/.exec(html)?.[1];
+  assert.ok(bundleName);
+  const bundle = read(bundleName);
+
+  // Static snapshot: Press Kit, then objections, then the inquiry form.
+  const pressAt = html.indexOf('<section id="press"');
+  const objectionsAt = html.indexOf('<section id="zp-objections"');
+  const contactAt = html.indexOf('<section id="contact"');
+  assert.ok(pressAt > 0 && objectionsAt > pressAt && contactAt > objectionsAt,
+    'objections sit between #press and #contact in the prerendered document');
+  assert.equal(html.split('id="zp-objections"').length - 1, 1,
+    'exactly one objections section in the snapshot');
+
+  // Bundle: the same island renders immediately before the Contact component.
+  assert.ok(bundle.includes('function zpFnObjections('), 'bundle defines the objections island');
+  assert.ok(
+    bundle.includes('u.jsx(zpFnObjections,{}),u.jsx(dj,{"data-source-loc":"src/App.tsx:47:10"})'),
+    'bundle renders objections immediately before the contact section',
+  );
+
+  const section = html.slice(
+    html.indexOf('<!--ZP-FN-START:objections-->'),
+    html.indexOf('<!--ZP-FN-END:objections-->'),
+  );
+  assert.ok(section.length > 0, 'snapshot carries the marked objections block');
+  assert.equal(section.split('<details class="zp-fn-item">').length - 1, 7,
+    'the seven approved questions ship as native details items');
+  for (const required of [
+    'id="zp-objections-h"',
+    'Is it too early to bring you on?',
+    'the earlier, the better',
+    'Can you still help me?',
+    'Tell me the real number.',
+    'actually be available for my timeline?',
+    'no more than four feature engagements per year',
+    'three slots remain for Q4.',
+    'answered personally within 72 hours',
+    'What kinds of projects are you the best fit for?',
+    'already have a composer',
+    'How do you calculate your pricing or rates for a film score?',
+    'no rigid, published retail rate card',
+    'in different time zones?',
+    'href="#contact"',
+    'href="/faq"',
+    'href="/process"',
+  ]) {
+    assert.ok(section.includes(required), `objections section carries: ${required}`);
+    // The bundle island is the same markup, JSON-escaped: slashes survive,
+    // so the visible copy must be findable verbatim there too.
+    if (!required.startsWith('href=') && !required.startsWith('id=')) {
+      assert.ok(bundle.includes(required), `bundle objections island carries: ${required}`);
+    }
+  }
+  for (const heldBack of ['Q3/Q4', 'beginning.it', 'SAG-AFTRA', 'SAG-AFTRE', 'IATSE', 'union or non-union']) {
+    assert.ok(!section.includes(heldBack) && !bundle.includes(heldBack),
+      `held-back copy stays off the homepage: ${heldBack}`);
+  }
 });
 
 test('press kit (#press) ships laurels, a curated mix of press quotes, and fancy links in both SSR and bundle without retired or redundant chrome', () => {
