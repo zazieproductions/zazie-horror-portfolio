@@ -209,6 +209,7 @@ export function buildPromptBundle(options) {
   const title = stripBoundaryTags(options.prTitle).slice(0, 300);
   const body = stripBoundaryTags(options.prBody).slice(0, 1200);
   const skippedGenerated = entries.filter((entry) => entry.tier === 'generated').map((entry) => entry.path);
+  const reviewableFiles = entries.filter((entry) => entry.tier !== 'generated').map((entry) => entry.path);
   const changedFiles = entries.map((entry) => entry.path);
 
   const headerLines = [
@@ -243,6 +244,7 @@ export function buildPromptBundle(options) {
       heat,
       heatBadge: HEAT_PROFILES[heat].badge,
       totalChangedFiles: entries.length,
+      reviewableFileCount: reviewableFiles.length,
       changedFiles,
       includedFiles,
       skippedGenerated,

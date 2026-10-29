@@ -325,6 +325,25 @@ test('buildDeterministicRoast flags real hazards and repo guardrail violations w
   const merged = mergeWithDeterministic(cleanLlm, det, meta);
   assert.equal(merged.issues.length, det.issues.length);
   assert.ok(merged.overallScore <= 69);
+
+  const prosePatch = new Map([
+    [
+      'src/messages.mjs',
+      [
+        '--- a/src/messages.mjs',
+        '+++ b/src/messages.mjs',
+        '@@ -1,1 +1,2 @@',
+        '+export const note = "Never use eval() or an empty catch {} in code.";',
+      ].join('\n'),
+    ],
+  ]);
+  const proseRoast = buildDeterministicRoast({
+    entries: parseNameStatus('M\tsrc/messages.mjs'),
+    patchesByPath: prosePatch,
+    meta: { heat: 'medium-rare', changedFiles: ['src/messages.mjs'], includedFiles: ['src/messages.mjs'] },
+  });
+  assert.equal(proseRoast.issues.length, 0);
+  assert.equal(proseRoast.grade, 'A+');
 });
 
 test('roast.yml workflow never interpolates GitHub expressions directly inside shell run blocks', () => {

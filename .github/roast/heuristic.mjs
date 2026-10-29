@@ -48,6 +48,7 @@ const CODE_LINE_RULES = Object.freeze([
     fix: 'catch (err) {\n  console.error("Operation failed:", err);\n  throw err;\n}',
   },
   {
+    rawText: true,
     pattern: /(?:ghp_[A-Za-z0-9]{30,}|sk-[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----)/,
     severity: 'high',
     category: 'security',
@@ -162,6 +163,14 @@ function scanWorkflowAddedLines(filePath, addedLines, issues) {
   }
 }
 
+function stripStringLiterals(line) {
+  return line
+    .replace(/'(?:\\.|[^'\\])*'/g, "''")
+    .replace(/"(?:\\.|[^"\\])*"/g, '""')
+    .replace(/`(?:\\.|[^`\\])*`/g, '``')
+    .replace(/\/\/.*$/, '');
+}
+
 function scanCodeAddedLines(filePath, addedLines, issues) {
   if (/\.test\.[mc]?[jt]sx?$/.test(filePath)) return;
   const isTs = /\.(?:ts|tsx)$/.test(filePath);
@@ -184,10 +193,12 @@ function scanCodeAddedLines(filePath, addedLines, issues) {
       continue;
     }
 
+    const codeOnly = stripStringLiterals(text);
     for (const rule of CODE_LINE_RULES) {
       if (rule.tsOnly && !isTs) continue;
       if (rule.clientOnly && !isClient) continue;
-      if (rule.pattern.test(text)) {
+      const target = rule.rawText ? text : codeOnly;
+      if (rule.pattern.test(target)) {
         recordIssue(issues, filePath, line, rule);
       }
     }
@@ -337,11 +348,14 @@ export function buildDeterministicRoast({ entries, patchesByPath, meta }) {
     issues.length === 0
       ? CLEAN_VERDICTS[heat] || CLEAN_VERDICTS['medium-rare']
       : ISSUE_VERDICTS[heat] || ISSUE_VERDICTS['medium-rare'];
+  const scannedCount = Number.isFinite(meta.reviewableFileCount)
+    ? meta.reviewableFileCount
+    : meta.includedFiles.length;
   const topBurns =
     issues.length > 0
       ? issues.slice(0, 4).map((i) => i.burn)
       : [
-          `Scanned ${meta.includedFiles.length} reviewable file(s) and found zero slop — either this PR was crafted with surgical discipline or the bugs are wearing camouflage.`,
+          `Scanned ${scannedCount} reviewable file(s) and found zero slop — either this PR was crafted with surgical discipline or the bugs are wearing camouflage.`,
           'Zero runtime dependencies added, zero swallowed exceptions, and zero shell-interpolated workflow expressions.',
         ];
   const roadmap = issues

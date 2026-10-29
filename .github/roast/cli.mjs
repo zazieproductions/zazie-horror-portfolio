@@ -177,6 +177,9 @@ export function runRender(env = process.env) {
   if (meta.deterministicReport) {
     const md = renderRoastMarkdown(meta.deterministicReport, {
       ...baseContext,
+      filesAnalyzed: Number.isFinite(meta.reviewableFileCount)
+        ? meta.reviewableFileCount
+        : baseContext.filesAnalyzed,
       engine: 'static-guardrails',
     });
     fs.writeFileSync(outMarkdownFile, md, 'utf8');
