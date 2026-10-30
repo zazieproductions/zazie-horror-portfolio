@@ -10,9 +10,9 @@
  */
 
 export const PRESS_SECTION_CLASS =
-  'zp-pk-section relative overflow-hidden border-y border-blood/20 bg-ink py-20 sm:py-28 md:py-32';
+  'zp-pk-section relative overflow-hidden border-y border-blood/15 bg-ink py-14 sm:py-16 md:py-20';
 
-export const PRESS_CONTAINER_CLASS = 'mx-auto max-w-6xl px-5 sm:px-6 relative z-10';
+export const PRESS_CONTAINER_CLASS = 'zp-pk-container relative z-10 px-5 sm:px-6';
 
 function fmt(n: number): string {
   return Number(n.toFixed(2)).toString();
@@ -398,160 +398,158 @@ export function pressKitInnerHtml(): string {
   const palmSvg = buildCinemaPalmWreathSvg();
   const baySvg = buildBayMedallionWreathSvg();
 
-  const featuresHtml = PRESS_FEATURES.map(
-    (item) => `<a href="${escapeHtml(item.href)}" target="_blank" rel="noopener noreferrer" class="zp-pk-feature-card">
-      <span class="zp-pk-corner zp-pk-corner-tl" aria-hidden="true"></span>
-      <span class="zp-pk-corner zp-pk-corner-br" aria-hidden="true"></span>
-      <div class="zp-pk-feature-top">
-        <span class="zp-pk-feature-num">${escapeHtml(item.num)}</span>
-        <span class="zp-pk-feature-badge">${escapeHtml(item.badge)}</span>
-      </div>
-      <div class="zp-pk-feature-pub">${escapeHtml(item.publication)}</div>
-      <h3 class="zp-pk-feature-title">${escapeHtml(item.title)}</h3>
-      <p class="zp-pk-feature-desc">${escapeHtml(item.excerpt)}</p>
-      <div class="zp-pk-feature-foot">
-        <span class="zp-pk-feature-cta">${escapeHtml(item.cta)}</span>
-        <span class="zp-pk-feature-icon">${item.isPdf ? FILE_PDF_SVG : ARROW_UP_RIGHT_SVG}</span>
-      </div>
-    </a>`,
+  const coverageHtml = PRESS_FEATURES.map(
+    (item) => `<a href="${escapeHtml(item.href)}" target="_blank" rel="noopener noreferrer" class="zp-pk-feature-card" aria-label="${escapeHtml(
+      `${item.publication}: ${item.title}. ${item.badge}. ${item.cta}, opens in a new tab`,
+    )}">
+          <div class="zp-pk-feature-top">
+            <span class="zp-pk-feature-pub">${escapeHtml(item.publication)}</span>
+            <span class="zp-pk-feature-badge">${escapeHtml(item.badge)}</span>
+          </div>
+          <div class="zp-pk-feature-main">
+            <h3 class="zp-pk-feature-title">${escapeHtml(item.title)}</h3>
+            <span class="zp-pk-feature-icon" aria-hidden="true">${item.isPdf ? FILE_PDF_SVG : ARROW_UP_RIGHT_SVG}</span>
+          </div>
+        </a>`,
   ).join('');
 
   const directoryHtml = PROFILE_DIRECTORY.map(
-    (item) => `<a href="${escapeHtml(item.href)}" target="_blank" rel="noopener noreferrer" class="zp-pk-dir-link">
-      <span class="zp-pk-dir-monogram" aria-hidden="true">${escapeHtml(item.code)}</span>
-      <span class="zp-pk-dir-body">
-        <span class="zp-pk-dir-title">${escapeHtml(item.label)}</span>
-        <span class="zp-pk-dir-meta">${escapeHtml(item.meta)}</span>
-      </span>
-      <span class="zp-pk-dir-arrow" aria-hidden="true">${ARROW_UP_RIGHT_SVG}</span>
-    </a>`,
+    (item) => `<a href="${escapeHtml(item.href)}" target="_blank" rel="noopener noreferrer" class="zp-pk-dir-link" title="${escapeHtml(item.meta)}">
+          <span class="zp-pk-dir-title">${escapeHtml(item.label)}</span>
+          <span class="zp-pk-dir-arrow" aria-hidden="true">${ARROW_UP_RIGHT_SVG}</span>
+        </a>`,
   ).join('');
 
-  return `<div class="zp-pk-ambient" aria-hidden="true"></div>
-    <header class="zp-pk-masthead">
-      <h2 id="zp-press-heading" class="zp-pk-heading">Press Kit</h2>
-    </header>
+  return `<div class="zp-pk-dossier">
+      <span class="zp-pk-tick zp-pk-tick-tl" aria-hidden="true"></span>
+      <span class="zp-pk-tick zp-pk-tick-br" aria-hidden="true"></span>
 
-    <div class="zp-pk-tier">
-      <div class="zp-pk-tier-head">
-        <span class="zp-pk-tier-idx">I</span>
-        <span class="zp-pk-tier-title">Festival Laurels &amp; Jury Recognition</span>
-        <span class="zp-pk-tier-line" aria-hidden="true"></span>
-      </div>
-      <div class="zp-pk-laurels-grid" role="list" aria-label="Film festival laurels and awards">
-        <article class="zp-pk-laurel-card zp-pk-laurel-card-featured" role="listitem">
-          <div class="zp-pk-laurel-stage">
-            <picture>
-              <source srcset="/images/laurels/golden-bloody-globes.webp" type="image/webp" />
-              <img src="/images/laurels/golden-bloody-globes.png" alt="Golden Bloody Globes horror film festival laurel emblem" width="480" height="280" loading="lazy" decoding="async" class="zp-pk-laurel-img" />
-            </picture>
-          </div>
-          <div class="zp-pk-laurel-caption">
-            <div class="zp-pk-laurel-award zp-pk-laurel-award-crimson">Festival Award Honoree</div>
-            <h3 class="zp-pk-laurel-name">Golden Bloody Globes</h3>
-            <p class="zp-pk-laurel-detail">Los Angeles · International Horror Film Festival &amp; Awards</p>
-          </div>
-        </article>
+      <header class="zp-pk-masthead">
+        <p class="zp-pk-kicker">Recognition &middot; Response &middot; Coverage</p>
+        <h2 id="zp-press-heading" class="zp-pk-heading">Press Kit</h2>
+        <p class="zp-pk-lead">Festival laurels, critical response, selected features and verified profiles, gathered in one dossier.</p>
+      </header>
 
-        <article class="zp-pk-laurel-card" role="listitem">
-          <div class="zp-pk-laurel-stage">
-            ${oliveSvg}
-          </div>
-          <div class="zp-pk-laurel-caption">
-            <div class="zp-pk-laurel-award">Special Jury Mention · 2025</div>
-            <h3 class="zp-pk-laurel-name">Re:Fract Festival (2025)</h3>
-            <p class="zp-pk-laurel-detail">Received a Special Jury Mention · Festival for Nonlinear Futures</p>
-          </div>
-        </article>
-
-        <article class="zp-pk-laurel-card" role="listitem">
-          <div class="zp-pk-laurel-stage">
-            ${palmSvg}
-          </div>
-          <div class="zp-pk-laurel-caption">
-            <div class="zp-pk-laurel-award zp-pk-laurel-award-crimson">Festival Winner</div>
-            <h3 class="zp-pk-laurel-name">PVTV Fringe Flicks</h3>
-            <p class="zp-pk-laurel-detail">Liverpool, UK · Underground &amp; Experimental Cinema Showcase</p>
-          </div>
-        </article>
-
-        <article class="zp-pk-laurel-card" role="listitem">
-          <div class="zp-pk-laurel-stage">
-            ${baySvg}
-          </div>
-          <div class="zp-pk-laurel-caption">
-            <div class="zp-pk-laurel-award">Jury Special Mention · 2024</div>
-            <h3 class="zp-pk-laurel-name">Pebbles Underground</h3>
-            <p class="zp-pk-laurel-detail">VisualcontainerTV · Winter 2024 Award-Winning Works</p>
-          </div>
-        </article>
-      </div>
-    </div>
-
-    <div class="zp-pk-tier">
-      <div class="zp-pk-tier-head">
-        <span class="zp-pk-tier-idx">II</span>
-        <span class="zp-pk-tier-title">Critical Acclaim</span>
-        <span class="zp-pk-tier-line" aria-hidden="true"></span>
-      </div>
-      <div class="zp-pk-spotlight">
-        <figure class="zp-pk-lead-quote">
-          <span class="zp-pk-quote-glyph" aria-hidden="true">&ldquo;</span>
-          <div class="zp-pk-review-eyebrow">Critical Review · Phantom Requiem</div>
-          <blockquote cite="https://lakeivan.substack.com/p/spinning-in-the-wildness-phantom" class="zp-pk-blockquote-main">
-            &ldquo;While the film constantly references horror film tropes, the originality of the imagery is startling, and Kanwar-Torge has painstakingly assembled these layers of imagery and music into a gushingly assaultive onslaught with finesse and precision.&rdquo;
-          </blockquote>
-          <figcaption class="zp-pk-quote-footer">
-            <div class="zp-pk-critic">
-              <span class="zp-pk-critic-name">David Finkelstein</span>
-              <span class="zp-pk-critic-pub">Lake Ivan Film Journal · &ldquo;Spinning in the Wildness: Phantom Requiem&rdquo;</span>
+      <div class="zp-pk-tier">
+        <div class="zp-pk-tier-head">
+          <span class="zp-pk-tier-idx">I</span>
+          <span class="zp-pk-tier-title">Festival Laurels &amp; Jury Recognition</span>
+          <span class="zp-pk-tier-line" aria-hidden="true"></span>
+        </div>
+        <div class="zp-pk-laurels-grid" role="list" aria-label="Film festival laurels and awards">
+          <article class="zp-pk-laurel-card zp-pk-laurel-card-featured" role="listitem">
+            <div class="zp-pk-laurel-stage">
+              <picture>
+                <source srcset="/images/laurels/golden-bloody-globes.webp" type="image/webp" />
+                <img src="/images/laurels/golden-bloody-globes.png" alt="Golden Bloody Globes horror film festival laurel emblem" width="480" height="280" loading="lazy" decoding="async" class="zp-pk-laurel-img" />
+              </picture>
             </div>
-            <a href="https://lakeivan.substack.com/p/spinning-in-the-wildness-phantom" target="_blank" rel="noopener noreferrer" class="zp-pk-review-cta">
-              <span>Read Full Review</span>
-              ${ARROW_UP_RIGHT_SVG}
-            </a>
-          </figcaption>
-        </figure>
+            <div class="zp-pk-laurel-caption">
+              <div class="zp-pk-laurel-award zp-pk-laurel-award-crimson">Festival Award Honoree</div>
+              <h3 class="zp-pk-laurel-name">Golden Bloody Globes</h3>
+              <p class="zp-pk-laurel-detail">Los Angeles · International Horror Film Festival &amp; Awards</p>
+            </div>
+          </article>
 
-        <div class="zp-pk-side-quotes">
-          <figure class="zp-pk-mini-quote">
-            <div class="zp-pk-mini-label">On Psychological Horror</div>
-            <blockquote cite="https://billboardwire.com/how-an-underground-experimental-musician-became-a-go-to-composer-for-psychological-horror/" class="zp-pk-mini-text">
-              &ldquo;His scores are built around tension, anticipation, and psychological misdirection.&rdquo;
-            </blockquote>
-            <figcaption class="zp-pk-mini-cite"><a href="https://billboardwire.com/how-an-underground-experimental-musician-became-a-go-to-composer-for-psychological-horror/" target="_blank" rel="noopener noreferrer">Ethan Walker · BillboardWire</a></figcaption>
-          </figure>
+          <article class="zp-pk-laurel-card" role="listitem">
+            <div class="zp-pk-laurel-stage">
+              ${oliveSvg}
+            </div>
+            <div class="zp-pk-laurel-caption">
+              <div class="zp-pk-laurel-award">Special Jury Mention · 2025</div>
+              <h3 class="zp-pk-laurel-name">Re:Fract Festival (2025)</h3>
+              <p class="zp-pk-laurel-detail">Received a Special Jury Mention · Festival for Nonlinear Futures</p>
+            </div>
+          </article>
 
-          <figure class="zp-pk-mini-quote">
-            <div class="zp-pk-mini-label">On Immersive Sound</div>
-            <blockquote cite="https://limitless-magazine.com/2026/06/12/forget-asmr-zazie-productions-will-rewire-your-whole-nervous-system/" class="zp-pk-mini-text">
-              &ldquo;Listening on headphones feels almost physical, as if the music is happening around you rather than in front of you.&rdquo;
-            </blockquote>
-            <figcaption class="zp-pk-mini-cite"><a href="https://limitless-magazine.com/2026/06/12/forget-asmr-zazie-productions-will-rewire-your-whole-nervous-system/" target="_blank" rel="noopener noreferrer">Limitless Magazine · Anesthesia for the Signal Age</a></figcaption>
-          </figure>
+          <article class="zp-pk-laurel-card" role="listitem">
+            <div class="zp-pk-laurel-stage">
+              ${palmSvg}
+            </div>
+            <div class="zp-pk-laurel-caption">
+              <div class="zp-pk-laurel-award zp-pk-laurel-award-crimson">Festival Winner</div>
+              <h3 class="zp-pk-laurel-name">PVTV Fringe Flicks</h3>
+              <p class="zp-pk-laurel-detail">Liverpool, UK · Underground &amp; Experimental Cinema Showcase</p>
+            </div>
+          </article>
+
+          <article class="zp-pk-laurel-card" role="listitem">
+            <div class="zp-pk-laurel-stage">
+              ${baySvg}
+            </div>
+            <div class="zp-pk-laurel-caption">
+              <div class="zp-pk-laurel-award">Jury Special Mention · 2024</div>
+              <h3 class="zp-pk-laurel-name">Pebbles Underground</h3>
+              <p class="zp-pk-laurel-detail">VisualcontainerTV · Winter 2024 Award-Winning Works</p>
+            </div>
+          </article>
         </div>
       </div>
-    </div>
 
-    <div class="zp-pk-tier">
-      <div class="zp-pk-tier-head">
-        <span class="zp-pk-tier-idx">III</span>
-        <span class="zp-pk-tier-title">Selected Features, Interviews &amp; Coverage</span>
-        <span class="zp-pk-tier-line" aria-hidden="true"></span>
-      </div>
-      <div class="zp-pk-features-grid">
-        ${featuresHtml}
-      </div>
-    </div>
+      <div class="zp-pk-tier">
+        <div class="zp-pk-tier-head">
+          <span class="zp-pk-tier-idx">II</span>
+          <span class="zp-pk-tier-title">Critical Acclaim</span>
+          <span class="zp-pk-tier-line" aria-hidden="true"></span>
+        </div>
+        <div class="zp-pk-spotlight">
+          <figure class="zp-pk-lead-quote">
+            <div class="zp-pk-review-eyebrow">Critical Review · Phantom Requiem</div>
+            <blockquote cite="https://lakeivan.substack.com/p/spinning-in-the-wildness-phantom" class="zp-pk-blockquote-main">
+              &ldquo;While the film constantly references horror film tropes, the originality of the imagery is startling, and Kanwar-Torge has painstakingly assembled these layers of imagery and music into a gushingly assaultive onslaught with finesse and precision.&rdquo;
+            </blockquote>
+            <figcaption class="zp-pk-quote-footer">
+              <div class="zp-pk-critic">
+                <span class="zp-pk-critic-name">David Finkelstein</span>
+                <span class="zp-pk-critic-pub">Lake Ivan Film Journal · &ldquo;Spinning in the Wildness: Phantom Requiem&rdquo;</span>
+              </div>
+              <a href="https://lakeivan.substack.com/p/spinning-in-the-wildness-phantom" target="_blank" rel="noopener noreferrer" class="zp-pk-review-cta">
+                <span>Read Full Review</span>
+                ${ARROW_UP_RIGHT_SVG}
+              </a>
+            </figcaption>
+          </figure>
 
-    <div class="zp-pk-tier zp-pk-tier-last">
-      <div class="zp-pk-tier-head">
-        <span class="zp-pk-tier-idx">IV</span>
-        <span class="zp-pk-tier-title">Official Profiles, Credits &amp; Streaming</span>
-        <span class="zp-pk-tier-line" aria-hidden="true"></span>
+          <div class="zp-pk-side-quotes">
+            <figure class="zp-pk-mini-quote">
+              <div class="zp-pk-mini-label">On Psychological Horror</div>
+              <blockquote cite="https://billboardwire.com/how-an-underground-experimental-musician-became-a-go-to-composer-for-psychological-horror/" class="zp-pk-mini-text">
+                &ldquo;His scores are built around tension, anticipation, and psychological misdirection.&rdquo;
+              </blockquote>
+              <figcaption class="zp-pk-mini-cite"><a href="https://billboardwire.com/how-an-underground-experimental-musician-became-a-go-to-composer-for-psychological-horror/" target="_blank" rel="noopener noreferrer">Ethan Walker · BillboardWire</a></figcaption>
+            </figure>
+
+            <figure class="zp-pk-mini-quote">
+              <div class="zp-pk-mini-label">On Immersive Sound</div>
+              <blockquote cite="https://limitless-magazine.com/2026/06/12/forget-asmr-zazie-productions-will-rewire-your-whole-nervous-system/" class="zp-pk-mini-text">
+                &ldquo;Listening on headphones feels almost physical, as if the music is happening around you rather than in front of you.&rdquo;
+              </blockquote>
+              <figcaption class="zp-pk-mini-cite"><a href="https://limitless-magazine.com/2026/06/12/forget-asmr-zazie-productions-will-rewire-your-whole-nervous-system/" target="_blank" rel="noopener noreferrer">Limitless Magazine · Anesthesia for the Signal Age</a></figcaption>
+            </figure>
+          </div>
+        </div>
       </div>
-      <div class="zp-pk-dir-grid">
-        ${directoryHtml}
+
+      <div class="zp-pk-tier">
+        <div class="zp-pk-tier-head">
+          <span class="zp-pk-tier-idx">III</span>
+          <span class="zp-pk-tier-title">Selected Features, Interviews &amp; Coverage</span>
+          <span class="zp-pk-tier-line" aria-hidden="true"></span>
+        </div>
+        <div class="zp-pk-features-grid">
+          ${coverageHtml}
+        </div>
+      </div>
+
+      <div class="zp-pk-tier zp-pk-tier-last">
+        <div class="zp-pk-tier-head">
+          <span class="zp-pk-tier-idx">IV</span>
+          <span class="zp-pk-tier-title">Official Profiles, Credits &amp; Streaming</span>
+          <span class="zp-pk-tier-line" aria-hidden="true"></span>
+        </div>
+        <div class="zp-pk-dir-grid">
+          ${directoryHtml}
+        </div>
       </div>
     </div>`;
 }
@@ -561,172 +559,247 @@ export function pressKitSectionHtml(): string {
 }
 
 export const PRESS_CSS = `
+/* Press kit: one compact dossier panel. Every block is separated by hairlines
+   instead of boxes, so the section reads as a single document rather than four
+   stacked card grids. */
 .zp-pk-section {
   background:
-    radial-gradient(ellipse 75% 42% at 50% 0%, rgba(139, 0, 0, 0.13) 0%, transparent 72%),
-    radial-gradient(ellipse 55% 45% at 88% 58%, rgba(216, 190, 130, 0.045) 0%, transparent 70%),
-    linear-gradient(180deg, #060607 0%, #050505 52%, #070607 100%);
+    radial-gradient(ellipse 62% 42% at 50% -6%, rgba(139, 0, 0, 0.2) 0%, transparent 68%),
+    radial-gradient(ellipse 44% 40% at 92% 46%, rgba(216, 190, 130, 0.032) 0%, transparent 72%),
+    linear-gradient(180deg, #070607 0%, #050505 58%, #070607 100%);
 }
-.zp-pk-ambient {
+.zp-pk-section .zp-pk-container {
+  width: 100%;
+  max-width: 66rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+.zp-pk-dossier {
+  position: relative;
+  padding: clamp(1.4rem, 3.4vw, 2.6rem) clamp(1.15rem, 3.2vw, 2.9rem) clamp(1.5rem, 3.4vw, 2.7rem);
+  border: 1px solid rgba(240, 235, 227, 0.09);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.022) 0%, rgba(255, 255, 255, 0.005) 46%, rgba(0, 0, 0, 0.18) 100%),
+    rgba(8, 8, 9, 0.55);
+  box-shadow: 0 44px 90px -70px rgba(0, 0, 0, 0.95);
+}
+.zp-pk-dossier::before {
+  content: "";
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(223, 196, 139, 0) 0%, rgba(223, 196, 139, 0.42) 26%, rgba(223, 196, 139, 0.42) 74%, rgba(223, 196, 139, 0) 100%);
   pointer-events: none;
-  background-image:
-    linear-gradient(90deg, rgba(240, 235, 227, 0.025) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(240, 235, 227, 0.02) 1px, transparent 1px);
-  background-size: 96px 96px;
-  mask-image: radial-gradient(ellipse 80% 65% at 50% 32%, #000 15%, transparent 80%);
-  -webkit-mask-image: radial-gradient(ellipse 80% 65% at 50% 32%, #000 15%, transparent 80%);
-  opacity: 0.45;
 }
+.zp-pk-tick {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  pointer-events: none;
+  opacity: 0.55;
+}
+.zp-pk-tick-tl {
+  top: -1px;
+  left: -1px;
+  border-top: 1px solid #dfc48b;
+  border-left: 1px solid #dfc48b;
+}
+.zp-pk-tick-br {
+  right: -1px;
+  bottom: -1px;
+  border-right: 1px solid rgba(230, 86, 80, 0.75);
+  border-bottom: 1px solid rgba(230, 86, 80, 0.75);
+}
+
+/* Masthead */
 .zp-pk-masthead {
-  padding-bottom: 2.25rem;
-  border-bottom: 1px solid rgba(240, 235, 227, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding-bottom: 1.3rem;
+  border-bottom: 1px solid rgba(240, 235, 227, 0.08);
 }
-@media (min-width: 1024px) {
-  .zp-pk-masthead {
-    padding-bottom: 2.65rem;
-  }
+.zp-pk-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #e65650;
+}
+.zp-pk-kicker::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 1.5rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
 }
 .zp-pk-heading {
   margin: 0;
   font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: clamp(2.55rem, 5.2vw, 4.1rem);
+  font-size: clamp(2.05rem, 4.6vw, 3.05rem);
   font-weight: 500;
   line-height: 1.02;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.01em;
   color: #f0ebe3;
 }
 .zp-pk-lead {
-  margin: 1rem 0 0;
-  max-width: 40rem;
+  margin: 0;
+  max-width: 36rem;
   font-family: Inter, system-ui, -apple-system, sans-serif;
-  font-size: 0.98rem;
-  line-height: 1.7;
-  color: #b5afa8;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: #9e9890;
+}
+@media (min-width: 900px) {
+  .zp-pk-masthead {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 19rem);
+    align-items: end;
+    column-gap: 2.5rem;
+  }
+  .zp-pk-kicker,
+  .zp-pk-heading {
+    grid-column: 1;
+  }
+  .zp-pk-lead {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: end;
+    max-width: none;
+  }
 }
 
-/* Section tiers */
+/* Section rules (I - IV) */
 .zp-pk-tier {
-  margin-top: 3rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(240, 235, 227, 0.07);
 }
-@media (min-width: 768px) {
-  .zp-pk-tier {
-    margin-top: 3.75rem;
-  }
+.zp-pk-masthead + .zp-pk-tier {
+  margin-top: 1.45rem;
+  padding-top: 0;
+  border-top: 0;
 }
 .zp-pk-tier-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1.35rem;
+  gap: 0.3rem 0.65rem;
+  margin-bottom: 0.95rem;
 }
 .zp-pk-tier-idx {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 1.75rem;
-  height: 1.45rem;
-  padding: 0 0.4rem;
-  border: 1px solid rgba(223, 196, 139, 0.3);
-  border-radius: 2px;
-  background: rgba(223, 196, 139, 0.06);
   font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  line-height: 1;
   color: #dfc48b;
+  opacity: 0.9;
 }
 .zp-pk-tier-title {
+  flex: 0 1 auto;
+  min-width: 0;
   font-family: Inter, system-ui, -apple-system, sans-serif;
-  font-size: 0.7rem;
+  font-size: 0.56rem;
   font-weight: 600;
-  letter-spacing: 0.26em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #d8d1c7;
+  color: #a9a39b;
+}
+@media (min-width: 640px) {
+  .zp-pk-tier-title {
+    font-size: 0.6rem;
+    letter-spacing: 0.24em;
+  }
 }
 .zp-pk-tier-line {
-  flex: 1 1 auto;
+  flex: 1 1 2rem;
+  min-width: 0.75rem;
   height: 1px;
-  background: linear-gradient(90deg, rgba(240, 235, 227, 0.16), rgba(240, 235, 227, 0.02));
+  background: linear-gradient(90deg, rgba(240, 235, 227, 0.13), rgba(240, 235, 227, 0));
 }
 
-/* Tier I: Festival Laurels */
+/* I. Laurels: one quiet band of marks, divided by hairlines */
 .zp-pk-laurels-grid {
+  --zp-pk-stage: 4.6rem;
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.6rem 0.5rem;
 }
 @media (min-width: 640px) {
   .zp-pk-laurels-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1.15rem;
+    --zp-pk-stage: 5.3rem;
+    gap: 1.9rem 0.75rem;
   }
 }
-@media (min-width: 1120px) {
+@media (min-width: 860px) {
   .zp-pk-laurels-grid {
+    --zp-pk-stage: 6.35rem;
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+  }
+  .zp-pk-laurel-card + .zp-pk-laurel-card {
+    border-left: 1px solid rgba(240, 235, 227, 0.07);
   }
 }
 .zp-pk-laurel-card {
-  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 1.35rem 1.15rem 1.3rem;
-  border: 1px solid rgba(240, 235, 227, 0.1);
-  border-radius: 2px;
-  background:
-    radial-gradient(ellipse 80% 55% at 50% 28%, rgba(223, 196, 139, 0.065) 0%, transparent 72%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.026) 0%, rgba(10, 10, 12, 0.85) 100%);
-  box-shadow: 0 18px 40px -28px rgba(0, 0, 0, 0.9);
-  transition: border-color 0.28s ease, transform 0.28s ease, box-shadow 0.28s ease;
-}
-.zp-pk-laurel-card-featured {
-  border-color: rgba(184, 32, 32, 0.34);
-  background:
-    radial-gradient(ellipse 82% 58% at 50% 30%, rgba(168, 22, 22, 0.14) 0%, transparent 74%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.03) 0%, rgba(10, 8, 9, 0.9) 100%);
-}
-.zp-pk-laurel-card:hover {
-  border-color: rgba(223, 196, 139, 0.38);
-  transform: translateY(-2px);
-  box-shadow: 0 22px 46px -24px rgba(0, 0, 0, 0.95), 0 0 28px -14px rgba(223, 196, 139, 0.25);
-}
-.zp-pk-laurel-card-featured:hover {
-  border-color: rgba(230, 86, 80, 0.55);
-  box-shadow: 0 22px 46px -24px rgba(0, 0, 0, 0.95), 0 0 32px -12px rgba(184, 32, 32, 0.4);
+  align-items: center;
+  min-width: 0;
+  padding: 0 0.65rem;
+  text-align: center;
 }
 .zp-pk-laurel-stage {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 9.25rem;
-  padding: 0.25rem 0.35rem;
+  width: 100%;
+  height: var(--zp-pk-stage);
+}
+.zp-pk-laurel-stage picture {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
 }
 .zp-pk-laurel-img {
   width: auto;
   max-width: 100%;
-  height: 8.5rem;
+  height: var(--zp-pk-stage);
   object-fit: contain;
-  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.65));
+  opacity: 0.94;
+  transition: opacity 0.25s ease;
+}
+.zp-pk-laurel-img,
+.zp-pk-laurel-svg {
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.55));
 }
 .zp-pk-laurel-svg {
   width: 100%;
-  max-width: 15.5rem;
-  height: 8.65rem;
+  max-width: 13.5rem;
+  height: var(--zp-pk-stage);
   overflow: visible;
-  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.55));
+  opacity: 0.94;
+  transition: opacity 0.25s ease;
+}
+.zp-pk-laurel-card:hover .zp-pk-laurel-img,
+.zp-pk-laurel-card:hover .zp-pk-laurel-svg {
+  opacity: 1;
 }
 .zp-pk-laurel-caption {
-  margin-top: 0.85rem;
-  padding-top: 0.9rem;
-  border-top: 1px solid rgba(240, 235, 227, 0.08);
-  text-align: center;
+  margin-top: 0.6rem;
 }
 .zp-pk-laurel-award {
   font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 0.63rem;
+  font-size: 0.54rem;
   font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -736,416 +809,307 @@ export const PRESS_CSS = `
   color: #e65650;
 }
 .zp-pk-laurel-name {
-  margin: 0.35rem 0 0;
+  margin: 0.28rem 0 0;
   font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 1.28rem;
+  font-size: 1rem;
   font-weight: 600;
-  line-height: 1.2;
+  line-height: 1.22;
   color: #f0ebe3;
 }
 .zp-pk-laurel-detail {
-  margin: 0.3rem 0 0;
-  font-size: 0.76rem;
-  line-height: 1.5;
-  color: #a9a39b;
+  margin: 0.24rem 0 0;
+  font-size: 0.66rem;
+  line-height: 1.45;
+  color: #8f8981;
 }
-
-/* Tier II: Critical Spotlight */
-.zp-pk-spotlight {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.15rem;
-}
-@media (min-width: 1024px) {
-  .zp-pk-spotlight {
-    grid-template-columns: minmax(0, 1.32fr) minmax(0, 1fr);
-    gap: 1.35rem;
+@media (max-width: 639px) {
+  .zp-pk-laurel-detail {
+    display: none;
   }
 }
-.zp-pk-lead-quote {
-  position: relative;
+
+/* II. Critical acclaim: one lead review beside two short responses */
+.zp-pk-spotlight {
+  display: grid;
+  gap: 1.3rem;
+}
+@media (min-width: 960px) {
+  .zp-pk-spotlight {
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+    gap: 0;
+  }
+  .zp-pk-lead-quote {
+    padding-right: 2.25rem;
+  }
+  .zp-pk-side-quotes {
+    padding-left: 2.25rem;
+    border-left: 1px solid rgba(240, 235, 227, 0.07);
+  }
+}
+.zp-pk-lead-quote,
+.zp-pk-mini-quote {
   margin: 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 2rem 1.65rem 1.75rem;
-  border: 1px solid rgba(223, 196, 139, 0.22);
-  border-left: 3px solid #a81c1c;
-  border-radius: 2px;
-  background:
-    radial-gradient(ellipse 75% 65% at 12% 10%, rgba(139, 0, 0, 0.16) 0%, transparent 68%),
-    linear-gradient(155deg, rgba(255, 255, 255, 0.032) 0%, rgba(10, 9, 10, 0.92) 100%);
-  overflow: hidden;
-}
-@media (min-width: 640px) {
-  .zp-pk-lead-quote {
-    padding: 2.35rem 2.35rem 2rem;
-  }
-}
-.zp-pk-quote-glyph {
-  position: absolute;
-  top: -0.6rem;
-  right: 1.25rem;
-  font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 7.5rem;
-  line-height: 1;
-  color: rgba(223, 196, 139, 0.1);
-  pointer-events: none;
-  user-select: none;
 }
 .zp-pk-review-eyebrow {
   font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 0.66rem;
+  font-size: 0.55rem;
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: #dfc48b;
 }
 .zp-pk-blockquote-main {
-  margin: 1.1rem 0 1.6rem;
+  margin: 0.7rem 0 1rem;
   font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: clamp(1.38rem, 2.3vw, 1.86rem);
+  font-size: clamp(1.08rem, 1.85vw, 1.4rem);
   font-weight: 500;
   font-style: italic;
-  line-height: 1.38;
-  color: #f5f0e8;
+  line-height: 1.42;
+  color: #f0ebe3;
 }
 .zp-pk-quote-footer {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  padding-top: 1.2rem;
-  border-top: 1px solid rgba(240, 235, 227, 0.1);
+  gap: 0.7rem 1rem;
+  margin-top: auto;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(240, 235, 227, 0.08);
 }
 .zp-pk-critic {
   display: flex;
   flex-direction: column;
-  gap: 0.18rem;
+  gap: 0.1rem;
 }
 .zp-pk-critic-name {
   font-family: Inter, system-ui, -apple-system, sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.76rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
-  color: #f0ebe3;
+  letter-spacing: 0.05em;
+  color: #e6dfd5;
 }
 .zp-pk-critic-pub {
-  font-size: 0.77rem;
-  color: #b5afa8;
+  font-size: 0.7rem;
+  color: #9e9890;
 }
 .zp-pk-review-cta {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.58rem 1rem;
-  border: 1px solid rgba(223, 196, 139, 0.42);
-  border-radius: 2px;
-  background: rgba(223, 196, 139, 0.08);
+  gap: 0.4rem;
+  padding: 0 0 0.15rem;
+  border-bottom: 1px solid rgba(223, 196, 139, 0.32);
   font-family: Inter, system-ui, -apple-system, sans-serif;
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   font-weight: 600;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
   text-decoration: none;
-  color: #f5ebd6;
-  transition: border-color 0.22s ease, background-color 0.22s ease, color 0.22s ease, transform 0.22s ease;
+  color: #dfc48b;
+  transition: color 0.22s ease, border-color 0.22s ease;
 }
 .zp-pk-review-cta:hover {
-  border-color: #dfc48b;
-  background: rgba(223, 196, 139, 0.17);
   color: #ffffff;
-  transform: translateY(-1px);
+  border-color: #dfc48b;
 }
 .zp-pk-side-quotes {
   display: grid;
-  grid-template-rows: 1fr 1fr;
-  gap: 1.15rem;
+  gap: 1rem;
 }
 .zp-pk-mini-quote {
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 1.4rem 1.5rem;
-  border: 1px solid rgba(240, 235, 227, 0.1);
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.02);
+  gap: 0.4rem;
+}
+.zp-pk-mini-quote + .zp-pk-mini-quote {
+  padding-top: 1rem;
+  border-top: 1px solid rgba(240, 235, 227, 0.07);
 }
 .zp-pk-mini-label {
   font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 0.63rem;
+  font-size: 0.53rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: #e65650;
 }
 .zp-pk-mini-text {
-  margin: 0.7rem 0 0.85rem;
+  margin: 0;
   font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 1.12rem;
+  font-size: 0.98rem;
   font-style: italic;
-  line-height: 1.48;
-  color: #e6dfd5;
+  line-height: 1.5;
+  color: #d8d1c7;
 }
 .zp-pk-mini-cite {
-  font-size: 0.73rem;
-  letter-spacing: 0.06em;
-  color: #9e9890;
+  font-size: 0.66rem;
+  letter-spacing: 0.03em;
+  color: #8f8981;
+}
+.zp-pk-mini-cite a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(240, 235, 227, 0.14);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+.zp-pk-mini-cite a:hover {
+  color: #dfc48b;
+  border-color: rgba(223, 196, 139, 0.5);
 }
 
-/* Tier III: Monograph Press Feature Cards */
+/* III. Coverage: a two-column index, no cards */
 .zp-pk-features-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.1rem;
+  grid-template-columns: minmax(0, 1fr);
+  border-top: 1px solid rgba(240, 235, 227, 0.08);
 }
-@media (min-width: 720px) {
+@media (min-width: 900px) {
   .zp-pk-features-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
-@media (min-width: 1080px) {
-  .zp-pk-features-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.2rem;
-  }
-}
 .zp-pk-feature-card {
-  position: relative;
   display: flex;
   flex-direction: column;
-  padding: 1.55rem 1.5rem 1.4rem;
-  border: 1px solid rgba(240, 235, 227, 0.1);
-  border-radius: 2px;
-  background: linear-gradient(170deg, rgba(255, 255, 255, 0.028) 0%, rgba(11, 10, 12, 0.92) 100%);
+  gap: 0.3rem;
+  min-width: 0;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid rgba(240, 235, 227, 0.08);
   text-decoration: none;
   color: inherit;
-  transition: border-color 0.26s ease, background-color 0.26s ease, transform 0.26s ease, box-shadow 0.26s ease;
 }
-.zp-pk-feature-card:hover {
-  border-color: rgba(223, 196, 139, 0.42);
-  background: linear-gradient(170deg, rgba(255, 255, 255, 0.045) 0%, rgba(20, 12, 13, 0.95) 100%);
-  transform: translateY(-3px);
-  box-shadow: 0 22px 44px -26px rgba(0, 0, 0, 0.95), 0 0 28px -16px rgba(184, 32, 32, 0.45);
+@media (min-width: 900px) {
+  .zp-pk-feature-card {
+    padding: 0.85rem 1.5rem 0.9rem 0;
+  }
+  .zp-pk-feature-card:nth-child(even) {
+    padding: 0.85rem 0 0.9rem 1.5rem;
+    border-left: 1px solid rgba(240, 235, 227, 0.08);
+  }
+  .zp-pk-feature-card:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
 }
-.zp-pk-corner {
-  position: absolute;
-  width: 9px;
-  height: 9px;
-  pointer-events: none;
-  opacity: 0.45;
-  transition: opacity 0.25s ease, border-color 0.25s ease;
-}
-.zp-pk-corner-tl {
-  top: -1px;
-  left: -1px;
-  border-top: 1.5px solid #dfc48b;
-  border-left: 1.5px solid #dfc48b;
-}
-.zp-pk-corner-br {
-  right: -1px;
-  bottom: -1px;
-  border-right: 1.5px solid #e65650;
-  border-bottom: 1.5px solid #e65650;
-}
-.zp-pk-feature-card:hover .zp-pk-corner {
-  opacity: 1;
+.zp-pk-feature-card:last-child {
+  border-bottom: 0;
 }
 .zp-pk-feature-top {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   gap: 0.75rem;
-  margin-bottom: 0.95rem;
-}
-.zp-pk-feature-num {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 0.68rem;
-  letter-spacing: 0.16em;
-  color: #9e9890;
-}
-.zp-pk-feature-badge {
-  padding: 0.2rem 0.52rem;
-  border: 1px solid rgba(223, 196, 139, 0.24);
-  border-radius: 2px;
-  background: rgba(223, 196, 139, 0.06);
-  font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 0.6rem;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #dfc48b;
 }
 .zp-pk-feature-pub {
   font-family: Inter, system-ui, -apple-system, sans-serif;
-  font-size: 0.7rem;
+  font-size: 0.6rem;
   font-weight: 600;
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: #e65650;
 }
+.zp-pk-feature-badge {
+  flex: 0 0 auto;
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-size: 0.51rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #7e7973;
+}
+.zp-pk-feature-main {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.9rem;
+}
 .zp-pk-feature-title {
-  margin: 0.45rem 0 0.7rem;
+  margin: 0;
+  min-width: 0;
   font-family: "Cormorant Garamond", Georgia, serif;
-  font-size: 1.42rem;
+  font-size: 1.05rem;
   font-weight: 600;
-  line-height: 1.22;
-  color: #f0ebe3;
+  line-height: 1.24;
+  color: #e6dfd5;
   transition: color 0.22s ease;
+}
+.zp-pk-feature-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  color: #857f78;
+  transition: color 0.22s ease, transform 0.22s ease;
 }
 .zp-pk-feature-card:hover .zp-pk-feature-title {
   color: #ffffff;
 }
-.zp-pk-feature-desc {
-  margin: 0;
-  flex: 1 1 auto;
-  font-size: 0.84rem;
-  line-height: 1.62;
-  color: #ada79f;
-}
-.zp-pk-feature-foot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  margin-top: 1.25rem;
-  padding-top: 0.9rem;
-  border-top: 1px solid rgba(240, 235, 227, 0.08);
-}
-.zp-pk-feature-cta {
-  font-family: Inter, system-ui, -apple-system, sans-serif;
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #d8d1c7;
-  transition: color 0.22s ease;
-}
-.zp-pk-feature-card:hover .zp-pk-feature-cta {
-  color: #dfc48b;
-}
-.zp-pk-feature-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  border: 1px solid rgba(240, 235, 227, 0.14);
-  border-radius: 9999px;
-  color: #b5afa8;
-  transition: border-color 0.22s ease, background-color 0.22s ease, color 0.22s ease, transform 0.22s ease;
-}
 .zp-pk-feature-card:hover .zp-pk-feature-icon {
-  border-color: rgba(223, 196, 139, 0.55);
-  background: rgba(223, 196, 139, 0.12);
   color: #dfc48b;
   transform: translate(2px, -2px);
 }
 
-/* Tier IV: Verified Profiles & Streaming Directory */
+/* IV. Profiles: a quiet four-column index of verified destinations */
 .zp-pk-dir-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem 1.25rem;
 }
-@media (min-width: 600px) {
-  .zp-pk-dir-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-@media (min-width: 1024px) {
+@media (min-width: 720px) {
   .zp-pk-dir-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 0.85rem;
   }
 }
 .zp-pk-dir-link {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
-  padding: 0.9rem 1rem;
-  border: 1px solid rgba(240, 235, 227, 0.1);
-  border-radius: 2px;
-  background: rgba(255, 255, 255, 0.018);
-  text-decoration: none;
-  color: inherit;
-  transition: border-color 0.22s ease, background-color 0.22s ease, transform 0.22s ease;
-}
-.zp-pk-dir-link:hover {
-  border-color: rgba(230, 86, 80, 0.48);
-  background: linear-gradient(135deg, rgba(139, 0, 0, 0.14) 0%, rgba(223, 196, 139, 0.06) 100%);
-  transform: translateY(-1px);
-}
-.zp-pk-dir-monogram {
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.35rem;
-  height: 2.35rem;
-  border: 1px solid rgba(223, 196, 139, 0.26);
-  border-radius: 2px;
-  background: rgba(223, 196, 139, 0.05);
-  font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-size: 0.64rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  color: #dfc48b;
-  transition: border-color 0.22s ease, background-color 0.22s ease, color 0.22s ease;
-}
-.zp-pk-dir-link:hover .zp-pk-dir-monogram {
-  border-color: rgba(230, 86, 80, 0.6);
-  background: rgba(139, 0, 0, 0.28);
-  color: #fff6ea;
-}
-.zp-pk-dir-body {
+  gap: 0.4rem;
   min-width: 0;
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 0.14rem;
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  color: #b5afa8;
+  transition: color 0.2s ease;
 }
 .zp-pk-dir-title {
-  font-family: Inter, system-ui, -apple-system, sans-serif;
-  font-size: 0.84rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  color: #f0ebe3;
-  white-space: nowrap;
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-.zp-pk-dir-meta {
-  font-size: 0.71rem;
-  color: #9e9890;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 .zp-pk-dir-arrow {
+  display: inline-flex;
   flex: 0 0 auto;
-  color: #8f8981;
-  transition: color 0.22s ease, transform 0.22s ease;
+  color: #857f78;
+  opacity: 0.85;
+  transition: color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+}
+.zp-pk-dir-link:hover {
+  color: #f0ebe3;
 }
 .zp-pk-dir-link:hover .zp-pk-dir-arrow {
   color: #dfc48b;
-  transform: translate(2px, -2px);
+  opacity: 1;
+  transform: translate(1px, -1px);
 }
 
 .zp-pk-review-cta:focus-visible,
 .zp-pk-feature-card:focus-visible,
-.zp-pk-dir-link:focus-visible {
+.zp-pk-dir-link:focus-visible,
+.zp-pk-mini-cite a:focus-visible {
   outline: 2px solid #dfc48b;
-  outline-offset: 2px;
+  outline-offset: 3px;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .zp-pk-laurel-card,
+  .zp-pk-laurel-img,
+  .zp-pk-laurel-svg,
   .zp-pk-review-cta,
   .zp-pk-feature-card,
+  .zp-pk-feature-title,
   .zp-pk-feature-icon,
   .zp-pk-dir-link,
-  .zp-pk-dir-monogram,
-  .zp-pk-dir-arrow {
+  .zp-pk-dir-arrow,
+  .zp-pk-mini-cite a {
     transition: none;
     transform: none;
   }
