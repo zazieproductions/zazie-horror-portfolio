@@ -72,6 +72,10 @@
   Frontières 2026 projects in development where a composer can actually still
   be attached. Includes the copy, the sources for every claim in it, and the
   Music Pitch route for 2027.
+- [Wave 7 technique test, 2026-10-30](outreach/WAVE7-TECHNIQUE-TEST-2026-10-30.md)
+  — four letters, each built on a different persuasion engine (reverse
+  qualification, scarcity, non-neediness, low-risk reciprocity), so replies can
+  be compared against the copy rather than the list.
 
 ### Archive
 - [Archive index](archive/README.md) — dated dossiers, audits and proposals moved
