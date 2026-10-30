@@ -1,0 +1,77 @@
+# This workflow uses an action that is not certified by GitHub.
+# It is provided by a third-party and is governed by separate terms of
+# service, privacy policy, and support documentation.
+#
+# SEO guard for horror.zazieproductions.com.
+# Uses stillindexed/seo-guard (GitHub Marketplace: "SEO Guard"), which fetches
+# each listed URL and fails the step when it finds SEO regressions:
+# non-2xx status, noindex (meta or X-Robots-Tag), robots.txt blocks for
+# Googlebot, and canonical mismatches. One fetch per URL, no JavaScript
+# rendering, no dependencies.
+#
+# Source: https://github.com/stillindexed/seo-guard
+# Marketplace: https://github.com/marketplace/actions/seo-guard
+# Pinned release at authoring: v1.0.1 (bump only after reviewing new releases:
+# https://github.com/stillindexed/seo-guard/releases)
+#
+# TRIGGERS
+#   push to main        check the production site after it ships
+#   schedule            weekly regression check (Mondays 06:00 UTC)
+#   workflow_dispatch   check the default URL list, or your own comma/newline
+#                       separated list
+#
+#   gh workflow run seo-guard.yml
+#   gh workflow run seo-guard.yml -f urls="https://horror.zazieproductions.com/, https://horror.zazieproductions.com/pricing.html"
+
+name: SEO guard
+
+on:
+  push:
+    branches: [ "main" ]
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: URLs to check (newline or comma separated; defaults to the production site's core pages)
+        required: false
+        default: |
+          https://horror.zazieproductions.com/
+          https://horror.zazieproductions.com/sitemap.xml
+          https://horror.zazieproductions.com/robots.txt
+          https://horror.zazieproductions.com/llms.txt
+          https://horror.zazieproductions.com/work.html
+          https://horror.zazieproductions.com/store.html
+          https://horror.zazieproductions.com/reel.html
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: seo-guard
+  cancel-in-progress: true
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run SEO guard
+        id: seo-guard
+        # Pin to a release; bump after reviewing the action's releases:
+        # https://github.com/stillindexed/seo-guard/releases
+        uses: stillindexed/seo-guard@v1.0.1
+        with:
+          # seo-guard accepts newline or comma separated URLs. On push/schedule
+          # the dispatch input is empty, so fall back to the committed default
+          # list (same set as the workflow_dispatch default above).
+          urls: ${{ inputs.urls || 'https://horror.zazieproductions.com/, https://horror.zazieproductions.com/sitemap.xml, https://horror.zazieproductions.com/robots.txt, https://horror.zazieproductions.com/llms.txt, https://horror.zazieproductions.com/work.html, https://horror.zazieproductions.com/store.html, https://horror.zazieproductions.com/reel.html' }}
+
+      - name: Publish SEO guard summary
+        if: always()
+        run: |
+          echo "${{ steps.seo-guard.outputs.summary }}" >> "$GITHUB_STEP_SUMMARY"
