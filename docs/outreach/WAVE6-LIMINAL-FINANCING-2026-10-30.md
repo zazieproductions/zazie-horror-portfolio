@@ -1,7 +1,9 @@
 # Wave 6 — the liminal lane where the door is actually open
 
 **Date:** 2026-10-30
-**Status:** 3 drafts written, none sent.
+**Status:** 1 draft remaining (*The Mire*). *Aurora Comes Home* and *Spiral* were
+sent by hand from the account on 30 Oct 2026 at 11:58 and 11:59 EDT — see
+"Two went out" below for exactly what those two letters said.
 
 ## The finding, stated plainly
 
@@ -117,3 +119,76 @@ this list, and it belongs on the calendar rather than in the drafts folder.
    or answered and the tone of the batch is settled.
 
 One follow-up at 12–14 days, one line, no new material. Then stop.
+
+## Two went out
+
+Both Canadian letters were sent by hand on 30 October, *Spiral* at 11:58 EDT and
+*Aurora Comes Home* at 11:59. What actually left the account is the clean
+version — the one without the festival-attendance line:
+
+- *Aurora*: "…which is why the project stayed with me after the Frontières
+  lineup came out."
+- *Spiral*: "Kryptic is still the film I point people to…" — sent under the
+  subject "Spiral - I thought we should chat!", which was edited before sending.
+
+*The Mire* is still sitting in drafts, unsent, and is the only one of the three
+that can still be changed.
+
+## Warmth without fiction
+
+There was a request to pre-warm these letters with things that are not quite
+true: having seen the film at a named festival, having followed the project on
+some site, a friend-of-a-friend who backed the crowdfunding. That is not going
+in the copy, for three practical reasons rather than a scruple about white lies.
+
+1. **These are the exact claims that get tested.** "Which screening?" is a
+   one-line reply, and a producer who sends it is being friendly, not hostile.
+   The friend-of-a-friend version is worse: it invites a follow-up conversation
+   that has to be sustained, then has to end.
+2. **The downside is asymmetric.** Getting caught inventing one connection
+   discounts the true parts of the letter — the *Kryptic* observation, the
+   lullaby idea — because the reader now has to audit everything. Canadian genre
+   is about a dozen companies who all know each other; the story travels.
+3. **It costs nothing to do it honestly.** Everything the fabricated versions
+   were reaching for is already achieved by being specific about public
+   material, which is what these letters do. Quoting Harjusaari's own line about
+   who carries what reads like familiarity, and it happens to be true.
+
+### What replaces it
+
+**Say the cold part out loud.** The *Mire* draft now opens "I'm writing cold, so
+I'll be quick and specific." Naming it is disarming: the reader stops waiting
+for the connection that isn't there and starts reading the argument. A letter
+that pretends to be warm and isn't reads as a mailout; a letter that admits it's
+cold reads as a person.
+
+**Be specific where it's checkable.** Precision is the actual signal of having
+followed a project. Anyone can claim to have been at a market; almost nobody
+writes to you about your own director's quote, or knows the difference between
+the Frontières Platform and the Market (Platform is Cannes in May, Market is
+Montréal in July, and *Spiral* was in one while the other two were in the other).
+
+**Put the warmth in the follow-up, and earn it first.** The follow-up at 12–14
+days is where a real connection is worth more than a claimed one, because by
+then it can be true. Before it goes out: watch *Kryptic* (Goodbye) and
+*Hatching* (Silva Mysterium). Then the follow-up can honestly say "I watched
+*Kryptic* after sending that, and the cue under the tunnel is the reason I
+pushed" — which is a far better sentence than any claim about a festival, and
+takes one evening to make true.
+
+**If a real connection is wanted, buy it with a day of work.** The Frontières
+Music Pitch strand is the actual warm route: four composers, selected, pitching
+to the same financiers these producers pitched to. Applying in 2027 turns every
+one of these letters into a warm one, legitimately.
+
+### The test to apply before sending
+
+Ask of any line: **does it survive a one-question reply?** If the honest answer
+to "oh, which one?" is uncomfortable, cut the line. If the line is about Zazie
+rather than about them — "I've had the *Mire* logline open in a tab since July",
+"I've been meaning to watch *Hatching* for a year and finally did" — then it is
+hers to make true before the send, and it can stay.
+
+Lines that survive: taste, attention, craft opinion, a question about their
+film. Lines that don't: attendance, acquaintanceship, funding participation,
+anything with a venue or a name attached.
