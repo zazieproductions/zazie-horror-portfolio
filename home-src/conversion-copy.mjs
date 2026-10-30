@@ -219,7 +219,7 @@ const OBSESSION_INNER = `
         <div class="zp-listening-info">
           <p class="zp-listening-tag">Psychological tension <span aria-hidden="true">/</span> Cue 03</p>
           <h4>Variations on a Vanishing Body</h4>
-          <p>A string piece inspired by <em>Black Swan</em> and <em>Requiem for a Dream</em>.</p>
+          <p>A visceral classical string piece that sounds like a beautiful room with no exit: claustrophobic, elegant, and tightening the whole way through. Inspired by <em>Black Swan</em>, <em>Requiem for a Dream</em> and <em>Hannibal</em>.</p>
         </div>
         <div class="zp-listening-player">
           <div class="zp-listening-graphic" aria-hidden="true"><span></span><span></span><span></span><i></i><b></b><canvas class="zp-cue-visualizer"></canvas><small>SIGNAL // LIVE</small></div>

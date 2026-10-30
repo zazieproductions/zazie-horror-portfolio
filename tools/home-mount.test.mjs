@@ -387,7 +387,7 @@ test('selected emotional cues follow the acoustic scar copy in both homepage ren
     const section = content.slice(selected, originalCues);
     assert.match(section, /Emotional <em>Index<\/em>/, `${label}: index has its chosen name`);
     assert.ok(section.includes('zp-index-scope') && section.includes('SIGNAL STUDY'), `${label}: terminal scope is present`);
-    for (const phrase of ['waterphone', 'The Shining', 'Black Swan', 'Requiem for a Dream', 'synth-driven', 'A24', 'sustained high intensity and forward momentum']) {
+    for (const phrase of ['waterphone', 'The Shining', 'Black Swan', 'Requiem for a Dream', 'Hannibal', 'claustrophobic', 'synth-driven', 'A24', 'sustained high intensity and forward momentum']) {
       assert.ok(section.includes(phrase), `${label}: selected cue notes include ${phrase}`);
     }
     assert.equal((section.match(/zp-cue-play/g) || []).length, 4, `${label}: each cue has a play control`);
