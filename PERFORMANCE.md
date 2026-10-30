@@ -7,7 +7,7 @@ Scope: horror.zazieproductions.com (static prerendered React build on an edge ho
 ## Cue 03 note rewrite (Variations on a Vanishing Body): 2026-10-30
 
 Owner request: the Cue 03 note in the homepage Emotional Index should describe
-the cue in more detail — visceral, classical, claustrophobic yet elegant — and
+the cue in more detail (visceral, classical, claustrophobic yet elegant) and
 name *Hannibal* alongside *Black Swan* and *Requiem for a Dream*, with better
 prose than the previous one-liner.
 
