@@ -4,6 +4,28 @@ Date: 2026-09-25 · Branch: `arena/01a0d613-zazie-horror-portfolio`
 Scope: horror.zazieproductions.com (static prerendered React build on an edge host with `_headers`/`_redirects` semantics, i.e. Netlify/Cloudflare-Pages style).
 
 
+## Cue 03 note rewrite (Variations on a Vanishing Body): 2026-10-30
+
+Owner request: the Cue 03 note in the homepage Emotional Index should describe
+the cue in more detail (visceral, classical, claustrophobic yet elegant) and
+name *Hannibal* alongside *Black Swan* and *Requiem for a Dream*, with better
+prose than the previous one-liner.
+
+The note now reads: "A visceral classical string piece that sounds like a
+beautiful room with no exit: claustrophobic, elegant, and tightening the whole
+way through. Inspired by *Black Swan*, *Requiem for a Dream* and *Hannibal*."
+It is edited once, in `home-src/conversion-copy.mjs` (`OBSESSION_INNER`), and
+`home-src/build.mjs` carries it into both render paths: the static snapshot in
+`index.html` and the patched React bundle, whose content hash moved
+`index-ec291252.js` → `index-cbfe64c5.js`. `sw.js` points at the new bundle and
+retires the previous precache (`zazie-v58` → `zazie-v59`).
+
+Tests updated with the copy: `tools/home-mount.test.mjs` now asserts the
+selected-cue notes carry *Hannibal* and "claustrophobic", and
+`tools/boot-skip.test.mjs` pins the new cache name. No other copy, layout, or
+audio asset changed; the row grows in height because the note sits in
+the section's 31rem-wide, auto-height copy column and is not line-clamped.
+
 ## Deterministic homepage head and production repair: 2026-10-29
 
 PRs #178 and #180 merged, but production run 40965033599 stopped at 88/89 tests:
