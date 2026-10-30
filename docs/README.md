@@ -64,6 +64,9 @@
   — seven individual films shooting or just wrapped, with published budgets,
   no composer on the crew list, and a verified inbox. Perishable: read the
   sending order before using it.
+- [Wave 5 analog and atmospheric leads, 2026-10-30](outreach/WAVE5-ANALOG-ATMOSPHERIC-2026-10-30.md)
+  — the analog/liminal lane after *Backrooms*: three funded targets, the
+  anthology-segment argument, and nine titles checked and rejected with reasons.
 
 ### Archive
 - [Archive index](archive/README.md) — dated dossiers, audits and proposals moved
