@@ -103,6 +103,36 @@ for (const rule of rules) {
   seen.add(rule.pattern);
 }
 
+/**
+ * 1b. No angle brackets in any header value.
+ *
+ * Cloudflare Pages silently drops an angle-bracketed segment from a `_headers`
+ * value. The site used to advertise a redundant canonical this way --
+ *
+ *     /work
+ *       Link: <https://horror.zazieproductions.com/work>; rel="canonical"
+ *
+ * -- and the edge served it as `Link: ; rel="canonical"`: the quotes arrived,
+ * the URI did not. Every indexable route emitted a canonical hint with no
+ * canonical in it, and because the build file looked correct nothing caught it
+ * for as long as it shipped (verified live 2026-10-30 on /, /work and the
+ * *.pages.dev alias). Nothing in this repository needs an angle bracket in a
+ * header value, so the build now refuses one instead of trusting the edge to
+ * pass it through. The HTML `<link rel="canonical">` is the signal that counts.
+ */
+for (const rule of rules) {
+  for (const { name, value } of rule.set) {
+    if (/[<>]/.test(value)) {
+      fail(
+        `${rule.pattern}: ${name} value contains an angle bracket, and Cloudflare Pages drops the ` +
+          `bracketed segment when it serves the header (a "Link: <url>; rel=canonical" rule arrives as ` +
+          `"Link: ; rel=canonical"). Put the URI where it survives -- the page's <link rel="canonical"> -- ` +
+          `or reword the value without < >.`,
+      );
+    }
+  }
+}
+
 /* -------------------------------------------------- 2. security policy block */
 
 const get = (pathname, name) => effectiveHeaders(rules, pathname).get(name);

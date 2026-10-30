@@ -16,9 +16,9 @@
  *
  * The escape hatch is the one /store has always used: a root `<route>.html`
  * sitting next to `<route>/index.html`. Pages serves the file for the
- * slashless request, so the canonical URL that `sitemap.xml`, the page's
- * `<link rel="canonical">` and the `Link: rel="canonical"` header in `_headers`
- * all advertise resolves to a 200 with no redirect hop, while the
+ * slashless request, so the canonical URL that `sitemap.xml` and the page's
+ * own `<link rel="canonical">` advertise resolves to a 200 with no redirect
+ * hop, while the
  * trailing-slash form keeps working from the directory index.
  *
  * Directory-hub twins are generated, never hand-edited - editing one would let
