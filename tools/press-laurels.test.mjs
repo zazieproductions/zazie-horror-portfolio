@@ -1,31 +1,5 @@
 #!/usr/bin/env node
-/**
- * Regression checks for the laurel-led opening on the homepage.
- *
- * The four festival laurels from the press kit are repeated as a compact band
- * above the hero headline so recognition is the first thing a visitor reads,
- * while the full Electronic Press Kit (#press) stays below with the same
- * artwork, captions and links.
- *
- * What this pins down:
- *   1. The band really is above the hero headline (eyebrow + <h1>) in the
- *      prerendered document, and it ships in the React bundle too, so the
- *      hydrated render cannot reorder or drop it.
- *   2. The band is in normal flow. The old implementation floated it with
- *      `position:absolute` plus a reserved 280px of hero padding, which could
- *      be clipped by the hero's `overflow-hidden` and hid three of four marks
- *      behind a horizontal scroller on phones.
- *   3. All four marks are visible without scrolling: 2x2 on phones, 4-up from
- *      768px.
- *   4. The emblem image is above the fold (eager, fetchpriority="low", with
- *      intrinsic dimensions so it cannot cause layout shift) while every other
- *      homepage image stays lazily loaded.
- *   5. Every mark links to #press, and #press still carries the full laurel
- *      grid with captions, so the opening band is a shortcut into the dossier
- *      rather than a replacement for it.
- *
- * Run: node --test tools/press-laurels.test.mjs
- */
+/** Regression checks for the homepage festival recognition. */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -55,7 +29,7 @@ const MARKS = [
   'Pebbles Underground',
 ];
 
-test('the laurel band is the opening of the hero, above the headline', () => {
+test('the laurel band follows the hero headline', () => {
   assert.ok(band.length > 0, 'hero carries a ZP-HERO-LAURELS band');
   assert.equal((html.match(/<!--ZP-HERO-LAURELS-->/g) ?? []).length, 1, 'the band renders exactly once');
   assert.equal((html.match(/<!--ZP-HERO-LAURELS-END-->/g) ?? []).length, 1, 'the band markers are balanced');
@@ -65,8 +39,8 @@ test('the laurel band is the opening of the hero, above the headline', () => {
   const eyebrowAt = html.indexOf('<p class="mb-4 text-[10px] uppercase tracking-[0.38em] text-mist');
   const h1At = html.indexOf('<h1 class="font-display text-[2.35rem]');
   assert.ok(heroAt > 0 && bandAt > heroAt, 'the band sits inside #top');
-  assert.ok(eyebrowAt > bandAt, 'the band precedes the hero eyebrow line');
-  assert.ok(h1At > bandAt, 'the band precedes the hero <h1> headline');
+  assert.ok(eyebrowAt < bandAt, 'the band follows the hero eyebrow line');
+  assert.ok(h1At < bandAt, 'the band follows the hero <h1> headline');
   assert.ok(html.indexOf('<section id="press"') > bandAt, 'the full press kit still sits below the hero');
 });
 
@@ -75,30 +49,21 @@ test('the band ships identically from the React bundle', () => {
   // The pristine markup is spliced into the bundle as a JSON string; the
   // font-quote escaping in the SVG text nodes differs once inlined, so compare
   // the structural beats rather than raw bytes.
-  for (const mark of [...MARKS, 'class=\\"zp-hero-laurels\\"', 'aria-label=\\"Festival recognition\\"', 'href=\\"#press\\"']) {
+  for (const mark of [...MARKS, 'class=\\"zp-hero-laurels\\"', 'aria-label=\\"Festival recognition\\"']) {
     assert.ok(bundle.includes(mark), `bundle carries "${mark}"`);
   }
   assert.equal((bundle.match(/zp-hero-laurels/g) ?? []).length, (band.match(/zp-hero-laurels/g) ?? []).length,
     'the bundle repeats the band markup exactly once, like the prerender');
 });
 
-test('every mark links into the press kit and says what it is', () => {
-  assert.match(band, /<div class="zp-hero-laurels" role="list" aria-label="Festival recognition">/,
-    'the band is a labelled list, so assistive tech announces it as festival recognition');
-  const links = band.match(/<a\b[^>]*>/g) ?? [];
-  assert.equal(links.length, 4, 'four laurel links in the opening band');
-  assert.equal((band.match(/role="listitem"/g) ?? []).length, 4, 'each mark is a list item');
-  for (const link of links) {
-    assert.match(link, /href="#press"/, 'each mark deep-links to the press kit');
-    assert.match(link, /aria-label="[^"]+\. View press kit"/, 'each mark names itself and its destination');
-    assert.match(link, /title="[^"]+"/, 'each mark has a hover title');
-  }
-  for (const mark of MARKS) {
-    assert.ok(band.includes(`title="${mark}`) || band.includes(mark), `${mark} appears in the band`);
-  }
-  // The artwork is shared with the press kit, so it cannot drift.
+test('each mark is named without a redundant press-kit link', () => {
+  assert.match(band, /<div class="zp-hero-laurels" role="list" aria-label="Festival recognition">/);
+  const marks = band.match(/<span role="listitem"[^>]*>/g) ?? [];
+  assert.equal(marks.length, 4);
+  for (const mark of MARKS) assert.ok(marks.some((item) => item.includes(`aria-label="${mark}`)));
+  assert.doesNotMatch(band, /href="#press"/);
   assert.match(band, /images\/laurels\/golden-bloody-globes\.webp/);
-  assert.equal((band.match(/zp-pk-laurel-svg/g) ?? []).length, 3, 'the three drawn laurels are inlined as SVG');
+  assert.equal((band.match(/zp-pk-laurel-svg/g) ?? []).length, 3);
 });
 
 test('the band is in normal flow, not floated over the hero', () => {
@@ -142,17 +107,10 @@ test('the emblem loads eagerly at low priority, everything else stays lazy', () 
   }
 });
 
-test('the press kit below keeps the full laurel dossier', () => {
-  assert.ok(pressSection.length > 0, '#press section exists');
-  assert.match(pressSection, /class="zp-pk-laurels-grid"/, 'the full laurel grid is kept');
-  assert.equal((pressSection.match(/class="zp-pk-laurel-card/g) ?? []).length, 4, 'all four laurel cards stay');
-  for (const caption of ['Golden Bloody Globes', 'Re:Fract Festival (2025)', 'PVTV Fringe Flicks', 'Pebbles Underground']) {
-    assert.ok(pressSection.includes(caption), `#press keeps the ${caption} caption`);
-    assert.ok(bundle.includes(caption), `the bundle keeps the ${caption} caption`);
-  }
-  for (const award of ['Festival Award Honoree', 'Special Jury Mention', 'Festival Winner', 'Jury Special Mention']) {
-    assert.ok(pressSection.includes(award), `#press keeps the "${award}" award line`);
-  }
+test('the press kit does not repeat the laurels', () => {
+  assert.ok(pressSection.length > 0);
+  assert.doesNotMatch(pressSection, /zp-pk-laurels-grid|zp-pk-laurel-card/);
+  for (const mark of MARKS) assert.ok(!pressSection.includes(mark));
 });
 
 test('the live-release checker accepts the complete static and React laurel band', () => {
@@ -166,7 +124,7 @@ test('the live-release checker rejects a missing laurel or a stale React bundle'
   assert.ok(homepageReleaseProblems(html, '/* old bundle */').some((problem) => problem.includes('React bundle')));
 });
 
-test('the live-release checker rejects laurels moved below the hero headline', () => {
-  const misplaced = html.replace(bandMatch[0], '').replace('</h1>', `</h1>${bandMatch[0]}`);
-  assert.ok(homepageReleaseProblems(misplaced, bundle).some((problem) => problem.includes('precede the hero headline')));
+test('the live-release checker rejects laurels moved above the hero headline', () => {
+  const misplaced = html.replace(bandMatch[0], '').replace('<h1 class="font-display text-[2.35rem]', `${bandMatch[0]}<h1 class="font-display text-[2.35rem]`);
+  assert.ok(homepageReleaseProblems(misplaced, bundle).some((problem) => problem.includes('follow the hero headline')));
 });

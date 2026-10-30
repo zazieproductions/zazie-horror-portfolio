@@ -288,10 +288,8 @@ test('skip button markup is accessible, free of aria-hidden ancestors, and style
   assert.match(btnRule, /font:600 12px\/1/);
   assert.match(bootCss, /html\.zp-boot-on \.zp-skip\{display:none\}/);
   assert.match(bootCss, /#zp-boot\.zp-off\.zp-fast\{animation:zpFadeOut \.16s ease forwards\}/);
-  // The homepage cue notes changed, so the patched bundle hash (and the
-  // precache entry that points at it) moved; retire the previous
-  // document/asset cache (v58).
-  assert.match(sw, /CACHE_NAME\s*=\s*'zazie-v59'/);
+  // Retire both previous caches after combining the homepage changes.
+  assert.match(sw, /CACHE_NAME\s*=\s*'zazie-v60'/);
 });
 
 test('clicking #zp-boot-skip immediately dismisses the intro in fast mode and removes the node', async () => {

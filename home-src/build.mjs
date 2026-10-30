@@ -658,6 +658,11 @@ function patchBundle(orig) {
         () => `{title:${JSON.stringify(sample.title)},slug:${JSON.stringify(sample.slug)},alt:${JSON.stringify(sample.alt)},`,
       );
     }
+    const entries = projSlice.slice('projects:['.length).split('},{').map((entry) => `{${entry.replace(/^\{/, '').replace(/\}$/, '')}}`);
+    const firstFilm = entries.findIndex((entry) => entry.includes('slug:"goodbye-brother"'));
+    if (firstFilm < 0) throw new Error('bundle: Goodbye, Brother not found');
+    [entries[0], entries[firstFilm]] = [entries[firstFilm], entries[0]];
+    projSlice = `projects:[${entries.join(',')}`;
     out = out.slice(0, projStart) + projSlice + out.slice(projEnd);
   }
 
@@ -1017,6 +1022,18 @@ function patchStatic(html, tracks) {
     }
   }
 
+  // Keep the initial HTML film order in sync with the hydrated project array.
+  {
+    const film = /<article id="sample-goodbye-brother"[\s\S]*?<\/article>/.exec(out);
+    const first = /<article id="sample-[^"]+"/.exec(out.slice(out.indexOf('<section id="work"')));
+    if (!film || !first) throw new Error('index.html: film order anchors missing');
+    const firstAt = out.indexOf('<section id="work"') + first.index;
+    if (film.index !== firstAt) {
+      out = out.slice(0, film.index) + out.slice(film.index + film[0].length);
+      out = out.slice(0, firstAt) + film[0] + out.slice(firstAt);
+    }
+  }
+
   // Wrap raw email display in <!--email_off-->...<!--/email_off--> so Cloudflare
   // Email Obfuscation does not rewrite mailto: or inject email-decode.min.js.
   if (!out.includes('<!--email_off-->')) {
@@ -1062,9 +1079,9 @@ function patchStatic(html, tracks) {
   out = removeHeroProofStatic(out);
   out = injectHeroLineageStatic(out);
   out = out.replace(/<!--ZP-HERO-LAURELS-->[\s\S]*?<!--ZP-HERO-LAURELS-END-->/g, '');
-  const opening = '<p class="mb-4 text-[10px] uppercase tracking-[0.38em] text-mist sm:text-[11px]">';
-  if (countOf(out, opening) !== 1) throw new Error('Static hero opening anchor drifted');
-  out = out.replace(opening, () => `<!--ZP-HERO-LAURELS-->${heroLaurelsHtml()}<!--ZP-HERO-LAURELS-END-->${opening}`);
+  const heroHeadline = /(<h1 class="font-display text-\[2\.35rem\][\s\S]*?<\/h1>)/;
+  if (!heroHeadline.test(out)) throw new Error('Static hero headline anchor drifted');
+  out = out.replace(heroHeadline, (_match, headline) => `${headline}<!--ZP-HERO-LAURELS-->${heroLaurelsHtml()}<!--ZP-HERO-LAURELS-END-->`);
   {
     const pressRe = /<section id="press"(?:\s|>)[\s\S]*?<\/section>/;
     if (!pressRe.test(out)) throw new Error('index.html: #press section not found');
@@ -1153,7 +1170,7 @@ if (!origHash.startsWith('2afd4ec8')) throw new Error(`bundle.orig.js is not the
 // Retire the standalone Services route in both React navigation arrays and CTAs.
 const heroLaurels = heroLaurelsHtml();
 function injectOpeningLaurels(bundle) {
-  const anchor = 'u.jsx(Bt.p,{custom:1,variants:Ss,initial:"hidden",animate:"show",className:"mb-4 text-[10px] uppercase tracking-[0.38em] text-mist sm:text-[11px]"';
+  const anchor = 'u.jsxs(Bt.p,{custom:3,variants:Ss,initial:"hidden",animate:"show",className:"mt-5 max-w-md font-display';
   if (countOf(bundle, anchor) !== 1) throw new Error('Hero opening anchor drifted');
   return bundle.replace(anchor, () => `u.jsx("div",{dangerouslySetInnerHTML:{__html:${JSON.stringify(heroLaurels)}}}),${anchor}`);
 }

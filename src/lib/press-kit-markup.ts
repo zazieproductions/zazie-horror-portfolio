@@ -394,10 +394,6 @@ const ARROW_UP_RIGHT_SVG = `<svg class="zp-pk-arrow-icon" width="14" height="14"
 const FILE_PDF_SVG = `<svg class="zp-pk-arrow-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M12 18v-6"/><path d="m9.5 15.5 2.5 2.5 2.5-2.5"/></svg>`;
 
 export function pressKitInnerHtml(): string {
-  const oliveSvg = buildOliveBerryWreathSvg();
-  const palmSvg = buildCinemaPalmWreathSvg();
-  const baySvg = buildBayMedallionWreathSvg();
-
   const featuresHtml = PRESS_FEATURES.map(
     (item) => `<a href="${escapeHtml(item.href)}" target="_blank" rel="noopener noreferrer" class="zp-pk-feature-card">
       <span class="zp-pk-corner zp-pk-corner-tl" aria-hidden="true"></span>
@@ -435,62 +431,6 @@ export function pressKitInnerHtml(): string {
     <div class="zp-pk-tier">
       <div class="zp-pk-tier-head">
         <span class="zp-pk-tier-idx">I</span>
-        <span class="zp-pk-tier-title">Festival Laurels &amp; Jury Recognition</span>
-        <span class="zp-pk-tier-line" aria-hidden="true"></span>
-      </div>
-      <div class="zp-pk-laurels-grid" role="list" aria-label="Film festival laurels and awards">
-        <article class="zp-pk-laurel-card zp-pk-laurel-card-featured" role="listitem">
-          <div class="zp-pk-laurel-stage">
-            <picture>
-              <source srcset="/images/laurels/golden-bloody-globes.webp" type="image/webp" />
-              <img src="/images/laurels/golden-bloody-globes.png" alt="Golden Bloody Globes horror film festival laurel emblem" width="480" height="280" loading="lazy" decoding="async" class="zp-pk-laurel-img" />
-            </picture>
-          </div>
-          <div class="zp-pk-laurel-caption">
-            <div class="zp-pk-laurel-award zp-pk-laurel-award-crimson">Festival Award Honoree</div>
-            <h3 class="zp-pk-laurel-name">Golden Bloody Globes</h3>
-            <p class="zp-pk-laurel-detail">Los Angeles · International Horror Film Festival &amp; Awards</p>
-          </div>
-        </article>
-
-        <article class="zp-pk-laurel-card" role="listitem">
-          <div class="zp-pk-laurel-stage">
-            ${oliveSvg}
-          </div>
-          <div class="zp-pk-laurel-caption">
-            <div class="zp-pk-laurel-award">Special Jury Mention · 2025</div>
-            <h3 class="zp-pk-laurel-name">Re:Fract Festival (2025)</h3>
-            <p class="zp-pk-laurel-detail">Received a Special Jury Mention · Festival for Nonlinear Futures</p>
-          </div>
-        </article>
-
-        <article class="zp-pk-laurel-card" role="listitem">
-          <div class="zp-pk-laurel-stage">
-            ${palmSvg}
-          </div>
-          <div class="zp-pk-laurel-caption">
-            <div class="zp-pk-laurel-award zp-pk-laurel-award-crimson">Festival Winner</div>
-            <h3 class="zp-pk-laurel-name">PVTV Fringe Flicks</h3>
-            <p class="zp-pk-laurel-detail">Liverpool, UK · Underground &amp; Experimental Cinema Showcase</p>
-          </div>
-        </article>
-
-        <article class="zp-pk-laurel-card" role="listitem">
-          <div class="zp-pk-laurel-stage">
-            ${baySvg}
-          </div>
-          <div class="zp-pk-laurel-caption">
-            <div class="zp-pk-laurel-award">Jury Special Mention · 2024</div>
-            <h3 class="zp-pk-laurel-name">Pebbles Underground</h3>
-            <p class="zp-pk-laurel-detail">VisualcontainerTV · Winter 2024 Award-Winning Works</p>
-          </div>
-        </article>
-      </div>
-    </div>
-
-    <div class="zp-pk-tier">
-      <div class="zp-pk-tier-head">
-        <span class="zp-pk-tier-idx">II</span>
         <span class="zp-pk-tier-title">Critical Acclaim</span>
         <span class="zp-pk-tier-line" aria-hidden="true"></span>
       </div>
@@ -535,7 +475,7 @@ export function pressKitInnerHtml(): string {
 
     <div class="zp-pk-tier">
       <div class="zp-pk-tier-head">
-        <span class="zp-pk-tier-idx">III</span>
+        <span class="zp-pk-tier-idx">II</span>
         <span class="zp-pk-tier-title">Selected Features, Interviews &amp; Coverage</span>
         <span class="zp-pk-tier-line" aria-hidden="true"></span>
       </div>
@@ -546,7 +486,7 @@ export function pressKitInnerHtml(): string {
 
     <div class="zp-pk-tier zp-pk-tier-last">
       <div class="zp-pk-tier-head">
-        <span class="zp-pk-tier-idx">IV</span>
+        <span class="zp-pk-tier-idx">III</span>
         <span class="zp-pk-tier-title">Official Profiles, Credits &amp; Streaming</span>
         <span class="zp-pk-tier-line" aria-hidden="true"></span>
       </div>
@@ -1153,13 +1093,7 @@ export const PRESS_CSS = `
 `.trim();
 
 /**
- * Compact opening credits, using the same artwork as the full press kit.
- *
- * The band renders in normal flow directly above the hero opening line (the
- * eyebrow, then the `<h1>`), so festival recognition is the first thing a
- * visitor reads. Every mark links to the full `#press` dossier below, and the
- * artwork is the same in both places, so the opening band and the press kit
- * can never disagree.
+ * Festival recognition in normal flow directly beneath the hero headline.
  */
 export function heroLaurelsHtml(): string {
   const marks = [
@@ -1171,25 +1105,23 @@ export function heroLaurelsHtml(): string {
     ['PVTV Fringe Flicks · Festival Winner', buildCinemaPalmWreathSvg()],
     ['Pebbles Underground · Jury Special Mention · 2024', buildBayMedallionWreathSvg()],
   ];
-  return `<div class="zp-hero-laurels" role="list" aria-label="Festival recognition">${marks.map(([label, art]) => `<a href="#press" role="listitem" aria-label="${label}. View press kit" title="${label}">${art}</a>`).join('')}</div>`;
+  return `<div class="zp-hero-laurels" role="list" aria-label="Festival recognition">${marks.map(([label, art]) => `<span role="listitem" aria-label="${label}" title="${label}">${art}</span>`).join('')}</div>`;
 }
 
 export const HERO_LAURELS_CSS = `
-/* Opening laurel band. In flow above the hero opening line: no absolute
+/* Opening laurel band. In flow below the hero headline: no absolute
    placement, no reserved padding, no magic offsets, so the band can never be
    clipped by the hero's overflow-hidden or hidden behind the fixed header.
    All four marks are visible without scrolling, including on phones (2x2). */
-#top .zp-hero-laurels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:center;gap:12px 18px;margin:0 0 24px;padding:0 0 18px;border-bottom:1px solid rgba(223,196,139,.18)}
-#top .zp-hero-laurels a{display:flex;align-items:center;justify-content:center;min-width:0;min-height:44px;transition:filter .2s}
+#top .zp-hero-laurels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:center;gap:12px 18px;margin:24px 0 0;padding:18px 0 0;border-top:1px solid rgba(223,196,139,.18)}
+#top .zp-hero-laurels [role="listitem"]{display:flex;align-items:center;justify-content:center;min-width:0;min-height:44px}
 #top .zp-hero-laurels svg,#top .zp-hero-laurels img{display:block;width:100%;height:auto;max-height:none;object-fit:contain;flex-shrink:0}
 #top .zp-hero-laurels svg{aspect-ratio:360/202}
 #top .zp-hero-laurels img{aspect-ratio:480/280}
-#top .zp-hero-laurels a:hover{filter:brightness(1.25)}
-#top .zp-hero-laurels a:focus-visible{outline:2px solid #dfc48b;outline-offset:4px}
 @media(min-width:768px){
   #top .zp-hero-laurels{grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-bottom:28px}
 }
 @media(prefers-reduced-motion:reduce){
-  #top .zp-hero-laurels a{transition:none}
+  #top .zp-hero-laurels [role="listitem"]{transition:none}
 }
 `;

@@ -1,0 +1,21 @@
+/* A quieter reading surface for the studio's public documents. */
+.doc-compact .doc-index, .doc-compact .doc-jump { display: none; }
+.doc-compact .doc-layout { display: block; }
+.doc-compact .doc-body { max-width: 54rem; margin: 0 auto; }
+.doc-compact .doc-at-a-glance { padding: 1.5rem; border: 1px solid var(--edge); background: var(--ink); }
+.doc-compact .doc-overline { margin-bottom: .8rem; color: var(--blood-text); font-size: .65rem; letter-spacing: .2em; text-transform: uppercase; }
+.doc-compact .doc-at-a-glance ul { padding-left: 1.25rem; }
+.doc-compact .doc-at-a-glance li + li { margin-top: .4rem; }
+.doc-compact .doc-hint { margin-top: 1rem; color: var(--mist); font-size: .8rem; }
+.doc-compact .clause:has(> .doc-section) { margin: 0; padding: 0; border-top: 1px solid var(--edge); }
+.doc-compact .doc-section > summary { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1.2rem 0; cursor: pointer; list-style: none; }
+.doc-compact .doc-section > summary::-webkit-details-marker { display: none; }
+.doc-compact .doc-section > summary::after { content: '+'; color: var(--blood-text); font-size: 1.5rem; flex: none; }
+.doc-compact .doc-section[open] > summary::after { content: '−'; }
+.doc-compact .doc-section > summary:focus-visible { outline: 2px solid var(--blood-text); outline-offset: 4px; }
+.doc-compact .doc-section h2 { margin: 0; font-family: var(--display); font-size: clamp(1.25rem, 2.5vw, 1.75rem); font-weight: 400; line-height: 1.2; color: var(--bone); }
+.doc-compact .doc-section h2 .no { display: inline-block; margin-right: .8rem; color: var(--blood-text); font-family: var(--sans); font-size: .65rem; letter-spacing: .12em; }
+.doc-compact .doc-section-content { padding: 0 0 1.5rem; }
+.doc-compact .doc-section-content > * + * { margin-top: 1rem; }
+.doc-compact .faq-group { margin-top: 2rem; }
+@media print { .doc-compact .doc-section > summary::after { display: none; } }

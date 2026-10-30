@@ -440,8 +440,9 @@
   ]
 }
 </script>
+<link rel="stylesheet" href="/__DOC_CSS__" />
 </head>
-<body>
+<body class="doc-compact">
 __MASTHEAD__
 
 <main id="doc">
@@ -457,8 +458,8 @@ __MASTHEAD__
           <span>Documents</span></li>
       </ol>
     </nav>
-    <h1>Horror scoring documents: <em>the paperwork, written for this studio</em></h1>
-    <p class="doc-lead">Six documents cover everything that governs working with Zazie Productions: what a commission costs and how it is paid, who owns the music when it is delivered, what happens to the files you send, and what the catalogue listings do and do not include. They were written against how the work is actually done, not copied from a platform.</p>
+    <h1>Studio <em>documents</em></h1>
+    <p class="doc-lead">Plain-language information about working with the studio and using this site.</p>
     <ul class="doc-meta">
       <li>Published <time datetime="2026-10-13">13 October 2026</time></li>
       <li>Applies to <b>Commissions, catalogue, and this site</b></li>
@@ -489,7 +490,7 @@ __MASTHEAD__
       </nav>
 
       <section class="clause" id="precedence">
-        <h2><span class="no">i</span> Which document controls</h2>
+        <details class="doc-section"><summary><h2><span class="no">i</span> Which document controls</h2></summary><div class="doc-section-content">
         <p>Published documents describe the studio's standard position. They do not replace an agreement signed for a specific project. Where two sources disagree, this is the order:</p>
         <ol>
           <li><strong>The signed project agreement</strong>, or the composer's countersigned deal memo for your picture.</li>
@@ -498,6 +499,7 @@ __MASTHEAD__
           <li><strong>Anything else on this site</strong>, including marketing copy and rate summaries.</li>
         </ol>
         <p>For purchases from the catalogue, the marketplace that hosts the listing handles payment and its own terms apply to that transaction. See <a href="/purchases">purchases, delivery and returns</a>.</p>
+      </div></details>
       </section>
 
       <section class="clause" id="documents">
@@ -506,49 +508,50 @@ __MASTHEAD__
           <li class="hub-card reveal">
             <span class="no">01</span>
             <h3><a class="stretch" href="/faq">Questions filmmakers ask</a></h3>
-            <p>Fees and what moves them, how a score gets from spotting session to delivery, what is included in a revision, how long delivery takes, and what happens when a cut changes after picture lock.</p>
+            <p>Answers on budgets, process, delivery and rights.</p>
             <p class="stamp">Updated <time datetime="2026-10-18">18 October 2026</time></p>
           </li>
           <li class="hub-card reveal" style="--i:1">
             <span class="no">02</span>
             <h3><a class="stretch" href="/terms">Terms of use and commissioning</a></h3>
-            <p>The operating contract for the site and for scoring work: quotes, deposits, scope changes, delivery and acceptance, cancellation, client clearances, confidentiality, liability, and governing law.</p>
+            <p>The terms for this site and commissioned work.</p>
             <p class="stamp">Effective <time datetime="2026-10-13">13 October 2026</time></p>
           </li>
           <li class="hub-card reveal" style="--i:2">
             <span class="no">03</span>
             <h3><a class="stretch" href="/privacy">Privacy notice</a></h3>
-            <p>What this site does and does not collect. Cookieless Cloudflare Web Analytics, no advertising trackers, no cookies set by us, and a full inventory of the third parties that are contacted and exactly when.</p>
+            <p>Data, analytics, third parties and your privacy rights.</p>
             <p class="stamp">Effective <time datetime="2026-10-26">26 October 2026</time></p>
           </li>
           <li class="hub-card reveal" style="--i:3">
             <span class="no">04</span>
             <h3><a class="stretch" href="/licensing">Licensing, rights and credits</a></h3>
-            <p>The default grant for a commissioned score, the licence options, what the composer keeps, cue sheets and performing rights, exact credit wording, and the position on machine training.</p>
+            <p>Score rights, credits, cue sheets and licensing options.</p>
             <p class="stamp">Effective <time datetime="2026-10-13">13 October 2026</time></p>
           </li>
           <li class="hub-card reveal" style="--i:4">
             <span class="no">05</span>
             <h3><a class="stretch" href="/purchases">Purchases, delivery and returns</a></h3>
-            <p>How catalogue orders are fulfilled by Bandcamp, itch.io, Gumroad and eBay, what to do when a download link fails, shipping on physical items, and the refund position on digital goods.</p>
+            <p>Marketplace checkout, delivery, support and returns.</p>
             <p class="stamp">Effective <time datetime="2026-10-13">13 October 2026</time></p>
           </li>
           <li class="hub-card reveal" style="--i:5">
             <span class="no">06</span>
             <h3><a class="stretch" href="/accessibility">Accessibility statement</a></h3>
-            <p>The standard these pages are built to, what is implemented, the gaps that are still open, and how to ask for any document in another format.</p>
+            <p>Access features, known gaps and alternative formats.</p>
             <p class="stamp">Updated <time datetime="2026-10-13">13 October 2026</time></p>
           </li>
         </ul>
       </section>
 
       <section class="clause" id="status">
-        <h2><span class="no">iii</span> Status of this text</h2>
+        <details class="doc-section"><summary><h2><span class="no">iii</span> Status of this text</h2></summary><div class="doc-section-content">
         <p>These documents were drafted for Zazie Productions and describe its standard terms. They are not legal advice to you, and reading them does not create a lawyer client relationship. If your production needs a composer agreement reviewed by your own counsel, send it and the studio will work from your paper.</p>
         <p>Every page carries the date it took effect. A change is posted here before it applies to new work; a project already quoted keeps the terms it was quoted under.</p>
         <div class="fact">
           <p>Something missing, or a clause that does not fit your production? Say so before you sign anything. These terms are a starting position, and the studio would rather fix a clause than argue about it later.</p>
         </div>
+      </div></details>
       </section>
     </div>
   </div>
@@ -574,5 +577,6 @@ __FOOTER__
 if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("/sw.js").catch(()=>{})},{once:true})}
 </script>
 <script src="/__JS__" defer></script>
+<script src="/documents.js" defer></script>
 </body>
 </html>
