@@ -4,6 +4,27 @@
 
 > **Commercial/pricing supersession — 2026-10-17.** This historical dossier contains former `$75.99` and funding-based pricing recommendations. Do not reuse those proposals as current public copy. The approved rate card is in `COMMERCIAL-OVERHAUL.md` and `src/data/pricing.ts`; other observations below are dated snapshots and should be revalidated before use.
 
+> **Correction, 2026-10-30 (canonical `Link:` header).** Two claims below are
+> no longer true and the feature itself was removed.
+>
+> - **"Canonical Link headers for all 45 variants in `_headers`"** and the
+>   scorecard row **`_headers canonical Links | 0 | 45 | +45`**: Cloudflare
+>   Pages drops an angle-bracketed segment from a `_headers` value, so the edge
+>   was serving `Link: ; rel="canonical"` — the quotes arrived, the URI did
+>   not. Verified live on 2026-10-30 with `curl -sI
+>   https://horror.zazieproductions.com/` (and on `/work` and the
+>   `*.pages.dev` alias). A `Link` header cannot be made to survive without
+>   angle brackets (RFC 8288 requires them), so all 53 rules were deleted
+>   rather than "fixed". Every route still serves a correct, self-referencing
+>   `<link rel="canonical">`, which is the signal Google uses for an HTML page;
+>   nothing was lost except a malformed header. `tools/check-headers.mjs` now
+>   fails the build if an angle bracket reappears in any header value.
+> - The canonical policy is therefore "sitemap.xml + in-page
+>   `<link rel="canonical">`", not "sitemap + meta + header". See
+>   [routing](docs/architecture/routing.md) and
+>   [docs/quality/indexing.md](docs/quality/indexing.md) for the live
+>   indexability record.
+
 > **Correction, 2026-09-25 (sitelinks pass).** Some claims below were no longer
 > true in the tree when this pass started. Each was checked against the files:
 >
