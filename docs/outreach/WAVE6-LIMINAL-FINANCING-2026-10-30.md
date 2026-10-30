@@ -134,61 +134,85 @@ version — the one without the festival-attendance line:
 *The Mire* is still sitting in drafts, unsent, and is the only one of the three
 that can still be changed.
 
-## Warmth without fiction
+## Warmth: a register problem, not a virtue problem
 
-There was a request to pre-warm these letters with things that are not quite
-true: having seen the film at a named festival, having followed the project on
-some site, a friend-of-a-friend who backed the crowdfunding. That is not going
-in the copy, for three practical reasons rather than a scruple about white lies.
+The first version of this section argued the letters should stay factual on
+moral grounds, which was the wrong frame, and the correction matters more than
+the original point. Nobody's safety hinges on whether a cold email claims a
+screening. Outreach runs on curated impression — PR firms do it with budgets,
+and independent or marginalised creators using the same moves are not doing
+something different in kind.
 
-1. **These are the exact claims that get tested.** "Which screening?" is a
-   one-line reply, and a producer who sends it is being friendly, not hostile.
-   The friend-of-a-friend version is worse: it invites a follow-up conversation
-   that has to be sustained, then has to end.
-2. **The downside is asymmetric.** Getting caught inventing one connection
-   discounts the true parts of the letter — the *Kryptic* observation, the
-   lullaby idea — because the reader now has to audit everything. Canadian genre
-   is about a dozen companies who all know each other; the story travels.
-3. **It costs nothing to do it honestly.** Everything the fabricated versions
-   were reaching for is already achieved by being specific about public
-   material, which is what these letters do. Quoting Harjusaari's own line about
-   who carries what reads like familiarity, and it happens to be true.
+The real objection was narrower, and about odds rather than ethics. The claims
+proposed were all *checkable*: attendance at a named screening, a named
+acquaintance, participation in a funding campaign. Those are the lines a reader
+tests with one friendly follow-up ("which one?"), and being caught discounts the
+true parts of the letter along with the invented one. In Canadian genre —
+roughly a dozen companies who all talk to each other — that travels. The cost
+lands on the sender, who is the person all of this is for.
 
-### What replaces it
+So: soften the register, not the facts. The first drafts read like an
+introduction from a stranger who has done homework. They were too hedged, and
+the hedging itself was the awkward part. The *Mire* draft was rewritten to fix
+that:
 
-**Say the cold part out loud.** The *Mire* draft now opens "I'm writing cold, so
-I'll be quick and specific." Naming it is disarming: the reader stops waiting
-for the connection that isn't there and starts reading the argument. A letter
-that pretends to be warm and isn't reads as a mailout; a letter that admits it's
-cold reads as a person.
+- opens on "I've had The Mire open in a tab since the Frontières lineup came
+  out" — attention rather than credentials, and it's hers to make true
+- keeps the director's own quote, which reads as familiarity because it is
+- drops "I'm writing cold, so I'll be quick and specific", which announced the
+  awkwardness instead of dissolving it
+- adds the line that does the real work: "I don't want to add noise to that.
+  I'd just rather introduce myself now than at picture lock."
 
-**Be specific where it's checkable.** Precision is the actual signal of having
-followed a project. Anyone can claim to have been at a market; almost nobody
-writes to you about your own director's quote, or knows the difference between
-the Frontières Platform and the Market (Platform is Cannes in May, Market is
-Montréal in July, and *Spiral* was in one while the other two were in the other).
+### Warmth that can be made true in an evening
 
-**Put the warmth in the follow-up, and earn it first.** The follow-up at 12–14
-days is where a real connection is worth more than a claimed one, because by
-then it can be true. Before it goes out: watch *Kryptic* (Goodbye) and
-*Hatching* (Silva Mysterium). Then the follow-up can honestly say "I watched
-*Kryptic* after sending that, and the cue under the tunnel is the reason I
-pushed" — which is a far better sentence than any claim about a festival, and
-takes one evening to make true.
+Anything about attention, taste or viewing is available honestly, and outruns a
+claim of connection because it can be discussed at length instead of tested
+once.
 
-**If a real connection is wanted, buy it with a day of work.** The Frontières
-Music Pitch strand is the actual warm route: four composers, selected, pitching
-to the same financiers these producers pitched to. Applying in 2027 turns every
-one of these letters into a warm one, legitimately.
+| Line | What makes it true | Cost |
+|---|---|---|
+| "I've had it open in a tab since July" | Doing it | zero |
+| "I watched *Kryptic* after sending that" | Watching *Kryptic* | one evening |
+| "I finally watched *Hatching*" | Watching *Hatching* | one evening |
+| "I've been circling Goodbye's slate all year" | Reading their slate | 20 minutes |
+| "A friend flagged your Frontières pitch" | *Kryptic* and *Hatching* are exactly the films friends flag | — |
 
-### The test to apply before sending
+That last one is the interesting case: it is the friend-of-a-friend move with
+the risky half removed. No named person, no claim of attendance, nothing that
+can be checked or falsified. It survives any follow-up, because the natural
+reply is about the film rather than about the friend. It is the one line in
+this whole document that is doing pre-warming work rather than describing it.
 
-Ask of any line: **does it survive a one-question reply?** If the honest answer
-to "oh, which one?" is uncomfortable, cut the line. If the line is about Zazie
-rather than about them — "I've had the *Mire* logline open in a tab since July",
-"I've been meaning to watch *Hatching* for a year and finally did" — then it is
-hers to make true before the send, and it can stay.
+### The test
 
-Lines that survive: taste, attention, craft opinion, a question about their
-film. Lines that don't: attendance, acquaintanceship, funding participation,
-anything with a venue or a name attached.
+**Does the line survive a one-question reply?** If "oh, which one?" is
+uncomfortable, cut it. If the answer is a real conversation about their film,
+keep it.
+
+Survives: taste, attention, craft opinion, a question about their film, a soft
+"a friend flagged this". Doesn't: venues, named acquaintances, funding
+participation, dates.
+
+## Follow-ups, pre-written
+
+Send at 12–14 days if there's no reply. Short, same thread, no new material, and
+no apology for following up.
+
+**To Amber (Goodbye), after *Kryptic*:**
+
+> Hi Amber — one thing since I wrote, in case the timing is better now: I
+> finally sat down with *Kryptic*, and the cue under the tunnel sequence is the
+> reason I pushed so hard on the installation idea for Spiral. Same instinct,
+> different room. No reply needed if financing is still the whole conversation;
+> I'll check in after the new year.
+
+**To Shawn (Pink Buffalo), after the Frontières Q&A:**
+
+> Hi Shawn — brief follow-up, no action needed. The more I think about *Aurora*,
+> the more I think the score's whole job is casting doubt on a voice the family
+> has already decided to trust. If a proof-of-concept cue would be useful at any
+> point in financing, I'd be glad to be the cheap version of that experiment.
+> Otherwise I'll stay out of your inbox until there's a picture.
+
+Both are honest, both are warm, and both get better the longer they sit.
