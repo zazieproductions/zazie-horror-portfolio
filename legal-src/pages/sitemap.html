@@ -377,8 +377,9 @@
   ]
 }
 </script>
+<link rel="stylesheet" href="/__DOC_CSS__" />
 </head>
-<body>
+<body class="doc-compact">
 __MASTHEAD__
 
 <main id="doc">
@@ -394,8 +395,8 @@ __MASTHEAD__
           <span>Site map</span></li>
       </ol>
     </nav>
-    <h1>Site map: <em>portfolio hubs and sections</em></h1>
-    <p class="doc-lead">This human-readable overview links to the original portfolio hubs and the sections within them. The 65 production, cue, and catalogue item pages have their own clean URLs in <a href="/sitemap.xml">the XML sitemap</a> and link to related items from their individual pages; they are intentionally not added to the hub navigation. Nothing here needs JavaScript.</p>
+    <h1>Site <em>map</em></h1>
+    <p class="doc-lead">A directory of the portfolio, catalogue and documents.</p>
     <ul class="doc-meta">
       <li>Updated <time datetime="2026-10-18">18 October 2026</time></li>
       <li>Covers <b>Portfolio, archive, catalogue, documents</b></li>
@@ -429,7 +430,7 @@ __MASTHEAD__
       </nav>
 
       <section class="clause site-map" id="portfolio">
-        <h2><span class="no">i</span> The portfolio</h2>
+        <details class="doc-section"><summary><h2><span class="no">i</span> The portfolio</h2></summary><div class="doc-section-content">
         <p>The home page is one continuous piece, read top to bottom: productions, film samples, the playable showreel, press, the composer and the inquiry form.</p>
         <h3><a href="/">Portfolio home</a></h3>
         <p>Original dark, atmospheric scores for psychological horror, thrillers and dark sci-fi, for film, TV and games, with the showreel playable in the page.</p>
@@ -442,10 +443,11 @@ __MASTHEAD__
           <li><a href="/#about">The composer</a></li>
           <li><a href="/#contact">Inquiry</a></li>
         </ul>
+      </div></details>
       </section>
 
       <section class="clause site-map" id="archive">
-        <h2><span class="no">ii</span> Archive pages</h2>
+        <details class="doc-section"><summary><h2><span class="no">ii</span> Archive pages</h2></summary><div class="doc-section-content">
         <p>Each part of the portfolio has a page of its own with the detail the home page leaves out: notes on every cue, credits for every production, how quoting works, and the scoring process step by step.</p>
         <h3><a href="/hire-a-composer">Hire a horror composer</a></h3>
         <p>The commercial pillar: studio credentials, subgenres, composer comparison matrix, verified screen credits, how a commission runs, how quoting works, and buyer Q&amp;As.</p>
@@ -525,10 +527,11 @@ __MASTHEAD__
 
 <h3><a href="/#contact">Homepage inquiry</a></h3>
         <p>Jump directly to the scoring inquiry form at the bottom of the homepage.</p>
+      </div></details>
       </section>
 
       <section class="clause site-map" id="catalogue">
-        <h2><span class="no">iii</span> The catalogue</h2>
+        <details class="doc-section"><summary><h2><span class="no">iii</span> The catalogue</h2></summary><div class="doc-section-content">
         <h3><a href="/store">Catalogue</a></h3>
         <p>Twenty-four catalogue records span experimental music, sound libraries, software and visual assets, and physical objects. Listings link to Bandcamp, itch.io, Gumroad, or eBay when a source link is verified.</p>
         <ul>
@@ -538,10 +541,11 @@ __MASTHEAD__
           <li><a href="/store#tools">Tools and scores</a></li>
           <li><a href="/store#discography">The complete discography</a></li>
         </ul>
+      </div></details>
       </section>
 
       <section class="clause site-map" id="documents">
-        <h2><span class="no">iv</span> Documents</h2>
+        <details class="doc-section"><summary><h2><span class="no">iv</span> Documents</h2></summary><div class="doc-section-content">
         <p>The paperwork for commissions, the catalogue and this site. Every document carries the date it took effect.</p>
         <h3><a href="/legal">All documents</a></h3>
         <p>Which document controls when two of them disagree, and an index of the rest.</p>
@@ -657,11 +661,13 @@ __MASTHEAD__
           <li><a href="/accessibility#formats">Alternative formats</a></li>
           <li><a href="/accessibility#feedback">Feedback</a></li>
         </ul>
+      </div></details>
       </section>
 
       <section class="clause" id="machine-readable">
-        <h2><span class="no">v</span> For search engines and AI systems</h2>
+        <details class="doc-section"><summary><h2><span class="no">v</span> For search engines and AI systems</h2></summary><div class="doc-section-content">
         <p>Search engines use <a href="/sitemap.xml">sitemap.xml</a>, which contains all clean canonical hub and item URLs across productions, showreel cues, and catalogue entries. Crawl rules welcoming search and generative answer engines are published in <a href="/robots.txt">robots.txt</a>. Structured plain-text entity and catalog indexes for AI systems and researchers are published at <a href="/llms.txt">llms.txt</a> and <a href="/llms-full.txt">llms-full.txt</a>.</p>
+      </div></details>
       </section>
     </div>
   </div>
@@ -687,5 +693,6 @@ __FOOTER__
 if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("/sw.js").catch(()=>{})},{once:true})}
 </script>
 <script src="/__JS__" defer></script>
+<script src="/documents.js" defer></script>
 </body>
 </html>

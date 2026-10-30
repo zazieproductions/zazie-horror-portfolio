@@ -324,7 +324,7 @@ test('objections FAQ (#zp-objections) answers the owner-supplied questions immed
   }
 });
 
-test('press kit (#press) ships laurels, a curated mix of press quotes, and fancy links in both SSR and bundle without retired or redundant chrome', () => {
+test('press kit (#press) ships a curated mix of press quotes, and fancy links in both SSR and bundle without retired or redundant chrome', () => {
   const bundleMatch = /import\("\/(index-[0-9a-f]{8}\.js)"\)/.exec(html);
   assert.ok(bundleMatch, 'index.html still imports its hashed React bundle');
   const bundle = read(bundleMatch[1]);
@@ -345,12 +345,6 @@ test('press kit (#press) ships laurels, a curated mix of press quotes, and fancy
   assert.match(pressSection, /<h2 id="zp-press-heading" class="zp-pk-heading">Press Kit<\/h2>/);
 
   for (const required of [
-    '/images/laurels/golden-bloody-globes.webp',
-    '/images/laurels/golden-bloody-globes.png',
-    'Golden Bloody Globes',
-    'Re:Fract Festival (2025)',
-    'Received a Special Jury Mention',
-    'PVTV Fringe Flicks',
     'https://lakeivan.substack.com/p/spinning-in-the-wildness-phantom',
     'Lake Ivan Film Journal',
     'David Finkelstein',

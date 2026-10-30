@@ -26,7 +26,7 @@
  *                                             hubs, 404 for flat item routes
  *                                             (there is no item slash twin)
  *   4. unknown paths and slash twins        -> HTML 404 with noindex
- *   5. homepage release: .zp-hero-laurels above the headline, all four marks
+ *   5. homepage release: .zp-hero-laurels below the headline, all four marks
  *      in both the served HTML and the React bundle it imports
  *   6. delivery: on one HTML page, one content-hashed bundle, one font and
  *      one image -- Strict-Transport-Security, a CSP with frame-ancestors,
@@ -449,7 +449,7 @@ async function run() {
     line('');
     line('## Homepage release');
     line('');
-    line(releaseFail.length ? releaseProblems.map((problem) => `- FAIL: ${problem}`).join('\n') : 'PASS - .zp-hero-laurels precedes the headline; all four marks ship in HTML and the imported React bundle.');
+    line(releaseFail.length ? releaseProblems.map((problem) => `- FAIL: ${problem}`).join('\n') : 'PASS - .zp-hero-laurels follows the headline; all four marks ship in HTML and the imported React bundle.');
     line('');
     line('## Delivery: headers and compression');
     line('');
@@ -527,7 +527,7 @@ async function run() {
   if (releaseFail.length) {
     for (const problem of releaseProblems) line(`  FAIL  ${problem}`);
   } else {
-    line('  PASS  .zp-hero-laurels above the headline; Golden Bloody Globes, Re:Fract Festival, PVTV Fringe Flicks and Pebbles Underground in HTML + React');
+    line('  PASS  .zp-hero-laurels below the headline; Golden Bloody Globes, Re:Fract Festival, PVTV Fringe Flicks and Pebbles Underground in HTML + React');
   }
   line('');
   line('### delivery (security headers, cache lifetimes, compression)');

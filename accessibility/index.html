@@ -384,8 +384,9 @@
   ]
 }
 </script>
+<link rel="stylesheet" href="/documents-3b4ac7aa.css" />
 </head>
-<body>
+<body class="doc-compact">
 <a class="skip" href="#doc">Skip to the document</a>
 <div class="grain" aria-hidden="true"></div>
 <div class="vignette" aria-hidden="true"></div>
@@ -425,8 +426,8 @@
           <span>Accessibility</span></li>
       </ol>
     </nav>
-    <h1>Accessibility statement: <em>horror composer portfolio</em></h1>
-    <p class="doc-lead">A dark, grain covered portfolio is a hostile environment for accessibility by default, so this page states what is actually implemented, with measurements, and what is still open. An aesthetic is not an excuse, and a statement that only lists successes is not worth publishing.</p>
+    <h1>Accessibility <em>statement</em></h1>
+    <p class="doc-lead">How the site supports access, where limitations remain, and how to request help.</p>
     <ul class="doc-meta">
       <li>Updated <time datetime="2026-10-13">13 October 2026</time></li>
       <li>Target <b>WCAG 2.2 Level AA</b></li>
@@ -450,6 +451,7 @@
     </nav>
 
     <div class="doc-body">
+      <div class="doc-at-a-glance"><p class="doc-overline">At a glance</p><ul><li>The site supports keyboard navigation, reduced motion and readable document structure.</li><li>Some third-party media and experiences have known limitations; see the details below.</li><li>For an alternative format or to report a barrier, email zaziediya@gmail.com.</li></ul><p class="doc-hint">Open a section for the full details.</p></div>
       <nav class="doc-jump" aria-label="Sections">
         <p>Sections</p>
         <ul>
@@ -463,14 +465,15 @@
       </nav>
 
       <section class="clause" id="status">
-        <h2><span class="no">1</span> Status and scope</h2>
+        <details class="doc-section"><summary><h2><span class="no">1</span> Status and scope</h2></summary><div class="doc-section-content">
         <p>The target is WCAG 2.2 Level AA. The site is <strong>partially conformant</strong>: the document pages (FAQ, terms, privacy, licensing, purchases, accessibility) are built to that target and are the most heavily used pages by anyone who needs them, while the portfolio and catalogue carry atmosphere effects that create the exceptions listed in section 4.</p>
         <p>"Partially conformant" means some content does not fully conform. It is not a euphemism for unfinished; the specific exceptions are named below so you know which pages to treat with care.</p>
         <p>This statement covers horror.zazieproductions.com as published on the date above. Third party destinations reached by link, and embedded video players, are covered by their own statements.</p>
+      </div></details>
       </section>
 
       <section class="clause" id="implemented">
-        <h2><span class="no">2</span> What is implemented</h2>
+        <details class="doc-section"><summary><h2><span class="no">2</span> What is implemented</h2></summary><div class="doc-section-content">
         <h3>Content without scripting</h3>
         <p>Every clause, every question and every answer is in the HTML. With JavaScript disabled, all FAQ answers are open, the section index is a plain list of links, and nothing on any document page disappears. The enhancement script collapses the answers into an accordion on load; it never gates content.</p>
         <h3>Structure and landmarks</h3>
@@ -491,10 +494,11 @@
         <p>No information is carried by colour alone. FAQ state is conveyed by the native disclosure semantics as well as the indicator mark, the section index marks the current clause with a text colour change on a link whose text already identifies it, and status labels in the device inspector are words rather than dots.</p>
         <h3>Target size</h3>
         <p>Buttons are at least 40 pixels tall, FAQ summary rows are full width with generous padding, and no interactive element on these pages is smaller than 24 by 24 CSS pixels.</p>
+      </div></details>
       </section>
 
       <section class="clause" id="contrast">
-        <h2><span class="no">3</span> Contrast, measured</h2>
+        <details class="doc-section"><summary><h2><span class="no">3</span> Contrast, measured</h2></summary><div class="doc-section-content">
         <p>The palette is bone text on near black, which gives a lot of headroom, and one accent red that does not. Measured against <code>#030303</code>:</p>
         <div class="table-wrap">
           <table>
@@ -512,10 +516,11 @@
           </table>
         </div>
         <p>That last row is why these pages define a second red. The accent red is kept for rules, marks and large display type where 3 : 1 is sufficient, and small uppercase labels use <code>#e65650</code> at 5.71 : 1 instead. The portfolio homepage (<code>/</code>) now applies the same token to every <code>.text-blood</code> foreground, measured at 4.61–5.71 : 1 across its dark surfaces, with persistent underlines on prose links (type sizes stay at the design&rsquo;s original scale); the catalogue (<code>/store</code>) still uses the darker red for small labels and is listed as an open gap below rather than quietly ignored.</p>
+      </div></details>
       </section>
 
       <section class="clause" id="gaps">
-        <h2><span class="no">4</span> Known gaps</h2>
+        <details class="doc-section"><summary><h2><span class="no">4</span> Known gaps</h2></summary><div class="doc-section-content">
         <p>These are the exceptions behind "partially conformant", with the page each one lives on.</p>
         <ul>
           <li><strong>Small label contrast on the catalogue.</strong> The darker accent red sits at 3.49 : 1 against the background, below the 4.5 : 1 needed for small text. Fixed on the document pages and on the portfolio homepage <code>/</code> (AA red <code>#e65650</code> at 4.61–5.71 : 1 and underlined prose links); still open on <code>/store</code>.</li>
@@ -527,19 +532,22 @@
           <li><strong>Captions.</strong> The film samples are music driven picture with no dialogue, so there is nothing to caption. If a sample with dialogue is ever published, it will carry captions.</li>
         </ul>
         <p>None of these block access to the content of any document page. They are listed because an accessibility statement that hides its exceptions is worthless.</p>
+      </div></details>
       </section>
 
       <section class="clause" id="formats">
-        <h2><span class="no">5</span> Alternative formats</h2>
+        <details class="doc-section"><summary><h2><span class="no">5</span> Alternative formats</h2></summary><div class="doc-section-content">
         <p>Any document on this site can be supplied in another format on request: plain text, a single accessible PDF, large print, or a version without the atmosphere layers. Say which and it will be sent, normally within two business days.</p>
         <p>For an immediate plain text version, every page is readable with styling disabled, and the print stylesheet produces a clean text document from any browser's print dialog.</p>
+      </div></details>
       </section>
 
       <section class="clause" id="feedback">
-        <h2><span class="no">6</span> Feedback</h2>
+        <details class="doc-section"><summary><h2><span class="no">6</span> Feedback</h2></summary><div class="doc-section-content">
         <p>If something on this site blocks you, tell the studio: <a href="mailto:zaziediya@gmail.com?subject=Accessibility">zaziediya@gmail.com</a>. Say which page, what you were using, and what happened. The reply will come from the person who builds the site, which is the fastest route to a fix that exists at this size.</p>
         <p>Reports are treated as defects. Where a fix is not immediate, the gap gets added to section 4 with the reason, so the next reader knows it is known rather than invisible.</p>
         <p>Nothing in this statement limits any right you have under the accessibility law of your own jurisdiction, including the European Accessibility Act, the Equality Act 2010 in the UK, or the Americans with Disabilities Act in the United States.</p>
+      </div></details>
       </section>
     </div>
   </div>
@@ -618,5 +626,6 @@
 if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("/sw.js").catch(()=>{})},{once:true})}
 </script>
 <script src="/legal-54feff84.js" defer></script>
+<script src="/documents.js" defer></script>
 </body>
 </html>

@@ -290,7 +290,7 @@ test('skip button markup is accessible, free of aria-hidden ancestors, and style
   assert.match(bootCss, /#zp-boot\.zp-off\.zp-fast\{animation:zpFadeOut \.16s ease forwards\}/);
   // The precached homepage head is now deterministic, and the legal/item
   // asset names are current; retire the previous document/asset cache (v58).
-  assert.match(sw, /CACHE_NAME\s*=\s*'zazie-v58'/);
+  assert.match(sw, /CACHE_NAME\s*=\s*'zazie-v59'/);
 });
 
 test('clicking #zp-boot-skip immediately dismisses the intro in fast mode and removes the node', async () => {

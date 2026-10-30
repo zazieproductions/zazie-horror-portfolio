@@ -36,6 +36,8 @@ hash8() { printf '%s' "$1" | sha256sum | cut -c1-8; }
 
 CSS_HASH=$(hash8 "$(cat legal-src/legal.css)")
 JS_HASH=$(hash8 "$(cat legal-src/legal.js)")
+DOC_CSS_HASH=$(hash8 "$(cat legal-src/documents.css)")
+DOC_CSS_OUT="documents-${DOC_CSS_HASH}.css"
 CSS_OUT="legal-${CSS_HASH}.css"
 JS_OUT="legal-${JS_HASH}.js"
 
@@ -43,10 +45,12 @@ JS_OUT="legal-${JS_HASH}.js"
 rm -f legal-[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f].css \
       legal-[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f].js
 
+rm -f documents-[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f].css
+cp legal-src/documents.css "$DOC_CSS_OUT"
 cp legal-src/legal.css "$CSS_OUT"
 cp legal-src/legal.js "$JS_OUT"
 
-LEGAL_CSS="$CSS_OUT" LEGAL_JS="$JS_OUT" python3 - <<'PY'
+LEGAL_CSS="$CSS_OUT" LEGAL_JS="$JS_OUT" DOC_CSS="$DOC_CSS_OUT" python3 - <<'PY'
 import html
 import json
 import os
@@ -59,6 +63,7 @@ root = pathlib.Path(os.environ.get("REPO_ROOT", "."))
 src = root / "legal-src"
 css = os.environ["LEGAL_CSS"]
 js = os.environ["LEGAL_JS"]
+doc_css = os.environ["DOC_CSS"]
 
 masthead = (src / "partials" / "masthead.html").read_text(encoding="utf-8").strip()
 footer = (src / "partials" / "footer.html").read_text(encoding="utf-8").strip()
@@ -171,6 +176,7 @@ for page in sorted((src / "pages").glob("*.html")):
     markup = (markup
               .replace("__MASTHEAD__", page_masthead)
               .replace("__FOOTER__", footer)
+              .replace("__DOC_CSS__", doc_css)
               .replace("__CSS__", css)
               .replace("__JS__", js))
 

@@ -141,7 +141,8 @@
 // re-hashes the homepage bundle and rewrites the precached document again.
 // v58: deterministic homepage head order and current legal/item asset hashes;
 // refresh the precached document and retire the stale document script names.
-const CACHE_NAME = 'zazie-v58';
+// v59: refreshed homepage film order and hero recognition, plus document layouts.
+const CACHE_NAME = 'zazie-v59';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -150,7 +151,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-3465aa44.css',
-  '/index-ec291252.js',
+  '/index-2ed45c6a.js',
   '/store-1e13177a.css',
   '/store-3fc01be0.js',
   '/legal-f4e3a5fb.css',
