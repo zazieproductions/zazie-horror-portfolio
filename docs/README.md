@@ -60,6 +60,10 @@
   mid-budget production companies with verified contact routes, the draft
   copy that was written for each, and the sending plan. Not part of the site
   build; nothing here is sent automatically.
+- [Wave 4 in-production leads, 2026-10-30](outreach/WAVE4-IN-PRODUCTION-2026-10-30.md)
+  — seven individual films shooting or just wrapped, with published budgets,
+  no composer on the crew list, and a verified inbox. Perishable: read the
+  sending order before using it.
 
 ### Archive
 - [Archive index](archive/README.md) — dated dossiers, audits and proposals moved
