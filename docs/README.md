@@ -55,6 +55,12 @@
 - [Roadmap](project/roadmap.md) · [Known limitations](project/known-limitations.md) ·
   [Maintenance](project/maintenance.md) · [Change manifest](project/change-manifest.md)
 
+### Outreach
+- [Wave 3 leads, 2026-10-30](outreach/WAVE3-A24-LEADS-2026-10-30.md) — 45
+  mid-budget production companies with verified contact routes, the draft
+  copy that was written for each, and the sending plan. Not part of the site
+  build; nothing here is sent automatically.
+
 ### Archive
 - [Archive index](archive/README.md) — dated dossiers, audits and proposals moved
   2026-10-29, with the [relocation manifest](archive/RELOCATION-MANIFEST.md).
