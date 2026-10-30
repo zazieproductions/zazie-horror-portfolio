@@ -67,6 +67,11 @@
 - [Wave 5 analog and atmospheric leads, 2026-10-30](outreach/WAVE5-ANALOG-ATMOSPHERIC-2026-10-30.md)
   — the analog/liminal lane after *Backrooms*: three funded targets, the
   anthology-segment argument, and nine titles checked and rejected with reasons.
+- [Wave 6 liminal financing leads, 2026-10-30](outreach/WAVE6-LIMINAL-FINANCING-2026-10-30.md)
+  — why the liminal lane's finished films are all closed, and the three
+  Frontières 2026 projects in development where a composer can actually still
+  be attached. Includes the copy, the sources for every claim in it, and the
+  Music Pitch route for 2027.
 
 ### Archive
 - [Archive index](archive/README.md) — dated dossiers, audits and proposals moved
