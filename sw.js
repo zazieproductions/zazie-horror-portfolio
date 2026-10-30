@@ -139,7 +139,9 @@
 // the headline, 2x2 on phones), which re-hashes index-<hash>.js.
 // v57: merging the laurel-led hero with the reinstated #zp-objections FAQ
 // re-hashes the homepage bundle and rewrites the precached document again.
-const CACHE_NAME = 'zazie-v57';
+// v58: deterministic homepage head order and current legal/item asset hashes;
+// refresh the precached document and retire the stale document script names.
+const CACHE_NAME = 'zazie-v58';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -152,7 +154,7 @@ const PRECACHE_ASSETS = [
   '/store-1e13177a.css',
   '/store-3fc01be0.js',
   '/legal-f4e3a5fb.css',
-  '/legal-c623083a.js',
+  '/legal-54feff84.js',
   '/inquiry-d8cba1f7.css',
   '/inquiry-f408888b.js',
   // Hero & Atmosphere

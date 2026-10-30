@@ -15,6 +15,7 @@ Detail lives in the dated root records; this file is the index of *intent*.
 | D8 | aislop gate with accepted-debt baseline | Fail on *new* slop, not inherited debt | `.aislop/config.yml`, `.github/workflows/aislop.yml` |
 | D9 | Deploy uploads a filtered `dist/`, not the repo root | Repo root contains tooling/sources that must not be public | `scripts/build-deploy-dir.mjs` |
 | D10 | Root dated `*.md` records stay at root | Referenced by name in code comments, scripts and workflows | [docs index](../README.md) |
+| D11 | Final homepage head render owns mobile-CSS ordering; CI builds twice | SEO regeneration must not move resources on the next build; committed output must be a fixed point | `PERFORMANCE.md` (2026-10-29), `home-src/document.mjs`, `.github/workflows/deploy.yml` |
 
 New decision? Add a row here **and** write the dated record; do not edit
 history to make an old decision look current.

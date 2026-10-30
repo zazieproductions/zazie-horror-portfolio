@@ -4,6 +4,46 @@ Date: 2026-09-25 · Branch: `arena/01a0d613-zazie-horror-portfolio`
 Scope: horror.zazieproductions.com (static prerendered React build on an edge host with `_headers`/`_redirects` semantics, i.e. Netlify/Cloudflare-Pages style).
 
 
+## Deterministic homepage head and production repair: 2026-10-29
+
+PRs #178 and #180 merged, but production run 40965033599 stopped at 88/89 tests:
+`tools/mobile-ux.test.mjs` requires `ensureMobileUxAssets(index.html)` to be a
+no-op on the committed document. The local baseline reproduced the same ordering
+failure (89/90 on current `main`, which also includes #181).
+
+Root cause: `home-src/build.mjs` installed the mobile override block at the end
+of `<head>`, then `scripts/prerender.mjs` rebuilt the head and appended fresh
+canonical/alternate/JSON-LD after it. On the next complete build the homepage
+pass moved the unchanged mobile block behind those SEO tags. Removing generated
+SEO while leaving that block in place could also accumulate blank lines.
+
+Repair: the marked head/poster transform now lives in pure
+`home-src/document.mjs`. Generated SEO occupies an explicit marked region, so a
+rebuild replaces that region instead of stripping individual head tags; non-SEO
+scripts/comments are carried through unchanged. The renderer removes carried
+mobile blocks before regenerating SEO/posters and calls `ensureMobileUxAssets()`
+as the final head operation. One current block remains, after SEO, and repeated
+full builds are byte-identical. The original failing test is unchanged; new
+fixtures cover fresh heads, stale/duplicate blocks, SEO preservation and
+idempotence. `deploy.yml` now runs the complete build twice before the
+stale-output gate.
+
+Further genuine drift was regenerated rather than discarded: the committed
+legal bundle predated the URL-validation source change, and the item CSS hash
+did not match the current locked toolchain's whitespace-only output. All hub /
+item references and `sw.js` now name the generated assets; cache moved to v58.
+The homepage body, React bundle and homepage CSS are unchanged from `main`, so
+the four laurels and the visual design are preserved in both render paths.
+The live route audit now fails a stale production homepage unless
+`.zp-hero-laurels` precedes the headline and all four marks ship in both HTML
+and the imported React bundle.
+
+Verification (Node 22): `npm ci`; two complete `npm run build` passes with 116
+site-artifact hashes identical between passes; `npm run typecheck`; `npm test`
+95/95; verify/links/forms/headers/docs checks; deploy-directory assembly (231
+files, 80/80 sitemap routes); aislop against the accepted baseline. Production
+upload/live proof is recorded in the repair PR after the main-branch deploy.
+
 ## Laurel-led hero opening: 2026-10-29
 
 The festival laurels that used to appear only inside the Electronic Press Kit
