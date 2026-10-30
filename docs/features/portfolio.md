@@ -18,3 +18,9 @@
   route audit checks the same four marks in the served HTML and React bundle.
   The final head/poster render lives in `home-src/document.mjs` so mobile CSS
   stays after regenerated SEO without changing the hero markup or design.
+- `#press` is one framed dossier, not four card grids: a masthead plus four
+  hairline-ruled tiers (laurels, critical acclaim, coverage, verified profiles)
+  inside `pressKitInnerHtml()`. Coverage rows carry publication, subject and
+  link only (the excerpts they used to repeat live elsewhere on the page), so
+  the kit stays an index of sources rather than a second copy of the page.
+  `tools/home-mount.test.mjs` pins the structure and the retained URLs.

@@ -4,6 +4,52 @@ Date: 2026-09-25 · Branch: `arena/01a0d613-zazie-horror-portfolio`
 Scope: horror.zazieproductions.com (static prerendered React build on an edge host with `_headers`/`_redirects` semantics, i.e. Netlify/Cloudflare-Pages style).
 
 
+## Press kit reduced to one compact dossier: 2026-10-30
+
+The homepage press kit (`#press`) had grown into four stacked card grids: framed
+laurel cards, boxed quotes, six excerpt cards with badges and corners, eight
+monogram tiles, plus a full-bleed grid texture. It read as four sections bolted
+together and cost 2,238px of document height on a 1440px screen (5,400px on a
+390px phone), most of it chrome and repeated prose.
+
+Rebuilt as a single framed dossier (source of truth:
+`src/lib/press-kit-markup.ts`, rendered into `index.html` and the patched
+`index-<hash>.js` by `home-src/build.mjs`):
+
+- **One panel, hairline tiers.** A single bordered, corner-ticked panel holds a
+  masthead and four tiers (I laurels, II critical acclaim, III coverage,
+  IV profiles). Tiers are separated by hairlines instead of cards, so the kit
+  reads as one document. The `zp-pk-ambient` grid texture is gone.
+- **Copy de-duplicated, links untouched.** Coverage rows dropped their
+  repetition of the excerpts shown elsewhere on the page: each row is now
+  publication, subject and a link (all six URLs kept, `aria-label` carries the
+  full sentence). Profile tiles became a four-column index of verified
+  destinations (all eight URLs kept); the monogram tiles are gone. Every award
+  caption, quote, attribution and external URL is unchanged.
+- **Artwork contained.** Laurel marks sit in a fixed `--zp-pk-stage` box shared
+  by the bitmap and the drawn SVGs, so the emblem can no longer overflow its
+  caption between 640px and 1023px. Tier labels wrap instead of colliding with
+  the hairline at tablet widths.
+- **Smaller type ramp, same palette.** Heading clamp 2.05-3.05rem (was
+  2.55-4.1rem); section padding `py-14 sm:py-16 md:py-20` (was
+  `py-20 sm:py-28 md:py-32`); container capped at 66rem. Brand red `#C41E1E`
+  identity and text-red `#e65650` legibility roles are unchanged.
+
+Measured with the shipped static markup and JS disabled (so the prerender alone
+is measured): 1,335px desktop / 2,109px mobile, i.e. -40% and -61% section
+height; the section remains fully keyboard reachable and honours
+`prefers-reduced-motion`.
+
+Validation: `npm run build` (generated output regenerated, not hand-edited);
+`npm run typecheck`; `npm test` 95/95, including updated `#press` assertions in
+`tools/home-mount.test.mjs` that now pin the single dossier, four tiers, six
+coverage rows, eight profiles, the dropped excerpt sentences and the retired
+card chrome; `verify`, `check:links`, `check:forms`, `check:headers`,
+`check:docs`; `npm run lint:slop` (62/100, 130 accepted, 0 new, 0 stale).
+`sw.js` cache moved `zazie-v58` -> `zazie-v59` because the bundle hash changed
+(`index-ec291252.js` -> `index-ed05e519.js`), with `tools/boot-skip.test.mjs`
+pinned to the new name.
+
 ## Deterministic homepage head and production repair: 2026-10-29
 
 PRs #178 and #180 merged, but production run 40965033599 stopped at 88/89 tests:

@@ -369,7 +369,27 @@ test('press kit (#press) ships laurels, a curated mix of press quotes, and fancy
   }
 
   assert.equal((pressSection.match(/class="zp-pk-(?:lead|mini)-quote"/g) || []).length, 3);
-  assert.equal((pressSection.match(/David Finkelstein/g) || []).length, 2, 'one quote attribution plus one feature description');
+  assert.equal((pressSection.match(/David Finkelstein/g) || []).length, 1, 'one quote attribution');
+
+  // The press kit is a single dossier panel: one framed document, four ruled
+  // tiers, and no per-item cards or excerpts repeating copy. Every coverage
+  // row is publication + subject + link; the prose lives nowhere else.
+  assert.equal((pressSection.match(/class="zp-pk-dossier"/g) || []).length, 1, 'one dossier panel holds the whole kit');
+  assert.ok(!pressSection.includes('zp-pk-ambient'), 'the full-bleed grid texture is gone');
+  assert.ok(!pressSection.includes('zp-pk-corner'), 'no decorative card corners');
+  assert.equal((pressSection.match(/class="zp-pk-tier(?: zp-pk-tier-last)?"/g) || []).length, 4, 'four ruled tiers');
+  assert.equal((pressSection.match(/class="zp-pk-tier-idx"/g) || []).length, 4);
+  assert.equal((pressSection.match(/class="zp-pk-feature-card"/g) || []).length, 6, 'all six coverage rows stay');
+  assert.equal((pressSection.match(/class="zp-pk-dir-link"/g) || []).length, 8, 'all eight verified profiles stay');
+  for (const dropped of [
+    'Critic David Finkelstein dissects',
+    'Long-form profile charting the path',
+    'Close listen to visceral sub-bass architecture',
+    'Curatorial announcement and international exhibition dossier',
+    'zp-pk-dossier-monogram',
+  ]) {
+    assert.ok(!pressSection.includes(dropped), `de-cluttered kit drops: ${dropped}`);
+  }
 
   const pressStyle = /<style id="zp-press-style">([\s\S]*?)<\/style>/.exec(html)?.[1];
   assert.ok(pressStyle && pressStyle.includes('.zp-pk-laurel-card'), '#zp-press-style ships inline');
