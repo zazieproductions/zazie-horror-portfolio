@@ -7,8 +7,10 @@
  *
  * CANONICAL URL POLICY (enforced here and by tools/live-route-audit.mjs):
  *   Every page has exactly ONE canonical, extensionless, slashless URL
- *   (root "/" excepted), advertised by sitemap.xml, the page's
- *   <link rel="canonical"> and the Link: rel="canonical" header in _headers.
+ *   (root "/" excepted), advertised by sitemap.xml and by the page's own
+ *   <link rel="canonical">. (There is no `Link:` response header: see the note
+ *   in `_headers` -- Cloudflare Pages truncates an angle-bracketed value, so
+ *   the site served `Link: ; rel="canonical"` for as long as it carried one.)
  *   Every other spelling of that page must consolidate onto the canonical:
  *
  *     * .html alias files  -> 308 to the slashless canonical
@@ -83,9 +85,9 @@ const LEGACY = [
 const HEADER = `# Cloudflare Pages redirect rules — canonical URL consolidation
 #
 # Canonical URL policy: every page has exactly ONE canonical, extensionless,
-# slashless URL (root "/" excepted), advertised by sitemap.xml, the page's
-# <link rel="canonical"> and the Link: rel="canonical" header in _headers.
-# Every other spelling of that page must consolidate onto the canonical:
+# slashless URL (root "/" excepted), advertised by sitemap.xml and the page's
+# own <link rel="canonical">. Every other spelling of that page must
+# consolidate onto the canonical:
 #
 #   * .html alias files  -> 308 to the slashless canonical (legacy hub
 #     aliases keep an explicit hand-written 301; flat item aliases are

@@ -1,8 +1,16 @@
 # Routing
 
 Canonical policy: **one canonical, extensionless, slashless URL per page**
-(root `/` excepted), advertised identically by `sitemap.xml`, each page's
-`<link rel="canonical">` and the `Link: rel="canonical"` header in `_headers`.
+(root `/` excepted), advertised identically by `sitemap.xml` and each page's
+`<link rel="canonical">`.
+
+There is deliberately **no `Link: rel="canonical"` response header**. The site
+used to send one from `_headers`; Cloudflare Pages drops an angle-bracketed
+segment from a header value, so every route actually served
+`Link: ; rel="canonical"` — a canonical hint with no URI in it. The rules were
+removed on 2026-10-30 and `tools/check-headers.mjs` now fails the build if an
+angle bracket reappears in any header value. The in-page `<link rel="canonical">`
+is the signal Google uses for an HTML page, and it is correct on all 80 routes.
 
 | Request | Served | Status |
 |---|---|---|

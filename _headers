@@ -139,187 +139,159 @@
   ! Cache-Control
   Cache-Control: public, max-age=31536000, immutable
 
-# Canonical Link + explicit X-Robots-Tag headers on all indexable routes
+# Explicit X-Robots-Tag headers on all indexable routes.
+#
+# THERE IS DELIBERATELY NO `Link: <…>; rel="canonical"` RULE HERE.
+#
+# Until 2026-10-30 every indexable route carried one, and the edge mangled all
+# of them: Cloudflare Pages drops an angle-bracketed segment from a `_headers`
+# value, so the live response for `/`, `/work`, `/reel` and every other route
+# was
+#
+#     Link: ; rel="canonical"
+#
+# -- a canonical hint with no URL in it. Verified live 2026-10-30 with
+# `curl -sI https://horror.zazieproductions.com/`:
+#   link: ; rel="canonical"
+# The surrounding quotes survive, the URI is gone, so the header was never a
+# usable signal and was noise on every crawl. It is removed rather than
+# "fixed": RFC 8288 requires the URI in angle brackets, so any syntactically
+# valid Link value would be truncated the same way.
+#
+# Nothing is lost. Every route already serves a self-referencing
+# <link rel="canonical"> in the HTML, which is the signal Google actually uses
+# for an HTML page, and `tools/check-headers.mjs` now fails the build if an
+# angle-bracketed header value is added back here.
+#
+# Keep the X-Robots-Tag rules: those are real, they arrive intact, and they are
+# the edge-level assertion that a route is indexable.
 /
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/>; rel="canonical"
 
 /index.html
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/>; rel="canonical"
 
 /work
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/work>; rel="canonical"
 /work/
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/work>; rel="canonical"
 /work/index.html
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/work>; rel="canonical"
 /work/*
   X-Robots-Tag: index, follow, max-image-preview:large
 
 /reel
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/reel>; rel="canonical"
 /reel/
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/reel>; rel="canonical"
 /reel/index.html
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/reel>; rel="canonical"
 /reel/*
   X-Robots-Tag: index, follow, max-image-preview:large
 
 /process
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/process>; rel="canonical"
 /process/
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/process>; rel="canonical"
 /process/index.html
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/process>; rel="canonical"
 
 /services
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/services>; rel="canonical"
 /services/
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/services>; rel="canonical"
 /services/index.html
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/services>; rel="canonical"
 
 /hire-a-composer
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/hire-a-composer>; rel="canonical"
 /hire-a-composer/
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/hire-a-composer>; rel="canonical"
 /hire-a-composer/index.html
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/hire-a-composer>; rel="canonical"
 
 /how-to-hire-a-horror-composer
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/how-to-hire-a-horror-composer>; rel="canonical"
 /how-to-hire-a-horror-composer/
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/how-to-hire-a-horror-composer>; rel="canonical"
 /how-to-hire-a-horror-composer/index.html
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/how-to-hire-a-horror-composer>; rel="canonical"
 
 /sound-design
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/sound-design>; rel="canonical"
 /sound-design/
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/sound-design>; rel="canonical"
 /sound-design/index.html
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/sound-design>; rel="canonical"
 
 /game-scoring
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/game-scoring>; rel="canonical"
 /game-scoring/
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/game-scoring>; rel="canonical"
 /game-scoring/index.html
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/game-scoring>; rel="canonical"
 
 /store
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/store>; rel="canonical"
 /store/
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/store>; rel="canonical"
 /store/index.html
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/store>; rel="canonical"
 /store/*
   X-Robots-Tag: index, follow, max-image-preview:large
 
 /legal
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/legal>; rel="canonical"
 /legal/
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/legal>; rel="canonical"
 /legal/index.html
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/legal>; rel="canonical"
 
 /faq
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/faq>; rel="canonical"
 /faq/
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/faq>; rel="canonical"
 /faq/index.html
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/faq>; rel="canonical"
 
 /terms
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/terms>; rel="canonical"
 /terms/
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/terms>; rel="canonical"
 /terms/index.html
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/terms>; rel="canonical"
 
 /privacy
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/privacy>; rel="canonical"
 /privacy/
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/privacy>; rel="canonical"
 /privacy/index.html
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/privacy>; rel="canonical"
 
 /licensing
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/licensing>; rel="canonical"
 /licensing/
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/licensing>; rel="canonical"
 /licensing/index.html
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/licensing>; rel="canonical"
 
 /purchases
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/purchases>; rel="canonical"
 /purchases/
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/purchases>; rel="canonical"
 /purchases/index.html
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/purchases>; rel="canonical"
 
 /accessibility
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/accessibility>; rel="canonical"
 /accessibility/
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/accessibility>; rel="canonical"
 /accessibility/index.html
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/accessibility>; rel="canonical"
 
 /sitemap
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/sitemap>; rel="canonical"
 /sitemap/
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/sitemap>; rel="canonical"
 /sitemap/index.html
   X-Robots-Tag: index, follow, max-image-preview:large
-  Link: <https://horror.zazieproductions.com/sitemap>; rel="canonical"

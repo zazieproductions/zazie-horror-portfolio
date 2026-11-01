@@ -49,7 +49,8 @@
 
 ### Quality
 - [Accessibility](quality/accessibility.md) · [Performance](quality/performance.md) ·
-  [Security](quality/security.md) · [SEO](quality/seo.md)
+  [Security](quality/security.md) · [SEO](quality/seo.md) ·
+  [Google indexing](quality/indexing.md) — live record, stale-index diagnosis, the actions that are not code
 
 ### Project
 - [Roadmap](project/roadmap.md) · [Known limitations](project/known-limitations.md) ·
