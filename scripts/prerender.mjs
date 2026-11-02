@@ -223,7 +223,7 @@ for (const loc of sitemapLocs) {
   const html = fs.readFileSync(file, 'utf8');
   const titleCount = [...html.matchAll(/<title>/gi)].length;
   const canonicalTags = [...html.matchAll(/<link\s+rel="canonical"\s+href="([^"]+)"/gi)];
-  const descriptionTags = [...html.matchAll(/<meta\b(?=[^>]*\bname=["']description["'])(?=[^>]*\bcontent=["'][^"']+["'])[^>]*>/gi)];
+  const descriptionTags = [...html.matchAll(/<meta\b[^>]*>/gi)].filter((m) => /\bname=["']description["']/i.test(m[0]));
   const robots = /<meta\s+name="robots"\s+content="([^"]*)"/i.exec(html)?.[1] ?? '';
   const expected = url(route.path);
   if (titleCount !== 1) problems.push(`${route.path}: expected one <title>, found ${titleCount}`);

@@ -26,6 +26,7 @@ export const releases: Release[] = [
     schemaType: 'MusicAlbum',
     trackCount: 10,
     summary: 'A ten-track experimental electronic album whose Bandcamp notes name CRT hum, impulse pulses, surgical steel, failing hard drives, and immersive foley among its sound objects.',
+    metaDescription: "Anesthesia for the Signal Age: ten-track experimental album of CRT hum, surgical steel and failing drives. Bandcamp.",
     paragraphs: [
       'The Bandcamp liner note describes a collection moving through acousmatic modular percussion, glitch-lacerated IDM, and sound objects gathered from late-stage machinery. Its tracklist includes “DNA Fragment AGTCCTGAA,” “CRT-204 Bone Static,” “Needle In The Nerve,” and “Quarter-Eater Poltergeist.”',
       'The listing dates the album May 7, 2026 and credits Zazie Kanwar-Torge across writing, recording, composition, arrangement, production, engineering, mixing, mastering, editing, manipulation, programming, sound design, and spatial processing. The download is listed as 24-bit/44.1 kHz; no current price is repeated here.',
@@ -61,6 +62,7 @@ export const releases: Release[] = [
     schemaType: 'MusicAlbum',
     trackCount: 1,
     summary: 'A 2:24 string-driven composition described by its Bandcamp notes as moving between chamber music and spectral cinema, with an intimate, uncanny character.',
+    metaDescription: "Opaline Lament: a 2:24 string-driven piece between chamber music and spectral cinema, uncanny and intimate. Bandcamp.",
     paragraphs: [
       'The first-party notes call Opaline Lament a string-driven meditation that drifts between chamber music and spectral cinema. They describe it as a modern continuation of the cinematic string language Zazie Kanwar-Torge first explored in early adolescence, now reshaped with greater compositional control.',
       'Bandcamp lists the track at 2:24, released December 19, 2025, with a 16-bit/44.1 kHz download. Its credits name Zazie Kanwar-Torge for arrangement, composition, performance, mixing, mastering, and production. A same-titled showreel cue is linked separately from the release listing.',
@@ -97,6 +99,7 @@ export const releases: Release[] = [
     schemaType: 'MusicAlbum',
     trackCount: 1,
     summary: 'A single 8:55 experimental sound composition commissioned in response to a Metapsychosis open call and described in the liner notes as binaurally mastered.',
+    metaDescription: "Spectral Ode to Synesthesia: 8:55 experimental sound composition, binaurally mastered for a Metapsychosis open call. Bandcamp.",
     paragraphs: [
       'The Bandcamp notes describe a sound composition built around impulse noise, stretched rubber, electromagnetic recordings, and liquid field recordings. They say granular synthesis and spectral analysis are used to break apart and reassemble those sounds, and describe the spatial mix as 3D binaural mastering.',
       'The release contains one track with an 8:55 runtime and was released March 6, 2025. Its notes say the work responded to an open call from Metapsychosis and credit Zazie Kanwar-Torge with composition, performance, production, and mixing. The listing specifies a 16-bit/48 kHz download.',
@@ -134,6 +137,7 @@ export const releases: Release[] = [
     schemaType: 'MusicAlbum',
     trackCount: 8,
     summary: 'An eight-track experimental album with a tracklist that includes Phases of Trichromatic Being, Pivot And Deflect, Grief Is A Hot Commodity, and Gainax Ending.',
+    metaDescription: "To Halt Space Adrift: eight-track experimental album with Phases of Trichromatic Being and Grief Is A Hot Commodity. Bandcamp.",
     paragraphs: [
       'Bandcamp lists eight tracks, beginning with “Phases of Trichromatic Being” and continuing through titles such as “Pivot And Deflect,” “Exfoliating Flower,” “Grief Is A Hot Commodity,” “Pseudologia Fantastica,” and “Gainax Ending.” The tracklist is the most reliable guide to the scope of this catalogue entry.',
       'The release date is May 2, 2023, and the page lists a 16-bit/44.1 kHz download. This record keeps to the verified title, track names, count, and published date rather than adding a plot, commission, or screen-use claim.',
@@ -169,6 +173,7 @@ export const releases: Release[] = [
     schemaType: 'MusicAlbum',
     trackCount: 8,
     summary: 'An eight-track Bandcamp album released July 26, 2023; its listing applies a Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 licence.',
+    metaDescription: "Vermiform: eight-track experimental album released July 26, 2023 under a CC BY-NC-ND 4.0 licence. Bandcamp.",
     paragraphs: [
       'The tracklist pairs the title piece with “Man Who Cries [Hollow Sea],” “Horseman of The Apocalypse,” “Pollyanna Carnival,” and “Moving in Perpetual Slumber.” Bandcamp tags the album with experimental, avant-garde, outsider, and surreal descriptors.',
       'Vermiform was released July 26, 2023, and the listing specifies a 16-bit/44.1 kHz download. Its licence is CC BY-NC-ND 4.0; readers should consult that licence and the source page for the precise permissions that apply to reuse.',
@@ -204,6 +209,7 @@ export const releases: Release[] = [
     schemaType: 'MusicAlbum',
     trackCount: 10,
     summary: 'A ten-track experimental album released May 6, 2022, with a Bandcamp-listed 24-bit/44.1 kHz download and tags including industrial and dark ambient.',
+    metaDescription: "Constrained Capacity: ten-track industrial and dark ambient album from 2022, with a 24-bit/44.1 kHz download. Bandcamp.",
     paragraphs: [
       'The tracklist includes “Pyrogenesis,” “Hyperfixation Simulation,” “Clan of the Rats,” “Drill & Plastic Bag Variation,” and “Soundscape of 0/11/2022 (Bonus Track).” The varied names are preserved as Bandcamp lists them, including the date-like text in the bonus-track title.',
       'Bandcamp lists ten tracks, a release date of May 6, 2022, and a 24-bit/44.1 kHz download. Its tags include experimental, avant-garde, dark ambient, industrial, noise rock, and post-rock; current purchase terms remain on the platform.',
@@ -239,6 +245,7 @@ export const releases: Release[] = [
     schemaType: 'MusicAlbum',
     trackCount: 5,
     summary: 'A five-track, synth-led album whose Bandcamp notes describe a cyberpunk hallucination, pseudo-retro sound, and an anachronistic ’90s industrial-DJ reference.',
+    metaDescription: "Interference Archive 01010101: five-track synth-led album of cyberpunk hallucination and pseudo-retro sound. Bandcamp.",
     paragraphs: [
       'The Bandcamp description calls the album a synth-led trip into a cyberpunk hallucination, built around digital nostalgia and pseudo-retro sounds. Its five tracks are “Timeless Retro Splurge,” “Dance Dance Immolation,” “Guru Meditation Error,” “Klerksdorp Sphere 3.1415,” and “Beneath Mercury.”',
       'The album was released September 8, 2021, and the listing specifies a 24-bit/44.1 kHz download. “Timeless Retro Splurge” has a same-titled showreel cue, so that distinct archive entry is linked below without suggesting a screen placement.',
@@ -274,6 +281,7 @@ export const releases: Release[] = [
     schemaType: 'MusicAlbum',
     trackCount: 1,
     summary: 'The Bandcamp listing presents one track, “List of Russian Spies on Wikipedia,” with a published runtime of 2:34; no release date is stated here.',
+    metaDescription: "Stutter to stammer: one 2:34 experimental Bandcamp track, List of Russian Spies on Wikipedia.",
     paragraphs: [
       'The listing’s visible track is “List of Russian Spies on Wikipedia,” timed at 2:34. This archive records the track count and duration shown on Bandcamp rather than repeating an older catalogue description that called it a five-track album.',
       'No publication date is asserted on this page because the available listing does not establish one. The Bandcamp link remains the source for the release’s current notes, playback, and download details.',
@@ -307,6 +315,7 @@ export const releases: Release[] = [
     creatorName: 'Zazie Productions',
     schemaType: 'Product',
     summary: 'An itch.io sound pack listing 209 WAV effects across ten labeled categories, from body impacts and bones to screams, creatures, demons, ghosts, and vampires.',
+    metaDescription: "UNHOLY ANATOMY: 209 horror WAV effects across bones, screams, creatures, ghosts and vampires. itch.io sound pack.",
     paragraphs: [
       'The product page groups 209 sound effects into ten categories: body impacts and movement; bones and joints; flesh, organs, and anatomy; weapons, cuts, and stabs; human screams and pain; breaths and howls; laughs, spells, and whispers; demons and possession; monsters and creatures; ghosts, undead, and vampires.',
       'The listing describes the pack for horror games, films, trailers, animation, audio drama, and related sound-design work. It identifies the contents as WAV files and says the library is organized into labeled folders; current terms and availability are left to itch.io.',
@@ -339,6 +348,7 @@ export const releases: Release[] = [
     creatorName: 'Zazie Productions',
     schemaType: 'Product',
     summary: 'A focused set of 25+ one-shot interface sounds: minimal error beeps, warning signals, invalid-input tones, and system-failure alerts.',
+    metaDescription: "FAULT CODES: 25+ one-shot interface sounds, from error beeps to system-failure alerts. itch.io sound pack.",
     paragraphs: [
       'The itch.io description presents FAULT CODES as a small toolkit for machines and fictional interfaces that refuse an input. Its listed examples include error tones, warning signals, invalid-action beeps, and short alerts for malfunctions or unavailable actions.',
       'The page specifies 25+ original one-shot effects as individual WAV files and suggests use in games, interactive media, terminals, puzzles, and sound design. The listing (not this static archive page) remains the source for current download terms.',
@@ -371,6 +381,7 @@ export const releases: Release[] = [
     creatorName: 'Zazie Productions',
     schemaType: 'Product',
     summary: 'A 2:04 science-fiction battle soundscape listed as a 48 kHz, 24-bit stereo WAV, with spacecraft, energy-weapon, alien-voice, and glitch details in its description.',
+    metaDescription: "Galactic Requiem: a 2:04 sci-fi battle soundscape of spacecraft, energy weapons and glitch effects. Gumroad WAV.",
     paragraphs: [
       'The Gumroad description evokes a science-fiction battle through energy weapons, alien voices, overhead warships, metallic impacts, and glitching technology. It markets the piece as an immersive 3D soundscape for game, film, and other media projects.',
       'The product specification lists a 2:04 WAV file at 48 kHz/24-bit in stereo. This page records those stable technical details and the themes named by the seller, while leaving price, download availability, and other current purchase terms to Gumroad.',
@@ -405,6 +416,7 @@ export const releases: Release[] = [
     creatorName: 'Zazie Productions',
     schemaType: 'Product',
     summary: 'A Gumroad archive listing 200+ Windows VST/VST3 plug-ins across effects, synths, loop slicers, reverbs, delays, distortions, and unusual tools; compatibility varies.',
+    metaDescription: "Plug-in Mega-Vault: 200+ Windows VST/VST3 plug-ins for effects, synths, reverbs and delays. Gumroad software archive.",
     paragraphs: [
       'The seller describes the bundle as a collection of more than 200 VST/VST3 plug-ins for Windows DAWs, spanning effects, synthesizers, loop slicers, reverbs, delays, distortions, and other unusual audio tools. It is presented as an archival collection rather than a promise of current commercial support.',
       'The listing warns that compatibility varies by system, DAW, and configuration; it notes that some older plug-ins may need bridging or may not behave as expected. Anyone considering the archive should read the seller’s safety and compatibility notes before installing unfamiliar software.',
@@ -437,6 +449,7 @@ export const releases: Release[] = [
     creatorName: 'Zazie Productions',
     schemaType: 'Product',
     summary: 'An 18-clip pack of pre-rendered 9:16 MP4 glitch cuts for short-form video, described as signal loss, data corruption, and cyber-static effects.',
+    metaDescription: "Micro-Rupture Collection: 18 pre-rendered 9:16 glitch cuts of signal loss and data corruption. Gumroad video pack.",
     paragraphs: [
       'The Gumroad page describes eighteen pre-rendered visual cuts for vertical short-form video. It frames the clips around glitch transitions, signal loss, data corruption, and cyber-static, rather than presenting them as static artwork.',
       'The listing specifies 9:16 MP4 files and names Reels, Shorts, and TikTok among the intended contexts. This archive does not repeat conflicting file-size details or make claims about platform reach, retention, or performance.',
@@ -468,6 +481,7 @@ export const releases: Release[] = [
     creatorName: 'Zazie Productions',
     schemaType: 'Product',
     summary: 'A Gumroad digital collection presented as facsimiles of historical musical scores; the listing conflicts on the manuscript count and date range, which are omitted here.',
+    metaDescription: "The Forbidden Canticles: facsimiles of historical musical scores. Gumroad collection; count and dates unstated.",
     paragraphs: [
       'The Gumroad listing presents this release as a collection of historical score facsimiles in downloadable PDF form, with original notation and engravings described as part of the archival material. The product page gives readers a source for its full notes and current terms.',
       'The listing uses inconsistent manuscript counts and date ranges in its title and description. To avoid repeating an unresolved claim, this catalogue entry omits a count and period and records only the stable format and score-facsimile framing.',
@@ -499,6 +513,7 @@ export const releases: Release[] = [
     creatorName: 'Zazie Productions',
     schemaType: 'Product',
     summary: 'A liminal environment asset whose itch.io description evokes an abandoned concrete bathroom after a power flicker, with lighting that feels subtly wrong.',
+    metaDescription: "Room 7G: The Hygiene Loop: a liminal horror environment of an abandoned bathroom after a power flicker. itch.io asset.",
     paragraphs: [
       'The first-party description sets Room 7G in an abandoned concrete bathroom just after a power-grid flicker. It calls attention to the uneasy light and the contrast between surfaces that seem too clean and a door glowing from an unknown source.',
       'The listing suggests the asset for liminal storytelling, horror scenes, environment lighting, and interactive art. Because its file description gives inconsistent format and resolution details, this page leaves those specifications unstated and links to the live source.',
@@ -530,6 +545,7 @@ export const releases: Release[] = [
     creatorName: 'Zazie Productions',
     schemaType: 'Product',
     summary: 'A pixel-art asset pack with six modular card UI frames and three 16×16 icons, supplied as transparent PNGs with layered front-and-back textures.',
+    metaDescription: "CRYPTOTYPE-9: six modular pixel-art UI frames and three 16x16 icons as transparent PNGs. itch.io asset pack.",
     paragraphs: [
       'The itch.io page describes CRYPTOTYPE-9 as interface fragments from a fictional lost console. The listed contents are six modular card frames and three 16×16 icons, with transparent PNGs and layered front/back textures for card assembly or flip-state use.',
       'The seller suggests the assets for tactical deck-builders, experimental card interfaces, inventory menus, fake emulators, and liminal UI settings. Those suggested uses are taken from the product description; this page makes no compatibility promise beyond the listed PNG assets.',
@@ -560,6 +576,7 @@ export const releases: Release[] = [
     sellerName: ebaySeller,
     schemaType: 'Product',
     summary: 'An eBay listing for a skull-shaped death whistle; its product gallery shows multiple designs and a demonstration of the whistle’s scream-like sound.',
+    metaDescription: "Aztec Death Whistle: skull-shaped death whistle with a scream-like sound, shown in an eBay gallery.",
     paragraphs: [
       'The seller’s gallery shows skull-shaped whistle designs in several finishes, along with images of the instrument being held and a sound demonstration. The catalogue entry records the listing’s product identity without treating promotional sound-level claims as independently measured specifications.',
       'This is a physical object listing rather than one of the downloadable sound libraries or original recordings. Check the live eBay page for the selected design, exact item details, shipping, and any current purchase terms.',
@@ -590,6 +607,7 @@ export const releases: Release[] = [
     sellerName: ebaySeller,
     schemaType: 'Product',
     summary: 'An eBay listing for skull-head decorations with a motion sensor; the product gallery shows red-lit eyes and three AAA batteries.',
+    metaDescription: "Skull Heads With Motion Sensor: red-lit Halloween skull props with a motion sensor, shown in an eBay listing.",
     paragraphs: [
       'The listing gallery identifies the item as skull-head horror decor with a built-in motion sensor. Its photographs show red eyes and three AAA batteries, alongside views of the skull and sensor switch.',
       'This page records the seller’s visible product description and avoids static claims about stock, condition, or price. Use the current eBay listing to confirm the specific item variant and its present terms.',
@@ -620,6 +638,7 @@ export const releases: Release[] = [
     sellerName: ebaySeller,
     schemaType: 'Product',
     summary: 'An eBay listing for a compact cricket-noise generator module; the gallery identifies seven high-frequency sound effects and an on/off switch.',
+    metaDescription: "Creepy Cricket Noise Generator: a compact sound module with seven high-frequency effects, shown on eBay.",
     paragraphs: [
       'The eBay gallery describes a Creepy Cricket Noise Generator module and shows several board and enclosure views. One image identifies seven high-frequency sound effects and an on/off switch, giving this listing a more specific description than the generic item category alone.',
       'The item is catalogued here as a physical sound module, not as a downloadable library. The live listing remains the source for its exact configuration, condition, and current purchase terms.',
@@ -650,6 +669,7 @@ export const releases: Release[] = [
     sellerName: ebaySeller,
     schemaType: 'Product',
     summary: 'A Halloween fruit-plate listing whose title mentions ghost glow and music; the gallery shows several seasonal plate and bowl designs.',
+    metaDescription: "Ghost Glow Fruit Plate: a musical Halloween fruit plate and bowl design shown in an eBay listing.",
     paragraphs: [
       'The eBay title describes a Halloween plate with a ghost-glow and music effect, while the gallery presents several related plate and bowl designs. Because the page shows multiple variations, the exact selected item should be confirmed on the live listing.',
       'This is a seasonal decorative object in the catalogue, separate from the studio’s audio releases and downloadable assets. No dimensions, battery details, or availability are repeated here unless confirmed for the selected variation.',
@@ -680,6 +700,7 @@ export const releases: Release[] = [
     sellerName: ebaySeller,
     schemaType: 'Product',
     summary: 'An eBay listing titled as a white F998Pro live-singing sound card with intelligent noise reduction; gallery images show an LED display, buttons, knobs, and inputs.',
+    metaDescription: "F998Pro Live Sound Card: a white live-singing sound card with noise reduction, shown in an eBay gallery.",
     paragraphs: [
       'The listing title identifies the item as an F998Pro white live-singing sound card and includes an intelligent-noise-reduction description. Its gallery shows a display, multicolor controls, knobs, input ports, and bundled cables or accessories.',
       'The page records the device name and visible control layout, but does not infer compatibility or audio performance from product imagery. Consult eBay for the current item details and listing terms.',
@@ -710,6 +731,7 @@ export const releases: Release[] = [
     sellerName: ebaySeller,
     schemaType: 'Product',
     summary: 'An eBay listing for an Alexa voice-control Wi-Fi bulb; its title specifies an RGBCW 9W lamp with timing features and multiple socket variants.',
+    metaDescription: "Voice-Control WiFi Bulb: an RGBCW 9W Alexa-controlled lamp with timing features, shown on eBay.",
     paragraphs: [
       'The eBay listing title describes an Alexa voice-control Wi-Fi bulb with RGBCW lighting, 9W power, and timing features. Its item selector shows several socket variants, so the exact fitting must be chosen and checked on the source page.',
       'The catalogue entry preserves the listing’s product identity without repeating price or stock counts, which can change. The live eBay page is the authority for compatibility, selected variant, shipping, and current purchase terms.',
@@ -738,6 +760,7 @@ export const releases: Release[] = [
     platform: 'eBay',
     schemaType: 'Product',
     summary: 'The original catalogue contains a TEA5767 Digital Radio Kit entry, but its attached eBay item ID currently resolves to unrelated content; no purchase link or hardware specifications are asserted.',
+    metaDescription: "TEA5767 Digital Radio Kit: an archived catalogue entry whose eBay item ID no longer resolves; no specs asserted.",
     paragraphs: [
       'This record preserves the original catalogue title so the collection remains complete. The eBay URL previously attached to the entry now resolves to unrelated content, so it is deliberately not linked as a verified source.',
       'Until a correct listing or product reference is available, this page does not guess at the kit’s contents, compatibility, or technical specifications. The entry remains a transparent archive record rather than a purchase recommendation.',
@@ -762,6 +785,7 @@ export const releases: Release[] = [
     sellerName: ebaySeller,
     schemaType: 'Product',
     summary: 'An eBay listing for an HD X60 sound card and mixer; product images show multicolor controls, knobs, labeled inputs, and live-sound use.',
+    metaDescription: "HD X60 Sound Card Mixer: a live-sound card and mixer with multicolor controls, shown in an eBay gallery.",
     paragraphs: [
       'The eBay listing title names the HD X60 as a sound card and sound mixer. Its gallery shows a compact control surface with buttons, knobs, displays, and labeled input ports; another image places microphones beside the device.',
       'This catalogue record describes only the item and features visible in the source listing. Compatibility, included accessories, condition, and current purchase terms should be checked on eBay rather than inferred from the photographs.',

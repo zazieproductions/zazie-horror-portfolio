@@ -80,6 +80,8 @@ export interface Production {
   title: string;
   headline: string;
   summary: string;
+  /** Short, niche-targeted SERP copy; the full first-party record stays in summary. */
+  metaDescription: string;
   workType: string;
   schemaType: ProductionSchemaType;
   genres: string[];
@@ -111,6 +113,8 @@ export interface Cue {
   durationSeconds: number;
   /** The published first-party description from /reel. */
   description: string;
+  /** Short, niche-targeted SERP copy; the full first-party note stays in description. */
+  metaDescription: string;
   /** Unique editorial context about the cue; no inferred BPM, gear, or placement. */
   paragraphs: string[];
   audioPath: string;
@@ -141,6 +145,8 @@ export interface Release {
   creatorName?: string;
   schemaType: StoreSchemaType;
   summary: string;
+  /** Short, niche-targeted SERP copy; the full listing note stays in summary. */
+  metaDescription: string;
   paragraphs: string[];
   image?: Image;
   facts: Fact[];

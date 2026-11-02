@@ -13,6 +13,15 @@
   `MusicComposition`+`AudioObject`, catalogue items without mutable
   price/stock claims). `scripts/verify.mjs` enforces exactly one
   title/canonical/robots/OG set per generated page.
+- Meta descriptions are short and niche-forward (2026-11-02 policy). Every
+  route stays within the 80-140 character band declared by
+  `DESCRIPTION_MIN`/`DESCRIPTION_MAX` in `src/data/routes.ts`, which
+  `scripts/verify.mjs` also checks against the served HTML. Sources of truth:
+  `src/data/hubs.ts` for hub routes, each item's `metaDescription` in
+  `src/data/{productions,cues,releases}.ts` for generated item pages, and the
+  `legal-src/` + `store-src/` templates (plus hand-maintained hub HTML and
+  their root twins) for static pages. Change the source and run
+  `npm run build`; never hand-edit generated item HTML.
 - Programmes and audits: root `SEO-DOSSIER.md`, `SITEMAP.md`,
   `ITEM-URLS.md`; historical audits in `docs/archive/`.
 - Post-deploy discovery: `indexnow.yml` pings IndexNow; `wayback.yml`

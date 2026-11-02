@@ -10,6 +10,14 @@ import { releases } from './releases.js';
 import { oneLine, slugify } from './site.js';
 import type { Cue, ItemKind, ItemRoute, Production, Release, Route } from './types.js';
 
+/**
+ * Meta descriptions are deliberately short, niche-forward SERP copy: long
+ * enough to identify the route, short enough that no crawler truncates it.
+ * Shared with scripts/verify.mjs so source and served HTML agree on the band.
+ */
+export const DESCRIPTION_MIN = 80;
+export const DESCRIPTION_MAX = 140;
+
 /** Turn the small amount of allowed inline emphasis in summaries into plain text. */
 export function stripMarkup(value: string): string {
   return value
@@ -66,7 +74,7 @@ function itemRoutes(): ItemRoute[] {
       hub: HUB_PATHS.production,
       slug: production.slug,
       title: productionTitle(production),
-      description: oneLine(production.summary),
+      description: oneLine(production.metaDescription),
       lastmod: production.updatedAt,
       image: production.poster.src,
     });
@@ -79,7 +87,7 @@ function itemRoutes(): ItemRoute[] {
       hub: HUB_PATHS.cue,
       slug: cue.slug,
       title: cueTitle(cue),
-      description: oneLine(`${cue.title}: ${cue.description} Full MP3, ${cue.duration}.`),
+      description: oneLine(cue.metaDescription),
       lastmod: cue.updatedAt,
     });
   }
@@ -91,7 +99,7 @@ function itemRoutes(): ItemRoute[] {
       hub: HUB_PATHS.release,
       slug: release.slug,
       title: releaseTitle(release),
-      description: oneLine(stripMarkup(release.summary)),
+      description: oneLine(release.metaDescription),
       lastmod: release.updatedAt,
     };
     if (release.image) route.image = release.image.src;
@@ -303,7 +311,6 @@ export function validateRoutes(): ValidationIssue[] {
     const where = `item ${item.path}`;
     if (!hubByPath.has(item.hub)) issues.push({ where, message: `unknown hub ${item.hub}` });
     if (!oneLine(item.title) || !oneLine(item.description)) issues.push({ where, message: 'missing title or description' });
-    if (item.description.length < 80) issues.push({ where, message: 'SEO description is too short to identify the item usefully' });
   }
 
   for (const route of allRoutes) {
@@ -313,7 +320,12 @@ export function validateRoutes(): ValidationIssue[] {
     if (/[?#]/.test(route.path)) issues.push({ where, message: 'route path must not include a query or fragment' });
     if (route.path.includes('//') || !/^\/[a-z0-9/-]*$/i.test(route.path)) issues.push({ where, message: 'route path contains invalid characters' });
     if (!isRealDate(route.lastmod)) issues.push({ where, message: `lastmod "${route.lastmod}" is not a real date` });
-    if (!oneLine(route.title) || !oneLine(route.description)) issues.push({ where, message: 'title and description must be non-empty' });
+    const description = oneLine(route.description);
+    if (!oneLine(route.title) || !description) issues.push({ where, message: 'title and description must be non-empty' });
+    if (description.length < DESCRIPTION_MIN || description.length > DESCRIPTION_MAX) {
+      issues.push({ where, message: `meta description is ${description.length} characters; keep it between ${DESCRIPTION_MIN} and ${DESCRIPTION_MAX}` });
+    }
+    if (description !== route.description) issues.push({ where, message: 'meta description must be a single clean line' });
   }
 
   return issues;
