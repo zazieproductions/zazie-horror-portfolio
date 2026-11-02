@@ -26,10 +26,11 @@ export const hubs: Hub[] = [
     // Primary search identity (2026-10-26): experimental psychological horror
     // film composer for independent and arthouse cinema. The title carries the
     // specialist phrase inside the 30-60 character budget (no brand suffix);
-    // the description states the full identity sentence verbatim. Both are
-    // what the WebPage JSON-LD and sitemap reuse.
+    // the description is short, niche-forward SERP copy (2026-11-02 policy:
+    // 80-140 characters, no keyword stacking). Both are what the WebPage
+    // JSON-LD and sitemap reuse.
     title: "Experimental Psychological Horror Composer | Arthouse Film",
-    description: `Experimental psychological horror film composer for independent and arthouse cinema. IMDb-credited bespoke scores by Zazie Kanwar-Torge, quoted per project.`,
+    description: `Experimental psychological horror film scores for indie and arthouse cinema by Zazie Kanwar-Torge. Bespoke work, quoted per project.`,
     lastmod: "2026-10-27",
     images: [
       { loc: "https://horror.zazieproductions.com/images/hero-portrait.jpg", caption: "Portfolio portrait for Zazie Productions, a composer and sound-design studio working across screen and experimental media.", title: "Zazie Kanwar-Torge: Psychological Horror Composer - Dark Atmospheric Scores" },
@@ -107,7 +108,7 @@ export const hubs: Hub[] = [
     path: "/work",
     name: "Selected productions",
     title: "Selected Production Records: Psychological Horror and Experimental Film | Zazie Productions",
-    description: "Nine selected production records across independent psychological horror film, television, and experimental work. Project notes distinguish verified composing, co-composing, sound-design, and production credits.",
+    description: "Nine psychological horror and experimental production records with verified composer, co-composer and sound-design credits.",
     lastmod: "2026-10-26",
     images: [
       { loc: "https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg", caption: "EXPIRE (2025) - IMDb credits Zazie Kanwar-Torge for sound design; other composers are listed separately.", title: "EXPIRE - Production Record and Sound-Design Credit" },
@@ -134,7 +135,7 @@ export const hubs: Hub[] = [
     path: "/reel",
     name: "Showreel",
     title: "Psychological Horror Showreel: 30 Original Dark Cinematic Cues | Zazie Productions",
-    description: "Stream 30 original experimental psychological horror cues by Zazie Kanwar-Torge: slow-burn dread beds, tension stingers, dark ambient textures, body horror, and thriller themes.",
+    description: "30 original experimental horror cues by Zazie Kanwar-Torge: dread beds, dark ambient textures, stingers and body horror. Stream the reel.",
     lastmod: "2026-10-26",
     images: [],
     videos: [],
@@ -143,7 +144,7 @@ export const hubs: Hub[] = [
     path: "/process",
     name: "Scoring process",
     title: "Psychological Horror Scoring Process: Spotting to Delivery | Zazie Productions",
-    description: "A clear psychological horror scoring process for independent and arthouse film: spotting, original themes and motifs, agreed revision rounds, and stereo WAV delivery.",
+    description: "How a psychological horror score takes shape: spotting, original motifs, agreed revisions and stereo WAV delivery.",
     lastmod: "2026-10-27",
     images: [
       { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Kanwar-Torge at the scoring desk, Asheville, NC studio", title: "Psychological Horror Scoring Suite - Process" },
@@ -154,7 +155,7 @@ export const hubs: Hub[] = [
     path: "/store",
     name: "Catalogue",
     title: "Catalogue: Experimental Music, Sound Libraries, Tools and Objects | Zazie Productions",
-    description: "Twenty-four catalogue entries across Bandcamp, itch.io, Gumroad, and eBay, including experimental music, sound libraries, software and visual assets, and physical objects. Current terms and availability remain with each source platform.",
+    description: "Dark ambient records, horror sound libraries, experimental tools and objects from the Zazie Productions catalogue.",
     lastmod: "2026-10-21",
     images: [
       { loc: "https://f4.bcbits.com/img/a4087485987_16.jpg", caption: "Anesthesia for the Signal Age - ten-track experimental electronic album, released May 7, 2026.", title: "Anesthesia for the Signal Age - Zazie Productions" },
@@ -172,7 +173,7 @@ export const hubs: Hub[] = [
     path: "/faq",
     name: "FAQ",
     title: "Psychological Horror Scoring FAQ: Quotes, Process, Rights, Delivery - 35 Questions | Zazie Productions",
-    description: "35 answers on commissioning a psychological horror score for independent film from Zazie Kanwar-Torge: how quoting works, spotting to delivery, revisions, licensing and cue sheets.",
+    description: "Commissioning a psychological horror film score: quotes, spotting, revisions, licensing and cue sheets in 35 answers.",
     lastmod: "2026-10-27",
     images: [],
     videos: [],
@@ -181,7 +182,7 @@ export const hubs: Hub[] = [
     path: "/legal",
     name: "All documents",
     title: "Documents: Horror Scoring Terms, Privacy, Licensing, Purchases | Zazie Productions",
-    description: "Operating and legal documents for Zazie Productions LLC: commissioning terms, licensing and credits, privacy notice, catalogue purchases, accessibility, and 35-question FAQ.",
+    description: "Commissioning terms, horror score licensing, privacy and purchase policies for Zazie Productions LLC.",
     lastmod: "2026-10-18",
     images: [],
     videos: [],
@@ -190,7 +191,7 @@ export const hubs: Hub[] = [
     path: "/licensing",
     name: "Licensing and credits",
     title: "Horror Score Licensing, Rights and Credits: Buyout, Cue Sheets | Zazie Productions",
-    description: "Horror score licensing, synchronization rights, and credit terms for Zazie Kanwar-Torge: buyout vs. exclusive options, writer share, PRO cue sheets, and AI restrictions.",
+    description: "Horror score licensing: sync rights, buyout and exclusive options, writer share, PRO cue sheets and AI restrictions.",
     lastmod: "2026-10-13",
     images: [],
     videos: [],
@@ -199,7 +200,7 @@ export const hubs: Hub[] = [
     path: "/purchases",
     name: "Purchases and returns",
     title: "Purchases, Delivery and Returns: Horror Sound Libraries, Records | Zazie Productions",
-    description: "Order fulfillment, digital delivery, shipping, and return policies for Zazie Productions sound libraries, albums, tools, and hardware across Bandcamp, itch.io, Gumroad, and eBay.",
+    description: "Delivery and return terms for Zazie Productions sound libraries, experimental albums, tools and objects.",
     lastmod: "2026-10-13",
     images: [],
     videos: [],
@@ -208,7 +209,7 @@ export const hubs: Hub[] = [
     path: "/terms",
     name: "Terms",
     title: "Terms: Horror Film Scoring Commissioning, Quotes, Deposits | Zazie Productions",
-    description: "Commissioning terms and conditions for Zazie Productions LLC: written quotes, deposits, spotting to delivery, revisions, kill fees, clearances, and North Carolina law.",
+    description: "Commissioning terms for a psychological horror score: written quotes, deposits, revisions, clearances and North Carolina law.",
     lastmod: "2026-10-17",
     images: [],
     videos: [],
@@ -217,7 +218,7 @@ export const hubs: Hub[] = [
     path: "/privacy",
     name: "Privacy notice",
     title: "Privacy Notice: Cookieless Analytics, No Cookies | Zazie Productions",
-    description: "Privacy notice for horror.zazieproductions.com: cookieless Cloudflare Web Analytics disclosed, zero advertising trackers, zero cookies, local storage inventory, third-party media embeds, and NDA inquiry handling.",
+    description: "Privacy notice for this horror scoring portfolio: cookieless analytics, no ad trackers, no cookies and inquiry handling.",
     lastmod: "2026-10-26",
     images: [],
     videos: [],
@@ -226,7 +227,7 @@ export const hubs: Hub[] = [
     path: "/accessibility",
     name: "Accessibility",
     title: "Accessibility Statement: Horror Composer Portfolio | Zazie Productions",
-    description: "WCAG 2.1 AA accessibility statement for horror.zazieproductions.com: contrast ratios, keyboard navigation, reduced-motion support, known gaps, and alternate-format requests.",
+    description: "Accessibility statement for this horror composer portfolio: contrast, keyboard navigation, reduced motion and known gaps.",
     lastmod: "2026-10-13",
     images: [],
     videos: [],
@@ -235,7 +236,7 @@ export const hubs: Hub[] = [
     path: "/sitemap",
     name: "Site map",
     title: "Site Map: Portfolio Hubs and Item Archive | Zazie Productions",
-    description: "A human-readable overview of the portfolio hubs and operating documents. The XML sitemap separately lists all indexable production, cue, and catalogue item URLs.",
+    description: "Browse the portfolio hubs, psychological horror production records, cue pages and catalogue entries.",
     lastmod: "2026-10-27",
     images: [],
     videos: [],
@@ -244,7 +245,7 @@ export const hubs: Hub[] = [
     path: "/hire-a-composer",
     name: "Hire a horror composer",
     title: "Hire an Experimental Psychological Horror Composer | Zazie Productions",
-    description: "Hire experimental psychological horror film composer Zazie Kanwar-Torge (Zazie Productions) for independent and arthouse cinema: IMDb-credited custom scores to picture, quoted per project against your budget and references.",
+    description: "Hire an experimental psychological horror film composer for indie and arthouse cinema. Custom scores, quoted per project.",
     lastmod: "2026-10-27",
     images: [
       { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Zazie Kanwar-Torge, IMDb-credited experimental psychological horror film composer for hire at Zazie Productions LLC.", title: "Hire an Experimental Psychological Horror Composer | Zazie Kanwar-Torge" },
@@ -255,7 +256,7 @@ export const hubs: Hub[] = [
     path: "/how-to-hire-a-horror-composer",
     name: "How to hire a horror composer",
     title: "How to Hire a Horror Composer: Budgets, Subgenres & Vetting Guide | Zazie Productions",
-    description: "Guide for independent filmmakers and game developers hiring a horror composer: custom score vs. stock libraries, subgenre matching, planning your music budget, spotting, stems, and licensing.",
+    description: "How indie filmmakers hire a horror composer: subgenre fit, custom vs. library music, budgets, spotting and rights.",
     lastmod: "2026-10-27",
     images: [
       { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Guide to hiring a horror composer for independent films, series, and video games by Zazie Kanwar-Torge.", title: "How to Hire a Horror Composer: Budgets, Subgenres & Vetting Checklist" },
@@ -266,7 +267,7 @@ export const hubs: Hub[] = [
     path: "/sound-design",
     name: "Sound design",
     title: "Cinematic Sound Design for Psychological Horror Film | Zazie Productions",
-    description: "Cinematic sound design by Zazie Kanwar-Torge: designed dread, atmospheres, transitions and stingers for psychological horror and arthouse film, delivered as mix-ready stems.",
+    description: "Designed dread, atmospheres and stingers for psychological horror and arthouse film, delivered as mix-ready stems.",
     lastmod: "2026-10-26",
     images: [
       { loc: "https://horror.zazieproductions.com/images/posters/expire-red-check-640.jpg", caption: "EXPIRE sci-fi horror short - sound design by Zazie Kanwar-Torge, from the cinematic sound design page.", title: "Cinematic Sound Design for Psychological Horror Film - Zazie Productions" },
@@ -277,7 +278,7 @@ export const hubs: Hub[] = [
     path: "/game-scoring",
     name: "Game scoring",
     title: "Adaptive Horror Game Scoring & Music | Zazie Productions",
-    description: "Adaptive horror scoring for games: states, seamless loops, layered cues, stingers and implementation notes for Wwise, FMOD, Unity and Unreal pipelines.",
+    description: "Adaptive horror game scoring: layered stems, seamless loops and stingers for Wwise, FMOD, Unity and Unreal.",
     lastmod: "2026-10-17",
     images: [
       { loc: "https://horror.zazieproductions.com/images/posters/the-dark-awaits-640.jpg", caption: "THE DARK AWAITS - the tonal register behind adaptive horror scoring for games, by Zazie Kanwar-Torge.", title: "Adaptive Horror Game Scoring - Zazie Productions" },

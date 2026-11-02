@@ -6,7 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { hubs } from '../build/data/hubs.js';
-import { allRoutes, items, siblingsOf, productionBySlug, cueBySlug, releaseBySlug } from '../build/data/routes.js';
+import { allRoutes, items, siblingsOf, productionBySlug, cueBySlug, releaseBySlug, DESCRIPTION_MIN, DESCRIPTION_MAX } from '../build/data/routes.js';
 import { productions } from '../build/data/productions.js';
 import { cues } from '../build/data/cues.js';
 import { releases } from '../build/data/releases.js';
@@ -95,11 +95,20 @@ for (const route of allRoutes) {
   const html = fs.readFileSync(file, 'utf8');
   const canonical = [...html.matchAll(/<link\s+rel="canonical"\s+href="([^"]+)"/gi)];
   const titles = [...html.matchAll(/<title>/gi)];
-  const descriptions = [...html.matchAll(/<meta\b(?=[^>]*\bname=["']description["'])(?=[^>]*\bcontent=["'][^"']+["'])[^>]*>/gi)];
+  // Match the whole tag, then read content with a backreference: cue titles
+  // such as R'lyeh's Xenolith put apostrophes inside a double-quoted value.
+  const descriptions = [...html.matchAll(/<meta\b[^>]*>/gi)].filter((m) => /\bname=["']description["']/i.test(m[0]));
   const robots = /<meta\s+name="robots"\s+content="([^"]*)"/i.exec(html)?.[1] ?? '';
   const expected = url(route.path);
   if (titles.length !== 1) fail(`${route.path}: expected one title, found ${titles.length}`);
   if (descriptions.length !== 1) fail(`${route.path}: expected one description, found ${descriptions.length}`);
+  const descriptionText = decodeXml(/\bcontent=(["'])([\s\S]*?)\1/i.exec(descriptions[0]?.[0] ?? '')?.[2] ?? '');
+  if (descriptionText.length < DESCRIPTION_MIN || descriptionText.length > DESCRIPTION_MAX) {
+    fail(`${route.path}: meta description is ${descriptionText.length} characters; keep it between ${DESCRIPTION_MIN} and ${DESCRIPTION_MAX}`);
+  }
+  if (descriptionText !== oneLine(route.description)) {
+    fail(`${route.path}: served meta description does not match the route registry`);
+  }
   if (canonical.length !== 1 || canonical[0][1] !== expected) fail(`${route.path}: canonical is not uniquely self-referential`);
   if (!robots || /\bnoindex\b/i.test(robots) || !/\bindex\b/i.test(robots)) fail(`${route.path}: missing indexable robots metadata`);
   if (SNIPPET_BLOCK.test(robots)) fail(`${route.path}: robots metadata blocks search snippets (nosnippet / max-snippet:0)`);
@@ -123,14 +132,16 @@ if (resolved !== sitemapLocs.length) fail(`${sitemapLocs.length} sitemap URLs bu
 /* ---------------------------------------------------------- JSON-LD & media */
 const home = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 /**
- * SERP display limits for the homepage, the one route an external audit reads
- * first. Titles are measured as rendered (entities decoded): 30-60 characters
- * fit Google's title link, 120-160 render without truncation in a description.
+ * Homepage title is still held to the rendered-title band (30-60 characters).
+ * Descriptions site-wide follow the deliberately short, niche-forward band
+ * (DESCRIPTION_MIN..DESCRIPTION_MAX) rather than filling the whole SERP width.
  */
 const homeMetaTitle = decodeXml(/<title>([^<]*)<\/title>/i.exec(home)?.[1] ?? '');
 const homeMetaDescription = decodeXml(/<meta\s+name="description"\s+content="([^"]*)"/i.exec(home)?.[1] ?? '');
 if (homeMetaTitle.length < 30 || homeMetaTitle.length > 60) fail(`homepage title is ${homeMetaTitle.length} characters; keep it between 30 and 60`);
-if (homeMetaDescription.length < 120 || homeMetaDescription.length > 160) fail(`homepage description is ${homeMetaDescription.length} characters; keep it between 120 and 160`);
+if (homeMetaDescription.length < DESCRIPTION_MIN || homeMetaDescription.length > DESCRIPTION_MAX) {
+  fail(`homepage description is ${homeMetaDescription.length} characters; keep it between ${DESCRIPTION_MIN} and ${DESCRIPTION_MAX}`);
+}
 const homeNodes = jsonLdBlocks(home, '/');
 const homeTypes = allTypes(homeNodes);
 for (const required of ['Person', 'Organization', 'WebSite', 'WebPage', 'CreativeWork', 'MusicPlaylist', 'ItemList']) {

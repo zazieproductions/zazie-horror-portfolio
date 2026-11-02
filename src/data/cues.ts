@@ -18,6 +18,7 @@ export const cues: Cue[] = [
     duration: '1m 5s',
     durationSeconds: 65,
     description: 'Psychological orchestral cue: a theme that never quite resolves, bowed strings and glass harmonics circling something beautiful and wrong.',
+    metaDescription: "The Beautiful Wrongness: bowed strings and glass harmonics in an unresolved psychological horror theme. Full MP3, 1m 5s.",
     paragraphs: [
       'This description names an unresolved theme, bowed strings, and glass harmonics circling an uneasy beauty. The wording comes from the first-party showreel and is the most specific source note attached to the track.',
       'The full cue lasts 65 seconds. It is linked to neighboring psychological-orchestral entries for discovery, but no extra harmonic analysis or use in a film is invented for this page.',
@@ -35,6 +36,7 @@ export const cues: Cue[] = [
     duration: '1m 12s',
     durationSeconds: 72,
     description: 'Psychological horror cue: dissociative tension built for slow-burn dread, bowed metal harmonics, and sub-audible pressure.',
+    metaDescription: "Needle in The Nerve: bowed-metal tension and sub-audible pressure for slow-burn psychological horror. Full MP3, 1m 12s.",
     paragraphs: [
       'The showreel introduces this cue through the idea of a nerve held under pressure. Its published description names dissociative tension, slow-burn dread, bowed metal harmonics, and sub-audible pressure without assigning the music to a specific film.',
       'The 72-second MP3 is one entry in the 30-cue listening archive. A matching title also appears among the tracks on Anesthesia for the Signal Age; the catalogue link records that title match and does not claim a particular screen placement.',
@@ -52,6 +54,7 @@ export const cues: Cue[] = [
     duration: '35s',
     durationSeconds: 35,
     description: 'Sharp stinger cue for jump-scare and tension-release moments: acoustic violence and rapid sub decay.',
+    metaDescription: "Dissociative Amnesia: sharp horror stinger of acoustic violence and rapid sub decay for jump-scares. Full MP3, 35s.",
     paragraphs: [
       'The first-party cue note is concise: a sharp stinger for jump-scare and tension-release moments, centered on acoustic violence and a rapid sub decay. Those terms are the published description, not a claim about a particular edit.',
       'At 35 seconds, this is among the shorter entries in the showreel. The direct MP3 lets listeners hear the full published cue; the page does not prescribe a placement or add technical specifications that the source does not provide.',
@@ -69,6 +72,7 @@ export const cues: Cue[] = [
     duration: '2m 46s',
     durationSeconds: 166,
     description: 'Body horror composition: visceral, textural, unsettling string mutations and organic microtonal tension.',
+    metaDescription: "Variations on a Vanishing Body: visceral string mutations and microtonal tension in a body horror cue. Full MP3, 2m 46s.",
     paragraphs: [
       'The showreel describes a body-horror composition through visceral texture, unsettling string mutations, and organic microtonal tension. The title and category give this piece a different emphasis from the psychological and thriller cues around it.',
       'At 2 minutes 46 seconds, it is one of the longer named compositions in the reel. This record stays close to the source description and does not add an assumed film placement, alternate mix, stem list, or performance detail.',
@@ -86,6 +90,7 @@ export const cues: Cue[] = [
     duration: '30s',
     durationSeconds: 30,
     description: 'Brutalist horror stinger for thriller and horror chase sequences: kinetic percussive impact and raw distortion.',
+    metaDescription: "Brutalist Tension Stinger: percussive impact and raw distortion for horror chase sequences. Full MP3, 30s.",
     paragraphs: [
       'The published note places this stinger in the thriller-and-horror chase register and highlights kinetic percussive impact with raw distortion. Its name and category distinguish it from the slower ambient entries elsewhere in the reel.',
       'This 30-second track is the shortest cue in the archive. The direct player and MP3 link expose the audio immediately; no tempo, instrument list, or placement on a named production is asserted on this page.',
@@ -103,6 +108,7 @@ export const cues: Cue[] = [
     duration: '1m 31s',
     durationSeconds: 91,
     description: 'Dark ambient bed for psychological horror and supernatural dread: scraping psychophonic textures and frozen acoustic space.',
+    metaDescription: "Scraping Psychophonic Bed: frozen dark ambient textures for psychological horror and supernatural dread. Full MP3, 1m 31s.",
     paragraphs: [
       'This entry is described as a dark ambient bed, with scraping psychophonic textures and frozen acoustic space at its center. The showreel connects those qualities to psychological horror and supernatural dread.',
       'The 91-second duration gives the piece a longer footprint than the reel’s brief stingers. It remains a standalone cue in the catalogue: the page offers no unverified claim that it was used in a specific film, episode, or game.',
@@ -120,6 +126,7 @@ export const cues: Cue[] = [
     duration: '1m 2s',
     durationSeconds: 62,
     description: 'Dark ambient cue, serene surface concealing dark undercurrents: deceptive stillness and psychological unease.',
+    metaDescription: "Hidden Intentions / Serene Purgatory: deceptive stillness and dark undercurrents, a dark ambient horror cue. Full MP3, 1m 2s.",
     paragraphs: [
       'The paired title presents two sides of one idea: a serene surface and an undercurrent that feels wrong. The first-party note describes deceptive stillness and psychological unease, rather than supplying a named scene or production credit.',
       'At just over a minute, the cue sits between the brief stingers and the longer ambient pieces in the reel. Its full audio is available on this page, while the words on the page remain readable without starting playback.',
@@ -137,6 +144,7 @@ export const cues: Cue[] = [
     duration: '44s',
     durationSeconds: 44,
     description: 'Psychological horror cue for atmospheric dread sequences: slow-building, creeping dissonance and rising acoustic pressure.',
+    metaDescription: "The Silence Began Crawling: creeping dissonance and rising pressure, a slow-burn horror dread cue. Full MP3, 44s.",
     paragraphs: [
       'The published description frames this cue as atmospheric dread that builds through creeping dissonance and rising acoustic pressure. Its title turns that change into a small narrative image: silence is no longer still.',
       'The 44-second MP3 makes this one of the reel’s compact entries. Listeners can compare it with the longer cues through the sibling links, but the page does not infer how it was recorded or where it was used.',
@@ -154,6 +162,7 @@ export const cues: Cue[] = [
     duration: '2m 16s',
     durationSeconds: 136,
     description: 'Thriller cue with analog synth dread, tape decay, and haunting 80s retro horror aesthetics.',
+    metaDescription: "Timeless Retro Splurge: analog synth dread, tape decay and 80s retro horror atmosphere. Full MP3, 2m 16s.",
     paragraphs: [
       'This thriller entry is described in explicitly retro terms: analog-synth dread, tape decay, and an ’80s horror aesthetic. The name makes that period reference part of the cue’s identity without attaching it to a particular film.',
       'Its 2-minute-16-second runtime places it among the longer showreel tracks. The page provides the same direct MP3 as the reel and leaves technical particulars beyond the published description unstated.',
@@ -171,6 +180,7 @@ export const cues: Cue[] = [
     duration: '56s',
     durationSeconds: 56,
     description: 'Cosmic horror cue: otherworldly, disorienting electroacoustic anomalies and poltergeist energy.',
+    metaDescription: "Quarter-Eater Poltergeist: disorienting electroacoustic anomalies in a cosmic horror cue. Full MP3, 56s.",
     paragraphs: [
       'The first-party note describes otherworldly, disorienting electroacoustic anomalies and gives the cue a cosmic-horror frame. “Quarter-Eater” supplies a distinctive title rather than a literal production or scene reference.',
       'This 56-second MP3 is a standalone reel entry. The same title is listed on Anesthesia for the Signal Age, so the catalogue links that release record without suggesting the cue belongs to any named screen project.',
@@ -188,6 +198,7 @@ export const cues: Cue[] = [
     duration: '2m 24s',
     durationSeconds: 144,
     description: 'Psychological horror meditation between chamber music and spectral cinema: haunting strings, somber beauty, and ghostly grief.',
+    metaDescription: "Opaline Lament: haunting strings between chamber music and spectral cinema, a psychological horror cue. Full MP3, 2m 24s.",
     paragraphs: [
       'The published note places this piece between chamber music and spectral cinema, describing haunting strings, somber beauty, and ghostly grief. Its subtitle, “Life From The Beyond,” is part of the recorded title.',
       'At 2 minutes 24 seconds, the cue has the same title and duration as the Bandcamp single in the catalogue. The direct showreel audio is linked to that release record; it is not described here as a different master or a film placement.',
@@ -205,6 +216,7 @@ export const cues: Cue[] = [
     duration: '1m 57s',
     durationSeconds: 117,
     description: 'Dark ambient drone for sensory deprivation and psychological horror: continuous sub-harmonic rumination.',
+    metaDescription: "Ominous Drone: continuous sub-harmonic rumination, a dark ambient horror drone for sensory deprivation. Full MP3, 1m 57s.",
     paragraphs: [
       'The showreel identifies this track as a dark ambient drone and describes its focus as continuous sub-harmonic rumination. “Sensory deprivation” and psychological horror provide context for that published description.',
       'The 1-minute-57-second runtime makes it one of the longer drone entries in the set. Its page provides a direct listen and leaves any use in a film or game unclaimed unless a source names one.',
@@ -222,6 +234,7 @@ export const cues: Cue[] = [
     duration: '42s',
     durationSeconds: 42,
     description: 'Body horror cue for medical dread and tragic mortality: fading heartbeats and sonic collapse.',
+    metaDescription: "The Fatal Overdose: fading heartbeats and sonic collapse in a body horror cue for medical dread. Full MP3, 42s.",
     paragraphs: [
       'This short body-horror cue is described in terms of medical dread, tragic mortality, fading heartbeats, and sonic collapse. Those words define its catalogue note; they are not a claim that it accompanies a documented medical scene.',
       'At 42 seconds, the MP3 is one of the briefest entries. It is available as a complete cue from the showreel, with no playback required to read the description or follow the related-entry links.',
@@ -239,6 +252,7 @@ export const cues: Cue[] = [
     duration: '1m 22s',
     durationSeconds: 82,
     description: 'Body horror cue: bone-colored atmosphere, dry acoustic rattle, and barren textural desolation.',
+    metaDescription: "Bone-Colored Air: dry acoustic rattle and barren desolation, a body horror atmosphere cue. Full MP3, 1m 22s.",
     paragraphs: [
       '“Bone-colored atmosphere” is the showreel’s own language for this body-horror cue. Its published note adds a dry acoustic rattle and barren textural desolation, keeping the description focused on atmosphere rather than plot.',
       'The 82-second recording sits in the middle of the reel’s runtime range. This page repeats no invented instrument list or screen credit; it offers the original MP3 and neighboring cue pages for comparison.',
@@ -256,6 +270,7 @@ export const cues: Cue[] = [
     duration: '1m 48s',
     durationSeconds: 108,
     description: 'Cosmic horror cue: hybrid orchestration and dread architecture for gothic halls and supernatural spaces.',
+    metaDescription: "Obsidian Hall: hybrid orchestration and dread architecture for gothic cosmic horror spaces. Full MP3, 1m 48s.",
     paragraphs: [
       'The source describes a cosmic-horror cue whose setting is suggested by “gothic halls and supernatural spaces.” It also names hybrid orchestration and dread architecture, without listing individual instruments or a specific project.',
       'The full 108-second audio file is linked directly from the page. It can be read as one catalogue entry among 30, with the cue’s category and title supplying its stated context.',
@@ -273,6 +288,7 @@ export const cues: Cue[] = [
     duration: '6m 32s',
     durationSeconds: 392,
     description: 'Ambient horror composition: vast, unknowable Lovecraftian dread, abyssal depths, and non-Euclidean soundscapes.',
+    metaDescription: "R'lyeh's Xenolith: vast Lovecraftian dread and non-Euclidean soundscapes in an ambient horror cue. Full MP3, 6m 32s.",
     paragraphs: [
       'This is the longest cue in the showreel. Its first-party description invokes Lovecraftian dread, abyssal depths, and non-Euclidean soundscapes, establishing an expansive ambient-horror frame for the six-and-a-half-minute work.',
       'The spelling of R’lyeh is preserved from the published title, while its clean route is derived from that title. The full MP3 is playable here; the page does not attach the piece to a particular screen project.',
@@ -290,6 +306,7 @@ export const cues: Cue[] = [
     duration: '1m 11s',
     durationSeconds: 71,
     description: 'Thriller synth cue for dark sci-fi, techno dread, and post-apocalyptic alienation: cold analog walls of sound.',
+    metaDescription: "Deep Dystopian Synth Cue: cold analog walls for dark sci-fi and techno-dread horror. Full MP3, 1m 11s.",
     paragraphs: [
       'The showreel places this track in a thriller category and describes dark science fiction, techno dread, and post-apocalyptic alienation as its context. “Cold analog walls of sound” is the source’s own summary of its character.',
       'The 71-second MP3 is available without a script-based player. No specific synthesizer, signal chain, or production placement is added beyond the published note.',
@@ -307,6 +324,7 @@ export const cues: Cue[] = [
     duration: '52s',
     durationSeconds: 52,
     description: 'Thriller cue at the panic threshold: escalating dread, hyperventilation pacing, and claustrophobic pressure.',
+    metaDescription: "Panic Threshold: escalating dread and claustrophobic pressure in a horror-thriller cue. Full MP3, 52s.",
     paragraphs: [
       'The phrase “panic threshold” guides the source description: escalating dread, hyperventilation pacing, and claustrophobic pressure. The cue is categorized as a thriller piece rather than a general-purpose ambient track.',
       'At 52 seconds, this is a compact entry in the showreel. The page offers the full recording and its documented description, not a claim about how it would be edited into a particular scene.',
@@ -324,6 +342,7 @@ export const cues: Cue[] = [
     duration: '1m 19s',
     durationSeconds: 79,
     description: 'Horror stinger cue: shower scene dread, waterphone friction, and classic psychoacoustic shock.',
+    metaDescription: "Waterphone Shower Scene: waterphone friction and psychoacoustic shock, a horror stinger cue. Full MP3, 1m 19s.",
     paragraphs: [
       'The showreel’s note explicitly names shower-scene dread, waterphone friction, and psychoacoustic shock. The scene reference is part of the published cue description, not a claim that the track belongs to a specific film.',
       'This stinger runs 79 seconds, giving it a longer duration than the short impact-oriented entries nearby. Its clean URL keeps the route based on the cue title, and its direct MP3 remains accessible independently of the page script.',
@@ -341,6 +360,7 @@ export const cues: Cue[] = [
     duration: '2m 16s',
     durationSeconds: 136,
     description: 'Psychological horror cue: dissociative and uncanny, detuned strings evoking domestic disorientation and vanishing presence.',
+    metaDescription: "The Room Forgets You: detuned strings and dissociative unease in a psychological horror cue. Full MP3, 2m 16s.",
     paragraphs: [
       'The published description connects dissociation and the uncanny with domestic disorientation and a vanishing presence. Detuned strings are the only specific sound source named by the showreel, so the page does not expand that into a broader instrumentation claim.',
       'At 2 minutes 16 seconds, this cue shares a duration with Timeless Retro Splurge while occupying a different category. The full audio can be heard below, with no production placement implied.',
@@ -358,6 +378,7 @@ export const cues: Cue[] = [
     duration: '1m 44s',
     durationSeconds: 104,
     description: 'Dark ambient soundscape for supernatural horror and atmospheric dread: brooding nocturnal presence.',
+    metaDescription: "Dark Ambient Soundscape No. 1: brooding nocturnal presence for supernatural horror and atmospheric dread. Full MP3, 1m 44s.",
     paragraphs: [
       'This entry is identified as a dark ambient soundscape, with supernatural horror and atmospheric dread as its published context. “Brooding nocturnal presence” gives the first of the numbered soundscapes its own descriptive focus.',
       'The 104-second direct MP3 makes the track easy to compare with the second numbered soundscape. The page preserves the showreel’s original wording and does not assign either piece to a named screen project.',
@@ -375,6 +396,7 @@ export const cues: Cue[] = [
     duration: '1m 3s',
     durationSeconds: 63,
     description: 'Dark ambient drone for sensory deprivation: subdued, claustrophobic, deep acoustic isolation and chamber tone.',
+    metaDescription: "Subdued Drone / Sensory Deprivation: claustrophobic chamber tone in a dark ambient horror drone. Full MP3, 1m 3s.",
     paragraphs: [
       'The paired title sets a restrained frame, while the showreel describes claustrophobia, deep acoustic isolation, and chamber tone. “Sensory deprivation” is the listed use context, not an additional technical specification.',
       'At 63 seconds, the cue is a concise counterpart to the longer ambient tracks. The MP3 is playable and downloadable directly, so the content does not depend on hearing the audio to understand the entry.',
@@ -392,6 +414,7 @@ export const cues: Cue[] = [
     duration: '58s',
     durationSeconds: 58,
     description: 'Dark ambient soundscape No. 2: atmospheric horror bed for psychological suspense and supernatural haunting.',
+    metaDescription: "Dark Ambient Soundscape No. 2: an atmospheric horror bed for psychological suspense and haunting. Full MP3, 58s.",
     paragraphs: [
       'The second numbered soundscape is described as an atmospheric horror bed for psychological suspense and supernatural haunting. Its short title distinguishes it from the broader, more nocturnal framing of No. 1.',
       'The published duration is 58 seconds. Both this entry and its sibling soundscape link to their own direct MP3s, while the description remains available in the page source before any audio is played.',
@@ -409,6 +432,7 @@ export const cues: Cue[] = [
     duration: '34s',
     durationSeconds: 34,
     description: 'Thriller cue: heartbeat dread, narrow sub-bass pulse, and suspense pacing.',
+    metaDescription: "Narrow Pulse: heartbeat dread and a narrow sub-bass pulse, a compact horror-thriller cue. Full MP3, 34s.",
     paragraphs: [
       'The source note gives this thriller cue three anchors: heartbeat dread, a narrow sub-bass pulse, and suspense pacing. The title echoes the limited, focused pulse named in that description.',
       'At 34 seconds, Narrow Pulse is one of the shortest MP3s in the archive. The player supplies the full cue, while the page avoids adding an unverified tempo or claiming a placement in a particular production.',
@@ -426,6 +450,7 @@ export const cues: Cue[] = [
     duration: '1m 0s',
     durationSeconds: 60,
     description: 'Dark ambient soundscape sampler: dissonant decay, modular synth textures, and extended playing techniques.',
+    metaDescription: "Dissonant Decay : Soundscape Sampler: modular synth textures and dissonance in a dark ambient cue. Full MP3, 1m 0s.",
     paragraphs: [
       'The published note calls this a soundscape sampler and names dissonant decay, modular-synth textures, and extended playing techniques. That wording is retained as the source’s own description rather than expanded into a gear or process claim.',
       'The one-minute MP3 is a standalone showreel entry. Its title includes the punctuation used on the hub, while the clean route removes punctuation for a stable, readable URL.',
@@ -443,6 +468,7 @@ export const cues: Cue[] = [
     duration: '5m 4s',
     durationSeconds: 304,
     description: 'Psychological horror cue: time distortion, waking nightmares, and uncanny daylight disorientation.',
+    metaDescription: "Time Shifting Into Daylight: waking nightmares and uncanny daylight in a psychological horror cue. Full MP3, 5m 4s.",
     paragraphs: [
       'Time distortion, waking nightmares, and uncanny daylight disorientation form the published description for this psychological-horror cue. The title itself carries the day/night contrast without an added plot or character claim.',
       'At 5 minutes 4 seconds, it is the second-longest recording in the showreel. The full MP3 is available on the page, and its long duration is included as a verified catalogue detail rather than a claim about an edit.',
@@ -460,6 +486,7 @@ export const cues: Cue[] = [
     duration: '32s',
     durationSeconds: 32,
     description: 'Horror stinger cue for cello: sharp bowed dread, aggressive col legno, and screeching attack for jump-scare moments.',
+    metaDescription: "Stinger Cello Cue: sharp bowed dread and col legno attack for horror jump-scares. Full MP3, 32s.",
     paragraphs: [
       'The showreel explicitly names cello, col legno, and a screeching attack in this horror-stinger description. The cue’s short form and jump-scare context distinguish it from the longer ambient pieces in the archive.',
       'The 32-second original MP3 can be played or opened directly. No extra recording setup, performer list, or specific film use is supplied beyond the first-party note.',
@@ -477,6 +504,7 @@ export const cues: Cue[] = [
     duration: '2m 6s',
     durationSeconds: 126,
     description: 'Body horror cue: sterile hospital dread, chemical coldness, and antiseptic atmosphere.',
+    metaDescription: "Smell of Bleach: sterile hospital dread and antiseptic atmosphere, a body horror cue. Full MP3, 2m 6s.",
     paragraphs: [
       'The published description frames this body-horror cue through sterile hospital dread, chemical coldness, and antiseptic atmosphere. The title is sensory, but the page does not treat it as evidence of a specific story or location.',
       'At 2 minutes 6 seconds, this is a longer body-horror entry than The Fatal Overdose. Both tracks can be compared through the sibling links, with their source descriptions visible before playback.',
@@ -494,6 +522,7 @@ export const cues: Cue[] = [
     duration: '2m 53s',
     durationSeconds: 173,
     description: 'Psychological horror cue: fractured liturgical dread, splintered ceremony, and a funeral mass for the unburied.',
+    metaDescription: "Fractured Requiem: splintered liturgical dread in a psychological horror cue for the unburied. Full MP3, 2m 53s.",
     paragraphs: [
       'The showreel uses liturgical and ceremonial language to describe this psychological-horror cue: fractured dread, a splintered ceremony, and a funeral mass for the unburied. The title is preserved exactly as published.',
       'Its 2-minute-53-second runtime gives the piece room to stand apart from the shorter stingers. The direct MP3 is the complete showreel recording; no connection to Phantom Requiem or another production is claimed.',
@@ -511,6 +540,7 @@ export const cues: Cue[] = [
     duration: '1m 11s',
     durationSeconds: 71,
     description: 'Thriller synth cue: low earth-pulse sequencing, cold analog walls, and a signal that keeps transmitting after the picture cuts.',
+    metaDescription: "Earthpulse Protocol: low earth-pulse sequencing and cold analog walls, a horror-thriller synth cue. Full MP3, 1m 11s.",
     paragraphs: [
       'The final entry in the showreel is a thriller synth cue described through low earth-pulse sequencing, cold analog walls, and a signal that persists after the picture cuts. The source note supplies this image without a named narrative or production.',
       'The 71-second MP3 closes the reel’s numbered sequence. As with the other cues, the complete description appears in page markup and playback is optional for reading the entry.',
