@@ -76,7 +76,8 @@ root and uploaded (filtered) to Cloudflare Pages by GitHub Actions.
 |---|---|
 | `/` | Portfolio: productions, 30-cue showreel, film samples, press, inquiry (`mailto:` handoff) |
 | `/work` `/reel` `/store` | Hubs for productions, cues, catalogue (checkout delegated to marketplaces) |
-| `/hire-a-composer` `/sound-design` `/game-scoring` `/how-to-hire-a-horror-composer` | Commissioning pages |
+| `/hire-a-composer` `/sound-design` `/game-scoring` | Commissioning pages |
+| `/how-to-hire-a-horror-composer` | Informational companion guide: score budgeting, custom vs. library music, vetting, rights |
 | `/process` `/faq` `/legal` `/terms` `/privacy` `/licensing` `/purchases` `/accessibility` `/sitemap` | Process, trust and legal documents |
 | any unknown path | `404.html` — "Signal Lost", served with a real HTTP 404 |
 

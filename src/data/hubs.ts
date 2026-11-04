@@ -254,12 +254,18 @@ export const hubs: Hub[] = [
   },
   {
     path: "/how-to-hire-a-horror-composer",
-    name: "How to hire a horror composer",
-    title: "How to Hire a Horror Composer: Budgets, Subgenres & Vetting Guide | Zazie Productions",
-    description: "How indie filmmakers hire a horror composer: subgenre fit, custom vs. library music, budgets, spotting and rights.",
-    lastmod: "2026-10-27",
+    // Informational companion to /hire-a-composer, deliberately retargeted
+    // (2026-11-04). The pillar owns the transactional "hire a horror composer"
+    // family; this route owns the research queries behind it - budgeting by
+    // scored minutes, custom score vs. library music, vetting, and chain of
+    // title. Two pages must not answer the same query: see the cannibalisation
+    // record in SEO-DOSSIER.md.
+    name: "Score budgeting and vetting guide",
+    title: "Budgeting an Indie Horror Film Score: Custom vs. Library Music | Zazie Productions",
+    description: "How indie filmmakers budget a horror score by scored minutes, weigh custom scoring against library music, and vet credits and rights.",
+    lastmod: "2026-11-04",
     images: [
-      { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Guide to hiring a horror composer for independent films, series, and video games by Zazie Kanwar-Torge.", title: "How to Hire a Horror Composer: Budgets, Subgenres & Vetting Checklist" },
+      { loc: "https://horror.zazieproductions.com/images/press-photo.jpg", caption: "Guide to budgeting an independent horror film score by Zazie Kanwar-Torge: scored minutes, custom scoring versus library music, vetting and rights.", title: "Budgeting an Indie Horror Film Score: Custom vs. Library Music" },
     ],
     videos: [],
   },

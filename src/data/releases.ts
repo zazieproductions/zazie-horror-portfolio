@@ -51,7 +51,12 @@ export const releases: Release[] = [
   {
     slug: 'opaline-lament-life-from-the-beyond',
     title: 'Opaline Lament (Life From The Beyond)',
-    headline: 'Opaline Lament: a string-led piece between chamber music and spectral cinema',
+    // Purchase intent (2026-11-04). The showreel carries a same-titled free
+    // cue at /reel/opaline-lament-life-from-the-beyond; the two pages are
+    // deliberately differentiated rather than merged, so this headline and
+    // metaDescription say "the Bandcamp download you buy" and the cue record
+    // says "the showreel stream". Neither may read as the other.
+    headline: 'Opaline Lament: the Bandcamp single - a 2:24 string-led download',
     collection: 'records',
     section: 'Records',
     kicker: 'Digital track · 2:24',
@@ -62,7 +67,7 @@ export const releases: Release[] = [
     schemaType: 'MusicAlbum',
     trackCount: 1,
     summary: 'A 2:24 string-driven composition described by its Bandcamp notes as moving between chamber music and spectral cinema, with an intimate, uncanny character.',
-    metaDescription: "Opaline Lament: a 2:24 string-driven piece between chamber music and spectral cinema, uncanny and intimate. Bandcamp.",
+    metaDescription: "Buy the Opaline Lament single on Bandcamp: a 2:24 string-driven piece between chamber music and spectral cinema, 16-bit/44.1 kHz download.",
     paragraphs: [
       'The first-party notes call Opaline Lament a string-driven meditation that drifts between chamber music and spectral cinema. They describe it as a modern continuation of the cinematic string language Zazie Kanwar-Torge first explored in early adolescence, now reshaped with greater compositional control.',
       'Bandcamp lists the track at 2:24, released December 19, 2025, with a 16-bit/44.1 kHz download. Its credits name Zazie Kanwar-Torge for arrangement, composition, performance, mixing, mastering, and production. A same-titled showreel cue is linked separately from the release listing.',

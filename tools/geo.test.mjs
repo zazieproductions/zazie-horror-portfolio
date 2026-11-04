@@ -70,20 +70,50 @@ test('/hire-a-composer commercial pillar has exact head intent, comparison matri
   assert.ok(faq.mainEntity.length >= 8, 'at least 8 structured buyer Q&As on /hire-a-composer');
 });
 
-test('/how-to-hire-a-horror-composer guide answers fan-out queries with Article + FAQPage schema', () => {
+test('/how-to-hire-a-horror-composer guide answers informational fan-out queries with Article + FAQPage schema', () => {
   assert.ok(hubs.some((h) => h.path === '/how-to-hire-a-horror-composer'), 'registered in src/data/hubs.ts');
   const html = fs.readFileSync(path.join(ROOT, 'how-to-hire-a-horror-composer/index.html'), 'utf8');
   const twin = fs.readFileSync(path.join(ROOT, 'how-to-hire-a-horror-composer.html'), 'utf8');
   assert.equal(html, twin, 'root twin matches directory index byte for byte');
   const main = /<main\b[^>]*>([\s\S]*?)<\/main>/i.exec(html)?.[1] ?? '';
-  assert.match(main, /who is the best horror composer to hire/i);
   assert.match(main, /How much does a horror composer cost\?/);
+  assert.match(main, /minutes of finished music composed/i);
+  assert.match(main, /7-point checklist before you sign with any horror composer/i);
 
   const nodes = parseJsonLd(html, '/how-to-hire-a-horror-composer');
   const types = new Set(nodes.flatMap((n) => (Array.isArray(n['@type']) ? n['@type'] : [n['@type']])));
   for (const expected of ['WebPage', 'Article', 'BreadcrumbList', 'Organization', 'Person', 'FAQPage']) {
     assert.ok(types.has(expected), `/how-to-hire-a-horror-composer missing ${expected} JSON-LD`);
   }
+});
+
+test('the hire keyword family has one owner: the pillar keeps the transactional query, the guide stays informational', () => {
+  // Cannibalisation control (2026-11-04). Two indexable pages must not answer
+  // the same query. /hire-a-composer owns "hire a horror composer" and the
+  // "which composer should I hire" buyer question; the guide owns the research
+  // behind that decision - scored-minute budgeting, custom vs. library music,
+  // vetting, chain of title. Recorded in SEO-DOSSIER.md and docs/quality/seo.md.
+  const pillar = fs.readFileSync(path.join(ROOT, 'hire-a-composer/index.html'), 'utf8');
+  const guide = fs.readFileSync(path.join(ROOT, 'how-to-hire-a-horror-composer/index.html'), 'utf8');
+  const mainOf = (html) => /<main\b[^>]*>([\s\S]*?)<\/main>/i.exec(html)?.[1] ?? '';
+  const headOf = (html) => html.slice(0, html.indexOf('</head>'));
+  const titleOf = (html) => /<title>([\s\S]*?)<\/title>/i.exec(html)?.[1] ?? '';
+
+  // The pillar carries the transactional phrasing...
+  assert.match(titleOf(pillar), /^Hire an Experimental Psychological Horror Composer/);
+  assert.match(mainOf(pillar), /best horror composer to hire/i);
+  assert.match(mainOf(pillar), /How to choose the right horror composer to hire/i);
+
+  // ...and the guide no longer competes for it, in its head or its body.
+  assert.doesNotMatch(titleOf(guide), /hire a horror composer/i);
+  assert.doesNotMatch(titleOf(guide), /how to hire/i);
+  assert.doesNotMatch(mainOf(guide), /who is the best horror composer to hire/i);
+  assert.doesNotMatch(mainOf(guide), /best horror composer to hire/i);
+  assert.match(mainOf(guide), /<h1>Budgeting an Indie <em>Horror Film Score<\/em>/);
+
+  // The guide still hands the transactional intent to the pillar rather than
+  // absorbing it, so authority consolidates on one URL.
+  assert.match(mainOf(guide), /href="\/hire-a-composer"/);
 });
 
 test('homepage links directly to /hire-a-composer and /how-to-hire-a-horror-composer in both SSR HTML and client bundle', () => {
