@@ -13,6 +13,21 @@
 
 ---
 
+## Robots check (2026-11-04)
+
+The repository's generated `robots.txt` already allows Googlebot, including
+page assets, and advertises the canonical sitemap. It was left unchanged: an
+allow rule does not guarantee indexing or ranking. The sitemap preflight now
+checks Googlebot-specific rules without combining them with the wildcard group,
+so a future Google-only block cannot be masked by `Allow: /` for everyone else.
+
+This is an offline check, not a fresh measurement of the deployed site. In
+Search Console, inspect the affected URL and check the live robots.txt and
+sitemap fetch status; also review Cloudflare security and cache rules if Google
+receives a different response. Compare indexing status separately from ranking.
+
+---
+
 ## 1. What the live site actually served on 2026-10-30
 
 Probed with `curl -sI`-equivalent HEAD requests through two independent

@@ -50,6 +50,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { checkAliases } from './route-aliases.mjs';
+import { isAllowed, parseRobots } from './robots.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -267,69 +268,6 @@ function resolveLocalFile(urlObj) {
   return null;
 }
 
-/* ------------------------------------------------------------- robots.txt */
-
-function parseRobots(src) {
-  const groups = new Map(); // ua -> {allow:[], disallow:[], sitemaps:[]}
-  const sitemaps = [];
-  let current = [];
-  const ensure = (ua) => {
-    const key = ua.toLowerCase();
-    if (!groups.has(key)) groups.set(key, { allow: [], disallow: [], crawlDelay: null });
-    return groups.get(key);
-  };
-  for (const rawLine of src.split(/\r?\n/)) {
-    const line = rawLine.replace(/#.*$/, '').trim();
-    if (!line) continue;
-    const i = line.indexOf(':');
-    if (i === -1) continue;
-    const field = line.slice(0, i).trim().toLowerCase();
-    const value = line.slice(i + 1).trim();
-    if (field === 'user-agent') {
-      current = [value.toLowerCase()];
-      ensure(value);
-    } else if (field === 'disallow') {
-      for (const ua of current) ensure(ua).disallow.push(value);
-    } else if (field === 'allow') {
-      for (const ua of current) ensure(ua).allow.push(value);
-    } else if (field === 'sitemap') {
-      sitemaps.push(value);
-    } else if (field === 'crawl-delay') {
-      for (const ua of current) ensure(ua).crawlDelay = value;
-    }
-  }
-  return { groups, sitemaps };
-}
-
-/** Wildcard robots path matching (* = any sequence, $ = end of URL). */
-function ruleMatches(rule, pathnameAndQuery) {
-  const anchoredEnd = rule.endsWith('$');
-  let pattern = anchoredEnd ? rule.slice(0, -1) : rule;
-  if (pattern === '') return true;
-  const rx = '^' + pattern.split('*').map((p) => p.replace(/[.+?^${}()|[\]\\]/g, '\\$&')).join('.*');
-  return new RegExp(anchoredEnd ? rx + '$' : rx).test(pathnameAndQuery);
-}
-
-/** Longest-match-wins, Allow beats Disallow on equal specificity (Google's rule). */
-function isAllowed(robots, ua, urlObj) {
-  const target = urlObj.pathname + urlObj.search;
-  const groups = [robots.groups.get('*'), robots.groups.get(ua.toLowerCase())].filter(Boolean);
-  let best = null;
-  for (const g of groups) {
-    for (const [type, list] of [['allow', g.allow], ['disallow', g.disallow]]) {
-      for (const rule of list) {
-        if (!ruleMatches(rule, target)) continue;
-        const score = rule.replace(/\*/g, '').length;
-        if (!best || score > best.score || (score === best.score && type === 'allow')) {
-          best = { score, type };
-        }
-      }
-    }
-  }
-  if (!best) return true;
-  return best.type !== 'disallow';
-}
-
 /* --------------------------------------------------------------------- run */
 
 console.log(`\nsitemap:  ${path.relative(process.cwd(), SITEMAP)}`);
@@ -447,7 +385,7 @@ for (const urlEl of urls) {
   /* robots.txt cross-check */
   if (robots) {
     if (!isAllowed(robots, '*', u)) err(`${short}: blocked for User-agent: * by robots.txt`);
-    if (robots.groups.has('googlebot') && !isAllowed(robots, 'googlebot', u)) {
+    if (!isAllowed(robots, 'googlebot', u)) {
       err(`${short}: blocked for Googlebot by robots.txt`);
     }
   }
