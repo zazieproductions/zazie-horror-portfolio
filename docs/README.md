@@ -50,6 +50,7 @@
 ### Quality
 - [Accessibility](quality/accessibility.md) · [Performance](quality/performance.md) ·
   [Security](quality/security.md) · [SEO](quality/seo.md) ·
+  [robots.txt](quality/robots-txt.md) — what it can and cannot do for Google, and the group-precedence rule that silently deindexes sites ·
   [Google indexing](quality/indexing.md) — live record, stale-index diagnosis, the actions that are not code
 
 ### Project

@@ -26,6 +26,11 @@
   `ITEM-URLS.md`; historical audits in `docs/archive/`.
 - Post-deploy discovery: `indexnow.yml` pings IndexNow; `wayback.yml`
   archives the sitemap. Human `/sitemap` stays hub-only by design.
+- `robots.txt` removes nothing: every user-agent group is `Allow: /`, and the
+  file is generated from `src/data/robots.ts`. It is not a ranking lever in
+  either direction — see [robots.txt](robots-txt.md) for the audit, the
+  Google-specific group-precedence rule, and why the DuckDuckGo/Google gap is
+  an IndexNow-versus-crawl-queue asymmetry rather than a block.
 - Indexing status, what Search Console is actually seeing, and the actions that
   are not code: [Google indexing](indexing.md). That page records the `Link:`
   header defect fixed on 2026-10-30, the stale index entry for `/`, and the

@@ -244,7 +244,7 @@
       "engine": "ai-slop",
       "file": "scripts/verify.mjs",
       "fingerprint": "50d7355dd32b8188",
-      "count": 2
+      "count": 1
     },
     {
       "rule": "complexity/file-too-large",
@@ -258,7 +258,7 @@
       "engine": "lint",
       "file": "scripts/verify.mjs",
       "fingerprint": "50d7355dd32b8188",
-      "count": 2
+      "count": 1
     },
     {
       "rule": "unicorn/no-useless-spread",
@@ -832,6 +832,13 @@
       "engine": "lint",
       "file": "tools/live-route-audit.mjs",
       "fingerprint": "903449dbdae8aee3",
+      "count": 1
+    },
+    {
+      "rule": "ai-slop/narrative-comment",
+      "engine": "ai-slop",
+      "file": "tools/robots-parse.mjs",
+      "fingerprint": "ff2b632abdb76b77",
       "count": 1
     },
     {

@@ -28,7 +28,7 @@ fetchers, and with a headless metadata extractor for the in-page values.
 | `Link:` response header on `/`, `/work` | **`; rel="canonical"`** (URI missing) | **broken — fixed, §3** |
 | `http://` → `https://` | `301` to `https://horror.zazieproductions.com/` | ok |
 | `/index.html` → `/` | `301` | ok |
-| `robots.txt` | `200`, `text/plain`, every `User-agent` group `Allow: /`, `Sitemap:` line present | ok |
+| `robots.txt` | `200`, `text/plain`, every `User-agent` group `Allow: /`, `Sitemap:` line present | ok — see [robots-txt.md](robots-txt.md) |
 | `sitemap.xml` | `200`, `application/xml`, 80 `<loc>`, all 80 self-canonical | ok |
 | All 80 sitemap routes (static tree) | exactly 1 title, 1 canonical, 1 `index, follow` meta, 1 `h1`, 1 description, `lang` | ok |
 | `zazie-horror-site.pages.dev/` | `200` **with `x-robots-tag: index, follow`** and the same self-canonical | duplicate host — §4 |
