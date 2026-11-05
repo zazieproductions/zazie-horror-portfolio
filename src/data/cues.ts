@@ -193,12 +193,17 @@ export const cues: Cue[] = [
     track: 10,
     slug: 'opaline-lament-life-from-the-beyond',
     title: 'Opaline Lament (Life From The Beyond)',
-    headline: 'Opaline Lament: chamber music between grief and spectral cinema',
+    // Listen intent (2026-11-04). The catalogue carries a same-titled Bandcamp
+    // single at /store/opaline-lament-life-from-the-beyond; the two pages are
+    // deliberately differentiated rather than merged, so this headline and
+    // metaDescription say "free stream from the showreel" and the release
+    // record says "buy the download". Neither may read as the other.
+    headline: 'Opaline Lament: the showreel cue - stream the full 2m 24s recording',
     category: 'Psychological Orchestral',
     duration: '2m 24s',
     durationSeconds: 144,
     description: 'Psychological horror meditation between chamber music and spectral cinema: haunting strings, somber beauty, and ghostly grief.',
-    metaDescription: "Opaline Lament: haunting strings between chamber music and spectral cinema, a psychological horror cue. Full MP3, 2m 24s.",
+    metaDescription: "Stream the full 2m 24s showreel MP3 of Opaline Lament: haunting strings between chamber music and spectral cinema. Free listen, no login.",
     paragraphs: [
       'The published note places this piece between chamber music and spectral cinema, describing haunting strings, somber beauty, and ghostly grief. Its subtitle, “Life From The Beyond,” is part of the recorded title.',
       'At 2 minutes 24 seconds, the cue has the same title and duration as the Bandcamp single in the catalogue. The direct showreel audio is linked to that release record; it is not described here as a different master or a film placement.',

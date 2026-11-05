@@ -22,6 +22,21 @@
   `legal-src/` + `store-src/` templates (plus hand-maintained hub HTML and
   their root twins) for static pages. Change the source and run
   `npm run build`; never hand-edit generated item HTML.
+- One canonical owner per keyword family (2026-11-04 cannibalisation policy).
+  Two indexable pages must not answer the same query, so the transactional
+  *hire a horror composer* family lives only on `/hire-a-composer`, while
+  `/how-to-hire-a-horror-composer` owns the informational research behind it
+  (scored-minute budgeting, custom score vs. library music, vetting, chain of
+  title) and links the buyer intent back to the pillar. The split is pinned by
+  `tools/geo.test.mjs`; the keyword-to-owner table and the reasoning are in the
+  dated record in `SEO-DOSSIER.md`. Shingle overlap in
+  `tools/index-coverage.mjs` does **not** catch this class of duplicate - the
+  two pages shared 1% of their wording while competing for the same phrase -
+  so targeting is reviewed by title/H1/section intent, not by the dupe ratio.
+  Same rule for one work published under two intents: the `/reel/` cue page
+  (free stream) and the `/store/` catalogue page (Bandcamp purchase) of
+  *Opaline Lament* keep distinct headlines and descriptions rather than
+  merging, which the 30-cue and 24-item counts forbid.
 - Programmes and audits: root `SEO-DOSSIER.md`, `SITEMAP.md`,
   `ITEM-URLS.md`; historical audits in `docs/archive/`.
 - Post-deploy discovery: `indexnow.yml` pings IndexNow; `wayback.yml`

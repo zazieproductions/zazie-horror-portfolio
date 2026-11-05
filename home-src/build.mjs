@@ -211,8 +211,8 @@ const PAIRS = [
   ],
   ['Zazie Productions LLC · Experimental Art House &amp; Psychological, Folk &amp; Body Horror Scores', 'Zazie Productions LLC · Psychological horror film scores', HTML],
   [' · Atmospheric horror scores', ' · Psychological horror film scores', BUNDLE],
-  ['[["/hire-a-composer","Hire a composer"],["/sound-design","Sound design"]', '[["/hire-a-composer","Hire a horror composer"],["/how-to-hire-a-horror-composer","Hiring guide"],["/sound-design","Sound design"]', BUNDLE],
-  ['<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a composer</a><a href="/sound-design"', '<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a horror composer</a><a href="/how-to-hire-a-horror-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hiring guide</a><a href="/sound-design"', HTML],
+  ['[["/hire-a-composer","Hire a composer"],["/sound-design","Sound design"]', '[["/hire-a-composer","Hire a horror composer"],["/how-to-hire-a-horror-composer","Budgeting & vetting guide"],["/sound-design","Sound design"]', BUNDLE],
+  ['<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a composer</a><a href="/sound-design"', '<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a horror composer</a><a href="/how-to-hire-a-horror-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Budgeting &amp; vetting guide</a><a href="/sound-design"', HTML],
   ['["/services","Rate card"]', '["/services","Services"]', BUNDLE],
   ['["/contact","Contact"]', '["#contact","Contact"]', BUNDLE],
   // /composer retired (2026-10-29): the footer archive link folds into the
@@ -825,6 +825,15 @@ function patchStatic(html, tracks) {
   out = removeMethodSectionStatic(out);
   out = stripDerivedFieldNames(out).replaceAll('rel="noreferrer"', 'rel="noopener noreferrer"');
   const applied = [];
+  // The footer archive label for /how-to-hire-a-horror-composer was generated
+  // as "Hiring guide" until the 2026-11-04 cannibalisation pass retargeted the
+  // page to the informational budgeting/vetting queries. Fold a snapshot that
+  // still carries the old generated segment back to its pristine source form so
+  // the current PAIRS entry below re-applies cleanly instead of matching 0.
+  const staleGuideFooter = '<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a horror composer</a><a href="/how-to-hire-a-horror-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hiring guide</a><a href="/sound-design"';
+  if (countOf(out, staleGuideFooter) === 1) {
+    out = out.replace(staleGuideFooter, `<a href="/hire-a-composer" class="text-[10px] uppercase tracking-[0.25em] text-mist transition-colors hover:text-blood">Hire a composer</a><a href="/sound-design"`);
+  }
   // Normalize the previous generated section numbering back to its pristine
   // source values before applying the current contiguous sequence.
   if (countOf(out, '02 · Biography') === 1) out = out.replace('02 · Biography', '03 · Biography');
