@@ -32,6 +32,7 @@ const {
 const { productions } = await import('../build/data/productions.js');
 const { compilations } = await import('../build/data/compilations.js');
 const { releases } = await import('../build/data/releases.js');
+const { INDEXABLE_ROBOTS } = await import('../build/data/site.js');
 
 const mastheadPartial = fs.readFileSync(path.join(root, 'legal-src/partials/masthead.html'), 'utf8');
 const footerPartial = fs.readFileSync(path.join(root, 'legal-src/partials/footer.html'), 'utf8').trim();
@@ -221,6 +222,14 @@ function upgradeJsonLdNode(node, relFile) {
   }
 }
 
+function syncRobotsMeta(html, relFile) {
+  if (relFile === '404.html') return html;
+  return html.replace(
+    /(<meta\b[^>]*\bname=["']robots["'][^>]*\bcontent=["'])index,\s*follow[^"']*(['"][^>]*>)/i,
+    `$1${INDEXABLE_ROBOTS}$2`,
+  );
+}
+
 function syncHtmlFile(relFile, options = {}) {
   const fullPath = path.join(root, relFile);
   let html = fs.readFileSync(fullPath, 'utf8');
@@ -250,6 +259,7 @@ function syncHtmlFile(relFile, options = {}) {
       'title="EXPIRE · Dystopian sci-fi horror sound design by Zazie Kanwar-Torge"',
     );
   }
+  html = syncRobotsMeta(html, relFile);
 
   // 3. Rewrite <img> alt attributes using canonical Genre-Descriptive map
   html = html.replace(/<img\b[^>]*>/gi, (imgTag) => {

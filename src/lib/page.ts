@@ -1,17 +1,18 @@
 /** Static HTML renderer for production, cue and catalogue item routes. */
 
-import { AUTHOR_NAME, SITE_HOST, escapeHtml, oneLine, url } from '../data/site.js';
+import { AUTHOR_NAME, INDEXABLE_ROBOTS, displayDuration, escapeHtml, oneLine, url } from '../data/site.js';
 import { productions } from '../data/productions.js';
 import { cues } from '../data/cues.js';
 import { releases } from '../data/releases.js';
 import { cueBySlug, hubByPath, productionBySlug, releaseBySlug, siblingsOf, stripMarkup } from '../data/routes.js';
-import { displayDuration } from '../data/site.js';
 import {
   OG_TYPES,
   breadcrumbList,
   creditLine,
   cueNodes,
+  hasIndexableVideo,
   ogImageFor,
+  ogVideoFor,
   productionNodes,
   releaseNodes,
   seoBlock,
@@ -177,11 +178,13 @@ function embedMarkup(sample: { kind: 'youtube' | 'drive'; embedUrl: string; titl
   // Keep Drive's standard preview UI; its controls are owned by the provider.
   // Include fullscreen + picture-in-picture + encrypted-media so mobile
   // browsers don't fall back to a cramped audio-only UI with an inverted bar.
+  // Watch pages render the primary player eagerly above the fold so Googlebot
+  // classifies the embedded video as prominent primary content.
   const allow = sample.kind === 'youtube'
     ? 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen'
     : 'autoplay; clipboard-write; encrypted-media; picture-in-picture; fullscreen';
   return `        <div class="entry-embed">
-          <iframe src="${esc(sample.embedUrl)}" title="${esc(sample.title)}" loading="lazy" allow="${allow}" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+          <iframe src="${esc(sample.embedUrl)}" title="${esc(sample.title)}" width="1280" height="720" allow="${allow}" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
         </div>`;
 }
 
@@ -258,9 +261,24 @@ function productionMeta(production: Production, item: ItemRoute): MetaSections {
     updatedRow(item),
   ];
 
+  const entryNo = sample ? 'II' : 'I';
+  const detailNo = sample ? 'III' : 'II';
+  const posterLoading = sample ? 'lazy' : 'eager';
+
+  const entryAndDetailSections = `      <section class="clause" id="entry">
+        <h2><span class="no">${entryNo}</span> The production</h2>
+${figure(production.poster, 'poster', posterLoading)}
+${production.paragraphs.map((paragraph) => `        <p>${esc(paragraph)}</p>`).join('\n')}
+      </section>
+
+      <section class="clause" id="detail">
+        <h2><span class="no">${detailNo}</span> Credits and project facts</h2>
+${tableRows(rows)}
+      </section>`;
+
   const sampleSection = sample
     ? `      <section class="clause" id="sample">
-        <h2><span class="no">III</span> Project video</h2>
+        <h2><span class="no">I</span> Project video</h2>
         <p>${esc(sample.description)}${sample.durationSeconds ? ` Runtime ${esc(displayDuration(sample.durationSeconds))}.` : ''}</p>
 ${embedMarkup(sample)}
 ${sample.watchUrl ? `        <p style="margin-top:1rem">If the embed is unavailable, <a href="${esc(sample.watchUrl)}" target="_blank" rel="noopener noreferrer">open the video on its original host</a>.</p>` : ''}
@@ -273,27 +291,27 @@ ${audioPlayer(cue.audioPath, cue.title)}
         <p class="small"><a href="${esc(cue.audioPath)}">Open the MP3 directly</a></p>`).join('\n')}
       </section>`;
 
+  const tocEntries: Array<[string, string]> = sample
+    ? [
+        ['sample', 'Project video'],
+        ['entry', 'The production'],
+        ['detail', 'Credits and project facts'],
+        ['related', 'Related entries'],
+      ]
+    : [
+        ['entry', 'The production'],
+        ['detail', 'Credits and project facts'],
+        ['sample', 'Adjacent showreel listening'],
+        ['related', 'Related entries'],
+      ];
+
   return {
     metaList,
-    index: indexList([
-      ['entry', 'The production'],
-      ['detail', 'Credits and project facts'],
-      ['sample', sample ? 'Project video' : 'Adjacent showreel listening'],
-      ['related', 'Related entries'],
-    ]),
+    index: indexList(tocEntries),
     relatedNo: 'IV',
-    sections: `      <section class="clause" id="entry">
-        <h2><span class="no">I</span> The production</h2>
-${figure(production.poster, 'poster')}
-${production.paragraphs.map((paragraph) => `        <p>${esc(paragraph)}</p>`).join('\n')}
-      </section>
-
-      <section class="clause" id="detail">
-        <h2><span class="no">II</span> Credits and project facts</h2>
-${tableRows(rows)}
-      </section>
-
-${sampleSection}`,
+    sections: sample
+      ? `${sampleSection}\n\n${entryAndDetailSections}`
+      : `${entryAndDetailSections}\n\n${sampleSection}`,
     crossLinks: `The <a href="/work">selected productions archive</a> · <a href="/hire-a-composer">hire a psychological horror composer</a> · adjacent cues: ${cueLinkList(production.relatedCueSlugs)} · <a href="/process">scoring process</a> · <a href="/#contact">contact</a>.`,
   };
 }
@@ -434,7 +452,21 @@ function leadFor(item: ItemRoute): string {
 }
 
 function imageFor(item: ItemRoute): Image | undefined {
-  if (item.kind === 'production') return productionBySlug.get(item.slug)?.poster;
+  if (item.kind === 'production') {
+    const production = productionBySlug.get(item.slug);
+    if (!production) return undefined;
+    return hasIndexableVideo(production) ? production.sample?.thumbnail : production.poster;
+  }
+  if (item.kind === 'cue') return undefined;
+  return releaseBySlug.get(item.slug)?.image;
+}
+
+function aboveFoldHeroImageFor(item: ItemRoute): Image | undefined {
+  if (item.kind === 'production') {
+    const production = productionBySlug.get(item.slug);
+    if (!production || production.sample) return undefined;
+    return production.poster;
+  }
   if (item.kind === 'cue') return undefined;
   return releaseBySlug.get(item.slug)?.image;
 }
@@ -459,33 +491,38 @@ export function renderItemPage(item: ItemRoute, chrome: PageChrome): RenderedIte
     { name: displayName(item), path: item.path, current: true },
   ];
   const meta = metaFor(item);
+  const production = item.kind === 'production' ? productionBySlug.get(item.slug)! : undefined;
+  const watchPageVideo = production && hasIndexableVideo(production) ? production.sample : undefined;
   const aboutId = item.kind === 'production'
     ? `${url(item.path)}#work`
     : item.kind === 'cue'
       ? `${url(item.path)}#composition`
       : `${url(item.path)}#product`;
+  const videoId = watchPageVideo ? `${url(item.path)}#video` : undefined;
   const typedNodes = item.kind === 'production'
-    ? productionNodes(productionBySlug.get(item.slug)!, item.path)
+    ? productionNodes(production!, item.path)
     : item.kind === 'cue'
       ? cueNodes(cueBySlug.get(item.slug)!, item.path)
       : releaseNodes(releaseBySlug.get(item.slug)!, item.path);
   const jsonLd: Json[] = [
-    webPageNode({ path: item.path, name: item.title, description: item.description, lastmod: item.lastmod, aboutId }),
+    webPageNode({ path: item.path, name: item.title, description: item.description, lastmod: item.lastmod, aboutId, videoId }),
     ...typedNodes,
     breadcrumbList(item.path, trail),
   ];
   const image = imageFor(item);
+  const preload = aboveFoldHeroImageFor(item);
   const head = seoBlock({
     title: item.title,
     description: item.description,
     canonical: url(item.path),
-    robots: 'index, follow, max-image-preview:large',
+    robots: INDEXABLE_ROBOTS,
     ogType: item.kind === 'production'
-      ? (productionBySlug.get(item.slug)?.sample ? OG_TYPES.video : OG_TYPES.website)
+      ? (watchPageVideo ? OG_TYPES.video : OG_TYPES.website)
       : item.kind === 'cue'
         ? OG_TYPES.music
         : OG_TYPES.product,
     ...(image ? { image: ogImageFor(image) } : {}),
+    ...(watchPageVideo ? { video: ogVideoFor(watchPageVideo) } : {}),
     jsonLd,
   });
 
@@ -500,7 +537,7 @@ export function renderItemPage(item: ItemRoute, chrome: PageChrome): RenderedIte
 <meta name="theme-color" content="#030303"/>
 <link rel="preload" as="font" type="font/woff2" href="/fonts/cormorant-garamond-latin-400-normal.woff2" crossorigin/>
 <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-latin-wght-normal.woff2" crossorigin/>
-${preloadImage(image)}
+${preloadImage(preload)}
 <link href="/${chrome.legalCss}" rel="stylesheet"/>
 <link href="/${chrome.itemCss}" rel="stylesheet"/>
 ${head}

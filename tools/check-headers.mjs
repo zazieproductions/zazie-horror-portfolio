@@ -57,6 +57,7 @@ import {
   IMMUTABLE_CACHE,
   MEDIA_CACHE,
   DOC_CACHE,
+  INDEXABLE_ROBOTS_TAG,
   cacheControlFor,
   effectiveHeaders,
   parseHeadersFile,
@@ -283,10 +284,13 @@ for (const [pathname, expected, label] of expectations) {
   if (verbose) console.log(`  ok  ${pathname.padEnd(56)} ${actual}`);
 }
 
-/** Indexable routes must not arrive with a noindex header. */
+/** Indexable routes must not arrive with a noindex header and must match INDEXABLE_ROBOTS_TAG. */
 for (const pathname of sitemapPaths) {
   const robots = get(pathname, 'x-robots-tag') || '';
   if (/\bnoindex\b/i.test(robots)) fail(`${pathname} is in the sitemap but its X-Robots-Tag forbids indexing: ${robots}`);
+  if (robots !== INDEXABLE_ROBOTS_TAG) {
+    fail(`${pathname} X-Robots-Tag is "${robots}", expected "${INDEXABLE_ROBOTS_TAG}"`);
+  }
 }
 
 /* -------------------------------------------------------------- consistency */

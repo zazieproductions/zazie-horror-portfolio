@@ -97,6 +97,7 @@ export const HTML_CACHE = 'public, max-age=0, must-revalidate';
 export const IMMUTABLE_CACHE = 'public, max-age=31536000, immutable';
 export const MEDIA_CACHE = 'public, max-age=2592000, stale-while-revalidate=86400';
 export const DOC_CACHE = 'public, max-age=3600';
+export const INDEXABLE_ROBOTS_TAG = 'index, follow, max-image-preview:large, max-video-preview:-1';
 
 /**
  * The Cache-Control value for a request path, matching the rules in _headers.
@@ -127,6 +128,7 @@ export function headersFor(pathname, { https = true, html = false } = {}) {
     if (!https && HTTPS_ONLY.has(name)) continue;
     headers[name] = value;
   }
+  if (html && pathname !== '/404.html') headers['X-Robots-Tag'] = INDEXABLE_ROBOTS_TAG;
   headers['Cache-Control'] = cacheControlFor(pathname, { html });
   return headers;
 }

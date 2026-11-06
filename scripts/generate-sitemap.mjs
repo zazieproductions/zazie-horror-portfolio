@@ -103,6 +103,8 @@ function imageBlock(image, caption, title) {
   );
 }
 
+const MAX_VIDEO_DURATION_SECONDS = 28800; // Google Video Sitemap spec limit (8 hours)
+
 function videoBlock(video) {
   add(
     '    <video:video>',
@@ -113,15 +115,31 @@ function videoBlock(video) {
   );
   if (video.duration) {
     const seconds = Number(video.duration);
-    if (!Number.isInteger(seconds) || seconds < 1 || seconds > 86400) fail(`video ${video.title}: invalid duration ${video.duration}`);
-    else add(`      <video:duration>${seconds}</video:duration>`);
+    if (!Number.isInteger(seconds) || seconds < 1 || seconds > MAX_VIDEO_DURATION_SECONDS) {
+      fail(`video ${video.title}: invalid duration ${video.duration} (must be 1..${MAX_VIDEO_DURATION_SECONDS} seconds)`);
+    } else {
+      add(`      <video:duration>${seconds}</video:duration>`);
+    }
   }
   if (video.publicationDate) {
     if (!realDate(video.publicationDate)) fail(`video ${video.title}: invalid publication date ${video.publicationDate}`);
     else add(`      <video:publication_date>${escapeXml(video.publicationDate)}</video:publication_date>`);
   }
   if (video.familyFriendly) add(`      <video:family_friendly>${escapeXml(video.familyFriendly)}</video:family_friendly>`);
-  for (const tag of video.tags ?? []) add(`      <video:tag>${escapeXml(tag)}</video:tag>`);
+  if (video.requiresSubscription) {
+    add(`      <video:requires_subscription>${escapeXml(video.requiresSubscription)}</video:requires_subscription>`);
+  }
+  if (video.uploader) {
+    const infoAttr = video.uploaderInfo ? ` info="${escapeXml(video.uploaderInfo)}"` : '';
+    add(`      <video:uploader${infoAttr}>${escapeXml(video.uploader)}</video:uploader>`);
+  }
+  if (video.platform) {
+    add(`      <video:platform relationship="allow">${escapeXml(video.platform)}</video:platform>`);
+  }
+  if (video.live) {
+    add(`      <video:live>${escapeXml(video.live)}</video:live>`);
+  }
+  for (const tag of (video.tags ?? []).slice(0, 32)) add(`      <video:tag>${escapeXml(tag)}</video:tag>`);
   add('    </video:video>');
 }
 
@@ -173,7 +191,10 @@ for (const item of itemRoutes.production) {
   const poster = imageUrl(production.poster.src, `production ${item.slug} poster`);
   const images = poster ? [{ loc: poster, caption: production.poster.alt, title: production.title }] : [];
   const videos = [];
-  if (production.sample && /youtube(-nocookie)?\.com\/embed\//.test(production.sample.embedUrl)) {
+  if (
+    production.sample?.publicationDate &&
+    /youtube(-nocookie)?\.com\/embed\//.test(production.sample.embedUrl)
+  ) {
     const thumbnail = imageUrl(production.sample.thumbnail.src, `production ${item.slug} video thumbnail`);
     if (thumbnail) {
       videos.push({
@@ -183,6 +204,11 @@ for (const item of itemRoutes.production) {
         playerLoc: production.sample.embedUrl,
         duration: production.sample.durationSeconds ? String(production.sample.durationSeconds) : undefined,
         publicationDate: production.sample.publicationDate,
+        familyFriendly: 'yes',
+        requiresSubscription: 'no',
+        uploader: production.sample.creator?.name,
+        uploaderInfo: production.sample.creator?.url,
+        tags: production.sample.tags,
       });
     }
   }

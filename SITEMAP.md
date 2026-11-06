@@ -3,7 +3,7 @@
 **Sitemap:** [`sitemap.xml`](https://horror.zazieproductions.com/sitemap.xml)
 **Generator:** `scripts/generate-sitemap.mjs`, backed by the typed records in `src/data/`
 **Validator:** `node tools/check-sitemap.mjs`
-**Scope:** 85 canonical URLs — 20 hub URLs (home + 19) + 65 item URLs (9 productions, 32 cues, 24 catalogue entries). The current XML contains 79 image entries and 12 video entries.
+**Scope:** 80 canonical URLs — 17 hub URLs (home + 16) + 63 item URLs (9 productions, 30 cues, 24 catalogue entries). The current XML contains 74 image entries and 4 dedicated watch-page video entries.
 
 The sitemap describes the intended committed static tree. A successful local build is not evidence that the production host has deployed it; the live URL audit is run separately by GitHub Actions after a production deploy.
 
@@ -25,7 +25,7 @@ Non-content paths (assets, build tooling, source files, and the 404 document) ar
 
 `scripts/prerender.mjs` writes item HTML from `src/data/routes.ts` and the shared renderers in `src/lib/`. It replaces the complete unified `<head>` in the homepage source template as well as rendering route-specific item heads. Title, description, canonical, robots, Open Graph, Twitter, and JSON-LD are in the initial HTML response; they are not injected by client JavaScript.
 
-Structured data is type-specific: productions use their declared `Movie`, `TVSeries`, or `CreativeWork` type and add a `VideoObject` only when the record has a real sample; cues use `MusicComposition` and `AudioObject`; catalogue entries use `Product` or `MusicAlbum` with `Offer`; each item also carries `WebPage` and `BreadcrumbList` data. Unknown or mutable facts, prices, stock claims, and unavailable artwork are omitted rather than invented.
+Structured data is type-specific: productions use their declared `Movie`, `TVSeries`, or `CreativeWork` type and add a `VideoObject` (plus matching Open Graph `og:video` tags and `<video:video>` sitemap entry) only when the record is a dedicated watch page with a verified `uploadDate`; cues use `MusicComposition` and `AudioObject`; catalogue entries use `Product` or `MusicAlbum` with `Offer`; each item also carries `WebPage` and `BreadcrumbList` data. Unknown or mutable facts, prices, stock claims, and unavailable artwork are omitted rather than invented.
 
 ## Validation
 

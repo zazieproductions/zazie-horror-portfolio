@@ -18,8 +18,14 @@ export const ROBOTS_TXT = `# robots.txt for horror.zazieproductions.com
 User-agent: *
 Allow: /
 
-# Search & AI Overviews (Google / Gemini)
+# Search, Media & AI Overviews (Google / Gemini)
 User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Googlebot-Video
 Allow: /
 
 User-agent: Google-Extended
