@@ -13,6 +13,15 @@
   `MusicComposition`+`AudioObject`, catalogue items without mutable
   price/stock claims). `scripts/verify.mjs` enforces exactly one
   title/canonical/robots/OG set per generated page.
+- Video SEO (`tools/video-seo.test.mjs`): `<video:video>` sitemap entries,
+  `VideoObject` JSON-LD, and `og:video*` / `og:type="video.other"` tags are
+  emitted strictly on dedicated `/work/<slug>` watch pages that render the
+  primary `<iframe>` above the fold without user click and carry a verified
+  `uploadDate` (`expire`, `phantom-requiem`, `the-haunted`,
+  `mike-has-a-visitor`). All indexable routes ship
+  `max-image-preview:large, max-video-preview:-1` in both `<meta name="robots">`
+  and `_headers` `X-Robots-Tag`, with identical thumbnail and player URLs across
+  `VideoObject`, `sitemap.xml`, and Open Graph.
 - Meta descriptions are short and niche-forward (2026-11-02 policy). Every
   route stays within the 80-140 character band declared by
   `DESCRIPTION_MIN`/`DESCRIPTION_MAX` in `src/data/routes.ts`, which

@@ -20,6 +20,11 @@ export interface HubVideo {
   duration?: string;
   publicationDate?: string;
   familyFriendly?: 'yes' | 'no';
+  requiresSubscription?: 'yes' | 'no';
+  uploader?: string;
+  uploaderInfo?: string;
+  platform?: string;
+  live?: 'yes' | 'no';
   tags?: string[];
 }
 
@@ -70,7 +75,8 @@ export interface VideoSample {
   durationSeconds?: number;
   publicationDate?: string;
   watchUrl?: string;
-  creator?: { name: string; type: 'Person' | 'Organization' };
+  creator?: { name: string; type: 'Person' | 'Organization'; url?: string; id?: string };
+  tags?: string[];
 }
 
 export type ProductionSchemaType = 'Movie' | 'TVSeries' | 'CreativeWork';

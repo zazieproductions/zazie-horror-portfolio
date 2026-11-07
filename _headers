@@ -164,134 +164,135 @@
 # angle-bracketed header value is added back here.
 #
 # Keep the X-Robots-Tag rules: those are real, they arrive intact, and they are
-# the edge-level assertion that a route is indexable.
+# the edge-level assertion that a route is indexable and eligible for large
+# image and unrestricted moving video previews.
 /
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 
 /index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 
 /work
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /work/
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /work/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /work/*
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 
 /reel
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /reel/
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /reel/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /reel/*
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 
 /process
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /process/
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /process/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 
 /services
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /services/
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /services/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 
 /hire-a-composer
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /hire-a-composer/
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /hire-a-composer/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 
 /how-to-hire-a-horror-composer
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /how-to-hire-a-horror-composer/
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /how-to-hire-a-horror-composer/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 
 /sound-design
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /sound-design/
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /sound-design/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 
 /game-scoring
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /game-scoring/
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /game-scoring/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 
 /store
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /store/
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /store/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /store/*
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 
 /legal
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /legal/
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /legal/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 
 /faq
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /faq/
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /faq/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 
 /terms
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /terms/
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /terms/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 
 /privacy
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /privacy/
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /privacy/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 
 /licensing
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /licensing/
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /licensing/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 
 /purchases
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /purchases/
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /purchases/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 
 /accessibility
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /accessibility/
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /accessibility/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 
 /sitemap
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /sitemap/
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1
 /sitemap/index.html
-  X-Robots-Tag: index, follow, max-image-preview:large
+  X-Robots-Tag: index, follow, max-image-preview:large, max-video-preview:-1

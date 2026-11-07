@@ -5,405 +5,381 @@
  * treated as proof that Zazie composed its music; each role is stated below.
  */
 
-import type { Production } from './types.js';
+import type { Credit, Image, ItemLink, Production, ProductionSchemaType, VideoSample } from './types.js';
 
-const updatedAt = '2026-10-04';
+const defaultUpdatedAt = '2026-10-04';
 
-export const productions: Production[] = [
-  {
-    slug: 'expire',
-    title: 'EXPIRE',
+interface ProductionCopy {
+  headline: string;
+  summary: string;
+  metaDescription: string;
+  logline: string;
+  paragraphs: [string, string];
+  posterAlt: string;
+}
+
+const COPY = {
+  expire: {
     headline: 'EXPIRE: AI toys awaken in a ruined world',
     summary: 'EXPIRE is a 2025 science-fiction short about AI toys returning to life in a ruined world. IMDb credits Zazie Kanwar-Torge for sound design, not composition.',
-    metaDescription: "EXPIRE: 2025 sci-fi short with sound design by Zazie Kanwar-Torge. Verified IMDb credits, no score claim.",
-    workType: 'Short film',
-    schemaType: 'Movie',
-    genres: ['Science fiction', 'Short film'],
-    status: 'Released',
-    releaseYear: 2025,
-    releaseDate: '2025-12-20',
-    credits: [
-      { role: 'Director', name: 'Muhammad Abed Baryal' },
-      { role: 'Writer', name: 'Muhammad Abed Baryal' },
-      { role: 'Writer', name: 'Ines Rim Belabbas' },
-      { role: 'Composer', name: 'Patricia Chaylade' },
-      { role: 'Composer', name: 'Jorayo' },
-      { role: 'Composer', name: 'Brennan Mack' },
-      { role: 'Sound design', name: 'Zazie Kanwar-Torge' },
-    ],
+    metaDescription: 'EXPIRE: 2025 sci-fi short with sound design by Zazie Kanwar-Torge. Verified IMDb credits, no score claim.',
     logline: 'In EXPIRE, AI toys awaken in a mysterious ruined world. The 2025 science-fiction short credits Zazie Kanwar-Torge for sound design; the listed composers are Patricia Chaylade, Jorayo, and Brennan Mack.',
     paragraphs: [
       'The public synopsis places the story in a wrecked setting where artificial-intelligence toys have returned to life and question why they are there. That premise frames the project as science fiction rather than the body-horror score described in an older portfolio blurb.',
       'The credit distinction matters: IMDb lists Zazie Kanwar-Torge under sound design and names Patricia Chaylade, Jorayo, and Brennan Mack as composers. The linked YouTube video is identified by IMDb as an official first-look clip, not a score excerpt.',
     ],
-    poster: {
-      src: '/images/posters/expire-red-check-640.jpg',
-      avif: '/images/posters/expire-red-check-640.avif',
-      avifSet: '/images/posters/expire-red-check-400.avif 400w, /images/posters/expire-red-check-480.avif 480w, /images/posters/expire-red-check-640.avif 640w',
-      srcset: '/images/posters/expire-red-check-640.jpg 640w, /images/posters/expire-red-check-1200.jpg 1200w',
-      alt: 'EXPIRE: Dystopian sci-fi horror sound design by Zazie Kanwar-Torge featuring distressed mechanical foley, bowed metal resonance, and granular synthesis.',
-      width: 640,
-      height: 1138,
-    },
-    sample: {
-      kind: 'youtube',
-      embedUrl: 'https://www.youtube-nocookie.com/embed/lWm4Ies7edI',
-      watchUrl: 'https://www.youtube.com/watch?v=lWm4Ies7edI',
-      title: 'EXPIRE: official first-look clip',
-      description: 'IMDb lists this YouTube video as the official first-look clip for the 2025 science-fiction short EXPIRE. It is a film clip, not represented here as a score excerpt.',
-      thumbnail: {
-        src: 'https://i.ytimg.com/vi/lWm4Ies7edI/hqdefault.jpg',
-        alt: 'EXPIRE: First-look clip still featuring dystopian sci-fi horror sound design by Zazie Kanwar-Torge with distressed mechanical foley.',
-        width: 480,
-        height: 360,
-      },
-    },
-    links: [
-      { label: 'EXPIRE on IMDb', href: 'https://www.imdb.com/title/tt19369318/', kind: 'imdb', external: true },
-      { label: 'Official first-look clip', href: 'https://www.youtube.com/watch?v=lWm4Ies7edI', kind: 'youtube', external: true },
-    ],
-    relatedCueSlugs: ['needle-in-the-nerve', 'dissociative-amnesia'],
-    updatedAt: '2026-10-24',
+    posterAlt: 'EXPIRE: Dystopian sci-fi horror sound design by Zazie Kanwar-Torge featuring distressed mechanical foley, bowed metal resonance, and granular synthesis.',
   },
-  {
-    slug: 'unseen',
-    title: 'UNSEEN',
+  unseen: {
     headline: 'UNSEEN: a thriller feature with a verified composer credit',
     summary: 'UNSEEN is a 2026 horror-thriller feature about an unknown disaster and an abusive past. IMDb identifies Steve Merlo as composer; this archive does not assign a Zazie score credit.',
-    metaDescription: "UNSEEN: 2026 horror-thriller feature in the production archive. IMDb names Steve Merlo as composer; no Zazie score credit.",
-    workType: 'Feature film',
-    schemaType: 'Movie',
-    genres: ['Horror', 'Thriller'],
-    status: 'Released',
-    releaseYear: 2026,
-    runtime: '1 hr 29 min',
-    runtimeSeconds: 5340,
-    credits: [
-      { role: 'Director', name: 'Steve Merlo' },
-      { role: 'Writer', name: 'Steve Merlo' },
-      { role: 'Composer', name: 'Steve Merlo' },
-    ],
+    metaDescription: 'UNSEEN: 2026 horror-thriller feature in the production archive. IMDb names Steve Merlo as composer; no Zazie score credit.',
     logline: 'UNSEEN is a 2026 horror-thriller feature about a man seeking to satisfy his conscience after an unknown disaster while tormenting a woman with an abusive past; IMDb lists Steve Merlo as composer.',
     paragraphs: [
       'IMDb describes the story as taking place after an unknown disaster. A mentally unstable man tries to satisfy his conscience while tormenting a woman with an abusive past; the listing gives the feature a runtime of one hour and twenty-nine minutes.',
       'The older portfolio entry presented UNSEEN as a Zazie score. The available IMDb credits instead identify Steve Merlo as composer. This archive keeps the existing title record but does not claim that Zazie composed or contributed to the score.',
     ],
-    poster: {
-      src: '/images/posters/unseen-640.jpg',
-      avif: '/images/posters/unseen-640.avif',
-      avifSet: '/images/posters/unseen-400.avif 400w, /images/posters/unseen-480.avif 480w, /images/posters/unseen-640.avif 640w',
-      srcset: '/images/posters/unseen-640.jpg 640w, /images/posters/unseen-1200.jpg 1200w',
-      alt: 'UNSEEN: Psychological horror-thriller feature film poster (archival record; music composed by Steve Merlo).',
-      width: 640,
-      height: 942,
-    },
-    links: [{ label: 'UNSEEN on IMDb', href: 'https://www.imdb.com/title/tt27330757/', kind: 'imdb', external: true }],
-    relatedCueSlugs: ['panic-threshold', 'narrow-pulse', 'the-room-forgets-you'],
-    updatedAt,
+    posterAlt: 'UNSEEN: Psychological horror-thriller feature film poster (archival record; music composed by Steve Merlo).',
   },
-  {
-    slug: 'peregrinus',
-    title: 'PEREGRINUS',
+  peregrinus: {
     headline: 'PEREGRINUS: a five-episode science-fiction thriller series',
     summary: 'PEREGRINUS is a five-episode 2026 TV series about an escaped asset with psychic abilities. IMDb lists a December 31, 2026 premiere and credits Zazie Kanwar-Torge as a co-composer.',
-    metaDescription: "PEREGRINUS: 2026 sci-fi thriller series with a co-composer credit for Zazie Kanwar-Torge. Five episodes, IMDb record.",
-    workType: 'TV series',
-    schemaType: 'TVSeries',
-    genres: ['Drama', 'Science fiction', 'Thriller'],
-    status: 'Series premiere listed for 31 December 2026',
-    releaseYear: 2026,
-    expectedReleaseDate: '2026-12-31',
-    credits: [
-      { role: 'Creator', name: 'Dévi Mboto' },
-      { role: 'Co-composer', name: 'Zazie Kanwar-Torge' },
-    ],
+    metaDescription: 'PEREGRINUS: 2026 sci-fi thriller series with a co-composer credit for Zazie Kanwar-Torge. Five episodes, IMDb record.',
     logline: 'PEREGRINUS follows Kael, an escaped asset with psychic abilities, after Mara and Silas find him in the wilderness and covert pursuit escalates; IMDb lists five episodes and a 31 December 2026 premiere.',
     paragraphs: [
       'The series synopsis follows Kael, an escaped asset with psychic abilities, found in the wilderness by Mara and Silas. Their discovery leads to a covert pursuit that escalates toward containment and a widening conflict.',
       'IMDb lists five episodes and a premiere date of December 31, 2026. Its current credits identify Zazie Kanwar-Torge as one of the co-composers; this page makes no claim that the series is folk horror or that the score is solely hers.',
     ],
-    poster: {
-      src: '/images/posters/peregrinus-640.jpg',
-      avif: '/images/posters/peregrinus-640.avif',
-      avifSet: '/images/posters/peregrinus-400.avif 400w, /images/posters/peregrinus-480.avif 480w, /images/posters/peregrinus-640.avif 640w',
-      srcset: '/images/posters/peregrinus-640.jpg 640w, /images/posters/peregrinus-1200.jpg 1200w',
-      alt: 'PEREGRINUS: Sci-fi psychological thriller TV series co-score by Zazie Kanwar-Torge featuring dystopian analog synth pulses and sub-bass tension.',
-      width: 640,
-      height: 960,
-    },
-    links: [{ label: 'PEREGRINUS on IMDb', href: 'https://www.imdb.com/title/tt43438100/', kind: 'imdb', external: true }],
-    relatedCueSlugs: ['quarter-eater-poltergeist', 'rlyehs-xenolith', 'deep-dystopian-synth-cue'],
-    updatedAt,
+    posterAlt: 'PEREGRINUS: Sci-fi psychological thriller TV series co-score by Zazie Kanwar-Torge featuring dystopian analog synth pulses and sub-bass tension.',
   },
-  {
-    slug: 'phantom-requiem',
-    title: 'Phantom Requiem',
+  'phantom-requiem': {
     headline: 'Phantom Requiem: an experimental short from Zazie Productions',
     summary: 'Phantom Requiem is a 4:53 experimental short published by Zazie Productions on June 20, 2024. The studio describes its visuals, sound, and music as studio intellectual property.',
-    metaDescription: "Phantom Requiem: 4:53 experimental short from Zazie Productions, with studio-owned visuals, sound and music.",
-    workType: 'Experimental short film',
-    schemaType: 'CreativeWork',
-    genres: ['Experimental film', 'Experimental Art House'],
-    status: 'Published online',
-    releaseYear: 2024,
-    releaseDate: '2024-06-20',
-    runtime: '4 min 53 sec',
-    runtimeSeconds: 293,
-    credits: [{ role: 'Creator', name: 'Zazie Productions' }],
+    metaDescription: 'Phantom Requiem: 4:53 experimental short from Zazie Productions, with studio-owned visuals, sound and music.',
     logline: 'Phantom Requiem is a 4:53 experimental short published by Zazie Productions on June 20, 2024; the studio identifies the work’s visuals, sound, and music as its own intellectual property.',
     paragraphs: [
       'The published video is the short itself, rather than a separately edited score demonstration. Its runtime is four minutes and fifty-three seconds, and the studio’s description treats the visuals, sound, and music as part of the same original work.',
       'This entry preserves the project as an experimental screen work without adding an unverified plot synopsis, cast list, or instrument inventory. The linked video is the primary source for viewing the complete short.',
     ],
-    poster: {
-      src: '/images/posters/phantom-requiem-640.jpg',
-      avif: '/images/posters/phantom-requiem-640.avif',
-      avifSet: '/images/posters/phantom-requiem-400.avif 400w, /images/posters/phantom-requiem-480.avif 480w, /images/posters/phantom-requiem-640.avif 640w',
-      srcset: '/images/posters/phantom-requiem-640.jpg 640w, /images/posters/phantom-requiem-1200.jpg 1200w',
-      alt: 'Phantom Requiem: Experimental art house horror score by Zazie Kanwar-Torge featuring spectral synthesis and electroacoustic sound design.',
-      width: 640,
-      height: 960,
-    },
-    sample: {
-      kind: 'youtube',
-      embedUrl: 'https://www.youtube-nocookie.com/embed/UX2kv3G89Jw',
-      watchUrl: 'https://www.youtube.com/watch?v=UX2kv3G89Jw',
-      title: 'Phantom Requiem: experimental short film',
-      description: 'The complete experimental short Phantom Requiem, published by Zazie Productions on June 20, 2024. The video runs 4 minutes 53 seconds.',
-      thumbnail: {
-        src: '/images/project-UX2kv3G89Jw.jpg',
-        alt: 'Phantom Requiem: Experimental art house short film score by Zazie Kanwar-Torge featuring spectral synthesis and dark ambient textures.',
-        width: 640,
-        height: 480,
-      },
-      durationSeconds: 293,
-      publicationDate: '2024-06-20',
-      creator: { name: 'Zazie Productions', type: 'Organization' },
-    },
-    links: [
-      { label: 'Watch Phantom Requiem on YouTube', href: 'https://www.youtube.com/watch?v=UX2kv3G89Jw', kind: 'youtube', external: true },
-      { label: 'Read David Finkelstein review in Lake Ivan Film Journal', href: 'https://lakeivan.substack.com/p/spinning-in-the-wildness-phantom', kind: 'press', external: true },
-      { label: 'Visual Container Winter 2024 Award Winners Press Release (PDF)', href: 'https://www.visualcontainer.tv/wp-content/uploads/2025/01/Winter-2024-Award-Winners_Press-Release.pdf', kind: 'press', external: true },
-    ],
-    relatedCueSlugs: ['fractured-requiem', 'opaline-lament-life-from-the-beyond', 'the-beautiful-wrongness'],
-    updatedAt,
+    posterAlt: 'Phantom Requiem: Experimental art house horror score by Zazie Kanwar-Torge featuring spectral synthesis and electroacoustic sound design.',
   },
-  {
-    slug: 'eclipsed',
-    title: 'ECLIPSED',
+  eclipsed: {
     headline: 'ECLIPSED: a short about a woman confronting her darker self',
     summary: 'ECLIPSED is a 2025 surreal horror short about a woman whose attempt to destroy her darker self leads to transformation. IMDb credits Zazie Kanwar-Torge and Noah C. Castro as composers.',
-    metaDescription: "ECLIPSED: 2025 surreal body-horror short co-scored by Zazie Kanwar-Torge and Noah C. Castro. IMDb credit record.",
-    workType: 'Short film',
-    schemaType: 'Movie',
-    genres: ['Horror', 'Body Horror', 'Psychological Horror', 'Short film'],
-    status: 'Released',
-    releaseYear: 2025,
-    releaseDate: '2025-05-10',
-    credits: [
-      { role: 'Director', name: 'William Viera' },
-      { role: 'Writer', name: 'William Viera' },
-      { role: 'Composer', name: 'Zazie Kanwar-Torge' },
-      { role: 'Composer', name: 'Noah C. Castro' },
-    ],
+    metaDescription: 'ECLIPSED: 2025 surreal body-horror short co-scored by Zazie Kanwar-Torge and Noah C. Castro. IMDb credit record.',
     logline: 'ECLIPSED is a 2025 surreal horror short about a woman trapped in a dreamlike confrontation with her darker self; IMDb credits Zazie Kanwar-Torge and Noah C. Castro as composers.',
     paragraphs: [
       'IMDb describes a woman drawn into a dreamlike confrontation with her darker self. Desire, fear, and violence shape the encounter, and her attempt to destroy what haunts her becomes a story about duality, identity, and transformation.',
-      'The short was directed and written by William Viera. The IMDb credit listing names Zazie Kanwar-Torge and Noah C. Castro as composers. A Drive-hosted project sample is embedded below; no separate running time or release date is assigned to that sample.',
+      'The short was directed and written by William Viera. The IMDb credit listing names Zazie Kanwar-Torge and Noah C. Castro as composers. A Drive-hosted project sample is embedded on this page; no separate running time or release date is assigned to that sample.',
     ],
-    poster: {
-      src: '/images/posters/eclipsed-640.jpg',
-      avif: '/images/posters/eclipsed-640.avif',
-      avifSet: '/images/posters/eclipsed-400.avif 400w, /images/posters/eclipsed-480.avif 480w, /images/posters/eclipsed-640.avif 640w',
-      srcset: '/images/posters/eclipsed-640.jpg 640w, /images/posters/eclipsed-1200.jpg 1200w',
-      alt: 'ECLIPSED: Surrealist body horror score by Zazie Kanwar-Torge featuring dissonant bowed metal and experimental synthesis.',
-      width: 640,
-      height: 960,
-    },
-    sample: {
-      kind: 'drive',
-      embedUrl: 'https://drive.google.com/file/d/1zKtAavEx-Yjd2To_troEYlxTTt62Y2OU/preview',
-      title: 'ECLIPSED project sample',
-      description: 'A Google Drive-hosted project sample associated with the existing ECLIPSED work entry. IMDb identifies ECLIPSED as a 2025 short and lists Zazie Kanwar-Torge and Noah C. Castro as composers.',
-      thumbnail: {
-        src: '/images/eclipsed-cover-1280.jpg',
-        alt: 'ECLIPSED: Surrealist body horror score sample by Zazie Kanwar-Torge featuring dissonant bowed metal and experimental synthesis.',
-        width: 1280,
-        height: 720,
-      },
-    },
-    links: [{ label: 'ECLIPSED on IMDb', href: 'https://www.imdb.com/title/tt36984141/', kind: 'imdb', external: true }],
-    relatedCueSlugs: ['the-room-forgets-you', 'time-shifting-into-daylight', 'variations-on-a-vanishing-body'],
-    updatedAt,
+    posterAlt: 'ECLIPSED: Surrealist body horror score by Zazie Kanwar-Torge featuring dissonant bowed metal and experimental synthesis.',
   },
-  {
-    slug: 'the-haunted',
-    title: 'THE HAUNTED',
+  'the-haunted': {
     headline: 'THE HAUNTED: a 46-minute horror and science-fiction short',
     summary: 'THE HAUNTED is a completed 46-minute short about a virtual-reality therapy session that turns into a waking nightmare. IMDb credits Zazie Kanwar-Torge and Robert Mason Sandifer as co-composers.',
-    metaDescription: "THE HAUNTED: 46-minute psychological horror short co-scored by Zazie Kanwar-Torge and Robert Mason Sandifer.",
-    workType: 'Short film',
-    schemaType: 'Movie',
-    genres: ['Horror', 'Psychological Horror', 'Science fiction', 'Thriller'],
-    status: 'Completed',
-    runtime: '46 min',
-    runtimeSeconds: 2760,
-    credits: [
-      { role: 'Director', name: 'Mike Fox' },
-      { role: 'Writer', name: 'Mike Fox' },
-      { role: 'Co-composer', name: 'Zazie Kanwar-Torge' },
-      { role: 'Co-composer', name: 'Robert Mason Sandifer' },
-    ],
+    metaDescription: 'THE HAUNTED: 46-minute psychological horror short co-scored by Zazie Kanwar-Torge and Robert Mason Sandifer.',
     logline: 'THE HAUNTED is a completed 46-minute horror and science-fiction short about Sean’s experimental virtual-reality therapy becoming a waking nightmare; IMDb credits Zazie Kanwar-Torge and Robert Mason Sandifer as co-composers.',
     paragraphs: [
       'The story follows Sean as he seeks healing through experimental virtual-reality therapy. The simulation begins to distort his memories and perception, leaving him unsure whether the threat is a treatment gone wrong or something more sinister.',
       'IMDb lists THE HAUNTED as completed with a runtime of 46 minutes and classifies it as horror, science fiction, and thriller. Its composer credits name Zazie Kanwar-Torge and Robert Mason Sandifer. The embedded video is the official trailer from Crystal Fox Films, not a standalone score excerpt.',
     ],
-    poster: {
-      src: '/images/posters/the-haunted-640.jpg',
-      avif: '/images/posters/the-haunted-640.avif',
-      avifSet: '/images/posters/the-haunted-400.avif 400w, /images/posters/the-haunted-480.avif 480w, /images/posters/the-haunted-640.avif 640w',
-      srcset: '/images/posters/the-haunted-640.jpg 640w, /images/posters/the-haunted-1200.jpg 1200w',
-      alt: 'THE HAUNTED: Sci-fi psychological horror co-score by Zazie Kanwar-Torge featuring psychophonic scraping beds and dark ambient drones.',
-      width: 640,
-      height: 960,
-    },
-    sample: {
-      kind: 'youtube',
-      embedUrl: 'https://www.youtube-nocookie.com/embed/Ty8tPp59mDc',
-      watchUrl: 'https://www.youtube.com/watch?v=Ty8tPp59mDc',
-      title: 'THE HAUNTED: official trailer',
-      description: 'Official trailer for THE HAUNTED from Crystal Fox Films. The trailer is promotional film media, not presented as a separate score excerpt.',
-      thumbnail: {
-        src: '/images/project-Ty8tPp59mDc.jpg',
-        alt: 'THE HAUNTED: Official trailer still with sci-fi psychological horror co-score by Zazie Kanwar-Torge featuring psychophonic beds.',
-        width: 640,
-        height: 360,
-      },
-      durationSeconds: 149,
-      creator: { name: 'Crystal Fox Films', type: 'Organization' },
-    },
-    links: [
-      { label: 'THE HAUNTED on IMDb', href: 'https://www.imdb.com/title/tt37707793/', kind: 'imdb', external: true },
-      { label: 'Official film site', href: 'https://thehauntedmovie.com/', kind: 'press', external: true },
-      { label: 'Official trailer', href: 'https://www.youtube.com/watch?v=Ty8tPp59mDc', kind: 'youtube', external: true },
-    ],
-    relatedCueSlugs: ['scraping-psychophonic-bed', 'dark-ambient-soundscape-no-1', 'hidden-intentions-serene-purgatory'],
-    updatedAt,
+    posterAlt: 'THE HAUNTED: Sci-fi psychological horror co-score by Zazie Kanwar-Torge featuring psychophonic scraping beds and dark ambient drones.',
   },
-  {
-    slug: 'choleric',
-    title: 'CHOLERIC',
+  choleric: {
     headline: 'CHOLERIC: a post-production short about fame and a returning figure',
     summary: 'CHOLERIC is a short in post-production about a former child star whose manufactured fame begins to unravel. IMDb credits Zazie Kanwar-Torge as co-producer, not composer.',
-    metaDescription: "CHOLERIC: horror short in post-production with a co-producer credit for Zazie Kanwar-Torge, not a score credit.",
-    workType: 'Short film',
-    schemaType: 'Movie',
-    genres: ['Crime', 'Drama', 'Horror', 'Mystery'],
-    status: 'Post-production',
-    credits: [
-      { role: 'Director', name: 'Sebastian Fabres' },
-      { role: 'Writer', name: 'Aryane Carby' },
-      { role: 'Writer', name: 'Sebastian Fabres' },
-      { role: 'Co-producer', name: 'Zazie Kanwar-Torge' },
-    ],
+    metaDescription: 'CHOLERIC: horror short in post-production with a co-producer credit for Zazie Kanwar-Torge, not a score credit.',
     logline: 'CHOLERIC is a crime, drama, horror, and mystery short about a former child star whose carefully built public world unravels when a haunting figure from her past returns; IMDb credits Zazie Kanwar-Torge as co-producer.',
     paragraphs: [
       'The IMDb synopsis centers on a former child star pressured into a new stunt after years under the weight of manufactured fame. When a figure from her past resurfaces, the world she has carefully maintained begins to come apart.',
       'The project is listed as a short in post-production. Its current credits name Sebastian Fabres as director, Aryane Carby and Sebastian Fabres as writers, and Zazie Kanwar-Torge as co-producer. No composer credit is claimed on this page.',
     ],
-    poster: {
-      src: '/images/posters/choleric-640.jpg',
-      avif: '/images/posters/choleric-640.avif',
-      avifSet: '/images/posters/choleric-400.avif 400w, /images/posters/choleric-480.avif 480w, /images/posters/choleric-640.avif 640w',
-      srcset: '/images/posters/choleric-640.jpg 640w, /images/posters/choleric-1200.jpg 1200w',
-      alt: 'CHOLERIC: Psychological mystery-horror short film co-produced by Zazie Kanwar-Torge (post-production poster artwork).',
-      width: 640,
-      height: 960,
-    },
-    links: [{ label: 'CHOLERIC on IMDb', href: 'https://www.imdb.com/title/tt38637541/', kind: 'imdb', external: true }],
-    relatedCueSlugs: ['brutalist-tension-stinger', 'the-fatal-overdose', 'smell-of-bleach'],
-    updatedAt,
+    posterAlt: 'CHOLERIC: Psychological mystery-horror short film co-produced by Zazie Kanwar-Torge (post-production poster artwork).',
   },
-  {
-    slug: 'mike-has-a-visitor',
-    title: 'MIKE HAS A VISITOR',
+  'mike-has-a-visitor': {
     headline: 'MIKE HAS A VISITOR: sleep paralysis crosses into waking life',
     summary: 'MIKE HAS A VISITOR is a horror short about a man whose sleep-paralysis nightmares begin to enter his waking life. IMDb credits Zazie Kanwar-Torge as composer.',
-    metaDescription: "MIKE HAS A VISITOR: sleep-paralysis psychological horror short scored by Zazie Kanwar-Torge. IMDb-credited record.",
-    workType: 'Short film',
-    schemaType: 'Movie',
-    genres: ['Horror', 'Psychological Horror', 'Short film'],
-    credits: [
-      { role: 'Director', name: 'Marco Saikaley' },
-      { role: 'Writer', name: 'Marco Saikaley' },
-      { role: 'Composer', name: 'Zazie Kanwar-Torge' },
-    ],
+    metaDescription: 'MIKE HAS A VISITOR: sleep-paralysis psychological horror short scored by Zazie Kanwar-Torge. IMDb-credited record.',
     logline: 'MIKE HAS A VISITOR follows a man whose sleep-paralysis nightmares begin to seep into real life; IMDb credits Marco Saikaley as writer-director and Zazie Kanwar-Torge as composer.',
     paragraphs: [
       'The short’s published synopsis starts with sleep paralysis and follows the main character as nightmares begin to intrude into waking life. That premise is the project’s verified public description; no additional plot details are added here.',
       'IMDb credits Marco Saikaley as writer and director and Zazie Kanwar-Torge as composer. The linked YouTube upload is the short itself and is credited to its director; the upload date is shown only as video metadata, not as a film release date.',
     ],
-    poster: {
-      src: '/images/posters/mike-has-a-visitor-640.jpg',
-      avif: '/images/posters/mike-has-a-visitor-640.avif',
-      avifSet: '/images/posters/mike-has-a-visitor-400.avif 400w, /images/posters/mike-has-a-visitor-480.avif 480w, /images/posters/mike-has-a-visitor-640.avif 640w',
-      srcset: '/images/posters/mike-has-a-visitor-640.jpg 640w, /images/posters/mike-has-a-visitor-1200.jpg 1200w',
-      alt: 'MIKE HAS A VISITOR: Sleep-paralysis psychological horror score by Zazie Kanwar-Torge featuring nerve-scraping strings and sub-audible room tone.',
-      width: 640,
-      height: 960,
-    },
-    sample: {
-      kind: 'youtube',
-      embedUrl: 'https://www.youtube-nocookie.com/embed/HaVJP08j77U',
-      watchUrl: 'https://www.youtube.com/watch?v=HaVJP08j77U',
-      title: 'MIKE HAS A VISITOR: short film',
-      description: 'The 14:23 YouTube upload of MIKE HAS A VISITOR, published by director Marco Saikaley on June 30, 2025. IMDb separately credits Zazie Kanwar-Torge as composer.',
-      thumbnail: {
-        src: '/images/project-HaVJP08j77U.jpg',
-        alt: 'MIKE HAS A VISITOR: Short film still featuring psychological horror score by Zazie Kanwar-Torge with nerve-scraping string textures.',
-        width: 640,
-        height: 360,
-      },
-      durationSeconds: 863,
-      publicationDate: '2025-06-30',
-      creator: { name: 'Marco Saikaley', type: 'Person' },
-    },
-    links: [
-      { label: 'MIKE HAS A VISITOR on IMDb', href: 'https://www.imdb.com/title/tt36954700/', kind: 'imdb', external: true },
-      { label: 'Watch the short on YouTube', href: 'https://www.youtube.com/watch?v=HaVJP08j77U', kind: 'youtube', external: true },
-    ],
-    relatedCueSlugs: ['needle-in-the-nerve', 'the-silence-began-crawling', 'the-room-forgets-you'],
-    updatedAt,
+    posterAlt: 'MIKE HAS A VISITOR: Sleep-paralysis psychological horror score by Zazie Kanwar-Torge featuring nerve-scraping strings and sub-audible room tone.',
   },
-  {
-    slug: 'the-dark-awaits',
-    title: 'THE DARK AWAITS',
+  'the-dark-awaits': {
     headline: 'THE DARK AWAITS: a reality series in haunted locations',
     summary: 'THE DARK AWAITS is a reality-TV series in which an ordinary family investigates haunted locations through the night. IMDb lists a 45-minute runtime and credits Zazie Kanwar-Torge as composer.',
-    metaDescription: "THE DARK AWAITS: paranormal reality-TV series scored by Zazie Kanwar-Torge. Verified IMDb composer credit.",
-    workType: 'Reality-TV series',
-    schemaType: 'TVSeries',
-    genres: ['Reality television', 'Paranormal', 'Supernatural Thriller'],
-    runtime: '45 min',
-    runtimeSeconds: 2700,
-    credits: [{ role: 'Composer', name: 'Zazie Kanwar-Torge' }],
+    metaDescription: 'THE DARK AWAITS: paranormal reality-TV series scored by Zazie Kanwar-Torge. Verified IMDb composer credit.',
     logline: 'THE DARK AWAITS follows an ordinary family with no paranormal experience as they investigate unfamiliar haunted locations alone through the night; IMDb lists 45-minute episodes and credits Zazie Kanwar-Torge as composer.',
     paragraphs: [
       'The IMDb synopsis describes a family sent to haunted locations without advance knowledge of where they are going. They investigate alone through the night, facing fear and mystery while uncovering the history associated with each site.',
       'IMDb classifies THE DARK AWAITS as a reality-TV series and lists a 45-minute runtime. The available listing supplies no year, so none is assigned here. Zazie Kanwar-Torge is credited as composer.',
     ],
-    poster: {
-      src: '/images/posters/the-dark-awaits-640.jpg',
-      avif: '/images/posters/the-dark-awaits-640.avif',
-      avifSet: '/images/posters/the-dark-awaits-400.avif 400w, /images/posters/the-dark-awaits-480.avif 480w, /images/posters/the-dark-awaits-640.avif 640w',
-      srcset: '/images/posters/the-dark-awaits-640.jpg 640w, /images/posters/the-dark-awaits-1200.jpg 1200w',
-      alt: 'THE DARK AWAITS: Paranormal television series score by Zazie Kanwar-Torge featuring ominous low-end drones and bowed metallic textures.',
-      width: 640,
-      height: 960,
-    },
-    links: [{ label: 'THE DARK AWAITS on IMDb', href: 'https://www.imdb.com/title/tt43505987/', kind: 'imdb', external: true }],
-    relatedCueSlugs: ['scraping-psychophonic-bed', 'ominous-drone', 'dark-ambient-soundscape-no-2'],
-    updatedAt,
+    posterAlt: 'THE DARK AWAITS: Paranormal television series score by Zazie Kanwar-Torge featuring ominous low-end drones and bowed metallic textures.',
   },
+} satisfies Record<string, ProductionCopy>;
+
+type ProductionSlug = keyof typeof COPY;
+
+function posterArt(stem: string, alt: string, height = 960): Image {
+  return {
+    src: `/images/posters/${stem}-640.jpg`,
+    avif: `/images/posters/${stem}-640.avif`,
+    avifSet: `/images/posters/${stem}-400.avif 400w, /images/posters/${stem}-480.avif 480w, /images/posters/${stem}-640.avif 640w`,
+    srcset: `/images/posters/${stem}-640.jpg 640w, /images/posters/${stem}-1200.jpg 1200w`,
+    alt,
+    width: 640,
+    height,
+  };
+}
+
+function youtubeSample(
+  videoId: string,
+  title: string,
+  description: string,
+  thumb: [src: string, alt: string, width: number, height: number],
+  timing: [durationSeconds: number, publicationDate: string],
+  creator: NonNullable<VideoSample['creator']>,
+  tags: string[],
+): VideoSample {
+  return {
+    kind: 'youtube',
+    embedUrl: `https://www.youtube-nocookie.com/embed/${videoId}`,
+    watchUrl: `https://www.youtube.com/watch?v=${videoId}`,
+    title,
+    description,
+    thumbnail: { src: thumb[0], alt: thumb[1], width: thumb[2], height: thumb[3] },
+    durationSeconds: timing[0],
+    publicationDate: timing[1],
+    creator,
+    tags,
+  };
+}
+
+const credit = (role: string, name: string): Credit => ({ role, name });
+const extLink = (label: string, href: string, kind: ItemLink['kind']): ItemLink => ({ label, href, kind, external: true });
+
+interface ProductionFacts {
+  posterStem?: string;
+  posterHeight?: number;
+  status?: string;
+  releaseYear?: number;
+  releaseDate?: string;
+  expectedReleaseDate?: string;
+  runtime?: string;
+  runtimeSeconds?: number;
+  credits: Credit[];
+  sample?: VideoSample;
+  links: ItemLink[];
+  relatedCueSlugs: string[];
+  updatedAt?: string;
+}
+
+function entry(
+  slug: ProductionSlug,
+  title: string,
+  workType: string,
+  schemaType: ProductionSchemaType,
+  genres: string[],
+  facts: ProductionFacts,
+): Production {
+  const text = COPY[slug];
+  return {
+    slug,
+    title,
+    headline: text.headline,
+    summary: text.summary,
+    metaDescription: text.metaDescription,
+    workType,
+    schemaType,
+    genres,
+    ...(facts.status ? { status: facts.status } : {}),
+    ...(facts.releaseYear ? { releaseYear: facts.releaseYear } : {}),
+    ...(facts.releaseDate ? { releaseDate: facts.releaseDate } : {}),
+    ...(facts.expectedReleaseDate ? { expectedReleaseDate: facts.expectedReleaseDate } : {}),
+    ...(facts.runtime ? { runtime: facts.runtime } : {}),
+    ...(facts.runtimeSeconds ? { runtimeSeconds: facts.runtimeSeconds } : {}),
+    credits: facts.credits,
+    logline: text.logline,
+    paragraphs: [...text.paragraphs],
+    poster: posterArt(facts.posterStem ?? slug, text.posterAlt, facts.posterHeight),
+    ...(facts.sample ? { sample: facts.sample } : {}),
+    links: facts.links,
+    relatedCueSlugs: facts.relatedCueSlugs,
+    updatedAt: facts.updatedAt ?? defaultUpdatedAt,
+  };
+}
+
+const SAMPLES: Record<'expire' | 'phantomRequiem' | 'eclipsed' | 'theHaunted' | 'mikeVisitor', VideoSample> = {
+  expire: youtubeSample(
+    'lWm4Ies7edI',
+    'EXPIRE: official first-look clip',
+    'IMDb lists this YouTube video as the official first-look clip for the 2025 science-fiction short EXPIRE. It is a film clip, not represented here as a score excerpt.',
+    ['https://i.ytimg.com/vi/lWm4Ies7edI/hqdefault.jpg', 'EXPIRE: First-look clip still featuring dystopian sci-fi horror sound design by Zazie Kanwar-Torge with distressed mechanical foley.', 480, 360],
+    [95, '2026-04-23'],
+    { name: 'Muhammad Abed Baryal', type: 'Person', url: 'https://www.youtube.com/@MuhammadAbedBaryal' },
+    ['EXPIRE short film', 'science fiction short', 'film sound design'],
+  ),
+  phantomRequiem: youtubeSample(
+    'UX2kv3G89Jw',
+    'Phantom Requiem: experimental short film',
+    'The complete experimental short Phantom Requiem, published by Zazie Productions on June 20, 2024. The video runs 4 minutes 53 seconds.',
+    ['/images/project-UX2kv3G89Jw.jpg', 'Phantom Requiem: Experimental art house short film score by Zazie Kanwar-Torge featuring spectral synthesis and dark ambient textures.', 640, 480],
+    [293, '2024-06-20'],
+    { name: 'Zazie Productions', type: 'Organization', url: 'https://www.youtube.com/@zazieproductions', id: 'https://horror.zazieproductions.com/#org' },
+    ['Phantom Requiem', 'experimental short film', 'Zazie Productions'],
+  ),
+  eclipsed: {
+    kind: 'drive',
+    embedUrl: 'https://drive.google.com/file/d/1zKtAavEx-Yjd2To_troEYlxTTt62Y2OU/preview',
+    title: 'ECLIPSED project sample',
+    description: 'A Google Drive-hosted project sample associated with the existing ECLIPSED work entry. IMDb identifies ECLIPSED as a 2025 short and lists Zazie Kanwar-Torge and Noah C. Castro as composers.',
+    thumbnail: {
+      src: '/images/eclipsed-cover-1280.jpg',
+      alt: 'ECLIPSED: Surrealist body horror score sample by Zazie Kanwar-Torge featuring dissonant bowed metal and experimental synthesis.',
+      width: 1280,
+      height: 720,
+    },
+  },
+  theHaunted: youtubeSample(
+    'Ty8tPp59mDc',
+    'THE HAUNTED: official trailer',
+    'Official trailer for THE HAUNTED from Crystal Fox Films. The trailer is promotional film media, not presented as a separate score excerpt.',
+    ['/images/project-Ty8tPp59mDc.jpg', 'THE HAUNTED: Official trailer still with sci-fi psychological horror co-score by Zazie Kanwar-Torge featuring psychophonic beds.', 1280, 720],
+    [168, '2025-10-18'],
+    { name: 'Crystal Fox Films', type: 'Organization', url: 'https://www.youtube.com/@crystalfoxfilms' },
+    ['THE HAUNTED', 'psychological horror trailer', 'Crystal Fox Films'],
+  ),
+  mikeVisitor: youtubeSample(
+    'HaVJP08j77U',
+    'MIKE HAS A VISITOR: short film',
+    'The 14:23 YouTube upload of MIKE HAS A VISITOR, published by director Marco Saikaley on June 30, 2025. IMDb separately credits Zazie Kanwar-Torge as composer.',
+    ['/images/project-HaVJP08j77U.jpg', 'MIKE HAS A VISITOR: Short film still featuring psychological horror score by Zazie Kanwar-Torge with nerve-scraping string textures.', 320, 180],
+    [863, '2025-06-30'],
+    { name: 'Marco Saikaley', type: 'Person', url: 'https://www.youtube.com/@marcosaikaley' },
+    ['MIKE HAS A VISITOR', 'sleep paralysis horror', 'psychological horror short'],
+  ),
+};
+
+export const productions: Production[] = [
+  entry('expire', 'EXPIRE', 'Short film', 'Movie', ['Science fiction', 'Short film'], {
+    posterStem: 'expire-red-check',
+    posterHeight: 1138,
+    status: 'Released',
+    releaseYear: 2025,
+    releaseDate: '2025-12-20',
+    credits: [
+      credit('Director', 'Muhammad Abed Baryal'),
+      credit('Writer', 'Muhammad Abed Baryal'),
+      credit('Writer', 'Ines Rim Belabbas'),
+      credit('Composer', 'Patricia Chaylade'),
+      credit('Composer', 'Jorayo'),
+      credit('Composer', 'Brennan Mack'),
+      credit('Sound design', 'Zazie Kanwar-Torge'),
+    ],
+    sample: SAMPLES.expire,
+    links: [
+      extLink('EXPIRE on IMDb', 'https://www.imdb.com/title/tt19369318/', 'imdb'),
+      extLink('Official first-look clip', 'https://www.youtube.com/watch?v=lWm4Ies7edI', 'youtube'),
+    ],
+    relatedCueSlugs: ['needle-in-the-nerve', 'dissociative-amnesia'],
+    updatedAt: '2026-10-24',
+  }),
+  entry('unseen', 'UNSEEN', 'Feature film', 'Movie', ['Horror', 'Thriller'], {
+    posterHeight: 942,
+    status: 'Released',
+    releaseYear: 2026,
+    runtime: '1 hr 29 min',
+    runtimeSeconds: 5340,
+    credits: [credit('Director', 'Steve Merlo'), credit('Writer', 'Steve Merlo'), credit('Composer', 'Steve Merlo')],
+    links: [extLink('UNSEEN on IMDb', 'https://www.imdb.com/title/tt27330757/', 'imdb')],
+    relatedCueSlugs: ['panic-threshold', 'narrow-pulse', 'the-room-forgets-you'],
+  }),
+  entry('peregrinus', 'PEREGRINUS', 'TV series', 'TVSeries', ['Drama', 'Science fiction', 'Thriller'], {
+    status: 'Series premiere listed for 31 December 2026',
+    releaseYear: 2026,
+    expectedReleaseDate: '2026-12-31',
+    credits: [credit('Creator', 'Dévi Mboto'), credit('Co-composer', 'Zazie Kanwar-Torge')],
+    links: [extLink('PEREGRINUS on IMDb', 'https://www.imdb.com/title/tt43438100/', 'imdb')],
+    relatedCueSlugs: ['quarter-eater-poltergeist', 'rlyehs-xenolith', 'deep-dystopian-synth-cue'],
+  }),
+  entry('phantom-requiem', 'Phantom Requiem', 'Experimental short film', 'CreativeWork', ['Experimental film', 'Experimental Art House'], {
+    status: 'Published online',
+    releaseYear: 2024,
+    releaseDate: '2024-06-20',
+    runtime: '4 min 53 sec',
+    runtimeSeconds: 293,
+    credits: [credit('Creator', 'Zazie Productions')],
+    sample: SAMPLES.phantomRequiem,
+    links: [
+      extLink('Watch Phantom Requiem on YouTube', 'https://www.youtube.com/watch?v=UX2kv3G89Jw', 'youtube'),
+      extLink('Read David Finkelstein review in Lake Ivan Film Journal', 'https://lakeivan.substack.com/p/spinning-in-the-wildness-phantom', 'press'),
+      extLink('Visual Container Winter 2024 Award Winners Press Release (PDF)', 'https://www.visualcontainer.tv/wp-content/uploads/2025/01/Winter-2024-Award-Winners_Press-Release.pdf', 'press'),
+    ],
+    relatedCueSlugs: ['fractured-requiem', 'opaline-lament-life-from-the-beyond', 'the-beautiful-wrongness'],
+  }),
+  entry('eclipsed', 'ECLIPSED', 'Short film', 'Movie', ['Horror', 'Body Horror', 'Psychological Horror', 'Short film'], {
+    status: 'Released',
+    releaseYear: 2025,
+    releaseDate: '2025-05-10',
+    credits: [
+      credit('Director', 'William Viera'),
+      credit('Writer', 'William Viera'),
+      credit('Composer', 'Zazie Kanwar-Torge'),
+      credit('Composer', 'Noah C. Castro'),
+    ],
+    sample: SAMPLES.eclipsed,
+    links: [extLink('ECLIPSED on IMDb', 'https://www.imdb.com/title/tt36984141/', 'imdb')],
+    relatedCueSlugs: ['the-room-forgets-you', 'time-shifting-into-daylight', 'variations-on-a-vanishing-body'],
+  }),
+  entry('the-haunted', 'THE HAUNTED', 'Short film', 'Movie', ['Horror', 'Psychological Horror', 'Science fiction', 'Thriller'], {
+    status: 'Completed',
+    runtime: '46 min',
+    runtimeSeconds: 2760,
+    credits: [
+      credit('Director', 'Mike Fox'),
+      credit('Writer', 'Mike Fox'),
+      credit('Co-composer', 'Zazie Kanwar-Torge'),
+      credit('Co-composer', 'Robert Mason Sandifer'),
+    ],
+    sample: SAMPLES.theHaunted,
+    links: [
+      extLink('THE HAUNTED on IMDb', 'https://www.imdb.com/title/tt37707793/', 'imdb'),
+      extLink('Official film site', 'https://thehauntedmovie.com/', 'press'),
+      extLink('Official trailer', 'https://www.youtube.com/watch?v=Ty8tPp59mDc', 'youtube'),
+    ],
+    relatedCueSlugs: ['scraping-psychophonic-bed', 'dark-ambient-soundscape-no-1', 'hidden-intentions-serene-purgatory'],
+  }),
+  entry('choleric', 'CHOLERIC', 'Short film', 'Movie', ['Crime', 'Drama', 'Horror', 'Mystery'], {
+    status: 'Post-production',
+    credits: [
+      credit('Director', 'Sebastian Fabres'),
+      credit('Writer', 'Aryane Carby'),
+      credit('Writer', 'Sebastian Fabres'),
+      credit('Co-producer', 'Zazie Kanwar-Torge'),
+    ],
+    links: [extLink('CHOLERIC on IMDb', 'https://www.imdb.com/title/tt38637541/', 'imdb')],
+    relatedCueSlugs: ['brutalist-tension-stinger', 'the-fatal-overdose', 'smell-of-bleach'],
+  }),
+  entry('mike-has-a-visitor', 'MIKE HAS A VISITOR', 'Short film', 'Movie', ['Horror', 'Psychological Horror', 'Short film'], {
+    credits: [
+      credit('Director', 'Marco Saikaley'),
+      credit('Writer', 'Marco Saikaley'),
+      credit('Composer', 'Zazie Kanwar-Torge'),
+    ],
+    sample: SAMPLES.mikeVisitor,
+    links: [
+      extLink('MIKE HAS A VISITOR on IMDb', 'https://www.imdb.com/title/tt36954700/', 'imdb'),
+      extLink('Watch the short on YouTube', 'https://www.youtube.com/watch?v=HaVJP08j77U', 'youtube'),
+    ],
+    relatedCueSlugs: ['needle-in-the-nerve', 'the-silence-began-crawling', 'the-room-forgets-you'],
+  }),
+  entry('the-dark-awaits', 'THE DARK AWAITS', 'Reality-TV series', 'TVSeries', ['Reality television', 'Paranormal', 'Supernatural Thriller'], {
+    runtime: '45 min',
+    runtimeSeconds: 2700,
+    credits: [credit('Composer', 'Zazie Kanwar-Torge')],
+    links: [extLink('THE DARK AWAITS on IMDb', 'https://www.imdb.com/title/tt43505987/', 'imdb')],
+    relatedCueSlugs: ['scraping-psychophonic-bed', 'ominous-drone', 'dark-ambient-soundscape-no-2'],
+  }),
 ];

@@ -16,6 +16,11 @@
 4. **Audio library is the payload centre** (~30 MP3s in-repo). Growth is
    linear; external storage/LFS is a recorded future option, not current state.
 5. **External embeds are fragile by nature** (YouTube/Drive/Bandcamp/marketplace
-   CDNs) and governed by CSP allowlists + the `/privacy` inventory.
+   CDNs) and governed by CSP allowlists + the `/privacy` inventory. In
+   particular, the Google Drive sample on `/work/eclipsed` serves a large-file
+   virus-scan interstitial with no public upload date, so `VideoObject` and
+   `<video:video>` are intentionally omitted there rather than inventing an
+   `uploadDate`.
 6. **Stale counts in older prose.** Pre-overhaul docs cited 19 hubs / 65 items /
-   32 cues / 84 URLs; verified current counts are 17 / 63 / 30 / 80.
+   32 cues / 84 URLs; verified current counts are 17 / 63 / 30 / 80 (74 sitemap
+   images, 4 dedicated watch-page videos).

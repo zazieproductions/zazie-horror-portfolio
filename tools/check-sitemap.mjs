@@ -436,6 +436,12 @@ for (const urlEl of urls) {
   /* video extension */
   const videos = kids(urlEl).filter((k) => resolve(k, k.name).local === 'video');
   if (videos.length && !declaredVideo) err('video:video used but the video namespace is not declared on <urlset>');
+  if (videos.length && robots && !isAllowed(robots, 'googlebot-video', u)) {
+    err(`${short}: blocked for Googlebot-Video by robots.txt`);
+  }
+  if (videos.length > 1) {
+    err(`${short}: lists ${videos.length} <video:video> entries; Google indexes at most one prominent video per dedicated watch page`);
+  }
   videoCount += videos.length;
 
   for (const vid of videos) {
@@ -448,6 +454,7 @@ for (const urlEl of urls) {
     else {
       try {
         const tu = new URL(thumb);
+        if (tu.protocol !== 'https:') err(`${label}: thumbnail_loc must use https`);
         if (tu.host === SITE_HOST && !fs.existsSync(path.join(ROOT, decodeURIComponent(tu.pathname)))) {
           err(`${label}: thumbnail missing from disk: ${tu.pathname}`);
         }
@@ -480,22 +487,74 @@ for (const urlEl of urls) {
       if (contentLoc && text(contentLoc) === pv) {
         err(`${label}: video:content_loc and video:player_loc are identical`);
       }
+      if (playerLoc.attrs && ('allow_embed' in playerLoc.attrs || 'autoplay' in playerLoc.attrs)) {
+        err(`${label}: video:player_loc uses deprecated attributes (allow_embed / autoplay)`);
+      }
+    }
+
+    for (const deprecated of ['category', 'gallery_loc', 'price', 'tvshow']) {
+      if (child(vid, deprecated)) err(`${label}: uses deprecated Google video sitemap tag <video:${deprecated}>`);
     }
 
     const dur = child(vid, 'duration');
     if (dur) {
       const d = Number(text(dur));
-      if (!Number.isInteger(d) || d < 1 || d > 86400) err(`${label}: video:duration must be 1-86400 seconds`);
+      if (!Number.isInteger(d) || d < 1 || d > 28800) {
+        err(`${label}: video:duration must be 1-28800 seconds (Google Video Sitemap spec limit)`);
+      }
     }
     const pub = child(vid, 'publication_date');
-    if (pub && !validDate(text(pub))) err(`${label}: publication_date "${text(pub)}" is not a valid W3C datetime`);
+    if (!pub) err(`${label}: missing <video:publication_date> (keep in lockstep with VideoObject.uploadDate)`);
+    else if (!validDate(text(pub))) err(`${label}: publication_date "${text(pub)}" is not a valid W3C datetime`);
     const ff = child(vid, 'family_friendly');
     if (ff && !/^(yes|no)$/i.test(text(ff))) err(`${label}: family_friendly must be "yes" or "no"`);
+    const reqSub = child(vid, 'requires_subscription');
+    if (reqSub && !/^(yes|no)$/i.test(text(reqSub))) err(`${label}: requires_subscription must be "yes" or "no"`);
+    const liveEl = child(vid, 'live');
+    if (liveEl && !/^(yes|no)$/i.test(text(liveEl))) err(`${label}: live must be "yes" or "no"`);
+    const uploaderEl = child(vid, 'uploader');
+    if (uploaderEl?.attrs?.info) {
+      try {
+        const uu = new URL(uploaderEl.attrs.info);
+        if (uu.protocol !== 'https:') err(`${label}: video:uploader info must use https`);
+      } catch { err(`${label}: video:uploader info is not an absolute URL`); }
+    }
+    const platformEl = child(vid, 'platform');
+    if (platformEl) {
+      const rel = platformEl.attrs?.relationship;
+      if (!/^(allow|deny)$/.test(rel || '')) err(`${label}: video:platform requires relationship="allow" or "deny"`);
+      const tokens = text(platformEl).trim().split(/\s+/).filter(Boolean);
+      if (!tokens.length || tokens.some((t) => !/^(web|mobile|tv)$/.test(t))) {
+        err(`${label}: video:platform values must be space-separated tokens from {web, mobile, tv}`);
+      }
+    }
 
     const tags = kids(vid).filter((k) => resolve(k, k.name).local === 'tag');
     if (tags.length > MAX_TAGS_PER_VIDEO) err(`${label}: ${tags.length} tags - limit is ${MAX_TAGS_PER_VIDEO}`);
 
     checkOrder(vid, ORDER.video, label);
+
+    if (file && file.endsWith('.html')) {
+      const pageHtml = fs.readFileSync(file, 'utf8');
+      const expectedPlayer = playerLoc ? text(playerLoc) : text(contentLoc);
+      if (expectedPlayer && !pageHtml.includes(`src="${expectedPlayer}"`)) {
+        err(`${label}: host page ${short} does not render <iframe/video src="${expectedPlayer}"> in initial HTML without user interaction`);
+      }
+      const ldMatches = [...pageHtml.matchAll(/<script\s+type="application\/ld\+json">([\s\S]*?)<\/script>/gi)];
+      const videoObjects = ldMatches
+        .map((m) => { try { return JSON.parse(m[1]); } catch { return null; } })
+        .filter((n) => n && n['@type'] === 'VideoObject');
+      if (videoObjects.length !== 1) {
+        err(`${label}: host page ${short} must declare exactly one matching VideoObject JSON-LD node (found ${videoObjects.length})`);
+      } else {
+        const vo = videoObjects[0];
+        const voThumbs = Array.isArray(vo.thumbnailUrl) ? vo.thumbnailUrl : [vo.thumbnailUrl];
+        if (vo.name !== title) err(`${label}: VideoObject.name (${JSON.stringify(vo.name)}) !== <video:title>`);
+        if (!voThumbs.includes(thumb)) err(`${label}: VideoObject.thumbnailUrl (${JSON.stringify(voThumbs)}) does not include <video:thumbnail_loc> (${thumb})`);
+        if (pub && vo.uploadDate !== text(pub)) err(`${label}: VideoObject.uploadDate (${JSON.stringify(vo.uploadDate)}) !== <video:publication_date>`);
+        if (playerLoc && vo.embedUrl !== text(playerLoc)) err(`${label}: VideoObject.embedUrl (${JSON.stringify(vo.embedUrl)}) !== <video:player_loc>`);
+      }
+    }
   }
 
   liveTargets.push(loc);

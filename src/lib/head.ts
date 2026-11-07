@@ -2,7 +2,6 @@
 
 import {
   AUTHOR_NAME,
-  INDEXABLE_ROBOTS,
   ORG_ID,
   PERSON_ID,
   SITE_NAME,
@@ -16,13 +15,22 @@ import {
 } from '../data/site.js';
 import { deepLinkGenres } from '../data/entities.js';
 import { stripMarkup } from '../data/routes.js';
-import type { Cue, Credit, Image, Json, Production, Release } from '../data/types.js';
+import type { Cue, Image, Json, Production, Release, VideoSample } from '../data/types.js';
 
 export interface OgImage {
   url: string;
   alt: string;
   width: number;
   height: number;
+}
+
+export interface OgVideo {
+  embedUrl: string;
+  thumbnailUrl: string;
+  width: number;
+  height: number;
+  durationSeconds?: number;
+  releaseDate?: string;
 }
 
 export interface PageHead {
@@ -32,6 +40,7 @@ export interface PageHead {
   robots: string;
   ogType: string;
   image?: OgImage;
+  video?: OgVideo;
   jsonLd: Json[];
 }
 
@@ -41,6 +50,20 @@ export const OG_TYPES = {
   music: 'music.song',
   product: 'product',
 } as const;
+
+/**
+ * A production route qualifies for VideoObject structured data, Open Graph
+ * video metadata, and a <video:video> sitemap entry only when all three
+ * Google-required VideoObject properties (name, thumbnailUrl, uploadDate) are
+ * verified from a crawlable primary source.
+ */
+export function hasIndexableVideo(production: Production): boolean {
+  return Boolean(
+    production.sample?.publicationDate &&
+    production.sample.title.trim() &&
+    production.sample.thumbnail?.src.trim(),
+  );
+}
 
 /** Metadata is serialized directly into HTML. No browser-side head mutation. */
 export function seoBlock(head: PageHead): string {
@@ -69,6 +92,23 @@ export function seoBlock(head: PageHead): string {
       `<meta property="og:image:width" content="${head.image.width}"/>`,
       `<meta property="og:image:height" content="${head.image.height}"/>`,
     );
+  }
+  if (head.video) {
+    const embed = escapeHtml(head.video.embedUrl);
+    lines.push(
+      `<meta property="og:video" content="${embed}"/>`,
+      `<meta property="og:video:secure_url" content="${embed}"/>`,
+      '<meta property="og:video:type" content="text/html"/>',
+      `<meta property="og:video:width" content="${head.video.width}"/>`,
+      `<meta property="og:video:height" content="${head.video.height}"/>`,
+      `<meta property="og:video:image" content="${escapeHtml(head.video.thumbnailUrl)}"/>`,
+    );
+    if (head.video.durationSeconds) {
+      lines.push(`<meta property="video:duration" content="${head.video.durationSeconds}"/>`);
+    }
+    if (head.video.releaseDate) {
+      lines.push(`<meta property="video:release_date" content="${escapeHtml(head.video.releaseDate)}"/>`);
+    }
   }
   lines.push(
     `<meta name="twitter:card" content="${head.image ? 'summary_large_image' : 'summary'}"/>`,
@@ -110,6 +150,7 @@ export interface WebPageInput {
   description: string;
   lastmod: string;
   aboutId?: string;
+  videoId?: string;
 }
 
 export function webPageNode(input: WebPageInput): Json {
@@ -122,6 +163,7 @@ export function webPageNode(input: WebPageInput): Json {
     description: input.description,
     isPartOf: { '@id': WEBSITE_ID },
     about: { '@id': input.aboutId ?? PERSON_ID },
+    ...(input.videoId ? { video: { '@id': input.videoId } } : {}),
     author: { '@id': PERSON_ID },
     publisher: { '@id': ORG_ID },
     inLanguage: 'en',
@@ -150,10 +192,14 @@ export function productionNodes(production: Production, path: string): Json[] {
   const published = production.releaseDate ??
     (production.status === 'Released' && production.releaseYear ? String(production.releaseYear) : undefined);
 
+  const workId = `${url(path)}#work`;
+  const videoId = `${url(path)}#video`;
+  const indexableVideo = hasIndexableVideo(production);
+
   const work: Json = {
     '@context': 'https://schema.org',
     '@type': production.schemaType,
-    '@id': `${url(path)}#work`,
+    '@id': workId,
     url: url(path),
     name: production.title,
     description: production.summary,
@@ -173,29 +219,46 @@ export function productionNodes(production: Production, path: string): Json[] {
     ...(directors.length ? { director: directors } : {}),
     ...(composers.length ? { composer: composers, musicBy: composers } : {}),
     ...(productionCompanies.length ? { productionCompany: productionCompanies } : {}),
+    ...(indexableVideo ? { subjectOf: { '@id': videoId } } : {}),
     isPartOf: { '@id': WEBSITE_ID },
     mainEntityOfPage: { '@id': `${url(path)}#webpage` },
     dateModified: production.updatedAt,
   };
 
   const nodes: Json[] = [work];
-  if (production.sample) {
+  if (indexableVideo && production.sample?.publicationDate) {
     const sample = production.sample;
-    nodes.push({
+    const uploadDate: string = production.sample.publicationDate;
+    const videoCreator: Json | undefined = sample.creator
+      ? {
+          '@type': sample.creator.type,
+          ...(sample.creator.id ? { '@id': sample.creator.id } : {}),
+          name: sample.creator.name,
+          ...(sample.creator.url ? { url: sample.creator.url } : {}),
+        }
+      : undefined;
+    const videoNode: Json = {
       '@context': 'https://schema.org',
       '@type': 'VideoObject',
-      '@id': `${url(path)}#video`,
+      '@id': videoId,
       name: sample.title,
       description: sample.description,
       thumbnailUrl: [url(sample.thumbnail.src)],
+      uploadDate,
       embedUrl: sample.embedUrl,
       ...(sample.watchUrl ? { url: sample.watchUrl } : {}),
-      ...(sample.publicationDate ? { uploadDate: sample.publicationDate } : {}),
       ...(sample.durationSeconds ? { duration: isoDuration(sample.durationSeconds) } : {}),
-      ...(sample.creator ? { creator: { '@type': sample.creator.type, name: sample.creator.name } } : {}),
+      inLanguage: 'en',
+      isFamilyFriendly: true,
+      isAccessibleForFree: true,
+      genre: deepLinkGenres(production.genres),
+      ...(sample.tags?.length ? { keywords: sample.tags.join(', ') } : {}),
+      ...(videoCreator ? { creator: videoCreator } : {}),
+      about: { '@id': workId },
       isPartOf: { '@id': WEBSITE_ID },
       mainEntityOfPage: { '@id': `${url(path)}#webpage` },
-    });
+    };
+    nodes.push(videoNode);
   }
   return nodes;
 }
@@ -288,6 +351,18 @@ export function ogImageFor(image: Image): OgImage {
     alt: image.alt,
     width: image.width,
     height: image.height,
+  };
+}
+
+/** Open Graph video metadata aligned with VideoObject and <video:video>. */
+export function ogVideoFor(sample: VideoSample): OgVideo {
+  return {
+    embedUrl: sample.embedUrl,
+    thumbnailUrl: url(sample.thumbnail.src),
+    width: 1280,
+    height: 720,
+    ...(sample.durationSeconds ? { durationSeconds: sample.durationSeconds } : {}),
+    ...(sample.publicationDate ? { releaseDate: sample.publicationDate } : {}),
   };
 }
 

@@ -112,6 +112,7 @@ for (const route of allRoutes) {
   if (canonical.length !== 1 || canonical[0][1] !== expected) fail(`${route.path}: canonical is not uniquely self-referential`);
   if (!robots || /\bnoindex\b/i.test(robots) || !/\bindex\b/i.test(robots)) fail(`${route.path}: missing indexable robots metadata`);
   if (SNIPPET_BLOCK.test(robots)) fail(`${route.path}: robots metadata blocks search snippets (nosnippet / max-snippet:0)`);
+  if (!/\bmax-video-preview\s*:\s*-1\b/i.test(robots)) fail(`${route.path}: robots metadata is missing max-video-preview:-1`);
   if (!html.includes(`property="og:url" content="${expected}"`)) fail(`${route.path}: missing route-specific og:url`);
   if (!/<meta\s+name="twitter:card"/i.test(html)) fail(`${route.path}: missing Twitter card metadata`);
   if (/(?:href|src)="#"/.test(html)) fail(`${route.path}: contains a placeholder # link`);
@@ -317,7 +318,40 @@ for (const item of items) {
     const production = productionBySlug.get(item.slug);
     const schemaType = production.schemaType;
     if (!types.includes(schemaType)) fail(`${item.path}: missing ${schemaType} structured data`);
-    if (Boolean(production.sample) !== types.includes('VideoObject')) fail(`${item.path}: VideoObject does not match verified sample availability`);
+    const expectsVideoObject = Boolean(production.sample?.publicationDate);
+    if (expectsVideoObject !== types.includes('VideoObject')) {
+      fail(`${item.path}: VideoObject does not match verified indexable video availability (requires sample.publicationDate)`);
+    }
+    if (expectsVideoObject) {
+      const videoNode = nodes.find((node) => node?.['@type'] === 'VideoObject');
+      const expectedThumb = url(production.sample.thumbnail.src);
+      if (!videoNode?.name || !videoNode?.uploadDate || !videoNode?.embedUrl) {
+        fail(`${item.path}: VideoObject is missing required name, uploadDate, or embedUrl`);
+      }
+      if (!Array.isArray(videoNode?.thumbnailUrl) || !videoNode.thumbnailUrl.includes(expectedThumb)) {
+        fail(`${item.path}: VideoObject.thumbnailUrl must include ${expectedThumb}`);
+      }
+      if (!html.includes(`property="og:video" content="${escapeHtml(production.sample.embedUrl)}"`)) {
+        fail(`${item.path}: missing og:video matching VideoObject.embedUrl`);
+      }
+      if (!html.includes(`property="og:video:image" content="${escapeHtml(expectedThumb)}"`)) {
+        fail(`${item.path}: missing og:video:image matching VideoObject.thumbnailUrl`);
+      }
+      if (!html.includes(`property="og:image" content="${escapeHtml(expectedThumb)}"`)) {
+        fail(`${item.path}: og:image does not match VideoObject.thumbnailUrl on video watch page`);
+      }
+    }
+    if (production.sample) {
+      const sampleAt = html.indexOf('<section class="clause" id="sample">');
+      const entryAt = html.indexOf('<section class="clause" id="entry">');
+      if (sampleAt === -1 || entryAt === -1 || sampleAt > entryAt) {
+        fail(`${item.path}: watch page must render #sample above #entry so the video appears above the fold`);
+      }
+      const iframeTag = /<div class="entry-embed">\s*(<iframe\b[^>]*>)/i.exec(html)?.[1] ?? '';
+      if (!iframeTag || /\bloading="lazy"/i.test(iframeTag)) {
+        fail(`${item.path}: primary watch-page iframe must not be deferred with loading="lazy"`);
+      }
+    }
     const workNode = nodes.find((node) => node?.['@type'] === schemaType);
     const composerNames = production.credits.filter((credit) => /composer/i.test(credit.role)).map((credit) => credit.name);
     if (composerNames.length && !workNode?.composer) fail(`${item.path}: verified composer credit missing from schema`);
