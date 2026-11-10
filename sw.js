@@ -142,7 +142,12 @@
 // v58: deterministic homepage head order and current legal/item asset hashes;
 // refresh the precached document and retire the stale document script names.
 // v60: combine the refreshed homepage and document layouts with updated cue notes.
-const CACHE_NAME = 'zazie-v60';
+// v61: cannibalisation pass - /how-to-hire-a-horror-composer is retargeted from
+// the pillar's transactional "hire a horror composer" query to the informational
+// budgeting/vetting queries behind it, and the two Opaline Lament records split
+// into listen (reel) vs. buy (catalogue). The homepage footer label changes with
+// it, re-hashing index-<hash>.js and rewriting the precached document.
+const CACHE_NAME = 'zazie-v61';
 
 const PRECACHE_ASSETS = [
   '/',
@@ -151,7 +156,7 @@ const PRECACHE_ASSETS = [
   '/fonts/cormorant-garamond-latin-400-italic.woff2',
   '/fonts/inter-latin-wght-normal.woff2',
   '/index-3465aa44.css',
-  '/index-826e60e7.js',
+  '/index-cc1a17aa.js',
   '/store-1e13177a.css',
   '/store-3fc01be0.js',
   '/legal-f4e3a5fb.css',
