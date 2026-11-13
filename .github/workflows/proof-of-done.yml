@@ -1,0 +1,62 @@
+name: Proof of Done
+
+# Check that a pull request's tests are still tests.
+#
+# WHY THIS EXISTS
+#
+# "Done, tests pass" is only true if the tests are still there. A suite also
+# passes when the failing test was deleted, given a .skip, stripped of its
+# assertion, or replaced with expect(true) that cannot fail -- and nobody reads
+# the diff of tools/*.test.mjs. This workflow diffs the pull request against its
+# base commit and fails on those edits (POD001-POD005), and on edits to CI or to
+# this checker's own config (POD008), so the guardrail cannot be removed as part
+# of the change it is supposed to guard.
+#
+# It is deterministic: git plus syntax trees plus (optionally) a JUnit report,
+# with no model call, so a run costs nothing and takes about a second. Findings
+# arrive as annotations on the pull request.
+#
+# When a test change is intended, add the `proof-of-done: allow` label: the
+# findings are still reported, the check does not fail. The label only matters
+# if the check is not required, or a reviewer adds it -- see below.
+#
+# SETUP (once, in repository settings)
+#
+#   1. Make "Proof of Done" a required status check on main.
+#   2. Add a CODEOWNERS entry for this file and tools/*.test.mjs. A pull
+#      request can edit its own workflow, so without code owner review the
+#      guardrail is advisory: it only means something if the checker itself and
+#      the tests it reads need an owner's approval to change.
+#
+# The action installs its CLI into $RUNNER_TEMP rather than the checkout, so a
+# pull request cannot supply its own copy of the checker.
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: proof-of-done-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  proof-of-done:
+    name: Proof of Done
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # The base commit has to be present to diff the test changes against.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - uses: wasaybuilds/proof-of-done@v0
+        id: verify
+        with:
+          allow-label: 'proof-of-done: allow'
