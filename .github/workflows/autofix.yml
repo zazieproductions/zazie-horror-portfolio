@@ -1,0 +1,32 @@
+name: autofix.ci  # needed to securely identify the workflow
+
+on:
+  pull_request:
+  push:
+    branches: [ "main" ]
+permissions:
+  contents: read
+
+jobs:
+  autofix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      # Format the TypeScript / JavaScript source with Prettier. `npm ci`
+      # installs the pinned Prettier from devDependencies; `.prettierrc`
+      # matches the repo's existing style (single quotes, 120 cols) and
+      # `.prettierignore` keeps the formatter away from generated site
+      # output, content-hashed bundle sources (store-src/, legal-src/,
+      # src/**/*.css) and the pristine React bundle, so a formatting pass
+      # can never change a hashed asset name or desync the tree from
+      # `npm run build` (which the deploy workflow verifies).
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - run: npm ci
+
+      - run: npx prettier --write .
+
+      - uses: autofix-ci/action@c5b2d67aa2274e7b5a18224e8171550871fc7e4a
