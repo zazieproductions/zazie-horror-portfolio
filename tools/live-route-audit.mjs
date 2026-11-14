@@ -23,8 +23,10 @@
  *   2. the ".html" form of each URL        -> 308 to the canonical (or an
  *                                             explicit legacy 301 in _redirects)
  *   3. trailing-slash form of each URL      -> 200 for the original directory
- *                                             hubs, 404 for flat item routes
- *                                             (there is no item slash twin)
+ *                                             hubs; for a flat item route, a
+ *                                             308 to the slashless canonical
+ *                                             (Pages' own consolidation) or a
+ *                                             real noindex 404 -- never a 200
  *   4. unknown paths and slash twins        -> HTML 404 with noindex
  *   5. homepage release: .zp-hero-laurels below the headline, all four marks
  *      in both the served HTML and the React bundle it imports
@@ -223,11 +225,15 @@ async function run() {
     if (SITEMAP_PATHS.includes(targetOf(p))) {
       if (p.endsWith('.html')) return { accepts: [{ status: 308, to: targetOf(p) }] };
       if (p.endsWith('/') && p !== '/') {
-        // Original hubs still have directory indexes; a flat item has no
-        // <slug>/index.html twin and must remain a real noindex 404.
-        return hasDirectoryIndex(targetOf(p))
-          ? { accepts: [{ status: 200, to: null }] }
-          : { accepts: [{ status: 404, to: null }] };
+        // Original hubs still have directory indexes: 200 from <hub>/index.html.
+        if (hasDirectoryIndex(targetOf(p))) return { accepts: [{ status: 200, to: null }] };
+        // A flat item has no <slug>/index.html twin. Cloudflare Pages answers
+        // its trailing-slash spelling with its own 308 to the slashless
+        // canonical -- correct consolidation onto the one canonical URL, and
+        // the same answer the .html alias gets. A real noindex 404 is equally
+        // acceptable where the host does not canonicalise. What must never
+        // happen is a 200 here: that would be a duplicate of the item page.
+        return { accepts: [{ status: 404, to: null }, { status: 308, to: targetOf(p) }] };
       }
       // Slashless canonical. Served directly as 200 when a root twin exists;
       // otherwise Cloudflare Pages answers the directory route with its own
@@ -272,7 +278,7 @@ async function run() {
       location: r.location || '-',
       want,
       ok: rowOk(r),
-      note: r.error ? ` (${r.error})` : expectsNoindex(r) && !r.noindex ? ' (missing noindex)' : '',
+      note: r.error ? ` (${r.error})` : expectsNoindex(r) && r.status === 404 && !r.noindex ? ' (missing noindex)' : '',
     };
   };
 
@@ -473,7 +479,7 @@ async function run() {
       const groups = [
         ['canonical URL (expected 200)', canonFail],
         ['.html alias (expected 308 to the canonical, or the 301 _redirects wrote)', aliasFail.filter((f) => f.kind === '.html')],
-        ['trailing-slash alias (expected 200 for a hub directory index, 404 for an item)', aliasFail.filter((f) => f.kind !== '.html')],
+        ['trailing-slash alias (expected 200 for a hub directory index, or 308 to the slashless canonical / noindex 404 for an item)', aliasFail.filter((f) => f.kind !== '.html')],
         ['unknown path (expected 404 with noindex)', unknownFail],
         ['homepage release (four laurels in HTML and React)', releaseFail],
         ['delivery (security headers, caching, compression)', deliveryFail.map((d) => ({ url: `${d.url} [${d.header}]`, status: d.ok ? 200 : 'FAIL', location: '', note: '' }))],
@@ -511,7 +517,7 @@ async function run() {
   line(`  200: ${canonical.filter((r) => r.status === 200).length}   other: ${canonical.filter((r) => r.status !== 200).length}   failing: ${canonFail.length}`);
   line('');
   line(`### alias forms (${alias.length})`);
-  line('  .html: 308 (or the explicit legacy 301); hub slash form: 200; item slash twin: 404 with noindex');
+  line('  .html: 308 (or the explicit legacy 301); hub slash form: 200; item slash twin: 308 to the canonical, or 404 with noindex');
   const shapes = alias.reduce((acc, r) => {
     const key = `${r.kind} -> ${r.status}`;
     acc[key] = (acc[key] || 0) + 1;

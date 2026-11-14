@@ -19,13 +19,16 @@ is the signal Google uses for an HTML page, and it is correct on all 80 routes.
 | `/work/` | `work/index.html` | 200 |
 | `/work/<slug>` | flat `work/<slug>.html` | 200, no redirect hop |
 | `/work/<slug>.html` | → `/work/<slug>` | redirect (see `_redirects`) |
-| `/work/<slug>/` | `404.html` (no slash twin for items) | **404** |
+| `/work/<slug>/` | → `/work/<slug>` (no slash twin for items) | 308 |
 | Unknown path | `404.html` ("Signal Lost", `noindex`) | **404** |
 
 Rules that protect this:
 
 - Hub routes exist as `<hub>/index.html` **plus a byte-identical root
-  `<hub>.html` twin**; item routes are flat files with **no** slash twin.
+  `<hub>.html` twin**; item routes are flat files with **no** slash twin, so
+  Cloudflare Pages answers their trailing-slash spelling with its own 308 to
+  the slashless canonical. `tools/live-route-audit.mjs` accepts that 308 (or a
+  real noindex 404) and fails on a 200, which would be a duplicate item page.
 - There is deliberately **no SPA fallback** (`/* /index.html 200` would turn
   every typo into a soft-404 duplicate of the homepage).
 - `_redirects` holds legacy aliases (e.g. `/contact` → `/#contact`,
