@@ -8,10 +8,23 @@
   `.github/workflows/deploy.yml`.
 - **Upload contents:** `node scripts/build-deploy-dir.mjs dist` — repo root
   minus `.git`, `.github`, `node_modules`, `build`, `scripts`, `src`, `tools`,
-  `store-src`, `legal-src`, `home-src`, `server.mjs`, and all `*.md`/`*.json`.
+  `store-src`, `legal-src`, `home-src`, `functions`, `migrations`,
+  `wrangler.toml`, `server.mjs`, and all `*.md`/`*.json`.
   It refuses trees missing `index.html`, `404.html`, `sw.js`, `sitemap.xml`,
   `robots.txt` or the IndexNow key file, trees where a sitemap URL doesn't
   resolve, >20,000 files, or any file >25 MB.
+- **Pages Function + D1:** `POST /api/inquiry` is
+  `functions/api/inquiry.ts`, which lives at the **repository root**, not in
+  `dist` — Cloudflare requires the `functions` directory at the project root
+  and `wrangler pages deploy` bundles it itself. `wrangler.toml` declares the
+  Pages project and the D1 binding `DB` (`database_name = "zazie-inquiries"`).
+  Setup, once: create the database (Workers & Pages → D1 → Create database,
+  named `zazie-inquiries`), put its UUID in `wrangler.toml` in place of the
+  placeholder, then `npx wrangler d1 migrations apply zazie-inquiries --remote`.
+  Until the binding exists the endpoint answers 503 and the form falls back to
+  the `mailto:` handoff. After every production deploy, a workflow step GETs
+  `/api/inquiry` and fails on anything but 405 (405 = Function live; 404 = not
+  deployed; 503 = binding missing).
 - **Required secrets (names only):** `CLOUDFLARE_API_TOKEN` (Pages:Edit),
   `CLOUDFLARE_ACCOUNT_ID`. Without both, CI still builds/tests/assembles but
   deploys nothing and warns — by design.

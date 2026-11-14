@@ -41,11 +41,19 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.resolve(process.argv[2] || path.join(ROOT, 'dist'));
 
-/* Not the site: build inputs, tooling, sources, and local development files. */
+/* Not the site: build inputs, tooling, sources, and local development files.
+   `functions` and `migrations` are deliberately NOT uploaded: a Pages Function
+   lives at the root of the Pages project, not in the static root, and
+   `wrangler pages deploy` bundles ./functions itself (Cloudflare: "Make sure
+   that the /functions directory is at the root of your Pages project (and not
+   in the static root, such as /dist)"). Copying it into dist would publish the
+   endpoint's TypeScript source at /functions/api/inquiry.ts and would not
+   deploy the route. `wrangler.toml` is read from the repository root too. */
 const EXCLUDE_NAMES = new Set([
   '.git', '.github', '.gitignore', '.audit',
   'node_modules', 'build', 'dist',
   'scripts', 'src', 'tools', 'store-src', 'legal-src', 'home-src', 'public',
+  'functions', 'migrations', 'wrangler.toml',
   'server.mjs',
 ]);
 const EXCLUDE_EXT = new Set(['.md', '.json']);

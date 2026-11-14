@@ -141,16 +141,23 @@ function selectOptions(values: readonly string[], selected?: string): string {
 }
 
 /**
- * Structured inquiry form for the homepage inquiry section. It prepares an email; nothing is
- * sent by the site. Budget and musical references sit in the always-visible
- * part of the form: they are the two inputs a quote is now built from, and
- * the budget is stated by the visitor, in bands, never suggested by a
- * package price.
+ * Structured inquiry form for the homepage inquiry section. It posts to
+ * POST /api/inquiry on this origin (functions/api/inquiry.ts), which stores
+ * the submission so it can be answered; the `mailto:` action is the no-JS
+ * path and the fallback when that endpoint cannot be reached. Budget and
+ * musical references sit in the always-visible part of the form: they are the
+ * two inputs a quote is now built from, and the budget is stated by the
+ * visitor, in bands, never suggested by a package price.
+ *
+ * The `website` field is a honeypot: it is hidden with CSS, never focusable,
+ * and a submission that fills it is answered with a success the server does
+ * not act on (functions/api/inquiry.ts).
  */
 export function inquiryFormHtml(): string {
   return [
     `<form class="zp-inq" data-zp-inquiry novalidate aria-label="Scoring inquiry" method="post" enctype="text/plain" action="mailto:${INQUIRY_EMAIL}?subject=Scoring%20inquiry">`,
-    `<p class="zp-help zp-inq-intro">Start with your name and email. Everything else is optional, but your budget range and musical references are what the quote is built from, so add them if you can. Submitting prepares an email for you to review and send; this site does not store or send your details.</p>`,
+    `<p class="zp-help zp-inq-intro">Start with your name and email. Everything else is optional, but your budget range and musical references are what the quote is built from, so add them if you can. Submitting sends this to the studio’s own server and keeps it so it can be answered; it is not shared and not used for tracking. If that fails, your email app opens with the same message instead.</p>`,
+    `<div class="zp-hp" aria-hidden="true"><label class="zp-field"><span class="zp-label">Website</span><input class="zp-input" type="text" name="website" tabindex="-1" autocomplete="off"></label></div>`,
     `<div class="zp-grid2">`,
     `<label class="zp-field"><span class="zp-label">Your name <em>required</em></span><input class="zp-input" name="name" autocomplete="name" required aria-required="true"></label>`,
     `<label class="zp-field"><span class="zp-label">Email <em>required</em></span><input class="zp-input" type="email" name="email" autocomplete="email" required aria-required="true"></label>`,
@@ -191,6 +198,12 @@ export function inquiryFormHtml(): string {
     // a name would suggest it is submitted, which it never is.
     `<textarea class="zp-input zp-preview-text" id="zp-inquiry-preview" data-zp-text rows="12" readonly aria-label="Inquiry text"></textarea>`,
     `<p><button class="zp-cta zp-cta-ghost" type="button" data-zp-copy>Copy inquiry text</button> <span class="zp-help" data-zp-copied role="status"></span></p>`,
+    `</div>`,
+    // Shown once POST /api/inquiry has answered { ok: true }: the inquiry is
+    // saved, so there is nothing left for the visitor to send.
+    `<div class="zp-inq-confirmed" data-zp-confirmed role="status" hidden>`,
+    `<p class="zp-eyebrow">Inquiry received</p>`,
+    `<p class="zp-help" data-zp-confirmed-text></p>`,
     `</div>`,
     `</form>`,
   ].join('');
