@@ -56,7 +56,7 @@ export const hubs: Hub[] = [
   {
     path: "/work",
     name: "Selected productions",
-    title: "Selected Production Records: Psychological Horror and Experimental Film | Zazie Productions",
+    title: "Horror Film Scoring Credits: Production Records",
     description: "Nine psychological horror and experimental production records with verified composer, co-composer and sound-design credits.",
     lastmod: "2026-10-26",
     images: [
@@ -83,7 +83,7 @@ export const hubs: Hub[] = [
   {
     path: "/reel",
     name: "Showreel",
-    title: "Psychological Horror Showreel: 30 Original Dark Cinematic Cues | Zazie Productions",
+    title: "Horror Showreel: 30 Original Dark Cinematic Cues",
     description: "30 original experimental horror cues by Zazie Kanwar-Torge: dread beds, dark ambient textures, stingers and body horror. Stream the reel.",
     lastmod: "2026-10-26",
     images: [],
@@ -92,7 +92,7 @@ export const hubs: Hub[] = [
   {
     path: "/process",
     name: "Scoring process",
-    title: "Psychological Horror Scoring Process: Spotting to Delivery | Zazie Productions",
+    title: "Horror Scoring Process: Spotting to Delivery",
     description: "How a psychological horror score takes shape: spotting, original motifs, agreed revisions and stereo WAV delivery.",
     lastmod: "2026-10-27",
     images: [
@@ -103,8 +103,8 @@ export const hubs: Hub[] = [
   {
     path: "/store",
     name: "Catalogue",
-    title: "Catalogue: Experimental Music, Sound Libraries, Tools and Objects | Zazie Productions",
-    description: "Dark ambient records, horror sound libraries, experimental tools and objects from the Zazie Productions catalogue.",
+    title: "Horror Sound Catalogue: Records, Libraries, Objects",
+    description: "Dark ambient records, horror sound libraries, experimental tools and objects in the Zazie Productions catalogue, each with its own page.",
     lastmod: "2026-10-21",
     images: [
       { loc: "https://f4.bcbits.com/img/a4087485987_16.jpg", caption: "Anesthesia for the Signal Age - ten-track experimental electronic album, released May 7, 2026.", title: "Anesthesia for the Signal Age - Zazie Productions" },
@@ -121,7 +121,7 @@ export const hubs: Hub[] = [
   {
     path: "/faq",
     name: "FAQ",
-    title: "Psychological Horror Scoring FAQ: Quotes, Process, Rights, Delivery - 35 Questions | Zazie Productions",
+    title: "Horror Film Scoring FAQ: Quotes, Process, Rights",
     description: "Commissioning a psychological horror film score: quotes, spotting, revisions, licensing and cue sheets in 35 answers.",
     lastmod: "2026-10-27",
     images: [],
@@ -130,7 +130,7 @@ export const hubs: Hub[] = [
   {
     path: "/legal",
     name: "All documents",
-    title: "Documents: Horror Scoring Terms, Privacy, Licensing, Purchases | Zazie Productions",
+    title: "Horror Score Terms, Licensing and Privacy",
     description: "Commissioning terms, horror score licensing, privacy and purchase policies for Zazie Productions LLC.",
     lastmod: "2026-10-18",
     images: [],
@@ -204,7 +204,7 @@ export const hubs: Hub[] = [
   {
     path: "/how-to-hire-a-horror-composer",
     name: "How to hire a horror composer",
-    title: "How to Hire a Horror Composer: Budgets, Subgenres & Vetting Guide | Zazie Productions",
+    title: "How to Hire a Horror Composer: Budgets and Rights",
     description: "How indie filmmakers hire a horror composer: subgenre fit, custom vs. library music, budgets, spotting and rights.",
     lastmod: "2026-10-27",
     images: [
