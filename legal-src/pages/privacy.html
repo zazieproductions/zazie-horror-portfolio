@@ -439,7 +439,7 @@ __MASTHEAD__
     </nav>
 
     <div class="doc-body">
-      <div class="doc-at-a-glance"><p class="doc-overline">At a glance</p><ul><li>Cloudflare Web Analytics measures visits without cookies; the site does not set advertising trackers.</li><li>The inquiry form sends what you write to this site's own server, where it is stored so the studio can answer it. Nothing else about you is stored.</li><li>Third-party players and marketplaces have their own privacy practices. See the detailed inventory below.</li></ul><p class="doc-hint">Open a section for the full details.</p></div>
+      <div class="doc-at-a-glance"><p class="doc-overline">At a glance</p><ul><li>Cloudflare Web Analytics measures visits without cookies; the site does not set advertising trackers.</li><li>This site also counts its own page views: the page path, the host of the page you came from and the time, with no IP address, no cookie and no identifier, so the counts are per page and never per person.</li><li>The inquiry form sends what you write to this site's own server, where it is stored so the studio can answer it. Nothing else about you is stored.</li><li>Third-party players and marketplaces have their own privacy practices. See the detailed inventory below.</li></ul><p class="doc-hint">Open a section for the full details.</p></div>
       <nav class="doc-jump" aria-label="Sections">
         <p>Sections</p>
         <ul>
@@ -457,6 +457,7 @@ __MASTHEAD__
         <details class="doc-section"><summary><h2><span class="no">1</span> The short version</h2></summary><div class="doc-section-content">
         <ul>
           <li>One analytics beacon: Cloudflare Web Analytics, injected by the hosting platform on every page. It measures page loads and Core Web Vitals (how fast pages load), is cookieless, stores nothing on your device and, per Cloudflare, does not fingerprint visitors or track individuals. No advertising pixel. No behavioural tracking of any kind.</li>
+          <li>A page-view count on this site's own server: each page load stores the path of the page, the host of the page that linked to it, and the time. No IP address, no cookie, no identifier, no user-agent string, no country: counts per page, never per person, and two rows cannot be tied together. It does not run at all if your browser sends Do Not Track or Global Privacy Control. See <a href="#what-we-collect">section 3</a>.</li>
           <li>No cookie is set by this site, which is why there is no consent banner to dismiss.</li>
           <li>No account, no login, no newsletter, no marketing list.</li>
           <li>The scoring form sends what you write to this site's own server and stores it there so the studio can answer it. Nothing is shared with anyone else, and it is not used for tracking or advertising. If the form cannot reach the server, it falls back to composing an email in your own mail application, and you press send.</li>
@@ -510,6 +511,12 @@ __MASTHEAD__
                 <td>Legitimate interest in measuring and improving site performance</td>
               </tr>
               <tr>
+                <th scope="row">Page-view count: the path of the page loaded, the host of the page that linked to it (blank on a direct visit), and the time of the visit</th>
+                <td>Your browser, on each page load, to <code>/api/hit</code> on this site</td>
+                <td>To know which pages are looked at, so the ones nobody reads can be fixed or retired. No IP address is recorded, no cookie is set and no identifier is created; the referring page is reduced to its host before it is sent, so the address of the page you came from never leaves your browser and the rows cannot be tied to a person</td>
+                <td>Legitimate interest in knowing which pages are useful</td>
+              </tr>
+              <tr>
                 <th scope="row">Request metadata at the edge: IP address, user agent string, timestamp, requested path, referring site</th>
                 <td>Your browser, on every request, handled by the hosting platform</td>
                 <td>Serving the files, caching, rate limiting and abuse prevention</td>
@@ -533,14 +540,14 @@ __MASTHEAD__
         <ul>
           <li><strong>A service worker cache</strong>, registered on load, which stores copies of pages, fonts and images in your browser so a repeat visit renders immediately and the site still opens offline. It is a local file cache, not a profile, and it can be cleared at any time from your browser settings or from <a href="#inspector">section 5</a>.</li>
         </ul>
-        <p>The privacy page reads your cookie jar, your storage keys and your cache names in order to show them to you. It writes none of them. The Cloudflare Web Analytics beacon likewise stores nothing on your device and reads no cookie, storage or cache: per Cloudflare it works only from in-memory page timing data, which is gone when you reload.</p>
+        <p>The privacy page reads your cookie jar, your storage keys and your cache names in order to show them to you. It writes none of them. The page-view count in <a href="#what-we-collect">section 3</a> writes nothing to your device either: it is one request carrying a path and a host, and what is kept is the count on the server, not a marker in your browser. The Cloudflare Web Analytics beacon likewise stores nothing on your device and reads no cookie, storage or cache: per Cloudflare it works only from in-memory page timing data, which is gone when you reload.</p>
         <p>Your hosting provider or content delivery network may set its own cookie, for example a bot management cookie on your first request. That cookie is set by that provider under its own policy, not by this site, and the studio cannot read or remove it from here.</p>
       </div></details>
       </section>
 
       <section class="clause" id="inspector">
         <details class="doc-section"><summary><h2><span class="no">5</span> Check it yourself</h2></summary><div class="doc-section-content">
-        <p>This runs entirely in your browser against this origin. It makes no network request, sends nothing to the studio, and reports only what your own device is holding. Expect it to list one third-party script, the Cloudflare Web Analytics beacon (static.cloudflareinsights.com) disclosed in section 6; that listing is this notice being accurate, not a discrepancy.</p>
+        <p>This runs entirely in your browser against this origin. It makes no network request, sends nothing to the studio, and reports only what your own device is holding. Expect it to list one third-party script, the Cloudflare Web Analytics beacon (static.cloudflareinsights.com) disclosed in section 6; that listing is this notice being accurate, not a discrepancy. The page-view counter in <a href="#what-we-collect">section 3</a> is not listed there because it is on this domain, not a third party: it is one request to <code>/api/hit</code>, and no script from another host runs to make it.</p>
         <div class="device" data-device>
           <div class="device-head">
             <p>Device inspector · horror.zazieproductions.com</p>
@@ -558,7 +565,7 @@ __MASTHEAD__
 
       <section class="clause" id="third-parties">
         <details class="doc-section"><summary><h2><span class="no">6</span> Third parties, exactly</h2></summary><div class="doc-section-content">
-        <p>Exactly one third party script runs on this site: the Cloudflare Web Analytics beacon in the first row below. What follows is the full list of external hosts that can be contacted, and what triggers each one.</p>
+        <p>Exactly one third party script runs on this site: the Cloudflare Web Analytics beacon in the first row below. What follows is the full list of external hosts that can be contacted, and what triggers each one. The page-view counter described in <a href="#what-we-collect">section 3</a> is not on that list, because it is not a third party: it posts to <code>/api/hit</code> on this domain and the count is stored in the studio's own database.</p>
         <div class="table-wrap">
           <table>
             <caption>External hosts, triggers and what they receive</caption>
@@ -640,6 +647,7 @@ __MASTHEAD__
               <tr><th scope="row">Project material you sent: cuts, scripts, references</th><td>For the life of the project, then 12 months, after which it is deleted unless you ask for archival</td></tr>
               <tr><th scope="row">Delivered score, stems and session data</th><td>As above. Retrieval after the retention period is not guaranteed</td></tr>
               <tr><th scope="row">Invoices and payment records</th><td>7 years, to satisfy tax and accounting record keeping</td></tr>
+              <tr><th scope="row">Page-view counts (this site's own counter)</th><td>In the studio's own database until deleted. A row holds no identifier, so one person's visits cannot be found in it to be deleted individually; the whole table is cleared when it stops being useful</td></tr>
               <tr><th scope="row">Request metadata</th><td>Controlled by the hosting platform's own retention window, not by the studio</td></tr>
               <tr><th scope="row">Aggregate analytics (Cloudflare Web Analytics)</th><td>Controlled by Cloudflare's own retention, not by the studio; the studio sees aggregate reports, not individual visits</td></tr>
             </tbody>
@@ -700,7 +708,7 @@ __MASTHEAD__
 
       <section class="clause" id="gpc">
         <details class="doc-section"><summary><h2><span class="no">13</span> Do Not Track and Global Privacy Control</h2></summary><div class="doc-section-content">
-        <p>There is no behavioural tracking here to switch off, so a Do Not Track or Global Privacy Control signal changes nothing about profiles, advertising or cross-site tracking: there are none. The analytics beacon measures aggregate page performance only and builds no profile, per Cloudflare's documentation. If a third party host described in section 6 receives a signal from your browser, that host's handling of it is governed by its own policy.</p>
+        <p>There is no behavioural tracking here to switch off, so a Do Not Track or Global Privacy Control signal changes nothing about profiles, advertising or cross-site tracking: there are none. The analytics beacon measures aggregate page performance only and builds no profile, per Cloudflare's documentation. The page-view counter in <a href="#what-we-collect">section 3</a> honours both signals literally: if your browser sends Do Not Track or Global Privacy Control, it does not run at all and nothing is counted. If a third party host described in section 6 receives a signal from your browser, that host's handling of it is governed by its own policy.</p>
       </div></details>
       </section>
 
