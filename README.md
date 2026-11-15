@@ -95,7 +95,8 @@ Every route is a real static path. There is deliberately **no SPA fallback**.
   JavaScript off.
 - **Showreel** — 30 cues with dedicated pages, native playback and an
   on-demand in-browser ZIP download; no second hosted archive.
-- **Listen-first, privacy-structural** — no backend, no cookies set by the
+- **Listen-first, privacy-structural** — one same-origin inquiry endpoint
+  (`POST /api/inquiry` → D1), no cookies set by the
   site, no accounts; the only remote script is the disclosed, cookieless
   Cloudflare Web Analytics beacon (see `/privacy`).
 - **Catalogue without a shop** — 24 records linking to Bandcamp / itch.io /

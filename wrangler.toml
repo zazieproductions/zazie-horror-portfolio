@@ -1,0 +1,42 @@
+# wrangler.toml
+# -----------------------------------------------------------------------------
+# Configuration for the Cloudflare Pages project `zazie-horror-site`.
+#
+# The site itself is static: `node scripts/build-deploy-dir.mjs` assembles
+# `dist/`, and .github/workflows/deploy.yml uploads it with
+# `wrangler pages deploy dist --project-name zazie-horror-site`. The one piece
+# of server code is the Pages Function at `functions/api/inquiry.ts`
+# (POST /api/inquiry), which stores a submitted scoring inquiry in D1.
+#
+# Why this file exists at all: the D1 binding cannot be declared without it.
+# Wrangler reads this file from the repository root, so it applies to every
+# deploy of the project — including `wrangler pages dev` locally.
+#
+# ACTION REQUIRED BY THE OWNER — the database does not exist yet.
+#
+#   Cloudflare dashboard → Workers & Pages → D1 → Create database
+#   Name: zazie-inquiries          (must match database_name below)
+#
+# Then replace the placeholder database_id below with the UUID Cloudflare
+# shows for that database, and run the migration once:
+#
+#   npx wrangler d1 migrations apply zazie-inquiries --remote
+#
+# Until both are done, /api/inquiry answers 503 and the form falls back to the
+# `mailto:` handoff, so nothing is silently lost.
+# -----------------------------------------------------------------------------
+
+name = "zazie-horror-site"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-11-01"
+
+# The inquiry database. Binding name `DB` is what functions/api/inquiry.ts
+# reads as env.DB.
+[[d1_databases]]
+binding = "DB"
+database_name = "zazie-inquiries"
+# PLACEHOLDER — not a real database id. Replace with the UUID from
+# `npx wrangler d1 list` once the owner has created the `zazie-inquiries`
+# database in the account that owns the Pages project.
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"

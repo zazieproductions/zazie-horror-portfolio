@@ -439,7 +439,7 @@ __MASTHEAD__
     </nav>
 
     <div class="doc-body">
-      <div class="doc-at-a-glance"><p class="doc-overline">At a glance</p><ul><li>Cloudflare Web Analytics measures visits without cookies; the site does not set advertising trackers.</li><li>The inquiry form opens your email app. The studio receives only what you choose to send.</li><li>Third-party players and marketplaces have their own privacy practices. See the detailed inventory below.</li></ul><p class="doc-hint">Open a section for the full details.</p></div>
+      <div class="doc-at-a-glance"><p class="doc-overline">At a glance</p><ul><li>Cloudflare Web Analytics measures visits without cookies; the site does not set advertising trackers.</li><li>The inquiry form sends what you write to this site's own server, where it is stored so the studio can answer it. Nothing else about you is stored.</li><li>Third-party players and marketplaces have their own privacy practices. See the detailed inventory below.</li></ul><p class="doc-hint">Open a section for the full details.</p></div>
       <nav class="doc-jump" aria-label="Sections">
         <p>Sections</p>
         <ul>
@@ -459,9 +459,9 @@ __MASTHEAD__
           <li>One analytics beacon: Cloudflare Web Analytics, injected by the hosting platform on every page. It measures page loads and Core Web Vitals (how fast pages load), is cookieless, stores nothing on your device and, per Cloudflare, does not fingerprint visitors or track individuals. No advertising pixel. No behavioural tracking of any kind.</li>
           <li>No cookie is set by this site, which is why there is no consent banner to dismiss.</li>
           <li>No account, no login, no newsletter, no marketing list.</li>
-          <li>The scoring form does not send your details to a server. It composes an email in your own mail application, and you press send.</li>
+          <li>The scoring form sends what you write to this site's own server and stores it there so the studio can answer it. Nothing is shared with anyone else, and it is not used for tracking or advertising. If the form cannot reach the server, it falls back to composing an email in your own mail application, and you press send.</li>
           <li>Nothing about you is sold, rented or shared. There is nothing here to sell.</li>
-          <li>The only personal data that reaches the studio is what you choose to put in an email.</li>
+          <li>The only personal data that reaches the studio is what you choose to put in an inquiry.</li>
           <li>Third-party video and audio players load when you press play; Bandcamp cover images may load beforehand. See <a href="#third-parties">section 6</a> for the full inventory.</li>
         </ul>
         <p>The rest of this notice exists because "we value your privacy" is not a statement anybody can check. What follows is checkable.</p>
@@ -472,7 +472,7 @@ __MASTHEAD__
         <details class="doc-section"><summary><h2><span class="no">2</span> Who is responsible</h2></summary><div class="doc-section-content">
         <p>Zazie Productions LLC is the controller of the personal data described here. The studio is a single composer operation, so the person who reads your email is the person responsible for it.</p>
         <p>Contact for any privacy matter, including a rights request: <a href="mailto:zaziediya@gmail.com?subject=Privacy%20request">zaziediya@gmail.com</a>. The studio is established in the United States and has no establishment in the EEA, the UK or Switzerland. There is no separate data protection officer, because at this scale there is nobody else to appoint; requests are handled directly by the composer.</p>
-        <p>The site is hosted on an edge platform that serves the static files. That provider processes standard request metadata on the studio's behalf, described in <a href="#what-we-collect">section 3</a>.</p>
+        <p>The site is hosted on an edge platform that serves the static files and runs the one inquiry endpoint described in <a href="#what-we-collect">section 3</a>. That provider processes standard request metadata on the studio's behalf, also described there. The stored inquiries sit in a database in the same account, and only the studio can read it.</p>
       </div></details>
       </section>
 
@@ -486,10 +486,10 @@ __MASTHEAD__
             </thead>
             <tbody>
               <tr>
-                <th scope="row">Your inquiry: name, email, project details, budget, timeline, and anything else you write</th>
-                <td>You send it, from your own mail application, when you use the scoring form or write directly</td>
-                <td>To answer the inquiry, quote the work, and perform a commission</td>
-                <td>Pre contract steps and performance of a contract; legitimate interest in answering business correspondence</td>
+                <th scope="row">Your inquiry: name, email, project details, budget, timeline, and anything else you write — with the browser's user-agent string and the two-letter country the hosting platform reports for the request</th>
+                <td>You send it, by submitting the scoring form (stored on this site) or from your own mail application when the form falls back to email</td>
+                <td>To answer the inquiry, quote the work, and perform a commission; the user agent and country are kept only to tell a real inquiry from automated spam</td>
+                <td>Pre contract steps and performance of a contract; legitimate interest in answering business correspondence and keeping the form free of spam</td>
               </tr>
               <tr>
                 <th scope="row">Project material you choose to send: cuts, scripts, reference audio, storyboards</th>
@@ -520,7 +520,7 @@ __MASTHEAD__
         </div>
         <p>That is the complete list. The analytics record is aggregate page and performance measurement only: there is no device fingerprint, no interest profile and no advertising identifier, because nothing on the site creates one.</p>
         <div class="fact">
-          <p>The scoring form builds a <code>mailto:</code> link. When you press the button, your own mail client opens with the message you typed. Nothing is posted to this site's host, no copy is stored here, and if you close the draft the studio never learns you filled it in.</p>
+          <p>The scoring form posts what you write to <code>/api/inquiry</code> on this site and the inquiry is stored in the studio's own database so it can be answered. It is not sent to any third-party form service, not shared, and not used for tracking. If the form cannot reach the server, your own mail client opens with the message you typed and nothing is stored here. The form also carries one invisible field that a person never fills; a submission that fills it is answered as if it succeeded and is thrown away.</p>
         </div>
         <p>Please do not include special category data in an inquiry unless the project genuinely requires it. A logline and a runtime are enough for a quote.</p>
       </div></details>

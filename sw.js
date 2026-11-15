@@ -156,8 +156,8 @@ const PRECACHE_ASSETS = [
   '/store-3fc01be0.js',
   '/legal-f4e3a5fb.css',
   '/legal-54feff84.js',
-  '/inquiry-d8cba1f7.css',
-  '/inquiry-f408888b.js',
+  '/inquiry-9467ad97.css',
+  '/inquiry-087b4a70.js',
   // Hero & Atmosphere
   '/images/atmosphere-bg.jpg',
   '/images/hero-portrait.avif'

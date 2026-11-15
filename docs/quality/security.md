@@ -7,8 +7,12 @@
   requires: CSP update, `/privacy` inventory update, and PR justification.
 - HSTS (preload), `nosniff`, `SAMEORIGIN` framing, restrictive
   Permissions-Policy on `/*`.
-- No cookies set by this site, no accounts, no form backend (mailto handoff),
-  no secrets in the repo. Deploy credentials live only as GitHub secrets
+- No cookies set by this site, no accounts, no secrets in the repo. One
+  server endpoint exists: `POST /api/inquiry` (Pages Function
+  `functions/api/inquiry.ts`), same-origin, which stores a submitted inquiry in
+  D1 — it caps the body at 32 KB, rejects unexpected fields, validates
+  server-side and never logs or echoes a submitted address. Deploy credentials
+  live only as GitHub secrets
   (`CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`) — names documented,
   values never.
 - The IndexNow key file (`644fbc082803520e72f3988e53db3132.txt`) is public by

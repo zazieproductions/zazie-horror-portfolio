@@ -41,6 +41,9 @@ on:
       - tools/**
       - store-src/**
       - legal-src/**
+      - functions/**
+      - migrations/**
+      - wrangler.toml
       - '**/*.html'
       - images/**
       - audio/**
@@ -154,6 +157,23 @@ jobs:
           args=(dist --project-name "$PROJECT")
           [ "$ENVIRONMENT" = "production" ] && args+=(--branch main)
           npx --yes "wrangler@^4" pages deploy "${args[@]}"
+
+      # The quote form is only a form without this route. The Function answers a
+      # GET with 405; 404 means ./functions did not ship with the deploy, and
+      # 503 means the D1 binding is not configured yet. Either way the form is
+      # silently back on the mailto fallback for every visitor, so say so here
+      # rather than let it go unnoticed.
+      - name: Inquiry endpoint is live
+        if: ${{ github.event_name != 'pull_request' && steps.creds.outputs.ok == 'true' }}
+        run: |
+          code=$(curl -s -o /dev/null -w '%{http_code}' --retry 5 --retry-delay 5 "$BASE_URL/api/inquiry")
+          echo "GET /api/inquiry -> $code"
+          case "$code" in
+            405) echo "ok" ;;
+            404) echo "::error title=Inquiry Function not deployed::/api/inquiry answered 404: ./functions did not ship with this deploy."; exit 1 ;;
+            503) echo "::error title=Inquiry database not bound::/api/inquiry answered 503: the D1 binding is missing. Replace the database_id placeholder in wrangler.toml and apply migrations/0001_inquiries.sql."; exit 1 ;;
+            *) echo "::error title=Unexpected /api/inquiry response::$code"; exit 1 ;;
+          esac
 
       - name: Live route audit
         if: ${{ github.event_name != 'pull_request' && steps.creds.outputs.ok == 'true' && (github.event_name != 'workflow_dispatch' || (inputs.verify_live && inputs.environment == 'production')) }}

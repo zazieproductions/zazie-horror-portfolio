@@ -16,6 +16,7 @@ Detail lives in the dated root records; this file is the index of *intent*.
 | D9 | Deploy uploads a filtered `dist/`, not the repo root | Repo root contains tooling/sources that must not be public | `scripts/build-deploy-dir.mjs` |
 | D10 | Root dated `*.md` records stay at root | Referenced by name in code comments, scripts and workflows | [docs index](../README.md) |
 | D11 | Final homepage head render owns mobile-CSS ordering; CI builds twice | SEO regeneration must not move resources on the next build; committed output must be a fixed point | `PERFORMANCE.md` (2026-10-29), `home-src/document.mjs`, `.github/workflows/deploy.yml` |
+| D12 | The inquiry is captured on this origin: Pages Function `POST /api/inquiry` → D1, with the `mailto:` handoff kept as fallback (supersedes D1's "no backend") | A mailto handoff loses every inquiry from a visitor with no mail client, which is most phones; same-origin capture needs no CSP change and no third party. The mailto path remains for no-JS and for an unreachable endpoint | `functions/api/inquiry.ts`, `migrations/0001_inquiries.sql`, `wrangler.toml`, `docs/features/inquiry.md` |
 
 New decision? Add a row here **and** write the dated record; do not edit
 history to make an old decision look current.

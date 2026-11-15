@@ -44,10 +44,12 @@ decision are collected in **`RATIFY.md`**, not silently resolved.
 
 ## 1. System as found (evidence from repo inspection)
 
-* **No backend of any kind.** The scoring form builds a `mailto:` URL and
-  hands off to the visitor's own mail client
-  (`window.location.href=\`mailto:…\`` in `Contact.tsx:263`). Nothing is
-  posted anywhere. There are no accounts, no database, no newsletter.
+* **One backend endpoint, added 2026-11-14.** The scoring form posts to
+  `POST /api/inquiry` on this origin (`functions/api/inquiry.ts`), which stores
+  the inquiry in a D1 database so it can be answered; the `mailto:` handoff
+  (`window.location.href=\`mailto:…\`` in the bundle) remains the no-JS path
+  and the fallback when the endpoint is unreachable. Still no accounts, no
+  newsletter, and no third-party form service.
 * **No analytics, no cookies, no trackers.** `document.cookie` appears zero
   times in `index.html`, the bundle and `store.js`; `localStorage` zero times;
   `sessionStorage` zero times. (The opening sequence used to write one

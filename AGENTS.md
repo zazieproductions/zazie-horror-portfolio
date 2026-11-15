@@ -15,9 +15,13 @@ original, not a replacement.)
 
 ## Architectural facts (verified 2026-10-29)
 
-- Static site, no backend. Repo root ≈ served tree; deploy uploads a filtered
-  `dist/` (`scripts/build-deploy-dir.mjs`) to Cloudflare Pages project
-  `zazie-horror-site` via `.github/workflows/deploy.yml`.
+- Static site plus one server route. Repo root ≈ served tree; deploy uploads a
+  filtered `dist/` (`scripts/build-deploy-dir.mjs`) to Cloudflare Pages project
+  `zazie-horror-site` via `.github/workflows/deploy.yml`. The one exception is
+  `POST /api/inquiry` (`functions/api/inquiry.ts`, a Pages Function at the repo
+  root, **not** in `dist`), which stores a submitted inquiry in the D1 database
+  declared in `wrangler.toml`; the `mailto:` handoff in the form is the no-JS
+  path and the fallback.
 - 17 hubs + 63 generated item pages (9 productions, 30 cues, 24 catalogue
   items) = 80 sitemap URLs. Re-derive from `src/data/` before quoting.
 - **The homepage React bundle (`index-<hash>.js`) has no source in this repo.**
